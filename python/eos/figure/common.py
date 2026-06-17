@@ -64,6 +64,14 @@ class Watermark(Deserializable):
             self._version = f'v{eos_version}'
 
     def draw(self, ax):
+        """Draw the EOS watermark on the provided axes.
+
+        Renders the EOS version (or the word ``Preliminary``) as a semi-transparent label at the
+        configured corner of the axes.
+
+        :param ax: The matplotlib axes onto which the watermark is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         ax.text(self._x, self._y, fr'\textsf{{\textbf{{EOS {self._version}}}}}',
                 transform=ax.transAxes,
                 color=self._color, alpha=0.5, bbox=dict(facecolor='white', alpha=0.5, lw=0),

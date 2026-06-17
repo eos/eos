@@ -87,6 +87,16 @@ class SingleFigure(Figure):
         self._figure, self._ax = plt.subplots(figsize=self.size)
 
     def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
+        """Draw the single-plot figure.
+
+        Prepares and draws the figure's plot, adds the watermark, and optionally saves the figure to
+        one or more output files.
+
+        :param context: The analysis file context, which contains the paths to the data files and other relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
+        :type output: str | list[str] | None
+        """
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
         self.plot.draw(self._ax)
@@ -100,6 +110,15 @@ class SingleFigure(Figure):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`SingleFigure` from its keyword description.
+
+        Recursively deserializes the nested ``plot`` description via
+        :class:`PlotFactory <eos.figure.plot.PlotFactory>` and the optional ``watermark`` description.
+
+        :param kwargs: The figure description. Must contain a ``plot`` key.
+        :returns: The instantiated figure.
+        :rtype: SingleFigure
+        """
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['plot'] = PlotFactory.from_dict(**_kwargs['plot'])
         if 'watermark' in _kwargs:
@@ -127,17 +146,39 @@ class Inset(Deserializable):
         pass
 
     def prepare(self, context, ax):
-        """Prepare the inset plot for drawing."""
+        """Prepare the inset plot for drawing.
+
+        Creates the inset axes at the configured position and size within the parent axes and prepares
+        the inset's plot.
+
+        :param context: The analysis file context forwarded to the inset's plot.
+        :type context: AnalysisFileContext | None
+        :param ax: The parent matplotlib axes into which the inset axes are inserted.
+        :type ax: matplotlib.axes.Axes
+        """
         self._inset_ax = ax.inset_axes([self.position[0], self.position[1], self.size[0], self.size[1]])
         self.plot.prepare(context)
 
     def draw(self, ax):
-        """Draw the inset plot on the provided axes."""
+        """Draw the inset plot and indicate its zoom region on the parent axes.
+
+        :param ax: The parent matplotlib axes on which the inset's zoom region is indicated.
+        :type ax: matplotlib.axes.Axes
+        """
         self.plot.draw(self._inset_ax)
         ax.indicate_inset_zoom(self._inset_ax, edgecolor="black")
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create an :class:`Inset` from its keyword description.
+
+        Recursively deserializes the nested ``plot`` description via
+        :class:`PlotFactory <eos.figure.plot.PlotFactory>`.
+
+        :param kwargs: The inset description. Must contain a ``plot`` key.
+        :returns: The instantiated inset.
+        :rtype: Inset
+        """
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['plot'] = PlotFactory.from_dict(**_kwargs['plot'])
         return Deserializable.make(cls, **_kwargs)
@@ -208,6 +249,15 @@ class InsetFigure(Figure):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create an :class:`InsetFigure` from its keyword description.
+
+        Recursively deserializes the nested ``plot`` and ``inset`` descriptions, as well as the optional
+        ``watermark`` description.
+
+        :param kwargs: The figure description. Must contain ``plot`` and ``inset`` keys.
+        :returns: The instantiated figure.
+        :rtype: InsetFigure
+        """
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['plot'] = PlotFactory.from_dict(**_kwargs['plot'])
         _kwargs['inset'] = Inset.from_dict(**_kwargs['inset'])
@@ -285,6 +335,15 @@ class GridFigure(Figure):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`GridFigure` from its keyword description.
+
+        Recursively deserializes each entry of the ``plots`` list via
+        :class:`PlotFactory <eos.figure.plot.PlotFactory>`, as well as the optional ``watermark`` description.
+
+        :param kwargs: The figure description. Must contain ``plots`` and ``shape`` keys.
+        :returns: The instantiated figure.
+        :rtype: GridFigure
+        """
         _kwargs = _copy.deepcopy(kwargs)
         _kwargs['plots'] = [PlotFactory.from_dict(**p) for p in _kwargs['plots']]
         if 'watermark' in _kwargs:
@@ -472,6 +531,15 @@ class CornerFigure(Figure):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`CornerFigure` from its keyword description.
+
+        Recursively deserializes each entry of the ``contents`` list into a
+        :class:`DataFile <eos.figure.data.DataFile>` instance.
+
+        :param kwargs: The figure description. Must contain a ``contents`` key.
+        :returns: The instantiated figure.
+        :rtype: CornerFigure
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if 'contents' in _kwargs:
             _kwargs['contents'] = [DataFile.from_dict(**c) for c in _kwargs['contents']]

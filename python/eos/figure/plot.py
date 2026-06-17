@@ -76,6 +76,11 @@ class Grid(Deserializable):
             raise ValueError(f'Unknown axis: {self.axis}')
 
     def draw(self, ax):
+        """Draw the grid on the provided axes if it is visible.
+
+        :param ax: The matplotlib axes onto which the grid is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         if self.visible:
             ax.grid(visible=self.visible, axis=self.axis, alpha=0.3)
 
@@ -102,6 +107,14 @@ class XTicks(Deserializable):
             raise ValueError(f'Unknown position: {self.position}. Must be one of {",".join(POSITIONS)}')
 
     def draw(self, ax):
+        """Apply the x axis tick settings to the provided axes.
+
+        Configures the visibility, position (bottom/top/both), and major/minor locators of the
+        x axis ticks, accounting for linear and logarithmic scales.
+
+        :param ax: The matplotlib axes whose x axis ticks are configured.
+        :type ax: matplotlib.axes.Axes
+        """
         if not self.visible:
             ax.xaxis.set_major_formatter(plt.NullFormatter())
             ax.xaxis.set_minor_formatter(plt.NullFormatter())
@@ -156,6 +169,13 @@ class XAxis(Deserializable):
             self.range = tuple(float(x) for x in self.range)
 
     def draw(self, ax):
+        """Apply the x axis settings to the provided axes.
+
+        Sets the axis label (including the unit, if given), the axis range and scale, and draws the ticks.
+
+        :param ax: The matplotlib axes whose x axis is configured.
+        :type ax: matplotlib.axes.Axes
+        """
         if self.label is not None and self.unit is not None:
             ax.set_xlabel(f'{self.label} [{self.unit}]')
         elif self.label is not None:
@@ -168,6 +188,14 @@ class XAxis(Deserializable):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create an :class:`XAxis` from its keyword description.
+
+        Recursively deserializes the nested ``ticks`` description into an :class:`XTicks` instance.
+
+        :param kwargs: The x axis description.
+        :returns: The instantiated x axis.
+        :rtype: XAxis
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if 'ticks' in _kwargs:
             _kwargs['ticks'] = XTicks.from_dict(**_kwargs['ticks'])
@@ -196,6 +224,14 @@ class YTicks(Deserializable):
             raise ValueError(f'Unknown position: {self.position}. Must be one of {",".join(POSITIONS)}')
 
     def draw(self, ax):
+        """Apply the y axis tick settings to the provided axes.
+
+        Configures the visibility, position (left/right/both), and major/minor locators of the
+        y axis ticks, accounting for linear and logarithmic scales.
+
+        :param ax: The matplotlib axes whose y axis ticks are configured.
+        :type ax: matplotlib.axes.Axes
+        """
         if not self.visible:
             ax.yaxis.set_major_formatter(plt.NullFormatter())
             ax.yaxis.set_minor_formatter(plt.NullFormatter())
@@ -246,6 +282,13 @@ class YAxis(Deserializable):
             self.range = tuple(float(y) for y in self.range)
 
     def draw(self, ax):
+        """Apply the y axis settings to the provided axes.
+
+        Sets the axis label (including the unit, if given), the axis range and scale, and draws the ticks.
+
+        :param ax: The matplotlib axes whose y axis is configured.
+        :type ax: matplotlib.axes.Axes
+        """
         if self.label is not None and self.unit is not None:
             ax.set_ylabel(f'{self.label} [{self.unit}]')
         elif self.label is not None:
@@ -258,6 +301,14 @@ class YAxis(Deserializable):
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`YAxis` from its keyword description.
+
+        Recursively deserializes the nested ``ticks`` description into a :class:`YTicks` instance.
+
+        :param kwargs: The y axis description.
+        :returns: The instantiated y axis.
+        :rtype: YAxis
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if 'ticks' in _kwargs:
             _kwargs['ticks'] = YTicks.from_dict(**_kwargs['ticks'])
@@ -269,17 +320,36 @@ class Plot(ABC, Deserializable):
 
     @abstractmethod
     def prepare(self, context:AnalysisFileContext=None):
-        "Prepare the plot for drawing"
+        """Prepare the plot for drawing.
+
+        Subclasses override this method to prepare all of their items before drawing.
+
+        :param context: The analysis file context used to resolve relative paths to data files.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
         raise NotImplementedError
 
     @abstractmethod
     def draw(self, ax):
-        "Draw the plot on the axes"
+        """Draw the plot on the provided axes.
+
+        Subclasses override this method to render their items, axes, grid, and legend.
+
+        :param ax: The matplotlib axes onto which the plot is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         raise NotImplementedError
 
     @abstractmethod
     def draw_watermark(self, ax, watermark):
-        "Draw the watermark on the axes"
+        """Draw the watermark on the provided axes.
+
+        :param ax: The matplotlib axes onto which the watermark is drawn.
+        :type ax: matplotlib.axes.Axes
+        :param watermark: The watermark to draw.
+        :type watermark: eos.figure.common.Watermark
+        """
         watermark.draw(ax)
 
 @dataclass(kw_only=True)
@@ -336,12 +406,25 @@ class TwoDimensionalPlot(Plot):
         pass
 
     def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the plot by preparing each of its items.
+
+        :param context: The analysis file context forwarded to each item's ``prepare`` method.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
         context = AnalysisFileContext() if context is None else context
         for item in self.items:
             item.prepare(context=context)
 
     def draw(self, ax):
-        "Draw the plot including all items"
+        """Draw the plot and all of its items on the provided axes.
+
+        Sets the title, configures the grid, aspect ratio, and axes, draws each item, and collects
+        the items' legend entries into the legend.
+
+        :param ax: The matplotlib axes onto which the plot is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
         # Set title
         ax.set_title(self.title)
 
@@ -370,10 +453,26 @@ class TwoDimensionalPlot(Plot):
             self.legend.draw(ax=ax, entries=legend_entries)
 
     def draw_watermark(self, ax, watermark):
+        """Draw the watermark on the provided axes.
+
+        :param ax: The matplotlib axes onto which the watermark is drawn.
+        :type ax: matplotlib.axes.Axes
+        :param watermark: The watermark to draw.
+        :type watermark: eos.figure.common.Watermark
+        """
         watermark.draw(ax)
 
     @classmethod
     def from_dict(cls, **kwargs):
+        """Create a :class:`TwoDimensionalPlot` from its keyword description.
+
+        Recursively deserializes the nested ``grid``, ``legend``, ``xaxis``, and ``yaxis`` descriptions,
+        as well as each entry of ``items`` via :class:`ItemFactory <eos.figure.item.ItemFactory>`.
+
+        :param kwargs: The plot description. Must contain an ``items`` key.
+        :returns: The instantiated plot.
+        :rtype: TwoDimensionalPlot
+        """
         _kwargs = _copy.deepcopy(kwargs)
         if 'grid' in _kwargs:
             _kwargs['grid'] = Grid.from_dict(**_kwargs['grid'])
@@ -406,15 +505,43 @@ class EmptyPlot(Plot):
         pass
 
     def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the empty plot for drawing.
+
+        This plot requires no preparation.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
         pass
 
     def draw(self, ax):
+        """Draw the empty plot by turning off the provided axes.
+
+        :param ax: The matplotlib axes to turn off.
+        :type ax: matplotlib.axes.Axes
+        """
         ax.set_axis_off()
 
     def draw_watermark(self, ax, watermark):
+        """Draw the watermark on the provided axes.
+
+        Empty plots carry no watermark, so this is a no-op.
+
+        :param ax: The matplotlib axes onto which the watermark would be drawn.
+        :type ax: matplotlib.axes.Axes
+        :param watermark: The watermark to draw.
+        :type watermark: eos.figure.common.Watermark
+        """
         pass
 
 class PlotFactory:
+    """Factory that creates :class:`Plot` instances from their YAML or dictionary description.
+
+    The concrete plot class is selected from the optional ``type`` key using the :attr:`registry`,
+    which maps each supported type string to its corresponding :class:`Plot` subclass. If no ``type``
+    is given, the default ``'2D'`` plot is created.
+    """
+
     # Also build the documentation based on ordered registry
     # Initializer is well-defined for python version >= 3.6
     registry = {
@@ -424,12 +551,29 @@ class PlotFactory:
 
     @staticmethod
     def from_yaml(yaml_data:str):
+        """Create a plot from a YAML description.
+
+        :param yaml_data: A YAML string describing a single plot, optionally including its ``type`` key.
+        :type yaml_data: str
+        :returns: The instantiated plot.
+        :rtype: Plot
+        """
         kwargs = _yaml.safe_load(yaml_data)
         return PlotFactory.from_dict(**kwargs)
 
     @staticmethod
     def from_dict(**kwargs):
-        """Factory method to create a plot from a dictionary."""
+        """Create a plot from its keyword description.
+
+        The optional ``type`` key selects the concrete :class:`Plot` subclass from :attr:`registry`,
+        defaulting to ``'2D'``; the remaining keyword arguments are forwarded to that subclass. The
+        item color cycle is reset before the plot is created.
+
+        :param kwargs: The plot description. May contain a ``type`` key identifying a registered plot type.
+        :returns: The instantiated plot.
+        :rtype: Plot
+        :raises ValueError: If the ``type`` key names an unknown plot type.
+        """
 
         if 'type' not in kwargs:
             plot_type = '2D'
