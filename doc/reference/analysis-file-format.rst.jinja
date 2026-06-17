@@ -1,0 +1,490 @@
+====================
+Analysis File Format
+====================
+
+The `user guide <../user-guide/index.html>`_ illustrates various use cases for EOS that mostly cover relatively simple phenomenological analyses, with a small number of observables, parameters, and statistical constraints.
+Typical analyses carried out with EOS, however, require a high degree of organisation, as discussed in the `example on analysis organisation <../user-guide/analysis-organisation.html>`_.
+To support this, EOS provides the means to store one or more analyses within an external text file, a so-called *analysis file*.
+
+This is particularly beneficial when several analyses share common elements, such as:
+
+ - the same named priors (e.g. a shared set of form-factor priors);
+ - the same experimental and theoretical likelihoods (e.g. a common set of measurements and lattice-QCD constraints);
+ - the same definitions of custom observables and parameters.
+
+A typical case is a pair of analyses that use identical likelihoods and differ only in their statistical model --- for instance, one inferring the CKM matrix element :math:`|V_{ub}|` and another inferring the corresponding Wilson coefficients from the same set of measurements.
+Every analysis file is a YAML file that defines the individual steps of one or more Bayesian analyses.
+At the top level, the format recognizes the following YAML keys / sections.
+
+The following keys are mandatory:
+
+``priors``
+   A list of named :ref:`priors <analysis-file-priors>`. Each prior assigns a prior probability density to one or more parameters --- for example a uniform or Gaussian density on a single parameter, or a (correlated) multivariate density taken from a built-in EOS constraint. Priors are referenced by name when assembling a posterior.
+
+``likelihoods``
+   A list of named :ref:`likelihoods <analysis-file-likelihoods>`. Each likelihood combines one or more contributions: experimental measurements and theoretical constraints from EOS's built-in database, constraints specified inline within the file, or a likelihood imported from a ``pyhf`` workspace. Likelihoods are likewise referenced by name when assembling a posterior.
+
+``posteriors``
+   A list of named :ref:`posteriors <analysis-file-posteriors>`. Each posterior is built by combining one or more of the named priors and likelihoods defined above, optionally fixing parameters or setting global options. The posteriors are the objects on which the inference tasks --- sampling, optimisation, and prediction --- operate.
+
+The following keys are optional:
+
+``metadata``
+   Optional :ref:`bibliographic information <analysis-file-metadata>` about the analysis, such as a title, a unique identifier, and a list of authors with their affiliations and contact details. This information is purely descriptive and does not affect the inference.
+
+``observables``
+   A list of :ref:`custom observables <analysis-file-observables>` defined for the scope of the analysis. Each entry introduces a new named observable from an expression, following the syntax for :ref:`defining new observables <defining_observables>`, which can then be used like any built-in observable elsewhere in the file.
+
+``parameters``
+   A list of :ref:`new parameters <analysis-file-parameters>` defined for the scope of the analysis. Each entry either introduces a genuinely new parameter or defines an alias for one or more existing parameters; the latter is useful to impose symmetries (e.g. lepton-flavour universality) by varying several parameters together.
+
+``predictions``
+   A list of :ref:`theory predictions <analysis-file-predictions>`. Each entry specifies a set of observables to be evaluated on the samples of a posterior, optionally at several kinematic configurations, and is used to propagate the inferred uncertainties to derived quantities.
+
+``figures``
+   A list of :ref:`figures <analysis-file-figures>` to be produced from the results of the analysis. Each figure follows the dedicated `figure description format <figure-format.html>`_ and is rendered by the plotting tasks.
+
+``steps``
+   A list of :ref:`steps <analysis-file-steps>` that make the analysis reproducible. Each step bundles one or more tasks (such as sampling or plotting) together with their arguments, and may declare dependencies on earlier steps, so that the whole analysis can be executed in a well-defined order.
+
+``masks``
+   A list of :ref:`masks <analysis-file-masks>` for filtering posterior samples. Each mask selects a subset of samples by combining one or more (pseudo-)observables, which is useful, for example, to isolate a single mode of a multi-modal posterior.
+
+Each of these keys, and the entries it accepts, corresponds to a class in the
+:py:mod:`eos.analysis_file_description` module. These classes, which document the meaning of every key,
+are listed among the :ref:`analysis file description classes <analysis-file-classes>` in the Python API reference.
+
+.. note::
+
+   For a complete, real-world example of an analysis file, see the :ref:`Example <analysis-file-example>` section at the end of this page.
+
+
+.. _analysis-file-priors:
+
+Priors
+~~~~~~
+
+The ``priors`` key contains a list of *named* priors. Each prior has two mandatory keys:
+
+  - ``name`` (**mandatory**) --- The unique name of this prior.
+  - ``descriptions`` (**mandatory**) --- The ordered list of parameters described by this prior.
+
+For a univariate prior, ``descriptions`` contains only a single prior description, which is a key/value map describing the prior.
+For an uncorrelated multivariate prior, ``descriptions`` contains more than one prior description.
+The format for a prior description is the same as used in the :class:`Analysis <eos.Analysis>` constructor.
+For example, the following code create two named priors ``CKM`` (univariate) and ``FF-pi`` (multivariate but uncorrelated).
+
+.. code-block:: yaml
+
+   priors:
+     - name: CKM
+       descriptions:
+        - { 'parameter': 'CKM::abs(V_ub)', 'min': 3.0e-3, 'max': 4.0e-3, 'type': 'uniform' }
+
+     - name: FF-pi
+       descriptions:
+         - { 'parameter':  'B->pi::f_+(0)@BCL2008' , 'min':   0.21 , 'max':   0.32 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_+^1@BCL2008'  , 'min':  -2.96 , 'max':  -0.60 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_+^2@BCL2008'  , 'min':  -3.98 , 'max':   4.38 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_+^3@BCL2008'  , 'min': -18.30 , 'max':   9.27 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_0^1@BCL2008'  , 'min':  -0.10 , 'max':   1.35 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_0^2@BCL2008'  , 'min':  -2.08 , 'max':   4.65 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_0^3@BCL2008'  , 'min':  -4.73 , 'max':   9.07 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_0^4@BCL2008'  , 'min': -60.00 , 'max':  38.00 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::f_T(0)@BCL2008' , 'min':   0.18 , 'max':   0.32 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_T^1@BCL2008'  , 'min':  -3.91 , 'max':  -0.33 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_T^2@BCL2008'  , 'min':  -4.32 , 'max':   2.00 , 'type': 'uniform' }
+         - { 'parameter':  'B->pi::b_T^3@BCL2008'  , 'min':  -7.39 , 'max':  10.60 , 'type': 'uniform' }
+
+
+For a correlated multivariate prior, ``descriptions`` contains a single element consisting of a key/value pair.
+The mandatory key is ``constraint`` and the value is the qualified name of an EOS constraint.
+The following example illustrates the organisation of a correlated multivariate prior.
+
+.. code-block:: yaml
+
+   priors:
+     - name: FF-rho
+       descriptions:
+         - { 'constraint': 'B->rho::FormFactors[parametric,LCSR]@BSZ:2015A' }
+
+Each entry of ``descriptions`` is selected, based on its keys, from the following concrete prior descriptions:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - type
+     - description
+     - Python class
+   {% for selector, class, description in prior_types %}
+   * - ``{{ selector }}``
+     - {{ description }}
+     - :py:class:`~eos.analysis_file_description.{{ class }}`
+   {% endfor %}
+
+.. _analysis-file-likelihoods:
+
+Likelihoods
+~~~~~~~~~~~
+
+The ``likelihoods`` key contains a list of *named* likelihoods. Each likelihood has two mandatory keys:
+
+  - ``name`` (**mandatory**) --- The unique name of this likelihood.
+  - ``constraints`` or ``manual_constraints`` or ``pyhf`` (**mandatory**) --- The ordered list of EOS objects that comprise this likelihood.
+
+The likelihoods can be of three types:
+
+  - ``constraints`` The following example illustrates the organisation of a likelihood for a simple constraint. Each such constraint is described by a :py:class:`~eos.analysis_file_description.ConstraintLikelihoodDescription`.
+
+  .. code-block:: yaml
+
+    - name: EXP-pi
+      constraints:
+        - 'B^0->pi^-l^+nu::BR@HFLAV:2019A;form-factors=BCL2008-4'
+
+  - ``manual_constraints`` Additional manually-specified constraints can also be added.
+    The syntax needs to follow the syntax of the usual ``EOS constraints``, as in the following example. Each entry is described by a :py:class:`~eos.analysis_file_description.ManualConstraintDescription`.
+
+  .. code-block:: yaml
+
+    - name: manual-TH-pi
+      manual_constraints:
+        "B->pi::form-factor-ratio":
+          type: "Gaussian"
+          observable: "B->pi::f_0(q2)/f_+(q2)"
+          kinematics: {'q2': 0}
+          options: {'form-factors': 'BSZ2015'}
+          mean: 1
+          sigma-stat: {"hi": 0., "lo": 0.}
+          sigma-sys:  {"hi": 0.1, "lo": 0.1}
+
+  - ``pyhf`` A likelihood can also be imported from a `pyhf <https://pyhf.readthedocs.io/>`_ workspace, which provides a HistFactory statistical model. The import is described by a :py:class:`~eos.analysis_file_description.PyHFConstraintDescription`.
+
+    The ``pyhf`` key accepts a mandatory ``file`` key, giving the path to the JSON file that specifies the workspace, and an optional ``parameter_map`` key.
+    In the simplest case only the workspace file is given:
+
+    .. code-block:: yaml
+
+      - name: EXP-pyhf
+        pyhf:
+          file: workspace_uncorr.json
+
+    If no ``parameter_map`` is given, each free parameter of the pyhf model is exposed as an EOS parameter named ``pyhf::<name>``.
+    Such a parameter --- for instance ``pyhf::mu`` --- can then be constrained by a prior like any other EOS parameter:
+
+    .. code-block:: yaml
+
+      priors:
+        - name: EXP-pyhf-params
+          descriptions:
+            - { 'parameter': 'pyhf::mu', 'min': -2, 'max': 6, 'type': 'uniform' }
+
+    By providing a ``parameter_map``, a pyhf parameter is instead identified with an existing EOS observable or parameter, optionally fixing its kinematics and options.
+    The pyhf likelihood then depends on EOS theory predictions and can be combined coherently with the other likelihoods and parameters of the analysis.
+    For example, the following maps the pyhf parameter ``mu`` onto the EOS observable ``B->pilnu::mu`` evaluated over the given ``q2`` range:
+
+    .. code-block:: yaml
+
+      - name: EXP-pyhf
+        pyhf:
+          file: workspace_corr.json
+          parameter_map:
+            mu: { 'name': 'B->pilnu::mu', 'kinematics': { 'q2_min': 1.0e-7, 'q2_max': 25.0 } }
+
+
+.. _analysis-file-posteriors:
+
+Posteriors
+~~~~~~~~~~
+
+The ``posteriors`` key contains a list of *named* posteriors. Each posterior combines one or more of the named priors and likelihoods defined above into a single Bayesian posterior probability density --- the object that the inference tasks, such as sampling, optimisation, and prediction, operate on. Each posterior has three mandatory keys and two optional keys:
+
+  - ``name`` (**mandatory**) --- The unique name of this posterior.
+  - ``prior`` (**mandatory**) --- The ordered list of named priors that are used as part of this posterior.
+  - ``likelihood`` (**mandatory**) --- The ordered list of named likelihoods that are used as part of this posterior.
+  - ``global_options`` (**optional**) --- A key/value map providing global options, i.e., options that apply to all observables used within this posterior.
+  - ``fixed_parameters`` (**optional**) --- A key/value map providing values for parameters that deviate from the default values.
+
+The following example illustrates the organisation of a posterior.
+
+.. code-block:: yaml
+
+   posteriors:
+     - name: CKM-pi
+       global_options:
+         l: e
+         model: CKM
+       prior:
+         - CKM
+         - FF-pi
+       likelihood:
+         - TH-pi
+         - EXP-pi
+
+The ``prior`` and ``likelihood`` keys refer to the named priors and likelihoods by their ``name``; together, the chosen priors must constrain every parameter that the chosen likelihoods depend on.
+The optional ``global_options`` apply to all observables evaluated within the posterior, and can be overridden by options given on an individual observable.
+The optional ``fixed_parameters`` pins individual parameters to fixed values, removing them from the set of varied parameters in the inference.
+A posterior is described by a :py:class:`~eos.analysis_file_description.PosteriorDescription`.
+
+.. _analysis-file-metadata:
+
+Metadata
+~~~~~~~~
+
+The optional ``metadata`` key provides bibliographic information about the analysis. It is purely descriptive and does not affect the inference. It accepts the following keys:
+
+  - ``title`` (**optional**) --- A human-readable title for the analysis.
+  - ``id`` (**optional**) --- A unique identifier for the analysis.
+  - ``authors`` (**optional**) --- A list of authors, each given by a ``name`` and, optionally, an ``affiliation`` and an ``email``.
+
+The metadata is described by a :py:class:`~eos.analysis_file_description.MetadataDescription`, and each author by a :py:class:`~eos.analysis_file_description.MetadataAuthorDescription`.
+
+.. _analysis-file-observables:
+
+Observables
+~~~~~~~~~~~
+
+New observables can be defined and used in the analysis description by following the syntax described in :ref:`the corresponding section <defining_observables>`.
+
+For example, the following code defines the ratio of two :math:`B \to \pi` form-factors as a new observable.
+
+.. code-block:: yaml
+
+  observables:
+    'B->pi::f_+(q2)/f_0(q2)':
+      latex: '\frac{f_+}{f_0}'
+      unit: '1'
+      options: {}
+      expression:
+        '<<B->pi::f_+(q2)>> / <<B->pi::f_0(q2)>>'
+
+Note that if you define a custom observable in an analysis file, and then plot some results from that analysis interactively, you need to ensure ``EOS`` knows about the new observable by loading in the same analysis file through ``eos.AnalysisFile("my_analysis.yaml")``.
+
+Each entry is keyed by the qualified name of the new observable and accepts the keys ``latex`` (its LaTeX representation), ``unit``, and ``expression`` (the expression that defines it), as well as an optional ``options`` map.
+A custom observable is described by an :py:class:`~eos.analysis_file_description.ObservableComponent`.
+
+.. _analysis-file-parameters:
+
+Parameters
+~~~~~~~~~~~
+
+New parameters can also be defined in the analysis description. This can be useful in two cases:
+
+  1. The new parameter(s) can be directly used in a custom observable and added to the analysis priors.
+  The combination of new observables, parameters and manual constraints make ``EOS`` extremely flexible.
+  The syntax for a new parameter follows:
+
+  .. code-block:: yaml
+
+    parameters:
+      'prefix::name' :
+          central: +1.0
+          min:     +0.0
+          max:     +2.0
+          unit:     '1'
+          latex:    '$p_\mathrm{user}$'
+
+  2. New parameters can also be used as aliases for existing parameters. Varying the alias will then vary all the aliased parameters.
+  This is particularly useful in analyses that assumes some symmetry amongst the parameters.
+  E.g. for a fit to Wilson coefficients under the assumption of lepton flavor universality, we can use
+
+  .. code-block:: yaml
+
+    parameters:
+      'ublnul::Re{cVL}' :
+        alias_of: [ 'ubenue::Re{cVL}', 'ubmunumu::Re{cVL}', 'ubtaunutau::Re{cVL}' ]
+        central: +1.0
+        min:     +0.0
+        max:     +2.0
+        unit:     '1'
+        latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\ell}\nu_\ell}_{V_L}$'
+
+  Note that if you define an alias in an analysis file, and then plot some results from that analysis interactively, you need to ensure ``EOS`` knows about the aliases by loading in the same analysis file through ``eos.AnalysisFile("my_analysis.yaml")``.
+
+Each entry is keyed by the qualified name of the new parameter and accepts the keys ``central``, ``min``, ``max``, ``unit``, and ``latex``.
+An optional ``alias_of`` key, holding a list of existing qualified names, instead makes the new parameter an alias for those parameters, so that varying it varies all of them together.
+A custom parameter is described by a :py:class:`~eos.analysis_file_description.ParameterComponent`.
+
+.. _analysis-file-predictions:
+
+Predictions
+~~~~~~~~~~~
+
+The last step of an analysis usually consists in the prediction of a set of observables based on previously obtained importance samples.
+The recognized ``predictions`` keys are:
+
+  - ``name`` (**mandatory**) The name of the set of predictions.
+  - ``observables`` (**mandatory**) The list of observables that need to be predicted. This should contain valid existing or manually-specified observables.
+  - ``global_options`` (**optional**) The global options that should be used in the evaluation of the observables.
+  - ``fixed_parameters`` (**optional**) A dictionary of parameters and their values that will be fixed in the evaluation of the observables.
+
+The observables accept two keys:
+  - ``name`` (**mandatory**) The qualified name of the observable.
+    Options can be specified in the observable name following the syntax of :class:`QualifiedName <eos.QualifiedName>`.
+    A warning will be raised if the observable options override the global options defined above.
+  - ``kinematics`` (**optional**) The dictionary of kinematics specifications for the observables.
+    For brevity, a list of kinematic specifications can be provided. In this case, one observable per specification will be created.
+
+The following code provides a valid example of predictions.
+
+.. code-block:: yaml
+
+  predictions:
+  - name: BR
+    global_options:
+      model: CKM
+    observables:
+      - name: B_u->lnu::BR;l=e
+      - name: B_u->lnu::BR;l=mu
+      - name: B_u->lnu::BR;l=tau
+
+  - name: dBR
+    global_options:
+      l: e
+      q: d
+      model: CKM
+      form-factors: BCL2008
+    observables:
+      - name: B->pilnu::dBR/dq2
+        kinematics: [ { q2:  1.0 }, { q2:  2.0 }, { q2:  3.0 }, { q2:  4.0 }, { q2:  5.0 },
+                      { q2:  6.0 }, { q2:  7.0 }, { q2:  8.0 }, { q2:  9.0 }, { q2: 10.0 },
+                      { q2: 11.0 }, { q2: 12.0 }, { q2: 13.0 }, { q2: 14.0 }, { q2: 15.0 },
+                      { q2: 16.0 }, { q2: 17.0 }, { q2: 18.0 }, { q2: 19.0 }, { q2: 20.0 },
+                      { q2: 21.0 }, { q2: 22.0 }, { q2: 23.0 }, { q2: 24.0 }, { q2: 25.0 },
+                      { q2: 26.0 }, { q2: 27.0 } ]
+
+A prediction is described by a :py:class:`~eos.analysis_file_description.PredictionDescription`, and each of its observables by a :py:class:`~eos.analysis_file_description.PredictionObservableComponent`.
+
+.. _analysis-file-figures:
+
+Figures
+~~~~~~~
+
+The ``figures`` key contains a list of *named* figures to be produced from the results of the analysis. Each figure follows the dedicated `figure description format <figure-format.html>`_ and is created by the :py:class:`~eos.figure.FigureFactory`; the figure's ``name`` determines the file name under which the rendered figure is stored.
+
+
+.. _analysis-file-steps:
+
+Steps
+~~~~~~~~~~~
+
+The ``steps`` key contains a list of pre-defined tasks that allow an analysis to be fully reproduced. Each step has three mandatory keys, and two optional keys:
+
+  - ``title`` (**mandatory**) --- The title of this step.
+  - ``id`` (**mandatory**) --- The unique identifier of this step.
+  - ``depends_on`` (**optional**) --- A list of step ``id``\ s that need to be executed prior to this step.
+  - ``default_arguments`` (**optional**) --- A dictionary of tasks and default arguments, for any of the tasks in this step.
+  - ``tasks`` (**mandatory**) --- The list of tasks that are part of this step.
+
+The following example illustrates the description of two nested sampling steps, followed by plotting of the results.
+
+.. code-block:: yaml
+
+  steps:
+    - title: 'Sample from CKM-all posterior'
+      id: 'CKM-all.sample'
+      tasks:
+        - task: 'sample-nested'
+          arguments:
+            posterior: 'CKM-all'
+            bound: 'multi'
+            nlive: 100
+            dlogz: 9.0
+            maxiter: 4000
+
+    - title: 'Sample from WET-all posterior'
+      id: 'WET-all.sample'
+      tasks:
+        - task: 'sample-nested'
+          arguments:
+            posterior: 'WET-all'
+            bound: 'multi'
+            nlive: 100
+            dlogz: 9.0
+            maxiter: 4000
+
+    - title: 'Create corner plot for CKM-all posterior'
+      id: 'CKM-all.corner-plot'
+      depends_on: ['CKM-all.sample', 'WET-all.sample']
+      default_arguments:
+        corner-plot:
+          format: ['pdf', 'png']
+      tasks:
+        - task: 'corner-plot'
+          arguments:
+            posterior: 'CKM-all'
+        - task: 'corner-plot'
+          arguments:
+            posterior: 'WET-all'
+
+The ``depends_on`` key orders the steps into a dependency graph, so that an analysis can be reproduced by executing its steps in a well-defined order, while ``default_arguments`` supplies arguments shared by a step's tasks.
+A step is described by a :py:class:`~eos.analysis_file_description.StepComponent`, and each of its tasks by a :py:class:`~eos.analysis_file_description.TaskComponent`.
+
+.. _analysis-file-masks:
+
+Masks
+~~~~~
+
+In some analyses, the resulting posterior is multi-modal, and it is useful to be able to define within the analysis file a filter, or mask, that selects a subset of the posterior samples.
+The masks section allows to define a mask as a set of (pseudo-)observables, and filtering on any or all (pseudo-)observables being > 0.
+
+The ``masks`` key contains a list of *named* masks. Each mask contains two mandatory keys and one optional key:
+
+  - ``name`` (**mandatory**) --- The unique name of this mask.
+  - ``description`` (**mandatory**) --- A list of expressions that define the mask.
+  - ``logical_combination`` (**optional**) --- The logical combination to take of the expressions in the mask. The options are ``and`` and ``or``, defaults to ``and``.
+
+
+The ``description`` block contains a list of either existing EOS observable names, new observable names and valid expressions, or the name of a previously defined mask.
+An example is shown below:
+
+.. code-block:: yaml
+
+  masks:
+    - name: fplus-arg-large
+      description:
+        - name: '0->pipi::Arg{f_+}(2)'
+          expression: '<<0->pipi::Arg{f_+}(q2)>>[q2=2] - 4.5'
+    - name: abs-b3-large
+      logical_combination: 'or'
+      description:
+        - name: 0->pipi::b3positive
+          expression: '[[0->pipi::b_(+,1)^3@KKRvD2024]] + 0.1'
+        - name: 0->pipi::b3negative
+          expression: '-[[0->pipi::b_(+,1)^4@KKRvD2024]] - 0.1'
+    - name: fplus-arg-large-or-abs-b3-large
+      logical_combination: 'or'
+      description:
+        - mask_name: fplus-arg-large
+        - mask_name: abs-b3-large
+
+Each element of a mask's ``description`` is selected, based on its keys, from the following concrete types:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - YAML selector
+     - description
+     - Python class
+   {% for selector, class, description in mask_types %}
+   * - ``{{ selector }}``
+     - {{ description }}
+     - :py:class:`~eos.analysis_file_description.{{ class }}`
+   {% endfor %}
+
+A mask is described by a :py:class:`~eos.analysis_file_description.MaskComponent`.
+
+.. _analysis-file-example:
+
+Example
+~~~~~~~
+
+The following real-world example illustrates the analysis file format.
+
+.. toggle-header::
+   :header: Example `examples/b-to-u-l-nu.yaml <https://github.com/eos/eos/tree/master/examples/b-to-u-l-nu.yaml>`_
+
+   .. literalinclude:: ../../examples/b-to-u-l-nu.yaml
+      :language: YAML

@@ -469,3 +469,116 @@ Utility Classes
 
 .. autoclass:: eos.figure.Watermark
    :members:
+
+
+.. _analysis-file-classes:
+
+Analysis File Description Classes
+=================================
+
+
+The classes in the :py:mod:`eos.analysis_file_description` module describe the individual elements of an
+:doc:`analysis file <analysis-file-format>`. Each class corresponds to a key, or a type of entry, of the
+analysis file format; its fields correspond to the keys of the respective YAML object.
+
+
+The metadata of an analysis is described by:
+
+.. autoclass:: eos.analysis_file_description.MetadataDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.MetadataAuthorDescription
+   :members:
+
+
+A named prior, and the prior densities it comprises, are described by:
+
+.. autoclass:: eos.analysis_file_description.PriorComponent
+   :members:
+
+.. autoclass:: eos.analysis_file_description.ConstraintPriorDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.UniformPriorDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.ScalePriorDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.GaussianPriorDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.CurtailedGaussianDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.PoissonPriorDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.TransformPriorDescription
+   :members:
+
+
+A named likelihood, and the constraints it comprises, are described by:
+
+.. autoclass:: eos.analysis_file_description.LikelihoodComponent
+   :members:
+
+.. autoclass:: eos.analysis_file_description.ConstraintLikelihoodDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.ManualConstraintDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.PyHFConstraintDescription
+   :members:
+
+
+A named posterior is described by:
+
+.. autoclass:: eos.analysis_file_description.PosteriorDescription
+   :members:
+
+
+A custom observable is described by:
+
+.. autoclass:: eos.analysis_file_description.ObservableComponent
+   :members:
+
+
+A custom parameter is described by:
+
+.. autoclass:: eos.analysis_file_description.ParameterComponent
+   :members:
+
+
+A prediction, and the observables it comprises, are described by:
+
+.. autoclass:: eos.analysis_file_description.PredictionDescription
+   :members:
+
+.. autoclass:: eos.analysis_file_description.PredictionObservableComponent
+   :members:
+
+
+A step, and the tasks it comprises, are described by:
+
+.. autoclass:: eos.analysis_file_description.StepComponent
+   :members:
+
+.. autoclass:: eos.analysis_file_description.TaskComponent
+   :members:
+
+
+A named mask, and the entries it comprises, are described by:
+
+.. autoclass:: eos.analysis_file_description.MaskComponent
+   :members:
+
+.. autoclass:: eos.analysis_file_description.MaskObservableComponent
+   :members:
+
+.. autoclass:: eos.analysis_file_description.MaskExpressionComponent
+   :members:
+
+.. autoclass:: eos.analysis_file_description.MaskNamedComponent
+   :members:
