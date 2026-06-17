@@ -25,6 +25,18 @@ import scipy
 class BestFitPoint:
     """
     Represents the best-fit point of a Bayesian analysis undertaken with the :class:`Analysis <eos.Analysis>` class.
+
+    Typically obtained as the return value of :meth:`Analysis.optimize`. It bundles the analysis with the
+    parameter point that maximizes its log-posterior and renders as a parameter/value table in IPython.
+
+    :param analysis: The analysis whose best-fit point is represented.
+    :type analysis: eos.Analysis
+    :param point: The values of the varied parameters at the best-fit point, in the same order as
+        :attr:`eos.Analysis.varied_parameters`.
+    :type point: iterable of float
+
+    :ivar analysis: The analysis whose best-fit point is represented.
+    :ivar point: The values of the varied parameters at the best-fit point.
     """
     def __init__(self, analysis, point):
         self.analysis = analysis
@@ -329,18 +341,34 @@ class Analysis:
 
 
     def clone(self):
-        """Returns an independent instance of eos.Analysis."""
+        """Return an independent copy of this analysis.
+
+        The clone is constructed from the same arguments as the original, so it has its own parameter set
+        and can be modified without affecting this instance.
+
+        :returns: A new analysis equivalent to this one.
+        :rtype: eos.Analysis
+        """
         return eos.Analysis(**self.init_args)
 
 
     def reset_parameters(self):
-        """Resets the analysis parameters to their default values."""
+        """Reset this analysis' parameters to their EOS default values.
+
+        Each parameter of the analysis is set back to the default value of the corresponding EOS
+        parameter, discarding any modifications made since the analysis was created.
+        """
         for p in eos.Parameters():
             self.parameters.set(p.name(), p.evaluate())
 
 
     def goodness_of_fit(self):
-        """Returns a :class:`GoodnessOfFit` object that summarizes the quality of the fit for the current parameter point."""
+        """Summarize the quality of the fit at the current parameter point.
+
+        :returns: A goodness-of-fit summary (e.g. test statistic, degrees of freedom, and p-value)
+            evaluated at the analysis' current parameter values.
+        :rtype: eos.GoodnessOfFit
+        """
         return eos.GoodnessOfFit(self._log_posterior)
 
 
