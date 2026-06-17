@@ -50,6 +50,12 @@
 - Add a workflow to determine code coverage with test cases (D. van Dyk)
 - Add comparison operators for ``qnp::OptionValue`` (D. van Dyk)
 - Add an output stream operator for ``qnp::OptionValue`` (D. van Dyk)
+- Document the user-facing classes and methods of the ``eos`` Python modules, and auto-generate the analysis file format reference from the ``eos.analysis_file_description`` classes (D. van Dyk)
+
+### Deprecated
+
+- Deprecate the curtailed Gaussian prior description, i.e. a ``gauss``/``gaussian`` prior with ``min``/``max`` keys; use ``type: gaussian`` without ``min``/``max`` instead (D. van Dyk)
+- Deprecate constraint-based prior descriptions without a ``type`` key; use ``type: constraint`` instead (D. van Dyk)
 
 ### Removed
 
@@ -82,6 +88,8 @@
 - Fix inconsistent use of ``s`` rather than ``q2`` across B->Kll, B->K^*ll, B_s->phill, Lambda_b->Lambdall, Lambda_b->Lambda(1520)ll, and B->X_sll (D. van Dyk)
 - Fix bugs in figure framework (D. Suelmann)
 - Fix bug in (non-)packaging of constraint files (D. van Dyk)
+- Fix the default ``Item.legend`` to return a list rather than a tuple (D. van Dyk)
+- Fix the type annotation of ``MaskComponent.description`` (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
