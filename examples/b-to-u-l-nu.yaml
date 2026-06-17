@@ -1,3 +1,14 @@
+metadata:
+  title: 'Example analysis of B -> u l nu transitions'
+  id: 'b-to-u-l-nu'
+  authors:
+    - name: 'Alice Notarealperson'
+      affiliation: 'Department of Made-Up Physics, University of Nowhere'
+      email: 'alice@example.com'
+    - name: 'Bob McFakeface'
+      affiliation: 'Institute for Fictional Studies, Imaginary Institute of Technology'
+      email: 'bob@example.com'
+
 parameters:
   'ublnul::Re{cVL}' :
       alias_of: [ 'ubenue::Re{cVL}', 'ubmunumu::Re{cVL}', 'ubtaunutau::Re{cVL}' ]
