@@ -742,7 +742,7 @@ class MaskComponent(Deserializable):
     :type logical_combination: str
     """
     name:str
-    description:dict
+    description:list
     logical_combination: str = "and"
 
     def __post_init__(self):
