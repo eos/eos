@@ -58,6 +58,10 @@
 - Add ``tight_layout`` and ``shared_axes`` options to ``grid`` figures (D. van Dyk)
 - Provide a sensible default ``legend()`` entry for most figure item types (D. van Dyk)
 - Make the tick label format configurable via a ``format`` field on the ``xticks`` and ``yticks`` of a plot (D. van Dyk)
+- Add the unbinned log-likelihood block ``LogLikelihoodBlock::Unbinned1D`` (Python: ``eos.LogLikelihoodBlock.Unbinned1D``), which convolves a signal PDF with a resolution function on a grid via a discrete Fourier transform (D. van Dyk)
+- Add classes for discrete Fourier transforms, ``eos::dft::Container`` and ``eos::dft::Plan`` (D. van Dyk)
+- Add ``SignalPDF::evaluate_linear()`` to evaluate a signal PDF on the linear scale (D. van Dyk)
+- Allow registering a custom ``SignalPDF`` at run time via ``SignalPDFs::insert`` (Python: ``eos.SignalPDFs.insert``) (D. van Dyk)
 
 ### Deprecated
 
@@ -97,6 +101,7 @@
 - Fix bug in (non-)packaging of constraint files (D. van Dyk)
 - Fix the default ``Item.legend`` to return a list rather than a tuple (D. van Dyk)
 - Fix the type annotation of ``MaskComponent.description`` (D. van Dyk)
+- Do not draw an empty legend (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
