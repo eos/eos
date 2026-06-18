@@ -101,13 +101,13 @@ class Item(Deserializable):
     def legend(self):
         """Return the item's legend entry as a list of handle/label pairs.
 
-        The default implementation returns an empty tuple, i.e. the item contributes no
+        The default implementation returns an empty list, i.e. the item contributes no
         dedicated legend entry. Subclasses that require a custom legend handle override this.
 
-        :returns: A sequence of ``(handle, label)`` pairs to be added to the plot legend.
+        :returns: A list of ``(handle, label)`` pairs to be added to the plot legend.
         :rtype: list[tuple[matplotlib.artist.Artist, str]]
         """
-        return ()
+        return []
 
 
 @dataclass(kw_only=True)
