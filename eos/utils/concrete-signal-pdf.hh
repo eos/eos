@@ -279,6 +279,8 @@ namespace eos
 
             virtual double evaluate() const;
 
+            virtual double evaluate_linear() const;
+
             virtual double normalization() const;
 
             virtual Parameters parameters();
