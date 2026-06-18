@@ -54,6 +54,9 @@ namespace eos
 
             virtual double evaluate() const = 0;
 
+            // Evaluate the unnormalized PDF on the linear scale, clamping non-positive values to zero.
+            virtual double evaluate_linear() const = 0;
+
             virtual double normalization() const = 0;
 
             virtual Kinematics kinematics() = 0;

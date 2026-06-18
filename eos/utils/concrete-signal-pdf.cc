@@ -60,6 +60,17 @@ namespace eos
     }
 
     double
+    ConcreteSignalPDF::evaluate_linear() const
+    {
+        if (auto result = _unnormalized_pdf->evaluate(); result > 0.0) [[likely]]
+        {
+            return result;
+        }
+
+        return 0.0;
+    }
+
+    double
     ConcreteSignalPDF::normalization() const
     {
         if (auto result = _normalization->evaluate(); result > 0.0) [[likely]]
