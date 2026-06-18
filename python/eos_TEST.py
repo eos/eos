@@ -256,10 +256,11 @@ class SignalPDFTests(unittest.TestCase):
         from math import log
 
         # 'TestLegendre1D::P(z)' is a PDF provided for testing purposes:
-        # its unnormalized density is pdf(z) = 9 + 8 z + 9 z^2.
+        # its unnormalized density is pdf(z) = z (4 - z) = 4 z - z^2, with zeros at z = 0
+        # and z = 4 and a maximum at z = 2.
         try:
             pdf = SignalPDF.make('TestLegendre1D::P(z)', Parameters.Defaults(),
-                    Kinematics(z=0.0, z_min=-1.0, z_max=+1.0), Options())
+                    Kinematics(z=2.0, z_min=0.0, z_max=4.0), Options())
         except Exception as e:
             self.fail(f'cannot create SignalPDF: {e}')
 
@@ -272,8 +273,8 @@ class SignalPDFTests(unittest.TestCase):
             self.fail(f'cannot evaluate SignalPDF: {e}')
 
         # evaluate() returns the logarithm of the unnormalized PDF;
-        # pdf(z=0) = 9 + 8 * 0 + 9 * 0^2 = 9
-        self.assertAlmostEqual(value, log(9.0), delta=1.0e-10)
+        # pdf(z=2) = 4 * 2 - 2^2 = 4
+        self.assertAlmostEqual(value, log(4.0), delta=1.0e-10)
 
         try:
             norm = pdf.normalization()
@@ -281,8 +282,8 @@ class SignalPDFTests(unittest.TestCase):
             self.fail(f'cannot evaluate SignalPDF normalization: {e}')
 
         # normalization() returns the logarithm of the normalization integral;
-        # int_{-1}^{+1} dz (9 + 8 z + 9 z^2) = 9 * 2 + 0 + 3 * 2 = 24
-        self.assertAlmostEqual(norm, log(24.0), delta=1.0e-10)
+        # int_{0}^{4} dz (4 z - z^2) = 2 * 16 - 64 / 3 = 32 / 3
+        self.assertAlmostEqual(norm, log(32.0 / 3.0), delta=1.0e-10)
 
 
 class LoggingTests(unittest.TestCase):
