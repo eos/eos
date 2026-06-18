@@ -52,7 +52,7 @@ namespace eos
 {
     namespace test
     {
-        // PDF = (1/2 L_0 + 1/3 L_1 + 1/4 L_2) / 2
+        // Unnormalized PDF = z (4 - z) = 4 z - z^2; zeros at z = 0 and z = 4, maximum at z = 2.
         class Legendre1DPDF : public ParameterUser
         {
             public:
@@ -67,13 +67,13 @@ namespace eos
                 double
                 pdf(const double & z) const
                 {
-                    return (9.0 + 8.0 * z + 9.0 * z * z);
+                    return (4.0 * z - z * z);
                 }
 
                 double
                 norm(const double & z_min, const double & z_max) const
                 {
-                    return (9.0 * (z_max - z_min) + 4.0 * (power_of<2>(z_max) - power_of<2>(z_min)) + 3.0 * (power_of<3>(z_max) - power_of<3>(z_min)));
+                    return (2.0 * (power_of<2>(z_max) - power_of<2>(z_min)) - (power_of<3>(z_max) - power_of<3>(z_min)) / 3.0);
                 }
 
                 static ObservableEntry::OptionIterator
@@ -93,7 +93,7 @@ namespace eos
 
         const std::set<ReferenceName> Legendre1DPDF::references{};
 
-        const std::string Legendre1DPDF::description = "1D PDF up to 2nd order in z; used for unit tests only.";
+        const std::string Legendre1DPDF::description = "1D PDF, quadratic in z with zeros at z = 0 and z = 4 and a maximum at z = 2; used for unit tests only.";
     } // namespace test
 
     Observable::~Observable() = default;
