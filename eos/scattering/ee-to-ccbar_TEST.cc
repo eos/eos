@@ -314,10 +314,11 @@ class eetoccbarTest :
 
             {
                 // Phase-1/2 extension: the full EEToCCBar now carries 4 resonances and
-                // 10 channels (psi(4040) + eff(4040), and the equal-mass open-charm channels
-                // D_s^+D_s^-, D^*0Dbar^*0, D^*+D^*-). With every new coupling left at its
-                // default 0, the new resonance and channels must decouple completely, so the
-                // N_C=5 results are reproduced exactly.
+                // 14 channels (psi(4040) + eff(4040); the equal-mass open-charm channels
+                // D_s^+D_s^-, D^*0Dbar^*0, D^*+D^*-; the S-wave D Dbar^* channels; and the
+                // D-wave D Dbar^* channels). With every new coupling left at its default 0,
+                // the new resonance and channels must decouple completely, so the N_C=5
+                // results are reproduced exactly.
                 Parameters p = Parameters::Defaults();
                 p["mass::psi(3770)"]                      =  3.796443282051135;
                 p["ee->ccbar::g0(psi(2S),e^+e^-)"]        = -0.02077753547690923;
@@ -335,7 +336,7 @@ class eetoccbarTest :
                 Options oo;
                 EEToCCBar c(p, oo);
 
-                // Backward compatibility at the extended (12x4) default size: identical to
+                // Backward compatibility at the extended (14x4) default size: identical to
                 // the N_C=5 value pinned in the block above.
                 auto ir = c.prepare(3.78);
                 TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
@@ -355,15 +356,19 @@ class eetoccbarTest :
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstarpDstarm(ir_hi),    0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoD0Dbarstar0(ir_hi),     0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDpDstarm(ir_hi),        0.0, eps);
+                // ... including the new D-wave partial waves separately.
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoD0Dbarstar0_D(ir_hi),   0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDpDstarm_D(ir_hi),      0.0, eps);
 
                 // Positive control: switching the couplings on makes psi(4040) acquire a
                 // width and feed the new open-charm channels, confirming they are genuinely
-                // wired in (not dead code).
-                p["ee->ccbar::g0(psi(4040),e^+e^-)"]      = 5.0;
-                p["ee->ccbar::g0(psi(4040),eff(4040))"]   = 2.0;
-                p["ee->ccbar::g0(psi(4040),D_s^+D_s^-)"]  = 2.0;
-                p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0)"] = 2.0;
-                p["ee->ccbar::g0(psi(4040),D^0Dbar^*0)"]  = 2.0;
+                // wired in (not dead code). The D-wave D Dbar^* coupling is switched on too.
+                p["ee->ccbar::g0(psi(4040),e^+e^-)"]         = 5.0;
+                p["ee->ccbar::g0(psi(4040),eff(4040))"]      = 2.0;
+                p["ee->ccbar::g0(psi(4040),D_s^+D_s^-)"]     = 2.0;
+                p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0)"]    = 2.0;
+                p["ee->ccbar::g0(psi(4040),D^0Dbar^*0)"]     = 2.0;
+                p["ee->ccbar::g0(psi(4040),D^0Dbar^*0(D))"]  = 2.0;
                 TEST_CHECK(c.psi4040_eff_width()   > 0.0);
                 TEST_CHECK(c.psi4040_total_width() > 0.0);
 
@@ -371,6 +376,11 @@ class eetoccbarTest :
                 TEST_CHECK(c.sigma_eetoDsDs(ir_hi)            > 0.0);
                 TEST_CHECK(c.sigma_eetoDstar0Dstarbar0(ir_hi) > 0.0);
                 TEST_CHECK(c.sigma_eetoD0Dbarstar0(ir_hi)     > 0.0);
+                // The D-wave partial wave now contributes, and the total is the sum S + D.
+                TEST_CHECK(c.sigma_eetoD0Dbarstar0_S(ir_hi)   > 0.0);
+                TEST_CHECK(c.sigma_eetoD0Dbarstar0_D(ir_hi)   > 0.0);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbarstar0(ir_hi),
+                        c.sigma_eetoD0Dbarstar0_S(ir_hi) + c.sigma_eetoD0Dbarstar0_D(ir_hi), eps);
             }
         }
 } eetoccbar_test;

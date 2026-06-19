@@ -1649,9 +1649,11 @@ groups:
               'D_s^+D_s^-': 'D_s^+ D_s^-'
               'D^0Dbar^*0': 'D^0\bar{D}^{*0}'
               'D^+D^*-': 'D^+ D^{*-}'
+              'D^0Dbar^*0(D)': 'D^0\bar{D}^{*0}\,(D)'
+              'D^+D^*-(D)': 'D^+ D^{*-}\,(D)'
           matrix:
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-"]
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)"]
 
       # e^+ e^- channel
       'ee->ccbar::g0(%1%,%2%)' :
@@ -1676,7 +1678,9 @@ groups:
               'D_s^+D_s^-': 'D_s^+ D_s^-'
               'D^0Dbar^*0': 'D^0\bar{D}^{*0}'
               'D^+D^*-': 'D^+ D^{*-}'
+              'D^0Dbar^*0(D)': 'D^0\bar{D}^{*0}\,(D)'
+              'D^+D^*-(D)': 'D^+ D^{*-}\,(D)'
           matrix:
               - ["J/psi",  "psi(2S)", "psi(3770)", "psi(4040)"]
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)"]
   # }}}
