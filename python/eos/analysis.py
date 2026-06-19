@@ -215,6 +215,10 @@ class Analysis:
                 else:
                     raise ValueError(f'Unknown prior type \'{prior_type}\'')
             elif 'constraint' in prior:
+                if 'type' not in prior:
+                    eos.warn('A constraint prior specification without a \'type\' key is deprecated and will be removed in a future version of EOS; add \'type: constraint\' instead')
+                elif prior['type'] != 'constraint':
+                    raise ValueError(f'Unknown prior type \'{prior["type"]}\' for a constraint-based prior')
                 constraint_name = eos.QualifiedName(prior['constraint'])
                 constraint_entry = eos.Constraints()[constraint_name]
                 log_prior = constraint_entry.make_prior(self.parameters, constraint_name.options_part())

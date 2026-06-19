@@ -86,42 +86,46 @@ class MetadataDescription(Deserializable):
 class PriorDescription:
     """Polymorphic description of a single prior on one or more parameters.
 
-    This is a dispatcher rather than a concrete description: :meth:`from_dict` inspects the keys of a
-    prior description and returns an instance of the matching concrete type. A description containing a
-    ``constraint`` key yields a :class:`ConstraintPriorDescription`; a description containing
-    ``parameters`` yields a :class:`TransformPriorDescription`; otherwise the ``type`` key selects among
-    :class:`UniformPriorDescription`, :class:`ScalePriorDescription`, :class:`GaussianPriorDescription`,
-    :class:`CurtailedGaussianDescription` (a Gaussian with a ``min``/``max`` truncation), and
-    :class:`PoissonPriorDescription`.
+    This is a dispatcher rather than a concrete description: :meth:`from_dict` selects the concrete type
+    from the ``type`` key. The recognized types are ``constraint`` (:class:`ConstraintPriorDescription`),
+    ``uniform``/``flat`` (:class:`UniformPriorDescription`), ``scale`` (:class:`ScalePriorDescription`),
+    ``gauss``/``gaussian`` (:class:`GaussianPriorDescription`, or :class:`CurtailedGaussianDescription`
+    if ``min``/``max`` are given), ``poisson`` (:class:`PoissonPriorDescription`), and ``transform``
+    (:class:`TransformPriorDescription`).
+
+    For backwards compatibility, a description that omits the ``type`` key but provides a ``constraint``
+    key is still interpreted as a :class:`ConstraintPriorDescription`; this form is deprecated.
     """
 
     @staticmethod
     def from_dict(**kwargs):
         """Create the concrete prior description matching the given keyword description.
 
-        :returns: An instance of the concrete :class:`PriorDescription` subtype selected from the keys.
+        :returns: An instance of the concrete :class:`PriorDescription` subtype selected from ``type``.
         :raises ValueError: If the keys do not identify a known type of prior description.
         """
-        if 'constraint' in kwargs:
-            return Deserializable.make(ConstraintPriorDescription, **kwargs)
-        elif 'parameter' in kwargs and 'type' in kwargs:
+        if 'type' in kwargs:
             _kwargs = _copy.deepcopy(kwargs)
             _kwargs.pop('type')
-            if kwargs['type'] in ("uniform", "flat"):
+            if kwargs['type'] in ("constraint",):
+                return Deserializable.make(ConstraintPriorDescription, **_kwargs)
+            elif kwargs['type'] in ("uniform", "flat"):
                 return Deserializable.make(UniformPriorDescription, **_kwargs)
             elif kwargs['type'] in ("scale",):
                 return Deserializable.make(ScalePriorDescription, **_kwargs)
             elif kwargs['type'] in ("gauss", "gaussian"):
-                if "min" in kwargs:
+                if ('min' in kwargs) != ('max' in kwargs):
+                    raise ValueError('A Gaussian prior description must contain both \'min\' and \'max\' or neither')
+                if 'min' in kwargs:
                     return Deserializable.make(CurtailedGaussianDescription, **_kwargs)
                 return Deserializable.make(GaussianPriorDescription, **_kwargs)
             elif kwargs['type'] in ("poisson",):
                 return Deserializable.make(PoissonPriorDescription, **_kwargs)
-        elif 'parameters' in kwargs:
-            _kwargs = _copy.deepcopy(kwargs)
-            _kwargs.pop('type')
-            if kwargs['type'] in ("transform"):
+            elif kwargs['type'] in ("transform",):
                 return Deserializable.make(TransformPriorDescription, **_kwargs)
+        elif 'constraint' in kwargs:
+            eos.warn('A constraint prior description without a \'type\' key is deprecated and will be removed in a future version of EOS; add \'type: constraint\' instead')
+            return Deserializable.make(ConstraintPriorDescription, **kwargs)
 
         raise ValueError('Unknown type of prior description')
 
@@ -224,12 +228,13 @@ class UniformPriorDescription(Deserializable):
 
 @dataclass
 class ConstraintPriorDescription(Deserializable):
-    r"""Describes a prior taken from a built-in EOS constraint (selected by the ``constraint`` key).
+    r"""Describes a (possibly correlated, multivariate) prior taken from a built-in EOS constraint (``type: constraint``).
 
     :param constraint: The qualified name of the EOS constraint used as the prior.
     :type constraint: str
     """
     constraint:str
+    type:str=field(repr=False, init=False, default="constraint")
 
 @dataclass
 class TransformPriorDescription(Deserializable):

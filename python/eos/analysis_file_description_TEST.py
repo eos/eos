@@ -109,7 +109,7 @@ class PriorDescriptionTests(unittest.TestCase):
     def test_dispatch(self):
         "Check that the factory dispatches each prior type to the correct class."
         self.assertIsInstance(
-            PriorDescription.from_dict(constraint='B->D::f_++f_0@HPQCD:2015A'),
+            PriorDescription.from_dict(type='constraint', constraint='B->D::f_++f_0@HPQCD:2015A'),
             ConstraintPriorDescription)
         self.assertIsInstance(
             PriorDescription.from_dict(parameter='p', type='uniform', min=0.0, max=1.0),
@@ -133,6 +133,13 @@ class PriorDescriptionTests(unittest.TestCase):
             PriorDescription.from_dict(parameter='p', type='not-a-type')
         with self.assertRaises(ValueError):
             PriorDescription.from_dict()
+
+    def test_gaussian_requires_both_bounds(self):
+        "A gaussian prior with only one of 'min'/'max' is rejected with a clear error."
+        with self.assertRaises(ValueError):
+            PriorDescription.from_dict(parameter='p', type='gaussian', central=0.0, sigma=1.0, min=-1.0)
+        with self.assertRaises(ValueError):
+            PriorDescription.from_dict(parameter='p', type='gaussian', central=0.0, sigma=1.0, max=1.0)
 
 
 class PoissonPriorDescriptionTests(unittest.TestCase):
@@ -213,6 +220,13 @@ class UniformPriorDescriptionTests(unittest.TestCase):
 class ConstraintPriorDescriptionTests(unittest.TestCase):
 
     def test_from_dict(self):
+        desc = PriorDescription.from_dict(type='constraint', constraint='B->D::f_++f_0@HPQCD:2015A')
+        self.assertIsInstance(desc, ConstraintPriorDescription)
+        self.assertEqual(desc.constraint, 'B->D::f_++f_0@HPQCD:2015A')
+        self.assertEqual(desc.type, 'constraint')
+
+    def test_from_dict_without_type_is_supported(self):
+        "A constraint prior without an explicit 'type' key is still accepted (deprecated form)."
         desc = PriorDescription.from_dict(constraint='B->D::f_++f_0@HPQCD:2015A')
         self.assertIsInstance(desc, ConstraintPriorDescription)
         self.assertEqual(desc.constraint, 'B->D::f_++f_0@HPQCD:2015A')

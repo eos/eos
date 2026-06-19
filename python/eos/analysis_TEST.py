@@ -57,8 +57,8 @@ class ClassMethodTests(unittest.TestCase):
 
          # Note: the cases are not physically meaningful
          priors = [
-             { 'constraint': 'D_s^*::decay-constants@PZ:2021A' },
-             { 'constraint': 'D_s^*_T::decay-constants@PZ:2021A' }
+             { 'type': 'constraint', 'constraint': 'D_s^*::decay-constants@PZ:2021A' },
+             { 'type': 'constraint', 'constraint': 'D_s^*_T::decay-constants@PZ:2021A' }
          ]
 
          analysis_args = {
@@ -79,7 +79,7 @@ class ClassMethodTests(unittest.TestCase):
          # Note: the cases are not physically meaningful
          priors = [
              { 'parameter': 'decay-constant::D_s',      'min':  0.24781, 'max':  0.25197, 'type': 'uniform'},
-             { 'constraint': 'D_s^*::decay-constants@PZ:2021A' }
+             { 'type': 'constraint', 'constraint': 'D_s^*::decay-constants@PZ:2021A' }
          ]
 
          analysis_args = {
@@ -214,7 +214,7 @@ class ClassMethodTests(unittest.TestCase):
                 }
             },
             'priors': [
-                { 'constraint': 'B->K::FormFactors[parametric,LCSR]@GKvD:2018A' },
+                { 'type': 'constraint', 'constraint': 'B->K::FormFactors[parametric,LCSR]@GKvD:2018A' },
                 { 'parameter': 'mass::c', 'min': 1.18, 'max': 1.36, 'type': 'uniform' },
                 { 'parameter': 'mass::b(MSbar)', 'min': 4.12, 'max': 4.24, 'type': 'uniform' },
             ],
@@ -279,7 +279,7 @@ class ClassMethodTests(unittest.TestCase):
                 }
             },
             'priors': [
-                { 'constraint': 'test::test2' },
+                { 'type': 'constraint', 'constraint': 'test::test2' },
             ],
             'likelihood': [
                 # no entry; ``test::test`` is automatically selected as a manual constraint
