@@ -286,6 +286,109 @@ namespace eos
     };
 
 
+    // V -> PV channel for two unequal masses in a D-wave (l = 2), e.g. a
+    // sub-leading D Dbar^* amplitude. rho() is the bare phase space (the K-matrix
+    // engine applies the centrifugal barrier n^2 = (q/q0)^4 F_2^2 separately);
+    // chew_mandelstam() is the analytic continuation of i * rho * n^2, with
+    // n^2 = z^4/(9 + 3 z^2 + z^4), z = q/q0. The closed form is assembled from the
+    // l = 0 dispersive function CM_0 (cm0 below) plus the four poles of the
+    // Blatt-Weisskopf denominator, and is threshold-subtracted so CM((m1+m2)^2)=0,
+    // consistent with the other channels. Derived and validated (once-subtracted
+    // dispersion relation, plus an l = 1 cross-check against PWavePPChannel) in
+    // analytic/chew-mandelstam.py (sections 7-8, checks D0-D5).
+    template <unsigned nchannels_, unsigned nresonances_>
+    struct DWavePVChannel :
+    public KMatrix<nchannels_, nresonances_>::Channel
+    {
+        DWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 2, q0, g0s)
+        {
+        };
+
+        using KMatrix<nchannels_, nresonances_>::Channel::_q0;
+
+        const double pi = M_PI;
+        const complex<double> i = complex<double>(0.0, 1.0);
+
+        // Kaellen function lambda(s, m1^2, m2^2) = (s - (m1+m2)^2)(s - (m1-m2)^2).
+        complex<double> kallen(const complex<double> & s)
+        {
+            const double m1 = this->_m1();
+            const double m2 = this->_m2();
+
+            return (s - power_of<2>(m1 + m2)) * (s - power_of<2>(m1 - m2));
+        }
+
+        complex<double> rho(const complex<double> & s)
+        {
+            const double mthr = this->_m1() + this->_m2();
+
+            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : std::sqrt(kallen(s)) / 16.0 / pi / s;
+        }
+
+        // l = 0 dispersive building block CM_0(s) (bare: no barrier, no threshold
+        // subtraction). The +i*1e-15 fixes the branch as in the other channels.
+        complex<double> cm0(const complex<double> & S)
+        {
+            const double m1 = this->_m1();
+            const double m2 = this->_m2();
+            const complex<double> s = S + complex<double>(0.0, 1e-15);
+            const complex<double> w = std::sqrt(kallen(s));
+
+            return 1.0 / 16.0 / pi / pi * (
+                    w / s * std::log((m1 * m1 + m2 * m2 - s + w) / (2.0 * m1 * m2))
+                    - (m1 * m1 - m2 * m2) / s * std::log(m1 / m2)
+                    );
+        }
+
+        // Contribution to K(s) of the two s-plane poles arising from one z^2-root
+        // "root" (with partial-fraction coefficient "coeff") of the barrier
+        // denominator: coeff/(z^2 - root) = sum_{r+,r-} R/(s - r), with the poles
+        // r the roots of lambda(s) - 4 root q0^2 s = s^2 - B s + C0.
+        complex<double> pole_pair(const complex<double> & s, const complex<double> & cm0s,
+                const complex<double> & root, const complex<double> & coeff)
+        {
+            const double m1 = this->_m1();
+            const double m2 = this->_m2();
+            const double q0 = this->_q0();
+
+            const complex<double> B    = 2.0 * (m1 * m1 + m2 * m2) + 4.0 * root * q0 * q0;
+            const double          C0   = power_of<2>(m1 * m1 - m2 * m2);
+            const complex<double> disc = std::sqrt(B * B - 4.0 * C0);
+            const complex<double> rp   = (B + disc) / 2.0;
+            const complex<double> rm   = (B - disc) / 2.0;
+
+            const complex<double> Rp = coeff * 4.0 * q0 * q0 * rp / (rp - rm);
+            const complex<double> Rm = coeff * 4.0 * q0 * q0 * rm / (rm - rp);
+
+            return Rp * (cm0s - cm0(rp)) / (s - rp) + Rm * (cm0s - cm0(rm)) / (s - rm);
+        }
+
+        // K(s) = CM_0(s) + sum_p R_p [CM_0(s) - CM_0(p)] / (s - p). The z^2-roots of
+        // 9 + 3 z^2 + z^4 are a, b = 3 exp(+- 2 i pi/3), with partial-fraction
+        // coefficients c_a = 3 b/(a-b), c_b = -3 a/(a-b).
+        complex<double> kfun(const complex<double> & s)
+        {
+            const complex<double> a  = 3.0 * std::exp( 2.0 * i * pi / 3.0);
+            const complex<double> b  = 3.0 * std::exp(-2.0 * i * pi / 3.0);
+            const complex<double> ca =  3.0 * b / (a - b);
+            const complex<double> cb = -3.0 * a / (a - b);
+
+            const complex<double> cm0s = cm0(s);
+
+            return cm0s + pole_pair(s, cm0s, a, ca) + pole_pair(s, cm0s, b, cb);
+        }
+
+        // Analytic continuation of i * rho * n^2 for l = 2, threshold-subtracted.
+        complex<double> chew_mandelstam(const complex<double> & S)
+        {
+            const double sth = power_of<2>(this->_m1() + this->_m2());
+
+            return kfun(S) - kfun(complex<double>(sth, 0.0));
+        }
+    };
+
+
     template <unsigned nchannels_, unsigned nresonances_>
     struct CharmoniumResonance :
     public KMatrix<nchannels_, nresonances_>::Resonance
