@@ -41,6 +41,9 @@ namespace eos
         UsedParameter m_eff;
         UsedParameter m_D0;
         UsedParameter m_Dp;
+        UsedParameter m_Ds;       // mass::D_s        (D_s^+/D_s^-)
+        UsedParameter m_Dstar0;   // mass::D_u^*      (neutral D^*0)
+        UsedParameter m_Dstarp;   // mass::D_d^*      (charged D^*+)
 
         bool assume_isospin;
 
@@ -54,14 +57,16 @@ namespace eos
             Jpsi = 0, psi2S, psi3770, psi4040
         };
 
-        static const inline std::array<std::string, 7> channel_names =
+        static const inline std::array<std::string, 10> channel_names =
         {
-            "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)"
+            "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)",
+            "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-"
         };
 
         enum Channels
         {
-            ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040
+            ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040,
+            DsDs, Dstar0Dstarbar0, DstarpDstarm
         };
 
         // Resonance masses
@@ -125,6 +130,9 @@ namespace eos
                 {
                     case DpDm:
                         return D0Dbar0;
+
+                    case DstarpDstarm:
+                        return Dstar0Dstarbar0;
 
                     default:
                         return channel;
@@ -237,6 +245,9 @@ namespace eos
             m_eff(p["ee->ccbar::effective_mass"], u),
             m_D0(p["mass::D^0"], u),
             m_Dp(p["mass::D^+"], u),
+            m_Ds(p["mass::D_s"], u),
+            m_Dstar0(p["mass::D_u^*"], u),
+            m_Dstarp(p["mass::D_d^*"], u),
             assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"_ov).str())),
             m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
             g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -270,6 +281,17 @@ namespace eos
                         break;
                     case DpDm:
                         channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DsDs:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Ds, m_Ds, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    // V*V D^*Dbar^* collapsed to a single l=1 amplitude (first approximation;
+                    // the physical 1^-- V.V structure spans 3S1/3D1). See PHASE2-EASY-SCOPE.md.
+                    case Dstar0Dstarbar0:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DstarpDstarm:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
 
                     default:
@@ -531,6 +553,24 @@ namespace eos
     EEToCCBar::sigma_eetoDpDm(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DpDm);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DsDs);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstar0Dstarbar0(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::Dstar0Dstarbar0);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstarpDstarm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DstarpDstarm);
     }
 
     double
