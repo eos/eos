@@ -69,10 +69,9 @@ The ``priors`` key contains a list of *named* priors. Each prior has two mandato
   - ``name`` (**mandatory**) --- The unique name of this prior.
   - ``descriptions`` (**mandatory**) --- The ordered list of parameters described by this prior.
 
-For a univariate prior, ``descriptions`` contains only a single prior description, which is a key/value map describing the prior.
-For an uncorrelated multivariate prior, ``descriptions`` contains more than one prior description.
-The format for a prior description is the same as used in the :class:`Analysis <eos.Analysis>` constructor.
-For example, the following code create two named priors ``CKM`` (univariate) and ``FF-pi`` (multivariate but uncorrelated).
+Each prior description is a key/value map whose ``type`` key selects the kind of prior; the same format is used in the :class:`Analysis <eos.Analysis>` constructor.
+A univariate prior has a single description, while an uncorrelated multivariate prior has one description per parameter.
+For example, the following code creates two named priors ``CKM`` (univariate) and ``FF-pi`` (multivariate but uncorrelated).
 
 .. code-block:: yaml
 
@@ -97,9 +96,8 @@ For example, the following code create two named priors ``CKM`` (univariate) and
          - { 'parameter':  'B->pi::b_T^3@BCL2008'  , 'min':  -7.39 , 'max':  10.60 , 'type': 'uniform' }
 
 
-For a correlated multivariate prior, ``descriptions`` contains a single element consisting of a key/value map.
-It uses ``type: constraint``, and the ``constraint`` key gives the qualified name of an EOS constraint.
-The following example illustrates the organisation of a correlated multivariate prior.
+A ``type: constraint`` description instead draws a (possibly correlated, multivariate) prior from a built-in EOS constraint, named by the ``constraint`` key.
+The following example illustrates such a prior.
 
 .. code-block:: yaml
 
@@ -108,7 +106,7 @@ The following example illustrates the organisation of a correlated multivariate 
        descriptions:
          - { 'type': 'constraint', 'constraint': 'B->rho::FormFactors[parametric,LCSR]@BSZ:2015A' }
 
-Each entry of ``descriptions`` is selected, based on its keys, from the following concrete prior descriptions:
+Each prior description's ``type`` key selects one of the following:
 
 .. list-table::
    :widths: auto

@@ -131,7 +131,7 @@ class PriorDescription:
 
 @dataclass
 class PoissonPriorDescription(Deserializable):
-    r"""Describes a Poisson prior on a single parameter (selected by ``type: poisson``).
+    r"""Describes a Poisson prior on a single parameter.
 
     :param parameter: The qualified name of the parameter.
     :type parameter: str
@@ -173,7 +173,7 @@ class CurtailedGaussianDescription(Deserializable):
 
 @dataclass
 class GaussianPriorDescription(Deserializable):
-    r"""Describes a Gaussian prior on a single parameter (``type: gauss`` without ``min``/``max``).
+    r"""Describes a Gaussian prior on a single parameter.
 
     :param parameter: The qualified name of the parameter.
     :type parameter: str
@@ -190,7 +190,7 @@ class GaussianPriorDescription(Deserializable):
 
 @dataclass
 class ScalePriorDescription(Deserializable):
-    r"""Describes a prior on a renormalization scale parameter (selected by ``type: scale``).
+    r"""Describes a prior on a renormalization scale parameter.
 
     :param parameter: The qualified name of the scale parameter.
     :type parameter: str
@@ -212,7 +212,7 @@ class ScalePriorDescription(Deserializable):
 
 @dataclass
 class UniformPriorDescription(Deserializable):
-    r"""Describes a uniform (flat) prior on a single parameter (``type: uniform`` or ``flat``).
+    r"""Describes a uniform (flat) prior on a single parameter.
 
     :param parameter: The qualified name of the parameter.
     :type parameter: str
@@ -228,7 +228,7 @@ class UniformPriorDescription(Deserializable):
 
 @dataclass
 class ConstraintPriorDescription(Deserializable):
-    r"""Describes a (possibly correlated, multivariate) prior taken from a built-in EOS constraint (``type: constraint``).
+    r"""Describes a (possibly correlated, multivariate) prior taken from a built-in EOS constraint.
 
     :param constraint: The qualified name of the EOS constraint used as the prior.
     :type constraint: str
@@ -238,7 +238,7 @@ class ConstraintPriorDescription(Deserializable):
 
 @dataclass
 class TransformPriorDescription(Deserializable):
-    r"""Describes a prior on a linear transformation of several parameters (selected by ``type: transform``).
+    r"""Describes a prior on a linear transformation of several parameters.
 
     :param parameters: The qualified names of the parameters that enter the transformation.
     :type parameters: list[str]
