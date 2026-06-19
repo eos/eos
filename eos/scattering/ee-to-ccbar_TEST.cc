@@ -295,7 +295,7 @@ class eetoccbarTest :
                 Options oo;
                 EEToCCBar c(p, oo);
 
-                // Backward compatibility at the extended (10x4) default size: identical to
+                // Backward compatibility at the extended (12x4) default size: identical to
                 // the N_C=5 value pinned in the block above.
                 auto ir = c.prepare(3.78);
                 TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
@@ -305,12 +305,16 @@ class eetoccbarTest :
                 TEST_CHECK_NEARLY_EQUAL(c.psi4040_total_width(), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.psi4040_eff_width(),   0.0, eps);
 
-                // The new open-charm channels are inert at default couplings, evaluated
-                // above all three thresholds (D_sD̄_s 3.937, D*0D̄*0 4.014, D*+D*- 4.021 GeV).
+                // The new open-charm channels are inert at default couplings. The equal-mass
+                // ones are evaluated above all thresholds (D_sD̄_s 3.937, D*0D̄*0 4.014,
+                // D*+D*- 4.021 GeV); the unequal-mass D Dbar^* channels (thresholds 3.872 /
+                // 3.880 GeV) likewise.
                 auto ir_hi = c.prepare(4.05);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDsDs(ir_hi),            0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstar0Dstarbar0(ir_hi), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstarpDstarm(ir_hi),    0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoD0Dbarstar0(ir_hi),     0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDpDstarm(ir_hi),        0.0, eps);
 
                 // Positive control: switching the couplings on makes psi(4040) acquire a
                 // width and feed the new open-charm channels, confirming they are genuinely
@@ -319,12 +323,14 @@ class eetoccbarTest :
                 p["ee->ccbar::g0(psi(4040),eff(4040))"]   = 2.0;
                 p["ee->ccbar::g0(psi(4040),D_s^+D_s^-)"]  = 2.0;
                 p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0)"] = 2.0;
+                p["ee->ccbar::g0(psi(4040),D^0Dbar^*0)"]  = 2.0;
                 TEST_CHECK(c.psi4040_eff_width()   > 0.0);
                 TEST_CHECK(c.psi4040_total_width() > 0.0);
 
                 ir_hi = c.prepare(4.05);
                 TEST_CHECK(c.sigma_eetoDsDs(ir_hi)            > 0.0);
                 TEST_CHECK(c.sigma_eetoDstar0Dstarbar0(ir_hi) > 0.0);
+                TEST_CHECK(c.sigma_eetoD0Dbarstar0(ir_hi)     > 0.0);
             }
         }
 } eetoccbar_test;

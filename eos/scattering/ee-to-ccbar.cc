@@ -57,16 +57,16 @@ namespace eos
             Jpsi = 0, psi2S, psi3770, psi4040
         };
 
-        static const inline std::array<std::string, 10> channel_names =
+        static const inline std::array<std::string, 12> channel_names =
         {
             "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)",
-            "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-"
+            "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-"
         };
 
         enum Channels
         {
             ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040,
-            DsDs, Dstar0Dstarbar0, DstarpDstarm
+            DsDs, Dstar0Dstarbar0, DstarpDstarm, D0Dbarstar0, DpDstarm
         };
 
         // Resonance masses
@@ -133,6 +133,9 @@ namespace eos
 
                     case DstarpDstarm:
                         return Dstar0Dstarbar0;
+
+                    case DpDstarm:
+                        return D0Dbarstar0;
 
                     default:
                         return channel;
@@ -292,6 +295,14 @@ namespace eos
                         break;
                     case DstarpDstarm:
                         channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    // Unequal-mass P.V open-charm channels D Dbar^*, S-wave (l = 0).
+                    // See PHASE2-HARD-SCOPE.md and the SWavePVChannel validation.
+                    case D0Dbarstar0:
+                        channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_D0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DpDstarm:
+                        channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
 
                     default:
@@ -571,6 +582,18 @@ namespace eos
     EEToCCBar::sigma_eetoDstarpDstarm(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DstarpDstarm);
+    }
+
+    double
+    EEToCCBar::sigma_eetoD0Dbarstar0(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDpDstarm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DpDstarm);
     }
 
     double
