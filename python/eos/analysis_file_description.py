@@ -142,6 +142,10 @@ class PoissonPriorDescription(Deserializable):
 class CurtailedGaussianDescription(Deserializable):
     r"""Describes a Gaussian prior truncated to a finite interval (``type: gauss`` with ``min``/``max``).
 
+    .. deprecated:: 1.0.21
+       The curtailed Gaussian prior description is deprecated and will be removed in a future version
+       of EOS; use ``type: gaussian`` without the ``min``/``max`` keys instead.
+
     :param parameter: The qualified name of the parameter.
     :type parameter: str
     :param central: The central value (mean) of the Gaussian.
@@ -159,6 +163,9 @@ class CurtailedGaussianDescription(Deserializable):
     min:float
     max:float
     type:str=field(repr=False, init=False, default="gaussian")
+
+    def __post_init__(self):
+        eos.warn('The curtailed Gaussian prior description (a \'gauss\'/\'gaussian\' prior with \'min\' and \'max\') is deprecated and will be removed in a future version of EOS; use \'type: gaussian\' without the \'min\'/\'max\' keys instead')
 
 @dataclass
 class GaussianPriorDescription(Deserializable):
