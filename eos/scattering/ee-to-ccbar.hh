@@ -45,6 +45,8 @@ namespace eos
     7   Ds+  Ds-      PP (P)       3       -
     8   D*0  D*0bar   PP (P)       3       -
     9   D*+  D*-      PP (P)       3       8 (isospin)
+    10  D0   D*0bar   PV (S)       3       -
+    11  D+   D*-      PV (S)       3       10 (isospin)
     */
 
     // e^+e^- channel
@@ -287,7 +289,7 @@ namespace eos
     {
         public:
 
-            const static long unsigned nchannels = 10;
+            const static long unsigned nchannels = 12;
             const static long unsigned nresonances = 4;
 
             struct IntermediateResult :
@@ -384,6 +386,8 @@ namespace eos
             double sigma_eetoDsDs(const IntermediateResult *) const;
             double sigma_eetoDstar0Dstarbar0(const IntermediateResult *) const;
             double sigma_eetoDstarpDstarm(const IntermediateResult *) const;
+            double sigma_eetoD0Dbarstar0(const IntermediateResult *) const;
+            double sigma_eetoDpDstarm(const IntermediateResult *) const;
 
             // R ratios
             double R(const IntermediateResult *) const;
