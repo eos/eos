@@ -223,8 +223,12 @@ namespace eos
     // Uses the full Kaellen phase space and the unequal-mass l=0 Chew-Mandelstam
     // function. The closed form was validated against the equal-mass limit
     // (reduces to EEChannel) and a numerical once-subtracted dispersion integral
-    // of rho; see PHASE2-HARD-SCOPE.md. l = 0 => the barrier factor n = 1, so the
-    // Chew-Mandelstam is the analytic continuation of i * rho with no n factor.
+    // of rho; see PHASE2-HARD-SCOPE.md and analytic/chew-mandelstam.py. l = 0 =>
+    // the barrier factor n = 1, so the Chew-Mandelstam is the analytic
+    // continuation of i * rho with no n factor. It is threshold-subtracted so that
+    // CM((m1+m2)^2) = 0, matching the convention of EEChannel (l=0) and
+    // PWavePPChannel (l=1); the subtracted constant is the real number
+    // -(m1^2-m2^2) ln(m1/m2) / [16 pi^2 (m1+m2)^2] (it vanishes for equal masses).
     template <unsigned nchannels_, unsigned nresonances_>
     struct SWavePVChannel :
     public KMatrix<nchannels_, nresonances_>::Channel
@@ -265,10 +269,19 @@ namespace eos
             const complex<double> s = S + complex<double>(0.0, 1e-15);
             const complex<double> w = std::sqrt(kallen(s));
 
-            return 1.0 / 16.0 / pi / pi * (
+            const complex<double> cm = 1.0 / 16.0 / pi / pi * (
                     w / s * std::log((m1 * m1 + m2 * m2 - s + w) / (2.0 * m1 * m2))
                     - (m1 * m1 - m2 * m2) / s * std::log(m1 / m2)
                     );
+
+            // Threshold subtraction: at s = s_th = (m1+m2)^2 the Kaellen factor
+            // (hence w) vanishes, so only the asymmetry term survives. Subtracting
+            // this real constant enforces CM(s_th) = 0, consistent with the other
+            // channels (it cancels identically for equal masses).
+            const double sth = power_of<2>(m1 + m2);
+            const double cm_threshold = -1.0 / 16.0 / pi / pi * (m1 * m1 - m2 * m2) / sth * std::log(m1 / m2);
+
+            return cm - cm_threshold;
         }
     };
 

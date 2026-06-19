@@ -46,7 +46,9 @@ class eetoccbarTest :
                 // Standalone validation of the unequal-mass S-wave PV channel (D Dbar^*).
                 // Reference values were computed independently with mpmath and the closed
                 // form was checked against the equal-mass limit (EEChannel) and a numerical
-                // once-subtracted dispersion integral of rho; see PHASE2-HARD-SCOPE.md.
+                // once-subtracted dispersion integral of rho; see PHASE2-HARD-SCOPE.md and
+                // analytic/chew-mandelstam.py. CM is threshold-subtracted (CM(s_th) = 0),
+                // matching EEChannel/PWavePPChannel; Im CM is unchanged by the subtraction.
                 Parameters p = Parameters::Defaults();
                 p["ee->ccbar::q_0"] = 0.5;
                 std::array<Parameter, 2> g0s {{ p["ee->ccbar::q_0"], p["ee->ccbar::q_0"] }};
@@ -60,16 +62,16 @@ class eetoccbarTest :
                 TEST_CHECK_RELATIVE_ERROR(real(ch->rho(25.0)),        0.01258357249,  eps);
 
                 // Chew-Mandelstam: real below threshold; Im = rho above threshold
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(14.0)), -0.004429293625, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(14.0)), -0.004412244375, eps);
                 TEST_CHECK_NEARLY_EQUAL(  imag(ch->chew_mandelstam(14.0)),  0.0,            eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(16.5)), -0.001212102367, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(16.5)), -0.001195053117, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(16.5)),  0.006014846605, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(25.0)), -0.005990047443, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(25.0)), -0.005972998193, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(25.0)),  0.01258357249,  eps);
 
                 // complex s = 16 - 0.1 i
                 const complex<double> sc(16.0, -0.1);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)), -0.001064734374, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)), -0.001047685124, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(sc)), -0.004924905559, eps);
             }
 
