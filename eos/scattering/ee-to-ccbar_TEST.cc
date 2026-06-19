@@ -240,5 +240,45 @@ class eetoccbarTest :
                 TEST_CHECK_RELATIVE_ERROR(c.re_T_II_eetoDpDm(irc),  0.296099,   eps);
                 TEST_CHECK_RELATIVE_ERROR(c.im_T_II_eetoDpDm(irc), -0.0682443,  eps);
             }
+
+            {
+                // Phase-1 extension: the full EEToCCBar now carries 4 resonances and
+                // 7 channels (psi(4040) + eff(4040) added). With every psi(4040) and
+                // eff(4040) coupling left at its default 0, the new resonance and channel
+                // must decouple completely, so the N_C=5 results are reproduced exactly.
+                Parameters p = Parameters::Defaults();
+                p["mass::psi(3770)"]                      =  3.796443282051135;
+                p["ee->ccbar::g0(psi(2S),e^+e^-)"]        = -0.02077753547690923;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]      = -0.001999916489715092;
+                p["ee->ccbar::g0(psi(2S),D^0Dbar^0)"]     = -3.3693829070086214;
+                p["ee->ccbar::g0(psi(3770),D^0Dbar^0)"]   =  8.38428874933062;
+                p["ee->ccbar::g0(psi(2S),D^+D^-)"]        =  3.5692138012280807;
+                p["ee->ccbar::g0(psi(3770),D^+D^-)"]      = -8.391199026268827;
+                p["ee->ccbar::g0(psi(2S),eff(2S))"]       =  0.09237874214140328;
+                p["ee->ccbar::g0(psi(3770),eff(3770))"]   = -1.5409316160476978;
+
+                p["ee->ccbar::effective_mass"] = 0.1349768;
+                p["ee->ccbar::q_0"] = 0.5;
+
+                Options oo;
+                EEToCCBar c(p, oo);
+
+                // Backward compatibility at the extended (7x4) default size: identical to
+                // the N_C=5 value pinned in the block above.
+                auto ir = c.prepare(3.78);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDpDm(ir),    2.70723, eps);
+
+                // psi(4040) is inert while its couplings are at their default 0.
+                TEST_CHECK_NEARLY_EQUAL(c.psi4040_total_width(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.psi4040_eff_width(),   0.0, eps);
+
+                // Positive control: switching the couplings on makes psi(4040) acquire a
+                // width, confirming the new resonance/channel are genuinely wired in.
+                p["ee->ccbar::g0(psi(4040),e^+e^-)"]   = 5.0;
+                p["ee->ccbar::g0(psi(4040),eff(4040))"] = 2.0;
+                TEST_CHECK(c.psi4040_eff_width()   > 0.0);
+                TEST_CHECK(c.psi4040_total_width() > 0.0);
+            }
         }
 } eetoccbar_test;

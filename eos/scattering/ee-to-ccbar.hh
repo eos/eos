@@ -136,9 +136,15 @@ namespace eos
                     std::atan(s / std::sqrt(s * (mp * mp - s))) / 8.0 / pi / pi / std::sqrt(s);
             }
 
+            // atan(sqrt(delta) / (2 q0)) / sqrt(delta) is finite as delta -> 0 (limit 1 / (2 q0));
+            // take the limit explicitly to avoid the 0/0 NaN at the pseudothreshold delta = 0
+            // (reached e.g. by the bare defaults effective_mass == q0).
+            const complex<double> atan_over_sqrt_delta = (std::abs(delta) < 1e-12)
+                ? complex<double>(1.0 / (2.0 * q0))
+                : std::atan(std::sqrt(delta) / 2.0 / q0) / std::sqrt(delta);
+
             const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) *
-                    std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi /
-                    std::sqrt(delta) / (s - delta);
+                    atan_over_sqrt_delta / pi / pi / (s - delta);
 
             return (leading_term + loop_correction) / 4.0 / q0 / q0;
         }
@@ -194,9 +200,14 @@ namespace eos
                     std::atan(s / std::sqrt(s * (mp * mp - s))) / 8.0 / pi / pi / std::sqrt(s);
             }
 
+            // atan(sqrt(delta) / (2 q0)) / sqrt(delta) is finite as delta -> 0 (limit 1 / (2 q0));
+            // take the limit explicitly to avoid the 0/0 NaN at the pseudothreshold delta = 0.
+            const complex<double> atan_over_sqrt_delta = (std::abs(delta) < 1e-12)
+                ? complex<double>(1.0 / (2.0 * q0))
+                : std::atan(std::sqrt(delta) / 2.0 / q0) / std::sqrt(delta);
+
             const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) *
-                    std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi /
-                    std::sqrt(delta) / (s - delta);
+                    atan_over_sqrt_delta / pi / pi / (s - delta);
 
             return (leading_term + loop_correction) / 4.0 / q0 / q0;
         }
