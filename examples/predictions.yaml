@@ -1,7 +1,7 @@
 priors:
   - name: DecayConstant
     descriptions:
-      - { parameter: 'decay-constant::B_c',      min:  0.219, max: 0.649, type: 'gaussian', central: 0.434, sigma: 0.043 }
+      - { parameter: 'decay-constant::B_c',      type: 'gaussian', central: 0.434, sigma: 0.043 }
 
   - name: FF-SSE
     descriptions:
