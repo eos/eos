@@ -97,8 +97,8 @@ For example, the following code create two named priors ``CKM`` (univariate) and
          - { 'parameter':  'B->pi::b_T^3@BCL2008'  , 'min':  -7.39 , 'max':  10.60 , 'type': 'uniform' }
 
 
-For a correlated multivariate prior, ``descriptions`` contains a single element consisting of a key/value pair.
-The mandatory key is ``constraint`` and the value is the qualified name of an EOS constraint.
+For a correlated multivariate prior, ``descriptions`` contains a single element consisting of a key/value map.
+It uses ``type: constraint``, and the ``constraint`` key gives the qualified name of an EOS constraint.
 The following example illustrates the organisation of a correlated multivariate prior.
 
 .. code-block:: yaml
@@ -106,7 +106,7 @@ The following example illustrates the organisation of a correlated multivariate 
    priors:
      - name: FF-rho
        descriptions:
-         - { 'constraint': 'B->rho::FormFactors[parametric,LCSR]@BSZ:2015A' }
+         - { 'type': 'constraint', 'constraint': 'B->rho::FormFactors[parametric,LCSR]@BSZ:2015A' }
 
 Each entry of ``descriptions`` is selected, based on its keys, from the following concrete prior descriptions:
 
