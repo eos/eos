@@ -38,9 +38,10 @@ namespace eos
     0   ee            ee (S)       3       -
     1   effJpsi       PP (P)       3       -
     2   eff(2S)       PP (P)       3       -
-    3   eff(3770)     PP (P)       3       -
-    4   D0   D0bar    PP (P)       3       -
-    5   D+   D-       PP (P)       3       4 (isospin)
+    3   D0   D0bar    PP (P)       3       -
+    4   D+   D-       PP (P)       3       3 (isospin)
+    5   eff(3770)     PP (P)       3       -
+    6   eff(4040)     PP (P)       3       -
     */
 
     // e^+e^- channel
@@ -218,8 +219,8 @@ namespace eos
     {
         public:
 
-            const static long unsigned nchannels = 6;
-            const static long unsigned nresonances = 3;
+            const static long unsigned nchannels = 7;
+            const static long unsigned nresonances = 4;
 
             struct IntermediateResult :
                 public CacheableObservable::IntermediateResult
@@ -254,6 +255,8 @@ namespace eos
             double psi3770_DpDm_width() const;
             double psi3770_eff_width() const;
             double psi3770_total_width() const;
+            double psi4040_eff_width() const;
+            double psi4040_total_width() const;
 
             // Phase space factor
             double rho_ee(const IntermediateResult *) const;

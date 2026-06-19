@@ -71,6 +71,14 @@ namespace eos
                         Unit::GeV(),
                         &EEToCCBar::psi3770_total_width),
 
+                make_observable("psi(4040)->eff::decay_width", R"(\Gamma(\psi(4040) \to \textrm{eff}))",
+                        Unit::GeV(),
+                        &EEToCCBar::psi4040_eff_width),
+
+                make_observable("psi(4040)::total_width", R"(\Gamma_{\psi(4040)})",
+                        Unit::GeV(),
+                        &EEToCCBar::psi4040_total_width),
+
                 make_observable("psi(3770)::spectral_function(E)", R"(\textrm{spect}_{\psi(3770)}(E))",
                         Unit::InverseGeV2(),
                         &EEToCCBar::psi3770_spectral_function,

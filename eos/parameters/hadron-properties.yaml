@@ -1642,10 +1642,11 @@ groups:
               'eff(Jpsi)': '\mathrm{eff}_{J/\psi}'
               'eff(2S)': '\mathrm{eff}_{\psi(2S)}'
               'eff(3770)': '\mathrm{eff}_{\psi(3770)}'
+              'eff(4040)': '\mathrm{eff}_{\psi(4040)}'
               'D^0Dbar^0': 'D^0\bar{D}^0'
           matrix:
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)"]
 
       # e^+ e^- channel
       'ee->ccbar::g0(%1%,%2%)' :
@@ -1659,11 +1660,13 @@ groups:
               'J/psi': 'J/\psi'
               'psi(2S)': '\psi(2S)'
               'psi(3770)': '\psi(3770)'
+              'psi(4040)': '\psi(4040)'
               'eff(Jpsi)': '\mathrm{eff}_{J/\psi}'
               'eff(2S)': '\mathrm{eff}_{\psi(2S)}'
               'eff(3770)': '\mathrm{eff}_{\psi(3770)}'
+              'eff(4040)': '\mathrm{eff}_{\psi(4040)}'
               'D^0Dbar^0': 'D^0\bar{D}^0'
           matrix:
-              - ["J/psi",  "psi(2S)", "psi(3770)"]
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-"]
+              - ["J/psi",  "psi(2S)", "psi(3770)", "psi(4040)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)"]
   # }}}
