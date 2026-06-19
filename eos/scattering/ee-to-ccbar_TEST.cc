@@ -43,6 +43,37 @@ class eetoccbarTest :
             constexpr double eps = 1e-5;
 
             {
+                // Standalone validation of the unequal-mass S-wave PV channel (D Dbar^*).
+                // Reference values were computed independently with mpmath and the closed
+                // form was checked against the equal-mass limit (EEChannel) and a numerical
+                // once-subtracted dispersion integral of rho; see PHASE2-HARD-SCOPE.md.
+                Parameters p = Parameters::Defaults();
+                p["ee->ccbar::q_0"] = 0.5;
+                std::array<Parameter, 2> g0s {{ p["ee->ccbar::q_0"], p["ee->ccbar::q_0"] }};
+
+                // D^0 Dbar^*0: m1 = 1.86483, m2 = 2.00685 GeV, threshold s = 14.989 GeV^2
+                auto ch = std::make_shared<SWavePVChannel<3, 2>>("D^0Dbar^*0", p["mass::D^0"], p["mass::D_u^*"], p["ee->ccbar::q_0"], g0s);
+
+                // rho: zero below threshold, sqrt(lambda)/(16 pi s) above
+                TEST_CHECK_NEARLY_EQUAL(  std::abs(ch->rho(14.0)),    0.0,            eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(16.5)),        0.006014846605, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(25.0)),        0.01258357249,  eps);
+
+                // Chew-Mandelstam: real below threshold; Im = rho above threshold
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(14.0)), -0.004429293625, eps);
+                TEST_CHECK_NEARLY_EQUAL(  imag(ch->chew_mandelstam(14.0)),  0.0,            eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(16.5)), -0.001212102367, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(16.5)),  0.006014846605, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(25.0)), -0.005990047443, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(25.0)),  0.01258357249,  eps);
+
+                // complex s = 16 - 0.1 i
+                const complex<double> sc(16.0, -0.1);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)), -0.001064734374, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(sc)), -0.004924905559, eps);
+            }
+
+            {
                 Parameters p = Parameters::Defaults();
                 p["ee->ccbar::g0(psi(2S),e^+e^-)"] = 10.0;
                 p["ee->ccbar::g0(psi(3770),e^+e^-)"] = 12.0;

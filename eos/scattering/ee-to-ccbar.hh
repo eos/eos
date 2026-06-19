@@ -217,6 +217,60 @@ namespace eos
     };
 
 
+    // V -> PV channel for two unequal masses (e.g. D Dbar^*), S-wave (l = 0).
+    // Uses the full Kaellen phase space and the unequal-mass l=0 Chew-Mandelstam
+    // function. The closed form was validated against the equal-mass limit
+    // (reduces to EEChannel) and a numerical once-subtracted dispersion integral
+    // of rho; see PHASE2-HARD-SCOPE.md. l = 0 => the barrier factor n = 1, so the
+    // Chew-Mandelstam is the analytic continuation of i * rho with no n factor.
+    template <unsigned nchannels_, unsigned nresonances_>
+    struct SWavePVChannel :
+    public KMatrix<nchannels_, nresonances_>::Channel
+    {
+        SWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 0, q0, g0s)
+        {
+        };
+
+        const double pi = M_PI;
+        const complex<double> i = complex<double>(0.0, 1.0);
+
+        // Kaellen function lambda(s, m1^2, m2^2) = (s - (m1+m2)^2)(s - (m1-m2)^2),
+        // with a threshold at (m1+m2)^2 and a pseudothreshold at (m1-m2)^2.
+        complex<double> kallen(const complex<double> & s)
+        {
+            const double m1 = this->_m1();
+            const double m2 = this->_m2();
+
+            return (s - power_of<2>(m1 + m2)) * (s - power_of<2>(m1 - m2));
+        }
+
+        complex<double> rho(const complex<double> & s)
+        {
+            const double mthr = this->_m1() + this->_m2();
+
+            // Phase space vanishes below threshold (same convention as the
+            // equal-mass channels).
+            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : std::sqrt(kallen(s)) / 16.0 / pi / s;
+        }
+
+        // Analytic continuation of i * rho for unequal masses, l = 0.
+        complex<double> chew_mandelstam(const complex<double> & S)
+        {
+            const double m1 = this->_m1();
+            const double m2 = this->_m2();
+            // Adapt s to match the branch-cut prescription of the other channels.
+            const complex<double> s = S + complex<double>(0.0, 1e-15);
+            const complex<double> w = std::sqrt(kallen(s));
+
+            return 1.0 / 16.0 / pi / pi * (
+                    w / s * std::log((m1 * m1 + m2 * m2 - s + w) / (2.0 * m1 * m2))
+                    - (m1 * m1 - m2 * m2) / s * std::log(m1 / m2)
+                    );
+        }
+    };
+
+
     template <unsigned nchannels_, unsigned nresonances_>
     struct CharmoniumResonance :
     public KMatrix<nchannels_, nresonances_>::Resonance
