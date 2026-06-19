@@ -57,16 +57,18 @@ namespace eos
             Jpsi = 0, psi2S, psi3770, psi4040
         };
 
-        static const inline std::array<std::string, 12> channel_names =
+        static const inline std::array<std::string, 14> channel_names =
         {
             "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)",
-            "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-"
+            "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-",
+            "D^0Dbar^*0(D)", "D^+D^*-(D)"
         };
 
         enum Channels
         {
             ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040,
-            DsDs, Dstar0Dstarbar0, DstarpDstarm, D0Dbarstar0, DpDstarm
+            DsDs, Dstar0Dstarbar0, DstarpDstarm, D0Dbarstar0, DpDstarm,
+            D0Dbarstar0D, DpDstarmD
         };
 
         // Resonance masses
@@ -136,6 +138,9 @@ namespace eos
 
                     case DpDstarm:
                         return D0Dbarstar0;
+
+                    case DpDstarmD:
+                        return D0Dbarstar0D;
 
                     default:
                         return channel;
@@ -303,6 +308,15 @@ namespace eos
                         break;
                     case DpDstarm:
                         channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    // Unequal-mass P.V open-charm channels D Dbar^*, D-wave (l = 2):
+                    // the sub-leading partial wave of the same final state. See
+                    // PHASE2-DDSTAR-DWAVE-SCOPE.md and the DWavePVChannel validation.
+                    case D0Dbarstar0D:
+                        channel_array[i] = std::make_shared<DWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_D0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DpDstarmD:
+                        channel_array[i] = std::make_shared<DWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
 
                     default:
@@ -587,13 +601,45 @@ namespace eos
     double
     EEToCCBar::sigma_eetoD0Dbarstar0(const EEToCCBar::IntermediateResult * ir) const
     {
-        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0);
+        // Total cross section to D^0 Dbar^*0 = S-wave + D-wave partial waves.
+        return _imp->exclusive_norm * (
+              _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0)
+            + _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0D)
+            );
     }
 
     double
     EEToCCBar::sigma_eetoDpDstarm(const EEToCCBar::IntermediateResult * ir) const
     {
+        // Total cross section to D^+ D^*- = S-wave + D-wave partial waves.
+        return _imp->exclusive_norm * (
+              _imp->sigma_eetochannel(ir, Channels::DpDstarm)
+            + _imp->sigma_eetochannel(ir, Channels::DpDstarmD)
+            );
+    }
+
+    double
+    EEToCCBar::sigma_eetoD0Dbarstar0_S(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0);
+    }
+
+    double
+    EEToCCBar::sigma_eetoD0Dbarstar0_D(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0D);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDpDstarm_S(const EEToCCBar::IntermediateResult * ir) const
+    {
         return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DpDstarm);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDpDstarm_D(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DpDstarmD);
     }
 
     double
