@@ -44,24 +44,24 @@ namespace eos
 
         bool assume_isospin;
 
-        static const inline std::array<std::string, 3> resonance_names =
+        static const inline std::array<std::string, 4> resonance_names =
         {
-            "J/psi", "psi(2S)", "psi(3770)"
+            "J/psi", "psi(2S)", "psi(3770)", "psi(4040)"
         };
 
         enum Resonances
         {
-            Jpsi = 0, psi2S, psi3770
+            Jpsi = 0, psi2S, psi3770, psi4040
         };
 
-        static const inline std::array<std::string, 6> channel_names =
+        static const inline std::array<std::string, 7> channel_names =
         {
-            "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)"
+            "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)"
         };
 
         enum Channels
         {
-            ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770
+            ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040
         };
 
         // Resonance masses
@@ -262,6 +262,7 @@ namespace eos
                     case effJpsi:
                     case eff2S:
                     case eff3770:
+                    case eff4040:
                         channel_array[i] = std::make_shared<EffChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_eff, m_eff, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
                     case D0Dbar0:
@@ -492,6 +493,18 @@ namespace eos
     }
 
     double
+    EEToCCBar::psi4040_total_width() const
+    {
+        return _imp->res_total_width(Resonances::psi4040);
+    }
+
+    double
+    EEToCCBar::psi4040_eff_width() const
+    {
+        return _imp->res_partial_width(Resonances::psi4040, Channels::eff4040);
+    }
+
+    double
     EEToCCBar::sigma_eetoee(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::ee);
@@ -504,6 +517,7 @@ namespace eos
               _imp->sigma_eetochannel(ir, Channels::effJpsi)
             + _imp->sigma_eetochannel(ir, Channels::eff2S)
             + _imp->sigma_eetochannel(ir, Channels::eff3770)
+            + _imp->sigma_eetochannel(ir, Channels::eff4040)
             );
     }
 
