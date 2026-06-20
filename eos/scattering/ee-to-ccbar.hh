@@ -235,11 +235,17 @@ namespace eos
     struct SWavePVChannel :
     public KMatrix<nchannels_, nresonances_>::Channel
     {
-        SWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 0, q0, g0s)
+        // multiplicity counts the number of charge-conjugate final states this
+        // channel stands for (2 for D Dbar^* + h.c.). It scales rho and the
+        // Chew-Mandelstam function together, so unitarity (Im CM = rho * n^2),
+        // the resonance width and the cross section all stay consistent.
+        SWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s, double multiplicity = 1.0) :
+            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 0, q0, g0s),
+            _multiplicity(multiplicity)
         {
         };
 
+        const double _multiplicity;
         const double pi = M_PI;
         const complex<double> i = complex<double>(0.0, 1.0);
 
@@ -258,8 +264,9 @@ namespace eos
             const double mthr = this->_m1() + this->_m2();
 
             // Phase space vanishes below threshold (same convention as the
-            // equal-mass channels).
-            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : std::sqrt(kallen(s)) / 16.0 / pi / s;
+            // equal-mass channels). The multiplicity factor accounts for the h.c.
+            // final state (see the constructor).
+            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : _multiplicity * std::sqrt(kallen(s)) / 16.0 / pi / s;
         }
 
         // Analytic continuation of i * rho for unequal masses, l = 0.
@@ -283,7 +290,9 @@ namespace eos
             const double sth = power_of<2>(m1 + m2);
             const double cm_threshold = -1.0 / 16.0 / pi / pi * (m1 * m1 - m2 * m2) / sth * std::log(m1 / m2);
 
-            return cm - cm_threshold;
+            // Scale by the channel multiplicity together with rho, preserving
+            // Im CM = rho * n^2 and doubling the loop / width for D Dbar^* + h.c.
+            return _multiplicity * (cm - cm_threshold);
         }
     };
 
@@ -302,13 +311,18 @@ namespace eos
     struct DWavePVChannel :
     public KMatrix<nchannels_, nresonances_>::Channel
     {
-        DWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 2, q0, g0s)
+        // multiplicity: number of charge-conjugate final states represented
+        // (2 for D Dbar^* + h.c.); scales rho and chew_mandelstam together, cf.
+        // SWavePVChannel.
+        DWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s, double multiplicity = 1.0) :
+            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 2, q0, g0s),
+            _multiplicity(multiplicity)
         {
         };
 
         using KMatrix<nchannels_, nresonances_>::Channel::_q0;
 
+        const double _multiplicity;
         const double pi = M_PI;
         const complex<double> i = complex<double>(0.0, 1.0);
 
@@ -325,7 +339,8 @@ namespace eos
         {
             const double mthr = this->_m1() + this->_m2();
 
-            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : std::sqrt(kallen(s)) / 16.0 / pi / s;
+            // The multiplicity factor accounts for the h.c. final state (see ctor).
+            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : _multiplicity * std::sqrt(kallen(s)) / 16.0 / pi / s;
         }
 
         // l = 0 dispersive building block CM_0(s) (bare: no barrier, no threshold
@@ -386,7 +401,8 @@ namespace eos
         {
             const double sth = power_of<2>(this->_m1() + this->_m2());
 
-            return kfun(S) - kfun(complex<double>(sth, 0.0));
+            // Scale by the channel multiplicity together with rho (see ctor).
+            return _multiplicity * (kfun(S) - kfun(complex<double>(sth, 0.0)));
         }
     };
 
