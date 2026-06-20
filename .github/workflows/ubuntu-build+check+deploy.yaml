@@ -24,7 +24,7 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
@@ -91,7 +91,7 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -141,7 +141,7 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -173,7 +173,7 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
         steps:
             - name: Download configured source as artifact
               uses: actions/download-artifact@v4
@@ -215,7 +215,7 @@ jobs:
         runs-on: ubuntu-24.04
         timeout-minutes: 60
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
         steps:
             - name: Checkout git repository
               uses: actions/checkout@v4
@@ -308,7 +308,7 @@ jobs:
         name: Deploy documentation on ${{ matrix.cfg.os }}
         runs-on: ubuntu-24.04
         container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:2315df29acac4d7723224dd904b59d02ef89ecf6
+            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
         steps:
             - name: Create repository
               shell: bash
