@@ -55,8 +55,8 @@ jobs:
                 CIBW_BUILD: ${{ matrix.version}}-*
                 CIBW_SKIP: \*-musllinux_*
                 CIBW_ARCHS: ${{ matrix.arch}}
-                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:d03c3f78b81854177d386a455048f83496d10bfd15ddd35584024a99108c41b0
-                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:2acfa216598ace77ad17f662e9601caed6b98d375d30faf873f900019c305153
+                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:e898974e68ef3a917bdf935d98a31c43bd03baf0d6debe1dbccd357cbd3382c8
+                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:607f5624b69dc7bc04869332868849686ee9a0a2c415f0f414b34b98fce9cb79
                 CIBW_BEFORE_BUILD_LINUX: |
                   pushd {project}
                   ./autogen.bash
