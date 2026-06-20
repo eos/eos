@@ -114,6 +114,46 @@ class eetoccbarTest :
             }
 
             {
+                // Standalone validation of the equal-mass F-wave (l = 3) channel (D*Dbar*).
+                // Reference values were computed independently with mpmath; the closed form
+                // (l = 0 dispersive function plus the six Blatt-Weisskopf poles, threshold-
+                // subtracted) was checked against a numerical once-subtracted dispersion
+                // integral of rho*n^2; see analytic/chew-mandelstam.py (checks F0-F5).
+                Parameters p = Parameters::Defaults();
+                p["ee->ccbar::q_0"] = 0.5;
+                std::array<Parameter, 2> g0s {{ p["ee->ccbar::q_0"], p["ee->ccbar::q_0"] }};
+
+                // D^*0 Dbar^*0 masses (equal-mass VV pair): threshold s = 16.110 GeV^2, q0 = 0.5 GeV
+                auto ch = std::make_shared<FWavePPChannel<3, 2>>("D^*0Dbar^*0 (F-wave)", p["mass::D_u^*"], p["mass::D_u^*"], p["ee->ccbar::q_0"], g0s);
+
+                // rho is the bare equal-mass phase space
+                TEST_CHECK_NEARLY_EQUAL(  std::abs(ch->rho(14.0)),    0.0,            eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(17.0)),        0.004552526492, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(25.0)),        0.01186359211,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(35.0)),        0.0146155291,   eps);
+
+                // Chew-Mandelstam: real below threshold; Im = rho * n^2 above threshold
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(14.0)), -0.0009293672174, eps);
+                TEST_CHECK_NEARLY_EQUAL(  imag(ch->chew_mandelstam(14.0)),  0.0,             eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(17.0)),  0.0005132195813, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(17.0)),  1.1872278e-5,    eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(25.0)),  0.004436822172,  eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(25.0)),  0.004626120868,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(35.0)),  0.003104964563,  eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(35.0)),  0.009894674852,  eps);
+
+                // complex s = 25 - 0.1 i
+                const complex<double> sc(25.0, -0.1);
+                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)),  0.00436416736,   eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(sc)), -0.004632750481,  eps);
+
+                // threshold subtraction: CM(s_th) = 0 by construction
+                const double sth = power_of<2>(2.0 * double(p["mass::D_u^*"]));
+                TEST_CHECK_NEARLY_EQUAL(real(ch->chew_mandelstam(sth)), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(ch->chew_mandelstam(sth)), 0.0, eps);
+            }
+
+            {
                 Parameters p = Parameters::Defaults();
                 p["ee->ccbar::g0(psi(2S),e^+e^-)"] = 10.0;
                 p["ee->ccbar::g0(psi(3770),e^+e^-)"] = 12.0;
