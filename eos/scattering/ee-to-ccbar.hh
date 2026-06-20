@@ -43,12 +43,16 @@ namespace eos
     5   eff(3770)     PP (P)       3       -
     6   eff(4040)     PP (P)       3       -
     7   Ds+  Ds-      PP (P)       3       -
-    8   D*0  D*0bar   PP (P)       3       -
-    9   D*+  D*-      PP (P)       3       8 (isospin)
+    8   D*0  D*0bar   VV (P, 1P1)  3       -
+    9   D*+  D*-      VV (P, 1P1)  3       8 (isospin)
     10  D0   D*0bar   PV (S)       3       -
     11  D+   D*-      PV (S)       3       10 (isospin)
     12  D0   D*0bar   PV (D)       3       -
     13  D+   D*-      PV (D)       3       12 (isospin)
+    14  D*0  D*0bar   VV (P, 5P1)  3       -
+    15  D*+  D*-      VV (P, 5P1)  3       14 (isospin)
+    16  D*0  D*0bar   VV (F, 5F1)  3       -
+    17  D*+  D*-      VV (F, 5F1)  3       16 (isospin)
     */
 
     // e^+e^- channel
@@ -538,7 +542,7 @@ namespace eos
     {
         public:
 
-            const static long unsigned nchannels = 14;
+            const static long unsigned nchannels = 18;
             const static long unsigned nresonances = 4;
 
             struct IntermediateResult :
@@ -637,6 +641,14 @@ namespace eos
             double sigma_eetoDstarpDstarm(const IntermediateResult *) const;
             double sigma_eetoD0Dbarstar0(const IntermediateResult *) const;
             double sigma_eetoDpDstarm(const IntermediateResult *) const;
+
+            // partial-wave-resolved D^*Dbar^* cross sections (1P1 + 5P1 + 5F1 = total)
+            double sigma_eetoDstar0Dstarbar0_1P1(const IntermediateResult *) const;
+            double sigma_eetoDstar0Dstarbar0_5P1(const IntermediateResult *) const;
+            double sigma_eetoDstar0Dstarbar0_5F1(const IntermediateResult *) const;
+            double sigma_eetoDstarpDstarm_1P1(const IntermediateResult *) const;
+            double sigma_eetoDstarpDstarm_5P1(const IntermediateResult *) const;
+            double sigma_eetoDstarpDstarm_5F1(const IntermediateResult *) const;
             // Partial-wave-resolved D Dbar^*: the totals above are the sum S + D.
             double sigma_eetoD0Dbarstar0_S(const IntermediateResult *) const;
             double sigma_eetoD0Dbarstar0_D(const IntermediateResult *) const;
