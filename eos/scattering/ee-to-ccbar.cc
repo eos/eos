@@ -302,21 +302,25 @@ namespace eos
                         channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
                     // Unequal-mass P.V open-charm channels D Dbar^*, S-wave (l = 0).
+                    // The trailing 2.0 is the charge-conjugation multiplicity: a single
+                    // channel stands for D Dbar^* + h.c., so its rho and Chew-Mandelstam
+                    // (hence width, loop, and cross section) are doubled consistently.
                     // See PHASE2-HARD-SCOPE.md and the SWavePVChannel validation.
                     case D0Dbarstar0:
-                        channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_D0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_D0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()), 2.0);
                         break;
                     case DpDstarm:
-                        channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        channel_array[i] = std::make_shared<SWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()), 2.0);
                         break;
                     // Unequal-mass P.V open-charm channels D Dbar^*, D-wave (l = 2):
-                    // the sub-leading partial wave of the same final state. See
-                    // PHASE2-DDSTAR-DWAVE-SCOPE.md and the DWavePVChannel validation.
+                    // the sub-leading partial wave of the same final state (also + h.c.,
+                    // multiplicity 2.0). See PHASE2-DDSTAR-DWAVE-SCOPE.md and the
+                    // DWavePVChannel validation.
                     case D0Dbarstar0D:
-                        channel_array[i] = std::make_shared<DWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_D0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        channel_array[i] = std::make_shared<DWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_D0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()), 2.0);
                         break;
                     case DpDstarmD:
-                        channel_array[i] = std::make_shared<DWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        channel_array[i] = std::make_shared<DWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()), 2.0);
                         break;
 
                     default:
@@ -411,7 +415,10 @@ namespace eos
             static const double speedoflight = 299792458.; // Exact value
             const double GeVtonb = 10.0 * power_of<2>(1.0e18 * hbar * speedoflight);
 
-            // Channel properties
+            // Channel properties. rho() already carries the channel multiplicity
+            // (2 for D Dbar^* + h.c.), so this returns sigma(channel + h.c.) and is
+            // consistent with the resonance width and the K-matrix loop, which use
+            // the same multiplicity-weighted rho / chew_mandelstam.
             const double Nf = 2.0 * K->_channels[channel]->_l_orbital + 1.0;
             const double rhof = std::abs(K->_channels[channel]->rho(intermediate_result->s));
 
@@ -601,7 +608,9 @@ namespace eos
     double
     EEToCCBar::sigma_eetoD0Dbarstar0(const EEToCCBar::IntermediateResult * ir) const
     {
-        // Total cross section to D^0 Dbar^*0 = S-wave + D-wave partial waves.
+        // Total cross section to D^0 Dbar^*0 + h.c. = S-wave + D-wave partial waves.
+        // The h.c. final state is carried by the channel multiplicity (factor 2 in
+        // rho and chew_mandelstam), so the width and loop are doubled consistently.
         return _imp->exclusive_norm * (
               _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0)
             + _imp->sigma_eetochannel(ir, Channels::D0Dbarstar0D)
@@ -611,7 +620,9 @@ namespace eos
     double
     EEToCCBar::sigma_eetoDpDstarm(const EEToCCBar::IntermediateResult * ir) const
     {
-        // Total cross section to D^+ D^*- = S-wave + D-wave partial waves.
+        // Total cross section to D^+ D^*- + h.c. = S-wave + D-wave partial waves.
+        // The h.c. final state is carried by the channel multiplicity (factor 2 in
+        // rho and chew_mandelstam), so the width and loop are doubled consistently.
         return _imp->exclusive_norm * (
               _imp->sigma_eetochannel(ir, Channels::DpDstarm)
             + _imp->sigma_eetochannel(ir, Channels::DpDstarmD)
