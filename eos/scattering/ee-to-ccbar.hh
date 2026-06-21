@@ -649,6 +649,15 @@ namespace eos
             double sigma_eetoDstarpDstarm_1P1(const IntermediateResult *) const;
             double sigma_eetoDstarpDstarm_5P1(const IntermediateResult *) const;
             double sigma_eetoDstarpDstarm_5F1(const IntermediateResult *) const;
+
+            // Helicity (transverse/longitudinal) D^*Dbar^* cross sections, coherent
+            // combinations of the three partial waves (TT + TL + LL = total).
+            double sigma_eetoDstar0Dstarbar0_TT(const IntermediateResult *) const;
+            double sigma_eetoDstar0Dstarbar0_TL(const IntermediateResult *) const;
+            double sigma_eetoDstar0Dstarbar0_LL(const IntermediateResult *) const;
+            double sigma_eetoDstarpDstarm_TT(const IntermediateResult *) const;
+            double sigma_eetoDstarpDstarm_TL(const IntermediateResult *) const;
+            double sigma_eetoDstarpDstarm_LL(const IntermediateResult *) const;
             // Partial-wave-resolved D Dbar^*: the totals above are the sum S + D.
             double sigma_eetoD0Dbarstar0_S(const IntermediateResult *) const;
             double sigma_eetoD0Dbarstar0_D(const IntermediateResult *) const;
