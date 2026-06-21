@@ -437,6 +437,32 @@ class eetoccbarTest :
                           c.sigma_eetoDstar0Dstarbar0_1P1(ir_hi)
                         + c.sigma_eetoDstar0Dstarbar0_5P1(ir_hi)
                         + c.sigma_eetoDstar0Dstarbar0_5F1(ir_hi), eps);
+                // The transverse/longitudinal components are non-negative coherent
+                // combinations of the same waves, and the orthonormal recoupling makes
+                // their sum equal to the total: sigma_TT + sigma_TL + sigma_LL = total.
+                TEST_CHECK(c.sigma_eetoDstar0Dstarbar0_TT(ir_hi) > 0.0);
+                TEST_CHECK(c.sigma_eetoDstar0Dstarbar0_TL(ir_hi) > 0.0);
+                TEST_CHECK(c.sigma_eetoDstar0Dstarbar0_LL(ir_hi) > 0.0);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstar0Dstarbar0(ir_hi),
+                          c.sigma_eetoDstar0Dstarbar0_TT(ir_hi)
+                        + c.sigma_eetoDstar0Dstarbar0_TL(ir_hi)
+                        + c.sigma_eetoDstar0Dstarbar0_LL(ir_hi), eps);
+
+                // Selection-rule check: the mixed component sigma_TL is fed only by the
+                // two S=2 waves (5P1, 5F1) -- the spin-singlet 1P1 cannot produce it.
+                // With both S=2 couplings off, sigma_TL must vanish and the surviving
+                // 1P1 splits as sigma_TT : sigma_LL = 2 : 1 (= 2/3 : 1/3 of the total).
+                p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0(5P1))"] = 0.0;
+                p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0(5F1))"] = 0.0;
+                ir_hi = c.prepare(4.05);
+                TEST_CHECK(c.sigma_eetoDstar0Dstarbar0_1P1(ir_hi) > 0.0);
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstar0Dstarbar0_5P1(ir_hi), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstar0Dstarbar0_5F1(ir_hi), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstar0Dstarbar0_TL(ir_hi), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstar0Dstarbar0_TT(ir_hi),
+                        2.0 / 3.0 * c.sigma_eetoDstar0Dstarbar0(ir_hi), eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstar0Dstarbar0_LL(ir_hi),
+                        1.0 / 3.0 * c.sigma_eetoDstar0Dstarbar0(ir_hi), eps);
             }
         }
 } eetoccbar_test;

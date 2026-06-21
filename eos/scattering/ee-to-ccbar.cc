@@ -453,6 +453,51 @@ namespace eos
             return GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(T_eetochannel(intermediate_result, channel));
         }
 
+        // Partial-wave amplitude a_SL = sqrt(K_c) * T_{ee,c}, normalised so that
+        // norm(amp_SL) == sigma_eetochannel(c) = |a_SL|^2. sqrt(K_c) is real and
+        // positive, so the relative phases of the three D^*Dbar^* waves (needed for
+        // the coherent helicity cross sections below) are those of the T-matrix
+        // elements from one and the same solve.
+        complex<double> amp_SL(const IntermediateResult * intermediate_result, const Channels & channel)
+        {
+            static const double speedoflight = 299792458.; // Exact value
+            const double GeVtonb = 10.0 * power_of<2>(1.0e18 * hbar * speedoflight);
+
+            const double Nf   = 2.0 * K->_channels[channel]->_l_orbital + 1.0;
+            const double rhof = std::abs(K->_channels[channel]->rho(intermediate_result->s));
+            const double Kc   = GeVtonb / std::abs(intermediate_result->s) * Nf * rhof;
+
+            return std::sqrt(Kc) * T_eetochannel(intermediate_result, channel);
+        }
+
+        // Transverse/longitudinal helicity cross sections of e+e- -> V V (J^PC=1^--),
+        // following the angular note (arXiv:1707.09167). The three partial waves
+        // 1P1 (a01), 5P1 (a21), 5F1 (a23) recouple to the three helicity amplitudes
+        // F++, F+0, F00; the components are sigma_TT = 2|F++|^2, sigma_TL = 4|F+0|^2,
+        // sigma_LL = |F00|^2, and by orthonormality TT + TL + LL = 1P1 + 5P1 + 5F1.
+        struct HelicityXS
+        {
+            double tt, tl, ll;
+        };
+
+        HelicityXS sigma_helicity(const IntermediateResult * ir,
+                const Channels & ch_1P1, const Channels & ch_5P1, const Channels & ch_5F1)
+        {
+            const complex<double> a01 = amp_SL(ir, ch_1P1);
+            const complex<double> a21 = amp_SL(ir, ch_5P1);
+            const complex<double> a23 = amp_SL(ir, ch_5F1);
+
+            const double s3  = std::sqrt(3.0);
+            const double s15 = std::sqrt(15.0);
+            const double s10 = std::sqrt(10.0);
+
+            const complex<double> Fpp = a01 / s3 - a21 / s15 + a23 / s10;
+            const complex<double> Fp0 =          - (s15 / 10.0) * a21 - (s10 / 10.0) * a23;
+            const complex<double> F00 = -a01 / s3 - (2.0 / s15) * a21 + (2.0 / s10) * a23;
+
+            return HelicityXS{ 2.0 * std::norm(Fpp), 4.0 * std::norm(Fp0), std::norm(F00) };
+        }
+
         // K matrix widths, they are not expected to match the experimental ones
         double res_partial_width(const Resonances & resonance, const Channels & channel)
         {
@@ -679,6 +724,48 @@ namespace eos
     EEToCCBar::sigma_eetoDstarpDstarm_5F1(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DstarpDstarm5F1);
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstar0Dstarbar0_TT(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_helicity(ir,
+                Channels::Dstar0Dstarbar0, Channels::Dstar0Dstarbar05P1, Channels::Dstar0Dstarbar05F1).tt;
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstar0Dstarbar0_TL(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_helicity(ir,
+                Channels::Dstar0Dstarbar0, Channels::Dstar0Dstarbar05P1, Channels::Dstar0Dstarbar05F1).tl;
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstar0Dstarbar0_LL(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_helicity(ir,
+                Channels::Dstar0Dstarbar0, Channels::Dstar0Dstarbar05P1, Channels::Dstar0Dstarbar05F1).ll;
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstarpDstarm_TT(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_helicity(ir,
+                Channels::DstarpDstarm, Channels::DstarpDstarm5P1, Channels::DstarpDstarm5F1).tt;
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstarpDstarm_TL(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_helicity(ir,
+                Channels::DstarpDstarm, Channels::DstarpDstarm5P1, Channels::DstarpDstarm5F1).tl;
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstarpDstarm_LL(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_helicity(ir,
+                Channels::DstarpDstarm, Channels::DstarpDstarm5P1, Channels::DstarpDstarm5F1).ll;
     }
 
     double

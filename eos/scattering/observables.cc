@@ -138,6 +138,24 @@ namespace eos
                         &EEToCCBar::sigma_eetoDstar0Dstarbar0_5F1,
                         std::make_tuple("E")),
 
+                make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_TT(E)", R"(\sigma_{TT}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
+                        Unit::InverseGeV2(),
+                        &EEToCCBar::prepare,
+                        &EEToCCBar::sigma_eetoDstar0Dstarbar0_TT,
+                        std::make_tuple("E")),
+
+                make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_TL(E)", R"(\sigma_{TL}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
+                        Unit::InverseGeV2(),
+                        &EEToCCBar::prepare,
+                        &EEToCCBar::sigma_eetoDstar0Dstarbar0_TL,
+                        std::make_tuple("E")),
+
+                make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_LL(E)", R"(\sigma_{LL}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
+                        Unit::InverseGeV2(),
+                        &EEToCCBar::prepare,
+                        &EEToCCBar::sigma_eetoDstar0Dstarbar0_LL,
+                        std::make_tuple("E")),
+
                 make_cacheable_observable("e^+e^-->D^*+D^*-::sigma(E)", R"(\sigma(e^+e^- \to D^{*+} D^{*-}))",
                         Unit::InverseGeV2(),
                         &EEToCCBar::prepare,
@@ -160,6 +178,24 @@ namespace eos
                         Unit::InverseGeV2(),
                         &EEToCCBar::prepare,
                         &EEToCCBar::sigma_eetoDstarpDstarm_5F1,
+                        std::make_tuple("E")),
+
+                make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_TT(E)", R"(\sigma_{TT}(e^+e^- \to D^{*+} D^{*-}))",
+                        Unit::InverseGeV2(),
+                        &EEToCCBar::prepare,
+                        &EEToCCBar::sigma_eetoDstarpDstarm_TT,
+                        std::make_tuple("E")),
+
+                make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_TL(E)", R"(\sigma_{TL}(e^+e^- \to D^{*+} D^{*-}))",
+                        Unit::InverseGeV2(),
+                        &EEToCCBar::prepare,
+                        &EEToCCBar::sigma_eetoDstarpDstarm_TL,
+                        std::make_tuple("E")),
+
+                make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_LL(E)", R"(\sigma_{LL}(e^+e^- \to D^{*+} D^{*-}))",
+                        Unit::InverseGeV2(),
+                        &EEToCCBar::prepare,
+                        &EEToCCBar::sigma_eetoDstarpDstarm_LL,
                         std::make_tuple("E")),
 
                 make_cacheable_observable("e^+e^-->D^0Dbar^*0::sigma(E)", R"(\sigma(e^+e^- \to D^0 \bar{D}^{*0} + \mathrm{h.c.}))",
