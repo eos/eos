@@ -1921,6 +1921,45 @@ class BandItem(Item):
         return entries
 
 @dataclass(kw_only=True)
+class VerticalLineItem(Item):
+    r"""Plots a vertical line at a fixed position on the x axis.
+
+    This item type is used to mark a particular value on the x axis, e.g. a
+    kinematic threshold. The line's appearance is controlled by the inherited
+    ``color``, ``linestyle``, ``linewidth``, and ``alpha`` fields.
+
+    :param x: The x-axis position of the vertical line.
+    :type x: float
+
+    Example:
+
+    .. code-block::
+
+        plot:
+          xaxis: { label: '$\sqrt{s}$ [GeV]', range: [3.73, 4.085] }
+          yaxis: { label: '$\sigma$ [nb]' }
+          items:
+            - { type: 'vertical', x: 3.875, color: 'gray', linestyle: 'dashed', label: r'$D\bar{D}^*$ threshold' }
+    """
+
+    x:float|None=field(default=None)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.x is None:
+            raise ValueError("'x' must be specified to define a vertical line")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        "Prepare the vertical line for drawing."
+        pass
+
+    def draw(self, ax):
+        "Draw the vertical line on the axes."
+        ax.axvline(self.x, alpha=self.alpha, color=self.color,
+                   linestyle=self.linestyle, linewidth=self.linewidth)
+
+@dataclass(kw_only=True)
 class SignalPDFItem(Item):
     """Plots a single EOS signal PDF w/o uncertainties as a function of one kinematic variable
 
@@ -2300,6 +2339,7 @@ class ItemFactory:
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
         'band': BandItem,
+        'vertical': VerticalLineItem,
         'signal-pdf': SignalPDFItem,
         'complex-plane': ComplexPlaneItem,
         'errorbars': ErrorBarsItem,
