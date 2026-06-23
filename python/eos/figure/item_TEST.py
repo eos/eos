@@ -21,6 +21,8 @@ import os
 
 from eos.analysis_file_description import AnalysisFileContext
 from matplotlib import pyplot as plt
+from matplotlib.lines import Line2D
+from matplotlib.patches import Rectangle
 
 class ItemColorCyclerTests(unittest.TestCase):
 
@@ -62,6 +64,32 @@ class ObservableItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'observable': {e}")
+
+    def test_legend(self):
+
+        # a labelled observable contributes a single line entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::dBR/dq2'
+        variable: q2
+        range: [0.1, 1.0]
+        resolution: 10
+        label: 'foo'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'foo')
+
+        # an unlabelled item contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::dBR/dq2'
+        variable: q2
+        range: [0.1, 1.0]
+        resolution: 10
+        """)
+        self.assertEqual(list(item.legend()), [])
 
 class UncertaintyBandItemTests(unittest.TestCase):
 
@@ -121,6 +149,23 @@ class ConstraintItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'constraint': {e}")
 
+    def test_legend(self):
+
+        # a labelled constraint contributes a single point-marker entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        label: 'Belle'
+        constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+        observable: 'B->Dlnu::BR'
+        variable: 'q2'
+        rescale_by_width: true
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][0].get_marker(), '_')
+        self.assertEqual(entries[0][1], 'Belle')
+
 class ConstraintResidueItemTests(unittest.TestCase):
 
     def test_full(self):
@@ -175,6 +220,17 @@ class TwoDimensionalHistogramItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'constraint': {e}")
+
+    def test_legend(self):
+
+        # a 2D density has no faithful swatch and contributes no entry, even when labelled
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'histogram2D'
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        label: 'should be ignored'
+        """)
+        self.assertEqual(list(item.legend()), [])
 
 class OneDimensionalKernelDensityItemTests(unittest.TestCase):
 
@@ -250,6 +306,28 @@ class BandItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'band': {e}")
 
+    def test_legend(self):
+
+        # a labelled band contributes a single patch entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: band
+        x: [-0.1, +0.1]
+        color: 'blue'
+        label: 'foo'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'foo')
+
+        # an unlabelled band contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: band
+        y: [-0.1, +0.1]
+        color: 'orange'
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class SignalPDFItemTests(unittest.TestCase):
 
     def test_full(self):
@@ -293,6 +371,19 @@ class ComplexPlaneItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'complex-plane': {e}")
 
+    def test_legend(self):
+
+        # a pseudocolor plot has no faithful swatch and contributes no entry, even when labelled
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'complex-plane'
+        observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+        variables: ['Re{q2}', 'Im{q2}']
+        ranges: [[-1.0, +1.0], [-1.0, +1.0]]
+        resolution: 10
+        label: 'should be ignored'
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class ErrorBarsItemTests(unittest.TestCase):
 
     def test_full(self):
@@ -311,6 +402,60 @@ class ErrorBarsItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'signal-pdf': {e}")
+
+    def test_legend(self):
+
+        # a labelled error-bar item contributes a single marker entry using its marker
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'errorbars'
+        positions: [[1, 2], [2, 3]]
+        yerrors: [0.2, 0.3]
+        marker: 'o'
+        label: 'data'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][0].get_marker(), 'o')
+        self.assertEqual(entries[0][1], 'data')
+
+class VerticalLineItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'vertical'
+            x: 3.8
+            color: 'gray'
+            linestyle: 'dashed'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'vertical': {e}")
+
+    def test_legend(self):
+
+        # a labelled vertical line contributes a single line entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'vertical'
+        x: 3.8
+        label: 'threshold'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'threshold')
+
+        # an unlabelled vertical line contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'vertical'
+        x: 3.8
+        """)
+        self.assertEqual(list(item.legend()), [])
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
