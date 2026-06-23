@@ -22,6 +22,10 @@ from eos.deserializable import Deserializable
 import inspect
 import eos
 import matplotlib as _matplotlib
+import matplotlib.collections
+import matplotlib.container
+import matplotlib.lines
+import matplotlib.patches
 import numpy as _np
 import os
 import scipy as _scipy
@@ -98,11 +102,52 @@ class Item(Deserializable):
         """
         raise NotImplementedError
 
+    def _legend_line(self, alpha=None):
+        "A line swatch matching a plotted curve; pass the item's alpha if it draws with one."
+        if not self.label:
+            return []
+        handle = _matplotlib.lines.Line2D((0, 1), (0, 0), color=self.color, lw=self.linewidth, ls=self.linestyle, alpha=alpha)
+        return [(handle, self.label)]
+
+    def _legend_patch(self):
+        "A translucent filled swatch matching a band or histogram."
+        if not self.label:
+            return []
+        handle = _matplotlib.patches.Rectangle((0, 0), 1, 1, color=self.color, alpha=self.alpha)
+        return [(handle, self.label)]
+
+    def _legend_marker(self, marker, alpha=None):
+        "A point-marker swatch matching error bars; pass the item's alpha if it draws with one."
+        if not self.label:
+            return []
+        handle = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker=marker, linestyle='none', alpha=alpha)
+        return [(handle, self.label)]
+
+    def _legend_errorbar(self, marker='_', has_xerr=False, has_yerr=True, alpha=None):
+        """An error-bar swatch (capped bar) matching :class:`ErrorBarsItem`.
+
+        Returns an :class:`matplotlib.container.ErrorbarContainer`, which the default legend
+        renders via ``HandlerErrorbar`` as a central marker with caps and a connecting bar.
+        The central element is a marker (not a full-width line) and the caps are sized to
+        ``2 * errorbar.capsize`` -- matplotlib's own convention -- so the swatch reproduces
+        the error bars as the items actually draw them (no connecting line, capped bar). The
+        template artists below carry the visual properties (colour, width, marker size, alpha);
+        the handler copies them onto the swatch geometry it builds.
+        """
+        if not self.label:
+            return []
+        capsize  = 2.0 * _matplotlib.rcParams['errorbar.capsize']
+        line     = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker=marker, linestyle='none', alpha=alpha)
+        capline  = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker='_', linestyle='none', markersize=capsize, alpha=alpha)
+        barlines = _matplotlib.collections.LineCollection([[(0, 0), (0, 1)]], colors=self.color, linewidths=self.linewidth, alpha=alpha)
+        handle   = _matplotlib.container.ErrorbarContainer((line, [capline], [barlines]), has_xerr=has_xerr, has_yerr=has_yerr)
+        return [(handle, self.label)]
+
     def legend(self):
         """Return the item's legend entry as a list of handle/label pairs.
 
         The default implementation returns an empty list, i.e. the item contributes no
-        dedicated legend entry. Subclasses that require a custom legend handle override this.
+        dedicated legend entry. Subclasses that require a custom legend handle override this
 
         :returns: A list of ``(handle, label)`` pairs to be added to the plot legend.
         :rtype: list[tuple[matplotlib.artist.Artist, str]]
@@ -288,6 +333,10 @@ class ObservableItem(Item):
         :param kwargs: Additional keyword arguments forwarded to :meth:`matplotlib.axes.Axes.plot`.
         """
         ax.plot(self._xvalues, self._yvalues, label=self.label, color=self.color, lw=self.linewidth, ls=self.linestyle, **kwargs)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line()
 
 
 @dataclass(kw_only=True)
@@ -525,6 +574,10 @@ class UncertaintyBandItem(Item):
         if 'median' in self.band:
             ax.plot(self._xvalues, self._ovalues_central,                             alpha=self.alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
 
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_patch()
+
 
 @dataclass(kw_only=True)
 class BinnedUncertaintyItem(Item):
@@ -621,6 +674,10 @@ class BinnedUncertaintyItem(Item):
             ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
             ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=self.alpha, lw=self.linewidth, ls=self.linestyle)
             label = None
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_patch()
 
 
 @dataclass(kw_only=True)
@@ -739,6 +796,10 @@ class OneDimensionalHistogramItem(Item):
         ax.hist(self.samples, weights=self._datafile.weights, range=self.range,
                 alpha=self.alpha, bins=self.bins, color=self.color, density=True, label=self.label)
 
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_patch()
+
 @dataclass
 class TwoDimensionalHistogramItem(Item):
     """Plots a two-dimensional histogram.
@@ -832,6 +893,11 @@ class TwoDimensionalHistogramItem(Item):
         """
         ax.hist2d(self.samples[:, 0], self.samples[:, 1], weights=self.weights, range=[self.xrange, self.yrange],
                   bins=self.bins, label=self.label, rasterized=True, cmap='Greys')
+
+    def legend(self):
+        # a 2D density (colormap) has no faithful single-swatch representation,
+        # so it deliberately contributes no legend entry (use a colorbar instead).
+        return []
 
 
 @dataclass(kw_only=True)
@@ -1000,6 +1066,10 @@ class OneDimensionalKernelDensityEstimateItem(Item):
                                             facecolor=self.color, alpha=self.alpha)
 
         ax.plot(self.xvalues, self.pdf, color=self.color, lw=self.linewidth, ls=self.linestyle, label=self.label)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line()
 
 @dataclass(kw_only=True)
 class TwoDimensionalKernelDensityEstimateItem(Item):
@@ -1507,6 +1577,15 @@ class ConstraintItem(Item):
             # disable the label for subsequent plots
             label = None
 
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        # the constraint is drawn as capped error bars (always a y error, plus an x error
+        # for binned constraints), so the swatch must match. The x error is only known
+        # after prepare(); fall back to a y-only swatch if the data is not yet available.
+        xerrors = getattr(self, '_xerrors', None)
+        has_xerr = xerrors is not None and any(xe is not None for xe in xerrors)
+        return self._legend_errorbar(has_xerr=has_xerr, has_yerr=True)
+
 
 @dataclass(kw_only=True)
 class ConstraintResidueItem(Item):
@@ -1815,6 +1894,15 @@ class ConstraintResidueItem(Item):
             # disable the label for subsequent plots
             label = None
 
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        # the residues are drawn as capped error bars (always a y error, plus an x error
+        # for binned constraints), so the swatch must match. The x error is only known
+        # after prepare(); fall back to a y-only swatch if the data is not yet available.
+        xerrors = getattr(self, '_xerrors', None)
+        has_xerr = xerrors is not None and any(xe is not None for xe in xerrors)
+        return self._legend_errorbar(has_xerr=has_xerr, has_yerr=True)
+
 
 @dataclass(kw_only=True)
 class BandItem(Item):
@@ -1912,13 +2000,7 @@ class BandItem(Item):
         :returns: A list containing a single ``(handle, label)`` pair if a label is set, otherwise empty.
         :rtype: list[tuple[matplotlib.artist.Artist, str]]
         """
-        entries = []
-
-        if self.label:
-            handle = _matplotlib.pyplot.Rectangle((0,0),1,1, alpha=self.alpha, color=self.color)
-            entries.append((handle, self.label))
-
-        return entries
+        return self._legend_patch()
 
 @dataclass(kw_only=True)
 class VerticalLineItem(Item):
@@ -1958,6 +2040,10 @@ class VerticalLineItem(Item):
         "Draw the vertical line on the axes."
         ax.axvline(self.x, alpha=self.alpha, color=self.color,
                    linestyle=self.linestyle, linewidth=self.linewidth)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line(alpha=self.alpha)
 
 @dataclass(kw_only=True)
 class SignalPDFItem(Item):
@@ -2086,6 +2172,10 @@ class SignalPDFItem(Item):
 
         ax.plot(xvalues, _np.exp(pvalues), alpha=self.alpha, color=self.color, label=self.label, lw=self.linewidth, ls=self.linestyle)
 
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line(alpha=self.alpha)
+
 @dataclass(kw_only=True)
 class ComplexPlaneItem(Item):
     """Plots a single observable as a function on the complex plan
@@ -2211,6 +2301,11 @@ class ComplexPlaneItem(Item):
         """
         ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap='viridis', rasterized=True)
 
+    def legend(self):
+        # a pseudocolor plot has no faithful single-swatch representation,
+        # so it deliberately contributes no legend entry (use a colorbar instead).
+        return []
+
 
 @dataclass(kw_only=True)
 class ErrorBarsItem(Item):
@@ -2319,6 +2414,10 @@ class ErrorBarsItem(Item):
         ax.errorbar(self._x, self._y, xerr=self._xerr, yerr=self._yerr, fmt='none', color=self.color,
                     alpha=self.alpha, elinewidth=self.linewidth, linestyle=self.linestyle, label=self.label)
         ax.plot(self._x, self._y, marker=self.marker, linestyle='none', color=self.color, alpha=self.alpha)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_errorbar(marker=self.marker, has_xerr=self.xerrors is not None, has_yerr=self.yerrors is not None, alpha=self.alpha)
 
 class ItemFactory:
     """Factory that creates :class:`Item` instances from their YAML or dictionary description.
