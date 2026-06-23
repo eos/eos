@@ -51,6 +51,13 @@
 - Add comparison operators for ``qnp::OptionValue`` (D. van Dyk)
 - Add an output stream operator for ``qnp::OptionValue`` (D. van Dyk)
 - Document the user-facing classes and methods of the ``eos`` Python modules, and auto-generate the analysis file format reference from the ``eos.analysis_file_description`` classes (D. van Dyk)
+- Add a ``vertical`` plot item that draws a vertical line at a fixed position on the x axis, e.g. to mark a kinematic threshold (D. van Dyk)
+- Add an optional ``size`` field to ``grid`` figures to set the figure size explicitly (D. van Dyk)
+- Add an optional ``watermark_plot`` field to ``grid`` figures to stamp the watermark on a single panel, addressed either by a flattened index or by a ``(row, col)`` pair (D. van Dyk)
+- Allow an explicit anchor (``xy``) and a configurable ``offset`` for the figure ``watermark`` (D. van Dyk)
+- Add ``tight_layout`` and ``shared_axes`` options to ``grid`` figures (D. van Dyk)
+- Provide a sensible default ``legend()`` entry for most figure item types (D. van Dyk)
+- Make the tick label format configurable via a ``format`` field on the ``xticks`` and ``yticks`` of a plot (D. van Dyk)
 
 ### Deprecated
 
