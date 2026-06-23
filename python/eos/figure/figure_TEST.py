@@ -186,6 +186,67 @@ class GridFigureTests(unittest.TestCase):
         self.assertAlmostEqual(size[0], 6.0) # 3.0 * ncol = 3.0 * 2
         self.assertAlmostEqual(size[1], 3.0) # 3.0 * nrow = 3.0 * 1
 
+    @staticmethod
+    def _has_watermark(ax):
+        return any('EOS' in t.get_text() for t in ax.texts)
+
+    @staticmethod
+    def _grid_yaml(shape, nplots, extra=''):
+        plots = "".join("""
+          - xaxis: { label: '$q^2$' }
+            yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: { 'l': 'e' }
+                variable: 'q2'
+                range: [0.1, 1.0]
+                resolution: 100""" for _ in range(nplots))
+        return f"""
+        type: 'grid'
+        shape: {shape}
+        {extra}
+        plots:{plots}
+        """
+
+    def test_watermark_plot_single(self):
+
+        # A flattened index selects a single panel; only that panel is stamped.
+        input = self._grid_yaml('[1, 2]', 2, extra='watermark_plot: 1')
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        self.assertFalse(self._has_watermark(figure._axes[0]))
+        self.assertTrue(self._has_watermark(figure._axes[1]))
+
+    def test_watermark_plot_tuple(self):
+
+        # A 2D (row, col) address resolves to flat index row * ncol + col.
+        # (1, 0) in a 2x2 grid -> flat index 2.
+        input = self._grid_yaml('[2, 2]', 4, extra='watermark_plot: [1, 0]')
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        for idx in range(4):
+            self.assertEqual(self._has_watermark(figure._axes[idx]), idx == 2)
+
+    def test_watermark_plot_default(self):
+
+        # Without 'watermark_plot', every panel is stamped (backward-compatible).
+        input = self._grid_yaml('[1, 2]', 2)
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        self.assertTrue(self._has_watermark(figure._axes[0]))
+        self.assertTrue(self._has_watermark(figure._axes[1]))
+
+    def test_watermark_plot_out_of_range(self):
+
+        # An out-of-range flattened index is rejected at construction.
+        with self.assertRaises(Exception):
+            eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra='watermark_plot: 5'))
+
+        # An out-of-range 2D address is rejected as well.
+        with self.assertRaises(Exception):
+            eos.figure.FigureFactory.from_yaml(self._grid_yaml('[2, 2]', 4, extra='watermark_plot: [0, 9]'))
+
 
 class CornerFigureTests(unittest.TestCase):
 

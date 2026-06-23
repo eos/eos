@@ -281,6 +281,8 @@ class GridFigure(Figure):
     :type shape: tuple[int, int]
     :param size: The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
     :type size: tuple[float, float]
+    :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index or a 2D ``(row, col)`` address. If None, every plot is stamped.
+    :type watermark_plot: int | tuple[int, int] | None
     """
 
     type:str=field(repr=False, init=False, default='grid')
@@ -290,6 +292,7 @@ class GridFigure(Figure):
     shape:tuple[int, int]
     size:tuple[float, float]|None=field(default=None)
     watermark:Watermark=field(default_factory=Watermark)
+    watermark_plot:int|tuple[int, int]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Producing a Figure with a Grid of Plots
@@ -309,6 +312,9 @@ class GridFigure(Figure):
 
         * ``size`` (*tuple[float, float]*) -- The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
 
+        * ``watermark_plot`` (*int* or *tuple[int, int]*) -- The plot that carries the watermark, given either as a flattened
+            (row-major) index or as a 2D ``(row, col)`` address. If omitted, every plot is stamped.
+
 
     """)
     def __post_init__(self):
@@ -318,6 +324,29 @@ class GridFigure(Figure):
         self._gridspec = self._figure.add_gridspec(nrow, ncol, hspace=self.padding[0], wspace=self.padding[1])
         axes = self._gridspec.subplots()
         self._axes = axes.flatten('C') # flatten to row-major style
+        self._watermark_idx = self._resolve_watermark_plot(nrow, ncol)
+
+    def _resolve_watermark_plot(self, nrow, ncol):
+        "Resolve the watermark_plot field to a single flattened (row-major) index, or None for all plots."
+        wp = self.watermark_plot
+        if wp is None:
+            return None
+
+        nplots = len(self.plots)
+        if isinstance(wp, int):
+            idx = wp
+        else: # 2D (row, col) address; a YAML list arrives here as well
+            if len(wp) != 2:
+                raise ValueError(f"'watermark_plot' must be an int or a (row, col) pair, got {wp}")
+            row, col = wp
+            if not (0 <= row < nrow and 0 <= col < ncol):
+                raise ValueError(f"'watermark_plot' {tuple(wp)} is outside the {nrow}x{ncol} grid")
+            idx = row * ncol + col
+
+        if not (0 <= idx < nplots):
+            raise ValueError(f"'watermark_plot' resolves to plot {idx}, but there are only {nplots} plots")
+
+        return idx
 
     def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         """Draw the grid figure.
@@ -331,7 +360,8 @@ class GridFigure(Figure):
         for idx, plot in enumerate(self.plots):
             plot.prepare()
             plot.draw(self._axes[idx])
-            plot.draw_watermark(self._axes[idx], self.watermark)
+            if self._watermark_idx is None or self._watermark_idx == idx:
+                plot.draw_watermark(self._axes[idx], self.watermark)
 
         self._gridspec.tight_layout(self._figure)
         if output is not None:
