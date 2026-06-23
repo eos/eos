@@ -95,11 +95,14 @@ class XTicks(Deserializable):
     :type position: str
     :param visible: Whether the ticks are visible. Defaults to True.
     :type visible: bool
+    :param format: A printf-style format string for the major tick labels, e.g. '%.2f'. Defaults to None (matplotlib's default formatter).
+    :type format: str | None
     """
 
     minor:bool=field(default=True)
     position:str=field(default='bottom')
     visible:bool=field(default=True)
+    format:str|None=field(default=None)
 
     def __post_init__(self):
         POSITIONS = ['bottom', 'top', 'both']
@@ -130,6 +133,8 @@ class XTicks(Deserializable):
                     ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
                 else:
                     ax.xaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
+            if self.format is not None:
+                ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter(self.format))
             ax.xaxis.set_tick_params(
                 which = 'both' if self.minor else 'major',
                 bottom=(self.position == 'bottom' or self.position == 'both'),
@@ -212,11 +217,14 @@ class YTicks(Deserializable):
     :type position: str
     :param visible: Whether the ticks are visible. Defaults to True.
     :type visible: bool
+    :param format: A printf-style format string for the major tick labels, e.g. '%.2f'. Defaults to None (matplotlib's default formatter).
+    :type format: str | None
     """
 
     minor:bool=field(default=True)
     position:str=field(default='left')
     visible:bool=field(default=True)
+    format:str|None=field(default=None)
 
     def __post_init__(self):
         POSITIONS = ['left', 'right', 'both']
@@ -247,6 +255,8 @@ class YTicks(Deserializable):
                     ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
                 else:
                     ax.yaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
+            if self.format is not None:
+                ax.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter(self.format))
             ax.yaxis.set_tick_params(
                 left=(self.position == 'left' or self.position == 'both'),
                 right=(self.position == 'right' or self.position == 'both')

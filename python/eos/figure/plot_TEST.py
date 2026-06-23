@@ -146,6 +146,26 @@ class XTicksTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when drawing XTicks: {e}")
 
+    def test_format(self):
+        import matplotlib.ticker
+        from eos.figure.plot import XTicks
+
+        # defaults to None (matplotlib's default formatter)
+        self.assertIsNone(XTicks.from_dict().format)
+        self.assertEqual(XTicks.from_dict(format='%.2f').format, '%.2f')
+
+        # a format string installs a FormatStrFormatter on the major ticks
+        _, ax = plt.subplots()
+        XTicks.from_dict(format='%.2f').draw(ax)
+        formatter = ax.xaxis.get_major_formatter()
+        self.assertIsInstance(formatter, matplotlib.ticker.FormatStrFormatter)
+        self.assertEqual(formatter.fmt, '%.2f')
+
+        # without a format, the major formatter is left untouched (not a FormatStrFormatter)
+        _, ax = plt.subplots()
+        XTicks.from_dict().draw(ax)
+        self.assertNotIsInstance(ax.xaxis.get_major_formatter(), matplotlib.ticker.FormatStrFormatter)
+
 
 class YTicksTests(unittest.TestCase):
 
@@ -178,6 +198,26 @@ class YTicksTests(unittest.TestCase):
             YTicks.from_dict(visible=False).draw(ax)
         except Exception as e:
             self.fail(f"Error when drawing YTicks: {e}")
+
+    def test_format(self):
+        import matplotlib.ticker
+        from eos.figure.plot import YTicks
+
+        # defaults to None (matplotlib's default formatter)
+        self.assertIsNone(YTicks.from_dict().format)
+        self.assertEqual(YTicks.from_dict(format='%.2f').format, '%.2f')
+
+        # a format string installs a FormatStrFormatter on the major ticks
+        _, ax = plt.subplots()
+        YTicks.from_dict(format='%.2f').draw(ax)
+        formatter = ax.yaxis.get_major_formatter()
+        self.assertIsInstance(formatter, matplotlib.ticker.FormatStrFormatter)
+        self.assertEqual(formatter.fmt, '%.2f')
+
+        # without a format, the major formatter is left untouched (not a FormatStrFormatter)
+        _, ax = plt.subplots()
+        YTicks.from_dict().draw(ax)
+        self.assertNotIsInstance(ax.yaxis.get_major_formatter(), matplotlib.ticker.FormatStrFormatter)
 
 
 class XAxisTests(unittest.TestCase):
