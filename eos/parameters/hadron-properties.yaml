@@ -24,7 +24,6 @@ groups:
           unit:     'GeV'
           comments: "cf. [PDG-Live], December 2020"
       'mass::eta' :
-          alias_of: [ 'mass::eta_q', 'mass::eta_s' ]
           central: +0.547862
           min:     +0.547845
           max:     +0.547879
@@ -464,7 +463,7 @@ groups:
           alias_of: [ 'decay-constant::pi^+', 'decay-constant::pi^-', 'decay-constant::pi^0' ]
           central: +0.1302
           min:     +0.1288
-          max:     +0.1326
+          max:     +0.1316
           latex:    '$f_\pi$'
           unit:     'GeV'
           comments: 'cf. [FLAG2013], eq. (43)'
@@ -483,19 +482,19 @@ groups:
           unit:     'GeV'
           comments: 'calculated from 2106.05398, maybe update'
       'decay-constant::eta_q' :
-          central: +0.139
-          min:     +0.0437
-          max:     +0.0543
+          central: +0.1393
+          min:     +0.1363
+          max:     +0.1423
           latex:    '$f_{\eta_q}$'
           unit:     'GeV'
-          comments: 'UPDATE'
+          comments: '[FK:2002A] and [FLAG2013]'
       'decay-constant::eta_s' :
-          central: +0.1745
-          min:     +0.0437
-          max:     +0.0543
+          central: +0.174
+          min:     +0.166
+          max:     +0.182
           latex:    '$f_{\eta_s}$'
           unit:     'GeV'
-          comments: 'UPDATE'
+          comments: '[FK:2002A] and [FLAG2013]'
       'decay-constant::J/psi' :
           central: +0.2773
           min:     +0.2733
@@ -782,9 +781,9 @@ groups:
           comments: 'cf. [FK:2002A] eq. (1)'
       # Mixing angle of the eta meson in Flavor scheme
       'eta::theta_FKS' :
-          central: +0.0
-          min:     -3.14
-          max:     +3.14
+          central: +0.686
+          min:     -0.713
+          max:     +0.659
           unit:     '1'
           latex:    '$\theta_{FKS}$'
           comments: 'cf. [FK:2002A] eq. (1)'
