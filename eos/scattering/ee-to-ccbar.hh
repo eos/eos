@@ -53,6 +53,7 @@ namespace eos
     15  D*+  D*-      VV (P, 5P1)  3       14 (isospin)
     16  D*0  D*0bar   VV (F, 5F1)  3       -
     17  D*+  D*-      VV (F, 5F1)  3       16 (isospin)
+    18  eff(4160)     PP (P)       3       -
     */
 
     // e^+e^- channel
@@ -542,8 +543,8 @@ namespace eos
     {
         public:
 
-            const static long unsigned nchannels = 18;
-            const static long unsigned nresonances = 4;
+            const static long unsigned nchannels = 19;
+            const static long unsigned nresonances = 5;
 
             struct IntermediateResult :
                 public CacheableObservable::IntermediateResult
@@ -580,6 +581,7 @@ namespace eos
             double psi3770_total_width() const;
             double psi4040_eff_width() const;
             double psi4040_total_width() const;
+            double psi4160_total_width() const;
 
             // Phase space factor
             double rho_ee(const IntermediateResult *) const;

@@ -1643,6 +1643,7 @@ groups:
               'eff(2S)': '\mathrm{eff}_{\psi(2S)}'
               'eff(3770)': '\mathrm{eff}_{\psi(3770)}'
               'eff(4040)': '\mathrm{eff}_{\psi(4040)}'
+              'eff(4160)': '\mathrm{eff}_{\psi(4160)}'
               'D^0Dbar^0': 'D^0\bar{D}^0'
               'D^*0Dbar^*0': 'D^{*0}\bar{D}^{*0}'
               'D^*+D^*-': 'D^{*+} D^{*-}'
@@ -1656,8 +1657,8 @@ groups:
               'D^*0Dbar^*0(5F1)': 'D^{*0}\bar{D}^{*0}\,({}^5F_1)'
               'D^*+D^*-(5F1)': 'D^{*+} D^{*-}\,({}^5F_1)'
           matrix:
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)", "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)"]
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)", "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)", "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)", "eff(4160)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)", "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)", "eff(4160)"]
 
       # e^+ e^- channel
       'ee->ccbar::g0(%1%,%2%)' :
@@ -1672,10 +1673,12 @@ groups:
               'psi(2S)': '\psi(2S)'
               'psi(3770)': '\psi(3770)'
               'psi(4040)': '\psi(4040)'
+              'psi(4160)': '\psi(4160)'
               'eff(Jpsi)': '\mathrm{eff}_{J/\psi}'
               'eff(2S)': '\mathrm{eff}_{\psi(2S)}'
               'eff(3770)': '\mathrm{eff}_{\psi(3770)}'
               'eff(4040)': '\mathrm{eff}_{\psi(4040)}'
+              'eff(4160)': '\mathrm{eff}_{\psi(4160)}'
               'D^0Dbar^0': 'D^0\bar{D}^0'
               'D^*0Dbar^*0': 'D^{*0}\bar{D}^{*0}'
               'D^*+D^*-': 'D^{*+} D^{*-}'
@@ -1689,6 +1692,6 @@ groups:
               'D^*0Dbar^*0(5F1)': 'D^{*0}\bar{D}^{*0}\,({}^5F_1)'
               'D^*+D^*-(5F1)': 'D^{*+} D^{*-}\,({}^5F_1)'
           matrix:
-              - ["J/psi",  "psi(2S)", "psi(3770)", "psi(4040)"]
-              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)", "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)"]
+              - ["J/psi",  "psi(2S)", "psi(3770)", "psi(4040)", "psi(4160)"]
+              - ["e^+e^-", "eff(Jpsi)", "eff(2S)", "eff(3770)", "D^0Dbar^0", "D^+D^-", "eff(4040)", "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-", "D^0Dbar^*0(D)", "D^+D^*-(D)", "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)", "eff(4160)"]
   # }}}

@@ -482,12 +482,13 @@ class eetoccbarTest :
             }
 
             {
-                // Phase-1/2 extension: the full EEToCCBar now carries 4 resonances and
-                // 18 channels (psi(4040) + eff(4040); the equal-mass open-charm channels
-                // D_s^+D_s^-, D^*0Dbar^*0, D^*+D^*-; the S- and D-wave D Dbar^* channels;
-                // and the second P-wave (5P1) and F-wave (5F1) of D^*Dbar^*). With every
-                // new coupling left at its default 0, the new resonance and channels must
-                // decouple completely, so the N_C=5 results are reproduced exactly.
+                // Phase-1/2 extension: the full EEToCCBar now carries 5 resonances and
+                // 19 channels (psi(4040) + eff(4040), psi(4160) + eff(4160); the equal-mass
+                // open-charm channels D_s^+D_s^-, D^*0Dbar^*0, D^*+D^*-; the S- and D-wave
+                // D Dbar^* channels; and the second P-wave (5P1) and F-wave (5F1) of
+                // D^*Dbar^*). With every new coupling left at its default 0, the new
+                // resonances and channels must decouple completely, so the N_C=5 results are
+                // reproduced exactly.
                 Parameters p = Parameters::Defaults();
                 p["mass::psi(3770)"]                      =  3.796443282051135;
                 p["ee->ccbar::g0(psi(2S),e^+e^-)"]        = -0.02077753547690923;
@@ -511,9 +512,10 @@ class eetoccbarTest :
                 TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
                 TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDpDm(ir),    2.70723, eps);
 
-                // psi(4040) is inert while its couplings are at their default 0.
+                // psi(4040) and psi(4160) are inert while their couplings are at default 0.
                 TEST_CHECK_NEARLY_EQUAL(c.psi4040_total_width(), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.psi4040_eff_width(),   0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(c.psi4160_total_width(), 0.0, eps);
 
                 // The new open-charm channels are inert at default couplings. The equal-mass
                 // ones are evaluated above all thresholds (D_sD̄_s 3.937, D*0D̄*0 4.014,

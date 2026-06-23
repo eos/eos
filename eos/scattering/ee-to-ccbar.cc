@@ -47,22 +47,23 @@ namespace eos
 
         bool assume_isospin;
 
-        static const inline std::array<std::string, 4> resonance_names =
+        static const inline std::array<std::string, 5> resonance_names =
         {
-            "J/psi", "psi(2S)", "psi(3770)", "psi(4040)"
+            "J/psi", "psi(2S)", "psi(3770)", "psi(4040)", "psi(4160)"
         };
 
         enum Resonances
         {
-            Jpsi = 0, psi2S, psi3770, psi4040
+            Jpsi = 0, psi2S, psi3770, psi4040, psi4160
         };
 
-        static const inline std::array<std::string, 18> channel_names =
+        static const inline std::array<std::string, 19> channel_names =
         {
             "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)",
             "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-",
             "D^0Dbar^*0(D)", "D^+D^*-(D)",
-            "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)"
+            "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)",
+            "eff(4160)"
         };
 
         enum Channels
@@ -70,7 +71,8 @@ namespace eos
             ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040,
             DsDs, Dstar0Dstarbar0, DstarpDstarm, D0Dbarstar0, DpDstarm,
             D0Dbarstar0D, DpDstarmD,
-            Dstar0Dstarbar05P1, DstarpDstarm5P1, Dstar0Dstarbar05F1, DstarpDstarm5F1
+            Dstar0Dstarbar05P1, DstarpDstarm5P1, Dstar0Dstarbar05F1, DstarpDstarm5F1,
+            eff4160
         };
 
         // Resonance masses
@@ -290,6 +292,7 @@ namespace eos
                     case eff2S:
                     case eff3770:
                     case eff4040:
+                    case eff4160:
                         channel_array[i] = std::make_shared<EffChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_eff, m_eff, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
                     case D0Dbar0:
@@ -626,6 +629,12 @@ namespace eos
     }
 
     double
+    EEToCCBar::psi4160_total_width() const
+    {
+        return _imp->res_total_width(Resonances::psi4160);
+    }
+
+    double
     EEToCCBar::psi4040_eff_width() const
     {
         return _imp->res_partial_width(Resonances::psi4040, Channels::eff4040);
@@ -645,6 +654,7 @@ namespace eos
             + _imp->sigma_eetochannel(ir, Channels::eff2S)
             + _imp->sigma_eetochannel(ir, Channels::eff3770)
             + _imp->sigma_eetochannel(ir, Channels::eff4040)
+            + _imp->sigma_eetochannel(ir, Channels::eff4160)
             );
     }
 
