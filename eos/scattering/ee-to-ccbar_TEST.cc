@@ -22,7 +22,9 @@
 #include <eos/utils/kmatrix-impl.hh>
 
 #include <array>
+#include <cmath>
 #include <memory>
+#include <vector>
 
 
 using namespace test;
@@ -73,6 +75,133 @@ class eetoccbarTest :
                 const complex<double> sc(16.0, -0.1);
                 TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)), -0.001047685124, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(sc)), -0.004924905559, eps);
+            }
+
+            {
+                // High-accuracy validation of the S-wave (l = 0) Chew-Mandelstam function
+                // against the reference values obtained from a Python script using 40-digit
+                // mpmath. See EOS-ANALYSIS-2026-03 for the values.
+                // Three mass configurations are covered:
+                // - P1 equal masses 1/sqrt(2) (the EEChannel limit),
+                // - P2 equal masses 1, and
+                // - P3 the unequal pair (1/sqrt(2), sqrt(2)).
+                // The points span negative s, the pseudothreshold, the threshold cusp and
+                // the asymptotic region. CM is real below threshold (Im CM = 0), Im CM = rho
+                // above threshold (unitarity), and CM(s_th) = 0 (threshold subtraction).
+                Parameters p = Parameters::Defaults();
+                p["ee->ccbar::q_0"] = 0.5;
+                std::array<Parameter, 2> g0s {{ p["ee->ccbar::q_0"], p["ee->ccbar::q_0"] }};
+
+                const double eps_rel  = 1.0e-10; // Re CM, and Im CM above threshold
+                const double eps_cusp = 1.0e-8;  // within ~0.15 of the sqrt cusp at s_th
+                const double eps_abs  = 1.0e-10; // Im CM below threshold (analytically 0)
+
+                // each row: { s, Re CM(s), Im CM(s) }. m1, m2 reuse two distinct mass
+                // parameters set to the exact double literals used to compute the oracle.
+                auto check_pair = [&](double m1v, double m2v,
+                        const std::vector<std::array<double, 3>> & rows)
+                {
+                    p["mass::D^0"] = m1v;
+                    p["mass::D^+"] = m2v;
+                    auto ch = std::make_shared<SWavePVChannel<3, 2>>("CM-ref",
+                            p["mass::D^0"], p["mass::D^+"], p["ee->ccbar::q_0"], g0s);
+                    const double sth = power_of<2>(m1v + m2v);
+
+                    for (const auto & row : rows)
+                    {
+                        const double s = row[0], re_ref = row[1], im_ref = row[2];
+                        const complex<double> cm = ch->chew_mandelstam(s);
+                        const double eps = (std::abs(s - sth) < 0.15) ? eps_cusp : eps_rel;
+
+                        TEST_CHECK_RELATIVE_ERROR(real(cm), re_ref, eps);
+                        if (s < sth)
+                        {
+                            // below threshold Im CM and rho are analytically zero
+                            TEST_CHECK_NEARLY_EQUAL(imag(cm),            0.0, eps_abs);
+                            TEST_CHECK_NEARLY_EQUAL(std::abs(ch->rho(s)), 0.0, eps_abs);
+                        }
+                        else
+                        {
+                            // above threshold unitarity fixes Im CM = rho
+                            TEST_CHECK_RELATIVE_ERROR(imag(cm), im_ref,          eps);
+                            TEST_CHECK_RELATIVE_ERROR(imag(cm), real(ch->rho(s)), eps);
+                        }
+                    }
+
+                    // threshold subtraction: CM(s_th) = 0 by construction. The exact
+                    // threshold sits on the sqrt cusp, where the +i*1e-15 prescription leaves
+                    // a residue ~3e-10, so this uses the looser cusp tolerance (cf. §5).
+                    TEST_CHECK_NEARLY_EQUAL(real(ch->chew_mandelstam(sth)), 0.0, eps_cusp);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ch->chew_mandelstam(sth)), 0.0, eps_cusp);
+
+                    return ch;
+                };
+
+                // P1: m1 = m2 = 1/sqrt(2)
+                auto ch_P1 = check_pair(1.0 / std::sqrt(2.0), 1.0 / std::sqrt(2.0), {
+                    {       -5.0,   -0.01856633106339601,                    0.0 },
+                    {    -3.3273,   -0.01718330725143701,                    0.0 },
+                    {    -1.6545,   -0.01535843245361532,                    0.0 },
+                    {     0.0182,   -0.01262658976809803,                    0.0 },
+                    {     1.2727,  -0.008841779331811922,                    0.0 },
+                    {        1.9,  -0.003908832816629901,                    0.0 },
+                    {        2.1, -0.0006129585132922205,   0.004341306987767856 },
+                    {     6.7719,   -0.01296294970584483,    0.01670015659585684 },
+                    {    13.3125,   -0.01869243450631893,    0.01833916805856752 },
+                    {    20.7875,   -0.02213977623780263,    0.01891313446938620 },
+                    {    28.2625,   -0.02440736344346382,    0.01917753966534671 },
+                    {       32.0,   -0.02530388085671864,    0.01926263887692187 },
+                });
+
+                // P2: m1 = m2 = 1
+                check_pair(1.0, 1.0, {
+                    {       -5.0,   -0.01635357875576924,                    0.0 },
+                    {    -2.8424,   -0.01504971686221515,                    0.0 },
+                    {    -0.6848,   -0.01334276145479074,                    0.0 },
+                    {     1.4727,   -0.01081749037523438,                    0.0 },
+                    {     3.0909,  -0.007376014124534837,                    0.0 },
+                    {        3.9,  -0.002863634700957743,                    0.0 },
+                    {        4.1, -0.0003114548843090558,   0.003106978273228536 },
+                    {     8.7719,  -0.008828618422788801,    0.01467333982471145 },
+                    {    15.3125,   -0.01405927798112908,    0.01709961726772085 },
+                    {    22.7875,   -0.01743411331848962,    0.01806409882882630 },
+                    {    30.2625,   -0.01970511522029685,    0.01853300215040734 },
+                    {       34.0,   -0.02060982647817307,    0.01868750463945365 },
+                });
+
+                // P3: m1 = 1/sqrt(2), m2 = sqrt(2) (the genuine unequal-mass branch,
+                // pseudothreshold at s_- = 0.5)
+                check_pair(1.0 / std::sqrt(2.0), std::sqrt(2.0), {
+                    {       -5.0,   -0.01549899689444485,                    0.0 },
+                    {    -2.7212,   -0.01423049248800826,                    0.0 },
+                    {    -0.4424,   -0.01257581665976170,                    0.0 },
+                    {     0.4121,   -0.01179276938694260,                    0.0 },
+                    {     1.8364,   -0.01014143015504747,                    0.0 },
+                    {     3.5455,  -0.006852433318057166,                    0.0 },
+                    {        4.4,  -0.002571474740987491,                    0.0 },
+                    {        4.6, -0.0002457938041429069,   0.002769263243529780 },
+                    {     9.2719,  -0.007599502018633736,    0.01388205972976265 },
+                    {    15.8125,   -0.01256796688621726,    0.01655891790747672 },
+                    {    23.2875,   -0.01587938608409122,    0.01767624914919503 },
+                    {    30.7625,   -0.01813573212282312,    0.01823177497201795 },
+                    {       34.5,   -0.01903884180507123,    0.01841667123888186 },
+                });
+
+                // Equal masses reduce exactly to the equal-mass EEChannel: cross-check P1
+                // directly against an EEChannel built with the same masses (independent of
+                // the oracle table above). ch_P1 holds live references to both mass
+                // parameters, which the P2/P3 calls mutated, so restore the P1 masses first.
+                p["mass::D^0"] = 1.0 / std::sqrt(2.0);
+                p["mass::D^+"] = 1.0 / std::sqrt(2.0);
+                auto ee = std::make_shared<EEChannel<3, 2>>("ee-ref",
+                        p["mass::D^0"], p["mass::D^0"], p["ee->ccbar::q_0"], g0s);
+                for (const double s : { -3.3273, 1.2727, 6.7719, 20.7875 })
+                {
+                    TEST_CHECK_RELATIVE_ERROR(real(ch_P1->chew_mandelstam(s)),
+                            real(ee->chew_mandelstam(s)), 1.0e-10);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ch_P1->chew_mandelstam(s)),
+                            imag(ee->chew_mandelstam(s)), 1.0e-10);
+                }
             }
 
             {
