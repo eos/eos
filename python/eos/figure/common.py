@@ -29,12 +29,30 @@ class Watermark(Deserializable):
     :type position: str
     :param preliminary: If true, marks the figure as a preliminary version.
     :type preliminary: bool
+    :param xy: An explicit anchor point in axes fraction. If given, it overrides the
+        coordinates derived from ``position``, while the text alignment is still taken
+        from ``position``. Defaults to None (use the ``position`` preset).
+    :type xy: tuple[float, float] | None
+    :param offset: The offset from the edges for the ``position`` presets, given as a
+        single fraction (used for both axes) or as a ``(xdelta, ydelta)`` pair.
+        Defaults to None (i.e. 0.04 on both axes).
+    :type offset: float | tuple[float, float] | None
     """
     position:str=field(default='upper right')
     preliminary:bool=field(default=False)
+    xy:tuple[float, float]|None=field(default=None)
+    offset:float|tuple[float, float]|None=field(default=None)
 
     def __post_init__(self):
-        xdelta, ydelta = (0.04, 0.04)
+        if self.offset is None:
+            xdelta, ydelta = (0.04, 0.04)
+        elif isinstance(self.offset, (int, float)):
+            xdelta, ydelta = (self.offset, self.offset)
+        else:
+            if len(self.offset) != 2:
+                raise ValueError(f"'offset' must be a number or an (xdelta, ydelta) pair, got {self.offset!r}")
+            xdelta, ydelta = self.offset
+
         vpos, hpos = self.position.split(' ')
 
         if hpos == 'right':
@@ -55,6 +73,13 @@ class Watermark(Deserializable):
             self._valign = 'top'
         else:
             raise ValueError(f'invalid vertical position \'{vpos}\'')
+
+        # an explicit anchor overrides the preset-derived coordinates;
+        # the text alignment is still taken from `position`
+        if self.xy is not None:
+            if len(self.xy) != 2:
+                raise ValueError(f"'xy' must be an (x, y) pair in axes fraction, got {self.xy!r}")
+            self._x, self._y = self.xy
 
         if self.preliminary:
             self._color = 'red'
