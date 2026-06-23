@@ -251,7 +251,7 @@ AC_ARG_ENABLE([python],
 AM_CONDITIONAL([EOS_ENABLE_PYTHON], [test "x$enable_python" == "xyes"])
 has_boost_python_suffix=no
 AC_ARG_WITH([boost-python-suffix],
-	[AS_HELP_STRING([--with-boost-python-suffix], [suffix used to specify the libboost-python shared object])],
+	[AS_HELP_STRING([--with-boost-python-suffix], [suffix used to specify the libboost-python shared object (default: the Python major+minor version, e.g. '312' for CPython 3.12; pass an empty string for a suffix-less libboost_python)])],
 	[has_boost_python_suffix=yes],
 	[with_boost_python_suffix=""])
 dnl }}}
@@ -267,29 +267,18 @@ if test "x$enable_python" == xyes ; then
 	fi
 	PYTHON_LDFLAGS="`python$PYTHON_VERSION-config --ldflags`"
 	PYTHON_CXXFLAGS="`python$PYTHON_VERSION-config --includes`"
-	if test "x$has_boost_python_suffix" == "xno"; then
-		os_id="`. /etc/os-release ; echo $ID`"
-		if test "x$os_id" == xubuntu -o "x$os_id" == xdebian ; then
-			codename="`. /etc/os-release ; echo $VERSION_CODENAME`"
-			case $codename in
-				xenial|bionic)
-					BOOST_PYTHON_SUFFIX="-py`echo $PYTHON_VERSION | sed -e 's/\.//'`"
-					;;
-				disco)
-					BOOST_PYTHON_SUFFIX="`echo $PYTHON_VERSION | sed -e 's/\.//'`"
-					;;
-				*)
-					AC_MSG_NOTICE([assuming Ubuntu Disco or more recent, BOOST_PYTHON_SUFFIX might be wrong!])
-					BOOST_PYTHON_SUFFIX="`echo $PYTHON_VERSION | sed -e 's/\.//'`"
-					;;
-			esac
-		elif test "x$os_id" == xcentos ; then
-			BOOST_PYTHON_SUFFIX=""
-		fi
-	else
+	if test "x$has_boost_python_suffix" == "xyes"; then
+		dnl honour the explicitly provided suffix verbatim; an empty
+		dnl string is a valid choice for a suffix-less libboost_python
 		BOOST_PYTHON_SUFFIX=$with_boost_python_suffix
 		PYTHON_CXXFLAGS="$PYTHON_CXXFLAGS $BOOST_PYTHON_CXXFLAGS"
 		PYTHON_LDFLAGS="$PYTHON_LDFLAGS $BOOST_PYTHON_LDFLAGS"
+	else
+		dnl default to the modern Boost.Python naming convention used by
+		dnl conda-forge and current Debian/Ubuntu/Fedora releases, i.e.
+		dnl libboost_python<major><minor>.so (e.g. libboost_python312.so)
+		BOOST_PYTHON_SUFFIX="`echo $PYTHON_VERSION | sed -e 's/\.//'`"
+		AC_MSG_NOTICE([no --with-boost-python-suffix given; defaulting to '$BOOST_PYTHON_SUFFIX' (override with --with-boost-python-suffix=...)])
 	fi
 	AC_SUBST([PYTHON_LIBS])
 	AC_SUBST([PYTHON_LDFLAGS])
