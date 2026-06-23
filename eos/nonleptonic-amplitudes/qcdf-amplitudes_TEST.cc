@@ -84,7 +84,7 @@ class QCDFAmplitudesTest : public TestCase
                 p["nonleptonic::Re{bS4_c}@QCDF"]    = -2.0 * std::cos(-2.0);
                 p["nonleptonic::Im{bS4_c}@QCDF"]    = -2.0 * std::sin(-2.0);
                 /*p["eta::theta_18"]                  = 0.0;*/
-                p["eta::theta_FKS"]                 = 0.5;
+                p["eta::theta_FKS"]                 = 0.686;
 
 
                 static const double eps = 0.1e-6;
@@ -165,9 +165,9 @@ class QCDFAmplitudesTest : public TestCase
 
                 QCDFRepresentation<PToPP> d6(p, o6);
 
-                TEST_CHECK_RELATIVE_ERROR_C(d6.ordered_amplitude(), complex<double>(8.514846665318583e-8,-1.7954455928104048e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d6.inverse_amplitude(), complex<double>(2.9765205217285947e-7,2.4141259077360335e-9), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d6.amplitude(), complex<double>(3.828005188260453e-7,-1.554033002036801e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d6.ordered_amplitude(), complex<double>(1.046345494732723e-7, -2.205519360498948e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d6.inverse_amplitude(), complex<double>(2.1705544131419826e-7,1.8836775006222694e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d6.amplitude(), complex<double>(3.2168999078747063e-7,-3.2184185987667867e-9), eps);
 
 
                 Options o7{
@@ -180,9 +180,9 @@ class QCDFAmplitudesTest : public TestCase
                 QCDFRepresentation<PToPP> d7(p, o7);
 
 
-                TEST_CHECK_RELATIVE_ERROR_C(d7.ordered_amplitude(), complex<double>(4.173241057595099e-7,-9.094486422351031e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d7.inverse_amplitude(), complex<double>(9.464939488295129e-8,8.733373820412163e-9), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d7.amplitude(), complex<double>(5.119735006424611e-7,-8.221149040309815e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d7.ordered_amplitude(), complex<double>(4.753880811553182e-7,-9.062079140448238e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d7.inverse_amplitude(), complex<double>(2.32823512972189e-8,2.148280795119971e-9), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d7.amplitude(), complex<double>(4.986704324525372e-7,-8.847251060936242e-8), eps);
 
 
                 Options o8{
@@ -194,9 +194,9 @@ class QCDFAmplitudesTest : public TestCase
 
                 QCDFRepresentation<PToPP> d8(p, o8);
 
-                TEST_CHECK_RELATIVE_ERROR_C(d8.ordered_amplitude(), complex<double>(1.4179406004499472e-7,-3.107117030386428e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d8.inverse_amplitude(), complex<double>(5.5908981533771356e-8,4.7527739167367734e-11), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d8.amplitude(), complex<double>(1.9770304157876612e-7,-3.102364256469691e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d8.ordered_amplitude(), complex<double>(1.9773659594185027e-7,-3.7772480742497153e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d8.inverse_amplitude(), complex<double>(7.452553993234181e-8,6.2510416243630515e-9), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d8.amplitude(), complex<double>(2.7226213587419205e-7,-3.15214391181341e-8), eps);
 
                 Options o9
                 {
@@ -208,9 +208,9 @@ class QCDFAmplitudesTest : public TestCase
 
                 QCDFRepresentation<PToPP> d9(p, o9);
 
-                TEST_CHECK_RELATIVE_ERROR_C(d9.ordered_amplitude(), complex<double>(-1.011983965140553e-7,-1.3321146379120607e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d9.inverse_amplitude(), complex<double>(-1.7176545228686813e-6,7.232498530246952e-8), eps);
-                TEST_CHECK_RELATIVE_ERROR_C(d9.amplitude(), complex<double>(-1.8188529193827363e-6,5.9003838923348907e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d9.ordered_amplitude(), complex<double>(-1.8653040020760233e-7,-2.455373653056162e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d9.inverse_amplitude(), complex<double>(-1.786584610102707e-6,7.126348192849077e-8), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(d9.amplitude(), complex<double>(-1.9731150103103095e-6,4.670974539792915e-8), eps);
 
 
             }
