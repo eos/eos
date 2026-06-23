@@ -283,6 +283,10 @@ class GridFigure(Figure):
     :type size: tuple[float, float]
     :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index or a 2D ``(row, col)`` address. If None, every plot is stamped.
     :type watermark_plot: int | tuple[int, int] | None
+    :param tight_layout: If True (default), the grid spec is laid out with ``tight_layout``. Set to False to keep an explicit ``padding``, e.g. ``(0, 0)`` for abutting panels.
+    :type tight_layout: bool
+    :param shared_axes: Which axes the panels share, one of ``None``, ``'x'``, ``'y'``, or ``'both'``. ``'x'`` shares the x-axis per column (``sharex='col'``), ``'y'`` shares the y-axis per row (``sharey='row'``), and ``'both'`` shares both; a shared axis gives one common range per group and tick labels only on the outer edge. Defaults to None (independent axes).
+    :type shared_axes: str | None
     """
 
     type:str=field(repr=False, init=False, default='grid')
@@ -293,6 +297,8 @@ class GridFigure(Figure):
     size:tuple[float, float]|None=field(default=None)
     watermark:Watermark=field(default_factory=Watermark)
     watermark_plot:int|tuple[int, int]|None=field(default=None)
+    tight_layout:bool=field(default=True)
+    shared_axes:str|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Producing a Figure with a Grid of Plots
@@ -315,6 +321,13 @@ class GridFigure(Figure):
         * ``watermark_plot`` (*int* or *tuple[int, int]*) -- The plot that carries the watermark, given either as a flattened
             (row-major) index or as a 2D ``(row, col)`` address. If omitted, every plot is stamped.
 
+        * ``tight_layout`` (*bool*) -- Whether to lay out the grid with ``tight_layout``. Defaults to True. Set to False to keep an
+            explicit ``padding`` (e.g. ``(0, 0)`` for abutting panels), which ``tight_layout`` would otherwise undo.
+
+        * ``shared_axes`` (*str* or *None*) -- Which axes the panels share, one of ``None``, ``'x'``, ``'y'``, or ``'both'``. ``'x'`` shares
+            the x-axis per column, ``'y'`` shares the y-axis per row, ``'both'`` shares both; a shared axis gives one common range per group
+            and tick labels only on the outer edge. Defaults to None (independent axes).
+
 
     """)
     def __post_init__(self):
@@ -322,7 +335,11 @@ class GridFigure(Figure):
         figsize = self.size if self.size is not None else (3.0 * ncol, 3.0 * nrow)
         self._figure = plt.figure(figsize=figsize)
         self._gridspec = self._figure.add_gridspec(nrow, ncol, hspace=self.padding[0], wspace=self.padding[1])
-        axes = self._gridspec.subplots()
+        if self.shared_axes not in (None, 'x', 'y', 'both'):
+            raise ValueError(f"'shared_axes' must be one of None, 'x', 'y', 'both', got {self.shared_axes!r}")
+        sharex = 'col' if self.shared_axes in ('x', 'both') else False
+        sharey = 'row' if self.shared_axes in ('y', 'both') else False
+        axes = self._gridspec.subplots(sharex=sharex, sharey=sharey)
         self._axes = axes.flatten('C') # flatten to row-major style
         self._watermark_idx = self._resolve_watermark_plot(nrow, ncol)
 
@@ -363,7 +380,8 @@ class GridFigure(Figure):
             if self._watermark_idx is None or self._watermark_idx == idx:
                 plot.draw_watermark(self._axes[idx], self.watermark)
 
-        self._gridspec.tight_layout(self._figure)
+        if self.tight_layout:
+            self._gridspec.tight_layout(self._figure)
         if output is not None:
             if isinstance(output, list):
                 for out in output:
