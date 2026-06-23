@@ -279,6 +279,8 @@ class GridFigure(Figure):
     :type plots: list[:class:`Plot <eos.figure.Plot>`]
     :param shape: The tuple specifying the shape of the figure's grid, specifying the number of rows and columns in that order.
     :type shape: tuple[int, int]
+    :param size: The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
+    :type size: tuple[float, float]
     """
 
     type:str=field(repr=False, init=False, default='grid')
@@ -286,6 +288,7 @@ class GridFigure(Figure):
     plots:list[Plot]
     padding:tuple[float,float]=field(default=(0.2, 0.2))
     shape:tuple[int, int]
+    size:tuple[float, float]|None=field(default=None)
     watermark:Watermark=field(default_factory=Watermark)
 
     _api_doc = inspect.cleandoc("""
@@ -302,11 +305,16 @@ class GridFigure(Figure):
 
         * ``shape`` (*tuple[int, int]*) -- The shape of the figure's grid, specifying the number of rows and columns in that order.
 
+    The following keys are optional:
+
+        * ``size`` (*tuple[float, float]*) -- The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
+
 
     """)
     def __post_init__(self):
         nrow, ncol = self.shape
-        self._figure = plt.figure(figsize=(3.0 * ncol, 3.0 * nrow))
+        figsize = self.size if self.size is not None else (3.0 * ncol, 3.0 * nrow)
+        self._figure = plt.figure(figsize=figsize)
         self._gridspec = self._figure.add_gridspec(nrow, ncol, hspace=self.padding[0], wspace=self.padding[1])
         axes = self._gridspec.subplots()
         self._axes = axes.flatten('C') # flatten to row-major style
