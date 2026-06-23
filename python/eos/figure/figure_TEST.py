@@ -186,6 +186,17 @@ class GridFigureTests(unittest.TestCase):
         self.assertAlmostEqual(size[0], 6.0) # 3.0 * ncol = 3.0 * 2
         self.assertAlmostEqual(size[1], 3.0) # 3.0 * nrow = 3.0 * 1
 
+    def test_single_cell(self):
+
+        # a 1x1 grid must work: subplots() squeezes to a bare Axes by default, which
+        # would break the flatten() logic without squeeze=False.
+        try:
+            figure = eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 1]', 1))
+            self.assertEqual(len(figure._axes), 1)
+            figure.draw()
+        except Exception as e:
+            self.fail(f"Error when testing a 1x1 grid figure: {e}")
+
     @staticmethod
     def _has_watermark(ax):
         return any('EOS' in t.get_text() for t in ax.texts)
@@ -250,6 +261,79 @@ class GridFigureTests(unittest.TestCase):
         # A boolean is rejected rather than silently treated as the int 0/1.
         with self.assertRaises(Exception):
             eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra='watermark_plot: true'))
+
+    @staticmethod
+    def _two_range_grid(extra=''):
+        # a single column with two panels carrying different x-ranges
+        return f"""
+        type: 'grid'
+        shape: [2, 1]
+        {extra}
+        plots:
+          - xaxis: {{ label: '$q^2$', range: [0.1, 1.0] }}
+            yaxis: {{ label: '$d\\mathcal{{B}}/dq^2$' }}
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: {{ 'l': 'e' }}
+                variable: 'q2'
+                range: [0.1, 1.0]
+                resolution: 100
+          - xaxis: {{ label: '$q^2$', range: [2.0, 5.0] }}
+            yaxis: {{ label: '$d\\mathcal{{B}}/dq^2$' }}
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: {{ 'l': 'mu' }}
+                variable: 'q2'
+                range: [2.0, 5.0]
+                resolution: 100
+        """
+
+    def test_tight_layout_disabled(self):
+
+        try:
+            figure = eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra='tight_layout: false'))
+            self.assertFalse(figure.tight_layout)
+            figure.draw()
+        except Exception as e:
+            self.fail(f"Error when drawing grid figure with tight_layout disabled: {e}")
+
+    def test_shared_axes_x(self):
+
+        # With shared_axes 'x' the panels are joined in x and end up with one common x-range.
+        figure = eos.figure.FigureFactory.from_yaml(self._two_range_grid(extra="shared_axes: 'x'"))
+        self.assertTrue(figure._axes[0].get_shared_x_axes().joined(figure._axes[0], figure._axes[1]))
+        self.assertFalse(figure._axes[0].get_shared_y_axes().joined(figure._axes[0], figure._axes[1]))
+        figure.draw()
+        self.assertEqual(figure._axes[0].get_xlim(), figure._axes[1].get_xlim())
+
+    def test_shared_axes_y(self):
+
+        # 'y' shares the y-axis per row. The 2x1 single-column grid has one panel
+        # per row, so use a 1x2 grid to exercise row sharing.
+        figure = eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra="shared_axes: 'y'"))
+        self.assertTrue(figure._axes[0].get_shared_y_axes().joined(figure._axes[0], figure._axes[1]))
+        self.assertFalse(figure._axes[0].get_shared_x_axes().joined(figure._axes[0], figure._axes[1]))
+
+    def test_shared_axes_both(self):
+
+        figure = eos.figure.FigureFactory.from_yaml(self._grid_yaml('[2, 2]', 4, extra="shared_axes: 'both'"))
+        # column-shared x and row-shared y
+        self.assertTrue(figure._axes[0].get_shared_x_axes().joined(figure._axes[0], figure._axes[2]))
+        self.assertTrue(figure._axes[0].get_shared_y_axes().joined(figure._axes[0], figure._axes[1]))
+
+    def test_shared_axes_default_independent(self):
+
+        # Without shared_axes (the default) the panels keep independent axes.
+        figure = eos.figure.FigureFactory.from_yaml(self._two_range_grid())
+        self.assertFalse(figure._axes[0].get_shared_x_axes().joined(figure._axes[0], figure._axes[1]))
+        self.assertFalse(figure._axes[0].get_shared_y_axes().joined(figure._axes[0], figure._axes[1]))
+
+    def test_shared_axes_invalid(self):
+
+        with self.assertRaises(Exception):
+            eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra="shared_axes: 'diagonal'"))
 
 
 class CornerFigureTests(unittest.TestCase):
