@@ -124,6 +124,68 @@ class GridFigureTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing figure of type 'grid': {e}")
 
+    def test_size(self):
+
+        input = """
+        type: 'grid'
+        shape: [1, 2]
+        size: [8.0, 6.0]
+        plots:
+          - xaxis: { label: '$q^2$' }
+            yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: { 'l': 'e' }
+                variable: 'q2'
+                range: [0.1, 1.0]
+                resolution: 100
+          - xaxis: { label: '$q^2$' }
+            yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: { 'l': 'mu' }
+                variable: 'q2'
+                range: [0.1, 1.0]
+                resolution: 100
+        """
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        size = figure._figure.get_size_inches()
+        self.assertAlmostEqual(size[0], 8.0)
+        self.assertAlmostEqual(size[1], 6.0)
+
+    def test_default_size(self):
+
+        # When 'size' is omitted, the figure falls back to (3.0 * ncol, 3.0 * nrow).
+        input = """
+        type: 'grid'
+        shape: [1, 2]
+        plots:
+          - xaxis: { label: '$q^2$' }
+            yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: { 'l': 'e' }
+                variable: 'q2'
+                range: [0.1, 1.0]
+                resolution: 100
+          - xaxis: { label: '$q^2$' }
+            yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+            items:
+              - type: 'observable'
+                observable: 'B->Dlnu::dBR/dq2'
+                options: { 'l': 'mu' }
+                variable: 'q2'
+                range: [0.1, 1.0]
+                resolution: 100
+        """
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        size = figure._figure.get_size_inches()
+        self.assertAlmostEqual(size[0], 6.0) # 3.0 * ncol = 3.0 * 2
+        self.assertAlmostEqual(size[1], 3.0) # 3.0 * nrow = 3.0 * 1
+
 
 class CornerFigureTests(unittest.TestCase):
 
