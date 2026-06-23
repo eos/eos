@@ -58,12 +58,10 @@ namespace eos
         fB(p["decay-constant::B_" + opt_q.str()], *this),
         fP1(p["decay-constant::" + opt_p1.str()], *this),
         fP2(p["decay-constant::" + opt_p2.str()], *this),
-        Fetaq(p["B_" + opt_q.str() + "->eta_q::f_+(0)"], *this),
-        Fetas(p["B_" + opt_q.str() + "->eta_s::f_+(0)"], *this),
+        Feta(p["B_" + opt_q.str() + "->eta::f_+(0)"], *this),
+        Feta_prime(p["B_" + opt_q.str() + "->eta_prime::f_+(0)"], *this),
         fetaq(p["decay-constant::eta_q"], *this),
         fetas(p["decay-constant::eta_s"], *this),
-        metaq(p["mass::eta_q"], *this),
-        metas(p["mass::eta_s"], *this),
 
         re_alpha1(p["nonleptonic::Re{alpha1}@QCDF"], *this),
         im_alpha1(p["nonleptonic::Im{alpha1}@QCDF"], *this),
@@ -160,6 +158,16 @@ namespace eos
         {
             mB_q_0_p2 = [this]() { return mB_d_0(); };
         }
+
+        Fetaq = [this]()
+        {
+            return (cFKS * Feta() + sFKS * Feta_prime()) ;
+        };
+
+        Fetas = [this]()
+        {
+            return (- sFKS * Feta() + cFKS * Feta_prime());
+        };
     }
 
     const std::vector<OptionSpecification> QCDFRepresentation<PToPP>::options{
@@ -375,19 +383,16 @@ namespace eos
         {
             case LightMeson::etaq:
             {
-                mp2 = metaq();
                 fp2 = fetaq();
                 break;
             }
             case LightMeson::etas:
             {
-                mp2 = metas();
                 fp2 = fetas();
                 break;
             }
             default:
             {
-                mp2 = mP2();
                 fp2 = fP2();
                 break;
             }
@@ -408,7 +413,7 @@ namespace eos
         }
 
 
-        return power_of<2>(mB()) * Fp1 * fp2 / (1 - power_of<2>(mp2 / mB_q_0_p1())) * this->alpha_amplitude(p1, p2) + fB() * fp1 * fp2 * this->b_amplitude(p1, p2);
+        return power_of<2>(mB()) * Fp1 * fp2 / (1 - power_of<2>(mP2() / mB_q_0_p1())) * this->alpha_amplitude(p1, p2) + fB() * fp1 * fp2 * this->b_amplitude(p1, p2);
     }
 
 
@@ -492,19 +497,16 @@ namespace eos
         {
             case LightMeson::etaq:
             {
-                mp1 = metaq();
                 fp1 = fetaq();
                 break;
             }
             case LightMeson::etas:
             {
-                mp1 = metas();
                 fp1 = fetas();
                 break;
             }
             default:
             {
-                mp1 = mP1();
                 fp1 = fP1();
                 break;
             }
@@ -525,7 +527,7 @@ namespace eos
         }
 
 
-        return power_of<2>(mB()) * Fp2 * fp1 / (1 - power_of<2>(mp1 / mB_q_0_p2())) * this->alpha_amplitude(p2, p1) + fB() * fp1 * fp2 * this->b_amplitude(p2, p1);
+        return power_of<2>(mB()) * Fp2 * fp1 / (1 - power_of<2>(mP1() / mB_q_0_p2())) * this->alpha_amplitude(p2, p1) + fB() * fp1 * fp2 * this->b_amplitude(p2, p1);
     }
 
     complex<double>

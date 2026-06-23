@@ -63,12 +63,10 @@ namespace eos
             UsedParameter fP1;
             UsedParameter fP2;
 
-            UsedParameter Fetaq;
-            UsedParameter Fetas;
+            UsedParameter Feta;
+            UsedParameter Feta_prime;
             UsedParameter fetaq;
             UsedParameter fetas;
-            UsedParameter metaq;
-            UsedParameter metas;
 
             UsedParameter re_alpha1, im_alpha1;
             UsedParameter re_alpha2, im_alpha2;
@@ -99,6 +97,9 @@ namespace eos
             std::function<complex<double>()> lamsu;
             std::function<complex<double>()> lamdc;
             std::function<complex<double>()> lamsc;
+
+            std::function<double()> Fetaq;
+            std::function<double()> Fetas;
 
             std::function<double()> mB_q_0_p1;
             std::function<double()> mB_q_0_p2;
