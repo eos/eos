@@ -54,6 +54,55 @@ class WatermarkTests(unittest.TestCase):
         # a centered horizontal position is also valid
         self.assertAlmostEqual(Watermark.from_dict(position='upper center')._x, 0.5)
 
+    def test_explicit_xy(self):
+        "Check that an explicit xy anchor overrides the position preset."
+        from eos.figure.common import Watermark
+
+        wm = Watermark.from_dict(xy=[0.3, 0.7])
+        self.assertAlmostEqual(wm._x, 0.3)
+        self.assertAlmostEqual(wm._y, 0.7)
+        # the text alignment is still taken from the (default) position
+        self.assertEqual(wm._halign, 'right')
+        self.assertEqual(wm._valign, 'top')
+
+    def test_xy_invalid_length(self):
+        "Check that an xy anchor of the wrong length is rejected with a clear error."
+        from eos.figure.common import Watermark
+
+        with self.assertRaises(ValueError):
+            Watermark.from_dict(xy=[0.3, 0.5, 0.7])
+
+    def test_offset_scalar(self):
+        "Check that a scalar offset replaces the default 0.04 on both axes."
+        from eos.figure.common import Watermark
+
+        wm = Watermark.from_dict(offset=0.1)
+        self.assertAlmostEqual(wm._x, 0.9)
+        self.assertAlmostEqual(wm._y, 0.9)
+
+    def test_offset_tuple(self):
+        "Check that a (xdelta, ydelta) offset is applied per axis."
+        from eos.figure.common import Watermark
+
+        wm = Watermark.from_dict(position='lower left', offset=[0.1, 0.2])
+        self.assertAlmostEqual(wm._x, 0.1)
+        self.assertAlmostEqual(wm._y, 0.2)
+
+    def test_offset_invalid_length(self):
+        "Check that an offset sequence of the wrong length is rejected with a clear error."
+        from eos.figure.common import Watermark
+
+        with self.assertRaises(ValueError):
+            Watermark.from_dict(offset=[0.1, 0.2, 0.3])
+
+    def test_xy_overrides_offset(self):
+        "Check that an explicit xy wins over offset for the coordinates."
+        from eos.figure.common import Watermark
+
+        wm = Watermark.from_dict(xy=[0.25, 0.25], offset=0.1)
+        self.assertAlmostEqual(wm._x, 0.25)
+        self.assertAlmostEqual(wm._y, 0.25)
+
     def test_invalid_position(self):
         "Check that invalid positions are rejected."
         from eos.figure.common import Watermark
