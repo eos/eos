@@ -1097,9 +1097,29 @@ BOOST_PYTHON_MODULE(_eos)
 
     // SignalPDFs
     ::impl::std_pair_to_python_converter<const QualifiedName, SignalPDFEntryPtr> converter_signalpdfs_iter;
+    ::impl::iterable_to_std_vector_converter<std::string>                        iterable_to_std_vector_converter_string;
     class_<SignalPDFs>("_SignalPDFs")
             .def("__getitem__", &SignalPDFs::operator[])
             .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
+            .def("insert", &SignalPDFs::insert, R"(
+            Insert a new signal PDF to EOS, built at run time from two existing observables.
+
+            :param name: The name of the new signal PDF.
+            :type name: eos.QualifiedName
+            :param description: A human-readable description of the new signal PDF.
+            :type description: std::string
+            :param options: The set of options relevant to this new signal PDF. These options apply to **both** backing observables.
+            :type options: eos.Options
+            :param numerator: The name of the observable that provides the unnormalized PDF.
+            :type numerator: eos.QualifiedName
+            :param numerator_kinematic_variables: The kinematic variables of the unnormalized PDF; these are the PDF's sampling variables.
+            :type numerator_kinematic_variables: list of str
+            :param normalization: The name of the observable that provides the normalization.
+            :type normalization: eos.QualifiedName
+            :param normalization_kinematic_variables: The kinematic variables of the normalization; for each sampling variable ``v`` this should contain the bounds ``v_min`` and ``v_max``.
+            :type normalization_kinematic_variables: list of str
+        )",
+                 args("name", "description", "options", "numerator", "numerator_kinematic_variables", "normalization", "normalization_kinematic_variables"))
             .def("sections", range(&SignalPDFs::begin_sections, &SignalPDFs::end_sections));
 
     // Analytic Charm Loops
