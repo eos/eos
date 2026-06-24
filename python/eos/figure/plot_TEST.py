@@ -84,6 +84,19 @@ class LegendTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when drawing Legend: {e}")
 
+    def test_draw_empty_entries(self):
+        from eos.figure.plot import Legend
+
+        # an empty list of entries (no labelled items) must not draw a legend and must not
+        # raise: matplotlib >= 3.10 rejects empty handles/labels instead of warning.
+        _, ax = plt.subplots()
+        ax.plot([0, 1], [0, 1])
+        try:
+            Legend().draw(ax, entries=[])
+        except Exception as e:
+            self.fail(f"Error when drawing Legend with empty entries: {e}")
+        self.assertIsNone(ax.get_legend())
+
 
 class GridTests(unittest.TestCase):
 

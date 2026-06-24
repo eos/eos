@@ -51,6 +51,10 @@ class Legend(Deserializable):
         :type entries: list[tuple[matplotlib.artist.Artist, str]] | None
         """
         if entries is not None:
+            # Nothing labelled to show: drawing an empty legend is pointless and, as of
+            # matplotlib 3.10, passing empty handles/labels raises instead of warning.
+            if not entries:
+                return
             handles = [entry[0] for entry in entries]
             labels = [entry[1] for entry in entries]
             ax.legend(loc=self.position, handles=handles, labels=labels)
