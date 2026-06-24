@@ -285,6 +285,43 @@ class SignalPDFTests(unittest.TestCase):
         # int_{0}^{4} dz (4 z - z^2) = 2 * 16 - 64 / 3 = 32 / 3
         self.assertAlmostEqual(norm, log(32.0 / 3.0), delta=1.0e-10)
 
+    def test_runtime_insertion(self):
+        "Check that a new SignalPDF can be inserted at run time and evaluated."
+        from eos import SignalPDF, SignalPDFs, Parameters, Kinematics, Options
+        from math import log
+
+        signal_pdfs = SignalPDFs()
+
+        # reuse the observables backing the built-in 'TestLegendre1D::P(z)' PDF:
+        # pdf(z) = z (4 - z), int_{0}^{4} dz pdf(z) = 32 / 3
+        try:
+            signal_pdfs.insert('TestLegendre1D::RuntimePyP(z)', 'runtime-inserted test PDF', Options(),
+                    'TestLegendre1D::UnnormalizedPDF(z)', ['z'],
+                    'TestLegendre1D::NormalizationPDF(z)', ['z_min', 'z_max'])
+        except Exception as e:
+            self.fail(f'cannot insert SignalPDF: {e}')
+
+        # referencing an unknown observable must raise
+        with self.assertRaisesRegex(RuntimeError, "is not a known observable"):
+            signal_pdfs.insert('TestLegendre1D::RuntimePyBad(z)', 'bad', Options(),
+                    'TestLegendre1D::Unknown(z)', ['z'],
+                    'TestLegendre1D::NormalizationPDF(z)', ['z_min', 'z_max'])
+
+        try:
+            pdf = SignalPDF.make('TestLegendre1D::RuntimePyP(z)', Parameters.Defaults(),
+                    Kinematics(z=2.0, z_min=0.0, z_max=4.0), Options())
+        except Exception as e:
+            self.fail(f'cannot create runtime-inserted SignalPDF: {e}')
+
+        self.assertIsNotNone(pdf, 'lookup of runtime-inserted SignalPDF failed')
+        self.assertEqual(pdf.name(), 'TestLegendre1D::RuntimePyP(z)', 'cannot obtain SignalPDF name')
+
+        # evaluate() returns log(pdf(z = 2)) = log(4)
+        self.assertAlmostEqual(pdf.evaluate(), log(4.0), delta=1.0e-10)
+
+        # normalization() returns log(32 / 3)
+        self.assertAlmostEqual(pdf.normalization(), log(32.0 / 3.0), delta=1.0e-10)
+
 
 class LoggingTests(unittest.TestCase):
 
