@@ -430,6 +430,7 @@ AC_CONFIG_FILES([Makefile
 	test/Makefile
 	python/Makefile
 	python/setup.py
+	conda/recipe/meta.yaml
 	])
 AC_OUTPUT
 dnl }}}

@@ -27,6 +27,7 @@ stamp-h1
 debian/control-*
 !debian/control-*.in
 python/setup.py
+conda/recipe/meta.yaml
 
 # Tests
 *_TEST

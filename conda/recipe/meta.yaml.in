@@ -1,0 +1,100 @@
+{% set name = "eos" %}
+{# The version below is substituted by ./configure (from AC_INIT in
+   configure.ac); this template is generated to conda/recipe/meta.yaml. #}
+{% set version = "@PACKAGE_VERSION@" %}
+
+{# Python runtime dependencies -- mirror python/setup.py.in's install_requires. #}
+{% set py_run_deps = [
+    "argcomplete",
+    "dynesty",
+    "matplotlib-base",
+    "numpy >=1.13",
+    "pypandoc",
+    "pypmc >=1.2.6",
+    "pyyaml",
+    "scipy",
+    "tqdm",
+] %}
+
+{# Extra Python packages exercised by the test suite (see the macOS CI job),
+   needed at build time so that ``make check`` can run, but not declared
+   runtime dependencies of the installed package. #}
+{% set py_test_extras = [
+    "h5py",
+    "networkx",
+    "wilson",
+] %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  # Local development build: export the committed state of this checkout.
+  # For a released build, replace this with:
+  #   url: https://github.com/eos/eos/releases/download/v{{ version }}/eos-{{ version }}.tar.gz
+  #   sha256: <sha256-of-the-sdist>
+  git_url: ../..
+  git_rev: HEAD
+
+build:
+  number: 0
+  # The C++ libraries and the _eos extension are not architecture independent.
+  skip: true  # [win]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}          # C++20-capable toolchain (provides <source_location>)
+    - make
+    - autoconf
+    - automake
+    - libtool
+    - pkg-config
+  host:
+    - python {{ python }}
+    - pip
+    - setuptools
+    - wheel
+    - libboost-devel                 # boost_filesystem + headers
+    - libboost-python-devel          # libboost_python<major><minor>
+    - gsl                            # found via pkg-config
+    - yaml-cpp                       # found via pkg-config
+    - fftw                           # found via pkg-config (used by eos/maths DFT)
+    - pyhf                           # PyHF likelihood support; exercised by the test suite
+    {% for dep in py_run_deps %}
+    - {{ dep }}
+    {% endfor %}
+    {% for dep in py_test_extras %}
+    - {{ dep }}
+    {% endfor %}
+  run:
+    - python
+    # The C/C++ libraries (boost, gsl, yaml-cpp, fftw) are pinned automatically
+    # via their run_exports; they need not be listed here explicitly.
+    - pyhf                           # PyHF likelihood support (eos.pyhf_likelihood)
+    {% for dep in py_run_deps %}
+    - {{ dep }}
+    {% endfor %}
+
+test:
+  imports:
+    - eos
+  # The authoritative suite (C++ TESTS + Python *_TEST.py) runs at build time
+  # via ``make check`` in build.sh. Here we only smoke-test the relocated,
+  # installed artifact -- see run_test.sh.
+
+about:
+  home: https://eos.github.io/
+  license: GPL-2.0-only
+  license_file: LICENSE
+  summary: "EOS -- A HEP program for Flavor Observables"
+  description: |
+    EOS is a software framework for applications in high-energy physics,
+    with a focus on flavor physics: theory predictions of and experimental
+    likelihoods for flavor observables, and Bayesian inference thereof.
+  doc_url: https://eos.github.io/doc/
+  dev_url: https://github.com/eos/eos
+
+extra:
+  recipe-maintainers:
+    - eos
