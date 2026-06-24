@@ -28,6 +28,7 @@ debian/control-*
 !debian/control-*.in
 /setup.py
 /pyproject.toml
+conda/recipe/meta.yaml
 
 # Default output of build-wheel.bash: the wheel plus its split debug symbols,
 # which run to a few hundred MB and must never be committed.

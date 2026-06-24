@@ -495,6 +495,7 @@ AC_CONFIG_FILES([Makefile
 	python/Makefile
 	pyproject.toml
 	setup.py:python/setup.py.in
+	conda/recipe/meta.yaml
 	])
 AC_OUTPUT
 dnl }}}
