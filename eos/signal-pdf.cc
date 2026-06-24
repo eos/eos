@@ -30,6 +30,7 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <algorithm>
 #include <functional>
 #include <map>
 #include <ostream>
@@ -75,6 +76,17 @@ namespace eos
     }
 
     SignalPDFEntries::~SignalPDFEntries() = default;
+
+    void
+    SignalPDFEntries::insert_or_assign(const QualifiedName & key, const std::shared_ptr<const SignalPDFEntry> & value)
+    {
+        auto result = _entries->insert_or_assign(key, value);
+
+        if (! result.second)
+        {
+            Log::instance()->message("[SignalPDFEntries.insert_or_assign]", ll_warning) << "Entry for signal PDF " << key.str() << " has been replaced.";
+        }
+    }
 
     SignalPDFNameError::SignalPDFNameError(const std::string & name) :
         Exception("SignalPDF name '" + name + "' is malformed")
@@ -236,11 +248,8 @@ namespace eos
     {
             std::vector<SignalPDFSection> signal_pdf_sections;
 
-            std::map<QualifiedName, SignalPDFEntryPtr> signal_pdf_entries;
-
             Implementation() :
-                signal_pdf_sections(SignalPDFSections::instance()->sections()),
-                signal_pdf_entries(SignalPDFEntries::instance()->entries())
+                signal_pdf_sections(SignalPDFSections::instance()->sections())
             {
             }
     };
@@ -255,8 +264,10 @@ namespace eos
     SignalPDFEntryPtr
     SignalPDFs::operator[] (const QualifiedName & qn) const
     {
-        auto i = _imp->signal_pdf_entries.find(qn);
-        if (i != _imp->signal_pdf_entries.end())
+        const auto & signal_pdf_entries = SignalPDFEntries::instance()->entries();
+
+        auto i = signal_pdf_entries.find(qn);
+        if (i != signal_pdf_entries.end())
         {
             return i->second;
         }
@@ -267,13 +278,17 @@ namespace eos
     SignalPDFs::SignalPDFIterator
     SignalPDFs::begin() const
     {
-        return SignalPDFIterator(_imp->signal_pdf_entries.begin());
+        const auto & signal_pdf_entries = SignalPDFEntries::instance()->entries();
+
+        return SignalPDFIterator(signal_pdf_entries.begin());
     }
 
     SignalPDFs::SignalPDFIterator
     SignalPDFs::end() const
     {
-        return SignalPDFIterator(_imp->signal_pdf_entries.end());
+        const auto & signal_pdf_entries = SignalPDFEntries::instance()->entries();
+
+        return SignalPDFIterator(signal_pdf_entries.end());
     }
 
     SignalPDFs::SectionIterator
@@ -286,5 +301,43 @@ namespace eos
     SignalPDFs::end_sections() const
     {
         return SectionIterator(_imp->signal_pdf_sections.end());
+    }
+
+    void
+    SignalPDFs::insert(const QualifiedName & name, const std::string & description, const Options & options, const QualifiedName & numerator,
+                       const std::vector<std::string> & numerator_kinematic_names, const QualifiedName & normalization,
+                       const std::vector<std::string> & normalization_kinematic_names) const
+    {
+        const auto & observable_entries = ObservableEntries::instance()->entries();
+
+        // the numerator and normalization must reference known observables; fail fast otherwise
+        if (observable_entries.end() == observable_entries.find(numerator))
+        {
+            throw UnknownObservableError("Cannot create SignalPDF '" + name.str() + "': its numerator '" + numerator.str() + "' is not a known observable");
+        }
+
+        if (observable_entries.end() == observable_entries.find(normalization))
+        {
+            throw UnknownObservableError("Cannot create SignalPDF '" + name.str() + "': its normalization '" + normalization.str() + "' is not a known observable");
+        }
+
+        // each sampling variable 'v' (a numerator kinematic variable) should have matching bounds 'v_min' and 'v_max'
+        // among the normalization kinematic variables; the Python sampling layer relies on this convention, so warn if it is not met
+        for (const auto & variable : numerator_kinematic_names)
+        {
+            for (const auto & bound : { variable + "_min", variable + "_max" })
+            {
+                if (normalization_kinematic_names.end() == std::find(normalization_kinematic_names.begin(), normalization_kinematic_names.end(), bound))
+                {
+                    Log::instance()->message("[SignalPDFs.insert]", ll_warning)
+                            << "SignalPDF '" << name.str() << "': the normalization is missing the bound '" << bound << "' for the sampling variable '" << variable
+                            << "'; sampling from this PDF may not work as expected";
+                }
+            }
+        }
+
+        SignalPDFEntry * entry = new ConcreteSignalPDFEntry(name, description, options, numerator, normalization, numerator_kinematic_names, normalization_kinematic_names);
+
+        SignalPDFEntries::instance()->insert_or_assign(name, std::shared_ptr<const SignalPDFEntry>(entry));
     }
 } // namespace eos

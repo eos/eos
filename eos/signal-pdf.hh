@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2023 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,6 +32,7 @@
 #include <map>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace eos
 {
@@ -214,6 +215,22 @@ namespace eos
             SectionIterator begin_sections() const;
             SectionIterator end_sections() const;
             ///@}
+
+            /*!
+             * Insert a new SignalPDF that is built at run time from two existing observables.
+             *
+             * @param name                            The name of the new SignalPDF.
+             * @param description                      A human-readable description of the new SignalPDF.
+             * @param options                          A set of options that applies to both backing observables.
+             * @param numerator                        The name of the observable that provides the unnormalized PDF.
+             * @param numerator_kinematic_names        The kinematic variables of the unnormalized PDF; these are the PDF's sampling variables.
+             * @param normalization                    The name of the observable that provides the normalization.
+             * @param normalization_kinematic_names    The kinematic variables of the normalization; for each sampling variable @c v
+             *                                         this should contain the bounds @c v_min and @c v_max.
+             */
+            void insert(const QualifiedName & name, const std::string & description, const Options & options, const QualifiedName & numerator,
+                        const std::vector<std::string> & numerator_kinematic_names, const QualifiedName & normalization,
+                        const std::vector<std::string> & normalization_kinematic_names) const;
     };
 
     extern template class WrappedForwardIterator<SignalPDFs::SignalPDFIteratorTag, const std::pair<const QualifiedName, SignalPDFEntryPtr>>;
@@ -236,6 +253,8 @@ namespace eos
             {
                 return *_entries;
             }
+
+            void insert_or_assign(const QualifiedName & key, const std::shared_ptr<const SignalPDFEntry> & value);
     };
 
     /*!
