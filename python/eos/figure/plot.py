@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Danny van Dyk
+# Copyright (c) 2023-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -101,17 +101,27 @@ class XTicks(Deserializable):
     :type visible: bool
     :param format: A printf-style format string for the major tick labels, e.g. '%.2f'. Defaults to None (matplotlib's default formatter).
     :type format: str | None
+    :param scaling_factor: A non-zero factor by which each major tick value is divided before being
+        displayed, e.g. ``1e-3`` to label an axis in units of :math:`10^{-3}`. The (rescaled) value is
+        rendered with ``format`` if given, or with ``'%g'`` otherwise. The magnitude removed in this
+        way should be communicated through the axis ``label`` or ``unit``. Intended for linear axes.
+        Defaults to None (no rescaling).
+    :type scaling_factor: float | None
     """
 
     minor:bool=field(default=True)
     position:str=field(default='bottom')
     visible:bool=field(default=True)
     format:str|None=field(default=None)
+    scaling_factor:float|None=field(default=None)
 
     def __post_init__(self):
         POSITIONS = ['bottom', 'top', 'both']
         if self.position not in POSITIONS:
             raise ValueError(f'Unknown position: {self.position}. Must be one of {",".join(POSITIONS)}')
+
+        if self.scaling_factor is not None and self.scaling_factor == 0.0:
+            raise ValueError("'scaling_factor' must be non-zero")
 
     def draw(self, ax):
         """Apply the x axis tick settings to the provided axes.
@@ -137,7 +147,13 @@ class XTicks(Deserializable):
                     ax.xaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
                 else:
                     ax.xaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
-            if self.format is not None:
+            if self.scaling_factor is not None:
+                if log_scale:
+                    eos.warn("Tick 'scaling_factor' is intended for linear axes; applying it to a logarithmic x axis may yield misleading tick labels")
+                fmt = self.format if self.format is not None else '%g'
+                ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(
+                    lambda x, pos, s=self.scaling_factor, f=fmt: f % (x / s)))
+            elif self.format is not None:
                 ax.xaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter(self.format))
             ax.xaxis.set_tick_params(
                 which = 'both' if self.minor else 'major',
@@ -223,17 +239,27 @@ class YTicks(Deserializable):
     :type visible: bool
     :param format: A printf-style format string for the major tick labels, e.g. '%.2f'. Defaults to None (matplotlib's default formatter).
     :type format: str | None
+    :param scaling_factor: A non-zero factor by which each major tick value is divided before being
+        displayed, e.g. ``1e-3`` to label an axis in units of :math:`10^{-3}`. The (rescaled) value is
+        rendered with ``format`` if given, or with ``'%g'`` otherwise. The magnitude removed in this
+        way should be communicated through the axis ``label`` or ``unit``. Intended for linear axes.
+        Defaults to None (no rescaling).
+    :type scaling_factor: float | None
     """
 
     minor:bool=field(default=True)
     position:str=field(default='left')
     visible:bool=field(default=True)
     format:str|None=field(default=None)
+    scaling_factor:float|None=field(default=None)
 
     def __post_init__(self):
         POSITIONS = ['left', 'right', 'both']
         if self.position not in POSITIONS:
             raise ValueError(f'Unknown position: {self.position}. Must be one of {",".join(POSITIONS)}')
+
+        if self.scaling_factor is not None and self.scaling_factor == 0.0:
+            raise ValueError("'scaling_factor' must be non-zero")
 
     def draw(self, ax):
         """Apply the y axis tick settings to the provided axes.
@@ -259,7 +285,13 @@ class YTicks(Deserializable):
                     ax.yaxis.set_minor_locator(matplotlib.ticker.AutoMinorLocator())
                 else:
                     ax.yaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10.0, subs='auto'))
-            if self.format is not None:
+            if self.scaling_factor is not None:
+                if log_scale:
+                    eos.warn("Tick 'scaling_factor' is intended for linear axes; applying it to a logarithmic y axis may yield misleading tick labels")
+                fmt = self.format if self.format is not None else '%g'
+                ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(
+                    lambda y, pos, s=self.scaling_factor, f=fmt: f % (y / s)))
+            elif self.format is not None:
                 ax.yaxis.set_major_formatter(matplotlib.ticker.FormatStrFormatter(self.format))
             ax.yaxis.set_tick_params(
                 left=(self.position == 'left' or self.position == 'both'),

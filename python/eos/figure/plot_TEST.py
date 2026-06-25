@@ -179,6 +179,37 @@ class XTicksTests(unittest.TestCase):
         XTicks.from_dict().draw(ax)
         self.assertNotIsInstance(ax.xaxis.get_major_formatter(), matplotlib.ticker.FormatStrFormatter)
 
+    def test_scaling_factor(self):
+        import matplotlib.ticker
+        from eos.figure.plot import XTicks
+
+        # defaults to None (no rescaling)
+        self.assertIsNone(XTicks.from_dict().scaling_factor)
+
+        # scaling only: a FuncFormatter divides the tick value and renders it with the '%g' default
+        _, ax = plt.subplots()
+        XTicks.from_dict(scaling_factor=1e-3).draw(ax)
+        formatter = ax.xaxis.get_major_formatter()
+        self.assertIsInstance(formatter, matplotlib.ticker.FuncFormatter)
+        self.assertEqual(formatter(4.2e-3, 0), '4.2')
+
+        # scaling and format: the rescaled value is rendered with the given printf format
+        _, ax = plt.subplots()
+        XTicks.from_dict(scaling_factor=1e-3, format='%.0f').draw(ax)
+        formatter = ax.xaxis.get_major_formatter()
+        self.assertIsInstance(formatter, matplotlib.ticker.FuncFormatter)
+        self.assertEqual(formatter(4.2e-3, 0), '4')
+
+        # a zero scaling factor is rejected
+        with self.assertRaises(ValueError):
+            XTicks.from_dict(scaling_factor=0.0)
+
+        # combining the scaling factor with a logarithmic axis warns the user
+        _, ax = plt.subplots()
+        ax.set_xscale('log')
+        with self.assertLogs('EOS', level='WARNING'):
+            XTicks.from_dict(scaling_factor=1e-3).draw(ax)
+
 
 class YTicksTests(unittest.TestCase):
 
@@ -231,6 +262,37 @@ class YTicksTests(unittest.TestCase):
         _, ax = plt.subplots()
         YTicks.from_dict().draw(ax)
         self.assertNotIsInstance(ax.yaxis.get_major_formatter(), matplotlib.ticker.FormatStrFormatter)
+
+    def test_scaling_factor(self):
+        import matplotlib.ticker
+        from eos.figure.plot import YTicks
+
+        # defaults to None (no rescaling)
+        self.assertIsNone(YTicks.from_dict().scaling_factor)
+
+        # scaling only: a FuncFormatter divides the tick value and renders it with the '%g' default
+        _, ax = plt.subplots()
+        YTicks.from_dict(scaling_factor=1e-3).draw(ax)
+        formatter = ax.yaxis.get_major_formatter()
+        self.assertIsInstance(formatter, matplotlib.ticker.FuncFormatter)
+        self.assertEqual(formatter(4.2e-3, 0), '4.2')
+
+        # scaling and format: the rescaled value is rendered with the given printf format
+        _, ax = plt.subplots()
+        YTicks.from_dict(scaling_factor=1e-3, format='%.0f').draw(ax)
+        formatter = ax.yaxis.get_major_formatter()
+        self.assertIsInstance(formatter, matplotlib.ticker.FuncFormatter)
+        self.assertEqual(formatter(4.2e-3, 0), '4')
+
+        # a zero scaling factor is rejected
+        with self.assertRaises(ValueError):
+            YTicks.from_dict(scaling_factor=0.0)
+
+        # combining the scaling factor with a logarithmic axis warns the user
+        _, ax = plt.subplots()
+        ax.set_yscale('log')
+        with self.assertLogs('EOS', level='WARNING'):
+            YTicks.from_dict(scaling_factor=1e-3).draw(ax)
 
 
 class XAxisTests(unittest.TestCase):
