@@ -729,6 +729,67 @@ class ErrorBarsItemTests(unittest.TestCase):
         """)
         self.assertEqual(list(item.legend()), [])
 
+class PointItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'point'
+            x: 0.0
+            y: 0.261
+            marker: 'o'
+            markersize: 12
+            color: 'C0'
+            label: 'LCSR (Bharucha 2012)'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'point': {e}")
+
+    def test_invalid(self):
+
+        # a point requires both 'x' and 'y'
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'point'
+            x: 0.0
+            """)
+
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'point'
+            y: 0.0
+            """)
+
+    def test_legend(self):
+
+        # a labelled point contributes a single marker entry, drawn as an open (unfilled) marker
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'point'
+        x: 0.0
+        y: 0.261
+        marker: 'o'
+        label: 'foo'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'foo')
+        self.assertEqual(entries[0][0].get_marker(), 'o')
+        self.assertEqual(entries[0][0].get_markerfacecolor(), 'none')
+
+        # an unlabelled point contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'point'
+        x: 0.0
+        y: 0.261
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class VerticalLineItemTests(unittest.TestCase):
 
     def test_full(self):

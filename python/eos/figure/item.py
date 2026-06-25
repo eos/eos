@@ -2716,6 +2716,84 @@ class ErrorBarsItem(Item):
         """Return the item's legend entry in form of its handle(s) and label(s)."""
         return self._legend_errorbar(marker=self.marker, has_xerr=self.xerrors is not None, has_yerr=self.yerrors is not None, alpha=self.alpha)
 
+
+@dataclass(kw_only=True)
+class PointItem(Item):
+    r"""Plots a single point at a fixed position.
+
+    This item type is used to mark a single data point manually, e.g. a value taken from the
+    literature. The point is drawn as an open (unfilled) marker whose edge uses the inherited
+    ``color`` and ``alpha`` fields. To draw several points at once, or points with error bars, use
+    an :class:`ErrorBarsItem` instead.
+
+    :param x: The x-axis position of the point.
+    :type x: float
+    :param y: The y-axis position of the point.
+    :type y: float
+    :param marker: The marker style, given as a valid matplotlib marker. Defaults to ``'x'``.
+    :type marker: str
+    :param markersize: The marker size in points. Defaults to None, i.e. matplotlib's default size.
+    :type markersize: float | None
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$q^2$', range: [0.0, 1.0] }
+          yaxis: { label: r'$f_+(q^2)$' }
+          items:
+            - { type: 'point', x: 0.0, y: 0.261, marker: 'o', markersize: 12, color: 'C0',
+                label: r'LCSR (Bharucha 2012)'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    x:float
+    y:float
+    marker:str=field(default='x')
+    markersize:float|None=field(default=None)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.x is None:
+            raise ValueError("'x' must be specified to define a point")
+
+        if self.y is None:
+            raise ValueError("'y' must be specified to define a point")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the point for drawing.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
+        pass
+
+    def draw(self, ax):
+        """Draw the point on the provided axes.
+
+        :param ax: The matplotlib axes onto which the point is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+        ax.plot(self.x, self.y, alpha=self.alpha, color=self.color, label=self.label, linestyle='none',
+                marker=self.marker, markeredgecolor=self.color, markerfacecolor='none', markersize=self.markersize)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        # the point is drawn as an open marker, so its swatch must be open (unfilled) too
+        if not self.label:
+            return []
+        handle = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker=self.marker, linestyle='none',
+                                          markeredgecolor=self.color, markerfacecolor='none', markersize=self.markersize,
+                                          alpha=self.alpha)
+        return [(handle, self.label)]
+
+
 class ItemFactory:
     """Factory that creates :class:`Item` instances from their YAML or dictionary description.
 
@@ -2741,6 +2819,7 @@ class ItemFactory:
         'signal-pdf': SignalPDFItem,
         'complex-plane': ComplexPlaneItem,
         'errorbars': ErrorBarsItem,
+        'point': PointItem,
     }
 
     @staticmethod
