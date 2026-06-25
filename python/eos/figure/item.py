@@ -1397,6 +1397,247 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         return entries
 
 @dataclass(kw_only=True)
+class TwoDimensionalContoursItem(Item):
+    """Plots two-dimensional probability contours from a histogram of pre-existing samples.
+
+    This item type is used to display the credibility contours of two variables, be it a prior, a
+    posterior, or a prediction. In contrast to :class:`TwoDimensionalKernelDensityEstimateItem`, the
+    probability density is estimated from a two-dimensional histogram of the samples rather than from
+    a kernel density estimate, so that no smoothing is applied.
+
+    :param bins: The number of histogram bins along each axis used to estimate the density. Defaults to 100.
+    :type bins: int
+    :param contours: The types of contours to be drawn. Can be any combination of ``'lines'``, ``'areas'``, or ``'labels'``. Defaults to ``{'lines'}``.
+    :type contours: set[str]
+    :param datafile: Path to the file that contains the samples, which must be of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`.
+    :type datafile: str
+    :param levels: The credibility levels that shall be visualized in percent. Defaults to ``[68, 95, 99]``.
+    :type levels: list[float] | None
+    :param variables: The tuple of names of the two variables that shall be displayed on the x- and y-axis, respectively.
+    :type variables: tuple[str, str]
+    :param xrange: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type xrange: tuple[float, float] | None
+    :param yrange: The range of the variable to be plotted on the y-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type yrange: tuple[float, float] | None
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38e-3, 47e-3] }
+          yaxis: { label: '$f_+(0)$',   range: [0.6, 0.75]    }
+          items:
+            - { type: 'contours2D', label: 'posterior', color: 'C1',
+                levels: [68, 95, 99], contours: ['lines', 'labels'],
+                datafile: './inference-data/CKM/samples',
+                variables: ['CKM::abs(V_cb)', 'B->D::alpha^f+_0@BSZ2015']
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    bins:int=field(default=100)
+    contours:set[str]=field(default_factory=lambda : {'lines'})
+    datafile:str
+    levels:list[float]|None=field(default=None)
+    variables:tuple[str,str]
+    xrange:tuple[float,float]|None=field(default=None)
+    yrange:tuple[float,float]|None=field(default=None)
+
+    _api_doc = inspect.cleandoc("""
+    Plotting Two-Dimensional Contours
+    ---------------------------------
+
+    Plot items of type ``contours2D`` are used to display the credibility contours of a two-dimensional
+    probability density, be it a prior, a posterior, or a prediction. The density is estimated from a
+    two-dimensional histogram of the samples, i.e. without the smoothing applied by a kernel density estimate.
+
+    The following keys are mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.ImportanceSamples* or *eos.data.Prediction*) -- The path to
+          a data file that was generated with one of the ``sample-nested`` or ``predict-observables`` tasks.
+        * ``variables`` (*tuple* of two *str*) -- The names of the two variables that are plotted on the x- and y-axis, respectively.
+
+    The following keys are optional:
+
+        * ``bins`` (*int*) -- The number of histogram bins along each axis used to estimate the density. Defaults to 100.
+        * ``contours`` (*set* of *str*) -- The types of contours to be drawn. Can be any combination of ``'lines'``, ``'areas'``, or ``'labels'``. Defaults to ``{'lines'}``.
+        * ``levels`` (*list* of *float*) -- The credibility levels that shall be visualized in percent (optional). Defaults to ``[68, 95, 99]``.
+        * ``xrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``yrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the y-axis. Defaults to the full range of the variable in the data file.
+    """)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.bins < 2:
+            raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
+
+        if self.levels is None:
+            self.levels = [0, 68, 95, 99]
+        elif 0 not in self.levels:
+            # the 0% level (the peak of the density) is required as the innermost boundary so that
+            # the credibility areas can be filled correctly
+            self.levels = [0] + self.levels
+
+        for level in self.levels:
+            if level < 0 or level >= 100:
+                raise ValueError(f"Credibility level '{level}' is not in the interval (0, 100)")
+
+        for contour_type in self.contours:
+            if contour_type not in ['lines', 'areas', 'labels']:
+                raise ValueError(f"Contour type '{contour_type}' is not supported")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the two-dimensional contours for drawing.
+
+        Loads the data file (of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`),
+        extracts the samples of the two chosen ``variables``, and estimates the probability density on a
+        regular grid from a weighted two-dimensional histogram spanning the x- and y-ranges for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
+
+        context = AnalysisFileContext() if context is None else context
+
+        # These checks are necessary to ensure that the data file is in the correct format,
+        # but they are not possible in the __post_init__ method, because the data file might not yet exist.
+        datafile = context.data_path(self.datafile)
+        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist when preparing 2D contours")
+        name = os.path.split(datafile)[-1]
+        if name == 'samples':
+            self._datafile = eos.data.ImportanceSamples(datafile)
+
+            if self.variables[0] not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[0]}'")
+            if self.variables[1] not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[1]}'")
+
+            self._xidx = self._datafile.lookup_table[self.variables[0]]
+            self._yidx = self._datafile.lookup_table[self.variables[1]]
+        elif name.startswith('pred-'):
+            self._datafile = eos.data.Prediction(datafile)
+
+            stripped_lookup_table = { k.split(';')[0]: v for k, v in self._datafile.lookup_table.items() }
+
+            if self.variables[0] in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variables[0]}'; specify the full variable name including options and kinematics")
+                self._xidx = stripped_lookup_table[self.variables[0]]
+            else:
+                if self.variables[0] not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain predictions for variable '{self.variables[0]}'")
+                self._xidx = self._datafile.lookup_table[self.variables[0]]
+
+            if self.variables[1] in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variables[1]}'; specify the full variable name including options and kinematics")
+                self._yidx = stripped_lookup_table[self.variables[1]]
+            else:
+                if self.variables[1] not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain predictions for variable '{self.variables[1]}'")
+                self._yidx = self._datafile.lookup_table[self.variables[1]]
+        else:
+            eos.error(f"Data file '{datafile}' has an unsupported format")
+            raise NotImplementedError
+
+        samples = self._datafile.samples[:, (self._xidx, self._yidx)]
+        weights = self._datafile.weights
+
+        # determine the extent of the plot
+        if self.xrange is None:
+            self.xrange = (samples[:, 0].min(), samples[:, 0].max())
+        if self.yrange is None:
+            self.yrange = (samples[:, 1].min(), samples[:, 1].max())
+
+        # estimate the PDF from a weighted 2D histogram; ``self._pdf`` holds the probability mass
+        # per bin and sums to one, matching the convention used by the KDE-based contour item
+        H, _, _ = _np.histogram2d(samples[:, 0], samples[:, 1], bins=self.bins,
+                                  range=[self.xrange, self.yrange], weights=weights)
+        self._pdf = H / H.sum()
+
+    def _plevels(self):
+        """Return the PDF threshold values corresponding to the requested credibility ``levels``.
+
+        Each threshold is the density value above which the requested fraction of the total
+        probability lies. The 0% (peak) level is handled explicitly as the maximum density, since
+        solving for it numerically would return the upper bracket (~1.0) and produce an out-of-range
+        contour for typical PDFs whose maximum is much smaller than one.
+
+        :returns: The threshold values in the same order as ``levels``.
+        :rtype: list[float]
+        """
+        # find the PDF value corresponding to a given cummulative probability
+        plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+        plevels = []
+        for level in self.levels:
+            if level == 0:
+                plevels.append(self._pdf.max())
+            else:
+                plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
+        return plevels
+
+    def draw(self, ax):
+        """Draw the two-dimensional contours on the provided axes.
+
+        Draws contour lines at the requested credibility ``levels`` and, depending on the
+        ``contours`` setting, optionally fills the contour areas and/or labels the contour lines.
+
+        :param ax: The matplotlib axes onto which the contours are drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+        plevels = self._plevels()
+        labels = [f'{level}%' for level in self.levels]
+
+        if 'areas' in self.contours:
+            colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
+            ax.contourf(self._pdf.transpose(),
+                        colors=colors,
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                        levels=plevels[::-1])
+
+        CS = ax.contour(self._pdf.transpose(),
+                        colors=self.color,
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                        levels=plevels[::-1],
+                        linestyles=self.linestyle)
+
+        if 'labels' in self.contours:
+            fmt = {}
+            for level, label in zip(CS.levels, labels[::-1]):
+                fmt[level] = label
+
+            ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+    def legend(self):
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        Provides a filled rectangle handle when contour areas are drawn, and a line handle otherwise.
+
+        :returns: A list containing a single ``(handle, label)`` pair if a label is set, otherwise empty.
+        :rtype: list[tuple[matplotlib.artist.Artist, str]]
+        """
+        entries = []
+
+        if self.label:
+            handle = None
+            if 'areas' in self.contours:
+                handle = _matplotlib.pyplot.Rectangle((0,0),1,1, color=self.color)
+            else:
+                handle = _matplotlib.pyplot.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.linestyle)
+
+            entries.append((handle, self.label))
+
+        return entries
+
+@dataclass(kw_only=True)
 class ConstraintItem(Item):
     """Plots statistical constraints from the EOS library of experimental and theoretical likelihoods.
 
@@ -2814,6 +3055,7 @@ class ItemFactory:
         'histogram2D': TwoDimensionalHistogramItem,
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
+        'contours2D': TwoDimensionalContoursItem,
         'band': BandItem,
         'vertical': VerticalLineItem,
         'signal-pdf': SignalPDFItem,
