@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Danny van Dyk
+# Copyright (c) 2023-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -337,6 +337,106 @@ class ObservableItem(Item):
     def legend(self):
         """Return the item's legend entry in form of its handle(s) and label(s)."""
         return self._legend_line()
+
+
+# Namespace exposing NumPy's functions and constants (e.g. ``sin``, ``exp``, ``pi``) to the
+# expressions evaluated by :class:`ExpressionItem`, so that they can be used without a ``np.``
+# prefix. ``np`` itself is also made available for any name not exported at NumPy's top level.
+_EXPRESSION_NAMESPACE = {name: getattr(_np, name) for name in dir(_np) if not name.startswith('_')}
+_EXPRESSION_NAMESPACE['np'] = _np
+
+
+@dataclass(kw_only=True)
+class ExpressionItem(Item):
+    r"""Plots an arbitrary mathematical expression as a function of the x-axis variable.
+
+    This item type evaluates a user-supplied Python ``expression`` of the free variable ``x`` on a
+    grid spanning ``range`` and draws the result as a curve. The expression is evaluated with
+    Python's :func:`eval`, with NumPy's functions and constants (e.g. ``sin``, ``exp``, ``sqrt``,
+    ``pi``) available by name as well as the ``np`` module itself; for example,
+    ``'exp(-x**2) * sin(2 * pi * x)'``. Because the expression is evaluated as code, it should only
+    be populated from trusted figure descriptions.
+
+    :param expression: The expression to be plotted, given as a Python expression in the free variable ``x``.
+    :type expression: str
+    :param range: A tuple of two float values (min, max) representing the range of the x-axis variable over which the expression is evaluated.
+    :type range: tuple[float, float]
+    :param resolution: The number of points to be used for the evaluation of the expression. Defaults to 100.
+    :type resolution: int
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$x$', range: [0.0, 6.28] }
+          yaxis: { label: r'$f(x)$' }
+          items:
+            - { type: 'expression', expression: 'sin(x)',           label: r'$\sin x$'       }
+            - { type: 'expression', expression: 'exp(-x) * cos(x)', label: r'$e^{-x}\cos x$' }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    expression:str
+    range:tuple[float,float]
+    resolution:int=field(default=100)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if not isinstance(self.expression, str) or not self.expression.strip():
+            raise ValueError("'expression' must be a non-empty string")
+
+        if self.range is None or len(self.range) != 2:
+            raise ValueError(f"Invalid range '{self.range}'. It must be a tuple of two float values (min, max).")
+
+        if self.range[0] >= self.range[1]:
+            raise ValueError(f"Invalid range '{self.range}'. The first value must be less than the second value.")
+
+        if self.resolution <= 0:
+            raise ValueError(f"Invalid resolution '{self.resolution}'. It must be a positive integer.")
+
+        # compile the expression eagerly so that syntax errors surface at construction time
+        try:
+            self._code = compile(self.expression, '<eos.figure.ExpressionItem>', 'eval')
+        except SyntaxError as e:
+            raise ValueError(f"Could not parse expression '{self.expression}': {e}")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the drawing by evaluating the expression at the sample points.
+
+        Evaluates ``expression`` on a grid of ``resolution`` points spanning ``range`` and caches the
+        results for :meth:`draw`. The free variable ``x`` is passed as a NumPy array, so vectorized
+        expressions are evaluated in a single pass; constant expressions are broadcast to the grid.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
+        self._xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
+        # wrap evaluation as well as the conversion/broadcast so that shape/dtype issues (e.g. a
+        # complex or non-broadcastable result) are reported with the offending expression too
+        try:
+            yvalues = eval(self._code, {'__builtins__': {}}, {**_EXPRESSION_NAMESPACE, 'x': self._xvalues})
+            self._yvalues = _np.broadcast_to(_np.asarray(yvalues, dtype=float), self._xvalues.shape)
+        except Exception as e:
+            raise ValueError(f"Could not evaluate expression '{self.expression}': {e}")
+
+    def draw(self, ax, **kwargs):
+        """Draw a curve of the expression as a function of the x-axis variable.
+
+        :param ax: The matplotlib axes onto which the curve is drawn.
+        :type ax: matplotlib.axes.Axes
+        :param kwargs: Additional keyword arguments forwarded to :meth:`matplotlib.axes.Axes.plot`.
+        """
+        ax.plot(self._xvalues, self._yvalues, label=self.label, alpha=self.alpha, color=self.color,
+                lw=self.linewidth, ls=self.linestyle, **kwargs)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line(alpha=self.alpha)
 
 
 @dataclass(kw_only=True)
@@ -2429,6 +2529,7 @@ class ItemFactory:
 
     registry = {
         'observable': ObservableItem,
+        'expression': ExpressionItem,
         'uncertainty': UncertaintyBandItem,
         'uncertainty-binned': BinnedUncertaintyItem,
         'constraint': ConstraintItem,
