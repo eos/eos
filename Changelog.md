@@ -62,6 +62,11 @@
 - Add classes for discrete Fourier transforms, ``eos::dft::Container`` and ``eos::dft::Plan`` (D. van Dyk)
 - Add ``SignalPDF::evaluate_linear()`` to evaluate a signal PDF on the linear scale (D. van Dyk)
 - Allow registering a custom ``SignalPDF`` at run time via ``SignalPDFs::insert`` (Python: ``eos.SignalPDFs.insert``) (D. van Dyk)
+- Add an ``expression`` plot item that draws an arbitrary mathematical expression of the x-axis variable (D. van Dyk)
+- Add a ``constraint2D`` plot item that draws the 2D contours of two correlated observables from a single constraint (D. van Dyk)
+- Add a ``point`` plot item that draws a single marker at a fixed position (D. van Dyk)
+- Add a ``contours2D`` plot item that draws 2D probability contours from a histogram of pre-existing samples (D. van Dyk)
+- Add a ``scaling_factor`` field to the ``xticks`` and ``yticks`` of a plot to rescale the displayed tick values (D. van Dyk)
 
 ### Deprecated
 
@@ -102,6 +107,7 @@
 - Fix the default ``Item.legend`` to return a list rather than a tuple (D. van Dyk)
 - Fix the type annotation of ``MaskComponent.description`` (D. van Dyk)
 - Do not draw an empty legend (D. van Dyk)
+- Fix a potential out-of-range bug when computing the contour level for ``eos.figure.TwoDimensionalKernelDensityEstimateItem`` (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
