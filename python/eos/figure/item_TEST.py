@@ -558,6 +558,117 @@ class TwoDimensionalKernelDensityItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'constraint': {e}")
 
+class TwoDimensionalContoursItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'contours2D'
+            bins: 50
+            contours: ['lines', 'areas', 'labels']
+            levels: [68, 95, 99]
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            label: 'posterior'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'contours2D': {e}")
+
+    def test_levels(self):
+
+        # the 0% level (the peak) is prepended by default; its threshold must be the maximum
+        # density, and all thresholds must stay within the data range (i.e. not the ~1.0 that
+        # solving for P=0 numerically would return for a normalized histogram)
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        bins: 50
+        levels: [68, 95]
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+
+        # the 0% level is present by construction
+        self.assertIn(0, item.levels)
+
+        plevels = item._plevels()
+        pdf_max = item._pdf.max()
+        # the 0% level maps to the peak density, which is the largest threshold
+        self.assertEqual(max(plevels), pdf_max)
+        # every threshold lies within the data range (0, pdf_max], never the out-of-range ~1.0
+        for p in plevels:
+            self.assertGreater(p, 0.0)
+            self.assertLessEqual(p, pdf_max)
+
+    def test_invalid(self):
+
+        # fewer than two bins is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'contours2D'
+            bins: 1
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            """)
+
+        # an out-of-range credibility level is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'contours2D'
+            levels: [68, 100]
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            """)
+
+        # an unsupported contour type is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'contours2D'
+            contours: ['lines', 'blobs']
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            """)
+
+    def test_legend(self):
+
+        # with areas, the swatch is a filled rectangle
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        contours: ['lines', 'areas']
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        label: 'posterior'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'posterior')
+
+        # without areas, the swatch is a line
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        contours: ['lines']
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        label: 'posterior'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+
+        # an unlabelled item contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class BandItemTests(unittest.TestCase):
 
     def test_full(self):
