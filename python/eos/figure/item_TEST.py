@@ -330,6 +330,149 @@ class ConstraintResidueItemTests(unittest.TestCase):
         self.assertTrue(entry.has_xerr)
         self.assertTrue(entry.has_yerr)
 
+class TwoDimensionalConstraintItemTests(unittest.TestCase):
+
+    def test_multivariate(self):
+
+        # a bivariate constraint is drawn as one covariance ellipse per requested confidence level
+        try:
+            input = """
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            y: { observable: 'B->K^*gamma::C_K^*gamma' }
+            sigmas: [1.0, 2.0]
+            color: 'C0'
+            label: 'BaBar 2008'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'constraint2D': {e}")
+
+    def test_univariate(self):
+
+        # a univariate (Gaussian) constraint with only 'x' is drawn as a vertical band
+        try:
+            input = """
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing univariate item of type 'constraint2D': {e}")
+
+        # the same constraint with only 'y' is drawn as a horizontal band
+        try:
+            input = """
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            y: { observable: 'B->K^*gamma::S_K^*gamma' }
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing univariate item of type 'constraint2D': {e}")
+
+        # the band must span the full orthogonal axis independently of the current limits:
+        # it is anchored in axes-fraction coordinates, not in data coordinates. Non-default
+        # limits are set first so that a data-coordinate band (the previous behaviour) would fail.
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        ax.set_ylim(5.0, 17.0)
+        item.draw(ax)
+        rect = ax.patches[-1]
+        # the vertical (y) extent spans the whole axes: anchored at y=0 with height 1 in axes fraction
+        self.assertEqual(rect.get_y(), 0.0)
+        self.assertEqual(rect.get_height(), 1.0)
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+        y: { observable: 'B->K^*gamma::S_K^*gamma' }
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        ax.set_xlim(5.0, 17.0)
+        item.draw(ax)
+        rect = ax.patches[-1]
+        # the horizontal (x) extent spans the whole axes: anchored at x=0 with width 1 in axes fraction
+        self.assertEqual(rect.get_x(), 0.0)
+        self.assertEqual(rect.get_width(), 1.0)
+
+    def test_invalid(self):
+
+        # neither 'x' nor 'y' specified is rejected at construction time
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            """)
+
+        # an axis specification without an 'observable' key is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            x: {}
+            """)
+
+        # specifying both 'x' and 'y' for a univariate constraint is rejected during prepare()
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            y: { observable: 'B->K^*gamma::C_K^*gamma' }
+            """)
+            item.prepare()
+
+        # specifying only one axis for a multivariate constraint is rejected during prepare()
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            """)
+            item.prepare()
+
+    def test_legend(self):
+
+        # a labelled 2D constraint contributes a single patch entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        y: { observable: 'B->K^*gamma::C_K^*gamma' }
+        label: 'BaBar 2008'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'BaBar 2008')
+
+        # an unlabelled 2D constraint contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        y: { observable: 'B->K^*gamma::C_K^*gamma' }
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class OneDimensionalHistogramItemTests(unittest.TestCase):
 
     def test_full(self):

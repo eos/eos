@@ -26,6 +26,7 @@ import matplotlib.collections
 import matplotlib.container
 import matplotlib.lines
 import matplotlib.patches
+import matplotlib.transforms
 import numpy as _np
 import os
 import scipy as _scipy
@@ -1688,6 +1689,202 @@ class ConstraintItem(Item):
 
 
 @dataclass(kw_only=True)
+class TwoDimensionalConstraintItem(Item):
+    r"""Plots the 2D contours of two correlated observables from a single constraint.
+
+    This item type displays the uncertainty region of a single constraint from the EOS library in
+    the plane of two of its observables. For a bivariate (``MultivariateGaussian`` or
+    ``MultivariateGaussian(Covariance)``) constraint, the chosen pair of observables is drawn as one
+    or more covariance ellipses, one per requested confidence level. For a univariate ``Gaussian``
+    constraint, the single observable is drawn as a band spanning the orthogonal axis; in that case
+    exactly one of ``x`` or ``y`` is given.
+
+    Each of ``x`` and ``y`` is a dictionary with a single mandatory key ``observable`` that names the
+    observable mapped to that axis. For the time being, the observable is matched against the
+    constraint by its qualified name only.
+
+    :param constraint: The name of the constraint to be plotted. Must identify one of the constraints known to EOS; see `the complete list of constraints <../reference/constraints.html>`_.
+    :type constraint: eos.QualifiedName
+    :param x: The specification of the observable mapped to the x axis, given as a dictionary with the mandatory key ``observable``.
+    :type x: dict | None
+    :param y: The specification of the observable mapped to the y axis, given as a dictionary with the mandatory key ``observable``.
+    :type y: dict | None
+    :param sigmas: The list of confidence levels (in multiples of the standard deviation) for which a contour is drawn. Defaults to ``[1.0]``.
+    :type sigmas: list[float]
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$|V_{ub}|$' }
+          yaxis: { label: r'$|V_{cb}|$' }
+          items:
+            - { type: 'constraint2D', constraint: 'B->pilnu::|V_ub|@HFLAV:2024A',
+                x: { observable: 'CKM::abs(V_ub)' }, y: { observable: 'CKM::abs(V_cb)' },
+                sigmas: [1.0, 2.0], color: 'C0', label: 'HFLAV 2024'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    constraint:eos.QualifiedName
+    x:dict|None=field(default=None)
+    y:dict|None=field(default=None)
+    sigmas:list[float]=field(default_factory=lambda: [1.0])
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if type(self.constraint) is str:
+            self.constraint = eos.QualifiedName(self.constraint)
+        elif type(self.constraint) is not eos.QualifiedName:
+            raise TypeError(f'constraint must be a QualifiedName, not {type(self.constraint)}')
+
+        if self.x is None and self.y is None:
+            raise ValueError("at least one of 'x' or 'y' must be specified for a 2D constraint")
+
+        for axis_name, spec in (('x', self.x), ('y', self.y)):
+            if spec is not None and (not isinstance(spec, dict) or 'observable' not in spec):
+                raise ValueError(f"'{axis_name}' must be a dictionary containing an 'observable' key")
+
+        # draw the largest contour first (lowest opacity) and the smallest last (highest opacity),
+        # so that nested contours remain visible
+        self.sigmas = sorted(self.sigmas, reverse=True)
+        self._alphas = _np.linspace(0.0, self.alpha, len(self.sigmas) + 1)[1:]
+
+    @staticmethod
+    def _name(observable):
+        "Return the bare observable name (without options) used to match an axis observable."
+        return eos.QualifiedName(observable).full().split(';')[0]
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the 2D constraint for drawing.
+
+        Looks up and deserializes the named constraint and caches the geometry of its uncertainty
+        region: the means, standard deviations, and correlation of the chosen pair of observables for
+        a bivariate constraint, or the mean and (a)symmetric uncertainties of the single observable
+        for a univariate ``Gaussian`` constraint. The supported constraint types are ``Gaussian``,
+        ``MultivariateGaussian(Covariance)``, and ``MultivariateGaussian``.
+
+        :param context: The analysis file context. Accepted for interface consistency; this item
+            does not read any data files. If ``None``, a default context is used.
+        :type context: AnalysisFileContext | None
+        """
+        context = AnalysisFileContext() if context is None else context
+
+        import yaml
+
+        entry = eos.Constraints()[self.constraint]
+        if not entry:
+            raise ValueError(f'unknown constraint {self.constraint}')
+
+        constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+        ctype = constraint['type']
+        if ctype not in ('Gaussian', 'MultivariateGaussian', 'MultivariateGaussian(Covariance)'):
+            raise ValueError(f"constraint type '{ctype}' presently not supported")
+
+        if ctype in ('MultivariateGaussian(Covariance)', 'MultivariateGaussian'):
+            if self.x is None or self.y is None:
+                raise ValueError("both 'x' and 'y' must be specified for a multivariate constraint")
+
+            # for the time being, observables are matched by their qualified name only,
+            # ignoring any kinematics or options given in the axis specifications
+            observables = [self._name(o) for o in constraint['observables']]
+            xname = self._name(self.x['observable'])
+            yname = self._name(self.y['observable'])
+            if xname not in observables:
+                raise ValueError(f"x-axis observable {self.x['observable']} not contained in constraint {self.constraint}")
+            if yname not in observables:
+                raise ValueError(f"y-axis observable {self.y['observable']} not contained in constraint {self.constraint}")
+            xidx = observables.index(xname)
+            yidx = observables.index(yname)
+
+            means = _np.array(constraint['means'])
+            self._xmean = means[xidx]
+            self._ymean = means[yidx]
+
+            if ctype == 'MultivariateGaussian(Covariance)':
+                cov = _np.array(constraint['covariance'])
+                self._xsigma = _np.sqrt(cov[xidx, xidx])
+                self._ysigma = _np.sqrt(cov[yidx, yidx])
+                self._rho    = cov[xidx, yidx] / (self._xsigma * self._ysigma)
+            else:
+                sigmas = _np.sqrt(
+                      (_np.abs(_np.array(constraint['sigma-stat-hi'])) + _np.abs(_np.array(constraint['sigma-stat-lo'])))**2 / 4.0
+                    +  _np.array(constraint['sigma-sys'])**2
+                )
+                self._xsigma = sigmas[xidx]
+                self._ysigma = sigmas[yidx]
+                self._rho    = _np.array(constraint['correlations'])[xidx, yidx]
+
+            self._shape = 'ellipse'
+        else: # Gaussian
+            if self.x is not None and self.y is not None:
+                raise ValueError("only one of 'x' or 'y' may be specified for a univariate (Gaussian) constraint")
+
+            axis = 'x' if self.x is not None else 'y'
+            spec = self.x if self.x is not None else self.y
+
+            # for the time being, the observable is matched by its qualified name only
+            if self._name(spec['observable']) != self._name(constraint['observable']):
+                raise ValueError(f"{axis}-axis observable {spec['observable']} not contained in constraint {self.constraint}")
+
+            self._mean     = float(constraint['mean'])
+            self._sigma_hi = _np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2)
+            self._sigma_lo = _np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2)
+            self._shape    = 'rect-x' if axis == 'x' else 'rect-y'
+
+    def draw(self, ax):
+        """Draw the 2D constraint on the provided axes.
+
+        Renders a covariance ellipse for each requested confidence level for a bivariate constraint,
+        or a band spanning the orthogonal axis for a univariate ``Gaussian`` constraint.
+
+        :param ax: The matplotlib axes onto which the 2D constraint is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+        if self._shape == 'ellipse':
+            # the ellipse is built in a frame in which the principal axes are at 45 degrees, then
+            # scaled by the standard deviations and rotated/translated into the data frame
+            xwidth = 2.0 * _np.sqrt(1.0 + self._rho)
+            ywidth = 2.0 * _np.sqrt(1.0 - self._rho)
+            for sigma, alpha in zip(self.sigmas, self._alphas):
+                ellipse = _matplotlib.patches.Ellipse((0.0, 0.0), width=xwidth, height=ywidth,
+                                                       alpha=alpha, color=self.color, linewidth=self.linewidth, fill=True)
+                transf = _matplotlib.transforms.Affine2D() \
+                    .rotate_deg(45) \
+                    .scale(self._xsigma * sigma, self._ysigma * sigma) \
+                    .translate(self._xmean, self._ymean)
+                ellipse.set_transform(transf + ax.transData)
+                ax.add_patch(ellipse)
+        elif self._shape == 'rect-x':
+            # span the full orthogonal (y) axis: x is in data coordinates, y in axes coordinates,
+            # so the band is independent of the y limits at the time this item is drawn
+            transform = ax.get_xaxis_transform()
+            for sigma, alpha in zip(self.sigmas, self._alphas):
+                xlo = self._mean - sigma * self._sigma_lo
+                xhi = self._mean + sigma * self._sigma_hi
+                ax.add_patch(_matplotlib.patches.Rectangle((xlo, 0), width=xhi - xlo, height=1,
+                                                           transform=transform, alpha=alpha, color=self.color))
+        elif self._shape == 'rect-y':
+            # span the full orthogonal (x) axis: y is in data coordinates, x in axes coordinates,
+            # so the band is independent of the x limits at the time this item is drawn
+            transform = ax.get_yaxis_transform()
+            for sigma, alpha in zip(self.sigmas, self._alphas):
+                ylo = self._mean - sigma * self._sigma_lo
+                yhi = self._mean + sigma * self._sigma_hi
+                ax.add_patch(_matplotlib.patches.Rectangle((0, ylo), width=1, height=yhi - ylo,
+                                                           transform=transform, alpha=alpha, color=self.color))
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_patch()
+
+
+@dataclass(kw_only=True)
 class ConstraintResidueItem(Item):
     """Plots the residues of a statistical constraints from the EOS library of experimental and theoretical likelihoods.
 
@@ -2534,6 +2731,7 @@ class ItemFactory:
         'uncertainty-binned': BinnedUncertaintyItem,
         'constraint': ConstraintItem,
         'constraint-residue': ConstraintResidueItem,
+        'constraint2D': TwoDimensionalConstraintItem,
         'histogram1D': OneDimensionalHistogramItem,
         'histogram2D': TwoDimensionalHistogramItem,
         'kde1D': OneDimensionalKernelDensityEstimateItem,
