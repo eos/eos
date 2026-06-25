@@ -94,6 +94,114 @@ class ObservableItemTests(unittest.TestCase):
         """)
         self.assertEqual(list(item.legend()), [])
 
+class ExpressionItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: expression
+            expression: 'exp(-x**2) * sin(2 * pi * x)'
+            range: [0.0, 6.28]
+            resolution: 100
+            label: 'foo'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'expression': {e}")
+
+    def test_constant(self):
+
+        # a constant expression is broadcast to the full grid of sample points
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: expression
+        expression: '1.5'
+        range: [0.0, 1.0]
+        resolution: 7
+        """)
+        item.prepare()
+        self.assertEqual(item._yvalues.shape, item._xvalues.shape)
+        self.assertTrue((item._yvalues == 1.5).all())
+
+    def test_invalid(self):
+
+        # a syntactically invalid expression is rejected at construction time
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'sin(x'
+            range: [0.0, 1.0]
+            """)
+
+        # an empty expression is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: '   '
+            range: [0.0, 1.0]
+            """)
+
+        # an inverted range is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'x'
+            range: [1.0, 0.0]
+            """)
+
+        # a name that is not exposed to the expression cannot be used
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'os.getcwd()'
+            range: [0.0, 1.0]
+            """)
+            item.prepare()
+
+        # a complex-valued result cannot be converted to float and is reported as a ValueError
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: '(-1.0)**0.5'
+            range: [0.0, 1.0]
+            """)
+            item.prepare()
+
+        # a result that cannot be broadcast onto the grid is reported as a ValueError
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'np.array([1.0, 2.0, 3.0])'
+            range: [0.0, 1.0]
+            resolution: 100
+            """)
+            item.prepare()
+
+    def test_legend(self):
+
+        # a labelled expression contributes a single line entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: expression
+        expression: 'sin(x)'
+        range: [0.0, 6.28]
+        label: 'foo'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'foo')
+
+        # an unlabelled expression contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: expression
+        expression: 'sin(x)'
+        range: [0.0, 6.28]
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class UncertaintyBandItemTests(unittest.TestCase):
 
     def test_full(self):
