@@ -558,6 +558,32 @@ class TwoDimensionalKernelDensityItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'constraint': {e}")
 
+    def test_levels(self):
+
+        # the 0% level (the peak) is prepended by default; its threshold must be the maximum
+        # density, and all thresholds must stay within the data range (i.e. not the ~1.0 that
+        # solving for P=0 numerically would return for a normalized density)
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'kde2D'
+        bandwidth: 3
+        levels: [68, 95]
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+
+        # the 0% level is present by construction
+        self.assertIn(0, item.levels)
+
+        plevels = item._plevels()
+        pdf_max = item._pdf.max()
+        # the 0% level maps to the peak density, which is the largest threshold
+        self.assertEqual(max(plevels), pdf_max)
+        # every threshold lies within the data range (0, pdf_max], never the out-of-range ~1.0
+        for p in plevels:
+            self.assertGreater(p, 0.0)
+            self.assertLessEqual(p, pdf_max)
+
 class TwoDimensionalContoursItemTests(unittest.TestCase):
 
     def test_full(self):
