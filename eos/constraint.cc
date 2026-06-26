@@ -31,19 +31,15 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
-#include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/file_status.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
 #include <algorithm>
 #include <cmath>
 #include <config.h>
+#include <filesystem>
 #include <map>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace eos
 {
@@ -2756,19 +2752,19 @@ namespace eos
         if (std::getenv("EOS_TESTS_CONSTRAINTS"))
         {
             std::string envvar = std::string(std::getenv("EOS_TESTS_CONSTRAINTS"));
-            base_list.push_back(fs::system_complete(envvar) / "experimental");
-            base_list.push_back(fs::system_complete(envvar) / "theoretical");
+            base_list.push_back(fs::absolute(envvar) / "experimental");
+            base_list.push_back(fs::absolute(envvar) / "theoretical");
         }
         else if (std::getenv("EOS_HOME"))
         {
             std::string envvar = std::string(std::getenv("EOS_HOME"));
-            base_list.push_back(fs::system_complete(envvar) / "constraints/experimental");
-            base_list.push_back(fs::system_complete(envvar) / "constraints/theoretical");
+            base_list.push_back(fs::absolute(envvar) / "constraints/experimental");
+            base_list.push_back(fs::absolute(envvar) / "constraints/theoretical");
         }
         else
         {
-            base_list.push_back(fs::system_complete(EOS_DATADIR "/eos/constraints/experimental"));
-            base_list.push_back(fs::system_complete(EOS_DATADIR "/eos/constraints/theoretical"));
+            base_list.push_back(fs::absolute(EOS_DATADIR "/eos/constraints/experimental"));
+            base_list.push_back(fs::absolute(EOS_DATADIR "/eos/constraints/theoretical"));
         }
 
         // Go over all subdirectories

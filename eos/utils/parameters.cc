@@ -28,21 +28,18 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
-#include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/file_status.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/format.hpp>
 
 #include <cmath>
 #include <config.h>
+#include <filesystem>
 #include <iostream>
 #include <map>
 #include <random>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace eos
 {
@@ -248,16 +245,16 @@ namespace eos
                 if (std::getenv("EOS_TESTS_PARAMETERS"))
                 {
                     std::string envvar = std::string(std::getenv("EOS_TESTS_PARAMETERS"));
-                    base               = fs::system_complete(envvar);
+                    base               = fs::absolute(envvar);
                 }
                 else if (std::getenv("EOS_HOME"))
                 {
                     std::string envvar = std::string(std::getenv("EOS_HOME"));
-                    base               = fs::system_complete(envvar) / "parameters";
+                    base               = fs::absolute(envvar) / "parameters";
                 }
                 else
                 {
-                    base = fs::system_complete(EOS_DATADIR "/eos/parameters/");
+                    base = fs::absolute(EOS_DATADIR "/eos/parameters/");
                 }
 
                 if (! fs::exists(base))
