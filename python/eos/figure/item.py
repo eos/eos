@@ -1338,6 +1338,27 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         self._pdf = _np.reshape(self._kde(self._positions).T, xx.shape)
         self._pdf /= self._pdf.sum()
 
+    def _plevels(self):
+        """Return the PDF threshold values corresponding to the requested credibility ``levels``.
+
+        Each threshold is the density value above which the requested fraction of the total
+        probability lies. The 0% (peak) level is handled explicitly as the maximum density, since
+        solving for it numerically would return the upper bracket (~1.0) and produce an out-of-range
+        contour for typical PDFs whose maximum is much smaller than one.
+
+        :returns: The threshold values in the same order as ``levels``.
+        :rtype: list[float]
+        """
+        # find the PDF value corresponding to a given cummulative probability
+        plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+        plevels = []
+        for level in self.levels:
+            if level == 0:
+                plevels.append(self._pdf.max())
+            else:
+                plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
+        return plevels
+
     def draw(self, ax):
         """Draw the two-dimensional kernel density estimate on the provided axes.
 
@@ -1347,13 +1368,8 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         :param ax: The matplotlib axes onto which the KDE is drawn.
         :type ax: matplotlib.axes.Axes
         """
-        # find the PDF value corresponding to a given cummulative probability
-        plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
-        plevels = []
-        labels = []
-        for level in self.levels:
-            plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
-            labels.append(f'{level}%')
+        plevels = self._plevels()
+        labels = [f'{level}%' for level in self.levels]
 
         if 'areas' in self.contours:
             colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
