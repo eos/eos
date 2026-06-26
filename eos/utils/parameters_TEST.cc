@@ -159,5 +159,45 @@ class ParametersTest : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(p2_tau.evaluate(), +1.00, 1e-12); // default value
                 }
             }
+
+            // Loading of templated parameters
+            {
+                Parameters p = Parameters::Defaults();
+
+                // 'B->pi::a^%1%_%2%@G2026' is templated over the cartesian product of
+                //   - %1% in { "f+", "f0", "fT" }
+                //   - %2% in { 0, 1, 2, 3, 4 }
+                // with the latex template '$a_%2%^{%1%,B \to \pi,\mathrm{G2026}}$' and the
+                // latex substitutions { "f+" -> "f_+", "f0" -> "f_0", "fT" -> "f_T" }.
+
+                // all instances of the cartesian product must be present, ...
+                for (const std::string & ff : { "f+", "f0", "fT" })
+                {
+                    for (unsigned i = 0; i <= 4; ++i)
+                    {
+                        const std::string name = "B->pi::a^" + ff + "_" + std::to_string(i) + "@G2026";
+                        TEST_CHECK_MSG(p.has(name), "templated parameter '" + name + "' is missing");
+                    }
+                }
+
+                // ... while instances outside of the cartesian product must be absent.
+                // (the raw template name 'a^%1%_%2%' cannot be queried directly, since '%'
+                // is not a valid character in a QualifiedName.)
+                TEST_CHECK(! p.has("B->pi::a^f+_5@G2026"));
+                TEST_CHECK(! p.has("B->pi::a^fX_0@G2026"));
+
+                // the positional substitutions (note: %2% precedes %1% in the latex template)
+                // and the latex map must be applied correctly.
+                Parameter a_fp_0 = p["B->pi::a^f+_0@G2026"];
+                TEST_CHECK_EQUAL(a_fp_0.name(), "B->pi::a^f+_0@G2026");
+                TEST_CHECK_EQUAL(a_fp_0.latex(), R"($a_0^{f_+,B \to \pi,\mathrm{G2026}}$)");
+                TEST_CHECK_NEARLY_EQUAL(a_fp_0.central(), 0.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(a_fp_0.min(), -1.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(a_fp_0.max(), +1.0, 1e-12);
+
+                Parameter a_fT_2 = p["B->pi::a^fT_2@G2026"];
+                TEST_CHECK_EQUAL(a_fT_2.name(), "B->pi::a^fT_2@G2026");
+                TEST_CHECK_EQUAL(a_fT_2.latex(), R"($a_2^{f_T,B \to \pi,\mathrm{G2026}}$)");
+            }
         }
 } parameters_test;
