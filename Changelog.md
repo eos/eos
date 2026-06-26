@@ -26,6 +26,8 @@
 - Allow the characters `|`, `(`, `)`, and `*` in ``qnp::OptionValue`` (D. van Dyk)
 - Switch ``Options`` to use ``qnp::OptionValue`` in lieu of ``std::string`` for its option values; hard-coded option values are now expressed using the ``_ov`` user-defined literal (D. van Dyk)
 - Use ``qnp::OptionValue`` keys in the the factory method ``Model::make`` (D. van Dyk)
+- Use ``std::filesystem`` in lieu of ``boost::filesystem`` (D. van Dyk)
+- Use ``std::format`` in lieu of ``boost::format`` when templating parameters (D. van Dyk)
 
 ### Added
 
