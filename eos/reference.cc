@@ -21,17 +21,13 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
-#include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/file_status.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-
+#include <filesystem>
 #include <iostream>
 #include <map>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 namespace eos
 {
@@ -103,16 +99,16 @@ namespace eos
                 if (std::getenv("EOS_TESTS_REFERENCES"))
                 {
                     std::string envvar = std::string(std::getenv("EOS_TESTS_REFERENCES"));
-                    base               = fs::system_complete(envvar);
+                    base               = fs::absolute(envvar);
                 }
                 else if (std::getenv("EOS_HOME"))
                 {
                     std::string envvar = std::string(std::getenv("EOS_HOME"));
-                    base               = fs::system_complete(envvar);
+                    base               = fs::absolute(envvar);
                 }
                 else
                 {
-                    base = fs::system_complete(EOS_DATADIR "/eos/");
+                    base = fs::absolute(EOS_DATADIR "/eos/");
                 }
 
                 if (! fs::exists(base))
