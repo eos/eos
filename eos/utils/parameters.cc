@@ -28,21 +28,93 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
-#include <boost/filesystem/directory.hpp>
-#include <boost/filesystem/file_status.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
-#include <boost/format.hpp>
-
+#include <cctype>
 #include <cmath>
 #include <config.h>
+#include <filesystem>
+#include <format>
 #include <iostream>
 #include <map>
 #include <random>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
+
+namespace
+{
+    // std::make_format_args requires a parameter pack, but the substitution list for a
+    // templated parameter is a runtime-sized, homogeneous (all std::string) vector. Bridge
+    // the two by dispatching on the number of substitutions.
+    std::string
+    vformat_n(const std::string & fmt, const std::vector<std::string> & a)
+    {
+        using eos::InternalError;
+
+        switch (a.size())
+        {
+            case 0:  return fmt;
+            case 1:  return std::vformat(fmt, std::make_format_args(a[0]));
+            case 2:  return std::vformat(fmt, std::make_format_args(a[0], a[1]));
+            case 3:  return std::vformat(fmt, std::make_format_args(a[0], a[1], a[2]));
+            case 4:  return std::vformat(fmt, std::make_format_args(a[0], a[1], a[2], a[3]));
+            case 5:  return std::vformat(fmt, std::make_format_args(a[0], a[1], a[2], a[3], a[4]));
+            default: throw InternalError("Templated parameter uses more than 5 substitutions, which is not supported");
+        }
+    }
+
+    // Render a boost::format-style positional template ("%1%", "%2%", ...) using std::vformat.
+    // The entries of 'args' are substituted 1-based, i.e. args[0] replaces "%1%", args[1]
+    // replaces "%2%", and so on. Literal braces are escaped so that brace-rich strings (e.g.
+    // LaTeX such as "x^{y}") pass through unchanged.
+    std::string
+    render_template(const std::string & tmpl, const std::vector<std::string> & args)
+    {
+        std::string fmt;
+        fmt.reserve(tmpl.size());
+
+        for (std::size_t i = 0; i < tmpl.size();)
+        {
+            const char c = tmpl[i];
+
+            if (('{' == c) || ('}' == c)) // escape literal braces for std::format
+            {
+                fmt += c;
+                fmt += c;
+                ++i;
+            }
+            else if (('%' == c) && (i + 1 < tmpl.size()) && std::isdigit(static_cast<unsigned char>(tmpl[i + 1])))
+            {
+                std::size_t j = i + 1;
+                while ((j < tmpl.size()) && std::isdigit(static_cast<unsigned char>(tmpl[j])))
+                {
+                    ++j;
+                }
+
+                if ((j < tmpl.size()) && ('%' == tmpl[j])) // a "%N%" token
+                {
+                    const int n  = std::stoi(tmpl.substr(i + 1, j - i - 1));
+                    fmt         += '{';
+                    fmt         += std::to_string(n - 1); // boost::format is 1-based, std::format is 0-based
+                    fmt         += '}';
+                    i            = j + 1;
+                }
+                else // a stray '%', keep it literal
+                {
+                    fmt += c;
+                    ++i;
+                }
+            }
+            else
+            {
+                fmt += c;
+                ++i;
+            }
+        }
+
+        return vformat_n(fmt, args);
+    }
+} // namespace
 
 namespace eos
 {
@@ -248,16 +320,16 @@ namespace eos
                 if (std::getenv("EOS_TESTS_PARAMETERS"))
                 {
                     std::string envvar = std::string(std::getenv("EOS_TESTS_PARAMETERS"));
-                    base               = fs::system_complete(envvar);
+                    base               = fs::absolute(envvar);
                 }
                 else if (std::getenv("EOS_HOME"))
                 {
                     std::string envvar = std::string(std::getenv("EOS_HOME"));
-                    base               = fs::system_complete(envvar) / "parameters";
+                    base               = fs::absolute(envvar) / "parameters";
                 }
                 else
                 {
-                    base = fs::system_complete(EOS_DATADIR "/eos/parameters/");
+                    base = fs::absolute(EOS_DATADIR "/eos/parameters/");
                 }
 
                 if (! fs::exists(base))
@@ -533,35 +605,29 @@ namespace eos
 
                                         for (auto cp_it = cp.begin(); cp.end() != cp_it; ++cp_it)
                                         {
-                                            boost::format templated_name(name);
-                                            boost::format templated_latex(latex);
+                                            std::vector<std::string> name_args;
+                                            std::vector<std::string> latex_args;
 
                                             for (auto && i : *cp_it)
                                             {
-                                                templated_name = templated_name % i;
+                                                name_args.push_back(i);
 
-                                                std::string mapped_i;
-                                                auto        latex_map_it = latex_map.find(i);
-                                                if (latex_map.end() != latex_map_it)
-                                                {
-                                                    mapped_i = latex_map_it->second;
-                                                }
-                                                else
-                                                {
-                                                    mapped_i = i;
-                                                }
-                                                templated_latex = templated_latex % mapped_i;
+                                                auto latex_map_it = latex_map.find(i);
+                                                latex_args.push_back(latex_map.end() != latex_map_it ? latex_map_it->second : i);
                                             }
 
-                                            QualifiedName qn(templated_name.str());
+                                            const std::string templated_name  = render_template(name, name_args);
+                                            const std::string templated_latex = render_template(latex, latex_args);
+
+                                            QualifiedName qn(templated_name);
 
                                             if (_map.end() != _map.find(qn))
                                             {
                                                 throw ParameterInputDuplicateError(file, qn.str());
                                             }
 
-                                            _data->data.push_back(Parameter::Data(Parameter::Template{ qn, min, central, max, templated_latex.str(), unit }, idx));
-                                            _map[templated_name.str()] = idx;
+                                            _data->data.push_back(Parameter::Data(Parameter::Template{ qn, min, central, max, templated_latex, unit }, idx));
+                                            _map[templated_name] = idx;
                                             group_parameters.push_back(Parameter(_data, idx));
 
                                             ++idx;
