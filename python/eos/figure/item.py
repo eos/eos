@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Danny van Dyk
+# Copyright (c) 2023-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -26,6 +26,7 @@ import matplotlib.collections
 import matplotlib.container
 import matplotlib.lines
 import matplotlib.patches
+import matplotlib.transforms
 import numpy as _np
 import os
 import scipy as _scipy
@@ -337,6 +338,106 @@ class ObservableItem(Item):
     def legend(self):
         """Return the item's legend entry in form of its handle(s) and label(s)."""
         return self._legend_line()
+
+
+# Namespace exposing NumPy's functions and constants (e.g. ``sin``, ``exp``, ``pi``) to the
+# expressions evaluated by :class:`ExpressionItem`, so that they can be used without a ``np.``
+# prefix. ``np`` itself is also made available for any name not exported at NumPy's top level.
+_EXPRESSION_NAMESPACE = {name: getattr(_np, name) for name in dir(_np) if not name.startswith('_')}
+_EXPRESSION_NAMESPACE['np'] = _np
+
+
+@dataclass(kw_only=True)
+class ExpressionItem(Item):
+    r"""Plots an arbitrary mathematical expression as a function of the x-axis variable.
+
+    This item type evaluates a user-supplied Python ``expression`` of the free variable ``x`` on a
+    grid spanning ``range`` and draws the result as a curve. The expression is evaluated with
+    Python's :func:`eval`, with NumPy's functions and constants (e.g. ``sin``, ``exp``, ``sqrt``,
+    ``pi``) available by name as well as the ``np`` module itself; for example,
+    ``'exp(-x**2) * sin(2 * pi * x)'``. Because the expression is evaluated as code, it should only
+    be populated from trusted figure descriptions.
+
+    :param expression: The expression to be plotted, given as a Python expression in the free variable ``x``.
+    :type expression: str
+    :param range: A tuple of two float values (min, max) representing the range of the x-axis variable over which the expression is evaluated.
+    :type range: tuple[float, float]
+    :param resolution: The number of points to be used for the evaluation of the expression. Defaults to 100.
+    :type resolution: int
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$x$', range: [0.0, 6.28] }
+          yaxis: { label: r'$f(x)$' }
+          items:
+            - { type: 'expression', expression: 'sin(x)',           label: r'$\sin x$'       }
+            - { type: 'expression', expression: 'exp(-x) * cos(x)', label: r'$e^{-x}\cos x$' }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    expression:str
+    range:tuple[float,float]
+    resolution:int=field(default=100)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if not isinstance(self.expression, str) or not self.expression.strip():
+            raise ValueError("'expression' must be a non-empty string")
+
+        if self.range is None or len(self.range) != 2:
+            raise ValueError(f"Invalid range '{self.range}'. It must be a tuple of two float values (min, max).")
+
+        if self.range[0] >= self.range[1]:
+            raise ValueError(f"Invalid range '{self.range}'. The first value must be less than the second value.")
+
+        if self.resolution <= 0:
+            raise ValueError(f"Invalid resolution '{self.resolution}'. It must be a positive integer.")
+
+        # compile the expression eagerly so that syntax errors surface at construction time
+        try:
+            self._code = compile(self.expression, '<eos.figure.ExpressionItem>', 'eval')
+        except SyntaxError as e:
+            raise ValueError(f"Could not parse expression '{self.expression}': {e}")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the drawing by evaluating the expression at the sample points.
+
+        Evaluates ``expression`` on a grid of ``resolution`` points spanning ``range`` and caches the
+        results for :meth:`draw`. The free variable ``x`` is passed as a NumPy array, so vectorized
+        expressions are evaluated in a single pass; constant expressions are broadcast to the grid.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
+        self._xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
+        # wrap evaluation as well as the conversion/broadcast so that shape/dtype issues (e.g. a
+        # complex or non-broadcastable result) are reported with the offending expression too
+        try:
+            yvalues = eval(self._code, {'__builtins__': {}}, {**_EXPRESSION_NAMESPACE, 'x': self._xvalues})
+            self._yvalues = _np.broadcast_to(_np.asarray(yvalues, dtype=float), self._xvalues.shape)
+        except Exception as e:
+            raise ValueError(f"Could not evaluate expression '{self.expression}': {e}")
+
+    def draw(self, ax, **kwargs):
+        """Draw a curve of the expression as a function of the x-axis variable.
+
+        :param ax: The matplotlib axes onto which the curve is drawn.
+        :type ax: matplotlib.axes.Axes
+        :param kwargs: Additional keyword arguments forwarded to :meth:`matplotlib.axes.Axes.plot`.
+        """
+        ax.plot(self._xvalues, self._yvalues, label=self.label, alpha=self.alpha, color=self.color,
+                lw=self.linewidth, ls=self.linestyle, **kwargs)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line(alpha=self.alpha)
 
 
 @dataclass(kw_only=True)
@@ -1237,6 +1338,27 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         self._pdf = _np.reshape(self._kde(self._positions).T, xx.shape)
         self._pdf /= self._pdf.sum()
 
+    def _plevels(self):
+        """Return the PDF threshold values corresponding to the requested credibility ``levels``.
+
+        Each threshold is the density value above which the requested fraction of the total
+        probability lies. The 0% (peak) level is handled explicitly as the maximum density, since
+        solving for it numerically would return the upper bracket (~1.0) and produce an out-of-range
+        contour for typical PDFs whose maximum is much smaller than one.
+
+        :returns: The threshold values in the same order as ``levels``.
+        :rtype: list[float]
+        """
+        # find the PDF value corresponding to a given cummulative probability
+        plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
+        plevels = []
+        for level in self.levels:
+            if level == 0:
+                plevels.append(self._pdf.max())
+            else:
+                plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
+        return plevels
+
     def draw(self, ax):
         """Draw the two-dimensional kernel density estimate on the provided axes.
 
@@ -1246,13 +1368,249 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
         :param ax: The matplotlib axes onto which the KDE is drawn.
         :type ax: matplotlib.axes.Axes
         """
+        plevels = self._plevels()
+        labels = [f'{level}%' for level in self.levels]
+
+        if 'areas' in self.contours:
+            colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
+            ax.contourf(self._pdf.transpose(),
+                        colors=colors,
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                        levels=plevels[::-1])
+
+        CS = ax.contour(self._pdf.transpose(),
+                        colors=self.color,
+                        extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
+                        levels=plevels[::-1],
+                        linestyles=self.linestyle)
+
+        if 'labels' in self.contours:
+            fmt = {}
+            for level, label in zip(CS.levels, labels[::-1]):
+                fmt[level] = label
+
+            ax.clabel(CS, inline=1, fmt=fmt, fontsize=10)
+
+    def legend(self):
+        """Return the item's legend entry as a list of handle/label pairs.
+
+        Provides a filled rectangle handle when contour areas are drawn, and a line handle otherwise.
+
+        :returns: A list containing a single ``(handle, label)`` pair if a label is set, otherwise empty.
+        :rtype: list[tuple[matplotlib.artist.Artist, str]]
+        """
+        entries = []
+
+        if self.label:
+            handle = None
+            if 'areas' in self.contours:
+                handle = _matplotlib.pyplot.Rectangle((0,0),1,1, color=self.color)
+            else:
+                handle = _matplotlib.pyplot.Line2D((0,1),(0.5,0.), color=self.color, linestyle=self.linestyle)
+
+            entries.append((handle, self.label))
+
+        return entries
+
+@dataclass(kw_only=True)
+class TwoDimensionalContoursItem(Item):
+    """Plots two-dimensional probability contours from a histogram of pre-existing samples.
+
+    This item type is used to display the credibility contours of two variables, be it a prior, a
+    posterior, or a prediction. In contrast to :class:`TwoDimensionalKernelDensityEstimateItem`, the
+    probability density is estimated from a two-dimensional histogram of the samples rather than from
+    a kernel density estimate, so that no smoothing is applied.
+
+    :param bins: The number of histogram bins along each axis used to estimate the density. Defaults to 100.
+    :type bins: int
+    :param contours: The types of contours to be drawn. Can be any combination of ``'lines'``, ``'areas'``, or ``'labels'``. Defaults to ``{'lines'}``.
+    :type contours: set[str]
+    :param datafile: Path to the file that contains the samples, which must be of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`.
+    :type datafile: str
+    :param levels: The credibility levels that shall be visualized in percent. Defaults to ``[68, 95, 99]``.
+    :type levels: list[float] | None
+    :param variables: The tuple of names of the two variables that shall be displayed on the x- and y-axis, respectively.
+    :type variables: tuple[str, str]
+    :param xrange: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type xrange: tuple[float, float] | None
+    :param yrange: The range of the variable to be plotted on the y-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
+    :type yrange: tuple[float, float] | None
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: '$|V_{cb}|$', range: [38e-3, 47e-3] }
+          yaxis: { label: '$f_+(0)$',   range: [0.6, 0.75]    }
+          items:
+            - { type: 'contours2D', label: 'posterior', color: 'C1',
+                levels: [68, 95, 99], contours: ['lines', 'labels'],
+                datafile: './inference-data/CKM/samples',
+                variables: ['CKM::abs(V_cb)', 'B->D::alpha^f+_0@BSZ2015']
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    bins:int=field(default=100)
+    contours:set[str]=field(default_factory=lambda : {'lines'})
+    datafile:str
+    levels:list[float]|None=field(default=None)
+    variables:tuple[str,str]
+    xrange:tuple[float,float]|None=field(default=None)
+    yrange:tuple[float,float]|None=field(default=None)
+
+    _api_doc = inspect.cleandoc("""
+    Plotting Two-Dimensional Contours
+    ---------------------------------
+
+    Plot items of type ``contours2D`` are used to display the credibility contours of a two-dimensional
+    probability density, be it a prior, a posterior, or a prediction. The density is estimated from a
+    two-dimensional histogram of the samples, i.e. without the smoothing applied by a kernel density estimate.
+
+    The following keys are mandatory:
+
+        * ``datafile`` (*str*, path to an existing data file of type *eos.data.ImportanceSamples* or *eos.data.Prediction*) -- The path to
+          a data file that was generated with one of the ``sample-nested`` or ``predict-observables`` tasks.
+        * ``variables`` (*tuple* of two *str*) -- The names of the two variables that are plotted on the x- and y-axis, respectively.
+
+    The following keys are optional:
+
+        * ``bins`` (*int*) -- The number of histogram bins along each axis used to estimate the density. Defaults to 100.
+        * ``contours`` (*set* of *str*) -- The types of contours to be drawn. Can be any combination of ``'lines'``, ``'areas'``, or ``'labels'``. Defaults to ``{'lines'}``.
+        * ``levels`` (*list* of *float*) -- The credibility levels that shall be visualized in percent (optional). Defaults to ``[68, 95, 99]``.
+        * ``xrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
+        * ``yrange`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the y-axis. Defaults to the full range of the variable in the data file.
+    """)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.bins < 2:
+            raise ValueError(f"Number of bins '{self.bins}' is smaller than 2")
+
+        if self.levels is None:
+            self.levels = [0, 68, 95, 99]
+        elif 0 not in self.levels:
+            # the 0% level (the peak of the density) is required as the innermost boundary so that
+            # the credibility areas can be filled correctly
+            self.levels = [0] + self.levels
+
+        for level in self.levels:
+            if level < 0 or level >= 100:
+                raise ValueError(f"Credibility level '{level}' is not in the interval (0, 100)")
+
+        for contour_type in self.contours:
+            if contour_type not in ['lines', 'areas', 'labels']:
+                raise ValueError(f"Contour type '{contour_type}' is not supported")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the two-dimensional contours for drawing.
+
+        Loads the data file (of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`),
+        extracts the samples of the two chosen ``variables``, and estimates the probability density on a
+        regular grid from a weighted two-dimensional histogram spanning the x- and y-ranges for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative path to ``datafile``.
+            If ``None``, a default context rooted at the current working directory is used.
+        :type context: AnalysisFileContext | None
+        """
+
+        context = AnalysisFileContext() if context is None else context
+
+        # These checks are necessary to ensure that the data file is in the correct format,
+        # but they are not possible in the __post_init__ method, because the data file might not yet exist.
+        datafile = context.data_path(self.datafile)
+        os.path.exists(datafile) or eos.error(f"Data file '{datafile}' does not exist when preparing 2D contours")
+        name = os.path.split(datafile)[-1]
+        if name == 'samples':
+            self._datafile = eos.data.ImportanceSamples(datafile)
+
+            if self.variables[0] not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[0]}'")
+            if self.variables[1] not in self._datafile.lookup_table:
+                raise ValueError(f"Data file '{datafile}' does not contain samples of variable '{self.variables[1]}'")
+
+            self._xidx = self._datafile.lookup_table[self.variables[0]]
+            self._yidx = self._datafile.lookup_table[self.variables[1]]
+        elif name.startswith('pred-'):
+            self._datafile = eos.data.Prediction(datafile)
+
+            stripped_lookup_table = { k.split(';')[0]: v for k, v in self._datafile.lookup_table.items() }
+
+            if self.variables[0] in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variables[0]}'; specify the full variable name including options and kinematics")
+                self._xidx = stripped_lookup_table[self.variables[0]]
+            else:
+                if self.variables[0] not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain predictions for variable '{self.variables[0]}'")
+                self._xidx = self._datafile.lookup_table[self.variables[0]]
+
+            if self.variables[1] in stripped_lookup_table:
+                if len(stripped_lookup_table.keys()) != len(self._datafile.lookup_table.keys()):
+                    # variable name matches when stripping potential kinematic info from prediction variable names
+                    raise ValueError(f"Data file '{datafile}' contains multiple predictions for variable '{self.variables[1]}'; specify the full variable name including options and kinematics")
+                self._yidx = stripped_lookup_table[self.variables[1]]
+            else:
+                if self.variables[1] not in self._datafile.lookup_table:
+                    raise ValueError(f"Data file '{datafile}' does not contain predictions for variable '{self.variables[1]}'")
+                self._yidx = self._datafile.lookup_table[self.variables[1]]
+        else:
+            eos.error(f"Data file '{datafile}' has an unsupported format")
+            raise NotImplementedError
+
+        samples = self._datafile.samples[:, (self._xidx, self._yidx)]
+        weights = self._datafile.weights
+
+        # determine the extent of the plot
+        if self.xrange is None:
+            self.xrange = (samples[:, 0].min(), samples[:, 0].max())
+        if self.yrange is None:
+            self.yrange = (samples[:, 1].min(), samples[:, 1].max())
+
+        # estimate the PDF from a weighted 2D histogram; ``self._pdf`` holds the probability mass
+        # per bin and sums to one, matching the convention used by the KDE-based contour item
+        H, _, _ = _np.histogram2d(samples[:, 0], samples[:, 1], bins=self.bins,
+                                  range=[self.xrange, self.yrange], weights=weights)
+        self._pdf = H / H.sum()
+
+    def _plevels(self):
+        """Return the PDF threshold values corresponding to the requested credibility ``levels``.
+
+        Each threshold is the density value above which the requested fraction of the total
+        probability lies. The 0% (peak) level is handled explicitly as the maximum density, since
+        solving for it numerically would return the upper bracket (~1.0) and produce an out-of-range
+        contour for typical PDFs whose maximum is much smaller than one.
+
+        :returns: The threshold values in the same order as ``levels``.
+        :rtype: list[float]
+        """
         # find the PDF value corresponding to a given cummulative probability
         plevel = lambda x, pdf, P: pdf[pdf > x].sum() - P
         plevels = []
-        labels = []
         for level in self.levels:
-            plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
-            labels.append(f'{level}%')
+            if level == 0:
+                plevels.append(self._pdf.max())
+            else:
+                plevels.append(_scipy.optimize.brentq(plevel, 0., 1., args=(self._pdf, level / 100.0)))
+        return plevels
+
+    def draw(self, ax):
+        """Draw the two-dimensional contours on the provided axes.
+
+        Draws contour lines at the requested credibility ``levels`` and, depending on the
+        ``contours`` setting, optionally fills the contour areas and/or labels the contour lines.
+
+        :param ax: The matplotlib axes onto which the contours are drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+        plevels = self._plevels()
+        labels = [f'{level}%' for level in self.levels]
 
         if 'areas' in self.contours:
             colors = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in _np.linspace(0.50, 1.00, len(self.levels))]
@@ -1585,6 +1943,202 @@ class ConstraintItem(Item):
         xerrors = getattr(self, '_xerrors', None)
         has_xerr = xerrors is not None and any(xe is not None for xe in xerrors)
         return self._legend_errorbar(has_xerr=has_xerr, has_yerr=True)
+
+
+@dataclass(kw_only=True)
+class TwoDimensionalConstraintItem(Item):
+    r"""Plots the 2D contours of two correlated observables from a single constraint.
+
+    This item type displays the uncertainty region of a single constraint from the EOS library in
+    the plane of two of its observables. For a bivariate (``MultivariateGaussian`` or
+    ``MultivariateGaussian(Covariance)``) constraint, the chosen pair of observables is drawn as one
+    or more covariance ellipses, one per requested confidence level. For a univariate ``Gaussian``
+    constraint, the single observable is drawn as a band spanning the orthogonal axis; in that case
+    exactly one of ``x`` or ``y`` is given.
+
+    Each of ``x`` and ``y`` is a dictionary with a single mandatory key ``observable`` that names the
+    observable mapped to that axis. For the time being, the observable is matched against the
+    constraint by its qualified name only.
+
+    :param constraint: The name of the constraint to be plotted. Must identify one of the constraints known to EOS; see `the complete list of constraints <../reference/constraints.html>`_.
+    :type constraint: eos.QualifiedName
+    :param x: The specification of the observable mapped to the x axis, given as a dictionary with the mandatory key ``observable``.
+    :type x: dict | None
+    :param y: The specification of the observable mapped to the y axis, given as a dictionary with the mandatory key ``observable``.
+    :type y: dict | None
+    :param sigmas: The list of confidence levels (in multiples of the standard deviation) for which a contour is drawn. Defaults to ``[1.0]``.
+    :type sigmas: list[float]
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$|V_{ub}|$' }
+          yaxis: { label: r'$|V_{cb}|$' }
+          items:
+            - { type: 'constraint2D', constraint: 'B->pilnu::|V_ub|@HFLAV:2024A',
+                x: { observable: 'CKM::abs(V_ub)' }, y: { observable: 'CKM::abs(V_cb)' },
+                sigmas: [1.0, 2.0], color: 'C0', label: 'HFLAV 2024'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    constraint:eos.QualifiedName
+    x:dict|None=field(default=None)
+    y:dict|None=field(default=None)
+    sigmas:list[float]=field(default_factory=lambda: [1.0])
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if type(self.constraint) is str:
+            self.constraint = eos.QualifiedName(self.constraint)
+        elif type(self.constraint) is not eos.QualifiedName:
+            raise TypeError(f'constraint must be a QualifiedName, not {type(self.constraint)}')
+
+        if self.x is None and self.y is None:
+            raise ValueError("at least one of 'x' or 'y' must be specified for a 2D constraint")
+
+        for axis_name, spec in (('x', self.x), ('y', self.y)):
+            if spec is not None and (not isinstance(spec, dict) or 'observable' not in spec):
+                raise ValueError(f"'{axis_name}' must be a dictionary containing an 'observable' key")
+
+        # draw the largest contour first (lowest opacity) and the smallest last (highest opacity),
+        # so that nested contours remain visible
+        self.sigmas = sorted(self.sigmas, reverse=True)
+        self._alphas = _np.linspace(0.0, self.alpha, len(self.sigmas) + 1)[1:]
+
+    @staticmethod
+    def _name(observable):
+        "Return the bare observable name (without options) used to match an axis observable."
+        return eos.QualifiedName(observable).full().split(';')[0]
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the 2D constraint for drawing.
+
+        Looks up and deserializes the named constraint and caches the geometry of its uncertainty
+        region: the means, standard deviations, and correlation of the chosen pair of observables for
+        a bivariate constraint, or the mean and (a)symmetric uncertainties of the single observable
+        for a univariate ``Gaussian`` constraint. The supported constraint types are ``Gaussian``,
+        ``MultivariateGaussian(Covariance)``, and ``MultivariateGaussian``.
+
+        :param context: The analysis file context. Accepted for interface consistency; this item
+            does not read any data files. If ``None``, a default context is used.
+        :type context: AnalysisFileContext | None
+        """
+        context = AnalysisFileContext() if context is None else context
+
+        import yaml
+
+        entry = eos.Constraints()[self.constraint]
+        if not entry:
+            raise ValueError(f'unknown constraint {self.constraint}')
+
+        constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
+        ctype = constraint['type']
+        if ctype not in ('Gaussian', 'MultivariateGaussian', 'MultivariateGaussian(Covariance)'):
+            raise ValueError(f"constraint type '{ctype}' presently not supported")
+
+        if ctype in ('MultivariateGaussian(Covariance)', 'MultivariateGaussian'):
+            if self.x is None or self.y is None:
+                raise ValueError("both 'x' and 'y' must be specified for a multivariate constraint")
+
+            # for the time being, observables are matched by their qualified name only,
+            # ignoring any kinematics or options given in the axis specifications
+            observables = [self._name(o) for o in constraint['observables']]
+            xname = self._name(self.x['observable'])
+            yname = self._name(self.y['observable'])
+            if xname not in observables:
+                raise ValueError(f"x-axis observable {self.x['observable']} not contained in constraint {self.constraint}")
+            if yname not in observables:
+                raise ValueError(f"y-axis observable {self.y['observable']} not contained in constraint {self.constraint}")
+            xidx = observables.index(xname)
+            yidx = observables.index(yname)
+
+            means = _np.array(constraint['means'])
+            self._xmean = means[xidx]
+            self._ymean = means[yidx]
+
+            if ctype == 'MultivariateGaussian(Covariance)':
+                cov = _np.array(constraint['covariance'])
+                self._xsigma = _np.sqrt(cov[xidx, xidx])
+                self._ysigma = _np.sqrt(cov[yidx, yidx])
+                self._rho    = cov[xidx, yidx] / (self._xsigma * self._ysigma)
+            else:
+                sigmas = _np.sqrt(
+                      (_np.abs(_np.array(constraint['sigma-stat-hi'])) + _np.abs(_np.array(constraint['sigma-stat-lo'])))**2 / 4.0
+                    +  _np.array(constraint['sigma-sys'])**2
+                )
+                self._xsigma = sigmas[xidx]
+                self._ysigma = sigmas[yidx]
+                self._rho    = _np.array(constraint['correlations'])[xidx, yidx]
+
+            self._shape = 'ellipse'
+        else: # Gaussian
+            if self.x is not None and self.y is not None:
+                raise ValueError("only one of 'x' or 'y' may be specified for a univariate (Gaussian) constraint")
+
+            axis = 'x' if self.x is not None else 'y'
+            spec = self.x if self.x is not None else self.y
+
+            # for the time being, the observable is matched by its qualified name only
+            if self._name(spec['observable']) != self._name(constraint['observable']):
+                raise ValueError(f"{axis}-axis observable {spec['observable']} not contained in constraint {self.constraint}")
+
+            self._mean     = float(constraint['mean'])
+            self._sigma_hi = _np.sqrt(float(constraint['sigma-stat']['hi'])**2 + float(constraint['sigma-sys']['hi'])**2)
+            self._sigma_lo = _np.sqrt(float(constraint['sigma-stat']['lo'])**2 + float(constraint['sigma-sys']['lo'])**2)
+            self._shape    = 'rect-x' if axis == 'x' else 'rect-y'
+
+    def draw(self, ax):
+        """Draw the 2D constraint on the provided axes.
+
+        Renders a covariance ellipse for each requested confidence level for a bivariate constraint,
+        or a band spanning the orthogonal axis for a univariate ``Gaussian`` constraint.
+
+        :param ax: The matplotlib axes onto which the 2D constraint is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+        if self._shape == 'ellipse':
+            # the ellipse is built in a frame in which the principal axes are at 45 degrees, then
+            # scaled by the standard deviations and rotated/translated into the data frame
+            xwidth = 2.0 * _np.sqrt(1.0 + self._rho)
+            ywidth = 2.0 * _np.sqrt(1.0 - self._rho)
+            for sigma, alpha in zip(self.sigmas, self._alphas):
+                ellipse = _matplotlib.patches.Ellipse((0.0, 0.0), width=xwidth, height=ywidth,
+                                                       alpha=alpha, color=self.color, linewidth=self.linewidth, fill=True)
+                transf = _matplotlib.transforms.Affine2D() \
+                    .rotate_deg(45) \
+                    .scale(self._xsigma * sigma, self._ysigma * sigma) \
+                    .translate(self._xmean, self._ymean)
+                ellipse.set_transform(transf + ax.transData)
+                ax.add_patch(ellipse)
+        elif self._shape == 'rect-x':
+            # span the full orthogonal (y) axis: x is in data coordinates, y in axes coordinates,
+            # so the band is independent of the y limits at the time this item is drawn
+            transform = ax.get_xaxis_transform()
+            for sigma, alpha in zip(self.sigmas, self._alphas):
+                xlo = self._mean - sigma * self._sigma_lo
+                xhi = self._mean + sigma * self._sigma_hi
+                ax.add_patch(_matplotlib.patches.Rectangle((xlo, 0), width=xhi - xlo, height=1,
+                                                           transform=transform, alpha=alpha, color=self.color))
+        elif self._shape == 'rect-y':
+            # span the full orthogonal (x) axis: y is in data coordinates, x in axes coordinates,
+            # so the band is independent of the x limits at the time this item is drawn
+            transform = ax.get_yaxis_transform()
+            for sigma, alpha in zip(self.sigmas, self._alphas):
+                ylo = self._mean - sigma * self._sigma_lo
+                yhi = self._mean + sigma * self._sigma_hi
+                ax.add_patch(_matplotlib.patches.Rectangle((0, ylo), width=1, height=yhi - ylo,
+                                                           transform=transform, alpha=alpha, color=self.color))
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_patch()
 
 
 @dataclass(kw_only=True)
@@ -2419,6 +2973,84 @@ class ErrorBarsItem(Item):
         """Return the item's legend entry in form of its handle(s) and label(s)."""
         return self._legend_errorbar(marker=self.marker, has_xerr=self.xerrors is not None, has_yerr=self.yerrors is not None, alpha=self.alpha)
 
+
+@dataclass(kw_only=True)
+class PointItem(Item):
+    r"""Plots a single point at a fixed position.
+
+    This item type is used to mark a single data point manually, e.g. a value taken from the
+    literature. The point is drawn as an open (unfilled) marker whose edge uses the inherited
+    ``color`` and ``alpha`` fields. To draw several points at once, or points with error bars, use
+    an :class:`ErrorBarsItem` instead.
+
+    :param x: The x-axis position of the point.
+    :type x: float
+    :param y: The y-axis position of the point.
+    :type y: float
+    :param marker: The marker style, given as a valid matplotlib marker. Defaults to ``'x'``.
+    :type marker: str
+    :param markersize: The marker size in points. Defaults to None, i.e. matplotlib's default size.
+    :type markersize: float | None
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$q^2$', range: [0.0, 1.0] }
+          yaxis: { label: r'$f_+(q^2)$' }
+          items:
+            - { type: 'point', x: 0.0, y: 0.261, marker: 'o', markersize: 12, color: 'C0',
+                label: r'LCSR (Bharucha 2012)'
+              }
+        '''
+        figure = eos.figure.FigureFactory.from_yaml(figure_args)
+        figure.draw()
+    """
+
+    x:float
+    y:float
+    marker:str=field(default='x')
+    markersize:float|None=field(default=None)
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.x is None:
+            raise ValueError("'x' must be specified to define a point")
+
+        if self.y is None:
+            raise ValueError("'y' must be specified to define a point")
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the point for drawing.
+
+        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :type context: AnalysisFileContext | None
+        """
+        pass
+
+    def draw(self, ax):
+        """Draw the point on the provided axes.
+
+        :param ax: The matplotlib axes onto which the point is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+        ax.plot(self.x, self.y, alpha=self.alpha, color=self.color, label=self.label, linestyle='none',
+                marker=self.marker, markeredgecolor=self.color, markerfacecolor='none', markersize=self.markersize)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        # the point is drawn as an open marker, so its swatch must be open (unfilled) too
+        if not self.label:
+            return []
+        handle = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker=self.marker, linestyle='none',
+                                          markeredgecolor=self.color, markerfacecolor='none', markersize=self.markersize,
+                                          alpha=self.alpha)
+        return [(handle, self.label)]
+
+
 class ItemFactory:
     """Factory that creates :class:`Item` instances from their YAML or dictionary description.
 
@@ -2429,19 +3061,23 @@ class ItemFactory:
 
     registry = {
         'observable': ObservableItem,
+        'expression': ExpressionItem,
         'uncertainty': UncertaintyBandItem,
         'uncertainty-binned': BinnedUncertaintyItem,
         'constraint': ConstraintItem,
         'constraint-residue': ConstraintResidueItem,
+        'constraint2D': TwoDimensionalConstraintItem,
         'histogram1D': OneDimensionalHistogramItem,
         'histogram2D': TwoDimensionalHistogramItem,
         'kde1D': OneDimensionalKernelDensityEstimateItem,
         'kde2D': TwoDimensionalKernelDensityEstimateItem,
+        'contours2D': TwoDimensionalContoursItem,
         'band': BandItem,
         'vertical': VerticalLineItem,
         'signal-pdf': SignalPDFItem,
         'complex-plane': ComplexPlaneItem,
         'errorbars': ErrorBarsItem,
+        'point': PointItem,
     }
 
     @staticmethod

@@ -94,6 +94,114 @@ class ObservableItemTests(unittest.TestCase):
         """)
         self.assertEqual(list(item.legend()), [])
 
+class ExpressionItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: expression
+            expression: 'exp(-x**2) * sin(2 * pi * x)'
+            range: [0.0, 6.28]
+            resolution: 100
+            label: 'foo'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'expression': {e}")
+
+    def test_constant(self):
+
+        # a constant expression is broadcast to the full grid of sample points
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: expression
+        expression: '1.5'
+        range: [0.0, 1.0]
+        resolution: 7
+        """)
+        item.prepare()
+        self.assertEqual(item._yvalues.shape, item._xvalues.shape)
+        self.assertTrue((item._yvalues == 1.5).all())
+
+    def test_invalid(self):
+
+        # a syntactically invalid expression is rejected at construction time
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'sin(x'
+            range: [0.0, 1.0]
+            """)
+
+        # an empty expression is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: '   '
+            range: [0.0, 1.0]
+            """)
+
+        # an inverted range is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'x'
+            range: [1.0, 0.0]
+            """)
+
+        # a name that is not exposed to the expression cannot be used
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'os.getcwd()'
+            range: [0.0, 1.0]
+            """)
+            item.prepare()
+
+        # a complex-valued result cannot be converted to float and is reported as a ValueError
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: '(-1.0)**0.5'
+            range: [0.0, 1.0]
+            """)
+            item.prepare()
+
+        # a result that cannot be broadcast onto the grid is reported as a ValueError
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: expression
+            expression: 'np.array([1.0, 2.0, 3.0])'
+            range: [0.0, 1.0]
+            resolution: 100
+            """)
+            item.prepare()
+
+    def test_legend(self):
+
+        # a labelled expression contributes a single line entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: expression
+        expression: 'sin(x)'
+        range: [0.0, 6.28]
+        label: 'foo'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'foo')
+
+        # an unlabelled expression contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: expression
+        expression: 'sin(x)'
+        range: [0.0, 6.28]
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class UncertaintyBandItemTests(unittest.TestCase):
 
     def test_full(self):
@@ -222,6 +330,149 @@ class ConstraintResidueItemTests(unittest.TestCase):
         self.assertTrue(entry.has_xerr)
         self.assertTrue(entry.has_yerr)
 
+class TwoDimensionalConstraintItemTests(unittest.TestCase):
+
+    def test_multivariate(self):
+
+        # a bivariate constraint is drawn as one covariance ellipse per requested confidence level
+        try:
+            input = """
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            y: { observable: 'B->K^*gamma::C_K^*gamma' }
+            sigmas: [1.0, 2.0]
+            color: 'C0'
+            label: 'BaBar 2008'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'constraint2D': {e}")
+
+    def test_univariate(self):
+
+        # a univariate (Gaussian) constraint with only 'x' is drawn as a vertical band
+        try:
+            input = """
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing univariate item of type 'constraint2D': {e}")
+
+        # the same constraint with only 'y' is drawn as a horizontal band
+        try:
+            input = """
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            y: { observable: 'B->K^*gamma::S_K^*gamma' }
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing univariate item of type 'constraint2D': {e}")
+
+        # the band must span the full orthogonal axis independently of the current limits:
+        # it is anchored in axes-fraction coordinates, not in data coordinates. Non-default
+        # limits are set first so that a data-coordinate band (the previous behaviour) would fail.
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        ax.set_ylim(5.0, 17.0)
+        item.draw(ax)
+        rect = ax.patches[-1]
+        # the vertical (y) extent spans the whole axes: anchored at y=0 with height 1 in axes fraction
+        self.assertEqual(rect.get_y(), 0.0)
+        self.assertEqual(rect.get_height(), 1.0)
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+        y: { observable: 'B->K^*gamma::S_K^*gamma' }
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        ax.set_xlim(5.0, 17.0)
+        item.draw(ax)
+        rect = ax.patches[-1]
+        # the horizontal (x) extent spans the whole axes: anchored at x=0 with width 1 in axes fraction
+        self.assertEqual(rect.get_x(), 0.0)
+        self.assertEqual(rect.get_width(), 1.0)
+
+    def test_invalid(self):
+
+        # neither 'x' nor 'y' specified is rejected at construction time
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            """)
+
+        # an axis specification without an 'observable' key is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            x: {}
+            """)
+
+        # specifying both 'x' and 'y' for a univariate constraint is rejected during prepare()
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            y: { observable: 'B->K^*gamma::C_K^*gamma' }
+            """)
+            item.prepare()
+
+        # specifying only one axis for a multivariate constraint is rejected during prepare()
+        with self.assertRaises(ValueError):
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint2D'
+            constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+            x: { observable: 'B->K^*gamma::S_K^*gamma' }
+            """)
+            item.prepare()
+
+    def test_legend(self):
+
+        # a labelled 2D constraint contributes a single patch entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        y: { observable: 'B->K^*gamma::C_K^*gamma' }
+        label: 'BaBar 2008'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'BaBar 2008')
+
+        # an unlabelled 2D constraint contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        y: { observable: 'B->K^*gamma::C_K^*gamma' }
+        """)
+        self.assertEqual(list(item.legend()), [])
+
 class OneDimensionalHistogramItemTests(unittest.TestCase):
 
     def test_full(self):
@@ -306,6 +557,143 @@ class TwoDimensionalKernelDensityItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'constraint': {e}")
+
+    def test_levels(self):
+
+        # the 0% level (the peak) is prepended by default; its threshold must be the maximum
+        # density, and all thresholds must stay within the data range (i.e. not the ~1.0 that
+        # solving for P=0 numerically would return for a normalized density)
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'kde2D'
+        bandwidth: 3
+        levels: [68, 95]
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+
+        # the 0% level is present by construction
+        self.assertIn(0, item.levels)
+
+        plevels = item._plevels()
+        pdf_max = item._pdf.max()
+        # the 0% level maps to the peak density, which is the largest threshold
+        self.assertEqual(max(plevels), pdf_max)
+        # every threshold lies within the data range (0, pdf_max], never the out-of-range ~1.0
+        for p in plevels:
+            self.assertGreater(p, 0.0)
+            self.assertLessEqual(p, pdf_max)
+
+class TwoDimensionalContoursItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'contours2D'
+            bins: 50
+            contours: ['lines', 'areas', 'labels']
+            levels: [68, 95, 99]
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            label: 'posterior'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'contours2D': {e}")
+
+    def test_levels(self):
+
+        # the 0% level (the peak) is prepended by default; its threshold must be the maximum
+        # density, and all thresholds must stay within the data range (i.e. not the ~1.0 that
+        # solving for P=0 numerically would return for a normalized histogram)
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        bins: 50
+        levels: [68, 95]
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+
+        # the 0% level is present by construction
+        self.assertIn(0, item.levels)
+
+        plevels = item._plevels()
+        pdf_max = item._pdf.max()
+        # the 0% level maps to the peak density, which is the largest threshold
+        self.assertEqual(max(plevels), pdf_max)
+        # every threshold lies within the data range (0, pdf_max], never the out-of-range ~1.0
+        for p in plevels:
+            self.assertGreater(p, 0.0)
+            self.assertLessEqual(p, pdf_max)
+
+    def test_invalid(self):
+
+        # fewer than two bins is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'contours2D'
+            bins: 1
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            """)
+
+        # an out-of-range credibility level is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'contours2D'
+            levels: [68, 100]
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            """)
+
+        # an unsupported contour type is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'contours2D'
+            contours: ['lines', 'blobs']
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            datafile: 'eos/data/importance_samples_TEST.d/samples'
+            """)
+
+    def test_legend(self):
+
+        # with areas, the swatch is a filled rectangle
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        contours: ['lines', 'areas']
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        label: 'posterior'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'posterior')
+
+        # without areas, the swatch is a line
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        contours: ['lines']
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        label: 'posterior'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+
+        # an unlabelled item contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        self.assertEqual(list(item.legend()), [])
 
 class BandItemTests(unittest.TestCase):
 
@@ -475,6 +863,67 @@ class ErrorBarsItemTests(unittest.TestCase):
         type: 'errorbars'
         positions: [[1, 2]]
         yerrors: [0.3]
+        """)
+        self.assertEqual(list(item.legend()), [])
+
+class PointItemTests(unittest.TestCase):
+
+    def test_full(self):
+
+        try:
+            input = """
+            type: 'point'
+            x: 0.0
+            y: 0.261
+            marker: 'o'
+            markersize: 12
+            color: 'C0'
+            label: 'LCSR (Bharucha 2012)'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'point': {e}")
+
+    def test_invalid(self):
+
+        # a point requires both 'x' and 'y'
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'point'
+            x: 0.0
+            """)
+
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'point'
+            y: 0.0
+            """)
+
+    def test_legend(self):
+
+        # a labelled point contributes a single marker entry, drawn as an open (unfilled) marker
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'point'
+        x: 0.0
+        y: 0.261
+        marker: 'o'
+        label: 'foo'
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'foo')
+        self.assertEqual(entries[0][0].get_marker(), 'o')
+        self.assertEqual(entries[0][0].get_markerfacecolor(), 'none')
+
+        # an unlabelled point contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'point'
+        x: 0.0
+        y: 0.261
         """)
         self.assertEqual(list(item.legend()), [])
 
