@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
  *
@@ -339,7 +339,7 @@ namespace eos
 
                 if (! fs::is_directory(base))
                 {
-                    throw InternalError("Expect '" + base.string() + " to be a directory");
+                    throw InternalError("Expect '" + base.string() + "' to be a directory");
                 }
 
                 unsigned idx = _data->data.size();
