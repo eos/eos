@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2011-2025 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -2777,7 +2777,7 @@ namespace eos
 
             if (! fs::is_directory(base))
             {
-                throw InternalError("Expect '" + base.string() + " to be a directory");
+                throw InternalError("Expect '" + base.string() + "' to be a directory");
             }
 
             for (fs::directory_iterator f(base), f_end; f != f_end; ++f)
