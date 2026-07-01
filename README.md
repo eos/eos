@@ -46,6 +46,22 @@ pip3 install --pre eoshep
 For instructions on how to build and install EOS on your computer please have a
 look at the [online documentation](https://eos.github.io/doc/installation.html).
 
+Attribution
+-----------
+
+When you use EOS for a project that results in a publication, please cite [the appropriate / most recent Zenodo release](https://doi.org/10.5281/zenodo.3376590)
+*as well as* the publication
+```
+@article{EOSAuthors:2021xpv,
+    author = "van Dyk, Danny and others", collaboration = "EOS Authors",
+    title = "{EOS: a software for flavor physics phenomenology}",
+    eprint = "2111.15428", archivePrefix = "arXiv", primaryClass = "hep-ph",
+    reportNumber = "EOS-2021-04, TUM-HEP 1371/21, P3H-21-094, SI-HEP-2021-32",
+    doi = "10.1140/epjc/s10052-022-10177-4",
+    journal = "Eur. Phys. J. C", volume = "82", number = "6", pages = "569", year = "2022"
+}
+```
+
 Contact
 -------
 
