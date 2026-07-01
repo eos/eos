@@ -1,6 +1,7 @@
 [![PyPi version](https://img.shields.io/pypi/v/eoshep)](https://img.shields.io/pypi/v/eoshep)
 [![Build Status](https://github.com/eos/eos/actions/workflows/pypi-build+check+deploy.yaml/badge.svg)](https://github.com/eos/eos/actions/workflows/pypi-build+check+deploy.yaml)
 [![Build Status](https://github.com/eos/eos/actions/workflows/ubuntu-build+check+deploy.yaml/badge.svg)](https://github.com/eos/eos/actions/workflows/ubuntu-build+check+deploy.yaml)
+![Coverage](https://raw.githubusercontent.com/eos/coverage/main/badge.svg)
 [![Discord](https://img.shields.io/discord/808999754989961236.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/hyPu7f7K6W)
 
 
