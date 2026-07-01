@@ -13,11 +13,11 @@ EOS - A software for Flavor Physics Phenomenology
 EOS is a software package that addresses several use cases in the field of
 high-energy flavor physics:
 
-1. [theory predictions of and uncertainty estimation for flavor observables](https://eos.github.io/doc/use-cases.html#theory-predictions-and-their-uncertainties)
+1. [theory predictions of and uncertainty estimation for flavor observables](https://eoshep.org/doc/user-guide/predictions.html)
    within the Standard Model or within the Weak Effective Theory;
-2. [Bayesian parameter inference](https://eos.github.io/doc/use-cases.html#parameter-inference)
+2. [Bayesian parameter inference](https://eoshep.org/doc/user-guide/inference.html)
    from both experimental and theoretical constraints; and
-3. [Monte Carlo simulation of pseudo events](https://eos.github.io/doc/use-cases.html#pseudo-event-simulation) for flavor processes.
+3. [Monte Carlo simulation of pseudo events](https://eoshep.org/doc/user-guide/simulation.html) for flavor processes.
 
 An up-to-date list of publications that use EOS can be found [here](https://collaboration.eoshep.org/publications.html).
 
@@ -29,7 +29,7 @@ It depends on as a small set of external software:
 - a subset of the BOOST C++ libraries,
 - the Python 3 interpreter.
 
-For details on these dependencies we refer to the [online documentation](https://eos.github.io/doc/installation.html#installing-the-dependencies-on-linux).
+For details on these dependencies we refer to the [online documentation](https://eoshep.org/doc/installation.html#installing-the-dependencies-on-linux).
 
 Installation
 ------------
@@ -45,7 +45,7 @@ pip3 install --pre eoshep
 ```
 
 For instructions on how to build and install EOS on your computer please have a
-look at the [online documentation](https://eos.github.io/doc/installation.html).
+look at the [online documentation](https://eoshep.org/doc/installation.html).
 
 Attribution
 -----------
