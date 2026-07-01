@@ -19,7 +19,7 @@ high-energy flavor physics:
    from both experimental and theoretical constraints; and
 3. [Monte Carlo simulation of pseudo events](https://eos.github.io/doc/use-cases.html#pseudo-event-simulation) for flavor processes.
 
-An up-to-date list of publications that use EOS can be found [here](https://eos.github.io/publications/).
+An up-to-date list of publications that use EOS can be found [here](https://collaboration.eoshep.org/publications.html).
 
 EOS is written in C++20 and designed to be used through its Python 3 interface,
 ideally within a Jupyter notebook environment.
