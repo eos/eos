@@ -52,39 +52,10 @@ Contact
 If you want to report an error or file a request, please file an issue [here](https://github.com/eos/eos/issues).
 For additional information, please contact any of the main authors, e.g. via our [Discord server](https://discord.gg/hyPu7f7K6W).
 
-Authors and Contributors
-------------------------
+To approach individual developers, please [look here](https://github.com/eos/eos/wiki/Development-Team).
 
-The main authors are:
-
-- Frederik Beaujean,
-- Christoph Bobeth,
-- Carolina Bolognani <carolinabolognani@gmail.com>,
-- Nico Gubernari <nicogubernari@gmail.com>,
-- Florian Herren <florian.s.herren@gmail.com>,
-- Matthew J. Kirk <matthew.j.kirk@durham.ac.uk>,
-- Meril Reboud <merilreboud@gmail.com>,
-- Danny van Dyk <danny.van.dyk@gmail.com>,
-
-with further code contributions by:
-
-- Marzia Bordone,
-- Thomas Blake,
-- Lorenz Gaertner,
-- Elena Graverini,
-- Stephan Jahn,
-- Ahmet Kokulu,
-- Viktor Kuschke,
-- Stephan Kürten,
-- Philip Lüghausen,
-- Bastian Müller,
-- Filip Novak,
-- Stefanie Reichert,
-- Eduardo Romero,
-- Rafael Silva Coutinho,
-- Ismo Tojiala,
-- K. Keri Vos,
-- Christian Wacker.
+Acknowledgments
+---------------
 
 We would like to extend our thanks to the following people whose input and
 support were most helpful in either the development or the maintenance of EOS:
