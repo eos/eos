@@ -290,20 +290,14 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     pvalue = (1.0 - scipy.stats.chi2(gof.total_degrees_of_freedom()).cdf(gof.total_chi_square()))
     eos.info(f'p value     = {100 * pvalue:.2f}%')
     eos.info('individual test statistics:')
-    local_pvalues = {}
     for n, e in gof:
         local_pvalue = (1.0 - scipy.stats.chi2(e.dof).cdf(e.chi2))
-        local_pvalues[f'{n}'] = float(local_pvalue)
         eos.info(f'  - {n}: chi^2 / dof = {e.chi2:.2f} / {e.dof}, local_pvalue = {100 * local_pvalue:.2f}%')
 
-    eos.data.Mode.create(
+    eos.data.Mode.from_bfp_and_gof(
         os.path.join(base_directory, 'data', posterior, f'mode-{label}'),
-        analysis.varied_parameters,
-        bfp.point,
-        pvalue,
-        local_pvalues,
-        min_chi2,
-        gof.total_degrees_of_freedom()
+        bfp,
+        gof
         )
     if (pvalue < 0.03):
         eos.warn(f'Final p value is {100 * pvalue:.2f}%, which is below the a-priori threshold 3%')
