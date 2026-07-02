@@ -33,6 +33,7 @@ EXTRA_DIST = \
 	eos/tasks_TEST.py \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
+	eos/data/_common.py \
 	eos/data/dynesty_results.py \
 	eos/data/dynesty_results_TEST.d \
 	eos/data/importance_samples.py \
@@ -105,6 +106,7 @@ eos_SCRIPTS = \
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
 	eos/data/__init__.py \
+	eos/data/_common.py \
 	eos/data/dynesty_results.py \
 	eos/data/importance_samples.py \
 	eos/data/markov_chain.py \
