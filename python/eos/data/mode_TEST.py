@@ -17,12 +17,45 @@ import unittest
 
 import eos
 import eos.data
+import numpy as np
 import os
+import tempfile
+import yaml
+
+
+class _Parameter:
+    "Minimal stand-in for eos.Parameter, exposing the name/min/max accessors that create() uses."
+
+    def __init__(self, name, minimum, maximum):
+        self._name = name
+        self._min  = minimum
+        self._max  = maximum
+
+    def name(self):
+        return self._name
+
+    def min(self):
+        return self._min
+
+    def max(self):
+        return self._max
 
 
 class ModeTests(unittest.TestCase):
 
     _path = os.path.join(os.environ['SOURCE_DIR'], 'eos/data/mode_TEST.d')
+
+    _parameters = [
+        _Parameter('CKM::abs(V_ub)',        3.0e-3, 4.5e-3),
+        _Parameter('B->pi::f_+(0)@BCL2008', 0.21,   0.32  ),
+    ]
+
+    @staticmethod
+    def _write(directory, description):
+        "Materialize a (possibly malformed) Mode fixture in the given directory."
+        os.makedirs(directory, exist_ok=True)
+        with open(os.path.join(directory, 'description.yaml'), 'w') as f:
+            yaml.safe_dump(description, f, default_flow_style=False)
 
     def test_loading(self):
         "Load a Mode from a prepared fixture and check its contents."
@@ -40,6 +73,87 @@ class ModeTests(unittest.TestCase):
         "Loading from a non-existent path raises an error."
         with self.assertRaises(RuntimeError):
             eos.data.Mode(os.path.join(self._path, 'does-not-exist'))
+
+    def test_roundtrip(self):
+        "A mode written by create() reads back identically (write/read symmetry)."
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'mode-default')
+            eos.data.Mode.create(
+                path, self._parameters, np.array([3.67e-3, 0.27]),
+                0.25, {'B->pilnu::BR': 0.5}, 12.0, 5.0
+            )
+
+            m = eos.data.Mode(path)
+            self.assertEqual(m.type, 'Mode')
+            self.assertEqual([p['name'] for p in m.varied_parameters], ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008'])
+            self.assertEqual(m.mode, [3.67e-3, 0.27])
+            self.assertAlmostEqual(m.pvalue, 0.25)
+            self.assertEqual(m.local_pvalues, {'B->pilnu::BR': 0.5})
+            self.assertAlmostEqual(m.global_chi2, 12.0)
+            self.assertAlmostEqual(m.dof, 5.0)
+
+    def test_roundtrip_none_pvalue(self):
+        "A mode created with pvalue None reads back as None."
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'mode-default')
+            eos.data.Mode.create(path, self._parameters, np.array([3.67e-3, 0.27]), None, {}, None, None)
+
+            m = eos.data.Mode(path)
+            self.assertIsNone(m.pvalue)
+            self.assertIsNone(m.global_chi2)
+            self.assertIsNone(m.dof)
+
+    def test_optional_keys_absent(self):
+        "An older description without global_chi2/dof loads with those attributes set to None."
+        with tempfile.TemporaryDirectory() as d:
+            self._write(d, {
+                'version': 'test', 'type': 'Mode',
+                'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
+                'mode': [0.5], 'pvalue': 0.25, 'local_pvalues': {},
+            })
+            m = eos.data.Mode(d)
+            self.assertIsNone(m.global_chi2)
+            self.assertIsNone(m.dof)
+
+    def test_wrong_type(self):
+        "A description whose type is not 'Mode' is rejected."
+        with tempfile.TemporaryDirectory() as d:
+            self._write(d, {
+                'version': 'test', 'type': 'Prediction',
+                'parameters': [], 'mode': [], 'pvalue': None, 'local_pvalues': {},
+            })
+            with self.assertRaises(ValueError):
+                eos.data.Mode(d)
+
+    def test_unknown_key(self):
+        "An unexpected key in the description is rejected rather than silently ignored."
+        with tempfile.TemporaryDirectory() as d:
+            self._write(d, {
+                'version': 'test', 'type': 'Mode',
+                'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
+                'mode': [0.5], 'pvalue': 0.25, 'local_pvalues': {}, 'bogus': 42,
+            })
+            with self.assertRaises(ValueError):
+                eos.data.Mode(d)
+
+    def test_missing_mode(self):
+        "A description missing the required 'mode' key is rejected."
+        with tempfile.TemporaryDirectory() as d:
+            self._write(d, {
+                'version': 'test', 'type': 'Mode',
+                'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
+                'pvalue': 0.25, 'local_pvalues': {},
+            })
+            with self.assertRaises(ValueError):
+                eos.data.Mode(d)
+
+    def test_non_mapping_description(self):
+        "A description.yaml that is not a top-level mapping is rejected."
+        with tempfile.TemporaryDirectory() as d:
+            with open(os.path.join(d, 'description.yaml'), 'w') as f:
+                yaml.safe_dump(['not', 'a', 'mapping'], f)
+            with self.assertRaises(RuntimeError):
+                eos.data.Mode(d)
 
 
 if __name__ == '__main__':
