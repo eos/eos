@@ -22,6 +22,10 @@ EXTRA_DIST = \
 	eos/parameter.py \
 	eos/reference.py \
 	eos/reporting.py \
+	eos/reporting_TEST.d \
+	eos/reporting_TEST.d/data/CKM/mode-default \
+	eos/reporting_TEST.d/data/CKM/samples \
+	eos/reporting_TEST.d/data/FF/samples \
 	eos/signal_pdf.py \
 	eos/tasks.py \
 	eos/tasks_TEST.py \
@@ -152,6 +156,7 @@ TESTS = \
 	eos/data/prediction_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
+	eos/reporting_TEST.py \
 	eos/figure/common_TEST.py \
 	eos/figure/data_TEST.py \
 	eos/figure/figure_TEST.py \

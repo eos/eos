@@ -1,0 +1,36 @@
+---
+{% for key, value in metadata.items() %}
+{{ key }}: {{ value }}
+{% endfor %}
+---
+# Report
+
+This analysis records {{ analysis | length }} posterior{{ 's' if analysis | length != 1 }}:
+{% for posterior in analysis %}
+`{{ posterior.name }}`{{ ',' if not loop.last else '.' }}
+{% endfor %}
+
+{% for posterior in analysis %}
+## Posterior `{{ posterior.name }}`
+
+### Goodness of fit
+
+{% if posterior.has_mode %}
+{% set mode = posterior.mode %}
+| Constraint | $\chi^2$ / d.o.f. | local $p$ value |
+|:-----------|:-----------------:|----------------:|
+{% for name, pvalue in mode.local_pvalues.items() %}
+| `{{ name }}` | | {{ '%.1f'|format(100 * pvalue) }}% |
+{% endfor %}
+| **total** | {% if mode.global_chi2 is not none %}${{ '%.2f'|format(mode.global_chi2) }}${% if mode.dof is not none %} / {{ mode.dof }}{% endif %}{% endif %} | **{{ '%.1f'|format(100 * mode.pvalue) }}%** |
+{% else %}
+No goodness-of-fit information has been recorded for this posterior.
+{% endif %}
+
+### Marginal posteriors
+
+{% if posterior.samples %}
+![Corner plot of the marginal posterior densities for posterior `{{ posterior.name }}`.]({{ corner_figure(posterior) }})
+{% endif %}
+
+{% endfor %}
