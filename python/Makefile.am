@@ -21,6 +21,7 @@ EXTRA_DIST = \
 	eos/observable.py \
 	eos/parameter.py \
 	eos/reference.py \
+	eos/reporting.py \
 	eos/signal_pdf.py \
 	eos/tasks.py \
 	eos/tasks_TEST.py \
@@ -85,6 +86,7 @@ eos_SCRIPTS = \
 	eos/observable.py \
 	eos/parameter.py \
 	eos/reference.py \
+	eos/reporting.py \
 	eos/signal_pdf.py \
 	eos/tasks.py \
 	eos/pyhf_likelihood.py
