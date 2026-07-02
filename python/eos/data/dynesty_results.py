@@ -1,4 +1,5 @@
 # Copyright (c) 2022-2023 Filip Novak
+# Copyright (c) 2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -13,11 +14,64 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+from dataclasses import dataclass, field, asdict
+from eos.data._common import ParameterDescription
+from eos.deserializable import Deserializable
+from eos.serializable import Serializable
+
+import copy as _copy
 import eos
 import os
 import numpy as _np
-import dynesty
-import yaml
+
+
+@dataclass(kw_only=True)
+class DynestyResultsDescription(Serializable, Deserializable):
+    r"""Schema of the ``description.yaml`` written for a :class:`DynestyResults` object.
+
+    This is the single source of truth for the metadata stored alongside a nested-sampling run, and it
+    backs both the read path (:meth:`from_yaml_file`) and the write path (:meth:`to_yaml_file`). The
+    ``type`` discriminator is validated on deserialization and is not part of the constructor.
+
+    :param version: The version of EOS that wrote the data object.
+    :type version: str
+    :param parameters: The descriptions of the varied parameters.
+    :type parameters: list[ParameterDescription]
+    """
+    version:str
+    parameters:list[ParameterDescription]
+    type:str = field(init=False, default='DynestyResults')
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        """Create a :class:`DynestyResultsDescription` from its on-disk keyword description.
+
+        Validates the ``type`` discriminator and deserializes each entry of ``parameters`` into a
+        :class:`ParameterDescription`.
+
+        :raises ValueError: If the description does not identify a dynesty-results object.
+        """
+        _kwargs = _copy.deepcopy(kwargs)
+
+        _type = _kwargs.pop('type', None)
+        if _type != 'DynestyResults':
+            raise ValueError(f'Expected a description of type \'DynestyResults\', got \'{_type}\'')
+
+        if 'parameters' in _kwargs:
+            _kwargs['parameters'] = [ParameterDescription.from_dict(**p) for p in _kwargs['parameters']]
+
+        return Deserializable.make(cls, **_kwargs)
+
+    def to_dict(self):
+        """Serialize this description into the on-disk mapping written to ``description.yaml``.
+
+        Emits the ``type`` discriminator, inverting :meth:`from_dict`.
+        """
+        return {
+            'version':    self.version,
+            'type':       self.type,
+            'parameters': [asdict(p) for p in self.parameters],
+        }
 
 
 class DynestyResults:
@@ -25,7 +79,8 @@ class DynestyResults:
 
     Wraps a :class:`dynesty.results.Results` object together with the descriptions of the varied
     parameters. Instances are created either by reading existing results from disk (passing their
-    ``path`` to the constructor) or by writing new results with :meth:`create`.
+    ``path`` to the constructor) or by writing new results with :meth:`create`. Reading requires the
+    optional dynesty module.
 
     :ivar type: The type identifier of the data object, always ``'DynestyResults'``.
     :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
@@ -44,24 +99,17 @@ class DynestyResults:
         if not os.path.exists(path) or not os.path.isdir(path):
             raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
-        f = os.path.join(path, 'description.yaml')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError(f'Description file {f} does not exist or is not a file')
+        description = DynestyResultsDescription.from_yaml_file(os.path.join(path, 'description.yaml'))
 
-        with open(f) as df:
-            description = yaml.load(df, Loader=yaml.SafeLoader)
-
-        if not description['type'] == 'DynestyResults':
-            raise RuntimeError(f'Path {path} not pointing to a DynestyResults file')
-
-        self.type = 'DynestyResults'
-        self.varied_parameters = description['parameters']
-        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
+        self.type = description.type
+        self.varied_parameters = [asdict(p) for p in description.parameters]
+        self.lookup_table = { p.name: idx for idx, p in enumerate(description.parameters) }
 
         f = os.path.join(path, 'dynesty_results.npy')
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError(f'Dynesty results file {f} does not exist or is not a file')
 
+        import dynesty
         res_dict = _np.load(f, allow_pickle=True).item()
         if "blob" in res_dict:
             res_dict.pop('blob')
@@ -81,18 +129,13 @@ class DynestyResults:
         :param results: The results of a nested sampling run.
         :type results: dynesty.results.Results
         """
-        description = {}
-        description['version'] = eos.__version__
-        description['type'] = 'DynestyResults'
-        description['parameters'] = [{
-            'name': p.name(),
-            'min': p.min(),
-            'max': p.max()
-        } for p in parameters]
+        description = DynestyResultsDescription(
+            version    = eos.__version__,
+            parameters = [ParameterDescription(name=p.name(), min=p.min(), max=p.max()) for p in parameters],
+        )
 
         os.makedirs(path, exist_ok=True)
-        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
-            yaml.dump(description, description_file, default_flow_style=False)
+        description.to_yaml_file(os.path.join(path, 'description.yaml'))
 
         res_dict = results.asdict()
         _np.save(os.path.join(path, 'dynesty_results.npy'), res_dict)
