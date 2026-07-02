@@ -709,17 +709,6 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
                                       samples, weights, posterior_values=posterior_values)
 
 
-def _get_modes(posterior:str, base_directory:str='./'):
-    result = []
-    search_path = os.path.join(base_directory, 'data', posterior, 'mode-*')
-
-    for mode_dir in glob.glob(search_path):
-        name = mode_dir.split('mode-')[1]
-        mode = eos.data.Mode(mode_dir)
-        result.append((name, mode))
-
-    return result
-
 def _get_references(analysis_file):
     all_references = eos.References()
     all_constraints = eos.Constraints()
@@ -772,6 +761,20 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
     if intermediate_ext not in ['.md']:
         raise ValueError(f'Intermediate file is expected to have an extension of \'.md\', but got \'{intermediate_ext}\'')
 
+    from eos.reporting import AnalysisData
+
+    # Lazy, disk-driven access to all recorded data below EOS_BASE_DIRECTORY/data/. Nothing is loaded
+    # until the template actually references a posterior's samples, modes, predictions, etc.
+    analysis = AnalysisData(base_directory=base_directory, analysis_file=analysis_file)
+
+    # Corner figures are drawn into a 'figures/' subdirectory next to the report and embedded through a
+    # path relative to the report, so that both pandoc and a reader of the intermediate file resolve it.
+    figures_directory = os.path.join(resource_directory, 'figures') if resource_directory else 'figures'
+
+    def corner_figure(posterior, **kwargs):
+        filename = posterior.corner_figure(output_directory=figures_directory, **kwargs)
+        return os.path.join('figures', filename)
+
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(searchpath='./'),
         undefined=jinja2.StrictUndefined, # error for undefined variables in
@@ -783,11 +786,9 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
         eos={ 'version': eos.__version__ },
         analysis_file=analysis_file,
         metadata=asdict(analysis_file._metadata),
-        analyses={posterior: analysis_file.analysis(posterior) for posterior in analysis_file.posteriors},
+        analysis=analysis,
         base_directory=base_directory,
-        len=len,
-        zip=zip,
-        modes=lambda posterior: _get_modes(posterior, base_directory=base_directory),
+        corner_figure=corner_figure,
         references=_get_references(analysis_file),
     )
 

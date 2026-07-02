@@ -5,27 +5,52 @@
 ---
 # Posteriors
 
-The analysis defines {{ analysis_file.posteriors | length }} posterior{{ 's' if analysis_file.posteriors | length > 1 }}:
-
-{% for name in analysis_file.posteriors %}
-- `{{ name }}`
+This analysis records {{ analysis | length }} posterior{{ 's' if analysis | length != 1 }}:
+{% for posterior in analysis %}
+`{{ posterior.name }}`{{ ',' if not loop.last else '.' }}
 {% endfor %}
 
-{% for name in analysis_file.posteriors %}
-## Posterior `{{ name }}`
+{% for posterior in analysis %}
+## Posterior `{{ posterior.name }}`
 
-This posterior involves {{ analyses[name].varied_parameters | length }} varied parameter{{ 's' if analyses[name].varied_parameters | length > 1 }}:
+{% if posterior.samples %}
+This posterior involves {{ posterior.samples.varied_parameters | length }} varied parameter{{ 's' if posterior.samples.varied_parameters | length != 1 }}:
 
-{% for parameter in analyses[name].varied_parameters %}
-- `{{ parameter.name() }}`
+{% if posterior.analysis %}
+{% for parameter in posterior.analysis.varied_parameters %}
+- `{{ parameter.name() }}`{{ (' (' ~ parameter.latex() ~ ')') if parameter.latex() else '' }}
 {% endfor %}
+{% else %}
+{% for parameter in posterior.samples.varied_parameters %}
+- `{{ parameter.name }}`
+{% endfor %}
+{% endif %}
+{% endif %}
+
+### Goodness of fit
+
+{% if posterior.has_mode %}
+{% set mode = posterior.mode %}
+The following table lists the local $p$ value for each constraint, as well as the overall $p$ value and total $\chi^2$ of the fit.
+
+| Constraint | $\chi^2$ / d.o.f. | local $p$ value |
+|:-----------|:-----------------:|----------------:|
+{% for name, pvalue in mode.local_pvalues.items() %}
+| `{{ name }}` | | {{ '%.1f'|format(100 * pvalue) }}% |
+{% endfor %}
+| **total** | {% if mode.global_chi2 is not none %}${{ '%.2f'|format(mode.global_chi2) }}${% if mode.dof is not none %} / {{ mode.dof }}{% endif %}{% endif %} | **{{ '%.1f'|format(100 * mode.pvalue) }}%** |
+{% else %}
+No mode information has been recorded for this posterior. Run the `find-mode` task to produce it.
+{% endif %}
+
+### Marginal posteriors
+
+{% if posterior.samples %}
+The following corner plot shows the 1D and 2D marginal posterior densities of the varied parameters:
+
+![Corner plot of the marginal posterior densities for posterior `{{ posterior.name }}`.]({{ corner_figure(posterior) }})
+{% else %}
+No importance samples have been recorded for this posterior. Run the `sample-nested` (or `sample-pmc`) task to produce them.
+{% endif %}
 
 {% endfor %}
-
-# Results
-
-The 2D marginal posterior density for the parameters $|V_{cb}|$ (named `CKM::abs(V_cb)`) and $f_+(0)$ (named `B->D::alpha^f+_0@BSZ2015`) is shown in the following figure:
-
-\lipsum
-
-![Contour plot of the 2D marginal posterior density obtained from this analysis, overlaid with a band indicating the PDG world average.](inference-data/fig-Vcb-v-fp0.pdf)
