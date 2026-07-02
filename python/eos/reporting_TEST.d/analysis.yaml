@@ -1,0 +1,26 @@
+metadata:
+  title: 'Reporting Test'
+  authors:
+    - name: 'Test Author'
+
+priors:
+  - name: params
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)',        min: 3.0e-3, max: 4.5e-3, type: 'uniform' }
+      - { parameter: 'B->pi::f_+(0)@BCL2008', min: 0.21,   max: 0.32,   type: 'uniform' }
+
+likelihoods:
+  - name: LH
+    constraints: []
+
+posteriors:
+  - name: CKM
+    prior:
+      - params
+    likelihood:
+      - LH
+  - name: FF
+    prior:
+      - params
+    likelihood:
+      - LH
