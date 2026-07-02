@@ -19,6 +19,7 @@ import eos
 import eos.data
 import numpy as np
 import os
+import scipy.stats
 import tempfile
 import yaml
 
@@ -41,6 +42,43 @@ class _Parameter:
         return self._max
 
 
+class _Entry:
+    "Minimal stand-in for a GoodnessOfFit test-statistic entry."
+
+    def __init__(self, chi2, dof):
+        self.chi2 = chi2
+        self.dof  = dof
+
+
+class _GoodnessOfFit:
+    "Minimal stand-in for eos.GoodnessOfFit, iterating as (name, entry) pairs."
+
+    def __init__(self, total_chi2, total_dof, entries):
+        self._total_chi2 = total_chi2
+        self._total_dof  = total_dof
+        self._entries    = entries
+
+    def total_chi_square(self):
+        return self._total_chi2
+
+    def total_degrees_of_freedom(self):
+        return self._total_dof
+
+    def __iter__(self):
+        return iter(self._entries)
+
+
+class _Analysis:
+    def __init__(self, varied_parameters):
+        self.varied_parameters = varied_parameters
+
+
+class _BestFitPoint:
+    def __init__(self, analysis, point):
+        self.analysis = analysis
+        self.point    = point
+
+
 class ModeTests(unittest.TestCase):
 
     _path = os.path.join(os.environ['SOURCE_DIR'], 'eos/data/mode_TEST.d')
@@ -57,17 +95,22 @@ class ModeTests(unittest.TestCase):
         with open(os.path.join(directory, 'description.yaml'), 'w') as f:
             yaml.safe_dump(description, f, default_flow_style=False)
 
-    def test_loading(self):
-        "Load a Mode from a prepared fixture and check its contents."
+    def test_loading_format1(self):
+        "Load a legacy (format-v1) Mode fixture and check that it is upgraded in memory."
         m = eos.data.Mode(self._path)
 
         self.assertEqual(m.type, 'Mode')
+        self.assertEqual(m.format_version, 1)
         self.assertEqual([p['name'] for p in m.varied_parameters], ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008'])
         self.assertEqual(m.mode, [3.67e-3, 0.27])
         self.assertAlmostEqual(m.pvalue, 0.25)
-        self.assertEqual(m.local_pvalues, {'B->pilnu::BR': 0.5})
         self.assertAlmostEqual(m.global_chi2, 12.0)
         self.assertAlmostEqual(m.dof, 5.0)
+        # the flat local_pvalues map is upgraded into test statistics (with no recorded value)
+        self.assertEqual(m.local_pvalues, {'B->pilnu::BR': 0.5})
+        self.assertEqual(m.test_statistics, [
+            {'name': 'B->pilnu::BR', 'type': 'chi^2', 'value': None, 'local_pvalue': 0.5},
+        ])
 
     def test_invalid_path(self):
         "Loading from a non-existent path raises an error."
@@ -75,52 +118,71 @@ class ModeTests(unittest.TestCase):
             eos.data.Mode(os.path.join(self._path, 'does-not-exist'))
 
     def test_roundtrip(self):
-        "A mode written by create() reads back identically (write/read symmetry)."
+        "A mode written by create() reads back identically as format 2 (write/read symmetry)."
+        test_statistics = [
+            {'name': 'B->pilnu::BR',    'type': 'chi^2', 'value': 3.50, 'local_pvalue': 0.06},
+            {'name': 'B->Dlnu::R_D',    'type': 'chi^2', 'value': 1.20, 'local_pvalue': 0.27},
+        ]
         with tempfile.TemporaryDirectory() as d:
             path = os.path.join(d, 'mode-default')
-            eos.data.Mode.create(
-                path, self._parameters, np.array([3.67e-3, 0.27]),
-                0.25, {'B->pilnu::BR': 0.5}, 12.0, 5.0
-            )
+            eos.data.Mode.create(path, self._parameters, np.array([3.67e-3, 0.27]), 0.25, test_statistics, 12.0, 5.0)
 
             m = eos.data.Mode(path)
             self.assertEqual(m.type, 'Mode')
+            self.assertEqual(m.format_version, 2)
             self.assertEqual([p['name'] for p in m.varied_parameters], ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008'])
             self.assertEqual(m.mode, [3.67e-3, 0.27])
             self.assertAlmostEqual(m.pvalue, 0.25)
-            self.assertEqual(m.local_pvalues, {'B->pilnu::BR': 0.5})
             self.assertAlmostEqual(m.global_chi2, 12.0)
             self.assertAlmostEqual(m.dof, 5.0)
+            self.assertEqual(m.test_statistics, test_statistics)
+            self.assertEqual(m.local_pvalues, {'B->pilnu::BR': 0.06, 'B->Dlnu::R_D': 0.27})
 
     def test_roundtrip_none_pvalue(self):
-        "A mode created with pvalue None reads back as None."
+        "A mode created with pvalue None and no test statistics reads back accordingly."
         with tempfile.TemporaryDirectory() as d:
             path = os.path.join(d, 'mode-default')
-            eos.data.Mode.create(path, self._parameters, np.array([3.67e-3, 0.27]), None, {}, None, None)
+            eos.data.Mode.create(path, self._parameters, np.array([3.67e-3, 0.27]), None, [], None, None)
 
             m = eos.data.Mode(path)
             self.assertIsNone(m.pvalue)
             self.assertIsNone(m.global_chi2)
             self.assertIsNone(m.dof)
+            self.assertEqual(m.test_statistics, [])
+            self.assertEqual(m.local_pvalues, {})
 
-    def test_optional_keys_absent(self):
-        "An older description without global_chi2/dof loads with those attributes set to None."
+    def test_from_bfp_and_gof(self):
+        "from_bfp_and_gof derives the mode, chi2/dof and p-values, then stores them."
+        bfp = _BestFitPoint(_Analysis(self._parameters), np.array([3.67e-3, 0.27]))
+        gof = _GoodnessOfFit(2.0, 3, [
+            ('B->pilnu::BR', _Entry(1.0, 2)),
+            ('B->Dlnu::R_D', _Entry(1.0, 1)),
+        ])
+
         with tempfile.TemporaryDirectory() as d:
-            self._write(d, {
-                'version': 'test', 'type': 'Mode',
-                'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
-                'mode': [0.5], 'pvalue': 0.25, 'local_pvalues': {},
-            })
-            m = eos.data.Mode(d)
-            self.assertIsNone(m.global_chi2)
-            self.assertIsNone(m.dof)
+            path = os.path.join(d, 'mode-default')
+            eos.data.Mode.from_bfp_and_gof(path, bfp, gof)
+
+            m = eos.data.Mode(path)
+            self.assertEqual(m.format_version, 2)
+            self.assertEqual([p['name'] for p in m.varied_parameters], ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008'])
+            self.assertEqual(m.mode, [3.67e-3, 0.27])
+            self.assertAlmostEqual(m.global_chi2, 2.0)
+            self.assertEqual(m.dof, 3)
+            self.assertAlmostEqual(m.pvalue, float(1.0 - scipy.stats.chi2(3).cdf(2.0)))
+
+            self.assertEqual([t['name']  for t in m.test_statistics], ['B->pilnu::BR', 'B->Dlnu::R_D'])
+            self.assertEqual([t['type']  for t in m.test_statistics], ['chi^2', 'chi^2'])
+            self.assertEqual([t['value'] for t in m.test_statistics], [1.0, 1.0])
+            self.assertAlmostEqual(m.local_pvalues['B->pilnu::BR'], float(1.0 - scipy.stats.chi2(2).cdf(1.0)))
+            self.assertAlmostEqual(m.local_pvalues['B->Dlnu::R_D'], float(1.0 - scipy.stats.chi2(1).cdf(1.0)))
 
     def test_wrong_type(self):
         "A description whose type is not 'Mode' is rejected."
         with tempfile.TemporaryDirectory() as d:
             self._write(d, {
-                'version': 'test', 'type': 'Prediction',
-                'parameters': [], 'mode': [], 'pvalue': None, 'local_pvalues': {},
+                'version': 'test', 'type': 'Prediction', 'format_version': 2,
+                'parameters': [], 'mode': [], 'pvalue': None, 'test_statistics': [],
             })
             with self.assertRaises(ValueError):
                 eos.data.Mode(d)
@@ -129,20 +191,31 @@ class ModeTests(unittest.TestCase):
         "An unexpected key in the description is rejected rather than silently ignored."
         with tempfile.TemporaryDirectory() as d:
             self._write(d, {
-                'version': 'test', 'type': 'Mode',
+                'version': 'test', 'type': 'Mode', 'format_version': 2,
                 'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
-                'mode': [0.5], 'pvalue': 0.25, 'local_pvalues': {}, 'bogus': 42,
+                'mode': [0.5], 'pvalue': 0.25, 'test_statistics': [], 'bogus': 42,
             })
             with self.assertRaises(ValueError):
                 eos.data.Mode(d)
 
     def test_missing_mode(self):
-        "A description missing the required 'mode' key is rejected."
+        "A format-2 description missing the required 'mode' key is rejected."
         with tempfile.TemporaryDirectory() as d:
             self._write(d, {
-                'version': 'test', 'type': 'Mode',
+                'version': 'test', 'type': 'Mode', 'format_version': 2,
                 'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
-                'pvalue': 0.25, 'local_pvalues': {},
+                'pvalue': 0.25, 'test_statistics': [],
+            })
+            with self.assertRaises(ValueError):
+                eos.data.Mode(d)
+
+    def test_format1_missing_local_pvalues(self):
+        "A format-1 description without the required 'local_pvalues' map is rejected."
+        with tempfile.TemporaryDirectory() as d:
+            self._write(d, {
+                'version': 'test', 'type': 'Mode', 'format_version': 1,
+                'parameters': [{'name': 'a', 'min': 0.0, 'max': 1.0}],
+                'mode': [0.5], 'pvalue': 0.25,
             })
             with self.assertRaises(ValueError):
                 eos.data.Mode(d)
