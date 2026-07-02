@@ -1,5 +1,5 @@
-# Copyright (c) 2022-2025 Danny van Dyk
-# Copyright (c) 2023 Méril Reboud
+# Copyright (c) 2022-2026 Danny van Dyk
+# Copyright (c) 2021-2024 Méril Reboud
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -14,10 +14,64 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+from dataclasses import dataclass, field, asdict
+from eos.data._common import ParameterDescription, load_array
+from eos.deserializable import Deserializable
+from eos.serializable import Serializable
+
+import copy as _copy
 import eos
 import os
 import numpy as _np
-import yaml
+
+
+@dataclass(kw_only=True)
+class ImportanceSamplesDescription(Serializable, Deserializable):
+    r"""Schema of the ``description.yaml`` written for an :class:`ImportanceSamples` object.
+
+    This is the single source of truth for the metadata stored alongside a set of importance samples,
+    and it backs both the read path (:meth:`from_yaml_file`) and the write path (:meth:`to_yaml_file`).
+    The ``type`` discriminator is validated on deserialization and is not part of the constructor.
+
+    :param version: The version of EOS that wrote the data object.
+    :type version: str
+    :param parameters: The descriptions of the varied parameters.
+    :type parameters: list[ParameterDescription]
+    """
+    version:str
+    parameters:list[ParameterDescription]
+    type:str = field(init=False, default='ImportanceSamples')
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        """Create an :class:`ImportanceSamplesDescription` from its on-disk keyword description.
+
+        Validates the ``type`` discriminator and deserializes each entry of ``parameters`` into a
+        :class:`ParameterDescription`.
+
+        :raises ValueError: If the description does not identify an importance-samples object.
+        """
+        _kwargs = _copy.deepcopy(kwargs)
+
+        _type = _kwargs.pop('type', None)
+        if _type != 'ImportanceSamples':
+            raise ValueError(f'Expected a description of type \'ImportanceSamples\', got \'{_type}\'')
+
+        if 'parameters' in _kwargs:
+            _kwargs['parameters'] = [ParameterDescription.from_dict(**p) for p in _kwargs['parameters']]
+
+        return Deserializable.make(cls, **_kwargs)
+
+    def to_dict(self):
+        """Serialize this description into the on-disk mapping written to ``description.yaml``.
+
+        Emits the ``type`` discriminator, inverting :meth:`from_dict`.
+        """
+        return {
+            'version':    self.version,
+            'type':       self.type,
+            'parameters': [asdict(p) for p in self.parameters],
+        }
 
 
 class ImportanceSamples:
@@ -44,35 +98,21 @@ class ImportanceSamples:
         if not os.path.exists(path) or not os.path.isdir(path):
             raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
-        f = os.path.join(path, 'description.yaml')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError(f'Description file {f} does not exist or is not a file')
+        description = ImportanceSamplesDescription.from_yaml_file(os.path.join(path, 'description.yaml'))
 
-        with open(f) as df:
-            description = yaml.load(df, Loader=yaml.SafeLoader)
+        self.type = description.type
+        self.varied_parameters = [asdict(p) for p in description.parameters]
+        self.lookup_table = { p.name: idx for idx, p in enumerate(description.parameters) }
 
-        if not description['type'] == 'ImportanceSamples':
-            raise RuntimeError(f'Path {path} not pointing to an ImportanceSamples object')
+        ncols = len(description.parameters)
+        self.samples = load_array(path, 'samples.npy', ncols=ncols)
+        self.weights = load_array(path, 'weights.npy', nrows=self.samples.shape[0])
 
-        self.type = 'ImportanceSamples'
-        self.varied_parameters = description['parameters']
-        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
-
-        f = os.path.join(path, 'samples.npy')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError(f'Samples file {f} does not exist or is not a file')
-        self.samples = _np.load(f)
-
-        f = os.path.join(path, 'weights.npy')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError(f'Weights file {f} does not exist or is not a file')
-        self.weights = _np.load(f)
-
-        f = os.path.join(path, 'posterior_values.npy')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            self.posterior_values = None
+        # posterior_values are optional and detected by the presence of their file
+        if os.path.isfile(os.path.join(path, 'posterior_values.npy')):
+            self.posterior_values = load_array(path, 'posterior_values.npy', nrows=self.samples.shape[0])
         else:
-            self.posterior_values = _np.load(f)
+            self.posterior_values = None
 
 
     @staticmethod
@@ -88,15 +128,6 @@ class ImportanceSamples:
         :param weights: Weights on a linear scale as a 1D array of shape (N, ).
         :type weights: 1D numpy array, optional
         """
-        description = {}
-        description['version'] = eos.__version__
-        description['type'] = 'ImportanceSamples'
-        description['parameters'] = [{
-            'name': p.name(),
-            'min': p.min() if 'min' in dir(p) else -_np.inf,
-            'max': p.max() if 'max' in dir(p) else +_np.inf
-        } for p in parameters]
-
         if not samples.shape[1] == len(parameters):
             raise RuntimeError(f'Shape of samples {samples.shape} incompatible with number of parameters {len(parameters)}')
 
@@ -106,9 +137,17 @@ class ImportanceSamples:
         if not posterior_values is None and not samples.shape[0] == posterior_values.shape[0]:
             raise RuntimeError(f'Shape of posterior values {posterior_values.shape} incompatible with shape of samples {samples.shape}')
 
+        description = ImportanceSamplesDescription(
+            version    = eos.__version__,
+            parameters = [ParameterDescription(
+                name = p.name(),
+                min  = p.min() if 'min' in dir(p) else -_np.inf,
+                max  = p.max() if 'max' in dir(p) else +_np.inf,
+            ) for p in parameters],
+        )
+
         os.makedirs(path, exist_ok=True)
-        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
-            yaml.dump(description, description_file, default_flow_style=False)
+        description.to_yaml_file(os.path.join(path, 'description.yaml'))
         _np.save(os.path.join(path, 'samples.npy'), samples)
         _np.save(os.path.join(path, 'weights.npy'), weights)
         if not posterior_values is None:
