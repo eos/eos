@@ -200,3 +200,71 @@ class PosteriorData:
         figure.draw(context=AnalysisFileContext(base_directory=self.base_directory), output=output)
 
         return filename
+
+
+class AnalysisData:
+    r"""Provides lazy, disk-driven access to all data recorded below ``EOS_BASE_DIRECTORY/data/``.
+
+    An instance is the single entry point exposed to the Jinja2-based reporting framework. Its
+    :attr:`posteriors` are discovered by scanning the ``data/`` directory for subdirectories; each
+    such directory is exposed as a :class:`PosteriorData`. The scan itself reads no data files -- each
+    :class:`PosteriorData` loads its own contents lazily on first access -- so a report only ever reads
+    what it references.
+
+    The container is dict-like: iterating over it yields the :class:`PosteriorData` instances, ``len``
+    reports their number, and indexing/containment tests operate on posterior names.
+
+    :ivar base_directory: The base directory below which the ``data/`` tree is located.
+
+    :param base_directory: The base directory for the storage of data files. Defaults to ``'./'``.
+    :type base_directory: str, optional
+    :param analysis_file: The analysis file that describes the posteriors. Optional; when provided it
+        is forwarded to each :class:`PosteriorData` so that descriptions and analyses become available.
+    :type analysis_file: eos.AnalysisFile, optional
+    """
+
+    def __init__(self, base_directory:str='./', analysis_file=None):
+        self.base_directory = base_directory
+        self._analysis_file = analysis_file
+        self._data_directory = _os.path.join(base_directory, 'data')
+
+    def __repr__(self):
+        return f'AnalysisData(base_directory={self.base_directory!r}, posteriors={self.names!r})'
+
+    @cached_property
+    def posteriors(self):
+        """The recorded posteriors, keyed by name and discovered from the ``data/`` directory.
+
+        Every immediate subdirectory of ``data/`` is treated as a posterior and exposed as a
+        :class:`PosteriorData`. Returns an empty mapping if ``data/`` does not exist.
+
+        :rtype: dict[str, PosteriorData]
+        """
+        result = {}
+        if not _os.path.isdir(self._data_directory):
+            return result
+        for entry in sorted(_os.listdir(self._data_directory)):
+            if not _os.path.isdir(_os.path.join(self._data_directory, entry)):
+                continue
+            result[entry] = PosteriorData(entry, base_directory=self.base_directory, analysis_file=self._analysis_file)
+        return result
+
+    @property
+    def names(self):
+        """The names of the recorded posteriors, in sorted order.
+
+        :rtype: list[str]
+        """
+        return list(self.posteriors.keys())
+
+    def __iter__(self):
+        return iter(self.posteriors.values())
+
+    def __len__(self):
+        return len(self.posteriors)
+
+    def __getitem__(self, name):
+        return self.posteriors[name]
+
+    def __contains__(self, name):
+        return name in self.posteriors
