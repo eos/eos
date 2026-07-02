@@ -28,6 +28,7 @@
 - Use ``qnp::OptionValue`` keys in the the factory method ``Model::make`` (D. van Dyk)
 - Use ``std::filesystem`` in lieu of ``boost::filesystem`` (D. van Dyk)
 - Use ``std::format`` in lieu of ``boost::format`` when templating parameters (D. van Dyk)
+- Change the interface for generating reports: report templates now access the recorded results through a single, lazily-loaded ``eos.reporting.AnalysisData`` object (iterating over the posteriors and, on demand, their importance samples, modes and goodness of fit, and predictions) together with a ``corner_figure`` helper, in lieu of the previous ``analyses``, ``modes``, ``len``, and ``zip`` template variables (D. van Dyk)
 
 ### Added
 
@@ -69,6 +70,8 @@
 - Add a ``point`` plot item that draws a single marker at a fixed position (D. van Dyk)
 - Add a ``contours2D`` plot item that draws 2D probability contours from a histogram of pre-existing samples (D. van Dyk)
 - Add a ``scaling_factor`` field to the ``xticks`` and ``yticks`` of a plot to rescale the displayed tick values (D. van Dyk)
+- Add the ``eos.reporting`` module with the ``AnalysisData``, ``PosteriorData``, and ``GoodnessOfFit`` classes, providing lazy, disk-driven access to the recorded results of an analysis for use in report templates (D. van Dyk)
+- Extend the ``inference`` example to find the best-fit point via a ``find-mode`` step and to report the goodness of fit (as a per-constraint table) and a corner figure for each posterior (D. van Dyk)
 
 ### Deprecated
 
