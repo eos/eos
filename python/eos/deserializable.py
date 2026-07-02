@@ -1,4 +1,4 @@
-# Copyright (c) 2024 Danny van Dyk
+# Copyright (c) 2024-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,8 @@ class Deserializable:
     @classmethod
     def from_yaml(cls, yaml_data:str):
         kwargs = _yaml.safe_load(yaml_data)
+        if not isinstance(kwargs, dict):
+            raise ValueError('The provided YAML data does not describe a mapping')
         return cls.from_dict(**kwargs)
 
     @staticmethod
