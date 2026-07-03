@@ -1,4 +1,4 @@
-# Copyright (c) 2021-2022 Danny van Dyk
+# Copyright (c) 2021-2026 Danny van Dyk
 # Copyright (c) 2021-2024 Méril Reboud
 #
 # This file is part of the EOS project. EOS is free software;
@@ -14,11 +14,107 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+from dataclasses import dataclass, field, asdict
+from eos.data._common import GaussianComponentDescription, ParameterDescription
+from eos.deserializable import Deserializable
+from eos.serializable import Serializable
+
+import copy as _copy
 import eos
 import os
 import numpy as _np
-import yaml
 from scipy.special import erf
+
+
+@dataclass(kw_only=True)
+class ProposalDescription(Serializable, Deserializable):
+    r"""Describes the Gaussian-mixture proposal density of a :class:`PMCSampler`.
+
+    :param components: The Gaussian components of the proposal mixture.
+    :type components: list[GaussianComponentDescription]
+    :param weights: The component weights of the proposal mixture.
+    :type weights: list
+    """
+    components:list[GaussianComponentDescription]
+    weights:list
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        """Create a :class:`ProposalDescription`, deserializing its Gaussian components."""
+        _kwargs = _copy.deepcopy(kwargs)
+        if 'components' in _kwargs:
+            _kwargs['components'] = [GaussianComponentDescription.from_dict(**c) for c in _kwargs['components']]
+        return Deserializable.make(cls, **_kwargs)
+
+
+@dataclass(kw_only=True)
+class PMCSamplerDescription(Serializable, Deserializable):
+    r"""Schema of the ``description.yaml`` written for a :class:`PMCSampler`.
+
+    This is the single source of truth for the metadata stored alongside a PMC proposal, and it backs
+    both the read path (:meth:`from_yaml_file`) and the write path (:meth:`to_yaml_file`). The ``type``
+    discriminator is validated on deserialization and is not part of the constructor.
+
+    The test statistics are written under the ``test_statistics`` key. For backward compatibility the
+    legacy misspelled key ``'test statistics'`` (with a space) is also accepted on deserialization
+    (with a warning), since older files were written with it.
+
+    :param version: The version of EOS that wrote the data object.
+    :type version: str
+    :param parameters: The descriptions of the varied parameters.
+    :type parameters: list[ParameterDescription]
+    :param proposal: The Gaussian-mixture proposal density.
+    :type proposal: ProposalDescription
+    :param test_statistics: The precomputed test statistics.
+    :type test_statistics: dict
+    """
+    version:str
+    parameters:list[ParameterDescription]
+    proposal:ProposalDescription
+    test_statistics:dict = field(default_factory=lambda: {'sigma': [], 'densities': []})
+    type:str = field(init=False, default='PMCSampler')
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        """Create a :class:`PMCSamplerDescription` from its on-disk keyword description.
+
+        Validates the ``type`` discriminator, deserializes the parameters and the proposal, and
+        normalizes the legacy ``'test statistics'`` key to ``test_statistics``.
+
+        :raises ValueError: If the description does not identify a PMC sampler.
+        """
+        _kwargs = _copy.deepcopy(kwargs)
+
+        _type = _kwargs.pop('type', None)
+        if _type != 'PMCSampler':
+            raise ValueError(f'Expected a description of type \'PMCSampler\', got \'{_type}\'')
+
+        if 'test statistics' in _kwargs:
+            eos.warn('The \'test statistics\' key is deprecated; it will be written as \'test_statistics\' when this data set is re-saved')
+            legacy = _kwargs.pop('test statistics')
+            _kwargs.setdefault('test_statistics', legacy)
+
+        if 'parameters' in _kwargs:
+            _kwargs['parameters'] = [ParameterDescription.from_dict(**p) for p in _kwargs['parameters']]
+
+        if 'proposal' in _kwargs:
+            _kwargs['proposal'] = ProposalDescription.from_dict(**_kwargs['proposal'])
+
+        return Deserializable.make(cls, **_kwargs)
+
+    def to_dict(self):
+        """Serialize this description into the on-disk mapping written to ``description.yaml``.
+
+        Emits the ``type`` discriminator and the (normalized) ``test_statistics`` key, inverting
+        :meth:`from_dict`.
+        """
+        return {
+            'version':         self.version,
+            'type':            self.type,
+            'parameters':      [asdict(p) for p in self.parameters],
+            'proposal':        self.proposal.to_dict(),
+            'test_statistics': self.test_statistics,
+        }
 
 
 class PMCSampler:
@@ -35,6 +131,7 @@ class PMCSampler:
     :ivar lookup_table: A mapping from each parameter name to its index in :attr:`varied_parameters`.
     :ivar components: The Gaussian components of the proposal mixture.
     :ivar component_weights: The weights of the proposal mixture components.
+    :ivar test_statistics: The precomputed test statistics.
     """
 
     def __init__(self, path):
@@ -46,25 +143,19 @@ class PMCSampler:
         if not os.path.exists(path) or not os.path.isdir(path):
             raise RuntimeError(f'Path {path} does not exist or is not a directory')
 
-        f = os.path.join(path, 'description.yaml')
-        if not os.path.exists(f) or not os.path.isfile(f):
-            raise RuntimeError(f'Description file {f} does not exist or is not a file')
-
-        with open(f) as df:
-            description = yaml.load(df, Loader=yaml.SafeLoader)
-
-        if not description['type'] == 'PMCSampler':
-            raise RuntimeError(f'Path {path} not pointing to a PMCSampler')
+        description = PMCSamplerDescription.from_yaml_file(os.path.join(path, 'description.yaml'))
 
         try:
             import pypmc
         except ImportError as e:
             raise ImportError('eos.data.PMCSampler requires the PyPMC python module, which can be installed from PyPI.') from e
-        self.type = 'PMCSampler'
-        self.varied_parameters = description['parameters']
-        self.lookup_table = { item['name']: idx for idx, item in enumerate(self.varied_parameters) }
-        self.components        = _np.array([pypmc.density.gauss.Gauss(_np.array(c['mu']), _np.array(c['sigma'])) for c in description['proposal']['components']])
-        self.component_weights = _np.array(description['proposal']['weights'])
+
+        self.type = description.type
+        self.varied_parameters = [asdict(p) for p in description.parameters]
+        self.lookup_table = { p.name: idx for idx, p in enumerate(description.parameters) }
+        self.components        = _np.array([pypmc.density.gauss.Gauss(_np.array(c.mu), _np.array(c.sigma)) for c in description.proposal.components])
+        self.component_weights = _np.array(description.proposal.weights)
+        self.test_statistics   = description.test_statistics
 
 
     def density(self):
@@ -115,26 +206,17 @@ class PMCSampler:
         :param weights: Weights on a linear scale as a 1D array of shape (N, ). Needed to generate the test statistic.
         :type weights: 1D numpy array, optional
         """
-        description = {}
-        description['version'] = eos.__version__
-        description['type'] = 'PMCSampler'
-        description['parameters'] = [{
-            'name': p.name(),
-            'min': p.min(),
-            'max': p.max()
-        } for p in parameters]
-
         # Don't write components that have a 0 weight
         purged_components = []
         purged_weights = []
         for comp, w in zip(proposal.components, proposal.weights.tolist()):
             if w != 0:
-                purged_components.append({ 'mu': comp.mu.tolist(), 'sigma': comp.sigma.tolist() })
+                purged_components.append(GaussianComponentDescription(mu=comp.mu.tolist(), sigma=comp.sigma.tolist()))
                 purged_weights.append(w)
-        description['proposal'] = { 'components': purged_components, 'weights': purged_weights }
+        proposal_description = ProposalDescription(components=purged_components, weights=purged_weights)
 
-        # The test statistics defaults to two empty lists
-        description['test statistics'] = { "sigma": [], "densities": [] }
+        # The test statistics default to two empty lists
+        test_statistics = { "sigma": [], "densities": [] }
         if sigma_test_stat is not None and samples is not None and weights is not None:
             sigma_test_stat = _np.array(sigma_test_stat)
             samplesPDF = list(map(lambda x: -2.0 * _np.log(PMCSampler._evaluate_mixture_pdf(proposal, x)), samples))
@@ -145,11 +227,17 @@ class PMCSampler:
             percents = erf(sigma_test_stat/_np.sqrt(2))
             weighted_percentile = _np.interp(percents, cumulant, sorted_samplesPDF)
 
-            description['test statistics'] = {
+            test_statistics = {
                 "sigma": sigma_test_stat.tolist(),
                 "densities": weighted_percentile.tolist()
             }
 
+        description = PMCSamplerDescription(
+            version         = eos.__version__,
+            parameters      = [ParameterDescription(name=p.name(), min=p.min(), max=p.max()) for p in parameters],
+            proposal        = proposal_description,
+            test_statistics = test_statistics,
+        )
+
         os.makedirs(path, exist_ok=True)
-        with open(os.path.join(path, 'description.yaml'), 'w') as description_file:
-            yaml.dump(description, description_file, default_flow_style=False)
+        description.to_yaml_file(os.path.join(path, 'description.yaml'))

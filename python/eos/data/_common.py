@@ -37,6 +37,23 @@ class ParameterDescription(Serializable, Deserializable):
     max:float = field(default=+_np.inf)
 
 
+@dataclass(kw_only=True)
+class GaussianComponentDescription(Serializable, Deserializable):
+    r"""Describes a single Gaussian component of a mixture density.
+
+    Shared by :class:`eos.data.MixtureDensity` and :class:`eos.data.PMCSampler`. The ``type: 'gauss'``
+    discriminator that :class:`MixtureDensity` stores on disk is handled by that class; this schema
+    holds only the mean vector and covariance matrix.
+
+    :param mu: The mean vector as a 1D list of floats.
+    :type mu: list
+    :param sigma: The covariance matrix as a 2D list of floats.
+    :type sigma: list
+    """
+    mu:list
+    sigma:list
+
+
 def load_array(directory:str, filename:str, *, ncols:int=None, nrows:int=None):
     r"""Load a NumPy array stored beside a data object's description and validate its shape.
 
