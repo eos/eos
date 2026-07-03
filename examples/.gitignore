@@ -1,0 +1,13 @@
+# ignore generated Jupyter notebooks
+*.nbconvert.ipynb
+
+# ignore generated data directories and other artifacts
+predictions-data/
+inference-data/
+inference.md
+inference.pdf
+simulation-data/
+
+# ignore generated miscellaneous files
+log
+*.log
