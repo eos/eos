@@ -583,7 +583,7 @@ BOOST_PYTHON_MODULE(_eos)
     )",
                             init<const Parameters &>())
             .def("__iter__", range(&ObservableCache::begin, &ObservableCache::end))
-            .def("__getitem__", &ObservableCache::operator[], R"(
+            .def("__getitem__", (double(ObservableCache::*)(const ObservableCache::ObservableId &) const) & ObservableCache::operator[], R"(
             Access the cached value of an observable.
 
             :param handle: The handle of the observable.

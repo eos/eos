@@ -27,6 +27,9 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/strong-typedef.hh>
 
+#include <span>
+#include <vector>
+
 namespace eos
 {
     class ObservableCache : public PrivateImplementationPattern<ObservableCache>
@@ -62,6 +65,32 @@ namespace eos
              */
             ObservableId add(const ObservablePtr & observable);
 
+            struct BatchIdTag;
+
+            /*!
+             * A BatchId identifies a batch of computations added to the cache via add_batch().
+             *
+             * In contrast to an ObservableId, which addresses a single prediction, a BatchId
+             * addresses a contiguous block of predictions, one per observable in the batch.
+             */
+            class BatchId : public StrongTypedef<unsigned, ObservableCache::BatchIdTag>
+            {
+                public:
+                    using StrongTypedef::StrongTypedef;
+            };
+
+            /*!
+             * Add a batch of computations to the cache and return its unique BatchId.
+             *
+             * The observables of a batch are evaluated into a contiguous, pre-allocated block of
+             * memory upon update(). Different batches may be evaluated in parallel; the computations
+             * within a single batch are partitioned across the available threads. The results are
+             * retrieved as a contiguous span via operator[](const BatchId &).
+             *
+             * @param computations The observables which shall be added to the cache as a single batch.
+             */
+            BatchId add_batch(std::vector<ObservablePtr> && computations);
+
             /// Update the predictions for all observables.
             void update();
 
@@ -81,6 +110,13 @@ namespace eos
              * @param id The unique ObservableCache::ObservableId whose associated observable's prediction shall be retrieved.
              */
             double operator[] (const ObservableCache::ObservableId & id) const;
+
+            /*!
+             * Retrieve the predictions for a given batch of computations from the cache.
+             *
+             * @param id The unique ObservableCache::BatchId whose associated batch's predictions shall be retrieved.
+             */
+            std::span<const double> operator[] (const ObservableCache::BatchId & id) const;
 
             /// Retrieve the number of independent predictions from the cache.
             unsigned size() const;
