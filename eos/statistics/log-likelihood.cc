@@ -34,6 +34,7 @@
 #include <format>
 #include <limits>
 #include <map>
+#include <span>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
@@ -1194,7 +1195,9 @@ namespace eos
             std::vector<Kinematics> kinematics_data;
             Options options;
 
-            std::vector<SignalPDFPtr> signal_pdfs;
+            // The unnormalized signal PDF values on the grid are evaluated by the ObservableCache as a
+            // single batch; batch_id addresses the contiguous block of grid predictions.
+            ObservableCache::BatchId batch_id;
             std::vector<double> resolution_data;
 
             // The events that were actually observed, expressed as kinematic variables.
@@ -1242,9 +1245,17 @@ namespace eos
                 resolution_dft(dft::impl::frequency_dimensions<rank_>(dimensions)),
                 _number_of_observations(observations.size())
             {
-                signal_pdfs.reserve(kinematics.size());
+                // Build the signal PDF at each grid point and register its unnormalized PDF observable
+                // with the cache as a single batch. The SignalPDF objects themselves need not be kept:
+                // each unnormalized_pdf() is a shared_ptr that keeps the underlying observable alive.
+                std::vector<ObservablePtr> unnormalized_pdfs;
+                unnormalized_pdfs.reserve(kinematics.size());
                 for (const auto & k : kinematics)
-                    signal_pdfs.push_back(SignalPDF::make(pdf_name, cache.parameters(), k, options));
+                {
+                    SignalPDFPtr signal_pdf = SignalPDF::make(pdf_name, cache.parameters(), k, options);
+                    unnormalized_pdfs.push_back(signal_pdf->unnormalized_pdf());
+                }
+                batch_id = this->cache.add_batch(std::move(unnormalized_pdfs));
 
                 // Pre-compute the DFT of the resolution function.
                 std::copy(resolution.begin(), resolution.end(),
@@ -1342,18 +1353,20 @@ namespace eos
 
             virtual std::string as_string() const
             {
-                return std::format("Unbinned<{}>: {} events on a grid of {} points", rank_, observations_data.size(), signal_pdfs.size());
+                return std::format("Unbinned<{}>: {} events on a grid of {} points", rank_, observations_data.size(), kinematics_data.size());
             }
 
             virtual double evaluate() const
             {
-                // Evaluate all signal PDFs on the linear scale and fill the time-domain container. The convolution
-                // with the resolution function operates on the linear density; non-positive values are clamped to
-                // zero by evaluate_linear().
+                // Read the unnormalized signal PDF values off the grid (evaluated by the cache as a batch)
+                // and fill the time-domain container. The convolution with the resolution function operates
+                // on the linear density; non-positive values are clamped to zero here, reproducing the
+                // clamping that SignalPDF::evaluate_linear() would otherwise apply.
+                const std::span<const double> grid = cache[batch_id];
                 double * time_data = forward_plan.time_domain_container().data();
-                for (std::size_t i = 0 ; i < signal_pdfs.size() ; ++i)
+                for (std::size_t i = 0 ; i < grid.size() ; ++i)
                 {
-                    time_data[i] = signal_pdfs[i]->evaluate_linear();
+                    time_data[i] = std::max(0.0, grid[i]);
                 }
 
                 // Forward DFT of the signal values.
@@ -1377,7 +1390,7 @@ namespace eos
                 // circular convolution; we divide by N below.
                 backward_plan.transform();
 
-                const double norm = 1.0 / static_cast<double>(signal_pdfs.size());
+                const double norm = 1.0 / static_cast<double>(grid.size());
                 const double * result = backward_plan.time_domain_container().data();
 
                 // The backward DFT yields the resolution-convolved PDF sampled on the grid points. The likelihood,

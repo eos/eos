@@ -965,6 +965,10 @@ namespace eos
 
                 auto block = LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, resolution, observations);
 
+                // The block reads the unnormalized PDF values off the grid from the cache, so the cache
+                // must be updated before evaluation (as LogLikelihood::operator()() does in production).
+                cache.update();
+
                 // The block convolves the PDF with the resolution and sums the logarithm of the smeared
                 // density evaluated at each observation; this must reproduce the reference values.
                 TEST_CHECK_NEARLY_EQUAL(block->evaluate(), expected, 1.0e-6);
