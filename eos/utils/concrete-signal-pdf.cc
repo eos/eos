@@ -81,6 +81,12 @@ namespace eos
         return -std::numeric_limits<double>::infinity();
     }
 
+    ObservablePtr
+    ConcreteSignalPDF::unnormalized_pdf() const
+    {
+        return _unnormalized_pdf;
+    }
+
     Parameters
     ConcreteSignalPDF::parameters()
     {

@@ -20,6 +20,7 @@
 #ifndef EOS_GUARD_EOS_UTILS_SIGNAL_PDF_HH
 #define EOS_GUARD_EOS_UTILS_SIGNAL_PDF_HH 1
 
+#include <eos/observable-fwd.hh>
 #include <eos/signal-pdf-fwd.hh>
 #include <eos/utils/density.hh>
 #include <eos/utils/exception.hh>
@@ -59,6 +60,10 @@ namespace eos
             virtual double evaluate_linear() const = 0;
 
             virtual double normalization() const = 0;
+
+            // Retrieve the observable that computes the unnormalized PDF on the linear scale.
+            // Its value equals evaluate_linear() up to the clamping of non-positive results to zero.
+            virtual ObservablePtr unnormalized_pdf() const = 0;
 
             virtual Kinematics kinematics() = 0;
 
