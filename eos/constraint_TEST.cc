@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2011-2025 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,8 @@
 #include <eos/maths/power-of.hh>
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood.hh>
+#include <eos/utils/exception.hh>
+#include <eos/utils/options.hh>
 
 #include <test/test.hh>
 
@@ -1274,6 +1276,462 @@ class ConstraintDeserializationTest : public TestCase
                 p["mass::b(MSbar)"] = 4.6;
                 p["mass::c"]        = 1.3;
                 TEST_CHECK_NEARLY_EQUAL(llh(), -4.779399451, 1e-8);
+            }
+            // }}}
+
+            // {{{ Gaussian (deserialization errors)
+            {
+                // missing required key 'mean'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Gaussian",
+                                                            YAML::Load("type: Gaussian\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "sigma-stat: {hi: 0.1, lo: -0.1}\n"
+                                                                       "sigma-sys: {hi: 0.0, lo: -0.0}")));
+
+                // scalar key 'mean' mapped to a map
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Gaussian",
+                                                            YAML::Load("type: Gaussian\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "mean: {a: 1}\n"
+                                                                       "sigma-stat: {hi: 0.1, lo: -0.1}\n"
+                                                                       "sigma-sys: {hi: 0.0, lo: -0.0}")));
+
+                // map key 'kinematics' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Gaussian",
+                                                            YAML::Load("type: Gaussian\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: 5\n"
+                                                                       "options: {}\n"
+                                                                       "mean: 4.3\n"
+                                                                       "sigma-stat: {hi: 0.1, lo: -0.1}\n"
+                                                                       "sigma-sys: {hi: 0.0, lo: -0.0}")));
+            }
+            // }}}
+
+            // {{{ LogGamma (deserialization errors)
+            {
+                // missing required key 'alpha'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::LogGamma",
+                                                            YAML::Load("type: LogGamma\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "mode: 0.53\n"
+                                                                       "sigma: {hi: 0.1, lo: 0.19}\n"
+                                                                       "lambda: 0.0687907")));
+
+                // scalar key 'mode' mapped to a map
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::LogGamma",
+                                                            YAML::Load("type: LogGamma\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "mode: {a: 1}\n"
+                                                                       "sigma: {hi: 0.1, lo: 0.19}\n"
+                                                                       "alpha: 0.383056\n"
+                                                                       "lambda: 0.0687907")));
+
+                // map key 'sigma' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::LogGamma",
+                                                            YAML::Load("type: LogGamma\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "mode: 0.53\n"
+                                                                       "sigma: 0.1\n"
+                                                                       "alpha: 0.383056\n"
+                                                                       "lambda: 0.0687907")));
+            }
+            // }}}
+
+            // {{{ Amoroso (deserialization errors)
+            {
+                // missing required key 'theta'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Amoroso",
+                                                            YAML::Load("type: Amoroso\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "physical-limit: 0.0\n"
+                                                                       "alpha: 8.2392613044e-01\n"
+                                                                       "beta: 1.6993290032")));
+
+                // scalar key 'alpha' mapped to a map
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Amoroso",
+                                                            YAML::Load("type: Amoroso\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: {}\n"
+                                                                       "physical-limit: 0.0\n"
+                                                                       "theta: 2.9708273062\n"
+                                                                       "alpha: {a: 1}\n"
+                                                                       "beta: 1.6993290032")));
+
+                // map key 'options' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Amoroso",
+                                                            YAML::Load("type: Amoroso\n"
+                                                                       "observable: mass::b(MSbar)\n"
+                                                                       "kinematics: {}\n"
+                                                                       "options: 5\n"
+                                                                       "physical-limit: 0.0\n"
+                                                                       "theta: 2.9708273062\n"
+                                                                       "alpha: 8.2392613044e-01\n"
+                                                                       "beta: 1.6993290032")));
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian (deserialization errors)
+            {
+                // missing required key 'correlations'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::MultivariateGaussian",
+                                                            YAML::Load("type: MultivariateGaussian\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "means: [4.3, 1.1]\n"
+                                                                       "sigma-stat-hi: [0.1, 0.05]\n"
+                                                                       "sigma-stat-lo: [0.1, 0.05]\n"
+                                                                       "sigma-sys: [0, 0]")));
+
+                // sequence key 'means' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::MultivariateGaussian",
+                                                            YAML::Load("type: MultivariateGaussian\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "means: 4.3\n"
+                                                                       "sigma-stat-hi: [0.1, 0.05]\n"
+                                                                       "sigma-stat-lo: [0.1, 0.05]\n"
+                                                                       "sigma-sys: [0, 0]\n"
+                                                                       "correlations: [[1, 0], [0, 1]]")));
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (deserialization errors)
+            {
+                // missing required key 'covariance'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)",
+                                                            YAML::Load("type: MultivariateGaussian(Covariance)\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "means: [4.3, 1.1]")));
+
+                // sequence key 'covariance' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)",
+                                                            YAML::Load("type: MultivariateGaussian(Covariance)\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "means: [4.3, 1.1]\n"
+                                                                       "covariance: 0.01")));
+            }
+            // }}}
+
+            // {{{ UniformBound (deserialization errors)
+            {
+                // missing required key 'uncertainty'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::UniformBound",
+                                                            YAML::Load("type: UniformBound\n"
+                                                                       "observables: [mass::b(MSbar)]\n"
+                                                                       "kinematics: [{}]\n"
+                                                                       "options: [{}]\n"
+                                                                       "bound: 1.0")));
+
+                // scalar key 'bound' mapped to a map
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::UniformBound",
+                                                            YAML::Load("type: UniformBound\n"
+                                                                       "observables: [mass::b(MSbar)]\n"
+                                                                       "kinematics: [{}]\n"
+                                                                       "options: [{}]\n"
+                                                                       "bound: {a: 1}\n"
+                                                                       "uncertainty: 0.1")));
+
+                // sequence key 'observables' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::UniformBound",
+                                                            YAML::Load("type: UniformBound\n"
+                                                                       "observables: mass::b(MSbar)\n"
+                                                                       "kinematics: [{}]\n"
+                                                                       "options: [{}]\n"
+                                                                       "bound: 1.0\n"
+                                                                       "uncertainty: 0.1")));
+            }
+            // }}}
+
+            // {{{ Mixture (deserialization errors)
+            {
+                // missing required key 'weights'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Mixture",
+                                                            YAML::Load("type: Mixture\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "components:\n"
+                                                                       "  - means: [4.3, 1.1]\n"
+                                                                       "    covariance: [[0.01, 0.003], [0.003, 0.0025]]\n"
+                                                                       "test statistics: {sigma: [], densities: []}")));
+
+                // sequence key 'components' mapped to a scalar
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Mixture",
+                                                            YAML::Load("type: Mixture\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "components: 1\n"
+                                                                       "weights: [1.0]\n"
+                                                                       "test statistics: {sigma: [], densities: []}")));
+            }
+            // }}}
+
+            // {{{ FromYAML (dispatch errors)
+            {
+                // node is not a map
+                TEST_CHECK_THROWS(ConstraintDeserializationError, ConstraintEntry::FromYAML("Test::NotAMap", YAML::Load("[1, 2, 3]")));
+
+                // node has no key 'type'
+                TEST_CHECK_THROWS(ConstraintDeserializationError, ConstraintEntry::FromYAML("Test::NoType", YAML::Load("observable: mass::b(MSbar)")));
+
+                // unsupported type
+                TEST_CHECK_THROWS(ConstraintDeserializationError, ConstraintEntry::FromYAML("Test::BadType", YAML::Load("type: NoSuchType")));
+            }
+            // }}}
+
+            // {{{ make_prior (unimplemented types throw InternalError)
+            {
+                Parameters p = Parameters::Defaults();
+
+                {
+                    std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Gaussian",
+                                                                                     YAML::Load("type: Gaussian\n"
+                                                                                                "observable: mass::b(MSbar)\n"
+                                                                                                "kinematics: {}\n"
+                                                                                                "options: {}\n"
+                                                                                                "mean: 4.3\n"
+                                                                                                "sigma-stat: {hi: 0.1, lo: -0.1}\n"
+                                                                                                "sigma-sys: {hi: 0.0, lo: -0.0}")));
+                    TEST_CHECK_THROWS(InternalError, entry->make_prior(p, Options{}));
+                }
+
+                {
+                    std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::LogGamma",
+                                                                                     YAML::Load("type: LogGamma\n"
+                                                                                                "observable: mass::b(MSbar)\n"
+                                                                                                "kinematics: {}\n"
+                                                                                                "options: {}\n"
+                                                                                                "mode: 0.53\n"
+                                                                                                "sigma: {hi: 0.1, lo: 0.19}\n"
+                                                                                                "alpha: 0.383056\n"
+                                                                                                "lambda: 0.0687907")));
+                    TEST_CHECK_THROWS(InternalError, entry->make_prior(p, Options{}));
+                }
+
+                {
+                    std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Amoroso",
+                                                                                     YAML::Load("type: Amoroso\n"
+                                                                                                "observable: mass::b(MSbar)\n"
+                                                                                                "kinematics: {}\n"
+                                                                                                "options: {}\n"
+                                                                                                "physical-limit: 0.0\n"
+                                                                                                "theta: 2.9708273062\n"
+                                                                                                "alpha: 8.2392613044e-01\n"
+                                                                                                "beta: 1.6993290032")));
+                    TEST_CHECK_THROWS(InternalError, entry->make_prior(p, Options{}));
+                }
+
+                {
+                    std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::UniformBound",
+                                                                                     YAML::Load("type: UniformBound\n"
+                                                                                                "observables: [mass::b(MSbar)]\n"
+                                                                                                "kinematics: [{}]\n"
+                                                                                                "options: [{}]\n"
+                                                                                                "bound: 1.0\n"
+                                                                                                "uncertainty: 0.1")));
+                    TEST_CHECK_THROWS(InternalError, entry->make_prior(p, Options{}));
+                }
+
+                {
+                    std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::Mixture",
+                                                                                     YAML::Load("type: Mixture\n"
+                                                                                                "observables: [mass::b(MSbar), mass::c]\n"
+                                                                                                "kinematics: [{}, {}]\n"
+                                                                                                "options: [{}, {}]\n"
+                                                                                                "components:\n"
+                                                                                                "  - means: [4.3, 1.1]\n"
+                                                                                                "    covariance: [[0.01, 0.003], [0.003, 0.0025]]\n"
+                                                                                                "test statistics: {sigma: [], densities: []}\n"
+                                                                                                "weights: [1.0]\n"
+                                                                                                "dof: 2")));
+                    TEST_CHECK_THROWS(InternalError, entry->make_prior(p, Options{}));
+                }
+            }
+            // }}}
+
+            // {{{ make_prior (MultivariateGaussian: success and subset-option errors)
+            {
+                static const std::string input("type: MultivariateGaussian\n"
+                                               "observables: [mass::b(MSbar), mass::c]\n"
+                                               "kinematics: [{}, {}]\n"
+                                               "options: [{}, {}]\n"
+                                               "means: [4.3, 1.1]\n"
+                                               "sigma-stat-hi: [0.1, 0.05]\n"
+                                               "sigma-stat-lo: [0.1, 0.05]\n"
+                                               "sigma-sys: [0, 0]\n"
+                                               "correlations: [[1, 0.6], [0.6, 1]]\n"
+                                               "dof: 2");
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian", YAML::Load(input)));
+                TEST_CHECK(nullptr != entry.get());
+
+                Parameters  p = Parameters::Defaults();
+                LogPriorPtr prior;
+                TEST_CHECK_NO_THROW(prior = entry->make_prior(p, Options{}));
+                TEST_CHECK(nullptr != prior.get());
+
+                // end beyond the number of measurements
+                TEST_CHECK_THROWS(InvalidOptionValueError,
+                                  entry->make_prior(p,
+                                                    Options{
+                                                        { "end"_ok, "99"_ov }
+                }));
+
+                // begin >= end
+                TEST_CHECK_THROWS(InvalidOptionValueError,
+                                  entry->make_prior(p,
+                                                    Options{
+                                                        { "begin"_ok, "2"_ov },
+                                                        {   "end"_ok, "1"_ov }
+                }));
+            }
+            // }}}
+
+            // {{{ make_prior (MultivariateGaussian(Covariance): success and subset-option errors)
+            {
+                static const std::string input("type: MultivariateGaussian(Covariance)\n"
+                                               "observables: [mass::b(MSbar), mass::c]\n"
+                                               "kinematics: [{}, {}]\n"
+                                               "options: [{}, {}]\n"
+                                               "means: [4.3, 1.1]\n"
+                                               "covariance: [[0.0100, 0.0030], [0.0030, 0.0025]]\n"
+                                               "dof: 2");
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", YAML::Load(input)));
+                TEST_CHECK(nullptr != entry.get());
+
+                Parameters  p = Parameters::Defaults();
+                LogPriorPtr prior;
+                TEST_CHECK_NO_THROW(prior = entry->make_prior(p, Options{}));
+                TEST_CHECK(nullptr != prior.get());
+
+                // end beyond the number of measurements
+                TEST_CHECK_THROWS(InvalidOptionValueError,
+                                  entry->make_prior(p,
+                                                    Options{
+                                                        { "end"_ok, "99"_ov }
+                }));
+
+                // begin >= end
+                TEST_CHECK_THROWS(InvalidOptionValueError,
+                                  entry->make_prior(p,
+                                                    Options{
+                                                        { "begin"_ok, "2"_ov },
+                                                        {   "end"_ok, "1"_ov }
+                }));
+            }
+            // }}}
+
+            // {{{ MultivariateGaussian(Covariance) (make: option and response errors)
+            {
+                static const std::string input("type: MultivariateGaussian(Covariance)\n"
+                                               "observables: [mass::b(MSbar), mass::c]\n"
+                                               "kinematics: [{}, {}]\n"
+                                               "options: [{}, {}]\n"
+                                               "means: [4.3, 1.1]\n"
+                                               "covariance: [[0.0100, 0.0030], [0.0030, 0.0025]]\n"
+                                               "dof: 2");
+
+                std::shared_ptr<ConstraintEntry> entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", YAML::Load(input)));
+
+                // end beyond the number of measurements
+                TEST_CHECK_THROWS(InvalidOptionValueError,
+                                  entry->make("Test::MultivariateGaussian(Covariance)",
+                                              Options{
+                                                  { "end"_ok, "99"_ov }
+                }));
+
+                // begin >= end
+                TEST_CHECK_THROWS(InvalidOptionValueError,
+                                  entry->make("Test::MultivariateGaussian(Covariance)",
+                                              Options{
+                                                  { "begin"_ok, "2"_ov },
+                                                  {   "end"_ok, "1"_ov }
+                }));
+
+                // response matrix together with a non-zero 'begin' is incompatible
+                static const std::string response_input("type: MultivariateGaussian(Covariance)\n"
+                                                        "observables: [mass::s(2GeV), mass::b(MSbar), mass::c]\n"
+                                                        "kinematics: [{}, {}, {}]\n"
+                                                        "options: [{}, {}, {}]\n"
+                                                        "means: [4.3, 1.1]\n"
+                                                        "covariance: [[0.0100, 0.0030], [0.0030, 0.0025]]\n"
+                                                        "response: [[0, 1, 0], [0, 0, 1]]\n"
+                                                        "dof: 2");
+
+                std::shared_ptr<ConstraintEntry> response_entry(ConstraintEntry::FromYAML("Test::MultivariateGaussian(Covariance)", YAML::Load(response_input)));
+                TEST_CHECK_THROWS(InternalError,
+                                  response_entry->make("Test::MultivariateGaussian(Covariance)",
+                                                       Options{
+                                                           { "begin"_ok, "1"_ov }
+                }));
+            }
+            // }}}
+
+            // {{{ Constraints (insert, lookup, and unknown-name errors)
+            {
+                static const std::string entry("type: Gaussian\n"
+                                               "observable: mass::b(MSbar)\n"
+                                               "kinematics: {}\n"
+                                               "options: {}\n"
+                                               "mean: 4.3\n"
+                                               "sigma-stat: {hi: 0.1, lo: -0.1}\n"
+                                               "sigma-sys: {hi: 0.0, lo: -0.0}");
+
+                // insert a new entry into the global registry from a YAML string
+                std::shared_ptr<const ConstraintEntry> inserted;
+                TEST_CHECK_NO_THROW(inserted = Constraints().insert("Test::Inserted", entry));
+                TEST_CHECK(nullptr != inserted.get());
+
+                // the string serialize() overload
+                TEST_CHECK(! inserted->serialize().empty());
+
+                // a freshly constructed Constraints re-reads the registry and finds it
+                TEST_CHECK_NO_THROW(Constraints()["Test::Inserted"]);
+                TEST_CHECK_NO_THROW(Constraint::make("Test::Inserted", Options{}));
+
+                // unknown-name lookups
+                TEST_CHECK_THROWS(UnknownConstraintError, Constraints()["Test::DoesNotExist"]);
+                TEST_CHECK_THROWS(UnknownConstraintError, Constraint::make("Test::DoesNotExist", Options{}));
             }
             // }}}
         }
