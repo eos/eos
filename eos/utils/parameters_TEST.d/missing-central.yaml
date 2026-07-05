@@ -1,0 +1,5 @@
+# Fixture for ParametersTest: a parameter node lacking the required 'central'
+# key. Parameters::override_from_file() rethrows the resulting node error as a
+# ParameterInputFileParseError.
+test::bad:
+    min: 1.0

@@ -121,7 +121,12 @@ include_eos_utils_HEADERS = \
 	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
 
 AM_TESTS_ENVIRONMENT = \
-	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
+	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
+	export EOS_TESTS_PARAMETERS_FIXTURES="$(abs_srcdir)/parameters_TEST.d";
+
+EXTRA_DIST = \
+	parameters_TEST.d/override.yaml \
+	parameters_TEST.d/missing-central.yaml
 
 TESTS = \
 	cacheable-observable_TEST \

@@ -1,0 +1,14 @@
+# Fixture for ParametersTest: exercises Parameters::override_from_file().
+# - the '@metadata@' key is skipped,
+# - 'mass::c' already exists and is overridden (value, min, max, latex, unit),
+# - 'test::override_new_param' does not exist and is added (central only).
+'@metadata@':
+    version: '1.0'
+mass::c:
+    central: 1.5
+    min: 1.0
+    max: 2.0
+    latex: 'm_c'
+    unit: 'GeV'
+test::override_new_param:
+    central: 42.0
