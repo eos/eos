@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
- * Copyright (c) 2021 Philip Lüghausen
+ * Copyright (c) 2011-2026 Danny van Dyk
+ * Copyright (c) 2021      Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,9 +18,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/exception.hh>
 #include <eos/utils/parameters.hh>
 
 #include <test/test.hh>
+
+#include <cstdlib>
+#include <memory>
+#include <string>
 
 using namespace test;
 using namespace eos;
@@ -198,6 +203,134 @@ class ParametersTest : public TestCase
                 Parameter a_fT_2 = p["B->pi::a^fT_2@G2026"];
                 TEST_CHECK_EQUAL(a_fT_2.name(), "B->pi::a^fT_2@G2026");
                 TEST_CHECK_EQUAL(a_fT_2.latex(), R"($a_2^{f_T,B \to \pi,\mathrm{G2026}}$)");
+            }
+
+            // A: Parameters::override_from_file (override existing, add new, error paths)
+            {
+                const char * env         = std::getenv("EOS_TESTS_PARAMETERS_FIXTURES");
+                std::string  fixture_dir = env ? env : "parameters_TEST.d";
+
+                // override 'mass::c' and add 'test::override_new_param'
+                {
+                    Parameters p = Parameters::Defaults();
+                    TEST_CHECK_NO_THROW(p.override_from_file(fixture_dir + "/override.yaml"));
+
+                    // for an existing parameter, override_from_file sets the current value
+                    // (not the central value), the min/max, and the latex; the unit is parsed
+                    // but not applied.
+                    Parameter m_c = p["mass::c"];
+                    TEST_CHECK_NEARLY_EQUAL(m_c.evaluate(), 1.5, 1e-12);
+                    TEST_CHECK_NEARLY_EQUAL(m_c.min(), 1.0, 1e-12);
+                    TEST_CHECK_NEARLY_EQUAL(m_c.max(), 2.0, 1e-12);
+                    TEST_CHECK_EQUAL(m_c.latex(), "m_c");
+
+                    TEST_CHECK(p.has("test::override_new_param"));
+                    Parameter added = p["test::override_new_param"];
+                    TEST_CHECK_NEARLY_EQUAL(added.central(), 42.0, 1e-12);
+                    // in the absence of 'min'/'max' both default to the central value
+                    TEST_CHECK_NEARLY_EQUAL(added.min(), 42.0, 1e-12);
+                    TEST_CHECK_NEARLY_EQUAL(added.max(), 42.0, 1e-12);
+                }
+
+                // the override is local to the Parameters object: a fresh default set is unaffected
+                {
+                    Parameters q = Parameters::Defaults();
+                    TEST_CHECK(! q.has("test::override_new_param"));
+                }
+
+                // a non-existent file is reported as a ParameterInputFileParseError
+                TEST_CHECK_THROWS(ParameterInputFileParseError, Parameters::Defaults().override_from_file("/this/does/not/exist.yaml"));
+
+                // a malformed entry (missing 'central') is rethrown as a ParameterInputFileParseError
+                TEST_CHECK_THROWS(ParameterInputFileParseError, Parameters::Defaults().override_from_file(fixture_dir + "/missing-central.yaml"));
+            }
+
+            // B: iteration over sections and groups (ParameterSection / ParameterGroup accessors)
+            {
+                Parameters p = Parameters::Defaults();
+
+                unsigned n_sections = 0, n_groups = 0, n_parameters = 0;
+                for (auto s = p.begin_sections(), s_end = p.end_sections(); s != s_end; ++s)
+                {
+                    ++n_sections;
+                    TEST_CHECK(! s->name().empty());
+                    (void) s->description();
+
+                    for (auto g = s->begin(), g_end = s->end(); g != g_end; ++g)
+                    {
+                        ++n_groups;
+                        TEST_CHECK(! g->name().empty());
+                        (void) g->description();
+
+                        for (auto par = g->begin(), par_end = g->end(); par != par_end; ++par)
+                        {
+                            ++n_parameters;
+                        }
+                    }
+                }
+
+                TEST_CHECK(n_sections > 0);
+                TEST_CHECK(n_groups > 0);
+                TEST_CHECK(n_parameters > 0);
+            }
+
+            // C: Parameters::operator[] (Parameter::Id) including the invalid-id error path
+            {
+                Parameters p   = Parameters::Defaults();
+                Parameter  m_c = p["mass::c"];
+
+                TEST_CHECK_EQUAL(p[m_c.id()].name(), "mass::c");
+                TEST_CHECK_THROWS(InternalError, p[Parameter::Id(0xFFFFFFFFu)]);
+            }
+
+            // D: Parameters::declare_and_insert returns the existing instance on a duplicate name
+            {
+                Parameters p = Parameters::Defaults();
+
+                Parameter first  = p.declare_and_insert("test::dup", R"(\text{dup})", Unit::None(), 1.0, 0.0, 2.0);
+                Parameter second = p.declare_and_insert("test::dup", R"(\text{dup})", Unit::None(), 9.0, 0.0, 2.0);
+
+                TEST_CHECK_EQUAL(first.id(), second.id());
+                TEST_CHECK_NEARLY_EQUAL(second.central(), 1.0, 1e-12); // the original value, not the second call's
+            }
+
+            // E: Parameters::set unknown-name error; static Parameters::redirect (undone afterwards)
+            {
+                Parameters p = Parameters::Defaults();
+
+                TEST_CHECK_THROWS(UnknownParameterError, p.set("mass::nonexistent", 1.0));
+
+                // redirect a parameter name in the default set and immediately restore it, so that
+                // the change to the global defaults is undone.
+                Parameter::Id target   = p["mass::c"].id();
+                Parameter::Id original = p["mass::s(2GeV)"].id();
+                TEST_CHECK_NO_THROW(Parameters::redirect("mass::s(2GeV)", target));
+                TEST_CHECK_NO_THROW(Parameters::redirect("mass::s(2GeV)", original));
+            }
+
+            // F: Parameter::set_min / Parameter::set_max
+            {
+                Parameters p   = Parameters::Defaults();
+                Parameter  m_c = p["mass::c"];
+
+                m_c.set_min(0.5);
+                m_c.set_max(5.0);
+
+                TEST_CHECK_NEARLY_EQUAL(m_c.min(), 0.5, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(m_c.max(), 5.0, 1e-12);
+            }
+
+            // G: operator== (ParameterDescription, ParameterDescription)
+            {
+                Parameters p   = Parameters::Defaults();
+                MutablePtr mut = std::make_shared<Parameter>(p["mass::c"]);
+
+                ParameterDescription a{ mut, 0.0, 1.0, false };
+
+                TEST_CHECK((a == ParameterDescription{ mut, 0.0, 1.0, false }));   // all equal
+                TEST_CHECK(! (a == ParameterDescription{ mut, 9.0, 1.0, false })); // min differs
+                TEST_CHECK(! (a == ParameterDescription{ mut, 0.0, 9.0, false })); // max differs
+                TEST_CHECK(! (a == ParameterDescription{ mut, 0.0, 1.0, true }));  // nuisance differs
             }
         }
 } parameters_test;
