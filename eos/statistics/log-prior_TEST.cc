@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2011-2023 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,10 @@
 #include <eos/constraint.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/utils/exception.hh>
+
+#include <cmath>
+#include <string>
 
 using namespace test;
 using namespace eos;
@@ -313,6 +317,181 @@ class LogPriorTest :
                 std::string s_gauss("Parameter: CKM::A, prior type: Gaussian, range: [0.774,0.834], x = 0.804 +- 0.01");
                 LogPriorPtr prior_gauss = LogPrior::Make(p, s_gauss);
                 TEST_CHECK_EQUAL(s_gauss, prior_gauss->as_string());
+            }
+
+            // A: informative(), as_string(), and clone() for every prior type
+            {
+                // informative(): Flat and Transform are non-informative, the rest are informative
+                TEST_CHECK_EQUAL(LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5)->informative(), false);
+                TEST_CHECK_EQUAL(LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda)->informative(), true);
+                TEST_CHECK_EQUAL(LogPrior::Gaussian(parameters, "mass::b(MSbar)", 0.5, 0.25)->informative(), true);
+                TEST_CHECK_EQUAL(LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0)->informative(), true);
+
+                // as_string() for the types that are not round-tripped through Make()
+                TEST_CHECK(LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda)->as_string().find("prior type: Scale") != std::string::npos);
+                TEST_CHECK(LogPrior::Gaussian(parameters, "mass::b(MSbar)", 0.5, 0.25)->as_string().find("prior type: gaussian") != std::string::npos);
+                TEST_CHECK(LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0)->as_string().find("prior type: poisson") != std::string::npos);
+
+                // CurtailedGauss as_string() with asymmetric uncertainties (sigma_upper != sigma_lower)
+                {
+                    LogPriorPtr        cg = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, 4.2, 4.3, 4.5);
+                    const std::string  s  = cg->as_string();
+                    TEST_CHECK(s.find(" + ") != std::string::npos);
+                    TEST_CHECK(s.find(" - ") != std::string::npos);
+                    TEST_CHECK_EQUAL(cg->informative(), true);
+                }
+
+                // clone(): the clone is independent and reproduces operator()
+                {
+                    Parameters               independent = Parameters::Defaults();
+                    std::vector<LogPriorPtr> priors{
+                        LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5),
+                        LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda),
+                        LogPrior::Gaussian(parameters, "mass::b(MSbar)", 0.5, 0.25),
+                        LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0)
+                    };
+
+                    for (const auto & prior : priors)
+                    {
+                        parameters["mass::b(MSbar)"]  = 4.3;
+                        independent["mass::b(MSbar)"] = 4.3;
+
+                        LogPriorPtr c = prior->clone(independent);
+                        TEST_CHECK_NEARLY_EQUAL((*c)(), (*prior)(), eps);
+                    }
+                }
+            }
+
+            // B: sample() and compute_cdf() for Flat, CurtailedGauss, and Transform
+            {
+                // Flat::compute_cdf
+                {
+                    LogPriorPtr flat  = LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5);
+                    Parameter   param = parameters["mass::b(MSbar)"];
+                    TEST_CHECK_NEARLY_EQUAL(cdf(flat, param, 4.35), 0.5, eps); // (4.35 - 4.2) / 0.3
+                }
+
+                // CurtailedGauss::sample (a valid inverse CDF) and compute_cdf (executed for
+                // coverage only: for asymmetric errors it is not a clean inverse of sample())
+                {
+                    LogPriorPtr cg    = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, 4.2, 4.3, 4.5);
+                    Parameter   param = parameters["mass::b(MSbar)"];
+
+                    // sample(): a small generator value hits the lower branch, a large one the
+                    // upper branch; the result stays within [min, max] and increases with p
+                    const double x_lo  = inverse_cdf(cg, param, 0.1);
+                    const double x_mid = inverse_cdf(cg, param, 0.5);
+                    const double x_hi  = inverse_cdf(cg, param, 0.9);
+                    TEST_CHECK(std::isfinite(x_lo) && (x_lo >= 4.15) && (x_lo <= 4.57));
+                    TEST_CHECK(std::isfinite(x_hi) && (x_hi >= 4.15) && (x_hi <= 4.57));
+                    TEST_CHECK(x_lo < x_mid);
+                    TEST_CHECK(x_mid < x_hi);
+
+                    // compute_cdf(): exercise both branches (below and above the central value)
+                    TEST_CHECK(std::isfinite(cdf(cg, param, 4.25)));
+                    TEST_CHECK(std::isfinite(cdf(cg, param, 4.35)));
+                }
+
+                // Transform::compute_cdf + sample (round-trip), informative(), and clone()
+                {
+                    std::vector<double>              shift     = { 0.0, 0.0 };
+                    std::vector<std::vector<double>> transform = {
+                        {  0.707106, 0.707106 },
+                        { -0.707106, 0.707106 }
+                    };
+                    std::vector<double> min = { -2.0, -2.0 };
+                    std::vector<double> max = { 2.0, 2.0 };
+                    LogPriorPtr         tp  = LogPrior::Transform(parameters, { "scnuee::Re{cVL}", "scnuee::Re{cVR}" }, shift, transform, min, max);
+
+                    parameters["scnuee::Re{cVL}"] = 0.3;
+                    parameters["scnuee::Re{cVR}"] = -0.4;
+                    tp->compute_cdf();
+                    const double uL = parameters["scnuee::Re{cVL}"].evaluate_generator();
+                    const double uR = parameters["scnuee::Re{cVR}"].evaluate_generator();
+
+                    parameters["scnuee::Re{cVL}"].set_generator(uL);
+                    parameters["scnuee::Re{cVR}"].set_generator(uR);
+                    tp->sample();
+                    TEST_CHECK_NEARLY_EQUAL(parameters["scnuee::Re{cVL}"], 0.3, 1e-9);
+                    TEST_CHECK_NEARLY_EQUAL(parameters["scnuee::Re{cVR}"], -0.4, 1e-9);
+
+                    TEST_CHECK_EQUAL(tp->informative(), false);
+
+                    LogPriorPtr c = tp->clone(parameters); // Transform::clone
+                    parameters["scnuee::Re{cVL}"] = 0.0;
+                    parameters["scnuee::Re{cVR}"] = 0.0;
+                    TEST_CHECK_NEARLY_EQUAL((*c)(), (*tp)(), 1e-9);
+                }
+            }
+
+            // C: MultivariateGaussian operator(), as_string() (throws), and clone()
+            {
+                gsl_vector * mean = gsl_vector_alloc(2);
+                gsl_vector_set(mean, 0, 4.3);
+                gsl_vector_set(mean, 1, 1.1);
+                gsl_matrix * cov = gsl_matrix_alloc(2, 2);
+                gsl_matrix_set(cov, 0, 0, 0.01);
+                gsl_matrix_set(cov, 0, 1, 0.0);
+                gsl_matrix_set(cov, 1, 0, 0.0);
+                gsl_matrix_set(cov, 1, 1, 0.0025);
+
+                LogPriorPtr mvg = LogPrior::MultivariateGaussian(parameters, { "mass::b(MSbar)", "mass::c" }, mean, cov);
+
+                parameters["mass::b(MSbar)"] = 4.3;
+                parameters["mass::c"]        = 1.1;
+
+                TEST_CHECK(std::isfinite((*mvg)()));
+                TEST_CHECK_EQUAL(mvg->informative(), true);
+                TEST_CHECK_THROWS(InternalError, mvg->as_string());
+
+                LogPriorPtr c = mvg->clone(parameters);
+                TEST_CHECK_NEARLY_EQUAL((*c)(), (*mvg)(), eps);
+            }
+
+            // D: factory and constructor error paths
+            {
+                // Flat: min >= max (RangeError, derived from Exception)
+                TEST_CHECK_THROWS(Exception, LogPrior::Flat(parameters, "mass::b(MSbar)", 4.5, 4.2));
+
+                // CurtailedGauss: lower >= central, and upper <= central
+                TEST_CHECK_THROWS(InternalError, LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.0, 5.0, 4.5, 4.3, 4.6));
+                TEST_CHECK_THROWS(InternalError, LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.0, 5.0, 4.1, 4.3, 4.2));
+
+                // Scale: mu_0 <= 0, and lambda <= 1
+                TEST_CHECK_THROWS(InternalError, LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, -1.0, 2.0));
+                TEST_CHECK_THROWS(InternalError, LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, 4.0, 0.5));
+
+                // Transform: min >= max (thrown from compute_log_volume() during construction)
+                TEST_CHECK_THROWS(InternalError,
+                                  LogPrior::Transform(parameters,
+                                                      { "scnuee::Re{cVL}", "scnuee::Re{cVR}" },
+                                                      { 0.0, 0.0 },
+                                                      {
+                                                          { 1.0, 0.0 },
+                                                          { 0.0, 1.0 }
+                },
+                                                      { 2.0, 2.0 },
+                                                      { -2.0, -2.0 }));
+
+                // MultivariateGaussian: mean dimension does not match the (square) covariance
+                {
+                    gsl_vector * m = gsl_vector_alloc(3);
+                    gsl_matrix * c = gsl_matrix_alloc(2, 2);
+                    gsl_matrix_set_identity(c);
+                    TEST_CHECK_THROWS(InternalError, LogPrior::MultivariateGaussian(parameters, { "mass::b(MSbar)", "mass::c" }, m, c));
+                }
+            }
+
+            // E: Make() asymmetric-sigma parse branch and unknown-type error
+            {
+                Parameters p = Parameters::Defaults();
+
+                // asymmetric uncertainties exercise the non-"+-" branch of the parser
+                LogPriorPtr asym = LogPrior::Make(p, "Parameter: CKM::A, prior type: Gaussian, range: [0.774,0.834], x = 0.804 + 0.02 -0.01");
+                TEST_CHECK(asym.get() != nullptr);
+
+                // unrecognised type -> UnknownPriorError (derived from Exception)
+                TEST_CHECK_THROWS(Exception, LogPrior::Make(p, "Parameter: CKM::A, prior type: nonsense, range: [0,1]"));
             }
         }
 } log_prior_test;
