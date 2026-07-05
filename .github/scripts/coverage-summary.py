@@ -14,12 +14,46 @@ import json
 import os
 
 
-def cpp_line_counts(summary_path):
-    """Return (covered, total) C++ lines from a gcovr JSON summary file."""
-    with open(summary_path) as f:
+def cpp_line_counts(report_path):
+    """Return (covered, total) physical C++ lines from a gcovr JSON report.
+
+    A template header included in many translation units is instantiated once
+    per unit, and ``gcov`` emits a separate coverage record for each
+    instantiation *at the same physical source line*. ``gcovr``'s
+    ``--json-summary`` sums those records, so a 67-line header instantiated in
+    40 units is reported as ~2700 "lines" -- vastly over-weighting template-
+    heavy headers in the overall percentage.
+
+    To avoid this, we consume the detailed ``gcovr --json`` report (which lists
+    the individual per-line records) and deduplicate by ``(file, line)``: a
+    physical line counts once and is considered covered if it is executed in
+    *any* instantiation.
+
+    For robustness we fall back to the top-level ``line_total``/``line_covered``
+    fields when the report contains no per-line data (e.g. a ``--json-summary``
+    file); those numbers carry the inflation described above.
+    """
+    with open(report_path) as f:
         data = json.load(f)
-    total   = int(data.get('line_total', 0))
-    covered = int(data.get('line_covered', 0))
+
+    files = data.get('files')
+    if not files or 'lines' not in files[0]:
+        total   = int(data.get('line_total', 0))
+        covered = int(data.get('line_covered', 0))
+        return covered, total
+
+    # Maximum hit count seen for each physical (file, line).
+    best = {}
+    for entry in files:
+        fname = entry['file']
+        for line in entry.get('lines', []):
+            key   = (fname, line['line_number'])
+            count = line.get('count', 0)
+            if count > best.get(key, -1):
+                best[key] = count
+
+    total   = len(best)
+    covered = sum(1 for count in best.values() if count > 0)
     return covered, total
 
 
@@ -141,7 +175,8 @@ def make_badge(badge_path, cpp, python, combined):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--date',        required=True, help='date of this coverage run (YYYY-MM-DD)')
-    parser.add_argument('--cpp-summary', required=True, help='path to the gcovr JSON summary file')
+    parser.add_argument('--cpp-summary', required=True,
+                        help='path to the detailed gcovr JSON report (gcovr --json)')
     parser.add_argument('--python-json', required=True, help='path to the coverage.py JSON file')
     parser.add_argument('--csv',         required=True, help='path to the coverage CSV file to append to')
     parser.add_argument('--badge',       required=True, help='path to the SVG badge file to (re)generate')

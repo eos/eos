@@ -105,16 +105,18 @@ jobs:
               shell: bash
               run: |
                 mkdir -p _intermediate
-                # Produce only the machine-readable summary needed for the
-                # overall percentage (printing a human-readable summary to the
-                # log). The full intermediate report is far too large to commit.
+                # Produce the detailed machine-readable report (deduplicated by
+                # 'coverage-summary.py' so that template headers instantiated in
+                # many translation units are not counted once per instantiation)
+                # while printing a human-readable summary to the log. Neither
+                # report is committed; only the CSV and badge are.
                 gcovr \
                   --root _src \
                   --object-directory _build \
                   --filter '_src/eos/' \
                   --exclude '.*_TEST\.' \
                   --gcov-ignore-parse-errors \
-                  --json-summary _intermediate/coverage-cpp-summary.json \
+                  --json _intermediate/coverage-cpp.json \
                   --txt
 
             - name: Determine Python coverage
@@ -146,7 +148,7 @@ jobs:
                 # 'badge.svg' from the most recent entry.
                 python3 _src/.github/scripts/coverage-summary.py \
                   --date "${DATE}" \
-                  --cpp-summary _intermediate/coverage-cpp-summary.json \
+                  --cpp-summary _intermediate/coverage-cpp.json \
                   --python-json _intermediate/coverage-python.json \
                   --csv _coverage/coverage.csv \
                   --badge _coverage/badge.svg
