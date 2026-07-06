@@ -242,7 +242,8 @@ namespace eos::exp
     ExpressionCloner::ExpressionCloner(const Parameters & parameters, const Kinematics & kinematics, const Options & options) :
         _parameters(parameters),
         _kinematics(kinematics),
-        _options(options)
+        _options(options),
+        _hidden_alias_index(0)
     {
     }
 
@@ -363,7 +364,8 @@ namespace eos::exp
         _parameters(parameters),
         _kinematics(kinematics),
         _options(options),
-        _parameter_user(parameter_user)
+        _parameter_user(parameter_user),
+        _hidden_alias_index(0)
     {
     }
 
