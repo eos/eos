@@ -72,6 +72,7 @@
 - Add a ``scaling_factor`` field to the ``xticks`` and ``yticks`` of a plot to rescale the displayed tick values (D. van Dyk)
 - Add the ``eos.reporting`` module with the ``AnalysisData``, ``PosteriorData``, and ``GoodnessOfFit`` classes, providing lazy, disk-driven access to the recorded results of an analysis for use in report templates (D. van Dyk)
 - Extend the ``inference`` example to find the best-fit point via a ``find-mode`` step and to report the goodness of fit (as a per-constraint table) and a corner figure for each posterior (D. van Dyk)
+- Add further test cases to cover the worst offenders in terms of code coverage (D. van Dyk)
 
 ### Deprecated
 
