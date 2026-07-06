@@ -114,6 +114,10 @@
 - Fix the type annotation of ``MaskComponent.description`` (D. van Dyk)
 - Do not draw an empty legend (D. van Dyk)
 - Fix a potential out-of-range bug when computing the contour level for ``eos.figure.TwoDimensionalKernelDensityEstimateItem`` (D. van Dyk)
+- Fix incorrect expression for ``CurtailedGauss::compute_cdf`` (issue #1189) (D. van Dyk)
+- Fix missing initialization of an index in ``ExpressionCloner`` and ``ExpressionMaker`` (issue #1191) (D. van Dyk)
+- Fix incorrect cloning of ``Parameters`` (issue #1192) (D. van Dyk)
+- Fix handling of the ``unit`` field when overriding parameters from file (issue #1193) (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
