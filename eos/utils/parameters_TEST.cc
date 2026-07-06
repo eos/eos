@@ -91,6 +91,23 @@ class ParametersTest : public TestCase
                 m_c_original = 0.0;
                 TEST_CHECK_EQUAL(m_c_original(), 0.0);
                 TEST_CHECK_EQUAL(m_c_clone(), m_c_clone.central());
+
+                // the clone's 'parameters' vector must be populated, not empty (see gh#1192):
+                // both iteration and lookup by Parameter::Id rely on it.
+                unsigned original_count = 0, clone_count = 0;
+                for (auto i = original.begin(), i_end = original.end(); i != i_end; ++i)
+                {
+                    ++original_count;
+                }
+                for (auto i = clone.begin(), i_end = clone.end(); i != i_end; ++i)
+                {
+                    ++clone_count;
+                }
+                TEST_CHECK(original_count > 0);
+                TEST_CHECK_EQUAL(clone_count, original_count);
+
+                // lookup by Id must resolve to the same parameter as lookup by name
+                TEST_CHECK_EQUAL(clone[m_c_clone.id()].name(), m_c_clone.name());
             }
 
             // Parameters::has
