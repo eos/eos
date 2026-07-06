@@ -2,8 +2,8 @@
 
 /*
  * Copyright (c) 2010-2026 Danny van Dyk
- * Copyright (c) 2021 Philip Lüghausen
- * Copyright (c) 2010 Christian Wacker
+ * Copyright (c) 2021      Philip Lüghausen
+ * Copyright (c) 2010      Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -714,7 +714,7 @@ namespace eos
                 parameters_map(other.parameters_map)
             {
                 parameters.reserve(other.parameters.size());
-                for (unsigned i = 0; i != parameters.size(); ++i)
+                for (unsigned i = 0; i != other.parameters.size(); ++i)
                 {
                     parameters.push_back(Parameter(parameters_data, i));
                 }
