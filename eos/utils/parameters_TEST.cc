@@ -233,13 +233,14 @@ class ParametersTest : public TestCase
                     TEST_CHECK_NO_THROW(p.override_from_file(fixture_dir + "/override.yaml"));
 
                     // for an existing parameter, override_from_file sets the current value
-                    // (not the central value), the min/max, and the latex; the unit is parsed
-                    // but not applied.
+                    // (not the central value), the min/max, the latex, and the unit (gh#1193)
                     Parameter m_c = p["mass::c"];
                     TEST_CHECK_NEARLY_EQUAL(m_c.evaluate(), 1.5, 1e-12);
                     TEST_CHECK_NEARLY_EQUAL(m_c.min(), 1.0, 1e-12);
                     TEST_CHECK_NEARLY_EQUAL(m_c.max(), 2.0, 1e-12);
                     TEST_CHECK_EQUAL(m_c.latex(), "m_c");
+                    // the overridden unit ('GeV^2') differs from the default ('GeV')
+                    TEST_CHECK_EQUAL(m_c.unit(), Unit::GeV2());
 
                     TEST_CHECK(p.has("test::override_new_param"));
                     Parameter added = p["test::override_new_param"];

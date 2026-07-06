@@ -9,6 +9,8 @@ mass::c:
     min: 1.0
     max: 2.0
     latex: 'm_c'
-    unit: 'GeV'
+    # deliberately differs from the default unit ('GeV') so the test can verify
+    # the overridden unit is actually applied (see gh#1193)
+    unit: 'GeV^2'
 test::override_new_param:
     central: 42.0
