@@ -800,7 +800,8 @@ namespace eos
                                 throw ParameterInputFileNodeError(file, name + ".unit", "is not a scalar");
                             }
 
-                            unit = Unit(unit_node.as<std::string>());
+                            unit     = Unit(unit_node.as<std::string>());
+                            has_unit = true;
                         }
 
                         auto i = parameters_map.find(name);
