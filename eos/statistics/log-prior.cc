@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2017-2024 Danny van Dyk
+ * Copyright (c) 2011      Frederik Beaujean
+ * Copyright (c) 2017-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -255,7 +255,10 @@ namespace eos
 
                 virtual void sample()
                 {
-                    // CDF = c \Phi(x - x_{central} / \sigma) + b
+                    // Invert the CDF F(x) = c (\Phi((x - x_{central}) / \sigma) - 1/2) + _prob_lower,
+                    // where (c, \sigma) = (c_b, \sigma_lower) below the central value and
+                    // (c_a, \sigma_upper) above it. Solving for x yields
+                    //   x = x_{central} + \sigma \Phi^{-1}((p - _prob_lower) / c + 1/2).
 
                     // find out if sample in upper or lower part
                     const auto p = _parameter.evaluate_generator();
@@ -268,15 +271,18 @@ namespace eos
 
                 virtual void compute_cdf()
                 {
-                    // CDF = c \Phi(x - x_{central} / \sigma) + b
+                    // Evaluate the CDF F(x) = c (\Phi((x - x_{central}) / \sigma) - 1/2) + _prob_lower,
+                    // where (c, \sigma) = (c_b, \sigma_lower) below the central value and
+                    // (c_a, \sigma_upper) above it. The -1/2 shift makes this the exact inverse of
+                    // sample(); F(x_{central}) = _prob_lower, F(_min) = 0, and F(_max) = 1.
 
                     // find out if sample in upper or lower part
                     const auto x = _parameter.evaluate();
 
                     if (x < _central)
-                        _parameter.set_generator(_c_b * gsl_cdf_gaussian_P((x - _central) / _sigma_lower, 1.0) + _prob_lower);
+                        _parameter.set_generator(_c_b * (gsl_cdf_gaussian_P((x - _central) / _sigma_lower, 1.0) - 0.5) + _prob_lower);
                     else
-                        _parameter.set_generator(_c_a * gsl_cdf_gaussian_P((x - _central) / _sigma_upper, 1.0) + _prob_lower);
+                        _parameter.set_generator(_c_a * (gsl_cdf_gaussian_P((x - _central) / _sigma_upper, 1.0) - 0.5) + _prob_lower);
                 }
 
                 virtual bool informative() const

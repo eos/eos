@@ -109,7 +109,26 @@ class LogPriorTest :
                 parameters["mass::b(MSbar)"] = 4.3 + 1e-7;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), lower_limit, eps);
 
-                // no CDF checks here: mean and median do not coincide for asymmetric uncertainties
+                // mean and median do not coincide for asymmetric uncertainties, so we cannot
+                // check the CDF against fixed quantiles; instead check that compute_cdf() and
+                // sample() are mutual inverses (see gh#1189).
+                Parameter param = parameters["mass::b(MSbar)"];
+
+                // the CDF anchors the support to [0, 1] and pins the central value to _prob_lower
+                const double cdf_min     = cdf(gauss_prior, param, 4.15);
+                const double cdf_central = cdf(gauss_prior, param, 4.3);
+                const double cdf_max     = cdf(gauss_prior, param, 4.57);
+                TEST_CHECK_NEARLY_EQUAL(cdf_min, 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf_max, 1.0, eps);
+                TEST_CHECK(cdf_central > cdf_min && cdf_central < cdf_max);
+
+                // round-trip on both branches: values must stay in [0, 1] and invert cleanly
+                for (const double & x : { 4.18, 4.25, 4.3, 4.35, 4.45, 4.55 })
+                {
+                    const double p = cdf(gauss_prior, param, x);
+                    TEST_CHECK(p >= 0.0 && p <= 1.0);
+                    TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gauss_prior, param, p), x, eps);
+                }
             }
 
             // cloning
