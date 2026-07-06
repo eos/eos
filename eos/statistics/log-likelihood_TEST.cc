@@ -21,6 +21,7 @@
 #include <test/test.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-posterior_TEST.hh>
+#include <eos/statistics/test-statistic-impl.hh>
 #include <eos/maths/power-of.hh>
 #include <algorithm>
 #include <cmath>
@@ -657,6 +658,172 @@ namespace eos
                     // ratio of pdfs at mode given by weight ratio
                     TEST_CHECK_RELATIVE_ERROR(pdf_favored, pdf_suppressed + std::log(weights[0] / weights[1]), 1e-12);
                 }
+
+                // A: UniformBound block (the factory is not exercised elsewhere)
+                {
+                    ObservablePtr   obs(new ObservableStub(p, "mass::c", k));
+                    ObservableCache cache(p);
+                    auto            block = LogLikelihoodBlock::UniformBound(cache, std::vector<ObservablePtr>{ obs }, 1.0, 0.1);
+
+                    TEST_CHECK(block->as_string().find("UniformBound") != std::string::npos);
+                    TEST_CHECK_EQUAL(block->number_of_observations(), 0u);
+
+                    gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
+                    TEST_CHECK_EQUAL(block->sample(rng), 0.0);
+                    gsl_rng_free(rng);
+
+                    // saturation below the bound -> no penalty
+                    p["mass::c"] = 0.5;
+                    cache.update();
+                    TEST_CHECK_EQUAL(block->evaluate(), 0.0);
+                    TEST_CHECK_EQUAL(block->significance(), 0.0);
+
+                    // saturation above the bound -> Gaussian penalty and non-zero significance
+                    p["mass::c"] = 1.2;
+                    cache.update();
+                    TEST_CHECK_NEARLY_EQUAL(block->evaluate(), -0.5 * power_of<2>((1.2 - 1.0) / 0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(block->significance(), (1.2 - 1.0) / 0.1, eps);
+                    TEST_CHECK_NO_THROW(block->primary_test_statistic());
+
+                    // clone reproduces the parent (both saturated at 1.2)
+                    Parameters      np = p.clone();
+                    ObservableCache ncache(np);
+                    auto            clone = block->clone(ncache);
+                    np["mass::c"] = 1.2;
+                    ncache.update();
+                    TEST_CHECK_NEARLY_EQUAL(clone->evaluate(), block->evaluate(), eps);
+
+                    // negative saturation is an error
+                    p["mass::c"] = -0.5;
+                    cache.update();
+                    TEST_CHECK_THROWS(InternalError, block->evaluate());
+                    TEST_CHECK_THROWS(InternalError, block->significance());
+
+                    // with a zero uncertainty, saturation above the bound yields -infinity
+                    auto block0 = LogLikelihoodBlock::UniformBound(cache, std::vector<ObservablePtr>{ ObservablePtr(new ObservableStub(p, "mass::c", k)) }, 1.0, 0.0);
+                    p["mass::c"] = 1.2;
+                    cache.update();
+                    TEST_CHECK(! std::isfinite(block0->evaluate()));
+                    TEST_CHECK(! std::isfinite(block0->significance()));
+                }
+
+                // B: as_string(), primary_test_statistic(), and clone() for the remaining block types
+                {
+                    // LogGamma
+                    ObservablePtr   obs(new ObservableStub(p, "mass::b(MSbar)", k));
+                    ObservableCache cache(p);
+                    auto            lg = LogLikelihoodBlock::LogGamma(cache, obs, 0.34, 0.53, 0.63, 0.383056, 0.0687907);
+                    p["mass::b(MSbar)"] = 0.53;
+                    cache.update();
+                    TEST_CHECK(! lg->as_string().empty());
+                    TEST_CHECK_NO_THROW(lg->primary_test_statistic());
+                    TEST_CHECK_NO_THROW(lg->clone(cache));
+                }
+                {
+                    // Mixture
+                    ObservableCache                    cache(p);
+                    std::vector<LogLikelihoodBlockPtr> comps{
+                        LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new ObservableStub(p, "mass::c")), -5, -4, -3),
+                        LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new ObservableStub(p, "mass::c")),  3,  4,  5)
+                    };
+                    std::vector<double>                weights{ 0.9, 0.1 };
+                    std::vector<std::array<double, 2>> test_stat{};
+                    auto                               mix = LogLikelihoodBlock::Mixture(comps, weights, test_stat);
+                    p["mass::c"] = -4;
+                    cache.update();
+                    TEST_CHECK(! mix->as_string().empty());
+                    TEST_CHECK_NO_THROW(mix->primary_test_statistic());
+                    TEST_CHECK_NO_THROW(mix->clone(cache));
+                }
+                {
+                    // MultivariateGaussian
+                    std::array<ObservablePtr, 2> obs{
+                        { ObservablePtr(new ObservableStub(p, "mass::b(MSbar)", k)), ObservablePtr(new ObservableStub(p, "mass::c", k)) }
+                    };
+                    ObservableCache cache(p);
+                    std::array<double, 2>                mean{ { 4.3, 1.1 } };
+                    std::array<std::array<double, 2>, 2> covariance;
+                    covariance[0][0] = 0.01;
+                    covariance[1][1] = 0.0025;
+                    covariance[0][1] = covariance[1][0] = 0.0;
+                    auto mvg = LogLikelihoodBlock::MultivariateGaussian<2>(cache, obs, mean, covariance);
+                    p["mass::b(MSbar)"] = 4.35;
+                    p["mass::c"]        = 1.1;
+                    cache.update();
+                    TEST_CHECK(! mvg->as_string().empty());
+                    TEST_CHECK_NO_THROW(mvg->primary_test_statistic());
+                }
+
+                // C: MixtureBlock::sample() is not implemented and must throw
+                {
+                    ObservableCache                    cache(p);
+                    std::vector<LogLikelihoodBlockPtr> comps{ LogLikelihoodBlock::Gaussian(cache, ObservablePtr(new ObservableStub(p, "mass::c")), -1, 0, 1) };
+                    std::vector<double>                weights{ 1.0 };
+                    std::vector<std::array<double, 2>> test_stat{};
+                    auto                               mix = LogLikelihoodBlock::Mixture(comps, weights, test_stat);
+
+                    gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
+                    TEST_CHECK_THROWS(InternalError, mix->sample(rng));
+                    gsl_rng_free(rng);
+                }
+
+                // D: factory error paths
+                {
+                    ObservablePtr   obs(new ObservableStub(p, "mass::c", k));
+                    ObservableCache cache(p);
+
+                    // LogGamma
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::LogGamma(cache, obs, 0.6, 0.5, 0.7, 0.3, 0.06));  // min >= central
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::LogGamma(cache, obs, 0.3, 0.5, 0.4, 0.3, 0.06));  // max <= central
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::LogGamma(cache, obs, 0.3, 0.5, 0.7, -1.0, 0.06)); // alpha <= 0
+
+                    // Amoroso: mis-ordered limits (checked before the cdf-consistency checks)
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Amoroso(cache, obs, 1.0, 0.5, 2.0, 3.0, 1.0, 1.0, 1.0)); // x_10 <= physical_limit
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Amoroso(cache, obs, 1.0, 2.0, 0.5, 3.0, 1.0, 1.0, 1.0)); // x_50 <= physical_limit
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Amoroso(cache, obs, 0.0, 1.0, 2.0, 1.5, 1.0, 1.0, 1.0)); // x_90 <= x_50
+
+                    // Mixture: components and weights sizes disagree
+                    {
+                        std::vector<LogLikelihoodBlockPtr> comps{ LogLikelihoodBlock::Gaussian(cache, obs, -1, 0, 1) };
+                        std::vector<double>                weights{ 0.5, 0.5 };
+                        std::vector<std::array<double, 2>> test_stat{};
+                        TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Mixture(comps, weights, test_stat));
+                    }
+
+                    // Unbinned1D
+                    {
+                        std::vector<Kinematics> kinematics{ Kinematics{} };
+                        std::vector<double>     resolution{ 0.1 };
+                        std::vector<Kinematics> observations{ Kinematics{} };
+                        TEST_CHECK_THROWS(InternalError,
+                                          LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", std::vector<Kinematics>{}, Options{}, resolution, observations)); // empty kinematics
+                        TEST_CHECK_THROWS(InternalError,
+                                          LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, std::vector<double>{ 0.1, 0.2 }, observations)); // size mismatch
+                        TEST_CHECK_THROWS(InternalError,
+                                          LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, resolution, std::vector<Kinematics>{})); // empty observations
+                    }
+                }
+
+                // E: externally-added likelihood blocks (LogLikelihood::add(block) and the external-block loops)
+                {
+                    Parameters    pe = Parameters::Defaults();
+                    LogLikelihood llh(pe);
+
+                    // add a standalone block directly (not via a constraint)
+                    llh.add(LogLikelihoodBlock::Gaussian(llh.observable_cache(), ObservablePtr(new ObservableStub(pe, "mass::c")), 1.1, 1.2, 1.3));
+
+                    pe["mass::c"] = 1.2;
+                    TEST_CHECK(std::isfinite(llh()));
+
+                    // cloning must carry the external block along
+                    LogLikelihood llh_clone = llh.clone();
+                    TEST_CHECK_NEARLY_EQUAL(llh_clone(), llh(), eps);
+
+                    // an external block evaluating to -infinity short-circuits the total likelihood
+                    llh.add(LogLikelihoodBlock::UniformBound(llh.observable_cache(), std::vector<ObservablePtr>{ ObservablePtr(new ObservableStub(pe, "mass::c")) }, 0.5, 0.0));
+                    pe["mass::c"] = 1.2;
+                    TEST_CHECK(! std::isfinite(llh()));
+                }
             }
     } log_likelihood_test;
 
@@ -801,6 +968,17 @@ namespace eos
                 // The block convolves the PDF with the resolution and sums the logarithm of the smeared
                 // density evaluated at each observation; this must reproduce the reference values.
                 TEST_CHECK_NEARLY_EQUAL(block->evaluate(), expected, 1.0e-6);
+
+                // exercise the remaining Unbinned1DLikelihoodBlock methods
+                TEST_CHECK(block->as_string().find("Unbinned") != std::string::npos);
+                TEST_CHECK_NO_THROW(block->primary_test_statistic());
+                TEST_CHECK_NO_THROW(block->clone(cache));
+
+                // sample() and significance() are not implemented and must throw
+                gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
+                TEST_CHECK_THROWS(InternalError, block->sample(rng));
+                gsl_rng_free(rng);
+                TEST_CHECK_THROWS(InternalError, block->significance());
             }
     } unbinned_log_likelihood_test;
 }
