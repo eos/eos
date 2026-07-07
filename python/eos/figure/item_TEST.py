@@ -1323,12 +1323,17 @@ class ConstraintItemCoverageTests(unittest.TestCase):
 
     def test_gaussian(self):
 
-        # a univariate Gaussian constraint is prepared into a single (x, y) point.
-        # NOTE: drawing a single-point Gaussian constraint currently fails (asymmetric y errors are
-        # passed to Axes.errorbar with an ambiguous shape), so only prepare() is exercised here.
+        # a univariate Gaussian constraint is prepared into a single (x, y) point and drawn as one
+        # error bar with an asymmetric y error. Regression test: drawing such a constraint previously
+        # failed because the asymmetric error (a pair) was passed to Axes.errorbar with a shape that
+        # matplotlib interpreted as two data points.
         item = eos.figure.ItemFactory.from_yaml("type: constraint\nconstraints: 'B->D::f_+@FKKM:2008A'\nvariable: q2")
         item.prepare()
         self.assertEqual(len(item._yvalues), 1)
+        _, ax = plt.subplots()
+        item.draw(ax)
+        # exactly one error bar (one ErrorbarContainer) is drawn
+        self.assertEqual(len(ax.containers), 1)
 
     def test_multivariate_gaussian(self):
 
@@ -1349,11 +1354,15 @@ class ConstraintResidueItemCoverageTests(unittest.TestCase):
 
     def test_gaussian(self):
 
-        # see the note in ConstraintItemCoverageTests.test_gaussian regarding drawing
+        # a univariate Gaussian constraint residue is drawn as one error bar with an asymmetric y
+        # error (see the regression note in ConstraintItemCoverageTests.test_gaussian)
         item = eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 'B->D::f_+@FKKM:2008A'\n"
                                                 "observable: 'B->D::f_+(q2)'\nvariable: q2")
         item.prepare()
         self.assertEqual(len(item._yvalues), 1)
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertEqual(len(ax.containers), 1)
 
     def test_multivariate_gaussian(self):
 

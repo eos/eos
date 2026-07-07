@@ -1925,6 +1925,11 @@ class ConstraintItem(Item):
 
         label = self.label
         for xv, xerr, yv, yerr in zip(xvalues, xerrors, yvalues, yerrors):
+            # an asymmetric y error is stored as the pair (upper, lower); matplotlib expects it as a
+            # column [[lower], [upper]] for the single point, whereas a symmetric error is a scalar
+            # and is passed through unchanged
+            if _np.ndim(yerr) > 0:
+                yerr = [[yerr[1]], [yerr[0]]]
             if xerr is not None:
                 ax.errorbar(x=xv, y=yv, xerr=xerr, yerr=yerr, color=self.color,
                                          elinewidth=1.0, fmt='_', linestyle='none', label=label)
@@ -2438,6 +2443,11 @@ class ConstraintResidueItem(Item):
 
         label = self.label
         for xv, xerr, yv, yerr in zip(xvalues, xerrors, yvalues, yerrors):
+            # an asymmetric y error is stored as the pair (upper, lower); matplotlib expects it as a
+            # column [[lower], [upper]] for the single point, whereas a symmetric error is a scalar
+            # and is passed through unchanged
+            if _np.ndim(yerr) > 0:
+                yerr = [[yerr[1]], [yerr[0]]]
             if xerr is not None:
                 ax.errorbar(x=xv, y=yv, xerr=xerr, yerr=yerr, color=self.color,
                                          elinewidth=1.0, fmt='_', linestyle='none', label=label)
