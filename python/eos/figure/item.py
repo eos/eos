@@ -293,7 +293,7 @@ class ObservableItem(Item):
             try:
                 qn = eos.QualifiedName(self.variable)
                 # Continues only if no failure occurs
-                self._variable = self.parameters[qn]
+                self._variable = self._parameters[qn]
                 self._variable.set(_np.nan)
             except RuntimeError:
                 raise ValueError(f"Value of 'variable' for observable '{self.observable}' is neither a valid kinematic variable nor a valid parameter: '{self.variable}")

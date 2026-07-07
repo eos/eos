@@ -1021,6 +1021,42 @@ class ObservableItemValidationTests(unittest.TestCase):
         """)
         item.prepare()
 
+    def test_variable_is_parameter(self):
+
+        # 'variable' may name an EOS parameter (rather than a kinematic variable); the observable is
+        # then evaluated as a function of that parameter. This exercises the QualifiedName branch of
+        # __post_init__, which previously referred to a non-existent 'self.parameters' attribute.
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::dBR/dq2'
+        options: { model: 'CKM' }
+        variable: 'CKM::abs(V_cb)'
+        fixed_kinematics: { q2: 5.0 }
+        range: [0.038, 0.043]
+        resolution: 5
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+        # the x-axis parameter is resolved to an EOS Parameter and is actually varied: dBR/dq2 grows
+        # with |V_cb| (it is proportional to |V_cb|^2), and the parameter is left at the last grid point
+        yvalues = list(item._yvalues)
+        self.assertTrue(all(lo < hi for lo, hi in zip(yvalues, yvalues[1:])),
+                        f"observable did not vary monotonically with the parameter: {yvalues}")
+        self.assertAlmostEqual(float(item._variable), 0.043)
+
+    def test_variable_invalid_parameter(self):
+
+        # a 'variable' that is a well-formed QualifiedName but not a registered parameter is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: observable
+            observable: 'B->Dlnu::dBR/dq2'
+            variable: 'Not::a-parameter'
+            range: [0.1, 0.2]
+            """)
+
     def test_invalid(self):
 
         # a fixed kinematic variable that the observable does not declare is rejected
