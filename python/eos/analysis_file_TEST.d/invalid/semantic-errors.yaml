@@ -1,0 +1,86 @@
+# An analysis file that parses and constructs successfully, but whose contents are
+# semantically invalid in many independent ways. AnalysisFile.validate() is expected to
+# report (rather than raise) one message per problem, so this fixture exercises the
+# error-reporting branches of validate().
+#
+# 'post-good' is deliberately valid so that its analysis is created successfully and the
+# per-prediction checks actually run against it (a posterior whose analysis fails would
+# short-circuit that inner loop).
+
+priors:
+  - name: GOOD
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 4.5e-3, type: uniform }
+  - name: BAD-PARAM
+    descriptions:
+      - { parameter: 'Not::a-parameter', min: 0.0, max: 1.0, type: uniform }
+
+likelihoods:
+  - name: GOOD-LL
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+  - name: BAD-LL
+    constraints:
+      - 'Not::a-constraint@Nowhere:2000A'
+  - name: MANUAL-LL
+    manual_constraints:
+      # a manual constraint whose name collides with an already-defined EOS constraint
+      'B^+->tau^+nu::BR@Belle:2014A':
+        type: 'Gaussian'
+        observable: 'B_u->lnu::BR;l=tau'
+        kinematics: {}
+        options: {}
+        mean: 1.0e-4
+        sigma-stat: { hi: 1.0e-5, lo: -1.0e-5 }
+        sigma-sys:  { hi: 0.0, lo: 0.0 }
+        dof: 1
+      # a manual constraint with a fresh name is fine (it does not collide with a built-in one)
+      'Test::fresh-manual-constraint@Test:2026A':
+        type: 'Gaussian'
+        observable: 'B_u->lnu::BR;l=tau'
+        kinematics: {}
+        options: {}
+        mean: 1.0e-4
+        sigma-stat: { hi: 1.0e-5, lo: -1.0e-5 }
+        sigma-sys:  { hi: 0.0, lo: 0.0 }
+        dof: 1
+
+posteriors:
+  - name: post-good
+    prior: [ GOOD ]
+    likelihood: [ GOOD-LL ]
+  - name: post-bad-fixed
+    prior: [ GOOD ]
+    likelihood: [ GOOD-LL ]
+    fixed_parameters:
+      'Not::a-fixed-parameter': 1.0
+
+predictions:
+  - name: pred-bad-obs
+    observables:
+      - name: 'B->pilnu::NOTREAL'
+  - name: pred-bad-fixed
+    fixed_parameters:
+      'Not::a-prediction-parameter': 2.0
+    observables:
+      - name: 'B_u->lnu::BR;l=e'
+
+steps:
+  - title: 'A step with several problems'
+    id: 'bad-step'
+    depends_on: [ 'nonexistent-step' ]
+    default_arguments:
+      not-a-real-task:
+        foo: bar
+    tasks:
+      - task: 'sample-nested'
+        arguments:
+          posterior: 'nonexistent-posterior'
+
+masks:
+  - name: mask-1
+    description:
+      - { name: 'repeated::name', expression: '<<B->pilnu::BR;l=e>>' }
+  - name: mask-2
+    description:
+      - { name: 'repeated::name', expression: '<<B->pilnu::BR;l=mu>>' }

@@ -1,0 +1,10 @@
+# Missing the mandatory 'priors' section: AnalysisFile.__init__ must raise.
+likelihoods:
+  - name: LL
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+
+posteriors:
+  - name: p
+    prior: []
+    likelihood: [ LL ]

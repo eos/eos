@@ -1,0 +1,20 @@
+# A mask references another mask that is not defined: AnalysisFile.__init__ must raise.
+priors:
+  - name: CKM
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 4.5e-3, type: uniform }
+
+likelihoods:
+  - name: LL
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+
+posteriors:
+  - name: p
+    prior: [ CKM ]
+    likelihood: [ LL ]
+
+masks:
+  - name: m1
+    description:
+      - { mask_name: 'nonexistent-mask' }
