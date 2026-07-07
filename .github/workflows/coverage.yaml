@@ -65,6 +65,10 @@ jobs:
                 [run]
                 parallel = True
                 source = eos
+                # Exclude the test drivers themselves from the coverage
+                # measurement; they are the tests, not the code under test.
+                omit =
+                    */*_TEST.py
                 EOF
 
             - name: Configure
