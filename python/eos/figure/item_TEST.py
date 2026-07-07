@@ -967,5 +967,543 @@ class VerticalLineItemTests(unittest.TestCase):
         """)
         self.assertEqual(list(item.legend()), [])
 
+# Fixtures and helpers shared by the coverage tests below.
+_ITEM_TEST_D = 'eos/figure/item_TEST.d'
+# The full lookup keys (name + options + kinematics) of the two observables stored in the
+# 'pred-uniq' Prediction fixture; used to exercise the full-name lookup of the data-driven items.
+_PRED_FP = 'B->D::f_+(q2);form-factors=BCL2008,model=CKM[q2=1]'
+_PRED_F0 = 'B->D::f_0(q2);form-factors=BCL2008,model=CKM[q2=1]'
+
+def _source_context():
+    "An analysis file context rooted at the test source directory, where the fixtures live."
+    return AnalysisFileContext(base_directory=os.environ['SOURCE_DIR'])
+
+class ItemFactoryTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        # a description without a 'type' key is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("observable: 'B->Dlnu::dBR/dq2'")
+
+        # a description naming an unknown item type is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: 'not-a-real-item-type'")
+
+class ObservableItemValidationTests(unittest.TestCase):
+
+    def test_fixed_kinematics_options(self):
+
+        # explicit options and a fixed (spectator) kinematic variable are declared without error
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::BR'
+        variable: q2_min
+        range: [0.1, 1.0]
+        resolution: 3
+        options: { l: 'mu' }
+        fixed_kinematics: { q2_max: 11.6 }
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_fixed_parameters(self):
+
+        # explicit fixed parameters are applied to the parameter set
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::dBR/dq2'
+        variable: q2
+        range: [0.1, 1.0]
+        resolution: 3
+        fixed_parameters: { 'mass::mu': 0.10566 }
+        """)
+        item.prepare()
+
+    def test_invalid(self):
+
+        # a fixed kinematic variable that the observable does not declare is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: observable
+            observable: 'B->Dlnu::dBR/dq2'
+            variable: q2
+            range: [0.1, 1.0]
+            fixed_kinematics: { not_a_kinematic: 1.0 }
+            """)
+
+        # a 'variable' that is neither a kinematic variable nor a valid parameter name is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: observable
+            observable: 'B->Dlnu::dBR/dq2'
+            variable: 'not a valid name'
+            range: [0.1, 1.0]
+            """)
+
+class ExpressionItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        # a null range is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: expression\nexpression: 'x'\nrange: null")
+
+        # a non-positive resolution is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: expression\nexpression: 'x'\nrange: [0.0, 1.0]\nresolution: 0")
+
+class UncertaintyBandItemValidationTests(unittest.TestCase):
+
+    def test_band_normalization(self):
+
+        # a single band type given as a string is normalized to a set
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nband: 'median'")
+        self.assertEqual(item.band, {'median'})
+
+        # a list of band types is normalized to a set
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nband: ['area', 'outer']")
+        self.assertEqual(item.band, {'area', 'outer'})
+
+    def test_invalid(self):
+
+        # a 'band' that is neither a string, list, nor set is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nband: 5")
+
+        # an unknown band type is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nband: 'nonsense'")
+
+        # an unknown interpolation type is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\ninterpolation: 'quadratic'")
+
+        # a range that is not a pair is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nrange: [1.0]")
+
+        # an inverted range is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nrange: [2.0, 1.0]")
+
+class BinnedUncertaintyItemValidationTests(unittest.TestCase):
+
+    def test_missing_binned_kinematics(self):
+
+        # the data file must expose '<variable>_min' and '<variable>_max' for each prediction
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
+                                                "datafile: 'eos/data/prediction_TEST.d/predictions-binned'")
+        with self.assertRaises(RuntimeError):
+            item.prepare(context=_source_context())
+
+class OneDimensionalHistogramItemValidationTests(unittest.TestCase):
+
+    def test_invalid_bins(self):
+
+        # fewer than two bins is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: histogram1D\nvariable: 'x'\ndatafile: 'x'\nbins: 1")
+
+    def test_prepare_errors(self):
+
+        ctx = _source_context()
+
+        # a data file whose name is neither 'samples' nor 'pred-*' has an unsupported format
+        item = eos.figure.ItemFactory.from_yaml("type: histogram1D\nvariable: 'x'\ndatafile: '" + _ITEM_TEST_D + "'")
+        with self.assertRaises(NotImplementedError):
+            item.prepare(context=ctx)
+
+        # a variable absent from the data file is rejected
+        item = eos.figure.ItemFactory.from_yaml("type: histogram1D\nvariable: 'not-a-variable'\n"
+                                                "datafile: 'eos/data/importance_samples_TEST.d/samples'")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+    def test_prediction(self):
+
+        # the Prediction ('pred-*') branch, addressed by the full observable name
+        item = eos.figure.ItemFactory.from_yaml("type: histogram1D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variable: '" + _PRED_FP + "'")
+        item.prepare(context=_source_context())
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+class TwoDimensionalHistogramItemValidationTests(unittest.TestCase):
+
+    def test_invalid_bins(self):
+
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: histogram2D\nvariables: ['a', 'b']\ndatafile: 'x'\nbins: 1")
+
+    def test_prepare_errors(self):
+
+        ctx = _source_context()
+
+        item = eos.figure.ItemFactory.from_yaml("type: histogram2D\nvariables: ['a', 'b']\ndatafile: '" + _ITEM_TEST_D + "'")
+        with self.assertRaises(NotImplementedError):
+            item.prepare(context=ctx)
+
+        item = eos.figure.ItemFactory.from_yaml("type: histogram2D\nvariables: ['nope1', 'nope2']\n"
+                                                "datafile: 'eos/data/importance_samples_TEST.d/samples'")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+    def test_prediction(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: histogram2D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['" + _PRED_FP + "', '" + _PRED_F0 + "']")
+        item.prepare(context=_source_context())
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+class OneDimensionalKernelDensityItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        # a credibility level outside (0, 100) is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'x'\ndatafile: 'x'\nlevel: 150")
+
+        # a non-positive bandwidth factor is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'x'\ndatafile: 'x'\nbandwidth: -1.0")
+
+    def test_prepare_errors(self):
+
+        ctx = _source_context()
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'x'\ndatafile: '" + _ITEM_TEST_D + "'")
+        with self.assertRaises(NotImplementedError):
+            item.prepare(context=ctx)
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'nope'\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+    def test_prediction(self):
+
+        ctx = _source_context()
+
+        # the stripped-name lookup (name without options/kinematics)
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variable: 'B->D::f_+(q2)'")
+        item.prepare(context=ctx)
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+        # the full-name lookup
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variable: '" + _PRED_FP + "'")
+        item.prepare(context=ctx)
+
+        # a stripped name that is ambiguous across several predictions is rejected
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\ndatafile: '" + _ITEM_TEST_D + "/pred-dup'\n"
+                                                "variable: 'B->D::f_+(q2)'")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+class TwoDimensionalKernelDensityItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        with self.assertRaises(ValueError):  # credibility level outside (0, 100)
+            eos.figure.ItemFactory.from_yaml("type: kde2D\nvariables: ['a', 'b']\ndatafile: 'x'\nlevels: [150]")
+
+        with self.assertRaises(ValueError):  # non-positive bandwidth factor
+            eos.figure.ItemFactory.from_yaml("type: kde2D\nvariables: ['a', 'b']\ndatafile: 'x'\nbandwidth: 0.0")
+
+        with self.assertRaises(ValueError):  # unsupported contour type
+            eos.figure.ItemFactory.from_yaml("type: kde2D\nvariables: ['a', 'b']\ndatafile: 'x'\ncontours: ['nonsense']")
+
+    def test_prepare_errors(self):
+
+        ctx = _source_context()
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\nvariables: ['a', 'b']\ndatafile: '" + _ITEM_TEST_D + "'")
+        with self.assertRaises(NotImplementedError):
+            item.prepare(context=ctx)
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\nvariables: ['nope', '" + _PRED_F0 + "']\n"
+                                                "datafile: '" + _ITEM_TEST_D + "/pred-uniq'")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+    def test_prediction(self):
+
+        ctx = _source_context()
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['B->D::f_+(q2)', 'B->D::f_0(q2)']")
+        item.prepare(context=ctx)
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['" + _PRED_FP + "', '" + _PRED_F0 + "']")
+        item.prepare(context=ctx)
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: '" + _ITEM_TEST_D + "/pred-dup'\n"
+                                                "variables: ['B->D::f_+(q2)', 'B->D::f_+(q2)']")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+class TwoDimensionalContoursItemPredictionTests(unittest.TestCase):
+
+    def test_prepare_errors(self):
+
+        ctx = _source_context()
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nvariables: ['a', 'b']\ndatafile: '" + _ITEM_TEST_D + "'")
+        with self.assertRaises(NotImplementedError):
+            item.prepare(context=ctx)
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nvariables: ['nope', '" + _PRED_F0 + "']\n"
+                                                "datafile: '" + _ITEM_TEST_D + "/pred-uniq'")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+    def test_prediction(self):
+
+        ctx = _source_context()
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['B->D::f_+(q2)', 'B->D::f_0(q2)']")
+        item.prepare(context=ctx)
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['" + _PRED_FP + "', '" + _PRED_F0 + "']")
+        item.prepare(context=ctx)
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: '" + _ITEM_TEST_D + "/pred-dup'\n"
+                                                "variables: ['B->D::f_+(q2)', 'B->D::f_+(q2)']")
+        with self.assertRaises(ValueError):
+            item.prepare(context=ctx)
+
+class ConstraintItemCoverageTests(unittest.TestCase):
+
+    def test_gaussian(self):
+
+        # a univariate Gaussian constraint is prepared into a single (x, y) point.
+        # NOTE: drawing a single-point Gaussian constraint currently fails (asymmetric y errors are
+        # passed to Axes.errorbar with an ambiguous shape), so only prepare() is exercised here.
+        item = eos.figure.ItemFactory.from_yaml("type: constraint\nconstraints: 'B->D::f_+@FKKM:2008A'\nvariable: q2")
+        item.prepare()
+        self.assertEqual(len(item._yvalues), 1)
+
+    def test_multivariate_gaussian(self):
+
+        # a MultivariateGaussian constraint (with a non-matching observable per entry that is skipped)
+        item = eos.figure.ItemFactory.from_yaml("type: constraint\nconstraints: 'B->D::f_++f_0@HPQCD:2015A'\n"
+                                                "observable: 'B->D::f_+(q2)'\nvariable: q2")
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_invalid(self):
+
+        # 'constraints' of an unsupported type is rejected at construction
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: constraint\nconstraints: 123\nvariable: q2")
+
+class ConstraintResidueItemCoverageTests(unittest.TestCase):
+
+    def test_gaussian(self):
+
+        # see the note in ConstraintItemCoverageTests.test_gaussian regarding drawing
+        item = eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 'B->D::f_+@FKKM:2008A'\n"
+                                                "observable: 'B->D::f_+(q2)'\nvariable: q2")
+        item.prepare()
+        self.assertEqual(len(item._yvalues), 1)
+
+    def test_multivariate_gaussian(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 'B->D::f_++f_0@HPQCD:2015A'\n"
+                                                "observable: 'B->D::f_+(q2)'\nvariable: q2")
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_invalid(self):
+
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 123\n"
+                                             "observable: 'B->D::f_+(q2)'\nvariable: q2")
+
+class TwoDimensionalConstraintItemCoverageTests(unittest.TestCase):
+
+    def test_invalid_type(self):
+
+        # a 'constraint' that is neither a string nor a QualifiedName is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: constraint2D\nconstraint: 123\nx: { observable: 'a' }")
+
+    def test_prepare_errors(self):
+
+        # a constraint of an unsupported type (here: Amoroso) is rejected during prepare()
+        item = eos.figure.ItemFactory.from_yaml("type: constraint2D\n"
+                                                "constraint: 'B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A'\n"
+                                                "x: { observable: 'B_q->ll::BR@Untagged' }")
+        with self.assertRaises(ValueError):
+            item.prepare()
+
+class BandItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        with self.assertRaises(ValueError):  # neither 'x' nor 'y'
+            eos.figure.ItemFactory.from_yaml("type: band")
+
+        with self.assertRaises(ValueError):  # 'x' not a pair
+            eos.figure.ItemFactory.from_yaml("type: band\nx: [1.0]")
+
+        with self.assertRaises(ValueError):  # inverted 'x'
+            eos.figure.ItemFactory.from_yaml("type: band\nx: [2.0, 1.0]")
+
+        with self.assertRaises(ValueError):  # 'y' not a pair
+            eos.figure.ItemFactory.from_yaml("type: band\ny: [1.0]")
+
+        with self.assertRaises(ValueError):  # inverted 'y'
+            eos.figure.ItemFactory.from_yaml("type: band\ny: [2.0, 1.0]")
+
+class VerticalLineItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        # 'x' is mandatory
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: vertical")
+
+class SignalPDFItemCoverageTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        base = "type: signal-pdf\npdf: 'B->Dlnu::P(q2);l=mu'\nvariable: q2\n"
+
+        with self.assertRaises(ValueError):  # null range
+            eos.figure.ItemFactory.from_yaml(base + "range: null")
+
+        with self.assertRaises(ValueError):  # inverted range
+            eos.figure.ItemFactory.from_yaml(base + "range: [2.0, 1.0]")
+
+        with self.assertRaises(ValueError):  # non-positive resolution
+            eos.figure.ItemFactory.from_yaml(base + "range: [0.02, 11.6]\nresolution: 0")
+
+        # a null kinematic variable is rejected in prepare()
+        item = eos.figure.ItemFactory.from_yaml("type: signal-pdf\npdf: 'B->Dlnu::P(q2);l=mu'\n"
+                                                "variable: null\nrange: [0.02, 11.6]")
+        with self.assertRaises(ValueError):
+            item.prepare()
+
+    def test_options_and_parameters(self):
+
+        # explicit options and parameters are applied during prepare()
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: signal-pdf
+        pdf: 'B->Dlnu::P(q2);l=mu'
+        variable: q2
+        range: [0.02, 11.6]
+        resolution: 10
+        kinematics: { q2_min: 0.02, q2_max: 11.6 }
+        options: { l: 'mu' }
+        parameters: { 'mass::mu': 0.10566 }
+        """)
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+class ComplexPlaneItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        base = "type: complex-plane\nobservable: 'b->s::Re{F17}(Re{q2},Im{q2})'\n"
+
+        # the first variable is not a kinematic variable
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml(base + "variables: ['not_a_var', 'Im{q2}']\nranges: [[-1, 1], [-1, 1]]")
+
+        # the second variable is not a kinematic variable
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'not_a_var']\nranges: [[-1, 1], [-1, 1]]")
+
+        # a fixed kinematic variable that the observable does not declare is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'Im{q2}']\nranges: [[-1, 1], [-1, 1]]\n"
+                                             "fixed_kinematics: { bad_kin: 1.0 }")
+
+        # an inverted x range is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'Im{q2}']\nranges: [[1, -1], [-1, 1]]")
+
+        # an inverted y range is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'Im{q2}']\nranges: [[-1, 1], [1, -1]]")
+
+        # a non-positive resolution is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'Im{q2}']\nranges: [[-1, 1], [-1, 1]]\nresolution: 0")
+
+class ErrorBarsItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        with self.assertRaises(ValueError):  # no positions
+            eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: []\nyerrors: []")
+
+        with self.assertRaises(ValueError):  # neither x nor y errors
+            eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]")
+
+        with self.assertRaises(ValueError):  # x error count mismatch
+            eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]\nxerrors: [0.1, 0.2]")
+
+        with self.assertRaises(ValueError):  # y error count mismatch
+            eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]\nyerrors: [0.1, 0.2]")
+
+    def test_invalid_error_specs(self):
+
+        # an x error tuple of the wrong length is rejected in prepare()
+        item = eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]\nxerrors: [[0.1, 0.2, 0.3]]")
+        with self.assertRaises(ValueError):
+            item.prepare()
+
+        # an x error of an unsupported type is rejected in prepare()
+        item = eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]\nxerrors: ['bad']")
+        with self.assertRaises(ValueError):
+            item.prepare()
+
+        # a y error tuple of the wrong length is rejected in prepare()
+        item = eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]\nyerrors: [[0.1, 0.2, 0.3]]")
+        with self.assertRaises(ValueError):
+            item.prepare()
+
+        # a y error of an unsupported type is rejected in prepare()
+        item = eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2]]\nyerrors: ['bad']")
+        with self.assertRaises(ValueError):
+            item.prepare()
+
+    def test_xerrors_only(self):
+
+        # error bars with only x errors leave the y errors unset
+        item = eos.figure.ItemFactory.from_yaml("type: errorbars\npositions: [[1, 2], [2, 3]]\nxerrors: [0.1, 0.2]")
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertIsNone(item._yerr)
+
+class PointItemValidationTests(unittest.TestCase):
+
+    def test_invalid(self):
+
+        # an explicitly null 'x' is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: point\nx: null\ny: 0.0")
+
+        # an explicitly null 'y' is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: point\nx: 0.0\ny: null")
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)
