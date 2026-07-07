@@ -56,6 +56,9 @@ EXTRA_DIST = \
 	eos/figure/data.py \
 	eos/figure/figure.py \
 	eos/figure/item.py \
+	eos/figure/item_TEST.d \
+	eos/figure/item_TEST.d/pred-uniq \
+	eos/figure/item_TEST.d/pred-dup \
 	eos/figure/plot.py \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
