@@ -206,3 +206,21 @@ steps:
       - task: 'find-mode'
         arguments:
           posterior: 'WET-all'
+
+metadata:
+  title: 'Test B to pi l nu analysis'
+  id: 'test-btopilnu-2026'
+  authors:
+    - { name: 'Test Author', affiliation: 'Test University', email: 'test@example.org' }
+
+masks:
+  - name: mask-A
+    logical_combination: and
+    description:
+      - { name: 'mask::expr1', expression: '<<B->pilnu::BR;l=e>>' }
+      - { name: 'B->pilnu::BR' }
+  - name: mask-B
+    logical_combination: or
+    description:
+      - { mask_name: 'mask-A' }
+      - { name: 'mask::expr2', expression: '<<B->pilnu::BR;l=mu>>' }

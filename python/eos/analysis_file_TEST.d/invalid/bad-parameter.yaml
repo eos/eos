@@ -1,0 +1,24 @@
+# A custom parameter whose name is not a valid QualifiedName: AnalysisFile.__init__ must
+# turn the RuntimeError from eos.QualifiedName into a ValueError.
+priors:
+  - name: CKM
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 4.5e-3, type: uniform }
+
+likelihoods:
+  - name: LL
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+
+posteriors:
+  - name: p
+    prior: [ CKM ]
+    likelihood: [ LL ]
+
+parameters:
+  'Invalid Name With Spaces':
+    central: 1.0
+    min:     0.0
+    max:     2.0
+    unit:    '1'
+    latex:   'x'

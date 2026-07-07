@@ -8,6 +8,7 @@ EXTRA_DIST = \
 	eos/analysis_TEST.py \
 	eos/analysis_file.py \
 	eos/analysis_file_TEST.d \
+	eos/analysis_file_TEST.d/invalid \
 	eos/analysis_file_TEST.py \
 	eos/analysis_file_description.py \
 	eos/config.py \
