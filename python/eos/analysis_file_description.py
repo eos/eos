@@ -1,4 +1,26 @@
+#!/usr/bin/python
+# vim: set sw=4 sts=4 et tw=120 :
+
+# Copyright (c) 2024-2026 Danny van Dyk
+# Copyright (c) 2024-2025 Matthew Kirk
+# Copyright (c) 2024      Carolina Bolognani
+# Copyright (c) 2024      Méril Reboud
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
 from .deserializable import Deserializable
+from eos.figure import FigureFactory
 from dataclasses import dataclass, field
 from collections import defaultdict
 import copy as _copy
@@ -750,6 +772,91 @@ MaskDescription.registry = {
     'expression': MaskExpressionComponent,
     'mask_name':  MaskNamedComponent,
 }
+
+
+@dataclass
+class AnalysisFileDescription(Deserializable):
+    r"""Structured, deserialized representation of a complete analysis file.
+
+    This is the in-memory counterpart of an analysis file's top-level YAML mapping: each field mirrors
+    one top-level section, and :meth:`from_dict` deserializes every section into the corresponding
+    description objects. It performs only the pure structural deserialization; the mandatory-section
+    and cross-reference checks (e.g. that a posterior refers only to defined priors and likelihoods),
+    the enforcement of unique step ids and mask names, and the EOS-runtime side effects (declaring
+    custom parameters, inserting custom observables) remain the responsibility of :class:`eos.AnalysisFile`.
+
+    Unknown top-level keys are rejected: adding a new section requires adding a field here (and, for a
+    backwards-incompatible change, bumping the analysis file format version).
+
+    :param format_version: The schema version of the analysis file. Defaults to 1, the version predating format versioning.
+    :type format_version: int
+    :param metadata: The analysis file's metadata.
+    :type metadata: MetadataDescription
+    :param priors: The named priors.
+    :type priors: list[PriorComponent]
+    :param likelihoods: The named likelihoods.
+    :type likelihoods: list[LikelihoodComponent]
+    :param posteriors: The named posteriors.
+    :type posteriors: list[PosteriorDescription]
+    :param predictions: The named predictions.
+    :type predictions: list[PredictionDescription]
+    :param figures: The figures.
+    :type figures: list
+    :param observables: The custom observables (from the YAML mapping keyed by observable name).
+    :type observables: list[ObservableComponent]
+    :param parameters: The custom parameters (from the YAML mapping keyed by parameter name).
+    :type parameters: list[ParameterComponent]
+    :param steps: The reproducible-analysis steps.
+    :type steps: list[StepComponent]
+    :param masks: The named sample masks.
+    :type masks: list[MaskComponent]
+    """
+    format_version:int           = 1
+    metadata:MetadataDescription = field(default_factory=MetadataDescription)
+    priors:list                  = field(default_factory=list)
+    likelihoods:list             = field(default_factory=list)
+    posteriors:list              = field(default_factory=list)
+    predictions:list             = field(default_factory=list)
+    figures:list                 = field(default_factory=list)
+    observables:list             = field(default_factory=list)
+    parameters:list              = field(default_factory=list)
+    steps:list                   = field(default_factory=list)
+    masks:list                   = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        r"""Create an :class:`AnalysisFileDescription` from the top-level mapping of an analysis file.
+
+        Each recognized section is deserialized into its corresponding description objects via that
+        type's own ``from_dict``. The ``observables`` and ``parameters`` sections are YAML mappings
+        keyed by name; the name is injected into each entry so the resulting objects match those built
+        elsewhere. Unknown top-level keys are rejected by the dataclass constructor.
+
+        :returns: The deserialized analysis file description.
+        :rtype: AnalysisFileDescription
+        """
+        _kwargs = dict(kwargs) # shallow copy: only the top-level keys are reassigned below
+        if 'metadata' in kwargs:
+            _kwargs['metadata'] = MetadataDescription.from_dict(**kwargs['metadata'])
+        if 'priors' in kwargs:
+            _kwargs['priors'] = [PriorComponent.from_dict(**p) for p in kwargs['priors']]
+        if 'likelihoods' in kwargs:
+            _kwargs['likelihoods'] = [LikelihoodComponent.from_dict(**ll) for ll in kwargs['likelihoods']]
+        if 'posteriors' in kwargs:
+            _kwargs['posteriors'] = [PosteriorDescription.from_dict(**p) for p in kwargs['posteriors']]
+        if 'predictions' in kwargs:
+            _kwargs['predictions'] = [PredictionDescription.from_dict(**p) for p in kwargs['predictions']]
+        if 'figures' in kwargs:
+            _kwargs['figures'] = [FigureFactory.from_dict(**f) for f in kwargs['figures']]
+        if 'observables' in kwargs:
+            _kwargs['observables'] = [ObservableComponent.from_dict(name=n, **d) for n, d in kwargs['observables'].items()]
+        if 'parameters' in kwargs:
+            _kwargs['parameters'] = [ParameterComponent.from_dict(name=n, **d) for n, d in kwargs['parameters'].items()]
+        if 'steps' in kwargs:
+            _kwargs['steps'] = [StepComponent.from_dict(**s) for s in kwargs['steps']]
+        if 'masks' in kwargs:
+            _kwargs['masks'] = [MaskComponent.from_dict(**m) for m in kwargs['masks']]
+        return Deserializable.make(cls, **_kwargs)
 
 # AnalysisFile schema
 
