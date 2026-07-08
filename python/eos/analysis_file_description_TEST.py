@@ -45,6 +45,7 @@ from eos.analysis_file_description import (
     MaskObservableComponent,
     MaskNamedComponent,
     MaskComponent,
+    AnalysisFileDescription,
 )
 
 
@@ -506,6 +507,66 @@ class MaskComponentTests(unittest.TestCase):
                 description=[{'name': 'B->pilnu::BR'}],
                 logical_combination='xor',
             )
+
+
+class AnalysisFileDescriptionTests(unittest.TestCase):
+
+    def test_defaults(self):
+        "An empty mapping yields the format-version baseline and empty sections."
+        desc = AnalysisFileDescription.from_dict()
+        self.assertEqual(desc.format_version, 1)
+        self.assertIsInstance(desc.metadata, MetadataDescription)
+        for section in (desc.priors, desc.likelihoods, desc.posteriors, desc.predictions,
+                        desc.figures, desc.observables, desc.parameters, desc.steps, desc.masks):
+            self.assertEqual(section, [])
+
+    def test_from_dict(self):
+        "Every recognized section is deserialized into its corresponding description objects."
+        desc = AnalysisFileDescription.from_dict(
+            format_version=1,
+            metadata={'title': 'My Analysis', 'authors': [{'name': 'Jane Doe'}]},
+            priors=[{'name': 'CKM', 'descriptions': [
+                {'parameter': 'CKM::abs(V_ub)', 'min': 3.0e-3, 'max': 4.5e-3, 'type': 'uniform'}]}],
+            likelihoods=[{'name': 'TH-pi', 'constraints': ['B->pi::f_++f_0@RBC+UKQCD:2015A']}],
+            posteriors=[{'name': 'CKM-all', 'prior': ['CKM'], 'likelihood': ['TH-pi']}],
+            predictions=[{'name': 'leptonic', 'observables': [{'name': 'B_u->lnu::BR;l=e'}]}],
+            figures=[{'name': 'fig-A', 'type': 'single', 'plot': {'items': []}}],
+            observables={'B->pilnu::R_pi': {'latex': '$R_\\pi$', 'unit': '1',
+                                            'expression': '<<B->pilnu::BR;l=tau>> / <<B->pilnu::BR;l=e>>'}},
+            parameters={'my::parameter': {'latex': 'x', 'unit': '1', 'central': 0.0, 'min': -1.0, 'max': 1.0}},
+            steps=[{'title': 'Corner', 'id': 'ckm.corner', 'tasks': [
+                {'task': 'corner-plot', 'arguments': {'posterior': 'CKM-all', 'format': ['pdf']}}]}],
+            masks=[{'name': 'mask-A', 'description': [{'name': 'B->pilnu::BR'}]}],
+        )
+        self.assertEqual(desc.format_version, 1)
+        self.assertEqual(desc.metadata.title, 'My Analysis')
+        self.assertIsInstance(desc.metadata.authors[0], MetadataAuthorDescription)
+        self.assertIsInstance(desc.priors[0], PriorComponent)
+        self.assertIsInstance(desc.likelihoods[0], LikelihoodComponent)
+        self.assertIsInstance(desc.posteriors[0], PosteriorDescription)
+        self.assertIsInstance(desc.predictions[0], PredictionDescription)
+        # figures are deserialized through the FigureFactory and carry their name
+        self.assertEqual(desc.figures[0].name, 'fig-A')
+        self.assertIsInstance(desc.steps[0], StepComponent)
+        self.assertIsInstance(desc.masks[0], MaskComponent)
+
+    def test_mapping_sections_inject_name(self):
+        "The observables/parameters mappings become lists with the name injected into each entry."
+        desc = AnalysisFileDescription.from_dict(
+            observables={'B->pilnu::R_pi': {'latex': '$R_\\pi$', 'unit': '1', 'expression': '1'}},
+            parameters={'my::parameter': {'latex': 'x', 'unit': '1', 'central': 0.0, 'min': -1.0, 'max': 1.0}},
+        )
+        self.assertEqual(len(desc.observables), 1)
+        self.assertIsInstance(desc.observables[0], ObservableComponent)
+        self.assertEqual(desc.observables[0].name, 'B->pilnu::R_pi')
+        self.assertEqual(len(desc.parameters), 1)
+        self.assertIsInstance(desc.parameters[0], ParameterComponent)
+        self.assertEqual(desc.parameters[0].name, 'my::parameter')
+
+    def test_unknown_top_level_key_is_rejected(self):
+        "An unrecognized top-level key is rejected rather than silently ignored."
+        with self.assertRaises(ValueError):
+            AnalysisFileDescription.from_dict(not_a_section=42)
 
 
 if __name__ == '__main__':

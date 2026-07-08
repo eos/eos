@@ -24,11 +24,8 @@ import yaml
 import inspect
 from collections import Counter
 from dataclasses import asdict
-from eos.analysis_file_description import PriorComponent, LikelihoodComponent, PosteriorDescription, \
-                                       PredictionDescription, ObservableComponent, ParameterComponent, \
-                                       StepComponent, PriorDescription, MaskComponent, MaskExpressionComponent, MaskNamedComponent, \
-                                       MetadataDescription
-from eos.figure import FigureFactory
+from eos.analysis_file_description import AnalysisFileDescription, PriorDescription, \
+                                       MaskExpressionComponent, MaskNamedComponent
 
 # The highest analysis file format version understood by this version of EOS. Increment this
 # whenever a change to the schema alters how existing files are interpreted. Files that omit the
@@ -76,26 +73,26 @@ class AnalysisFile:
                                f'{self.format_version}, but this version of EOS supports at most '
                                f'{SUPPORTED_FORMAT_VERSION}; please update EOS')
 
-        if 'metadata' in self.input_data:
-            self._metadata = MetadataDescription.from_dict(**self.input_data['metadata'])
-        else:
-            self._metadata = MetadataDescription()
+        # Deserialize the file's structure. AnalysisFileDescription performs the pure YAML->object
+        # mapping and rejects unknown top-level keys; the mandatory-section checks, cross-reference
+        # validation, uniqueness checks, and EOS-runtime side effects below remain here.
+        self._description = AnalysisFileDescription.from_dict(**self.input_data)
+
+        self._metadata = self._description.metadata
 
         if 'priors' not in self.input_data:
             raise RuntimeError('Cannot load analysis file: need at least one prior component')
 
-        self._priors = { p["name"]: PriorComponent.from_dict(**p) for p in self.input_data['priors'] }
+        self._priors = { p.name: p for p in self._description.priors }
 
         if 'likelihoods' not in self.input_data:
             eos.warn('No likelihood components found in analysis file')
-            self._likelihoods = {}
-        else:
-            self._likelihoods = { ll["name"]: LikelihoodComponent.from_dict(**ll) for ll in self.input_data['likelihoods'] }
+        self._likelihoods = { ll.name: ll for ll in self._description.likelihoods }
 
         if 'posteriors' not in self.input_data:
             raise RuntimeError('Cannot load analysis file: need at least one posterior')
 
-        self._posteriors = { p["name"]: PosteriorDescription.from_dict(**p) for p in self.input_data['posteriors'] }
+        self._posteriors = { p.name: p for p in self._description.posteriors }
         # Check that the priors and likelihoods referenced by the posteriors are defined
         for pc in self._posteriors.values():
             for p in pc.prior:
@@ -105,34 +102,25 @@ class AnalysisFile:
                 if l not in self._likelihoods:
                     raise RuntimeError(f'Posterior \'{pc.name}\' references likelihood \'{l}\' which is not defined')
 
-        # Optional: provide a list of figures
-        if 'figures' not in self.input_data:
-            self._figures = {}
-        else:
-            self._figures = { f['name']: FigureFactory.from_dict(**f) for f in self.input_data['figures'] }
+        # Optional: figures
+        self._figures = { f.name: f for f in self._description.figures }
 
-        # Optional: provide a list of observables for posterior prediction
-        if 'predictions' not in self.input_data:
-            self._predictions = {}
-        else:
-            self._predictions = { p["name"]: PredictionDescription.from_dict(**p) for p in self.input_data['predictions'] }
+        # Optional: observables for posterior prediction
+        self._predictions = { p.name: p for p in self._description.predictions }
 
         # Optional: insert custom observables using the expression parser
-        if 'observables' not in self.input_data:
-            self._obs = []
-        else:
+        self._obs = self._description.observables
+        if self._obs:
             eos.inprogress('Inserting custom observables ...')
-            self._obs = [ObservableComponent.from_dict(name=n, **d) for n,d in self.input_data['observables'].items()]
             for o in self._obs:
                 eos.Observables().insert(o.name, o.latex, eos.Unit(o.unit), eos.Options(**o.options), o.expression)
                 eos.info(f'Inserted observable: { o.name }')
             eos.completed(f'... finished inserting {len(self._obs)} custom observables')
 
-        if 'parameters' not in self.input_data:
-            self._params = []
-        else:
+        # Optional: declare custom parameters
+        self._params = self._description.parameters
+        if self._params:
             eos.inprogress('Declaring custom parameters ...')
-            self._params = [ParameterComponent.from_dict(name=n, **d) for n, d in self.input_data["parameters"].items()]
             for p in self._params:
                 try:
                     qn = eos.QualifiedName(p.name)
@@ -146,19 +134,14 @@ class AnalysisFile:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
-        if 'steps' not in self.input_data:
-            self._steps = {}
-        else:
-            if len(self.input_data['steps']) != len({s['id'] for s in self.input_data['steps']}):
-                raise ValueError("All steps must have a unique id")
-            self._steps = { s["id"]: StepComponent.from_dict(**s) for s in self.input_data['steps'] }
+        if len(self._description.steps) != len({s.id for s in self._description.steps}):
+            raise ValueError("All steps must have a unique id")
+        self._steps = { s.id: s for s in self._description.steps }
 
-        if 'masks' not in self.input_data:
-            self._masks = {}
-        else:
-            if len(self.input_data['masks']) != len({m['name'] for m in self.input_data['masks']}):
-                raise ValueError("All masks must have a unique name")
-            self._masks = { m["name"]: MaskComponent.from_dict(**m) for m in self.input_data['masks'] }
+        if len(self._description.masks) != len({m.name for m in self._description.masks}):
+            raise ValueError("All masks must have a unique name")
+        self._masks = { m.name: m for m in self._description.masks }
+        if self._masks:
             # Insert custom observables using the expression parser
             eos.inprogress('Inserting custom observables for sample masks ...')
             for mc in self._masks.values():
