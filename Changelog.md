@@ -118,6 +118,11 @@
 - Fix missing initialization of an index in ``ExpressionCloner`` and ``ExpressionMaker`` (issue #1191) (D. van Dyk)
 - Fix incorrect cloning of ``Parameters`` (issue #1192) (D. van Dyk)
 - Fix handling of the ``unit`` field when overriding parameters from file (issue #1193) (D. van Dyk)
+- Fix a typo in ``eos.figure.ObservableItem`` that prevented plotting an observable as a function of a parameter (D. van Dyk)
+- Fix the handling of asymmetric uncertainties when drawing single-point constraints in ``eos.figure`` (D. van Dyk)
+- Fix the detection of option conflicts in ``eos.AnalysisFile``, which silently failed to warn when an observable's option-part contradicted a global or local option (D. van Dyk)
+- Fix a crash when loading an analysis file that has no ``likelihoods`` section (D. van Dyk)
+- Report all unknown observable names in an analysis file prediction, rather than only the first (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
