@@ -1,4 +1,4 @@
-# Copyright (c) 2024-2025 Danny van Dyk
+# Copyright (c) 2024-2026 Danny van Dyk
 # Copyright (c) 2024      Méril Reboud
 #
 # This file is part of the EOS project. EOS is free software;
@@ -15,7 +15,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 from dataclasses import dataclass
-from eos.analysis_file_description import AnalysisFileContext
+from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
 from eos.figure.item import ItemColorCycler
 

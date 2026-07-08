@@ -182,7 +182,7 @@ class PosteriorData:
         if self.samples is None:
             raise RuntimeError(f'No importance samples recorded for posterior \'{self.name}\'; cannot draw a corner figure')
 
-        from eos.analysis_file_description import AnalysisFileContext
+        from eos.analysis_file_context import AnalysisFileContext
 
         _os.makedirs(output_directory, exist_ok=True)
 

@@ -22,7 +22,7 @@ import functools
 import glob
 import inspect
 import logging
-import eos.analysis_file_description
+import eos.analysis_file_context
 import numpy as _np
 import os
 import scipy
@@ -844,7 +844,7 @@ def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', for
             raise ValueError(f'Figure format \'{fmt}\' not supported. Supported formats are: {",".join(SUPPORTED_FORMATS)}')
 
     eos.inprogress(f'Drawing figure {figure_name}')
-    context = eos.analysis_file_description.AnalysisFileContext(base_directory=base_directory)
+    context = eos.analysis_file_context.AnalysisFileContext(base_directory=base_directory)
     figure = analysis_file._figures[figure_name]
     for fmt in format:
         eos.info(f'Drawing figure {figure_name} in \'{fmt}\' format')

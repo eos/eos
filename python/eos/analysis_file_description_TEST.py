@@ -14,12 +14,10 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import unittest
-import os
 
 import eos
 
 from eos.analysis_file_description import (
-    AnalysisFileContext,
     MetadataAuthorDescription,
     MetadataDescription,
     PriorDescription,
@@ -48,24 +46,6 @@ from eos.analysis_file_description import (
     MaskNamedComponent,
     MaskComponent,
 )
-
-
-class AnalysisFileContextTests(unittest.TestCase):
-
-    def test_data_path(self):
-        "Check that data_path resolves a relative path against the base directory."
-        ctx = AnalysisFileContext()
-        path = ctx.data_path('some/relative/path')
-        self.assertTrue(os.path.isabs(path))
-        self.assertTrue(path.endswith(os.path.join('some', 'relative', 'path')))
-
-    def test_invalid_base_directory(self):
-        "Check that a non-existent or non-directory base directory is rejected."
-        with self.assertRaises(ValueError):
-            AnalysisFileContext(base_directory='/this/does/not/exist/at/all')
-        # a path that exists but is a file, not a directory
-        with self.assertRaises(ValueError):
-            AnalysisFileContext(base_directory=__file__)
 
 
 class MetadataAuthorDescriptionTests(unittest.TestCase):

@@ -4,38 +4,6 @@ from collections import defaultdict
 import copy as _copy
 import eos
 import inspect
-import os
-
-@dataclass(kw_only=True)
-class AnalysisFileContext:
-    """
-    Auxiliary class used to resolve paths relative to an analysis file's base directory.
-
-    Instances are passed to consumers of an analysis file (e.g. figures and tasks) so that relative data
-    paths can be resolved against a common base directory.
-
-    :param base_directory: The base directory against which relative paths are resolved. Defaults to the current working directory.
-    :type base_directory: str
-    """
-    base_directory:str='./'
-
-    def __post_init__(self):
-        if not os.path.exists(self.base_directory):
-            raise ValueError(f'Base directory \'{self.base_directory}\' does not exist')
-
-        if not os.path.isdir(self.base_directory):
-            raise ValueError(f'Base directory \'{self.base_directory}\' is not a directory')
-
-    def data_path(self, relative_path:str):
-        """Resolve a path relative to :attr:`base_directory` into an absolute path.
-
-        :param relative_path: A path relative to the base directory.
-        :type relative_path: str
-        :returns: The corresponding absolute path.
-        :rtype: str
-        """
-        return os.path.abspath(os.path.join(self.base_directory, relative_path))
-
 
 @dataclass
 class MetadataAuthorDescription(Deserializable):

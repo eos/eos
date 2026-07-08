@@ -16,7 +16,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from eos.analysis_file_description import AnalysisFileContext
+from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 from .item import Item, ItemFactory, ItemColorCycler
