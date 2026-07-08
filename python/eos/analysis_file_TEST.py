@@ -125,11 +125,23 @@ class TestAnalysisFileMethods(unittest.TestCase):
         self.af.observable('WET-all', 'B_u->lnu::BR;l=e', parameters)
         self.assertAlmostEqual(float(parameters['CKM::abs(V_ub)']), 3.67e-3)
 
-    def test_observable_with_option_part_in_name(self):
-        # an observable name may carry an option-part; it is created under the posterior's global
-        # options merged with that name
-        observable = self.af.observable('WET-all', 'B_u->lnu::BR;l=e,model=CKM', eos.Parameters())
+    def test_observable_detects_global_option_conflict(self):
+        # the option-part (model=CKM) in the name conflicts with the posterior's global option
+        # (model=WET); observable() must report this (regression test: the option-part keys are
+        # qnpOptionKey objects that previously never matched the str-keyed option dict, so the
+        # conflict went undetected). The observable is still created.
+        with self.assertLogs('EOS', level='ERROR') as cm:
+            observable = self.af.observable('WET-all', 'B_u->lnu::BR;l=e,model=CKM', eos.Parameters())
         self.assertIsNotNone(observable)
+        self.assertTrue(any('overrides option part' in message for message in cm.output))
+
+    def test_observables_detects_global_option_conflict(self):
+        # the same conflict, but reported by observables() for a prediction observable whose name
+        # (model=WET) contradicts the prediction's global option (model=CKM)
+        with self.assertLogs('EOS', level='ERROR') as cm:
+            observables = self.af.observables('CKM-all', 'option-conflict', eos.Parameters())
+        self.assertGreater(len(observables), 0)
+        self.assertTrue(any('overrides option part' in message for message in cm.output))
 
     def test_observable_unknown_posterior(self):
         with self.assertRaises(RuntimeError):
