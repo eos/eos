@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020-2023 Danny van Dyk
+# Copyright (c) 2020-2026 Danny van Dyk
 # Copyright (c) 2023 Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
@@ -226,6 +226,9 @@ class AnalysisFile:
         for o in prediction.observables:
             options_part = eos.QualifiedName(o.name).options_part()
             for key, value in options_part:
+                # options_part() yields qnpOptionKey/qnpOptionValue objects; convert to str so that
+                # they compare against the str-keyed global and local option dictionaries
+                key, value = str(key), str(value)
                 if key in global_options and global_options[key] != value:
                     eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {o.name} in prediction {_prediction} when using posterior {_posterior}.')
                 if key in o.options and o.options[key] != value:
@@ -278,6 +281,9 @@ class AnalysisFile:
 
         options_part = eos.QualifiedName(observable_name).options_part()
         for key, value in options_part:
+            # options_part() yields qnpOptionKey/qnpOptionValue objects; convert to str so that
+            # they compare against the str-keyed global option dictionary
+            key, value = str(key), str(value)
             if key in global_options and global_options[key] != value:
                 eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {observable_name} when using posterior {_posterior}.')
 
