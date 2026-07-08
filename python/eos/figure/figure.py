@@ -1,4 +1,4 @@
-# Copyright (c) 2023-2025 Danny van Dyk
+# Copyright (c) 2023-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -16,7 +16,7 @@
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from eos.analysis_file_description import AnalysisFileContext
+from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
 
 from .plot import Plot, PlotFactory
@@ -39,7 +39,7 @@ class Figure(ABC, Deserializable):
         """Draw the figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
-        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
         :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
         :type output: str | list[str] | None
         """
@@ -93,7 +93,7 @@ class SingleFigure(Figure):
         one or more output files.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
-        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
         :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
         :type output: str | list[str] | None
         """
@@ -230,7 +230,7 @@ class InsetFigure(Figure):
         """Draw the inset figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
-        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
         :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
         :type output: str | list[str] | None
         """
@@ -374,7 +374,7 @@ class GridFigure(Figure):
         """Draw the grid figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
-        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
         :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
         :type output: str | list[str] | None
         """
@@ -453,7 +453,7 @@ class CornerFigure(Figure):
         """Prepare the corner figure for drawing.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
-        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
         :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
         :type output: str | None
         """
@@ -579,7 +579,7 @@ class CornerFigure(Figure):
         """Draw the corner figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
-        :type context: :class:`AnalysisFileContext <eos.analysis_file_description.AnalysisFileContext>`
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
         :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
         :type output: str | list[str] | None
         """

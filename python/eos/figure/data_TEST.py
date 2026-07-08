@@ -19,7 +19,7 @@ import eos
 import eos.figure
 import os
 
-from eos.analysis_file_description import AnalysisFileContext
+from eos.analysis_file_context import AnalysisFileContext
 
 class DataFileTests(unittest.TestCase):
 

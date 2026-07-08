@@ -19,7 +19,7 @@ import eos
 import eos.figure
 import os
 
-from eos.analysis_file_description import AnalysisFileContext
+from eos.analysis_file_context import AnalysisFileContext
 from matplotlib import pyplot as plt
 from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
