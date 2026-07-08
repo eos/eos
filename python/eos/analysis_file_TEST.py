@@ -157,9 +157,26 @@ class TestAnalysisFileMethods(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             self.af.observable('does-not-exist', 'B_u->lnu::BR;l=e', eos.Parameters())
 
+    def test_observable_unknown_name(self):
+        # an unknown observable name is reported with a clear message (regression test: the
+        # 'if not observable' guard was dead because make() raises instead of returning None)
+        with self.assertRaises(RuntimeError) as ctx:
+            self.af.observable('CKM-all', 'B->pilnu::TOTALLY_UNKNOWN', eos.Parameters())
+        self.assertIn('Unknown observable name', str(ctx.exception))
+
 
 class TestAnalysisFileValidation(unittest.TestCase):
     """The reporting (non-raising) branches of ``validate``."""
+
+    def test_observables_aggregates_unknown_names(self):
+        # observables() reports every unknown observable in a prediction, not just the first
+        # (regression test: make() raises on the first, so the aggregation must catch and continue),
+        # as a comma-separated list in the order the observables appear in the analysis file
+        af = eos.AnalysisFile(_TESTD / 'invalid' / 'semantic-errors.yaml')
+        with self.assertRaises(RuntimeError) as ctx:
+            af.observables('post-good', 'pred-bad-obs', eos.Parameters())
+        message = str(ctx.exception)
+        self.assertIn('B->pilnu::NOTREAL, B->pilnu::ALSO_NOTREAL', message)
 
     def test_semantic_errors_are_reported(self):
         af = eos.AnalysisFile(_TESTD / 'invalid' / 'semantic-errors.yaml')
