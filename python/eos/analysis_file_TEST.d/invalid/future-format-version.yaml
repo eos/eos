@@ -1,0 +1,13 @@
+# declares a format version newer than any EOS understands; loading must be refused
+format_version: 999
+
+priors:
+  - name: DC-Bu
+    descriptions:
+      - { 'parameter': 'decay-constant::B_u', 'central': 0.1894, 'sigma':  0.0014, 'type': 'gaussian' }
+
+posteriors:
+  - name: CKM-all
+    prior:
+      - DC-Bu
+    likelihood: []

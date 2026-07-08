@@ -1,3 +1,22 @@
+#!/usr/bin/python
+# vim: set sw=4 sts=4 et tw=120 :
+
+# Copyright (c) 2024-2026 Danny van Dyk
+# Copyright (c) 2025 Matthew Kirk
+#
+# This file is part of the EOS project. EOS is free software;
+# you can redistribute it and/or modify it under the terms of the GNU General
+# Public License version 2, as published by the Free Software Foundation.
+#
+# EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+# details.
+#
+# You should have received a copy of the GNU General Public License along with
+# this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+# Place, Suite 330, Boston, MA  02111-1307  USA
+
 import unittest
 
 import contextlib
@@ -30,6 +49,18 @@ class TestAnalysisFile(unittest.TestCase):
         self.assertEqual(dict(af.likelihoods), {})
         af.validate()
 
+    def test_format_version(self):
+
+        # the fixture declares 'format_version: 1' explicitly
+        af = eos.AnalysisFile(_TESTD / 'valid-analysis-file.yaml')
+        self.assertEqual(af.format_version, 1)
+
+    def test_format_version_defaults_to_one(self):
+
+        # a file without a 'format_version' key predates format versioning and is treated as v1
+        af = eos.AnalysisFile(_TESTD / 'minimal-analysis-file.yaml')
+        self.assertEqual(af.format_version, 1)
+
 
 class TestAnalysisFileConstructionErrors(unittest.TestCase):
     """The mandatory-structure and uniqueness checks in ``__init__`` must raise."""
@@ -42,6 +73,24 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
         # a directory is not a valid analysis file
         with self.assertRaises(RuntimeError):
             eos.AnalysisFile(_TESTD)
+
+    def test_future_format_version(self):
+        # a file declaring a newer format version than this EOS supports must be refused rather
+        # than silently misinterpreted
+        with self.assertRaises(RuntimeError):
+            eos.AnalysisFile(_TESTD / 'invalid' / 'future-format-version.yaml')
+
+    def test_empty_file(self):
+        # an empty file parses to None, which is not a top-level mapping; loading must raise a clear
+        # RuntimeError rather than an opaque AttributeError from the subsequent .get()/** access
+        with self.assertRaises(RuntimeError):
+            eos.AnalysisFile(_TESTD / 'invalid' / 'empty-file.yaml')
+
+    def test_non_integer_format_version(self):
+        # a 'format_version' that is not an integer (e.g. a quoted string) must be refused rather
+        # than raising an opaque TypeError from the numeric comparison
+        with self.assertRaises(RuntimeError):
+            eos.AnalysisFile(_TESTD / 'invalid' / 'string-format-version.yaml')
 
     def test_missing_priors(self):
         with self.assertRaises(RuntimeError):

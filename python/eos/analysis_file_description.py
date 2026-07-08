@@ -786,6 +786,9 @@ MaskDescription.registry = {
 # AnalysisFile schema
 
 # dict with keys:
+#   format_version (optional): int, the schema version of the file; defaults to 1 (the version
+#       predating format versioning). EOS refuses to load a file declaring a newer version than
+#       it supports.
 #   metadata (optional)
 #   priors (mandatory)
 #   likelihoods (mandatory)

@@ -30,6 +30,11 @@ from eos.analysis_file_description import PriorComponent, LikelihoodComponent, P
                                        MetadataDescription
 from eos.figure import FigureFactory
 
+# The highest analysis file format version understood by this version of EOS. Increment this
+# whenever a change to the schema alters how existing files are interpreted. Files that omit the
+# top-level 'format_version' key predate format versioning and are treated as version 1.
+SUPPORTED_FORMAT_VERSION = 1
+
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
 
@@ -50,6 +55,26 @@ class AnalysisFile:
 
         with open(analysis_file) as input_file:
             self.input_data = yaml.safe_load(input_file)
+
+        # A well-formed analysis file is a top-level YAML mapping. safe_load returns None for an empty
+        # file and other types (e.g. a bare scalar or list) for malformed input; reject these with a
+        # clear message rather than letting the .get()/** below raise an opaque AttributeError.
+        if not isinstance(self.input_data, dict):
+            raise RuntimeError(f'Cannot load analysis file: \'{analysis_file}\' is not a YAML mapping')
+
+        # The top-level 'format_version' records the schema version of the analysis file. Files that
+        # omit it predate format versioning and are treated as version 1. Reject files that declare a
+        # newer version than this EOS understands, rather than silently misinterpreting them.
+        self.format_version = self.input_data.get('format_version', 1)
+        # bool is a subclass of int; reject it (e.g. 'format_version: true') so that it is not
+        # silently treated as version 1, and reject non-integers before the numeric comparison below.
+        if not isinstance(self.format_version, int) or isinstance(self.format_version, bool):
+            raise RuntimeError(f'Cannot load analysis file: \'format_version\' must be an integer, '
+                               f'but is {self.format_version!r}')
+        if self.format_version > SUPPORTED_FORMAT_VERSION:
+            raise RuntimeError(f'Cannot load analysis file: it declares format version '
+                               f'{self.format_version}, but this version of EOS supports at most '
+                               f'{SUPPORTED_FORMAT_VERSION}; please update EOS')
 
         if 'metadata' in self.input_data:
             self._metadata = MetadataDescription.from_dict(**self.input_data['metadata'])

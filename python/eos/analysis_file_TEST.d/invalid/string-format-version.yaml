@@ -1,0 +1,13 @@
+# 'format_version' is a string rather than an integer; loading must be refused with a clear error
+format_version: '1'
+
+priors:
+  - name: DC-Bu
+    descriptions:
+      - { 'parameter': 'decay-constant::B_u', 'central': 0.1894, 'sigma':  0.0014, 'type': 'gaussian' }
+
+posteriors:
+  - name: CKM-all
+    prior:
+      - DC-Bu
+    likelihood: []

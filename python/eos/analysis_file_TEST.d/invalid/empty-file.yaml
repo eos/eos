@@ -1,0 +1,1 @@
+# an empty file: yaml.safe_load returns None, which is not a top-level mapping; loading must be refused
