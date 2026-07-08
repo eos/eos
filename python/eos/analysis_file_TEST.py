@@ -20,6 +20,16 @@ class TestAnalysisFile(unittest.TestCase):
         af = eos.AnalysisFile(_TESTD / 'minimal-analysis-file.yaml')
         af.validate()
 
+    def test_prior_only_analysis_file(self):
+
+        # a file without a 'likelihoods' section is a legitimate prior-only analysis; it must load
+        # (with a warning) and expose no likelihoods. Regression test: this previously raised a
+        # KeyError because the (absent) 'likelihoods' entry was accessed unconditionally.
+        with self.assertLogs('EOS', level='WARNING'):
+            af = eos.AnalysisFile(_TESTD / 'no-likelihoods-analysis-file.yaml')
+        self.assertEqual(dict(af.likelihoods), {})
+        af.validate()
+
 
 class TestAnalysisFileConstructionErrors(unittest.TestCase):
     """The mandatory-structure and uniqueness checks in ``__init__`` must raise."""

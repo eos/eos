@@ -1,0 +1,11 @@
+# A prior-only analysis file: it has no 'likelihoods' section and a posterior that references
+# none. This is a legitimate (if unusual) configuration and must load without error.
+priors:
+  - name: CKM
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 4.5e-3, type: uniform }
+
+posteriors:
+  - name: prior-only
+    prior: [ CKM ]
+    likelihood: []

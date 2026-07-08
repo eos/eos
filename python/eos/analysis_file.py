@@ -63,8 +63,9 @@ class AnalysisFile:
 
         if 'likelihoods' not in self.input_data:
             eos.warn('No likelihood components found in analysis file')
-
-        self._likelihoods = { ll["name"]: LikelihoodComponent.from_dict(**ll) for ll in self.input_data['likelihoods'] }
+            self._likelihoods = {}
+        else:
+            self._likelihoods = { ll["name"]: LikelihoodComponent.from_dict(**ll) for ll in self.input_data['likelihoods'] }
 
         if 'posteriors' not in self.input_data:
             raise RuntimeError('Cannot load analysis file: need at least one posterior')
