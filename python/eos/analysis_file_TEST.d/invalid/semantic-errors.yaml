@@ -59,6 +59,7 @@ predictions:
   - name: pred-bad-obs
     observables:
       - name: 'B->pilnu::NOTREAL'
+      - name: 'B->pilnu::ALSO_NOTREAL'
   - name: pred-bad-fixed
     fixed_parameters:
       'Not::a-prediction-parameter': 2.0

@@ -240,6 +240,9 @@ class AnalysisFile:
 
 
         observables = []
+        # keep the order in which unknown observables appear in the analysis file (without
+        # duplicates), so the error message points the user at the offending entries in order
+        unknown_observables = []
         for o in prediction.observables:
             # Update global options with any options specified for this particular observable in the AnalysisFile
             local_options = eos.Options(**(global_options | o.options))
@@ -250,19 +253,22 @@ class AnalysisFile:
                 kinematics = [k for k in o.kinematics]
 
             for k in kinematics:
-                observables.append(eos.Observable.make(
-                    o.name,
-                    parameters,
-                    eos.Kinematics(k),
-                    local_options
-                ))
+                # eos.Observable.make raises for an unknown observable; collect every offending name
+                # so that all of them can be reported together rather than only the first
+                try:
+                    observables.append(eos.Observable.make(
+                        o.name,
+                        parameters,
+                        eos.Kinematics(k),
+                        local_options
+                    ))
+                except RuntimeError:
+                    if o.name not in unknown_observables:
+                        unknown_observables.append(o.name)
 
-        if None in observables:
-            unknown_observables = set()
-            for p, o in zip(prediction.observables, observables):
-                if o is None:
-                    unknown_observables.add(p.name)
-            raise RuntimeError(f'Prediction \'{_prediction}\' contains unknown observable names: {unknown_observables}')
+        if unknown_observables:
+            names = ', '.join(str(name) for name in unknown_observables)
+            raise RuntimeError(f'Prediction \'{_prediction}\' contains unknown observable names: {names}')
 
         return observables
 
@@ -288,15 +294,16 @@ class AnalysisFile:
             if key in global_options and global_options[key] != value:
                 eos.error(f'Global option {key}={global_options[key]} overrides option part specification {key}={value} for observable {observable_name} when using posterior {_posterior}.')
 
-        observable = eos.Observable.make(
-            observable_name,
-            analysis_parameters,
-            eos.Kinematics(),
-            eos.Options(**global_options)
-        )
-
-        if not observable:
-            raise RuntimeError(f'Unknown observable name: {observable_name}')
+        # eos.Observable.make raises for an unknown observable; re-raise with a clearer message
+        try:
+            observable = eos.Observable.make(
+                observable_name,
+                analysis_parameters,
+                eos.Kinematics(),
+                eos.Options(**global_options)
+            )
+        except RuntimeError as e:
+            raise RuntimeError(f'Unknown observable name: {observable_name}') from e
         return observable
 
 
