@@ -296,7 +296,7 @@ class ObservableItem(Item):
                 self._variable = self._parameters[qn]
                 self._variable.set(_np.nan)
             except RuntimeError:
-                raise ValueError(f"Value of 'variable' for observable '{self.observable}' is neither a valid kinematic variable nor a valid parameter: '{self.variable}")
+                raise ValueError(f"Value of 'variable' for observable '{self.observable}' is neither a valid kinematic variable nor a valid parameter: '{self.variable}'")
 
         # Create options
         self._options = eos.Options()
