@@ -377,42 +377,94 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                       no_init)
             .def(float_(self))
-            .def("central", &Parameter::central, return_value_policy<copy_const_reference>())
-            .def("max", &Parameter::max, return_value_policy<copy_const_reference>())
-            .def("min", &Parameter::min, return_value_policy<copy_const_reference>())
+            .def("central", &Parameter::central, return_value_policy<copy_const_reference>(),
+                 R"(
+            Returns the default central value of the parameter.
+
+            :rtype: float
+            )",
+                 args("self"))
+            .def("max", &Parameter::max, return_value_policy<copy_const_reference>(),
+                 R"(
+            Returns the maximum value that the parameter is allowed to take.
+
+            :rtype: float
+            )",
+                 args("self"))
+            .def("min", &Parameter::min, return_value_policy<copy_const_reference>(),
+                 R"(
+            Returns the minimum value that the parameter is allowed to take.
+
+            :rtype: float
+            )",
+                 args("self"))
             .def("name", &Parameter::name, return_value_policy<copy_const_reference>(),
                  R"(
             Returns the name of the parameter.
-            )")
+
+            :rtype: str
+            )",
+                 args("self"))
             .def("latex", &Parameter::latex, return_value_policy<copy_const_reference>(),
                  R"(
             Returns the LaTeX representation of the parameter.
-            )")
-            .def("unit", &Parameter::unit)
+
+            :rtype: str
+            )",
+                 args("self"))
+            .def("unit", &Parameter::unit,
+                 R"(
+            Returns the unit of the parameter.
+
+            :rtype: eos.Unit
+            )",
+                 args("self"))
             .def("set", &Parameter::set,
                  R"(
             Set the value of a parameter.
 
             :param value: The value to set the parameter to.
             :type value: float
-            )")
+            )",
+                 args("self", "value"))
             .def("set_generator", &Parameter::set_generator,
                  R"(
             Set the generator value of a parameter.
 
             :param value: The value to set the parameter's generator to.
             :type value: float
-            )")
-            .def("set_max", &Parameter::set_max)
-            .def("set_min", &Parameter::set_min)
+            )",
+                 args("self", "value"))
+            .def("set_max", &Parameter::set_max,
+                 R"(
+            Set the maximum value that the parameter is allowed to take.
+
+            :param value: The maximum value to set.
+            :type value: float
+            )",
+                 args("self", "value"))
+            .def("set_min", &Parameter::set_min,
+                 R"(
+            Set the minimum value that the parameter is allowed to take.
+
+            :param value: The minimum value to set.
+            :type value: float
+            )",
+                 args("self", "value"))
             .def("evaluate", &Parameter::evaluate,
                  R"(
             Return the current value of a parameter.
-            )")
+
+            :rtype: float
+            )",
+                 args("self"))
             .def("evaluate_generator", &Parameter::evaluate_generator,
                  R"(
             Return the current generator value of a parameter.
-            )");
+
+            :rtype: float
+            )",
+                 args("self"));
 
     // ParameterUser
     class_<ParameterUser>("ParameterUser", no_init).def("used_parameter_ids", range(&ParameterUser::begin, &ParameterUser::end));
