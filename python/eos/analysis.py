@@ -793,6 +793,8 @@ class Analysis:
         :type maxiter: int, optional
         :param miniter: The minimum number of iterations. Defaults to 0. Samples will be added until miniter is reached, even if the termination condition is reached earlier.
         :type miniter: int, optional
+        :param print_progress: Whether to print progress messages during sampling. Defaults to True.
+        :type print_progress: bool, optional
         :param print_function: The function used to print progress messages. Defaults to using a dynesty-based function.
         :type print_function: callable, optional
         :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
