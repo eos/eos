@@ -746,7 +746,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param upper: The upper boundary of the 68% probability interval.
             :type upper: float
         )",
-                 args("parameters", "name", "range", "lower", "central", "upper"))
+                 args("parameters", "name", "min", "max", "lower", "central", "upper"))
             .staticmethod("CurtailedGauss")
             .def("Scale", &LogPrior::Scale, return_value_policy<return_by_value>(), R"(
             Returns a new Scale prior as a LogPrior.
