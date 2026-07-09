@@ -18,6 +18,19 @@
 from _eos import _References
 
 class References(_References):
+    """
+    Represents the complete list of references known to EOS.
+
+    Objects of this class are visualized as tables in Jupyter notebooks for easy
+    overview. Filters can be applied through keyword arguments to the initialization.
+
+    :param year: Only show references whose names contain the provided ``year`` in their year part.
+    :type year: str
+    :param index: Only show references whose names contain the provided ``index`` in their index part.
+    :type index: str
+
+    See also `the complete list of references <../reference/bibliography.html>`_ in this documentation.
+    """
     def __init__(self, year=None, index=None):
         super().__init__()
         self.year  = year
