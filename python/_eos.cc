@@ -544,35 +544,187 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Model
     register_ptr_to_python<std::shared_ptr<Model>>();
-    class_<Model, boost::noncopyable>("Model", no_init)
-            .def("make", &::impl::Model_make, return_value_policy<return_by_value>())
+    class_<Model, boost::noncopyable>("Model", R"(
+            Represents a physics model, providing access to the CKM matrix elements, quark masses in
+            various renormalization schemes, the strong coupling, and Wilson coefficients.
+
+            New objects are created using the :meth:`make <eos.Model.make>` static method.
+        )",
+                                      no_init)
+            .def("make", &::impl::Model_make, return_value_policy<return_by_value>(), R"(
+            Makes a new :class:`Model` object.
+
+            :param name: The name of the model, e.g. ``SM`` or ``WET``.
+            :type name: str
+            :param parameters: The set of parameters to which the model is bound.
+            :type parameters: eos.Parameters
+            :param options: The set of options relevant to the model.
+            :type options: eos.Options
+
+            :return: The new model object.
+            :rtype: eos.Model
+        )",
+                 args("name", "parameters", "options"))
             .staticmethod("make")
             // CKM component
-            .def("ckm_cd", &Model::ckm_cd)
-            .def("ckm_cs", &Model::ckm_cs)
-            .def("ckm_cb", &Model::ckm_cb)
-            .def("ckm_ud", &Model::ckm_ud)
-            .def("ckm_us", &Model::ckm_us)
-            .def("ckm_ub", &Model::ckm_ub)
-            .def("ckm_td", &Model::ckm_td)
-            .def("ckm_ts", &Model::ckm_ts)
-            .def("ckm_tb", &Model::ckm_tb)
+            .def("ckm_cd", &Model::ckm_cd, R"(
+            Returns the CKM matrix element :math:`V_{cd}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_cs", &Model::ckm_cs, R"(
+            Returns the CKM matrix element :math:`V_{cs}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_cb", &Model::ckm_cb, R"(
+            Returns the CKM matrix element :math:`V_{cb}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_ud", &Model::ckm_ud, R"(
+            Returns the CKM matrix element :math:`V_{ud}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_us", &Model::ckm_us, R"(
+            Returns the CKM matrix element :math:`V_{us}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_ub", &Model::ckm_ub, R"(
+            Returns the CKM matrix element :math:`V_{ub}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_td", &Model::ckm_td, R"(
+            Returns the CKM matrix element :math:`V_{td}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_ts", &Model::ckm_ts, R"(
+            Returns the CKM matrix element :math:`V_{ts}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
+            .def("ckm_tb", &Model::ckm_tb, R"(
+            Returns the CKM matrix element :math:`V_{tb}`.
+
+            :rtype: complex
+        )",
+                 args("self"))
             // QCD component
-            .def("m_t_msbar", &Model::m_t_msbar)
-            .def("m_t_pole", &Model::m_t_pole)
-            .def("m_b_kin", &Model::m_b_kin)
-            .def("m_b_msbar", &Model::m_b_msbar)
-            .def("m_b_pole", &Model::m_b_pole)
-            .def("m_b_pole", &::impl::m_b_pole_wrapper_noargs)
-            .def("m_c_kin", &Model::m_c_kin)
-            .def("m_c_msbar", &Model::m_c_msbar)
-            .def("m_c_pole", &Model::m_c_pole)
-            .def("m_s_msbar", &Model::m_s_msbar)
-            .def("m_ud_msbar", &Model::m_ud_msbar)
+            .def("m_t_msbar", &Model::m_t_msbar, R"(
+            Returns the top-quark :math:`\overline{\text{MS}}` mass :math:`\overline{m}_t(\mu)` in GeV.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :rtype: float
+        )",
+                 args("self", "mu"))
+            .def("m_t_pole", &Model::m_t_pole, R"(
+            Returns the top-quark pole mass in GeV.
+
+            :rtype: float
+        )",
+                 args("self"))
+            .def("m_b_kin", &Model::m_b_kin, R"(
+            Returns the bottom-quark kinetic mass :math:`m_b^{\text{kin}}(\mu_{\text{kin}})` in GeV.
+
+            :param mu_kin: The kinetic cutoff scale in GeV.
+            :type mu_kin: float
+            :rtype: float
+        )",
+                 args("self", "mu_kin"))
+            .def("m_b_msbar", &Model::m_b_msbar, R"(
+            Returns the bottom-quark :math:`\overline{\text{MS}}` mass :math:`\overline{m}_b(\mu)` in GeV.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :rtype: float
+        )",
+                 args("self", "mu"))
+            .def("m_b_pole", &Model::m_b_pole, R"(
+            Returns the bottom-quark pole mass in GeV.
+
+            :param loop_order: The loop order of the conversion from the :math:`\overline{\text{MS}}` mass. Defaults to 3.
+            :type loop_order: int
+            :rtype: float
+        )",
+                 args("self", "loop_order"))
+            .def("m_b_pole", &::impl::m_b_pole_wrapper_noargs, R"(
+            Returns the bottom-quark pole mass in GeV at the default loop order.
+
+            :rtype: float
+        )",
+                 args("self"))
+            .def("m_c_kin", &Model::m_c_kin, R"(
+            Returns the charm-quark kinetic mass :math:`m_c^{\text{kin}}(\mu_{\text{kin}})` in GeV.
+
+            :param mu_kin: The kinetic cutoff scale in GeV.
+            :type mu_kin: float
+            :rtype: float
+        )",
+                 args("self", "mu_kin"))
+            .def("m_c_msbar", &Model::m_c_msbar, R"(
+            Returns the charm-quark :math:`\overline{\text{MS}}` mass :math:`\overline{m}_c(\mu)` in GeV.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :rtype: float
+        )",
+                 args("self", "mu"))
+            .def("m_c_pole", &Model::m_c_pole, R"(
+            Returns the charm-quark pole mass in GeV.
+
+            :rtype: float
+        )",
+                 args("self"))
+            .def("m_s_msbar", &Model::m_s_msbar, R"(
+            Returns the strange-quark :math:`\overline{\text{MS}}` mass :math:`\overline{m}_s(\mu)` in GeV.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :rtype: float
+        )",
+                 args("self", "mu"))
+            .def("m_ud_msbar", &Model::m_ud_msbar, R"(
+            Returns the averaged up-/down-quark :math:`\overline{\text{MS}}` mass :math:`\overline{m}_{ud}(\mu)` in GeV.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :rtype: float
+        )",
+                 args("self", "mu"))
             // WilsonCoefficients
-            .def("wilson_coefficients_b_to_s", &Model::wilson_coefficients_b_to_s)
+            .def("wilson_coefficients_b_to_s", &Model::wilson_coefficients_b_to_s, R"(
+            Returns the Wilson coefficients of the :math:`b \to s` effective Hamiltonian.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :param lepton_flavor: The lepton flavor, one of ``e``, ``mu``, or ``tau``.
+            :type lepton_flavor: str
+            :param cp_conjugate: Whether to return the CP-conjugated Wilson coefficients. Defaults to False.
+            :type cp_conjugate: bool
+        )",
+                 args("self", "mu", "lepton_flavor", "cp_conjugate"))
             // alpha_s
-            .def("alpha_s", &Model::alpha_s);
+            .def("alpha_s", &Model::alpha_s, R"(
+            Returns the strong coupling :math:`\alpha_s(\mu)` at the renormalization scale ``mu``.
+
+            :param mu: The renormalization scale in GeV.
+            :type mu: float
+            :rtype: float
+        )",
+                 args("self", "mu"));
 
     class_<ObservableCache::ObservableId>("ObservableId", R"(
     )",
@@ -591,7 +743,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param handle: The handle of the observable.
             :type handle: int
         )",
-                 args("handle"))
+                 args("self", "handle"))
             .def("add", &ObservableCache::add, R"(
             Add an existing observable to the cache.
 
@@ -601,13 +753,17 @@ BOOST_PYTHON_MODULE(_eos)
             :returns: An internal handle to the cached observable. The observable's value can be retrieved using ``cache[handle]``.
             :rtype: int
         )",
-                 args("observable"))
+                 args("self", "observable"))
             .def("update", &ObservableCache::update, R"(
             Update the cache for the current parameter point.
-        )")
+        )",
+                 args("self"))
             .def("parameters", &ObservableCache::parameters, R"(
             Retrieve the set of parameters bound to this cache.
-        )");
+
+            :rtype: eos.Parameters
+        )",
+                 args("self"));
 
     // ReferenceName
     class_<ReferenceName>("ReferenceName", init<std::string>())
