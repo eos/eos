@@ -1268,12 +1268,38 @@ BOOST_PYTHON_MODULE(_eos)
 
     // ObservableEntry
     register_ptr_to_python<std::shared_ptr<const ObservableEntry>>();
-    class_<ObservableEntry, boost::noncopyable>("ObservableEntry", no_init)
-            .def("name", &ObservableEntry::name, return_value_policy<copy_const_reference>())
-            .def("latex", &ObservableEntry::latex, return_value_policy<copy_const_reference>())
-            .def("unit", &ObservableEntry::unit, return_internal_reference<>())
-            .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables))
-            .def("options", range(&ObservableEntry::begin_options, &ObservableEntry::end_options));
+    class_<ObservableEntry, boost::noncopyable>("ObservableEntry", R"(
+            Describes a single observable known to EOS.
+
+            An observable entry records an observable's name, its LaTeX representation, its unit, and the
+            kinematic variables and options it accepts. Entries are obtained by iterating or indexing
+            :class:`eos.Observables`.
+        )",
+                                                no_init)
+            .def("name", &ObservableEntry::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of the observable.
+
+            :rtype: eos.QualifiedName
+        )",
+                 args("self"))
+            .def("latex", &ObservableEntry::latex, return_value_policy<copy_const_reference>(), R"(
+            Returns the LaTeX representation of the observable.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("unit", &ObservableEntry::unit, return_internal_reference<>(), R"(
+            Returns the unit of the observable.
+
+            :rtype: eos.Unit
+        )",
+                 args("self"))
+            .def("kinematic_variables", range(&ObservableEntry::begin_kinematic_variables, &ObservableEntry::end_kinematic_variables), R"(
+            Returns an iterator over the names of the kinematic variables accepted by the observable.
+        )")
+            .def("options", range(&ObservableEntry::begin_options, &ObservableEntry::end_options), R"(
+            Returns an iterator over the options accepted by the observable.
+        )");
 
     def("make_wilson_polynomial_observable", &make_wilson_polynomial_observable, args("name", "reference_observable", "coefficients"),
         R"(
@@ -1348,17 +1374,19 @@ BOOST_PYTHON_MODULE(_eos)
             :param name: The name of the new observable.
             :type name: eos.QualifiedName
             :param latex: The latex representation of the new observable.
-            :type latex: std::string
+            :type latex: str
             :param unit: The unit of the new observable.
             :type unit: eos.Unit
             :param options: The set of options relevant to this new observable. These options apply to **all** the observables in the expression.
             :type options: eos.Options
             :param expression: The expression to be parsed.
-            :type expression: std::string
+            :type expression: str
         )",
-                 args("name", "latex", "unit", "options", "expression"))
+                 args("self", "name", "latex", "unit", "options", "expression"))
             .def("__contains__", &Observables::has)
-            .def("sections", range(&Observables::begin_sections, &Observables::end_sections));
+            .def("sections", range(&Observables::begin_sections, &Observables::end_sections), R"(
+            Returns an iterator over the sections into which the known observables are grouped.
+        )");
 
 
     // SignalPDF
