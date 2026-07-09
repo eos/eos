@@ -779,7 +779,18 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Constraints>("_Constraints")
             .def("__getitem__", (std::shared_ptr<const ConstraintEntry>(Constraints::*)(const QualifiedName &) const) & Constraints::operator[])
             .def("__iter__", range(&Constraints::begin, &Constraints::end))
-            .def("insert", &Constraints::insert);
+            .def("insert", &Constraints::insert, R"(
+            Inserts a new constraint into EOS at run time by parsing its YAML representation.
+
+            :param name: The name of the new constraint.
+            :type name: eos.QualifiedName
+            :param entry: The YAML representation of the constraint entry.
+            :type entry: str
+
+            :return: The newly inserted constraint entry.
+            :rtype: eos.ConstraintEntry
+        )",
+                 args("self", "name", "entry"));
 
     class_<ParameterDescription>("ParameterDescription").def_readonly("parameter", &ParameterDescription::parameter);
 

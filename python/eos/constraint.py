@@ -18,6 +18,21 @@
 from _eos import _Constraints, _References
 
 class Constraints(_Constraints):
+    """
+    Represents the complete list of constraints known to EOS.
+
+    Objects of this class are visualized as tables in Jupyter notebooks for easy
+    overview. Filters can be applied through keyword arguments to the initialization.
+
+    :param prefix: Only show constraints whose qualified names contain the provided ``prefix`` in their prefix part.
+    :type prefix: str
+    :param name: Only show constraints whose qualified names contain the provided ``name`` in their name part.
+    :type name: str
+    :param suffix: Only show constraints whose qualified names contain the provided ``suffix`` in their suffix part.
+    :type suffix: str
+
+    See also `the complete list of constraints <../reference/constraints.html>`_ in this documentation.
+    """
     def __init__(self, prefix=None, name=None, suffix=None):
         super().__init__()
         self.prefix=prefix
