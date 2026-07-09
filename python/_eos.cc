@@ -291,10 +291,21 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Parameters
     class_<Parameters>("_Parameters", no_init)
-            .def("Defaults", &Parameters::Defaults)
+            .def("Defaults", &Parameters::Defaults, R"(
+            Returns an independent instance of the default set of parameters known to EOS.
+
+            :rtype: eos.Parameters
+        )")
             .staticmethod("Defaults")
             .def("__getitem__", (Parameter(Parameters::*)(const QualifiedName &) const) &Parameters::operator[])
-            .def("by_id", (Parameter(Parameters::*)(const Parameter::Id &) const) &Parameters::operator[])
+            .def("by_id", (Parameter(Parameters::*)(const Parameter::Id &) const) &Parameters::operator[], R"(
+            Returns the parameter with the given internal id.
+
+            :param id: The internal id of the parameter.
+            :type id: int
+            :rtype: eos.Parameter
+        )",
+                 args("self", "id"))
             .def("__iter__", range(&Parameters::begin, &Parameters::end))
             .def("declare", &Parameters::declare,
                  R"(
@@ -335,7 +346,7 @@ BOOST_PYTHON_MODULE(_eos)
             :return: The newly inserted parameter.
             :rtype: eos.Parameter
             )",
-                 args("name", "latex", "unit", "value", "min", "max"))
+                 args("self", "name", "latex", "unit", "value", "min", "max"))
             .def("redirect", &Parameters::redirect,
                  R"(
             Redirect a parameter name to a different parameter id in the default set of parameters.
@@ -345,13 +356,15 @@ BOOST_PYTHON_MODULE(_eos)
             This is useful for example to alias a parameter name to a different parameter object.
 
             :param name: The name of the parameter to be redirected.
-            :type name:
+            :type name: eos.QualifiedName
             :param id: The id of the parameter to which the name shall be redirected.
             :type id: eos.Parameter::Id
             )",
                  args("name", "id"))
             .staticmethod("redirect")
-            .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections))
+            .def("sections", range(&Parameters::begin_sections, &Parameters::end_sections), R"(
+            Returns an iterator over the sections into which the known parameters are grouped.
+        )")
             .def("set", &Parameters::set,
                  R"(
             Set the value of a parameter.
@@ -360,9 +373,25 @@ BOOST_PYTHON_MODULE(_eos)
             :type name: str
             :param value: The value to set the parameter to.
             :type value: float
-            )")
-            .def("has", &Parameters::has)
-            .def("override_from_file", &Parameters::override_from_file);
+            )",
+                 args("self", "name", "value"))
+            .def("has", &Parameters::has,
+                 R"(
+            Returns whether a parameter of the given name is part of this set.
+
+            :param name: The name of the parameter to look up.
+            :type name: eos.QualifiedName
+            :rtype: bool
+            )",
+                 args("self", "name"))
+            .def("override_from_file", &Parameters::override_from_file,
+                 R"(
+            Overrides parameter values from a YAML file.
+
+            :param file: The path to the YAML file with the parameter values.
+            :type file: str
+            )",
+                 args("self", "file"));
 
     // Mutable
     register_ptr_to_python<std::shared_ptr<Mutable>>();
@@ -1318,7 +1347,10 @@ BOOST_PYTHON_MODULE(_eos)
         )")
             .def("parameters", &Observable::parameters, R"(
             Returns the set of parameters bound to this observable.
-        )")
+
+            :rtype: eos.Parameters
+        )",
+                 args("self"))
             .def("kinematics", &Observable::kinematics, R"(
             Returns the set of kinematic variables bound to this observable.
         )")
