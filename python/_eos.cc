@@ -666,12 +666,39 @@ BOOST_PYTHON_MODULE(_eos)
             .def("evaluate", &LogLikelihood::operator());
 
     // Constraint
-    class_<Constraint>("Constraint", no_init)
-            .def("make", &Constraint::make, return_value_policy<return_by_value>())
+    class_<Constraint>("Constraint", R"(
+            Represents a named experimental or theoretical constraint known to EOS.
+
+            A constraint bundles one or more observables with the log-likelihood blocks that
+            constrain them. New objects are created using the :meth:`make <eos.Constraint.make>`
+            static method. See also `the complete list of constraints <../reference/constraints.html>`_.
+        )",
+                       no_init)
+            .def("make", &Constraint::make, return_value_policy<return_by_value>(), R"(
+            Makes a new :class:`Constraint` object from the internal database of constraints.
+
+            :param name: The name of the constraint. See `the complete list of constraints <../reference/constraints.html>`_.
+            :type name: eos.QualifiedName
+            :param options: The set of options passed to the observables entering the constraint.
+            :type options: eos.Options
+
+            :return: The new constraint object.
+            :rtype: eos.Constraint
+        )",
+                 args("name", "options"))
             .staticmethod("make")
-            .def("name", &Constraint::name, return_value_policy<copy_const_reference>())
-            .def("blocks", range(&Constraint::begin_blocks, &Constraint::end_blocks))
-            .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables));
+            .def("name", &Constraint::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of the constraint.
+
+            :rtype: eos.QualifiedName
+        )",
+                 args("self"))
+            .def("blocks", range(&Constraint::begin_blocks, &Constraint::end_blocks), R"(
+            Returns an iterator over the log-likelihood blocks that make up the constraint.
+        )")
+            .def("observables", range(&Constraint::begin_observables, &Constraint::end_observables), R"(
+            Returns an iterator over the observables entering the constraint.
+        )");
 
     // ConstraintEntry
     register_ptr_to_python<std::shared_ptr<const ConstraintEntry>>();
