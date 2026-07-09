@@ -1298,13 +1298,50 @@ BOOST_PYTHON_MODULE(_eos)
     // {{{ eos/
     // Reference
     register_ptr_to_python<ReferencePtr>();
-    class_<Reference>("Reference", no_init)
-            .def("name", &Reference::name, return_value_policy<copy_const_reference>())
-            .def("authors", &Reference::authors, return_value_policy<copy_const_reference>())
-            .def("eprint_archive", &Reference::eprint_archive, return_value_policy<copy_const_reference>())
-            .def("eprint_id", &Reference::eprint_id, return_value_policy<copy_const_reference>())
-            .def("title", &Reference::title, return_value_policy<copy_const_reference>())
-            .def("inspire_id", &Reference::inspire_id, return_value_policy<copy_const_reference>());
+    class_<Reference>("Reference", R"(
+            Represents a single bibliographic reference known to EOS.
+
+            A reference records the bibliographic details (authors, title, e-print, and INSPIRE
+            identifier) of a publication underlying part of EOS, be it an experimental constraint or
+            a theoretical work such as the implementation of an observable, a form factor
+            parametrization, or a theory prediction. References are obtained by iterating or indexing
+            :class:`eos.References`.
+        )",
+                      no_init)
+            .def("name", &Reference::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name (handle) of the reference.
+        )",
+                 args("self"))
+            .def("authors", &Reference::authors, return_value_policy<copy_const_reference>(), R"(
+            Returns the authors of the reference.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("eprint_archive", &Reference::eprint_archive, return_value_policy<copy_const_reference>(), R"(
+            Returns the e-print archive of the reference, e.g. ``arXiv``.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("eprint_id", &Reference::eprint_id, return_value_policy<copy_const_reference>(), R"(
+            Returns the e-print identifier of the reference, e.g. the arXiv number.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("title", &Reference::title, return_value_policy<copy_const_reference>(), R"(
+            Returns the title of the reference.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("inspire_id", &Reference::inspire_id, return_value_policy<copy_const_reference>(), R"(
+            Returns the INSPIRE identifier of the reference.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // References
     ::impl::std_pair_to_python_converter<const ReferenceName, ReferencePtr> converter_references_iter;
