@@ -51,7 +51,7 @@ from .ipython import __ipython__
 from .observable import Observables
 from .parameter import Parameters
 from .reference import References
-from .signal_pdf import SignalPDF, SignalPDFs
+from .signal_pdf import SignalPDF, SignalPDFs, DetectorLevelPDF
 from .tasks import *
 from .pyhf_likelihood import PyhfLogLikelihood
 

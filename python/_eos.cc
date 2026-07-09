@@ -21,6 +21,7 @@
 
 #include "eos/config.hh"
 #include "eos/constraint.hh"
+#include "eos/detector-level-pdf.hh"
 #include "eos/models/model.hh"
 #include "eos/nonlocal-form-factors/charm-loops-impl.hh"
 #include "eos/observable.hh"
@@ -1083,6 +1084,29 @@ BOOST_PYTHON_MODULE(_eos)
             .def("kinematics", &SignalPDF::kinematics, R"(
             Returns the set of kinematic variables bound to this PDF.
         )");
+
+    // DetectorLevelPDF::Axis
+    class_<DetectorLevelPDF::Axis>("_DetectorLevelPDFAxis",
+                                   init<const std::string &, double, double, unsigned long, optional<const std::string &>>(args("variable", "minimum", "maximum", "points",
+                                                                                                                                "offset_variable")))
+            .def_readwrite("variable", &DetectorLevelPDF::Axis::variable)
+            .def_readwrite("minimum", &DetectorLevelPDF::Axis::min)
+            .def_readwrite("maximum", &DetectorLevelPDF::Axis::max)
+            .def_readwrite("points", &DetectorLevelPDF::Axis::points)
+            .def_readwrite("offset_variable", &DetectorLevelPDF::Axis::offset_variable);
+
+    ::impl::iterable_to_std_vector_converter<DetectorLevelPDF::Axis> iterable_to_std_vector_converter_DetectorLevelPDFAxis;
+
+    // DetectorLevelPDF
+    class_<DetectorLevelPDF, bases<SignalPDF>, boost::noncopyable>("_DetectorLevelPDF", R"(
+            Internal binding for a detector-level (resolution-convolved) SignalPDF; use
+            :class:`eos.DetectorLevelPDF` instead.
+    )",
+                                                                   no_init)
+            .def("make", &DetectorLevelPDF::make, return_value_policy<return_by_value>(), args("cache", "signal_name", "resolution_name", "options", "axes"))
+            .staticmethod("make")
+            .def("make_1d", &DetectorLevelPDF::make_1d, return_value_policy<return_by_value>(), args("cache", "signal_name", "options", "axis", "resolution"))
+            .staticmethod("make_1d");
 
     // SignalPDFEntry
     register_ptr_to_python<std::shared_ptr<const SignalPDFEntry>>();

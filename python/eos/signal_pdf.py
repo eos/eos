@@ -15,7 +15,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _SignalPDF, _SignalPDFs
+from _eos import _SignalPDF, _SignalPDFs, _DetectorLevelPDF, _DetectorLevelPDFAxis
 import eos
 import numpy as np
 
@@ -133,6 +133,91 @@ class SignalPDF(_SignalPDF):
         pdf.bounds = [(kinematics[v.name() + '_min'], kinematics[v.name() + '_max']) for v in pdf.variables]
 
         return pdf
+
+def _axis_from_dict(axis):
+    """Build a native axis descriptor from a dictionary."""
+    variable = axis['variable']
+    return _DetectorLevelPDFAxis(
+        variable,
+        float(axis['min']),
+        float(axis['max']),
+        int(axis['points']),
+        axis.get('offset_variable', variable)
+    )
+
+
+def _as_signal_pdf(pdf):
+    """Attach the :class:`SignalPDF` interface (and the ``variables``/``bounds`` attributes) to a raw PDF."""
+    kinematics = pdf.kinematics()
+    pdf.__class__ = SignalPDF
+    pdf.variables = list(map(
+        lambda n: kinematics[n],
+        filter(lambda n: not (n.endswith('_min') or n.endswith('_max')), [kv.name() for kv in kinematics])
+    ))
+    pdf.bounds = [(kinematics[v.name() + '_min'], kinematics[v.name() + '_max']) for v in pdf.variables]
+
+    return pdf
+
+
+class DetectorLevelPDF:
+    """
+    Factory for detector-level (resolution-convolved) :class:`SignalPDF` objects.
+
+    A detector-level PDF represents a truth-level :class:`SignalPDF` after convolution with a
+    detector resolution function. The result is itself a :class:`SignalPDF`, so it can be evaluated
+    and plotted like any other PDF. The convolution is circular, so each axis must be padded with a
+    region in which both the PDF and the resolution are negligible.
+    """
+
+    @staticmethod
+    def make(cache, signal, resolution, options, axes):
+        """
+        Make a detector-level PDF whose resolution is supplied as a :class:`SignalPDF`.
+
+        :param cache: The observable cache providing the common set of parameters.
+        :type cache: eos.ObservableCache
+        :param signal: The qualified name of the truth-level SignalPDF.
+        :type signal: eos.QualifiedName or str
+        :param resolution: The qualified name of the resolution SignalPDF, a density over the per-axis
+            offset variables.
+        :type resolution: eos.QualifiedName or str
+        :param options: The options forwarded to both the signal and the resolution SignalPDF.
+        :type options: eos.Options
+        :param axes: One descriptor per sampling axis; each is a dictionary with the keys ``variable``,
+            ``min``, ``max``, ``points`` and, optionally, ``offset_variable`` (defaulting to ``variable``).
+        :type axes: list of dict
+
+        :rtype: eos.SignalPDF
+        """
+        _axes = [_axis_from_dict(axis) for axis in axes]
+        return _as_signal_pdf(_DetectorLevelPDF.make(cache, signal, resolution, options, _axes))
+
+    @staticmethod
+    def make_from_grid(cache, signal, options, axis, resolution):
+        """
+        Make a one-dimensional detector-level PDF from a pre-computed resolution grid.
+
+        :param cache: The observable cache providing the common set of parameters.
+        :type cache: eos.ObservableCache
+        :param signal: The qualified name of the truth-level SignalPDF.
+        :type signal: eos.QualifiedName or str
+        :param options: The options forwarded to the signal SignalPDF.
+        :type options: eos.Options
+        :param axis: The single sampling axis; a dictionary with the keys ``variable``, ``min``,
+            ``max`` and ``points``.
+        :type axis: dict
+        :param resolution: The resolution kernel sampled on the grid in natural (centred) order,
+            i.e. the zero offset sits at the centre of the array. Unlike the unbinned-likelihood
+            interface, this grid is *not* subjected to :func:`numpy.fft.ifftshift`; the shift is
+            applied internally.
+        :type resolution: list of float
+
+        :rtype: eos.SignalPDF
+        """
+        _axis = _axis_from_dict(axis)
+        _resolution = [float(value) for value in np.asarray(resolution, dtype=float)]
+        return _as_signal_pdf(_DetectorLevelPDF.make_1d(cache, signal, options, _axis, _resolution))
+
 
 class SignalPDFs(_SignalPDFs):
     """
