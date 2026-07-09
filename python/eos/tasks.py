@@ -736,8 +736,8 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
     :type template_file: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param convert_to_pdf: The flag that enables the conversion of the intermediate file to PDF. Defaults to `True`.
-    :type convert_to_pdf: bool, optional
+    :param generate_pdf: The flag that enables the conversion of the intermediate file to PDF. Defaults to `True`.
+    :type generate_pdf: bool, optional
     """
     import jinja2
 
