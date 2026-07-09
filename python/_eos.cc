@@ -814,7 +814,7 @@ BOOST_PYTHON_MODULE(_eos)
             :type name: str
             :param shift: The shift vector to the original set of parameters
             :type shift: vector
-            :param transform; The matrix that transforms the original set of parameters
+            :param transform: The matrix that transforms the original set of parameters
             :type transform: matrix
             :param min: The vector of minimum values that the parameters are allowed to take.
             :type min: vector
