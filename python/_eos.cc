@@ -983,16 +983,31 @@ BOOST_PYTHON_MODULE(_eos)
                          init<LogLikelihood>())
             .def("add", &LogPosterior::add, R"(
             Adds a new prior object to the posterior.
-        )")
+
+            :param prior: The prior to add to the posterior.
+            :type prior: eos.LogPrior
+            :param nuisance: Whether the prior's parameters shall be treated as nuisance parameters.
+            :type nuisance: bool
+
+            :return: Whether the prior was added successfully.
+            :rtype: bool
+        )",
+                 args("self", "prior", "nuisance"))
             .def("log_likelihood", &LogPosterior::log_likelihood, R"(
             Returns the likelihood object used as part of the posterior.
-        )")
+
+            :rtype: eos.LogLikelihood
+        )",
+                 args("self"))
             .def("log_priors", range(&LogPosterior::begin_priors, &LogPosterior::end_priors), R"(
             Returns a range of :class:`LogPrior` objects used as part of the posterior.
         )")
             .def("evaluate", &LogPosterior::evaluate, R"(
             Returns the posterior probability density.
-        )");
+
+            :rtype: float
+        )",
+                 args("self"));
 
     // test_statistics::ChiSquare
     class_<test_statistics::ChiSquare>("test_statisticsChiSquare", no_init)
