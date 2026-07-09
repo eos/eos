@@ -30,6 +30,7 @@ lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
 	config.cc config.hh \
 	constraint.cc constraint.hh \
+	detector-level-pdf.cc detector-level-pdf.hh \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
 	reference.cc reference.hh \
 	signal-pdf.cc signal-pdf.hh signal-pdf-fwd.hh signal-pdf-impl.hh
@@ -56,6 +57,7 @@ libeos_la_LIBADD = \
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \
 	constraint.hh \
+	detector-level-pdf.hh \
 	observable.hh \
 	reference.hh \
 	signal-pdf.hh
@@ -67,6 +69,7 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	constraint_TEST \
+	detector-level-pdf_TEST \
 	observable_TEST \
 	reference_TEST \
 	signal-pdf_TEST
@@ -89,6 +92,7 @@ LDADD = \
 
 check_PROGRAMS = \
 	constraint_TEST \
+	detector-level-pdf_TEST \
 	observable_TEST \
 	reference_TEST \
 	signal-pdf_TEST
@@ -96,6 +100,10 @@ check_PROGRAMS = \
 constraint_TEST_SOURCES = constraint_TEST.cc
 constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 constraint_TEST_LDADD = $(LDADD) -lyaml-cpp
+
+detector_level_pdf_TEST_SOURCES = detector-level-pdf_TEST.cc
+detector_level_pdf_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+detector_level_pdf_TEST_LDADD = $(LDADD) -lyaml-cpp
 
 observable_TEST_SOURCES = observable_TEST.cc
 observable_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
