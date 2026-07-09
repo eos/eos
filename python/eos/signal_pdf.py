@@ -32,7 +32,7 @@ class SignalPDF(_SignalPDF):
 
         return self.evaluate()
 
-    def sample_mcmc(self, N, stride, pre_N, preruns, cov_scale=0.1, start_point=None, rng=np.random.mtrand):
+    def sample_mcmc(self, N, stride, pre_N, preruns, cov_scale=0.1, start_point=None, rng=None):
         """
         Return samples of the kinematic variables and the log(PDF).
 
@@ -53,6 +53,9 @@ class SignalPDF(_SignalPDF):
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
         """
+        if rng is None:
+            rng = np.random.mtrand
+
         import pypmc
         try:
             from tqdm.auto import tqdm

@@ -376,7 +376,7 @@ class Analysis:
         return eos.GoodnessOfFit(self._log_posterior)
 
 
-    def optimize(self, start_point=None, rng=np.random.mtrand, **kwargs):
+    def optimize(self, start_point=None, rng=None, **kwargs):
         r"""
         Optimize the log(posterior) and returns a best-fit-point summary.
         Optimization is performed using the scipy SLSQP method by default since the varied parameters are usually bounded.
@@ -392,6 +392,9 @@ class Analysis:
         :param \**kwargs: Are passed to `scipy.optimize.minimize`
 
         """
+        if rng is None:
+            rng = np.random.mtrand
+
         if str(start_point) == "random":
             # generate random uniform probabilities and store them in the generator values
             for param in self.varied_parameters:
@@ -472,7 +475,7 @@ class Analysis:
         return -self.log_pdf(u, *args)
 
 
-    def sample_prior(self, N=1000, rng=np.random.mtrand):
+    def sample_prior(self, N=1000, rng=None):
         """
         Return prior samples of the parameters.
 
@@ -484,6 +487,9 @@ class Analysis:
 
         :return: An iterable of the parameter samples of size N.
         """
+        if rng is None:
+            rng = np.random.mtrand
+
         samples = []
         for _ in range(N):
             u_samples = rng.uniform(0.0, 1.0, len(self.varied_parameters))
@@ -491,7 +497,7 @@ class Analysis:
         return np.array(samples)
 
 
-    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=np.random.mtrand,
+    def sample(self, N=1000, stride=5, pre_N=150, preruns=3, cov_scale=0.1, observables=None, start_point=None, rng=None,
                return_uspace=False):
         """
         Return samples of the parameters, log(weights), and optionally posterior-predictive samples for a sequence of observables.
@@ -515,6 +521,9 @@ class Analysis:
         .. note::
            This method requiries the PyPMC python module, which can be installed from PyPI.
         """
+        if rng is None:
+            rng = np.random.mtrand
+
         try:
             import pypmc
         except ImportError as e:
@@ -588,7 +597,7 @@ class Analysis:
             return(parameter_samples, weights, np.array(observable_samples))
 
 
-    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=np.random.mtrand,
+    def sample_pmc(self, log_proposal, step_N=1000, steps=10, final_N=5000, rng=None,
                     return_final_only=True, final_perplexity_threshold=1.0, weight_threshold=1e-10,
                     pmc_iterations=1, pmc_rel_tol=1e-10, pmc_abs_tol=1e-05, pmc_lookback=1):
         """
@@ -642,6 +651,9 @@ class Analysis:
         .. note::
            This method requires the PyPMC python module, which can be installed from PyPI.
         """
+        if rng is None:
+            rng = np.random.mtrand
+
         try:
             import pypmc
         except ImportError as e:
