@@ -473,7 +473,15 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__init__", raw_function(&::impl::Options_ctor))
             .def("__iter__", range(&Options::begin, &Options::end))
             .def(init<>())
-            .def("declare", &Options::declare)
+            .def("declare", &Options::declare, R"(
+            Declares an option as a (key, value) pair.
+
+            :param key: The name of the option.
+            :type key: str
+            :param value: The value assigned to the option.
+            :type value: str
+        )",
+                 args("self", "key", "value"))
             .def("__str__", &Options::as_string)
             .def("__eq__", &Options::operator==)
             .def("__getitem__", &Options::operator[], return_value_policy<copy_const_reference>());
@@ -1264,7 +1272,10 @@ BOOST_PYTHON_MODULE(_eos)
         )")
             .def("options", &Observable::options, R"(
             Returns the set of options used when creating the observable.
-        )");
+
+            :rtype: eos.Options
+        )",
+                 args("self"));
 
     // ObservableEntry
     register_ptr_to_python<std::shared_ptr<const ObservableEntry>>();
