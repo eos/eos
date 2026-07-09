@@ -965,16 +965,23 @@ BOOST_PYTHON_MODULE(_eos)
             .staticmethod("Transform")
             .def("evaluate", &LogPrior::operator(), R"(
             Returns the logarithm of the prior's probability density at the current parameter values.
-        )")
+
+            :rtype: float
+        )",
+                 args("self"))
             .def("sample", &LogPrior::sample, R"(
             Sets its parameters' values corresponding to the cumulative propability :math:`p` assigned to
             each parameter via its :meth:`Parameter.set_generator` method.
-        )")
+        )",
+                 args("self"))
             .def("compute_cdf", &LogPrior::compute_cdf, R"(
             Returns the cumulative probabilities :math:`p` assigned to each parameter via its
             :meth:`Parameter.evaluate_generator` method.
-        )")
-            .def("varied_parameters", range(&LogPrior::begin, &LogPrior::end));
+        )",
+                 args("self"))
+            .def("varied_parameters", range(&LogPrior::begin, &LogPrior::end), R"(
+            Returns an iterator over the :class:`Parameter <eos.Parameter>` objects varied by this prior.
+        )");
 
     // LogPosterior
     class_<LogPosterior>("LogPosterior", R"(
