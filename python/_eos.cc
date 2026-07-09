@@ -702,15 +702,76 @@ BOOST_PYTHON_MODULE(_eos)
 
     // ConstraintEntry
     register_ptr_to_python<std::shared_ptr<const ConstraintEntry>>();
-    class_<eos::ConstraintEntry, boost::noncopyable>("ConstraintEntry", no_init)
-            .def("make", &ConstraintEntry::make, return_value_policy<return_by_value>())
-            .def("make_prior", &ConstraintEntry::make_prior, return_value_policy<return_by_value>())
-            .def("name", &ConstraintEntry::name, return_value_policy<copy_const_reference>())
-            .def("type", &ConstraintEntry::type, return_value_policy<copy_const_reference>())
-            .def("observables", range(&ConstraintEntry::begin_observable_names, &ConstraintEntry::end_observable_names))
-            .def("references", range(&ConstraintEntry::begin_references, &ConstraintEntry::end_references))
-            .def("serialize", (std::string(ConstraintEntry::*)(void) const) &ConstraintEntry::serialize, return_value_policy<return_by_value>())
-            .def("deserialize", (ConstraintEntry * (*) (const QualifiedName &, const std::string &) ) & ConstraintEntry::FromYAML, return_value_policy<manage_new_object>())
+    class_<eos::ConstraintEntry, boost::noncopyable>("ConstraintEntry", R"(
+            Describes a single constraint known to EOS and acts as its factory.
+
+            A constraint entry records a constraint's name, type, the observables it constrains, and
+            the references it originates from. Entries are obtained by iterating or indexing
+            :class:`eos.Constraints`, and can create the corresponding :class:`eos.Constraint` (via
+            :meth:`make <eos.ConstraintEntry.make>`) or an equivalent :class:`eos.LogPrior` (via
+            :meth:`make_prior <eos.ConstraintEntry.make_prior>`).
+        )",
+                                                     no_init)
+            .def("make", &ConstraintEntry::make, return_value_policy<return_by_value>(), R"(
+            Makes a new :class:`Constraint` object from this entry.
+
+            :param name: The name of the constraint.
+            :type name: eos.QualifiedName
+            :param options: The set of options passed to the observables entering the constraint.
+            :type options: eos.Options
+
+            :return: The new constraint object.
+            :rtype: eos.Constraint
+        )",
+                 args("self", "name", "options"))
+            .def("make_prior", &ConstraintEntry::make_prior, return_value_policy<return_by_value>(), R"(
+            Makes a new :class:`LogPrior` object from this entry.
+
+            :param parameters: The set of parameters to which the prior is bound.
+            :type parameters: eos.Parameters
+            :param options: The set of options passed to the observables entering the constraint.
+            :type options: eos.Options
+
+            :return: The new log(prior) object.
+            :rtype: eos.LogPrior
+        )",
+                 args("self", "parameters", "options"))
+            .def("name", &ConstraintEntry::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of the constraint.
+
+            :rtype: eos.QualifiedName
+        )",
+                 args("self"))
+            .def("type", &ConstraintEntry::type, return_value_policy<copy_const_reference>(), R"(
+            Returns the type description of the constraint, e.g. ``Gaussian`` or ``MultivariateGaussian``.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("observables", range(&ConstraintEntry::begin_observable_names, &ConstraintEntry::end_observable_names), R"(
+            Returns an iterator over the names of the observables entering the constraint.
+        )")
+            .def("references", range(&ConstraintEntry::begin_references, &ConstraintEntry::end_references), R"(
+            Returns an iterator over the names of the references from which the constraint originates.
+        )")
+            .def("serialize", (std::string(ConstraintEntry::*)(void) const) &ConstraintEntry::serialize, return_value_policy<return_by_value>(), R"(
+            Returns the YAML representation of the constraint entry as a string.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("deserialize", (ConstraintEntry * (*) (const QualifiedName &, const std::string &) ) & ConstraintEntry::FromYAML, return_value_policy<manage_new_object>(), R"(
+            Creates a new :class:`ConstraintEntry` by deserializing its YAML representation.
+
+            :param name: The name of the constraint.
+            :type name: eos.QualifiedName
+            :param yaml: The YAML representation of the constraint entry.
+            :type yaml: str
+
+            :return: The new constraint entry object.
+            :rtype: eos.ConstraintEntry
+        )",
+                 args("name", "yaml"))
             .staticmethod("deserialize");
 
     // Constraints
