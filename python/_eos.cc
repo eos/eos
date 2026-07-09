@@ -703,7 +703,9 @@ BOOST_PYTHON_MODULE(_eos)
             Represents a Bayesian prior on the log scale.
 
             New LogPrior objects can only be created using the capitalized static methods:
-            :meth:`LogPrior.Uniform`, :meth:`LogPrior.Gaussian`, and :meth:`LogPrior.Scale`.
+            :meth:`LogPrior.Uniform`, :meth:`LogPrior.Flat`, :meth:`LogPrior.Gaussian`,
+            :meth:`LogPrior.CurtailedGauss`, :meth:`LogPrior.Poisson`, :meth:`LogPrior.Scale`,
+            and :meth:`LogPrior.Transform`.
         )",
                                          no_init)
             .def("Uniform", &LogPrior::Flat, return_value_policy<return_by_value>(), R"(
