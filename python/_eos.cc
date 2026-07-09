@@ -1584,9 +1584,25 @@ BOOST_PYTHON_MODULE(_eos)
 
     // SignalPDFEntry
     register_ptr_to_python<std::shared_ptr<const SignalPDFEntry>>();
-    class_<SignalPDFEntry, boost::noncopyable>("SignalPDFEntry", no_init)
-            .def("name", &SignalPDFEntry::name, return_value_policy<copy_const_reference>())
-            .def("description", &SignalPDFEntry::description, return_value_policy<copy_const_reference>());
+    class_<SignalPDFEntry, boost::noncopyable>("SignalPDFEntry", R"(
+            Describes a single signal PDF known to EOS.
+
+            A signal-PDF entry records the PDF's name and a human-readable description. Entries are
+            obtained by iterating or indexing :class:`eos.SignalPDFs`.
+        )",
+                                               no_init)
+            .def("name", &SignalPDFEntry::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of the signal PDF.
+
+            :rtype: eos.QualifiedName
+        )",
+                 args("self"))
+            .def("description", &SignalPDFEntry::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the human-readable description of the signal PDF.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // SignalPDFGroup
     register_ptr_to_python<std::shared_ptr<SignalPDFGroup>>();
@@ -1614,7 +1630,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param name: The name of the new signal PDF.
             :type name: eos.QualifiedName
             :param description: A human-readable description of the new signal PDF.
-            :type description: std::string
+            :type description: str
             :param options: The set of options relevant to this new signal PDF. These options apply to **both** backing observables.
             :type options: eos.Options
             :param numerator: The name of the observable that provides the unnormalized PDF.
@@ -1626,8 +1642,10 @@ BOOST_PYTHON_MODULE(_eos)
             :param normalization_kinematic_variables: The kinematic variables of the normalization; for each sampling variable ``v`` this should contain the bounds ``v_min`` and ``v_max``.
             :type normalization_kinematic_variables: list of str
         )",
-                 args("name", "description", "options", "numerator", "numerator_kinematic_variables", "normalization", "normalization_kinematic_variables"))
-            .def("sections", range(&SignalPDFs::begin_sections, &SignalPDFs::end_sections));
+                 args("self", "name", "description", "options", "numerator", "numerator_kinematic_variables", "normalization", "normalization_kinematic_variables"))
+            .def("sections", range(&SignalPDFs::begin_sections, &SignalPDFs::end_sections), R"(
+            Returns an iterator over the sections into which the known signal PDFs are grouped.
+        )");
 
     // Analytic Charm Loops
     def("delta_c7", &agv_2019a::delta_c7);
