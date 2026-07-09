@@ -216,6 +216,12 @@ namespace eos
             /// Retrieve a KinematicVariable's numeric value.
             virtual double evaluate() const;
 
+            /// Retrieve a KinematicVariable's min value if set.
+            virtual double min() const;
+
+            /// Retrieve a KinematicVariable's max value if set.
+            virtual double max() const;
+
             /// Set a KinematicVariable's numeric value.
             const KinematicVariable & operator= (const double &);
 

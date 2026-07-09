@@ -543,6 +543,28 @@ Lists the dependencies of a step defined within the analysis file.
     )
     parser_list_step_dependencies.set_defaults(cmd = cmd_list_step_dependencies)
 
+    # create-constraint
+    parser_create_constraint = subparsers.add_parser('create-constraint',
+        parents = [common_subparser],
+        description =
+'''
+Create a constraint from existing importance samples of a named posterior.
+''',
+        help = 'Creates a constraint from a posterior.'
+    )
+    parser_create_constraint.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
+    )
+    parser_create_constraint.add_argument('constraint_name', metavar = 'CONSTRAINT-NAME',
+        help = 'The name of the constraint to create.',
+        action = 'store', type = str
+    )
+    parser_create_constraint.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_create_constraint.set_defaults(cmd = cmd_create_constraint)
+
 
     # create-mask
     parser_create_mask = subparsers.add_parser('create-mask',
@@ -852,6 +874,10 @@ def cmd_list_step_dependencies(args):
     elif isinstance(result, str):
         print(result)
 
+
+# Create constraint
+def cmd_create_constraint(args):
+    return eos.create_constraint(**args_to_dict(args))
 
 # Filter samples
 def cmd_create_mask(args):
