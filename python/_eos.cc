@@ -1553,19 +1553,34 @@ BOOST_PYTHON_MODULE(_eos)
             To speed up sampling from the PDF, the :meth:`evaluate <eos.SignalPDF.evaluate>` returns values of an
             unnormalized function proportional to the actual PDF. To ensure that the integral over the PDF is
             normalized to 1, the values returned by evaluate need to be divided by the return value of this method.
-        )")
+
+            :rtype: float
+        )",
+                 args("self"))
             .def("name", &SignalPDF::name, return_value_policy<copy_const_reference>(), R"(
             Returns the name of the PDF.
-        )")
+
+            :rtype: eos.QualifiedName
+        )",
+                 args("self"))
             .def("parameters", &SignalPDF::parameters, R"(
             Returns the set of parameters bound to this PDF.
-        )")
+
+            :rtype: eos.Parameters
+        )",
+                 args("self"))
             .def("options", &SignalPDF::options, R"(
             Returns the set of options used when creating the PDF.
-        )")
+
+            :rtype: eos.Options
+        )",
+                 args("self"))
             .def("kinematics", &SignalPDF::kinematics, R"(
             Returns the set of kinematic variables bound to this PDF.
-        )");
+
+            :rtype: eos.Kinematics
+        )",
+                 args("self"));
 
     // SignalPDFEntry
     register_ptr_to_python<std::shared_ptr<const SignalPDFEntry>>();
