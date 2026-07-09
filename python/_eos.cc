@@ -1049,9 +1049,18 @@ BOOST_PYTHON_MODULE(_eos)
             .def("make", &SignalPDF::make, return_value_policy<return_by_value>()) // docstring is maintained in python/eos/signal_pdf.py
             .staticmethod("make")
             .def("evaluate", &SignalPDF::evaluate, R"(
-            Evaluates the (unnormalized) PDF for the present values of the sets of parameters and kinematic variables that it is bound to.
+            Evaluates the logarithm of the (unnormalized) PDF for the present values of the sets of parameters and kinematic variables that it is bound to.
 
-            :return: The value of the PDF.
+            :return: The value of the log of the PDF.
+            :rtype: float
+        )",
+                 args("self"))
+            .def("evaluate_linear", &SignalPDF::evaluate_linear, R"(
+            Evaluates the (unnormalized) PDF on the linear scale for the present values of the sets of parameters and kinematic variables that it is bound to.
+
+            Non-positive values are clamped to zero.
+
+            :return: The value of the PDF on the linear scale.
             :rtype: float
         )",
                  args("self"))
