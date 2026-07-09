@@ -260,20 +260,25 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__lt__", &QualifiedName::operator<)
             .def("prefix_part", &QualifiedName::prefix_part, return_value_policy<copy_const_reference>(), R"(
             Returns the prefix part of the name, i.e., the part preceeding the '::'.
-        )")
+        )",
+                 args("self"))
             .def("name_part", &QualifiedName::name_part, return_value_policy<copy_const_reference>(), R"(
             Returns the name part of the name, i.e., the part following the '::' and preceeding any
             optional '@'.
-        )")
+        )",
+                 args("self"))
             .def("suffix_part", &QualifiedName::suffix_part, return_value_policy<copy_const_reference>(), R"(
             Returns the optional suffix part of the name, i.e., the part following the optional '@'.
-        )")
+        )",
+                 args("self"))
             .def("options_part", &QualifiedName::options, return_value_policy<copy_const_reference>(), R"(
             Returns the optional options part of the name, i.e., the part following the optional ';'.
-        )")
+        )",
+                 args("self"))
             .def("full", &QualifiedName::full, return_value_policy<copy_const_reference>(), R"(
             Returns the full name, i.e., the concatenation of all parts.
-        )");
+        )",
+                 args("self"));
     implicitly_convertible<std::string, QualifiedName>();
 
 
@@ -1344,7 +1349,10 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self"))
             .def("name", &Observable::name, return_value_policy<copy_const_reference>(), R"(
             Returns the name of the observable.
-        )")
+
+            :rtype: eos.QualifiedName
+        )",
+                 args("self"))
             .def("parameters", &Observable::parameters, R"(
             Returns the set of parameters bound to this observable.
 
