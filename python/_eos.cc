@@ -622,14 +622,29 @@ BOOST_PYTHON_MODULE(_eos)
     // {{{ eos/statistics
     // LogLikelihoodBlock
     register_ptr_to_python<std::shared_ptr<LogLikelihoodBlock>>();
-    class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", no_init)
+    class_<LogLikelihoodBlock, boost::noncopyable>("LogLikelihoodBlock", R"(
+            Represents a single block (term) of a :class:`LogLikelihood <eos.LogLikelihood>`.
+
+            A block encapsulates the likelihood contribution of one or more observables, such as a
+            (multivariate) Gaussian constraint or a user-provided external likelihood. New blocks are
+            created using the static factory methods, e.g. :meth:`External <eos.LogLikelihoodBlock.External>`
+            and :meth:`Unbinned1D <eos.LogLikelihoodBlock.Unbinned1D>`, and added to a likelihood via
+            :meth:`LogLikelihood.add <eos.LogLikelihood.add>`.
+        )",
+                                                   no_init)
             .def("__str__", &LogLikelihoodBlock::as_string)
             .def("evaluate", &LogLikelihoodBlock::evaluate, R"(
             Evaluate the log-likelihood block at the current parameter point.
-        )")
+
+            :rtype: float
+        )",
+                 args("self"))
             .def("number_of_observations", &LogLikelihoodBlock::number_of_observations, R"(
             Retrieve the number of observations in this block.
-        )")
+
+            :rtype: int
+        )",
+                 args("self"))
             .def("External", &ExternalLogLikelihoodBlock::make, R"(
             Create a new external log-likelihood block.
 
