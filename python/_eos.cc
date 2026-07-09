@@ -493,7 +493,7 @@ BOOST_PYTHON_MODULE(_eos)
 
             Thirteen possible entries are currently implemented in EOS:
               - Undefined
-              - None
+              - Unity
               - GeV
               - GeV2
               - GeV3
@@ -533,7 +533,9 @@ BOOST_PYTHON_MODULE(_eos)
             .staticmethod("GeVSecond")
             .def("Femtometer2", &Unit::Femtometer2)
             .staticmethod("Femtometer2")
-            .def("latex", &Unit::latex, return_value_policy<copy_const_reference>())
+            .def("latex", &Unit::latex, return_value_policy<copy_const_reference>(), R"(
+            Returns the LaTeX representation of the unit.
+        )")
             .def("__str__", &Unit::string, return_value_policy<copy_const_reference>())
             .def("__eq__", &Unit::operator==);
 
