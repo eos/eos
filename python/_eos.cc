@@ -973,10 +973,16 @@ BOOST_PYTHON_MODULE(_eos)
             .def("total_chi_square", &GoodnessOfFit::total_chi_square, R"(
             Returns the total :math:`\chi^2` value of the log(likelihood). Only (multivariate) gaussian
             likelihoods are considered for this result.
-        )")
+
+            :rtype: float
+        )",
+                 args("self"))
             .def("total_degrees_of_freedom", &GoodnessOfFit::total_degrees_of_freedom, R"(
             Returns the total number of degrees of freedom in the log(posterior).
-        )");
+
+            :rtype: int
+        )",
+                 args("self"));
 
     // }}}
 
