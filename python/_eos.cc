@@ -659,11 +659,33 @@ BOOST_PYTHON_MODULE(_eos)
             Represents the log(likelihood) of a Bayesian analysis undertaken with the :class:`Analysis <eos.Analysis>` class.
         )",
                           init<Parameters>())
-            .def("add", (void(LogLikelihood::*)(const Constraint &)) & LogLikelihood::add)
-            .def("add", (void(LogLikelihood::*)(const LogLikelihoodBlockPtr &)) & LogLikelihood::add)
+            .def("add", (void(LogLikelihood::*)(const Constraint &)) & LogLikelihood::add, R"(
+            Adds a constraint from the internal database to the likelihood.
+
+            :param constraint: The constraint to add.
+            :type constraint: eos.Constraint
+        )",
+                 args("self", "constraint"))
+            .def("add", (void(LogLikelihood::*)(const LogLikelihoodBlockPtr &)) & LogLikelihood::add, R"(
+            Adds a single log-likelihood block to the likelihood.
+
+            :param block: The log-likelihood block to add.
+            :type block: eos.LogLikelihoodBlock
+        )",
+                 args("self", "block"))
             .def("__iter__", range(&LogLikelihood::begin, &LogLikelihood::end))
-            .def("observable_cache", &LogLikelihood::observable_cache)
-            .def("evaluate", &LogLikelihood::operator());
+            .def("observable_cache", &LogLikelihood::observable_cache, R"(
+            Returns the observable cache shared by the likelihood's blocks.
+
+            :rtype: eos.ObservableCache
+        )",
+                 args("self"))
+            .def("evaluate", &LogLikelihood::operator(), R"(
+            Evaluates the log(likelihood) for the current parameter point.
+
+            :rtype: float
+        )",
+                 args("self"));
 
     // Constraint
     class_<Constraint>("Constraint", R"(
