@@ -678,7 +678,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type bound: str, optional
     :param nlive: The number of live points.
     :type nlive: int, optional
-    :param dlogz: Relative tolerance for the remaining evidence. Defaults to 5%.
+    :param dlogz: The relative tolerance for the remaining evidence. Defaults to 1.0.
     :type dlogz: float, optional
     :param maxiter: The maximum number of iterations. Iterations may stop earlier if the termination condition is reached.
     :type maxiter: int, optional
