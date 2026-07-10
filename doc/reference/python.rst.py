@@ -1,5 +1,6 @@
 import eos
 import eos.figure
+from eos._api import API_BASIC_CLASSES, API_COMMON_CLASSES
 from jinja_util import print_template
 
 
@@ -46,6 +47,8 @@ task_names = [task.__name__ for task in eos.tasks._tasks.values() if task.__name
 task_names = sorted(task_names)
 
 print_template(__file__,
+    api_basic_classes = API_BASIC_CLASSES,
+    api_common_classes = API_COMMON_CLASSES,
     plot_types = plot_types,
     figure_figure_types = figure_figure_types,
     figure_item_types = figure_item_types,
