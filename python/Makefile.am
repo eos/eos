@@ -3,6 +3,7 @@ CLEANFILES = *~
 EXTRA_DIST = \
 	setup.py.in \
 	eos/__init__.py \
+	eos/_api.py \
 	eos/analysis.py \
 	eos/analysis_TEST.d \
 	eos/analysis_TEST.py \
@@ -84,6 +85,7 @@ eosdir = $(pkgpythondir)
 eos_PYTHON =
 eos_SCRIPTS = \
 	eos/__init__.py \
+	eos/_api.py \
 	eos/analysis.py \
 	eos/analysis_file.py \
 	eos/analysis_file_description.py \
@@ -165,6 +167,7 @@ TESTS = \
 	eos/data/sample_mask_TEST.py \
 	eos/data/pmc_sampler_TEST.py \
 	eos/data/prediction_TEST.py \
+	eos/_api_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
 	eos/reporting_TEST.py \
