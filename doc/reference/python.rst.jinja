@@ -1,3 +1,10 @@
+{% macro autoclass(name, inherited) -%}
+.. autoclass:: eos.{{ name }}
+{% if inherited %}
+   :inherited-members:
+{% endif %}
+   :members:
+{%- endmacro %}
 ##########
 Python API
 ##########
@@ -8,79 +15,10 @@ Basic Classes
 
 EOS provides its basic functionality via the main ``eos`` module.
 
+{% for name, inherited in api_basic_classes.items() %}
 
-.. autoclass:: eos.Constraint
-   :members:
-
-.. autoclass:: eos.ConstraintEntry
-   :members:
-
-.. autoclass:: eos.Constraints
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.Kinematics
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.LogLikelihood
-   :members:
-
-.. autoclass:: eos.LogLikelihoodBlock
-   :members:
-
-.. autoclass:: eos.LogPrior
-   :members:
-
-.. autoclass:: eos.LogPosterior
-   :members:
-
-.. autoclass:: eos.Model
-   :members:
-
-.. autoclass:: eos.Observable
-   :members:
-
-.. autoclass:: eos.ObservableEntry
-   :members:
-
-.. autoclass:: eos.Observables
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.Options
-   :members:
-
-.. autoclass:: eos.Parameter
-   :members:
-
-.. autoclass:: eos.Parameters
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.QualifiedName
-   :members:
-
-.. autoclass:: eos.Reference
-   :members:
-
-.. autoclass:: eos.References
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.SignalPDF
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.SignalPDFEntry
-   :members:
-
-.. autoclass:: eos.SignalPDFs
-   :inherited-members:
-   :members:
-
-.. autoclass:: eos.Unit
-   :members:
+{{ autoclass(name, inherited) }}
+{% endfor %}
 
 
 **************
@@ -89,9 +27,10 @@ Common Classes
 
 EOS provides common classes for use in statistical analyses via the main ``eos`` module.
 
+{% for name, inherited in api_common_classes.items() %}
 
-.. autoclass:: eos.Analysis
-   :members:
+{{ autoclass(name, inherited) }}
+{% if name == 'Analysis' %}
 
    .. _eos-Analysis-prior-descriptions:
 
@@ -109,18 +48,8 @@ EOS provides common classes for use in statistical analyses via the main ``eos``
    * **sigma** (*float*, or *list*, *tuple* of *float*) -- The width of the 68% probability interval. If a list or tuple
      of two numbers is provided, the prior will by a asymmetric but continuous. The two values are then taken to be the
      distance to the lower and upper end of the 68% probability interval.
-
-.. autoclass:: eos.AnalysisFile
-   :members:
-
-.. autoclass:: eos.BestFitPoint
-   :members:
-
-.. autoclass:: eos.GoodnessOfFit
-   :members:
-
-.. autoclass:: eos.ObservableCache
-   :members:
+{% endif %}
+{% endfor %}
 
 
 .. _api_eos_tasks:
