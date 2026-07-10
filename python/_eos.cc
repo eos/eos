@@ -1398,7 +1398,10 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self"))
             .def("kinematics", &Observable::kinematics, R"(
             Returns the set of kinematic variables bound to this observable.
-        )")
+
+            :rtype: eos.Kinematics
+        )",
+                 args("self"))
             .def("options", &Observable::options, R"(
             Returns the set of options used when creating the observable.
 
