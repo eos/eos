@@ -56,6 +56,7 @@
 - Add comparison operators for ``qnp::OptionValue`` (D. van Dyk)
 - Add an output stream operator for ``qnp::OptionValue`` (D. van Dyk)
 - Document the user-facing classes and methods of the ``eos`` Python modules, and auto-generate the analysis file format reference from the ``eos.analysis_file_description`` classes (D. van Dyk)
+- Complete the reference documentation of the ``eos`` Python bindings: fix several incorrect docstrings, name all arguments and add docstrings across the documented C++-bound classes, and document the previously undocumented ``Model``, ``LogLikelihoodBlock``, ``Constraint``, ``ConstraintEntry``, ``ObservableEntry``, ``Reference``, ``References``, and ``SignalPDFEntry`` classes; the list of documented classes now lives in ``eos._api``, shared by the API reference template and by a new unit test that guards argument naming and docstring coverage against regressions (D. van Dyk)
 - Add a ``vertical`` plot item that draws a vertical line at a fixed position on the x axis, e.g. to mark a kinematic threshold (D. van Dyk)
 - Add an optional ``size`` field to ``grid`` figures to set the figure size explicitly (D. van Dyk)
 - Add an optional ``watermark_plot`` field to ``grid`` figures to stamp the watermark on a single panel, addressed either by a flattened index or by a ``(row, col)`` pair (D. van Dyk)
