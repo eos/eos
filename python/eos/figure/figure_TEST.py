@@ -335,6 +335,30 @@ class GridFigureTests(unittest.TestCase):
         with self.assertRaises(Exception):
             eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra="shared_axes: 'diagonal'"))
 
+    def test_draw_forwards_context(self):
+
+        # Regression: GridFigure.draw must forward its context to each plot's prepare(), so that
+        # items resolve relative paths against the analysis file's base directory. Previously the
+        # context was dropped and every plot fell back to a fresh CWD-rooted context.
+        from eos.analysis_file_context import AnalysisFileContext
+
+        figure = eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2))
+        context = AnalysisFileContext()
+
+        seen = []
+        for plot in figure.plots:
+            original = plot.prepare
+            def spy(ctx=None, _original=original):
+                seen.append(ctx)
+                return _original(ctx)
+            plot.prepare = spy
+
+        figure.draw(context=context)
+
+        self.assertEqual(len(seen), len(figure.plots))
+        for ctx in seen:
+            self.assertIs(ctx, context)
+
 
 class CornerFigureTests(unittest.TestCase):
 
