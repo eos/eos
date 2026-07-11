@@ -380,7 +380,7 @@ class GridFigure(Figure):
         """
         context = AnalysisFileContext() if context is None else context
         for idx, plot in enumerate(self.plots):
-            plot.prepare()
+            plot.prepare(context)
             plot.draw(self._axes[idx])
             if self._watermark_idx is None or self._watermark_idx == idx:
                 plot.draw_watermark(self._axes[idx], self.watermark)
