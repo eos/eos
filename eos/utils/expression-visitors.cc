@@ -336,12 +336,18 @@ namespace eos::exp
     ExpressionCloner::operator() (const CachedObservableExpression & e)
     {
         const auto & kinematics_values  = e.kinematics_specification.values;
-        const auto & kinematics_aliases = e.kinematics_specification.aliases;
+        auto         kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
         for (const auto & value : kinematics_values)
         {
-            _kinematics.declare(value.first, value.second);
+            // Set variables are aliased before being set, using a hidden alias
+            // that is unique per sub-observable. Declaring under the original
+            // name would let two sub-observables that fix the same variable
+            // (e.g. 'q2') collide on a single shared kinematic variable.
+            std::string hidden_alias = this->next_hidden_alias();
+            _kinematics.declare(hidden_alias, value.second);
+            kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
         }
         for (const auto & alias : kinematics_aliases)
         {

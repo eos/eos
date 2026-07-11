@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -491,6 +491,48 @@ class ExpressionParserTest : public TestCase
                 c.update();
                 ExpressionEvaluator evaluator;
                 TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, cached_e), 5.0, 1e-10);
+            }
+
+            // testing that cloning a *cached* expression preserves distinct fixed
+            // kinematic values (regression test for GitHub issue #1077)
+            {
+                // test::obs1 returns p[mass::c] * multiplier * (q2_max - q2_min).
+                // Both sub-observables fix the SAME kinematic variable (q2_min) to
+                // different values. Cloning the cached form must not let them collide
+                // on a single shared kinematic variable.
+                ExpressionTest test("<<test::obs1>>[q2_min=1.0] + <<test::obs1>>[q2_min=0.0]");
+
+                Parameters p = Parameters::Defaults();
+                p.set("mass::c", 1.0);
+                Kinematics k = Kinematics({
+                    { "q2_max", 3 },
+                });
+
+                ExpressionMaker maker(p, k, Options());
+                Expression      e;
+                TEST_CHECK_NO_THROW(e = std::visit(maker, *test.e));
+
+                // Cache the expression: ObservableExpression nodes become
+                // CachedObservableExpression nodes.
+                ObservableCache  c(p);
+                ExpressionCacher cacher(c);
+                Expression       cached_e;
+                TEST_CHECK_NO_THROW(cached_e = std::visit(cacher, e));
+                c.update();
+
+                ExpressionEvaluator evaluator;
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, cached_e), 5.0, 1e-10);
+
+                // Clone the *cached* expression and evaluate. The result must remain
+                // 5.0 (= 2.0 + 3.0); a collision on q2_min would yield 4.0 (= 2 * 2.0)
+                // or 6.0 (= 2 * 3.0).
+                Parameters p2 = Parameters::Defaults();
+                p2.set("mass::c", 1.0);
+                Kinematics       k2 = k.clone();
+                ExpressionCloner cloner(p2, k2, Options());
+                Expression       cloned_cached_e;
+                TEST_CHECK_NO_THROW(cloned_cached_e = std::visit(cloner, cached_e));
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, cloned_cached_e), 5.0, 1e-10);
             }
         }
 } expression_parser_test;
