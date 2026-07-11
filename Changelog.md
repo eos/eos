@@ -126,6 +126,7 @@
 - Fix the detection of option conflicts in ``eos.AnalysisFile``, which silently failed to warn when an observable's option-part contradicted a global or local option (D. van Dyk)
 - Fix a crash when loading an analysis file that has no ``likelihoods`` section (D. van Dyk)
 - Report all unknown observable names in an analysis file prediction, rather than only the first (D. van Dyk)
+- Fix incorrect cloning of cached ``ExpressionObservable`` instances that fix the same kinematic variable to different values (issue #1077) (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
