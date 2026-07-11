@@ -18,6 +18,7 @@ import unittest
 import eos
 import eos.figure
 import os
+import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
 from matplotlib import pyplot as plt
@@ -1078,6 +1079,42 @@ class ObservableItemValidationTests(unittest.TestCase):
             range: [0.1, 1.0]
             """)
 
+    def test_missing_fixed_parameters_from_file(self):
+
+        # Regression (issue #1181): an item referencing a fixed_parameters_from_file that does not
+        # exist must still load, because the file is read only when the item is prepared for drawing
+        # (it may be the output of an earlier task, e.g. find-mode). A file that is genuinely missing
+        # at prepare() then raises.
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::dBR/dq2'
+        variable: q2
+        range: [0.1, 1.0]
+        resolution: 3
+        fixed_parameters_from_file: 'does-not-exist.yaml'
+        """)
+        with self.assertRaises(RuntimeError):
+            item.prepare()
+
+    def test_fixed_parameters_from_file(self):
+
+        # The parameter file is resolved relative to the context's base directory and applied in
+        # prepare(), not at construction.
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, 'params.yaml'), 'w') as f:
+                f.write("'mass::mu':\n  central: 0.10566\n")
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: observable
+            observable: 'B->Dlnu::dBR/dq2'
+            variable: q2
+            range: [0.1, 1.0]
+            resolution: 3
+            fixed_parameters_from_file: 'params.yaml'
+            """)
+            item.prepare(context=AnalysisFileContext(base_directory=tmp))
+            _, ax = plt.subplots()
+            item.draw(ax)
+
 class ExpressionItemValidationTests(unittest.TestCase):
 
     def test_invalid(self):
@@ -1490,6 +1527,21 @@ class ComplexPlaneItemValidationTests(unittest.TestCase):
         # a non-positive resolution is rejected
         with self.assertRaises(ValueError):
             eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'Im{q2}']\nranges: [[-1, 1], [-1, 1]]\nresolution: 0")
+
+    def test_missing_fixed_parameters_from_file(self):
+
+        # Regression (issue #1181): loading must not require the parameter file to exist; it is read
+        # only in prepare(), which raises if the file is genuinely missing at draw time.
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: complex-plane
+        observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+        variables: ['Re{q2}', 'Im{q2}']
+        ranges: [[-1.0, 1.0], [-1.0, 1.0]]
+        resolution: 5
+        fixed_parameters_from_file: 'does-not-exist.yaml'
+        """)
+        with self.assertRaises(RuntimeError):
+            item.prepare()
 
 class ErrorBarsItemValidationTests(unittest.TestCase):
 

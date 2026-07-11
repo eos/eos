@@ -269,18 +269,10 @@ class ObservableItem(Item):
                     raise ValueError(f"Kinematic variable '{k}' does not match any of the declared kinematic variables '{self.observable}': {valid_kinematic_variables.__repr__()}")
                 self._kinematics.declare(k, v)
 
-        # Create parameters
+        # Create parameters. Values overridden from a file and explicit fixed parameters are applied
+        # in prepare() rather than here, so that loading a figure does not require the parameter file
+        # to exist yet; it may be the output of an earlier task (e.g. find-mode). See issue #1181.
         self._parameters = eos.Parameters.Defaults()
-        if self.fixed_parameters_from_file:
-            eos.warn('Overriding parameters from file')
-            self._parameters.override_from_file(self.fixed_parameters_from_file)
-
-        if self.fixed_parameters:
-            if self.fixed_parameters_from_file:
-                eos.warn('Overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
-
-            for key, value in self.fixed_parameters.items():
-                self._parameters.set(key, value)
 
         # Declare variable that is either parameter or kinematic
         self._variable = None
@@ -320,6 +312,20 @@ class ObservableItem(Item):
         :type context: AnalysisFileContext | None
         """
         context = AnalysisFileContext() if context is None else context
+
+        # Override parameters from a file (resolved relative to the analysis file's base directory)
+        # and/or from explicit values, with explicit values taking precedence. Done here rather than
+        # in __post_init__ so that the parameter file need not exist at load time; see issue #1181.
+        if self.fixed_parameters_from_file:
+            eos.warn('Overriding parameters from file')
+            self._parameters.override_from_file(context.data_path(self.fixed_parameters_from_file))
+
+        if self.fixed_parameters:
+            if self.fixed_parameters_from_file:
+                eos.warn('Overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+            for key, value in self.fixed_parameters.items():
+                self._parameters.set(key, value)
+
         self._yvalues = _np.empty((len(self._xvalues),))
         for i, x in enumerate(self._xvalues):
             self._variable.set(x)
@@ -2783,18 +2789,10 @@ class ComplexPlaneItem(Item):
                     raise ValueError(f"Kinematic variable '{k}' does not match any of the declared kinematic variables '{self.observable}': {valid_kinematic_variables.__repr__()}")
                 self._kinematics.declare(k, v)
 
-        # Create parameters
+        # Create parameters. Values overridden from a file and explicit fixed parameters are applied
+        # in prepare() rather than here, so that loading a figure does not require the parameter file
+        # to exist yet; it may be the output of an earlier task (e.g. find-mode). See issue #1181.
         self._parameters = eos.Parameters.Defaults()
-        if self.fixed_parameters_from_file:
-            eos.warn('Overriding parameters from file')
-            self._parameters.override_from_file(self.fixed_parameters_from_file)
-
-        if self.fixed_parameters:
-            if self.fixed_parameters_from_file:
-                eos.warn('Overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
-
-            for key, value in self.fixed_parameters.items():
-                self._parameters.set(key, value)
 
         # Declare variables
         if self.variables[0] not in valid_kinematic_variables:
@@ -2852,9 +2850,26 @@ class ComplexPlaneItem(Item):
         Evaluates the observable on a regular ``resolution`` x ``resolution`` grid of complex values
         spanning the two ranges given by ``ranges`` and caches the results for :meth:`draw`.
 
-        :param context: The analysis file context. Accepted for interface consistency and unused.
+        :param context: The analysis file context used to resolve the relative path to
+            ``fixed_parameters_from_file``. If ``None``, a default context rooted at the current
+            working directory is used.
         :type context: AnalysisFileContext | None
         """
+        context = AnalysisFileContext() if context is None else context
+
+        # Override parameters from a file (resolved relative to the analysis file's base directory)
+        # and/or from explicit values, with explicit values taking precedence. Done here rather than
+        # in __post_init__ so that the parameter file need not exist at load time; see issue #1181.
+        if self.fixed_parameters_from_file:
+            eos.warn('Overriding parameters from file')
+            self._parameters.override_from_file(context.data_path(self.fixed_parameters_from_file))
+
+        if self.fixed_parameters:
+            if self.fixed_parameters_from_file:
+                eos.warn('Overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+            for key, value in self.fixed_parameters.items():
+                self._parameters.set(key, value)
+
         self._ovalues = _np.reshape(list(map(self.evaluate, self._cvalues)), (self.resolution, self.resolution)).T
 
     def draw(self, ax):
