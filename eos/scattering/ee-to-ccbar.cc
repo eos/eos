@@ -59,18 +59,20 @@ namespace eos
 
         static const inline std::array<std::string, 17> channel_names =
         {
-            "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "eff(4040)",
-            "D_s^+D_s^-", "D^*0Dbar^*0", "D^*+D^*-", "D^0Dbar^*0", "D^+D^*-",
-            "D^*0Dbar^*0(5P1)", "D^*+D^*-(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(5F1)",
-            "eff(4160)"
+            "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)",
+            "D^0Dbar^*0", "D^+D^*-", "D_s^+D_s^-",
+            "D^*0Dbar^*0", "D^*0Dbar^*0(5P1)", "D^*0Dbar^*0(5F1)",
+            "D^*+D^*-", "D^*+D^*-(5P1)", "D^*+D^*-(5F1)",
+            "eff(4040)", "eff(4160)"
         };
 
         enum Channels
         {
-            ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770, eff4040,
-            DsDs, Dstar0Dstarbar0, DstarpDstarm, D0Dbarstar0, DpDstarm,
-            Dstar0Dstarbar05P1, DstarpDstarm5P1, Dstar0Dstarbar05F1, DstarpDstarm5F1,
-            eff4160
+            ee = 0, effJpsi, eff2S, D0Dbar0, DpDm, eff3770,
+            D0Dbarstar0, DpDstarm, DsDs,
+            Dstar0Dstarbar0, Dstar0Dstarbar05P1, Dstar0Dstarbar05F1,
+            DstarpDstarm, DstarpDstarm5P1, DstarpDstarm5F1,
+            eff4040, eff4160
         };
 
         // Resonance masses
@@ -296,37 +298,6 @@ namespace eos
                     case DpDm:
                         channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
-                    case DsDs:
-                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Ds, m_Ds, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
-                    // V*V D^*Dbar^* (J^PC = 1^--) couples in three partial waves: two
-                    // P-waves (1P1 with S=0, 5P1 with S=2; both l=1) and one F-wave (5F1
-                    // with S=2, l=3). They do not interfere in the angular-integrated cross
-                    // section, so each is a separate K-matrix channel and sigma is their sum.
-                    // The leading P-wave (1P1) keeps the historical bare channel name.
-                    case Dstar0Dstarbar0:
-                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
-                    case DstarpDstarm:
-                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
-                    // Second P-wave (5P1, l=1): an independent l=1 amplitude with its own
-                    // couplings (same barrier and kinematics as the 1P1, different spin).
-                    case Dstar0Dstarbar05P1:
-                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
-                    case DstarpDstarm5P1:
-                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
-                    // F-wave (5F1, l=3): the sub-leading D*Dbar* partial wave, using the
-                    // l=3 Chew-Mandelstam (FWavePPChannel). D*Dbar* is self-conjugate, so
-                    // there is no charge-conjugation multiplicity (unlike D Dbar^*).
-                    case Dstar0Dstarbar05F1:
-                        channel_array[i] = std::make_shared<FWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
-                    case DstarpDstarm5F1:
-                        channel_array[i] = std::make_shared<FWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
-                        break;
                     // Unequal-mass P.V open-charm channels D Dbar^*, P-wave (l = 1).
                     // In J^PC = 1^-- a pseudoscalar-vector pair is a single 3P1 (l=1)
                     // wave with a transverse vector; there is no S- or D-wave here (both
@@ -340,6 +311,37 @@ namespace eos
                         break;
                     case DpDstarm:
                         channel_array[i] = std::make_shared<PWavePVChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()), 2.0);
+                        break;
+                    case DsDs:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Ds, m_Ds, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    // V*V D^*Dbar^* (J^PC = 1^--) couples in three partial waves: two
+                    // P-waves (1P1 with S=0, 5P1 with S=2; both l=1) and one F-wave (5F1
+                    // with S=2, l=3). They do not interfere in the angular-integrated cross
+                    // section, so each is a separate K-matrix channel and sigma is their sum.
+                    // The channels are grouped by charge state; within each group the
+                    // leading P-wave (1P1) keeps the historical bare channel name, the 5P1
+                    // is an independent l=1 amplitude (same barrier/kinematics, S=2), and
+                    // the 5F1 uses the l=3 Chew-Mandelstam (FWavePPChannel). D*Dbar* is
+                    // self-conjugate, so there is no charge-conjugation multiplicity
+                    // (unlike D Dbar^*).
+                    case Dstar0Dstarbar0:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case Dstar0Dstarbar05P1:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case Dstar0Dstarbar05F1:
+                        channel_array[i] = std::make_shared<FWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstar0, m_Dstar0, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DstarpDstarm:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DstarpDstarm5P1:
+                        channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                        break;
+                    case DstarpDstarm5F1:
+                        channel_array[i] = std::make_shared<FWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(channel_names[i], m_Dstarp, m_Dstarp, q[i], _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                         break;
 
                     default:
