@@ -226,29 +226,41 @@ namespace eos
     };
 
 
-    // V -> PV channel for two unequal masses (e.g. D Dbar^*), S-wave (l = 0).
-    // Uses the full Kaellen phase space and the unequal-mass l=0 Chew-Mandelstam
-    // function. The closed form was validated against the equal-mass limit
-    // (reduces to EEChannel) and a numerical once-subtracted dispersion integral
-    // of rho; see PHASE2-HARD-SCOPE.md and analytic/chew-mandelstam.py. l = 0 =>
-    // the barrier factor n = 1, so the Chew-Mandelstam is the analytic
-    // continuation of i * rho with no n factor. It is threshold-subtracted so that
-    // CM((m1+m2)^2) = 0, matching the convention of EEChannel (l=0) and
-    // PWavePPChannel (l=1); the subtracted constant is the real number
-    // -(m1^2-m2^2) ln(m1/m2) / [16 pi^2 (m1+m2)^2] (it vanishes for equal masses).
+    // V -> PV channel for two unequal masses in a P-wave (l = 1), e.g. D Dbar^*
+    // or D_s Dbar_s^*. In the photon (J^PC = 1^--) channel a pseudoscalar-vector
+    // pair has P = (-1)^L = -1, so L must be odd; the single open partial wave is
+    // the 3P1 (l = 1), with the vector transverse. There is NO l = 0 (S-wave) or
+    // l = 2 (D-wave) piece here -- both would carry P = +1 (see the CORRECTION
+    // banner in EXTENSION-INSTRUCTIONS.md and analytic/angular-distribution/). The
+    // l = 0 function survives only as the analytic *building block* (cm0 below).
+    // rho() is the bare Kaellen phase space (the K-matrix engine applies the
+    // centrifugal barrier n^2 = (q/q0)^2 F_1^2 separately); chew_mandelstam() is
+    // the analytic continuation of i * rho * n^2, with n^2 = z^2/(1 + z^2),
+    // z = q/q0. The closed form is assembled with the same machinery as
+    // DWavePVChannel/FWavePPChannel: the l = 0 dispersive building block CM_0 plus
+    // the s-plane poles of the single z^2-root of the barrier denominator (u = -1,
+    // partial-fraction coefficient -1), threshold-subtracted so CM((m1+m2)^2) = 0.
+    // It reduces to the equal-mass PWavePPChannel when m1 = m2 (one s-pole then
+    // sits at s = 0 with vanishing residue, leaving the familiar single pole at
+    // s = (m1+m2)^2 - 4 q0^2). Derived and validated (once-subtracted dispersion,
+    // unitarity, reality, threshold, and the equal-mass reduction) in
+    // analytic/chew-mandelstam.py (cm_pwave_recon, check D1); frozen reference
+    // values for the physical channels are in INSTRUCTION-CHEW-MANDELSTAM-CHANNELS.md.
     template <unsigned nchannels_, unsigned nresonances_>
-    struct SWavePVChannel :
+    struct PWavePVChannel :
     public KMatrix<nchannels_, nresonances_>::Channel
     {
         // multiplicity counts the number of charge-conjugate final states this
         // channel stands for (2 for D Dbar^* + h.c.). It scales rho and the
         // Chew-Mandelstam function together, so unitarity (Im CM = rho * n^2),
         // the resonance width and the cross section all stay consistent.
-        SWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s, double multiplicity = 1.0) :
-            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 0, q0, g0s),
+        PWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s, double multiplicity = 1.0) :
+            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s),
             _multiplicity(multiplicity)
         {
         };
+
+        using KMatrix<nchannels_, nresonances_>::Channel::_q0;
 
         const double _multiplicity;
         const double pi = M_PI;
@@ -274,80 +286,6 @@ namespace eos
             return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : _multiplicity * std::sqrt(kallen(s)) / 16.0 / pi / s;
         }
 
-        // Analytic continuation of i * rho for unequal masses, l = 0.
-        complex<double> chew_mandelstam(const complex<double> & S)
-        {
-            const double m1 = this->_m1();
-            const double m2 = this->_m2();
-            // Adapt s to match the branch-cut prescription of the other channels.
-            const complex<double> s = S + complex<double>(0.0, 1e-15);
-            const complex<double> w = std::sqrt(kallen(s));
-
-            const complex<double> cm = 1.0 / 16.0 / pi / pi * (
-                    w / s * std::log((m1 * m1 + m2 * m2 - s + w) / (2.0 * m1 * m2))
-                    - (m1 * m1 - m2 * m2) / s * std::log(m1 / m2)
-                    );
-
-            // Threshold subtraction: at s = s_th = (m1+m2)^2 the Kaellen factor
-            // (hence w) vanishes, so only the asymmetry term survives. Subtracting
-            // this real constant enforces CM(s_th) = 0, consistent with the other
-            // channels (it cancels identically for equal masses).
-            const double sth = power_of<2>(m1 + m2);
-            const double cm_threshold = -1.0 / 16.0 / pi / pi * (m1 * m1 - m2 * m2) / sth * std::log(m1 / m2);
-
-            // Scale by the channel multiplicity together with rho, preserving
-            // Im CM = rho * n^2 and doubling the loop / width for D Dbar^* + h.c.
-            return _multiplicity * (cm - cm_threshold);
-        }
-    };
-
-
-    // V -> PV channel for two unequal masses in a D-wave (l = 2), e.g. a
-    // sub-leading D Dbar^* amplitude. rho() is the bare phase space (the K-matrix
-    // engine applies the centrifugal barrier n^2 = (q/q0)^4 F_2^2 separately);
-    // chew_mandelstam() is the analytic continuation of i * rho * n^2, with
-    // n^2 = z^4/(9 + 3 z^2 + z^4), z = q/q0. The closed form is assembled from the
-    // l = 0 dispersive function CM_0 (cm0 below) plus the four poles of the
-    // Blatt-Weisskopf denominator, and is threshold-subtracted so CM((m1+m2)^2)=0,
-    // consistent with the other channels. Derived and validated (once-subtracted
-    // dispersion relation, plus an l = 1 cross-check against PWavePPChannel) in
-    // analytic/chew-mandelstam.py (sections 7-8, checks D0-D5).
-    template <unsigned nchannels_, unsigned nresonances_>
-    struct DWavePVChannel :
-    public KMatrix<nchannels_, nresonances_>::Channel
-    {
-        // multiplicity: number of charge-conjugate final states represented
-        // (2 for D Dbar^* + h.c.); scales rho and chew_mandelstam together, cf.
-        // SWavePVChannel.
-        DWavePVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s, double multiplicity = 1.0) :
-            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 2, q0, g0s),
-            _multiplicity(multiplicity)
-        {
-        };
-
-        using KMatrix<nchannels_, nresonances_>::Channel::_q0;
-
-        const double _multiplicity;
-        const double pi = M_PI;
-        const complex<double> i = complex<double>(0.0, 1.0);
-
-        // Kaellen function lambda(s, m1^2, m2^2) = (s - (m1+m2)^2)(s - (m1-m2)^2).
-        complex<double> kallen(const complex<double> & s)
-        {
-            const double m1 = this->_m1();
-            const double m2 = this->_m2();
-
-            return (s - power_of<2>(m1 + m2)) * (s - power_of<2>(m1 - m2));
-        }
-
-        complex<double> rho(const complex<double> & s)
-        {
-            const double mthr = this->_m1() + this->_m2();
-
-            // The multiplicity factor accounts for the h.c. final state (see ctor).
-            return (real(s) < mthr * mthr) ? complex<double>(0.0, 0.0) : _multiplicity * std::sqrt(kallen(s)) / 16.0 / pi / s;
-        }
-
         // l = 0 dispersive building block CM_0(s) (bare: no barrier, no threshold
         // subtraction). The +i*1e-15 fixes the branch as in the other channels.
         complex<double> cm0(const complex<double> & S)
@@ -366,7 +304,8 @@ namespace eos
         // Contribution to K(s) of the two s-plane poles arising from one z^2-root
         // "root" (with partial-fraction coefficient "coeff") of the barrier
         // denominator: coeff/(z^2 - root) = sum_{r+,r-} R/(s - r), with the poles
-        // r the roots of lambda(s) - 4 root q0^2 s = s^2 - B s + C0.
+        // r the roots of lambda(s) - 4 root q0^2 s = s^2 - B s + C0. Identical to
+        // DWavePVChannel/FWavePPChannel::pole_pair.
         complex<double> pole_pair(const complex<double> & s, const complex<double> & cm0s,
                 const complex<double> & root, const complex<double> & coeff)
         {
@@ -386,22 +325,17 @@ namespace eos
             return Rp * (cm0s - cm0(rp)) / (s - rp) + Rm * (cm0s - cm0(rm)) / (s - rm);
         }
 
-        // K(s) = CM_0(s) + sum_p R_p [CM_0(s) - CM_0(p)] / (s - p). The z^2-roots of
-        // 9 + 3 z^2 + z^4 are a, b = 3 exp(+- 2 i pi/3), with partial-fraction
-        // coefficients c_a = 3 b/(a-b), c_b = -3 a/(a-b).
+        // K(s) = CM_0(s) + R_p [CM_0(s) - CM_0(p)] / (s - p) summed over the poles.
+        // The l = 1 barrier n^2 = z^2/(1 + z^2) = 1 - 1/(z^2 - (-1)) has a single
+        // z^2-root u = -1 with partial-fraction coefficient -1.
         complex<double> kfun(const complex<double> & s)
         {
-            const complex<double> a  = 3.0 * std::exp( 2.0 * i * pi / 3.0);
-            const complex<double> b  = 3.0 * std::exp(-2.0 * i * pi / 3.0);
-            const complex<double> ca =  3.0 * b / (a - b);
-            const complex<double> cb = -3.0 * a / (a - b);
-
             const complex<double> cm0s = cm0(s);
 
-            return cm0s + pole_pair(s, cm0s, a, ca) + pole_pair(s, cm0s, b, cb);
+            return cm0s + pole_pair(s, cm0s, complex<double>(-1.0, 0.0), complex<double>(-1.0, 0.0));
         }
 
-        // Analytic continuation of i * rho * n^2 for l = 2, threshold-subtracted.
+        // Analytic continuation of i * rho * n^2 for l = 1, threshold-subtracted.
         complex<double> chew_mandelstam(const complex<double> & S)
         {
             const double sth = power_of<2>(this->_m1() + this->_m2());
@@ -417,7 +351,7 @@ namespace eos
     // rho() is the bare phase space (the K-matrix engine applies the centrifugal
     // barrier n^2 = (q/q0)^6 F_3^2 separately); chew_mandelstam() is the analytic
     // continuation of i * rho * n^2, with n^2 = z^6/(225 + 45 z^2 + 6 z^4 + z^6),
-    // z = q/q0. The closed form is assembled exactly as for DWavePVChannel: the
+    // z = q/q0. The closed form is assembled exactly as for PWavePVChannel: the
     // l = 0 dispersive function CM_0 (cm0 below) plus the six poles of the
     // Blatt-Weisskopf denominator P_3(z^2) = z^6 + 6 z^4 + 45 z^2 + 225, then
     // threshold-subtracted so CM((m1+m2)^2) = 0. The three z^2-roots a_k of P_3
@@ -477,7 +411,7 @@ namespace eos
 
         // Contribution to K(s) of the two s-plane poles arising from one z^2-root
         // "root" (partial-fraction coefficient "coeff") of the barrier denominator;
-        // identical to DWavePVChannel::pole_pair. The poles r are the roots of
+        // identical to PWavePVChannel::pole_pair. The poles r are the roots of
         // lambda(s) - 4 root q0^2 s = s^2 - B s + C0.
         complex<double> pole_pair(const complex<double> & s, const complex<double> & cm0s,
                 const complex<double> & root, const complex<double> & coeff)
@@ -543,7 +477,7 @@ namespace eos
     {
         public:
 
-            const static long unsigned nchannels = 19;
+            const static long unsigned nchannels = 17;
             const static long unsigned nresonances = 5;
 
             struct IntermediateResult :
@@ -660,11 +594,6 @@ namespace eos
             double sigma_eetoDstarpDstarm_TT(const IntermediateResult *) const;
             double sigma_eetoDstarpDstarm_TL(const IntermediateResult *) const;
             double sigma_eetoDstarpDstarm_LL(const IntermediateResult *) const;
-            // Partial-wave-resolved D Dbar^*: the totals above are the sum S + D.
-            double sigma_eetoD0Dbarstar0_S(const IntermediateResult *) const;
-            double sigma_eetoD0Dbarstar0_D(const IntermediateResult *) const;
-            double sigma_eetoDpDstarm_S(const IntermediateResult *) const;
-            double sigma_eetoDpDstarm_D(const IntermediateResult *) const;
 
             // R ratios
             double R(const IntermediateResult *) const;

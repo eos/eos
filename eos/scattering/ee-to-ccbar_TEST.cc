@@ -45,40 +45,93 @@ class eetoccbarTest :
             constexpr double eps = 1e-5;
 
             {
-                // Standalone validation of the unequal-mass S-wave PV channel (D Dbar^*).
-                // Reference values were computed independently with mpmath and the closed
-                // form was checked against the equal-mass limit (EEChannel) and a numerical
-                // once-subtracted dispersion integral of rho; see PHASE2-HARD-SCOPE.md and
-                // analytic/chew-mandelstam.py. CM is threshold-subtracted (CM(s_th) = 0),
-                // matching EEChannel/PWavePPChannel; Im CM is unchanged by the subtraction.
+                // Standalone validation of the unequal-mass P-wave (l = 1) PV channel
+                // against the physical open-charm channels D Dbar^* and D_s Dbar_s^*.
+                // In J^PC = 1^-- a pseudoscalar-vector pair is a single 3P1 (l=1) wave --
+                // there is no S-wave (l=0) or D-wave (l=2), both of which carry P = +1
+                // (see the CORRECTION banner in EXTENSION-INSTRUCTIONS.md). Reference
+                // values are the frozen, dispersion-validated tables of
+                // INSTRUCTION-CHEW-MANDELSTAM-CHANNELS.md (analytic/chew-mandelstam.py,
+                // cm_pwave_recon at 40-digit precision), built with the default meson
+                // masses and q0 = 0.5 GeV. CM is threshold-subtracted (CM(s_th) = 0);
+                // real below threshold; above threshold Im CM = rho * n_1^2 (unitarity),
+                // which the table tabulates directly.
                 Parameters p = Parameters::Defaults();
                 p["ee->ccbar::q_0"] = 0.5;
                 std::array<Parameter, 2> g0s {{ p["ee->ccbar::q_0"], p["ee->ccbar::q_0"] }};
 
-                // D^0 Dbar^*0: m1 = 1.86483, m2 = 2.00685 GeV, threshold s = 14.989 GeV^2
-                auto ch = std::make_shared<SWavePVChannel<3, 2>>("D^0Dbar^*0", p["mass::D^0"], p["mass::D_u^*"], p["ee->ccbar::q_0"], g0s);
+                const double eps_rel  = 1.0e-10; // Re CM, rho, and Im CM above threshold
+                const double eps_cusp = 1.0e-8;  // within ~0.15 of the sqrt cusp at s_th
+                const double eps_abs  = 1.0e-10; // Im CM below threshold (analytically 0)
 
-                // rho: zero below threshold, sqrt(lambda)/(16 pi s) above
-                TEST_CHECK_NEARLY_EQUAL(  std::abs(ch->rho(14.0)),    0.0,            eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(16.5)),        0.006014846605, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(25.0)),        0.01258357249,  eps);
+                // each row: { s, rho(s), Re CM(s), Im CM(s) } straight from the tables.
+                auto check_rows = [&](const std::string & m1par, const std::string & m2par,
+                        const std::vector<std::array<double, 4>> & rows)
+                {
+                    auto ch = std::make_shared<PWavePVChannel<3, 2>>("CM-ref",
+                            p[m1par], p[m2par], p["ee->ccbar::q_0"], g0s);
+                    const double sth = power_of<2>(double(p[m1par]) + double(p[m2par]));
 
-                // Chew-Mandelstam: real below threshold; Im = rho above threshold
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(14.0)), -0.004412244375, eps);
-                TEST_CHECK_NEARLY_EQUAL(  imag(ch->chew_mandelstam(14.0)),  0.0,            eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(16.5)), -0.001195053117, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(16.5)),  0.006014846605, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(25.0)), -0.005972998193, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(25.0)),  0.01258357249,  eps);
+                    for (const auto & row : rows)
+                    {
+                        const double s = row[0], rho_ref = row[1], re_ref = row[2], im_ref = row[3];
+                        const complex<double> cm = ch->chew_mandelstam(s);
+                        const double eps = (std::abs(s - sth) < 0.15) ? eps_cusp : eps_rel;
 
-                // complex s = 16 - 0.1 i
-                const complex<double> sc(16.0, -0.1);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)), -0.001047685124, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(sc)), -0.004924905559, eps);
+                        TEST_CHECK_RELATIVE_ERROR(real(cm), re_ref, eps);
+                        if (s < sth)
+                        {
+                            // below threshold Im CM and rho are analytically zero
+                            TEST_CHECK_NEARLY_EQUAL(imag(cm),             0.0, eps_abs);
+                            TEST_CHECK_NEARLY_EQUAL(std::abs(ch->rho(s)), 0.0, eps_abs);
+                        }
+                        else
+                        {
+                            // above threshold unitarity fixes Im CM = rho * n_1^2
+                            TEST_CHECK_RELATIVE_ERROR(imag(cm),         im_ref,  eps);
+                            TEST_CHECK_RELATIVE_ERROR(real(ch->rho(s)), rho_ref, eps);
+                        }
+                    }
+
+                    // threshold subtraction: CM(s_th) = 0 by construction (cusp tolerance).
+                    TEST_CHECK_NEARLY_EQUAL(real(ch->chew_mandelstam(sth)), 0.0, eps_cusp);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ch->chew_mandelstam(sth)), 0.0, eps_cusp);
+                };
+
+                // D^0 Dbar^*0 (m1 = mass::D^0 = 1.86483, m2 = mass::D_u^* = 2.00685)
+                check_rows("mass::D^0", "mass::D_u^*", {
+                    {    -5.0, 0.0,                   -0.009974543188216803,  0.0                   },
+                    { 13.6468, 0.0,                   -0.002343120090761492,  0.0                   },
+                    { 16.3337, 0.005702770474308451,   0.001927514692063523,  0.003267910201090339 },
+                    { 20.0649, 0.01000025373568118,    0.0007638057727858898, 0.008352736293493861 },
+                    { 25.0399, 0.01259858491231080,   -0.001415186781468479,  0.01145760497173571  },
+                    { 34.9899, 0.01503656089284346,   -0.004769717244926236,  0.01432014066844538  },
+                });
+
+                // D^+ D^*- (m1 = mass::D^+ = 1.86965, m2 = mass::D_d^* = 2.01026)
+                check_rows("mass::D^+", "mass::D_d^*", {
+                    {    -5.0, 0.0,                   -0.009976607233926739,  0.0                   },
+                    { 13.7066, 0.0,                   -0.002344133404224852,  0.0                   },
+                    { 16.3975, 0.005691757672235442,   0.001925301183490933,  0.003261644593882082 },
+                    { 25.1037, 0.01258268094397748,   -0.001406013399770404,  0.01144316037526277  },
+                    { 35.0537, 0.01502296589036831,   -0.004754852246437654,  0.01430720202281092  },
+                });
+
+                // D_s^+ D_s^*- (m1 = mass::D_s = 1.96834, m2 = mass::D_s^* = 2.11220)
+                check_rows("mass::D_s", "mass::D_s^*", {
+                    {    -5.0, 0.0,                   -0.01002465912869524,   0.0                    },
+                    { 15.2039, 0.0,                   -0.002368029736567858,  0.0                    },
+                    { 16.7508, 0.001536135000184274,   0.0003777866409735731, 0.0001394832806290329 },
+                    { 24.2133, 0.01111347749689195,   -0.0002005847598894860, 0.009814571555967738  },
+                    { 36.6508, 0.01469199218855373,   -0.004402947008672821,  0.01399199684413937   },
+                });
             }
 
             {
-                // High-accuracy validation of the S-wave (l = 0) Chew-Mandelstam function
+                // High-accuracy validation of the l = 0 S-wave Chew-Mandelstam *building
+                // block* -- the function cm0() from which the physical l = 1 (and l = 3)
+                // channels are reconstructed. It is exposed by PWavePVChannel; here it is
+                // threshold-subtracted in the test (CM(s) = cm0(s) - cm0(s_th)) and checked
                 // against the reference values obtained from a Python script using 40-digit
                 // mpmath. See EOS-ANALYSIS-2026-03 for the values.
                 // Three mass configurations are covered:
@@ -103,14 +156,21 @@ class eetoccbarTest :
                 {
                     p["mass::D^0"] = m1v;
                     p["mass::D^+"] = m2v;
-                    auto ch = std::make_shared<SWavePVChannel<3, 2>>("CM-ref",
+                    auto ch = std::make_shared<PWavePVChannel<3, 2>>("CM-ref",
                             p["mass::D^0"], p["mass::D^+"], p["ee->ccbar::q_0"], g0s);
                     const double sth = power_of<2>(m1v + m2v);
+                    // The l = 0 building block, threshold-subtracted in the test with the
+                    // exact (analytic) subtraction constant cm0(s_th) = CM_bare(s_th) =
+                    // -(m1^2-m2^2) ln(m1/m2) / (16 pi^2 s_th) (real; zero for equal
+                    // masses). Evaluating cm0(s_th) numerically would sit on the sqrt cusp
+                    // and pick up the +i*1e-15 residue (~3e-10), so use the closed form.
+                    const complex<double> cm0_sth = -1.0 / (16.0 * M_PI * M_PI)
+                            * (m1v * m1v - m2v * m2v) / sth * std::log(m1v / m2v);
 
                     for (const auto & row : rows)
                     {
                         const double s = row[0], re_ref = row[1], im_ref = row[2];
-                        const complex<double> cm = ch->chew_mandelstam(s);
+                        const complex<double> cm = ch->cm0(s) - cm0_sth;
                         const double eps = (std::abs(s - sth) < 0.15) ? eps_cusp : eps_rel;
 
                         TEST_CHECK_RELATIVE_ERROR(real(cm), re_ref, eps);
@@ -128,11 +188,11 @@ class eetoccbarTest :
                         }
                     }
 
-                    // threshold subtraction: CM(s_th) = 0 by construction. The exact
-                    // threshold sits on the sqrt cusp, where the +i*1e-15 prescription leaves
-                    // a residue ~3e-10, so this uses the looser cusp tolerance (cf. §5).
-                    TEST_CHECK_NEARLY_EQUAL(real(ch->chew_mandelstam(sth)), 0.0, eps_cusp);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ch->chew_mandelstam(sth)), 0.0, eps_cusp);
+                    // threshold subtraction: CM(s_th) = cm0(s_th) - cm0(s_th) = 0 by
+                    // construction; Im cm0(s_th) is separately ~0 (the +i*1e-15
+                    // prescription leaves a residue on the sqrt cusp), cf. §5.
+                    TEST_CHECK_NEARLY_EQUAL(real(ch->cm0(sth) - cm0_sth), 0.0, eps_cusp);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ch->cm0(sth)),           0.0, eps_cusp);
 
                     return ch;
                 };
@@ -195,51 +255,16 @@ class eetoccbarTest :
                 p["mass::D^+"] = 1.0 / std::sqrt(2.0);
                 auto ee = std::make_shared<EEChannel<3, 2>>("ee-ref",
                         p["mass::D^0"], p["mass::D^0"], p["ee->ccbar::q_0"], g0s);
+                // For equal masses the analytic subtraction constant vanishes, so the
+                // l = 0 building block cm0() is itself the (subtracted) equal-mass CM and
+                // must match EEChannel directly.
                 for (const double s : { -3.3273, 1.2727, 6.7719, 20.7875 })
                 {
-                    TEST_CHECK_RELATIVE_ERROR(real(ch_P1->chew_mandelstam(s)),
+                    TEST_CHECK_RELATIVE_ERROR(real(ch_P1->cm0(s)),
                             real(ee->chew_mandelstam(s)), 1.0e-10);
-                    TEST_CHECK_NEARLY_EQUAL(imag(ch_P1->chew_mandelstam(s)),
+                    TEST_CHECK_NEARLY_EQUAL(imag(ch_P1->cm0(s)),
                             imag(ee->chew_mandelstam(s)), 1.0e-10);
                 }
-            }
-
-            {
-                // Standalone validation of the unequal-mass D-wave (l = 2) PV channel.
-                // Reference values were computed independently with mpmath; the closed form
-                // (l = 0 dispersive function plus the four Blatt-Weisskopf poles, threshold-
-                // subtracted) was checked against a numerical once-subtracted dispersion
-                // integral of rho*n^2 and against EOS's own l = 1 form; see
-                // analytic/chew-mandelstam.py (checks D0-D5).
-                Parameters p = Parameters::Defaults();
-                p["ee->ccbar::q_0"] = 0.5;
-                std::array<Parameter, 2> g0s {{ p["ee->ccbar::q_0"], p["ee->ccbar::q_0"] }};
-
-                // D^0 Dbar^*0 masses (a PV pair): threshold s = 14.989 GeV^2, q0 = 0.5 GeV
-                auto ch = std::make_shared<DWavePVChannel<3, 2>>("D^0Dbar^*0 (D-wave)", p["mass::D^0"], p["mass::D_u^*"], p["ee->ccbar::q_0"], g0s);
-
-                // rho is the same bare phase space as the S-wave channel
-                TEST_CHECK_NEARLY_EQUAL(  std::abs(ch->rho(14.0)),    0.0,            eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(18.0)),        0.008130934478, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->rho(28.0)),        0.01355610326,  eps);
-
-                // Chew-Mandelstam: real below threshold; Im = rho * n^2 above threshold
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(14.0)), -0.0008931396197, eps);
-                TEST_CHECK_NEARLY_EQUAL(  imag(ch->chew_mandelstam(14.0)),  0.0,             eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(18.0)),  0.003115315952,  eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(18.0)),  0.002716379008,  eps);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(28.0)),  0.001411672509,  eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(28.0)),  0.01055767226,   eps);
-
-                // complex s = 18 - 0.1 i
-                const complex<double> sc(18.0, -0.1);
-                TEST_CHECK_RELATIVE_ERROR(real(ch->chew_mandelstam(sc)),  0.0029893857,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(ch->chew_mandelstam(sc)), -0.002760542364, eps);
-
-                // threshold subtraction: CM(s_th) = 0 by construction
-                const double sth = power_of<2>(double(p["mass::D^0"]) + double(p["mass::D_u^*"]));
-                TEST_CHECK_NEARLY_EQUAL(real(ch->chew_mandelstam(sth)), 0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(imag(ch->chew_mandelstam(sth)), 0.0, eps);
             }
 
             {
@@ -483,10 +508,10 @@ class eetoccbarTest :
 
             {
                 // Phase-1/2 extension: the full EEToCCBar now carries 5 resonances and
-                // 19 channels (psi(4040) + eff(4040), psi(4160) + eff(4160); the equal-mass
-                // open-charm channels D_s^+D_s^-, D^*0Dbar^*0, D^*+D^*-; the S- and D-wave
-                // D Dbar^* channels; and the second P-wave (5P1) and F-wave (5F1) of
-                // D^*Dbar^*). With every new coupling left at its default 0, the new
+                // 17 channels (psi(4040) + eff(4040), psi(4160) + eff(4160); the equal-mass
+                // open-charm channels D_s^+D_s^-, D^*0Dbar^*0, D^*+D^*-; the single P-wave
+                // (3P1, l=1) D Dbar^* channels; and the second P-wave (5P1) and F-wave (5F1)
+                // of D^*Dbar^*). With every new coupling left at its default 0, the new
                 // resonances and channels must decouple completely, so the N_C=5 results are
                 // reproduced exactly.
                 Parameters p = Parameters::Defaults();
@@ -506,7 +531,7 @@ class eetoccbarTest :
                 Options oo;
                 EEToCCBar c(p, oo);
 
-                // Backward compatibility at the extended (18x4) default size: identical to
+                // Backward compatibility at the extended (17x5) default size: identical to
                 // the N_C=5 value pinned in the block above.
                 auto ir = c.prepare(3.78);
                 TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
@@ -527,9 +552,6 @@ class eetoccbarTest :
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstarpDstarm(ir_hi),    0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoD0Dbarstar0(ir_hi),     0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDpDstarm(ir_hi),        0.0, eps);
-                // ... including the new D-wave partial waves separately.
-                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoD0Dbarstar0_D(ir_hi),   0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDpDstarm_D(ir_hi),      0.0, eps);
                 // ... and the three D^*Dbar^* partial waves (1P1, 5P1, 5F1) separately.
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstar0Dstarbar0_1P1(ir_hi), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDstar0Dstarbar0_5P1(ir_hi), 0.0, eps);
@@ -538,7 +560,7 @@ class eetoccbarTest :
 
                 // Positive control: switching the couplings on makes psi(4040) acquire a
                 // width and feed the new open-charm channels, confirming they are genuinely
-                // wired in (not dead code). The D-wave D Dbar^* coupling is switched on too.
+                // wired in (not dead code).
                 p["ee->ccbar::g0(psi(4040),e^+e^-)"]            = 5.0;
                 p["ee->ccbar::g0(psi(4040),eff(4040))"]         = 2.0;
                 p["ee->ccbar::g0(psi(4040),D_s^+D_s^-)"]        = 2.0;
@@ -546,19 +568,14 @@ class eetoccbarTest :
                 p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0(5P1))"]  = 2.0;
                 p["ee->ccbar::g0(psi(4040),D^*0Dbar^*0(5F1))"]  = 2.0;
                 p["ee->ccbar::g0(psi(4040),D^0Dbar^*0)"]        = 2.0;
-                p["ee->ccbar::g0(psi(4040),D^0Dbar^*0(D))"]     = 2.0;
                 TEST_CHECK(c.psi4040_eff_width()   > 0.0);
                 TEST_CHECK(c.psi4040_total_width() > 0.0);
 
                 ir_hi = c.prepare(4.05);
                 TEST_CHECK(c.sigma_eetoDsDs(ir_hi)            > 0.0);
                 TEST_CHECK(c.sigma_eetoDstar0Dstarbar0(ir_hi) > 0.0);
+                // The single P-wave (3P1) D Dbar^* channel now contributes.
                 TEST_CHECK(c.sigma_eetoD0Dbarstar0(ir_hi)     > 0.0);
-                // The D-wave partial wave now contributes, and the total is the sum S + D.
-                TEST_CHECK(c.sigma_eetoD0Dbarstar0_S(ir_hi)   > 0.0);
-                TEST_CHECK(c.sigma_eetoD0Dbarstar0_D(ir_hi)   > 0.0);
-                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbarstar0(ir_hi),
-                        c.sigma_eetoD0Dbarstar0_S(ir_hi) + c.sigma_eetoD0Dbarstar0_D(ir_hi), eps);
                 // The three D^*Dbar^* partial waves each contribute, and the total is their
                 // incoherent sum 1P1 + 5P1 + 5F1.
                 TEST_CHECK(c.sigma_eetoDstar0Dstarbar0_1P1(ir_hi) > 0.0);
