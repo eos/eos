@@ -79,6 +79,7 @@
 - Extend the ``inference`` example to find the best-fit point via a ``find-mode`` step and to report the goodness of fit (as a per-constraint table) and a corner figure for each posterior (D. van Dyk)
 - Add further test cases to cover the worst offenders in terms of code coverage (D. van Dyk)
 - Add a ``format_version`` field to the analysis file format, so that EOS rejects files declaring a newer schema version than it supports (issue #1196) (D. van Dyk)
+- Complete the documentation of the figure description format (D. van Dyk)
 
 ### Deprecated
 
