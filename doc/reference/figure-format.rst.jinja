@@ -1,0 +1,303 @@
+=========================
+Figure Description Format
+=========================
+
+EOS provides a descriptive framework to produce publication-quality figures from a declarative YAML input, without writing any plotting code.
+A figure description can be stored as a standalone YAML file and rendered interactively, or it can be included among the :ref:`figures <analysis-file-figures>` of an `analysis file <./analysis-file-format.html>`_ and rendered by the plotting tasks.
+
+The format is organised as a three-level hierarchy:
+
+ - a **figure** is the top-level object; it manages the underlying `matplotlib <https://matplotlib.org/>`_ figure and arranges one or more plots;
+ - a **plot** is a single set of axes (a 'canvas') onto which content is drawn, together with its axes, grid, and legend;
+ - an **item** is a single piece of content drawn onto a plot, such as an observable as a function of a kinematic variable, a data point with error bars, or a kernel density estimate of a set of samples.
+
+A figure description is deserialized by the :py:class:`FigureFactory <eos.figure.FigureFactory>`, which selects the concrete figure class from the ``type`` key; each nested plot and item is likewise selected by its own ``type`` key.
+The classes that back every key, and that document the meaning of each key in detail, are listed among the :py:mod:`eos.figure` classes in the `Python API reference <./python.html#module-eos.figure>`_.
+
+Every figure description recognizes the following two top-level keys:
+
+``name``
+   The name of the figure.
+   This key is **mandatory** when the figure is used within an analysis file, and is otherwise ignored.
+   If required, it must be a valid file name, since it determines the file name under which the rendered figure is stored.
+
+``type``
+   The type of figure to be produced. For the list of supported figure types, see the :ref:`Figures <figure-format-figures>` section below.
+   This key is **optional** and defaults to ``single``.
+
+The remaining keys depend on the chosen figure type and are described in the sections below.
+
+.. note::
+
+   Import :py:mod:`eos.figure` *before* you import ``matplotlib.pyplot``, because importing :py:mod:`eos.figure`
+   adjusts the default plot style and the matplotlib backend.
+
+
+.. _figure-format-figures:
+
+Figures
+-------
+
+The ``type`` key selects one of the following figure types:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - type
+     - description
+     - Python class
+   {% for selector, class, description in figure_types %}
+   * - ``{{ selector }}``
+     - {{ description }}
+     - :py:class:`~eos.figure.{{ class }}`
+   {% endfor %}
+
+Single-plot figure
+~~~~~~~~~~~~~~~~~~~
+
+A figure of type ``single`` contains a single plot, which is stored under the ``plot`` key.
+This is the default figure type.
+It accepts a mandatory ``plot`` key and the optional ``size`` (the figure size in inches) and ``watermark`` keys.
+
+.. code-block:: yaml
+
+   type: single
+   plot:
+     legend: { position: 'lower left' }
+     xaxis: { label: '$q^2$' }
+     yaxis: { label: '$d\mathcal{B}/dq^2$' }
+     items:
+       - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'e'  }, variable: 'q2', range: [0.1, 11.6] }
+       - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.1, 11.6] }
+
+A single-plot figure is described by a :py:class:`~eos.figure.SingleFigure`.
+
+Inset figure
+~~~~~~~~~~~~
+
+A figure of type ``inset`` contains a main plot that covers the full area of the figure, and a smaller inset plot placed in one corner, typically to magnify a region of interest.
+It accepts a mandatory ``plot`` key (the main plot) and a mandatory ``inset`` key.
+The ``inset`` key holds an :py:class:`~eos.figure.Inset`, whose ``plot`` key describes the inset's plot and whose ``position`` and ``size`` keys give the bottom-left corner and the extent of the inset in normalized figure coordinates (from 0 to 1).
+The optional ``size`` and ``watermark`` keys are also accepted.
+
+.. code-block:: yaml
+
+   type: inset
+   plot:
+     xaxis: { label: '$q^2$',                range: [0.0, 11.6]   }
+     yaxis: { label: '$d\mathcal{B}/dq^2$', range: [0.0, 5.4e-3] }
+     items:
+       - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.02, 11.6], resolution: 5800 }
+   inset:
+     position: [0.5, 0.5]
+     size:     [0.485, 0.48]
+     plot:
+       xaxis: { range: [0.0, 0.25],   ticks: { visible: false } }
+       yaxis: { range: [0.0, 4.4e-3], ticks: { visible: false } }
+       items:
+         - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.01, 0.25], resolution: 230 }
+
+An inset figure is described by a :py:class:`~eos.figure.InsetFigure`, and its inset by an :py:class:`~eos.figure.Inset`.
+
+Grid figure
+~~~~~~~~~~~
+
+A figure of type ``grid`` contains a rectangular grid of individual plots.
+The shape of the grid is given as a ``(rows, columns)`` tuple in the mandatory ``shape`` key.
+The individual plots are described by the elements of the mandatory ``plots`` list, in row-major order, i.e., the first plot occupies the first row and first column, the second plot the first row and second column, and so on.
+
+The optional keys are ``size`` (the figure size in inches), ``watermark`` and ``watermark_plot`` (which plot carries the watermark, as a flattened index or a ``(row, col)`` address; by default every plot is stamped), ``tight_layout`` and ``padding`` (the layout of the grid), and ``shared_axes`` (which axes the panels share, one of ``x``, ``y``, or ``both``).
+
+.. code-block:: yaml
+
+   type: grid
+   shape: [1, 2]
+   plots:
+     - xaxis: { label: '$q^2$' }
+       yaxis: { label: '$d\mathcal{B}/dq^2$' }
+       items:
+         - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'e'  }, variable: 'q2', range: [0.1, 11.6] }
+     - xaxis: { label: '$q^2$' }
+       yaxis: { label: '$d\mathcal{B}/dq^2$' }
+       items:
+         - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.1, 11.6] }
+
+A grid figure is described by a :py:class:`~eos.figure.GridFigure`.
+An individual grid cell can be left blank by using an :ref:`empty plot <figure-format-plots>`.
+
+Corner figure
+~~~~~~~~~~~~~
+
+A figure of type ``corner`` shows the one- and two-dimensional marginal distributions of a set of variables in a triangular arrangement: the one-dimensional marginals lie on the diagonal, while the two-dimensional marginals (the pairwise correlations) fill the lower-left triangle.
+
+It accepts a mandatory ``contents`` key and an optional ``variables`` key.
+Each element of ``contents`` is a :py:class:`~eos.figure.DataFile`, described by the :ref:`data file keys <figure-format-datafiles>` below, and refers to a data file produced by the `common tasks framework <./python.html#common-tasks>`_.
+The optional ``variables`` key selects the subset of variables to be shown; if omitted, all variables contained in the first data file are used.
+
+.. code-block:: yaml
+
+   type: corner
+   contents:
+     - { path: 'data/th+exp/samples', label: 'th+exp', color: 'C0' }
+   variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+
+A corner figure is described by a :py:class:`~eos.figure.CornerFigure`.
+
+
+.. _figure-format-plots:
+
+Plots
+-----
+
+Each plot describes a single set of axes together with the content items drawn on it.
+A plot's ``type`` key selects one of the following plot types:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - type
+     - description
+     - Python class
+   {% for selector, class, description in plot_types %}
+   * - ``{{ selector }}``
+     - {{ description }}
+     - :py:class:`~eos.figure.{{ class }}`
+   {% endfor %}
+
+The default plot type is ``2D``, which draws a two-dimensional plot along a single set of axes.
+Its only mandatory key is ``items``, the list of :ref:`content items <figure-format-items>` to be drawn.
+The optional keys configure the appearance of the axes:
+
+  - ``title`` --- The title of the plot.
+  - ``aspect`` --- The aspect ratio of the plot.
+  - ``xaxis`` / ``yaxis`` --- The x and y axis properties, described by an :py:class:`~eos.figure.XAxis` and a :py:class:`~eos.figure.YAxis`.
+    Each axis accepts a ``label``, a ``range`` as a ``(min, max)`` tuple, a ``unit``, a ``scale`` (``linear`` or ``log``), and a ``ticks`` sub-key.
+    The ``ticks`` (an :py:class:`~eos.figure.XTicks` or :py:class:`~eos.figure.YTicks`) control the ``visible``\ ility, ``position``, ``minor`` ticks, printf-style ``format``, and an optional ``scaling_factor``.
+  - ``grid`` --- The grid properties, described by a :py:class:`~eos.figure.Grid` (its ``visible``\ ility and the ``axis`` it is drawn on).
+  - ``legend`` --- The legend properties, described by a :py:class:`~eos.figure.Legend` (its ``position``).
+    A legend is only drawn if this key is present.
+
+The ``type: empty`` plot draws nothing and takes no further keys.
+It is useful as a placeholder in a :py:class:`~eos.figure.GridFigure`, where a grid cell should be left blank.
+
+.. code-block:: yaml
+
+   type: '2D'
+   title: 'Differential branching ratio'
+   legend: { position: 'upper right' }
+   grid:   { visible: true }
+   xaxis:  { label: '$q^2$', unit: '$\text{GeV}^2$', range: [0.0, 11.6] }
+   yaxis:  { label: '$d\mathcal{B}/dq^2$', scale: 'log' }
+   items:
+     - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.1, 11.6] }
+
+
+.. _figure-format-items:
+
+Items
+-----
+
+An item is a single piece of content drawn onto a plot.
+Every item has a mandatory ``type`` key that selects one of the following item types:
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - type
+     - description
+     - Python class
+   {% for selector, class, description in item_types %}
+   * - ``{{ selector }}``
+     - {{ description }}
+     - :py:class:`~eos.figure.item.{{ class }}`
+   {% endfor %}
+
+Besides the type-specific keys documented on each class, all items share a set of optional keys that control their appearance:
+``label`` (the entry shown in the plot legend), ``color``, ``alpha`` (the opacity), ``linestyle``, and ``linewidth``.
+If no ``color`` is given, a color is chosen automatically from EOS's color cycle.
+
+The most common items fall into two groups.
+Items such as ``observable``, ``expression``, ``uncertainty``, and ``signal-pdf`` visualize *theory predictions* as a function of a kinematic variable or a parameter.
+For example, an ``observable`` item plots one of the built-in `observables <./observables.html>`_ over a range of a chosen ``variable``:
+
+.. code-block:: yaml
+
+   - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },
+       variable: 'q2', range: [0.02, 11.6], resolution: 100, label: '$\ell = \mu$' }
+
+Items such as ``histogram1D``, ``kde1D``, ``histogram2D``, ``kde2D``, and ``contours2D`` visualize *statistical samples* read from a data file produced by the analysis tasks.
+For example, a ``histogram1D`` and a ``kde1D`` item can be overlaid to show both the raw histogram and a smooth kernel density estimate of the same posterior samples:
+
+.. code-block:: yaml
+
+   - { type: 'histogram1D', datafile: 'data/th+exp/samples', variable: 'CKM::abs(V_ub)' }
+   - { type: 'kde1D',       datafile: 'data/th+exp/samples', variable: 'CKM::abs(V_ub)' }
+
+Items such as ``constraint`` and ``constraint2D`` visualize *experimental and theoretical constraints* from EOS's built-in database, and items such as ``point``, ``errorbars``, ``band``, and ``vertical`` add simple annotations.
+The full set of keys accepted by each item type is documented on the corresponding class linked in the table above.
+
+
+.. _figure-format-datafiles:
+
+Data files
+----------
+
+Items that visualize statistical samples, and the ``contents`` of a corner figure, refer to a data file produced by the analysis tasks.
+Such a data file is described by a :py:class:`~eos.figure.DataFile` and accepts the following keys:
+
+  - ``path`` (**mandatory**) --- The path to the data file, in either :py:class:`eos.data.ImportanceSamples` or :py:class:`eos.data.Prediction` format. When the figure is part of an analysis file, the path is resolved relative to the analysis's base directory.
+  - ``label`` (**mandatory**) --- The label to appear in the figure's legend in association with this data file.
+  - ``color`` (**optional**) --- The color to be used for this data file. If omitted, a color is chosen from EOS's color cycle.
+  - ``kde`` (**optional**) --- Whether to visualize the distributions using kernel density estimates rather than histograms. Defaults to ``false``.
+
+
+Watermark
+---------
+
+Every figure carries an EOS watermark, whose placement and appearance can be customized through the optional ``watermark`` key.
+The watermark is described by a :py:class:`~eos.figure.Watermark` and accepts the following keys:
+
+  - ``position`` (**optional**) --- The corner of the plot at which the watermark is placed, given as ``'<vpos> <hpos>'`` with ``vpos`` one of ``upper`` or ``lower`` and ``hpos`` one of ``left``, ``right``, or ``center``. Defaults to ``upper right``.
+  - ``preliminary`` (**optional**) --- If ``true``, the watermark reads ``Preliminary`` (in red) instead of the EOS version. Defaults to ``false``.
+  - ``xy`` (**optional**) --- An explicit anchor point in axes fractions, which overrides the coordinates derived from ``position``.
+  - ``offset`` (**optional**) --- The offset from the edges for the ``position`` presets, as a single fraction or an ``(xdelta, ydelta)`` pair.
+
+.. code-block:: yaml
+
+   type: single
+   watermark:
+     position: 'upper left'
+     preliminary: true
+   plot:
+     items:
+       - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.1, 11.6] }
+
+
+.. _figure-format-rendering:
+
+Rendering a figure
+------------------
+
+A standalone figure description can be rendered interactively through the :py:class:`FigureFactory <eos.figure.FigureFactory>`.
+The :py:meth:`from_yaml <eos.figure.FigureFactory.from_yaml>` method turns a YAML description into a figure object, whose :py:meth:`draw <eos.figure.Figure.draw>` method renders it and, optionally, saves it to one or more output files:
+
+.. code-block:: python
+
+   import eos.figure
+
+   description = '''
+   type: single
+   plot:
+     xaxis: { label: '$q^2$' }
+     yaxis: { label: '$d\\mathcal{B}/dq^2$' }
+     items:
+       - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' },
+           variable: 'q2', range: [0.1, 11.6] }
+   '''
+   figure = eos.figure.FigureFactory.from_yaml(description)
+   figure.draw(output='dBR.pdf')
+
+When a figure is instead listed among the :ref:`figures <analysis-file-figures>` of an analysis file, it is rendered by the ``draw-figure`` task, and its ``name`` determines the file name under which the rendered figure is stored.
