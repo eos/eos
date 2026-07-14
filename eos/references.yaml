@@ -1420,6 +1420,15 @@ EHMRR:2010A:
     id: oai:arXiv.org:1005.0571
   inspire-id: Egede:2010zc
   title: New physics reach of the decay mode $\bar{B} \to \bar{K}^{*0}\ell^+\ell^-$
+EPPRR:2026A:
+  authors: Estrada, E. and Passemar, E. and Paz, S. and Rodríguez-Sánchez, A. and Roig,
+    P.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2606.13139
+  inspire-id: Estrada:2026nww
+  title: Electroweak precision physics via angular distributions in hadronic $\tau$
+    decays
 ETM:2017A:
   authors: Lubicz, V. and Melis, A. and Simula, S.
   collaboration: ETM
