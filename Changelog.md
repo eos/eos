@@ -63,6 +63,7 @@
 - Register the twelve ``0->pipi`` and ``0->Kpi`` form factor observables as cacheable observables, so that they share one intermediate result across all values of ``q^2`` within one update of an observable cache (D. van Dyk)
 - Export ``MemoisationControl`` to Python, so that ``eos.MemoisationControl.instance().clear()`` frees the memory held by all memoisation caches (L. Gärtner)
 - Expose the ``numerator_kinematic_variables()`` and ``denominator_kinematic_variables()`` accessors of ``eos.SignalPDFEntry`` to Python, which listing a signal PDF's kinematic variables requires (D. van Dyk)
+- Add double-differential rates ``tau->K_Spinu::d^2Gamma/dq^2/dcos(theta_K)`` and similar based on [EPPRR:2026A] (D. van Dyk)
 
 ### Deprecated
 
@@ -105,6 +106,7 @@
 - Share an intermediate result only between cacheable observables that agree on the function preparing it and on the implementation behind their provider interface: two observables of one provider whose prepare functions have the same signature were grouped together, and the second silently evaluated the first's intermediate result (D. van Dyk)
 - Fix the arXiv identifier that ``eos-list-references`` prints: it searched the reversed eprint id for a colon and then sliced the unreversed id at that index, so that ``oai:arXiv.org:1912.09335`` was reported as ``arXiv:org:1912.09335`` (D. van Dyk)
 - Fix ``eos-list-constraints --dump-as-yaml``, which emitted each constraint nested inside the one before it, so that the dump of all 741 constraints parsed as a mapping of 7 entries and the remainder was unreachable (D. van Dyk)
+- Fix bug in scalar contributions to ``tau->K_spinu::dBR/dq2`` and ``tau->K^-pinu::dBR/dq2`` (issue #1203) (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
