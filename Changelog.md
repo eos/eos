@@ -6,11 +6,15 @@
 
 ### Added
 
+- Add double-differential rates ``tau->K_Spinu::d^2Gamma/dq^2/dcos(theta_K)`` and similar based on [EPPRR:2026A] (D. van Dyk)
+
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- Fix bug in scalar contributions to ``tau->K_spinu::dBR/dq2`` and ``tau->K^-pinu::dBR/dq2`` (issue #1203) (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
