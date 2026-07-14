@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
- * Copyright (c) 2025 Matthew Kirk
+ * Copyright (c) 2025-2026 Danny van Dyk
+ * Copyright (c) 2025      Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -112,7 +112,7 @@ namespace eos
                 const complex<double>                    cV  = std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cA  = -std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cS  = std::conj(wc.csl() + wc.csr());
-                const complex<double>                    icP = -std::conj(wc.csl() + wc.csr());
+                const complex<double>                    icP = std::conj(wc.csl() + wc.csr());
                 const complex<double>                    cT  = 2.0 * std::conj(wc.ct());
 
                 const auto m_tau2 = power_of<2>(m_tau);
