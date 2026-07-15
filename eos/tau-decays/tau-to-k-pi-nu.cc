@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
- * Copyright (c) 2025 Matthew Kirk
+ * Copyright (c) 2025-2026 Danny van Dyk
+ * Copyright (c) 2025      Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -94,25 +94,37 @@ namespace eos
                 u.uses(*form_factors);
             }
 
-            double
-            differential_decay_width(const double & k2) const
+            // Angular coefficients of the two-fold differential rate
+            //     d^2 Gamma / (dq^2 d cos(theta_K)) = a + b cos(theta_K) + c cos^2(theta_K),
+            // where theta_K is the Kpi helicity angle between the kaon momentum and the extension
+            // of the Kpi line of flight, both evaluated in the Kpi rest frame. See [EPPRR:2026A],
+            // page 3, eq. (15) for the definition of theta_K.
+            // Both the single- and double-differential rates are expressed in terms of these coefficients:
+            //     dGamma/dq^2                  = 2 a + 2 c / 3    (b-term integrates to zero),
+            //     d^2 Gamma / (dq^2 dz)        = a + b z + c z^2  (z = cos(theta_K)).
+            //
+            // Original expression for dGamma/dq^2 taken from [CCH:2017A], page 2, eqs. (12-14),
+            // which we also follow for the phase convention for the tensor form factor.
+            struct AngularCoefficients
+            {
+                    double a, b, c;
+            };
+
+            AngularCoefficients
+            angular_coefficients(const double & k2) const
             {
                 // Return zero outside of physical phase space
                 if (k2 < power_of<2>(m_K + m_pi) || k2 > power_of<2>(m_tau))
                 {
-                    return 0.0;
+                    return { 0.0, 0.0, 0.0 };
                 }
-
-                // Expression taken from [CCH:2017A], page 2, eqs. (12-14)
-                // Except the missing factor of S_EW, as this is a RG evolution for the vector coefficient
-                // alone, and is taken care of by our RG
 
                 // Compare EOS basis with [CCH:2017A], page 2, eq. (9)
                 const WilsonCoefficients<ChargedCurrent> wc  = model->wet_uslnu(LeptonFlavor::tauon, false);
                 const complex<double>                    cV  = std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cA  = -std::conj(wc.cvl() + wc.cvr());
                 const complex<double>                    cS  = std::conj(wc.csl() + wc.csr());
-                const complex<double>                    icP = -std::conj(wc.csl() + wc.csr());
+                const complex<double>                    icP = std::conj(wc.csl() + wc.csr());
                 const complex<double>                    cT  = 2.0 * std::conj(wc.ct());
 
                 const auto m_tau2 = power_of<2>(m_tau);
@@ -122,10 +134,10 @@ namespace eos
                 const auto fp = form_factors->f_p(k2);
                 const auto f0 = form_factors->f_0(k2);
                 // const auto BT = ( (-2.0 * m_K) / (m_K + m_pi) ) *  form_factors->f_t(k2);
-                const auto BT = 0.0; // neglect tensor form factor as not implemented yet!
+                const auto BT = 0.0; // neglect tensor form factor, since no implementation provides it yet!
 
                 const double lambda_piK = lambda(k2, m_pi2, m_K2);
-                const auto   xi         = (m_tau2 + 2.0 * k2) * lambda_piK / (3.0 * m_tau2 * power_of<2>(m_K2 - m_pi2));
+                const double Delta      = m_K2 - m_pi2;
 
                 const auto T = 3.0 * k2 * m_tau * cT * BT / ((m_tau2 + 2.0 * k2) * m_K);
                 const auto V = fp * cV - T;
@@ -133,15 +145,43 @@ namespace eos
                 const auto S = f0 * (cV + k2 * cS / (m_tau * (m_s - m_u)));
                 const auto P = f0 * (cA - k2 * icP / (m_tau * (m_s - m_u)));
 
-                return power_of<2>(g_fermi * std::abs(model->ckm_us())) * sqrt(lambda_piK) * power_of<2>((m_tau2 - k2) * (m_K2 - m_pi2))
-                       / (1024.0 * pow(M_PI, 3.0) * m_tau * pow(k2, 3.0))
-                       * (xi * (std::norm(V) + std::norm(A) + 4.0 * power_of<2>(m_tau2 - k2) * std::norm(T) / (9.0 * k2 * m_tau2)) + std::norm(S) + std::norm(P));
+                const double pref = power_of<2>(g_fermi * std::abs(model->ckm_us())) * sqrt(lambda_piK) * power_of<2>((m_tau2 - k2) * (m_K2 - m_pi2))
+                                    / (1024.0 * pow(M_PI, 3.0) * m_tau * pow(k2, 3.0));
+
+                const double lam_over_D2 = lambda_piK / power_of<2>(Delta);
+                const double a           = pref * (0.5 * (std::norm(V) + std::norm(A)) * lam_over_D2 * (k2 / m_tau2) + 0.5 * (std::norm(S) + std::norm(P)));
+                const double b           = pref * (2.0 * sqrt(lambda_piK) / Delta * std::real(V * std::conj(S)));
+                const double c           = pref * (0.5 * (std::norm(V) + std::norm(A)) * lam_over_D2 * (1.0 - k2 / m_tau2));
+
+                return { a, b, c };
+            }
+
+            double
+            differential_decay_width(const double & k2) const
+            {
+                const AngularCoefficients ac = angular_coefficients(k2);
+
+                return 2.0 * ac.a + 2.0 / 3.0 * ac.c;
             }
 
             double
             differential_branching_ratio(const double & k2) const
             {
                 return differential_decay_width(k2) * tau_tau / hbar;
+            }
+
+            double
+            double_differential_decay_width(const double & k2, const double & z) const
+            {
+                const AngularCoefficients ac = angular_coefficients(k2);
+
+                return ac.a + ac.b * z + ac.c * power_of<2>(z);
+            }
+
+            double
+            double_differential_branching_ratio(const double & k2, const double & z) const
+            {
+                return double_differential_decay_width(k2, z) * tau_tau / hbar;
             }
 
             double
@@ -196,6 +236,18 @@ namespace eos
     }
 
     double
+    TauToKPiNeutrino::double_differential_decay_width(const double & k2, const double & z) const
+    {
+        return _imp->double_differential_decay_width(k2, z);
+    }
+
+    double
+    TauToKPiNeutrino::double_differential_branching_ratio(const double & k2, const double & z) const
+    {
+        return _imp->double_differential_branching_ratio(k2, z);
+    }
+
+    double
     TauToKPiNeutrino::decay_width(const double & q2_min, const double & q2_max) const
     {
         // Integrate the differential decay width over the specified kinematic range
@@ -228,7 +280,7 @@ namespace eos
         return _imp->integrated_pdf_q2(q2_min, q2_max);
     }
 
-    const std::set<ReferenceName> TauToKPiNeutrino::references{ "CCH:2017A"_rn };
+    const std::set<ReferenceName> TauToKPiNeutrino::references{ "CCH:2017A"_rn, "EPPRR:2026A"_rn };
 
     std::vector<OptionSpecification>::const_iterator
     TauToKPiNeutrino::begin_options()

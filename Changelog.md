@@ -79,6 +79,7 @@
 - Extend the ``inference`` example to find the best-fit point via a ``find-mode`` step and to report the goodness of fit (as a per-constraint table) and a corner figure for each posterior (D. van Dyk)
 - Add further test cases to cover the worst offenders in terms of code coverage (D. van Dyk)
 - Add a ``format_version`` field to the analysis file format, so that EOS rejects files declaring a newer schema version than it supports (issue #1196) (D. van Dyk)
+- Add double-differential rates ``tau->K_Spinu::d^2Gamma/dq^2/dcos(theta_K)`` and similar based on [EPPRR:2026A] (D. van Dyk)
 
 ### Deprecated
 
@@ -132,6 +133,7 @@
 - Fix incorrect cloning of cached ``ExpressionObservable`` instances that fix the same kinematic variable to different values (issue #1077) (D. van Dyk)
 - Fix ``eos.figure.GridFigure`` to forward the analysis file context to each of its plots, so that items resolve relative data and parameter paths against the analysis file's base directory (D. van Dyk)
 - Defer loading of a figure item's ``fixed_parameters_from_file`` from construction to draw time, so that loading an analysis file no longer requires the parameter file (which may be the output of an earlier task such as ``find-mode``) to already exist (issue #1181) (D. van Dyk)
+- Fix bug in scalar contributions to ``tau->K_spinu::dBR/dq2`` and ``tau->K^-pinu::dBR/dq2`` (issue #1203) (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28

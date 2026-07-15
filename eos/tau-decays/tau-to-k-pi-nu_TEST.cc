@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
- * Copyright (c) 2025 Matthew Kirk
+ * Copyright (c) 2025-2026 Danny van Dyk
+ * Copyright (c) 2025      Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -98,6 +98,39 @@ class TauToKPiNeutrinoTest : public TestCase
                                          { "n-resonances-0m"_ok,   "1"_ov }
                 });
                 TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 4.25288e-3, eps);
+
+                // Regression test for the sign of the pseudoscalar coefficient (icP), cf. gh#1203.
+                // A non-zero scalar NP coefficient must produce a *linear* shift in the rate; with the
+                // former icP sign bug the |S|^2 + |P|^2 combination cancelled the linear term, so that
+                // the rate was identical under Re{cSL} -> -Re{cSL}. Requires the WET model, as the SM
+                // model ignores the ustaunutau Wilson coefficients.
+                const Options wet_opts{
+                    {           "model"_ok, "WET"_ov },
+                    { "n-resonances-1m"_ok,   "2"_ov },
+                    { "n-resonances-0m"_ok,   "1"_ov }
+                };
+                p["ustaunutau::Re{cSL}"] = +0.1;
+                TauToKPiNeutrino d_cSL_plus(p, wet_opts);
+                TEST_CHECK_NEARLY_EQUAL(d_cSL_plus.total_branching_ratio(), 0.0046365212390183843, eps);
+                p["ustaunutau::Re{cSL}"] = -0.1;
+                TauToKPiNeutrino d_cSL_minus(p, wet_opts);
+                TEST_CHECK_NEARLY_EQUAL(d_cSL_minus.total_branching_ratio(), 0.0042855354180517651, eps);
+                p["ustaunutau::Re{cSL}"] = 0.0;
+
+                // Two-fold differential rate d^2Gamma/dq2/dcos(theta_K) (here for tau -> K_L pi- nu,
+                // the last instance constructed above). The distribution is a quadratic in
+                // z = cos(theta_K); Simpson's rule is exact for a quadratic, so
+                //     (f(-1) + 4 f(0) + f(+1)) / 3 == dBR/dq2 .
+                const double f_m1 = d.double_differential_branching_ratio(1.0, -1.0);
+                const double f_0  = d.double_differential_branching_ratio(1.0, 0.0);
+                const double f_p1 = d.double_differential_branching_ratio(1.0, +1.0);
+                TEST_CHECK_NEARLY_EQUAL((f_m1 + 4.0 * f_0 + f_p1) / 3.0, d.differential_branching_ratio(1.0), eps);
+                TEST_CHECK_NEARLY_EQUAL(f_m1, 0.0013654922519557517, eps);
+                TEST_CHECK_NEARLY_EQUAL(f_0, 0.00051133788806815986, eps);
+                TEST_CHECK_NEARLY_EQUAL(f_p1, 0.0018269935336002955, eps);
+                // the S-P interference (linear in cos(theta_K)) makes the distribution forward-backward
+                // asymmetric: f(+1) != f(-1).
+                TEST_CHECK(std::abs(f_p1 - f_m1) > 1.0e-2 * f_0);
             }
         }
 } tau_to_k_pi_nu_test;
