@@ -87,6 +87,12 @@ namespace eos
         return _unnormalized_pdf;
     }
 
+    ObservablePtr
+    ConcreteSignalPDF::normalization_observable() const
+    {
+        return _normalization;
+    }
+
     Parameters
     ConcreteSignalPDF::parameters()
     {

@@ -852,6 +852,15 @@ namespace eos
                 static const double      dz            = (z_smeared_max - z_smeared_min) / N; // = 7/256
                 static const double      sigma         = 0.1;
 
+                // Physical support of the truth PDF z (4 - z). The smeared grid above extends well
+                // beyond this range to provide the padding the circular convolution requires, but the
+                // signal PDF's normalization is the integral of the unnormalized PDF over its physical
+                // domain: int_0^4 dz z (4 - z) = 32/3.
+                static const double      z_phys_min    = 0.0;
+                static const double      z_phys_max    = 4.0;
+                static const double      normalization = 2.0 * (power_of<2>(z_phys_max) - power_of<2>(z_phys_min))
+                                                       - (power_of<3>(z_phys_max) - power_of<3>(z_phys_min)) / 3.0; // = 32/3
+
                 static const std::array<double, N> reference{{
                 0, 0, 0, 0,
                 0, 0, 0, 0,
@@ -936,8 +945,8 @@ namespace eos
                 {
                     Kinematics k;
                     k.declare("z",     z_smeared_min + i * dz);
-                    k.declare("z_min", z_smeared_min);
-                    k.declare("z_max", z_smeared_max);
+                    k.declare("z_min", z_phys_min);
+                    k.declare("z_max", z_phys_max);
                     kinematics.push_back(k);
 
                     const double offset = (i <= N / 2 ? static_cast<double>(i) : static_cast<double>(static_cast<long>(i) - static_cast<long>(N))) * dz;
@@ -956,11 +965,13 @@ namespace eos
 
                     Kinematics k;
                     k.declare("z",     z_smeared_min + i * dz);
-                    k.declare("z_min", z_smeared_min);
-                    k.declare("z_max", z_smeared_max);
+                    k.declare("z_min", z_phys_min);
+                    k.declare("z_max", z_phys_max);
                     observations.push_back(k);
 
-                    expected += std::log(value);
+                    // The block divides the convolved (unnormalized) density by the signal PDF's
+                    // normalization, so each observation contributes log(value / normalization).
+                    expected += std::log(value) - std::log(normalization);
                 }
 
                 auto block = LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, resolution, observations);

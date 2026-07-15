@@ -65,6 +65,11 @@ namespace eos
             // Its value equals evaluate_linear() up to the clamping of non-positive results to zero.
             virtual ObservablePtr unnormalized_pdf() const = 0;
 
+            // Retrieve the observable that computes the PDF's normalization, i.e. the integral of the
+            // unnormalized PDF over the sampling variable(s). Its value is the normalization on the
+            // linear scale, in contrast to normalization(), which returns its logarithm.
+            virtual ObservablePtr normalization_observable() const = 0;
+
             virtual Kinematics kinematics() = 0;
 
             virtual Parameters parameters() = 0;

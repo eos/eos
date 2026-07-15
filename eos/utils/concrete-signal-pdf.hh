@@ -285,6 +285,8 @@ namespace eos
 
             virtual ObservablePtr unnormalized_pdf() const;
 
+            virtual ObservablePtr normalization_observable() const;
+
             virtual Parameters parameters();
 
             virtual Kinematics kinematics();

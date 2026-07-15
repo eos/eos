@@ -304,6 +304,15 @@ namespace eos
         throw InternalError("DetectorLevelPDF::unnormalized_pdf: a detector-level PDF is not backed by a single observable");
     }
 
+    ObservablePtr
+    DetectorLevelPDF::normalization_observable() const
+    {
+        // The convolution preserves the truth PDF's normalization (the kernel is renormalised to
+        // unit sum), so the normalization is that of the truth PDF. It depends only on the [min, max]
+        // bounds, which are identical for every grid point, so any grid point's PDF may be used.
+        return _data->signal_pdfs.front()->normalization_observable();
+    }
+
     Kinematics
     DetectorLevelPDF::kinematics()
     {

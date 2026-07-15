@@ -1198,6 +1198,12 @@ namespace eos
             // The unnormalized signal PDF values on the grid are evaluated by the ObservableCache as a
             // single batch; batch_id addresses the contiguous block of grid predictions.
             ObservableCache::BatchId batch_id;
+
+            // The signal PDF's normalization (the integral of the unnormalized PDF over the sampling
+            // variable). It is the same for every grid point, so it is registered as a single cached
+            // observable and evaluated once per likelihood evaluation. normalization_id addresses it.
+            ObservableCache::ObservableId normalization_id;
+
             std::vector<double> resolution_data;
 
             // The events that were actually observed, expressed as kinematic variables.
@@ -1250,12 +1256,22 @@ namespace eos
                 // each unnormalized_pdf() is a shared_ptr that keeps the underlying observable alive.
                 std::vector<ObservablePtr> unnormalized_pdfs;
                 unnormalized_pdfs.reserve(kinematics.size());
+                ObservablePtr normalization_observable;
                 for (const auto & k : kinematics)
                 {
                     SignalPDFPtr signal_pdf = SignalPDF::make(pdf_name, cache.parameters(), k, options);
                     unnormalized_pdfs.push_back(signal_pdf->unnormalized_pdf());
+
+                    // The normalization depends only on the (constant) integration bounds, so it is the
+                    // same for every grid point; capture it once from the first grid point's PDF.
+                    if (! normalization_observable)
+                        normalization_observable = signal_pdf->normalization_observable();
                 }
                 batch_id = this->cache.add_batch(std::move(unnormalized_pdfs));
+
+                // Register the normalization as a single cached observable. The cache evaluates it once
+                // per likelihood evaluation (on update()); evaluate() reads it back via normalization_id.
+                normalization_id = this->cache.add(normalization_observable);
 
                 // Pre-compute the DFT of the resolution function.
                 std::copy(resolution.begin(), resolution.end(),
@@ -1393,6 +1409,16 @@ namespace eos
                 const double norm = 1.0 / static_cast<double>(grid.size());
                 const double * result = backward_plan.time_domain_container().data();
 
+                // The grid holds the *unnormalized* signal PDF, so the convolved density must be divided
+                // by the signal PDF's normalization (the integral of the unnormalized PDF over the
+                // sampling variable) to yield a proper probability density. The normalization is the same
+                // for every observation and is evaluated once per likelihood evaluation by the cache; a
+                // non-positive normalization leaves the PDF undefined and is treated as zero probability.
+                const double normalization = cache[normalization_id];
+                if (normalization <= 0.0) [[unlikely]]
+                    return -std::numeric_limits<double>::infinity();
+                const double log_normalization = std::log(normalization);
+
                 // The backward DFT yields the resolution-convolved PDF sampled on the grid points. The likelihood,
                 // however, is a product over the *observed* events, so we evaluate the convolved PDF at each
                 // observation by multilinear interpolation from the surrounding grid points.
@@ -1418,7 +1444,7 @@ namespace eos
                     // std::log() that would silently poison downstream minimization/sampling.
                     const double density = value * norm;
                     if (density > 0.0) [[likely]]
-                        log_likelihood += std::log(density);
+                        log_likelihood += std::log(density) - log_normalization;
                     else
                         return -std::numeric_limits<double>::infinity();
                 }
