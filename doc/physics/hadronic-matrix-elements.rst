@@ -1,68 +1,12 @@
-==================================
-Summary of the Physics Conventions
-==================================
+===========================================
+Hadronic Matrix Elements of Local Operators
+===========================================
 
-EOS implicitly uses the following conventions in the predictions of flavour physics observables.
-
-Units
------
-
-EOS uses natural units :math:`(\hbar = c =1)`.
-Most quantities are expressed in powers of GeV.
-Exceptions include lifetimes, which are expressed in seconds.
-Units are specified in the definition of observables and parameters (which can be found in this documentation (`here <constraints.html>`_ and `here <parameters.html>`_, respectively),
-or directly from python, as described in the `basic examples <../user-guide/basics.html>`_).
-EOS currently implements the following units:
-
-{% for unit, latex in units %}
-* ``{{ unit }}``: {{ latex }}
-{% endfor %}
-
-
-Weak Effective Theory
----------------------
-
-We follow the conventions of the WCxf format for the Wilson coefficients of the effective Hamiltonian at mass dimension six.
-Each sector of the effective Hamiltonian is defined by a unique name, corresponding to the flavour quantum numbers
-of the fermion fields.
-
-Semileptonic Charged-Current Operators
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-We use the Bern class-III notation for the semileptonic charged-current operators.
-For down-type (:math:`D`) to up-type (:math:`U`) semileptonic decays, the sector of the effective theory is described by the Lagrangian:
-
-.. math::
-   :nowrap:
-
-   \begin{align*}
-      \mathcal{L}^{UD\ell\nu}
-        = -\frac{4 G_\text{F}}{\sqrt{2}} V_{UD} \sum_{i} \mathcal{C}_i^{UD\ell\nu}(\mu) \, \mathcal{O}_i + \text{h.c.}\,,
-   \end{align*}
-
-
-where :math:`V_{UD}` is the CKM matrix element, :math:`G_\text{F}` is the Fermi constant. The operator basis :math:`\mathcal{O}_i` reads:
-
-.. math::
-   :nowrap:
-
-   \begin{align*}
-      \mathcal{O}_{VL}^{UD\ell\nu} & = [\bar{U} \gamma_\mu      P_L D] [\bar{\ell} \gamma^\mu      P_L \nu]\,, &
-      \mathcal{O}_{VR}^{UD\ell\nu} & = [\bar{U} \gamma_\mu      P_R D] [\bar{\ell} \gamma^\mu      P_L \nu]\,, \\
-      \mathcal{O}_{SL}^{UD\ell\nu} & = [\bar{U}                 P_L D] [\bar{\ell}                 P_L \nu]\,, &
-      \mathcal{O}_{SR}^{UD\ell\nu} & = [\bar{U}                 P_R D] [\bar{\ell}                 P_L \nu]\,, \\
-      \mathcal{O}_{T}^{UD\ell\nu}  & = [\bar{U} \sigma_{\mu\nu}     D] [\bar{\ell} \sigma^{\mu\nu} P_L \nu]\,.
-   \end{align*}
-
-The Wilson coefficients :math:`\mathcal{C}_i^{UD\ell\nu}(\mu)` are defined at the sector-specific scale :math:`\mu^{UD\ell\nu}` and are dimensionless.
-Their parameters use the prefix ``UDlnul``, where ``U``, ``D``, and ``l`` are understood as metavariables.
-
-
-Hadronic Matrix Elements
-------------------------
+EOS uses the following conventions for the hadronic matrix elements of local operators,
+i.e. the decay constants and the semileptonic form factors.
 
 Definition of Decay Constants
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------------
 
 EOS uses meson to vacuum elements for the decay of both pseudoscalar (:math:`P`) and vector (:math:`V`) mesons.
 The decay constants are defined as:
@@ -82,7 +26,7 @@ and :math:`\epsilon` is the polarization vector of the vector meson.
 The parameters describing these decay constants use the prefix ``decay-constant``.
 
 Definition of Semileptonic Form Factors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------------------
 
 EOS uses the following definitions for semileptonic form factors.
 
@@ -130,7 +74,7 @@ Here, :math:`\eta` is the polarization vector of the vector meson, and again :ma
 
 
 Parametrisation of Semileptonic Form Factors
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------
 
 EOS provides one general-purpose parametrisation of all semileptonic form factors. It is referred to as the ``BSZ2015`` parametrisation.
 For a generic form factor :math:`F(q^2)`, it reads:

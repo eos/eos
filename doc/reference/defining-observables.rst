@@ -91,7 +91,7 @@ This can be done using the :meth:`eos.Observables.insert` method.
     eos.Observables().insert(name, latex, unit, options, expression)
 
 Here the arguments ``name``, ``latex`` and ``unit`` are the qualified name, the latex representation, and the unit of the new observable, respectively.
-For the list of valid units, see `here <physics-conventions.html#units>`_.
+For the list of valid units, see `here <../physics/conventions.html#units>`_.
 
 The argument ``options`` takes an :class:`eos.Options` object and allows to specify *global* options (i.e. applied to all observables in the expression),
 for the newly defined observable.

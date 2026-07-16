@@ -1,5 +1,5 @@
 import eos
-from jinja_util import print_template, qn_to_link_map
+from jinja_util import print_template
 
 def get_units():
    unit_names = {m if m[0].isupper() else 'Undefined' for m in dir(eos.Unit)}
