@@ -83,10 +83,12 @@ For a generic form factor :math:`F(q^2)`, it reads:
    :nowrap:
 
    \begin{equation*}
-      F(q^2) = \frac{1}{q^2 - M_R^2} \left[\sum_{i=0}^N \alpha^{(F)}_{i} z^i(q^2) \right]\,.
+      F(q^2) = \frac{1}{1 - q^2 / M_R^2} \left[\sum_{i=0}^N \alpha^{(F)}_{i} \left(z(q^2) - z(0)\right)^i \right]\,.
    \end{equation*}
 
 Here :math:`M_R` correspond to the mass of the first resonance seen by that form factor and :math:`\alpha_i^{(F)}` are free parameters.
+The coefficients :math:`\alpha_i^{(F)}` are treated as unconstrained free parameters:
+there is no expectation for the magnitude of any individual coefficient, nor is there an expectation that the series of coefficients converges.
 We use the conformal mapping :math:`q^2 \mapsto z(q^2) = z(q^2; t_+, t_0)`, which reads
 
 .. math::
