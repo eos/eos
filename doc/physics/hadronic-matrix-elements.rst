@@ -54,7 +54,7 @@ In the case of the decay of a pseudoscalar meson (:math:`P`) to a vector meson (
       \braket{V(k, \eta) | \bar{q}_1 \gamma^\mu q_2 | P(p)}
          & = \frac{2 V^{P \to V}(q^2)}{M_P + M_V} \varepsilon^{\mu\nu\alpha\beta} \eta^*_\nu p_\alpha k_\beta\,, \\
       \braket{V(k, \eta) | \bar{q}_1 \gamma^\mu \gamma_5 q_2 | P(p)}
-         & = i \eta_\nu^* \left[ A_1^{P \to V}(q^2) (M_B + M_V) g^{\mu\nu} - A_2^{P \to V}(q^2) \frac{(p + k)^\mu q_\nu}{M_B + M_V} - (A_3 - A_0) \frac{2 M_V q^\mu q^\nu}{q^2}\right]\,, \\
+         & = i \eta_\nu^* \left[ A_1^{P \to V}(q^2) (M_P + M_V) g^{\mu\nu} - A_2^{P \to V}(q^2) \frac{(p + k)^\mu q_\nu}{M_P + M_V} - (A_3 - A_0) \frac{2 M_V q^\mu q^\nu}{q^2}\right]\,, \\
       \braket{V(k, \eta) | \bar{q}_1 \sigma^{\mu\nu} q_2 | P(p)}
          & = 2 T_1^{P \to V} \varepsilon^{\mu\nu\alpha\beta} \eta^*_\nu p_\alpha k_\beta\,, \\
       \braket{V(k, \eta) | \bar{q}_1 \sigma^{\mu\nu} \gamma_5 q_2 | P(p)}
@@ -67,7 +67,7 @@ where we abbreviate:
    :nowrap:
 
    \begin{equation*}
-      A_3^{P \to V}(q^2) = A_1^{P \to V}(q^2) \frac{M_B + M_V}{2 M_V} - A_2^{P \to V}(q^2) \frac{M_B - M_V}{2 M_V}\,.
+      A_3^{P \to V}(q^2) = A_1^{P \to V}(q^2) \frac{M_P + M_V}{2 M_V} - A_2^{P \to V}(q^2) \frac{M_P - M_V}{2 M_V}\,.
    \end{equation*}
 
 Here, :math:`\eta` is the polarization vector of the vector meson, and again :math:`q = p - k` is the momentum transfer.
@@ -83,7 +83,7 @@ For a generic form factor :math:`F(q^2)`, it reads:
    :nowrap:
 
    \begin{equation*}
-      F(q^2) = \frac{1}{q^2 - M_F^2} \left[\sum_{i=0}^N \alpha^{(F)}_{i} z^i(q^2) \right]\,.
+      F(q^2) = \frac{1}{q^2 - M_R^2} \left[\sum_{i=0}^N \alpha^{(F)}_{i} z^i(q^2) \right]\,.
    \end{equation*}
 
 Here :math:`M_R` correspond to the mass of the first resonance seen by that form factor and :math:`\alpha_i^{(F)}` are free parameters.
@@ -93,7 +93,7 @@ We use the conformal mapping :math:`q^2 \mapsto z(q^2) = z(q^2; t_+, t_0)`, whic
    :nowrap:
 
    \begin{equation*}
-      z(q^2; t_+, t_0) = \frac{\sqrt{t_+ - q^2} - \sqrt{t_+ - t_0}}{\sqrt{t_+ - q^2} - \sqrt{t_+ - t_0}}\,.
+      z(q^2; t_+, t_0) = \frac{\sqrt{t_+ - q^2} - \sqrt{t_+ - t_0}}{\sqrt{t_+ - q^2} + \sqrt{t_+ - t_0}}\,.
    \end{equation*}
 
 In the above, :math:`t_+ \equiv (M_1 + M_2)^2` represents the two-body threshold for the respective form factor for a reaction with hadron masses :math:`M_{1,2}`,
@@ -107,5 +107,5 @@ Examples for accessing the parameters :math:`\alpha_i^{(F)}` are:
 +-------------------+--------------+------------------------------+
 | :math:`D\to K`    | :math:`f_0`  | ``D->K::alpha^f0_2@BSZ2015`` |
 +-------------------+--------------+------------------------------+
-| :math:`B\to K^*`  | :math:`V`    | ``B->K^*::alpha^V_1@BZS2015``|
+| :math:`B\to K^*`  | :math:`V`    | ``B->K^*::alpha^V_1@BSZ2015``|
 +-------------------+--------------+------------------------------+
