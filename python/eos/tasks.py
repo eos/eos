@@ -861,6 +861,10 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     """
     Generates a corner plot of the 1-D and 2-D marginalized posteriors.
 
+    .. deprecated:: 1.0.21
+       The ``corner-plot`` task will be removed in version 1.1.
+       Use the ``corner`` figure type (:class:`eos.figure.CornerFigure`) from the ``eos.figure`` subpackage instead.
+
     The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
     The output files will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/plots.
 
