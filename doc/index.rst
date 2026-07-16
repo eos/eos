@@ -30,5 +30,6 @@ their power to organise one or more analyses is demonstrated in the `analysis fi
 
    installation
    user-guide/index
+   physics/index
    faq
    reference/index
