@@ -116,6 +116,18 @@ namespace eos
             double switch_soft;
             double switch_soft_tw_3_4;
 
+            // Truncation of the leading-power normalization f_B/lambda_B(mu) * R(Egamma, mu) to
+            // leading-logarithmic accuracy. At "LL", switch_nll multiplies to zero every explicit
+            // O(alpha_s) correction entering this normalization: the hard matching coefficient C and
+            // the HQET/QCD decay-constant matching factor K (both O(alpha_s(mu_h))), the non-cusp
+            // pieces of the RG evolution factor U (also O(alpha_s(mu_h))), cf. [BR:2011A], Appendix A,
+            // footnote 3, as well as the O(alpha_s(mu)) hard-collinear matching correction C_NLO to
+            // J(Egamma, mu) entering F_leading_power() and the soft contribution to xi(). This matches
+            // the "leading-logarithmic approximation" of [BR:2011A] and, separately, of [BBJW:2018A]
+            // for the evolution of the LCDA coefficients.
+            SwitchOption opt_evolution_order;
+            double switch_nll;
+
             static const constexpr double e_spectator = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_spectator;
             static const constexpr double e_heavy     = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_heavy;
             static const constexpr double C_F         =  4.0 / 3.0;
