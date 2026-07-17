@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -115,6 +115,21 @@ namespace eos
             double switch_ht;
             double switch_soft;
             double switch_soft_tw_3_4;
+
+            // Truncation of the leading-power normalization f_B/lambda_B(mu) * R(Egamma, mu) to
+            // leading-logarithmic accuracy. At "LL", switch_nll multiplies to zero every explicit
+            // O(alpha_s) correction entering this normalization: the hard matching coefficient C and
+            // the HQET/QCD decay-constant matching factor K (both O(alpha_s(mu_h))); the
+            // O(alpha_s(mu_h)) corrections to the RG evolution factors U1 and U2, cf. [BBJW:2018A],
+            // footnote 3, which retains the two-loop cusp and one-loop non-cusp anomalous dimensions
+            // in the exponents; and the O(alpha_s(mu)) hard-collinear matching correction C_NLO to
+            // J(Egamma, mu) entering F_leading_power() and the soft contribution to xi(). The result
+            // is the leading-power form factor in the form used in [BBJW:2018A], Eq. (4.8).
+            //
+            // Note that this option does not affect the RG evolution of the B-meson LCDA, which
+            // [BBJW:2018A] likewise carry out at leading-logarithmic accuracy.
+            SwitchOption opt_evolution_order;
+            double switch_nll;
 
             static const constexpr double e_spectator = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_spectator;
             static const constexpr double e_heavy     = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_heavy;
