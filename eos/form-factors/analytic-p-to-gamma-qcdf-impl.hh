@@ -139,24 +139,23 @@ namespace eos
         // cf. the factor in [BR:2011A], Eq. (2.10)
 
         const double alpha_s_mu = model->alpha_s(mu);
+        const double alpha_s_mu_h1 = model->alpha_s(mu_h1);
+        const double alpha_s_mu_h2 = model->alpha_s(mu_h2);
         const double m_heavy = traits.m_heavy_pole(1);
 
         const double x = 2.0 * Egamma / m_heavy;
         const double log_x = std::log(x);
-        const double log_x_prime = std::log(2.0 * Egamma / mu);
+        // cf. [BR:2011A], Eq. (2.12): C(Egamma, mu_h1) is evaluated at the hard matching scale mu_h1
+        const double log_x_prime = std::log(2.0 * Egamma / mu_h1);
         const double li2_1_m_x = dilog(1.0 - x).real(); // result is always real as x > 0
 
-        const double C = 1.0 + alpha_s_mu * C_F / (4.0 * pi) * (
+        const double C = 1.0 + alpha_s_mu_h1 * C_F / (4.0 * pi) * (
                     - 2.0 * log_x_prime * log_x_prime
                     + 5.0 * log_x_prime
                     - (3.0 - 2.0 * x) / (1.0 - x) * log_x
                     - 2.0 * li2_1_m_x
                     - 6.0 - pi2 / 12.0
                 );
-
-
-        const double alpha_s_mu_h1 = model->alpha_s(mu_h1);
-        const double alpha_s_mu_h2 = model->alpha_s(mu_h2);
 
         const double Gamma_0 = 4.0 * C_F;
         const double Gamma_1 = C_F * (268.0 / 3.0 - 4.0 * pi2 - 40.0 / 9.0 * n_l);
@@ -170,9 +169,16 @@ namespace eos
         const double beta_1 = 102.0 - 38.0 * n_l / 3.0;
         const double beta_2 = 2857.0 / 2.0 - 5033.0 / 18.0 * n_l + 325.0 / 54.0 * n_l * n_l;
 
+        // Anomalous dimension of the SCET current, cf. [BR:2011A], Eq. (A.5); enters U1.
         const double gamma_0 = -5.0 * C_F;
         const double gamma_1 = C_F * (
                 -1585.0 / 18.0 - 5.0 * pi2 / 6.0 + 34.0 * zeta_3 + n_l * (125.0 / 27.0 + pi2 / 3.0)
+            );
+
+        // Anomalous dimension of the HQET heavy-light current, cf. [BR:2011A], Eq. (A.6); enters U2.
+        const double gamma_0_hl = -3.0 * C_F;
+        const double gamma_1_hl = C_F * (
+                -127.0 / 6.0 - 14.0 * pi2 / 9.0 + 5.0 * n_l / 3.0
             );
 
         const double r1 = alpha_s_mu / alpha_s_mu_h1;
@@ -210,13 +216,14 @@ namespace eos
 
 
         const double r2 = alpha_s_mu / alpha_s_mu_h2;
-        const double U2 = std::pow(r2, - gamma_0 / (2.0 * beta_0)) * (
+        const double U2 = std::pow(r2, - gamma_0_hl / (2.0 * beta_0)) * (
                 1.0 + alpha_s_mu_h2 / (4.0 * pi) * (
-                    gamma_1 / (2.0 * beta_0) - gamma_0 * beta_1 / (2.0 * beta_0 * beta_0)
+                    gamma_1_hl / (2.0 * beta_0) - gamma_0_hl * beta_1 / (2.0 * beta_0 * beta_0)
                 ) * (1.0 - r2)
             );
 
-        const double K = 1 + alpha_s_mu * C_F / (4.0 * pi) * (3.0 * std::log(m_heavy / mu) - 2.0);
+        // cf. [BR:2011A], Eq. (2.15): K(mu_h2) is evaluated at the hard matching scale mu_h2
+        const double K = 1 + alpha_s_mu_h2 * C_F / (4.0 * pi) * (3.0 * std::log(m_heavy / mu_h2) - 2.0);
 
         return { C, 1.0 / K, U1 / U2 };
     }
