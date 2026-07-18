@@ -32,6 +32,8 @@
 - Change the interface for generating reports: report templates now access the recorded results through a single, lazily-loaded ``eos.reporting.AnalysisData`` object (iterating over the posteriors and, on demand, their importance samples, modes and goodness of fit, and predictions) together with a ``corner_figure`` helper, in lieu of the previous ``analyses``, ``modes``, ``len``, and ``zip`` template variables (D. van Dyk)
 - Move ``AnalysisFileContext`` into its own module, ``eos.analysis_file_context`` (D. van Dyk)
 - Deserialize analysis files through a new ``eos.AnalysisFileDescription`` class, which maps the YAML structure to description objects and rejects unknown top-level keys (issue #1197) (D. van Dyk)
+- Replace the dedicated ``BToDPiLeptonNeutrino`` implementation of the ``B->D^*lnu`` 1D PDFs with the general ``BToVectorLeptonNeutrino`` class; the observables are renamed from ``B->Dpilnu::P(...)`` to ``B->D^*lnu::P(...)`` and the Belle:2017A constraints are updated accordingly (D. van Dyk)
+- Return bin-averaged densities for the angular ``B->D^*lnu::P(cos(theta_D)...)``, ``...P(cos(theta_l)...)``, and ``...P(phi...)`` observables, consistent with the other 1D PDFs, and rescale the Belle:2017A angular distributions by their bin widths (D. van Dyk)
 
 ### Added
 
@@ -133,6 +135,7 @@
 - Fix incorrect cloning of cached ``ExpressionObservable`` instances that fix the same kinematic variable to different values (issue #1077) (D. van Dyk)
 - Fix ``eos.figure.GridFigure`` to forward the analysis file context to each of its plots, so that items resolve relative data and parameter paths against the analysis file's base directory (D. van Dyk)
 - Defer loading of a figure item's ``fixed_parameters_from_file`` from construction to draw time, so that loading an analysis file no longer requires the parameter file (which may be the output of an earlier task such as ``find-mode``) to already exist (issue #1181) (D. van Dyk)
+- Fix the ``B->D^*lnu`` azimuthal (``phi``) 1D distribution, which contained a spurious ``cos(phi)`` term, and the phase-space normalization of the 1D PDFs, previously computed by ``BToDPiLeptonNeutrino`` (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
