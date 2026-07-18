@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018-2019 Ahmet Kokulu
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -376,9 +376,12 @@ namespace eos
             const double a_fb = ao.a_fb_leptonic();
             const double ftilde_L = ao.ftilde_L();
 
-            return 0.5 * (c_theta_l_max - c_theta_l_min)
+            const double integral = 0.5 * (c_theta_l_max - c_theta_l_min)
                 + a_fb * 0.5 * (c_theta_l_max * c_theta_l_max - c_theta_l_min * c_theta_l_min)
                 + (1.0 - 3.0 * ftilde_L) / 8.0 * ((power_of<3>(c_theta_l_max) - power_of<3>(c_theta_l_min)) - (c_theta_l_max - c_theta_l_min));
+
+            // return the bin-averaged PDF (density), consistent with differential_pdf_l
+            return integral / (c_theta_l_max - c_theta_l_min);
         }
 
         double integrated_pdf_v(const double & c_theta_v_min, const double & c_theta_v_max, const double & q2_min, const double & q2_max)
@@ -387,10 +390,13 @@ namespace eos
 
             const double f_L = ao.f_L();
 
-            return 3.0 / 4.0 * (
+            const double integral = 3.0 / 4.0 * (
                 (1.0 - f_L) * (c_theta_v_max - c_theta_v_min)
                 - (1.0 - 3.0 * f_L) * (power_of<3>(c_theta_v_max) - power_of<3>(c_theta_v_min)) / 3.0
             );
+
+            // return the bin-averaged PDF (density), consistent with differential_pdf_v
+            return integral / (c_theta_v_max - c_theta_v_min);
         }
 
         double integrated_pdf_phi(const double & phi_min, const double & phi_max, const double & q2_min, const double & q2_max)
@@ -400,10 +406,13 @@ namespace eos
             const double J3 = 3.0 / 4.0 * ao.vv4T();
             const double J9 = 3.0 / 4.0 * ao.vv5T();
 
-            return (0.5 * (phi_max - phi_min)
+            const double integral = (0.5 * (phi_max - phi_min)
                 + 1.0 / 3.0 * J3 * (std::sin(2.0 * phi_max) - std::sin(2.0 * phi_min))
                 - 1.0 / 3.0 * J9 * (std::cos(2.0 * phi_max) - std::cos(2.0 * phi_min))
             ) / M_PI;
+
+            // return the bin-averaged PDF (density), consistent with differential_pdf_phi
+            return integral / (phi_max - phi_min);
         }
     };
 
