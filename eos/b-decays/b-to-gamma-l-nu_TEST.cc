@@ -42,20 +42,23 @@ class BToGammaLeptonNeutrinoTest :
 
             Parameters p = Parameters::Defaults();
 
-            // Values from [BBJW:2018A]
+            // Values from [BBJW:2018A], Table 1. Note that mu_0 is set equal to mu: BBJW's lambda_B
+            // (the x-axis of their Fig. 9, and the argument in their Eq. 55 anchors) is lambda_B
+            // evaluated directly at the hard-collinear scale mu, not lambda_B(mu_0 = 1 GeV) subsequently
+            // RG-evolved to mu.
             p["B_u::mu_0@FLvD2022"]  = 1.5;
             p["B->gamma::mu@FLvD2022QCDF"]  = 1.5;
-            p["B->gamma::mu_h1@FLvD2022QCDF"]  = 4.7;
-            p["B->gamma::mu_h2@FLvD2022QCDF"]  = 4.5;
-            p["B->gamma::s_0@FLvD2022QCDF"] = 1.59;
-            p["B->gamma::M^2@FLvD2022QCDF"] = 1.35;
+            p["B->gamma::mu_h1@FLvD2022QCDF"]  = 4.8;
+            p["B->gamma::mu_h2@FLvD2022QCDF"]  = 4.8;
+            p["B->gamma::s_0@FLvD2022QCDF"] = 1.5;
+            p["B->gamma::M^2@FLvD2022QCDF"] = 1.25;
             p["decay-constant::B_u"] = 0.192;
             p["mass::B_u"] = 5.27929;
             p["mass::b(MSbar)"] = 4.453796188717916; // fix m_b_pole@1-loop to 4.8
             p["mass::rho^+"] = 0.77526;
             p["B::lambda_E^2"] = 0.0625;
             p["B::lambda_H^2"] = 0.125;
-            p["B::LambdaBar"] = 1.033232013955; // m_B - m_b
+            p["B::LambdaBar"] = 0.479; // m_B - m_b
             p["CKM::abs(V_ub)"] = 3.7e-3;
             p["life_time::B_u"] = 1.638e-12;
             p["WET::G_Fermi"] = 1.166378e-5;
@@ -83,17 +86,20 @@ class BToGammaLeptonNeutrinoTest :
                     auto k = Kinematics({ { "E_gamma_min", E_gamma_min } });
                     auto parameters = p; parameters["B_u::omega_0@FLvD2022"] = lambda_B; // a_k fixed to exp. model => omega_0 = lambda_B
 
-                    return Observable::make("B_u->gammalnu::BR(E_gamma_min)", p, k, oo)->evaluate();
+                    return Observable::make("B_u->gammalnu::BR(E_gamma_min)", parameters, k, oo)->evaluate();
                 };
 
-                // Values taken from Ref. [BBJW:2018A], Fig. (9)
-                TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.2), 5.0e-6, 0.5e-6);
-                TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.3), 2.4e-6, 0.4e-6);
-                TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.4), 1.2e-6, 0.2e-6);
+                // Values read off Ref. [BBJW:2018A], Fig. (9); precision is limited by reading the plot
+                // by eye. BBJW note themselves that their expansion "cannot be considered reliable below
+                // E_gamma ~ 1.5 GeV", so the E_min = 1.0 GeV curve is, in their words, "at best indicative";
+                // its tolerances are widened accordingly.
+                TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.2), 5.0e-6, 1.0e-6);
+                TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.3), 2.4e-6, 0.8e-6);
+                TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.4), 1.2e-6, 0.5e-6);
                 TEST_CHECK_NEARLY_EQUAL(BR(1.0, 0.6), 0.2e-6, 0.2e-6);
 
-                TEST_CHECK_NEARLY_EQUAL(BR(1.5, 0.2), 3.2e-6,  0.5e-6);
-                TEST_CHECK_NEARLY_EQUAL(BR(2.0, 0.2), 1.25e-6, 0.5e-6);
+                TEST_CHECK_NEARLY_EQUAL(BR(1.5, 0.2), 3.2e-6,  0.4e-6);
+                TEST_CHECK_NEARLY_EQUAL(BR(2.0, 0.2), 1.25e-6, 0.15e-6);
             }
 
             // Consistency check of the angular-differential decay witdh and the integrated decay width

@@ -78,6 +78,7 @@
 - Add the ``eos.reporting`` module with the ``AnalysisData``, ``PosteriorData``, and ``GoodnessOfFit`` classes, providing lazy, disk-driven access to the recorded results of an analysis for use in report templates (D. van Dyk)
 - Extend the ``inference`` example to find the best-fit point via a ``find-mode`` step and to report the goodness of fit (as a per-constraint table) and a corner figure for each posterior (D. van Dyk)
 - Add further test cases to cover the worst offenders in terms of code coverage (D. van Dyk)
+- Add an ``evolution-order`` option (``LL``/``NLL``, default ``NLL``) to ``B->gamma::F_V``/``F_A`` (``FLvD2022QCDF``), truncating the resummation of the radiative-correction factor ``R(Egamma,mu)`` to leading-logarithmic accuracy (D. van Dyk)
 - Add a ``format_version`` field to the analysis file format, so that EOS rejects files declaring a newer schema version than it supports (issue #1196) (D. van Dyk)
 - Complete the documentation of the figure description format (D. van Dyk)
 
@@ -133,6 +134,7 @@
 - Fix incorrect cloning of cached ``ExpressionObservable`` instances that fix the same kinematic variable to different values (issue #1077) (D. van Dyk)
 - Fix ``eos.figure.GridFigure`` to forward the analysis file context to each of its plots, so that items resolve relative data and parameter paths against the analysis file's base directory (D. van Dyk)
 - Defer loading of a figure item's ``fixed_parameters_from_file`` from construction to draw time, so that loading an analysis file no longer requires the parameter file (which may be the output of an earlier task such as ``find-mode``) to already exist (issue #1181) (D. van Dyk)
+- Fix wrong scales and anomalous dimension in the resummed radiative-correction factor ``R(Egamma,mu)`` entering ``B->gamma::F_V``/``F_A``, and fix fudged inputs and a variable-shadowing bug in the corresponding ``B_u->gammalnu::BR`` unit test (issue #1206) (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28

@@ -75,16 +75,16 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     std::make_pair(2.9528207810186,     1e-9), // norm_incomplete(8.0)
                     std::make_pair(0.156908479594529,   1e-9), // lapltr_incomplete(8.0, 4.0)
                     std::make_pair(-0.186641425933295,  1e-9), // lapltr_incomplete_dsigma(8.0, 4.0)
-                    std::make_pair(0.272354067021644,   1e-3), // L0_effective(3.0); numerical reference is imprecise
-                    std::make_pair(0.0527171469619207,  1e-3), // L0_effective(2.16)
+                    std::make_pair(0.272486748944117,   1e-3), // L0_effective(3.0); numerical reference is imprecise
+                    std::make_pair(0.0534704590581136,  1e-3), // L0_effective(2.16)
                     std::make_pair(10.4492075178413 + -10.4781709714967 + 6.58190087562423 + -8.92720937287174,     1e-3), // L0_incomplete_effective(3.0, 8.0); numerical reference is imprecise
                     std::make_pair(0.101195623867872 + -0.188854545332271 + 0.334217768087141 + -0.315849218854024, 1e-6), // lapltr_effective_incomplete(3.0, 8.0, 4.0)
-                    std::make_pair(0.88941106522119,   1e-8), // C at Egamma=2.16
-                    std::make_pair(0.92569114368575,   1e-8), // K_inv at Egamma=2.16
-                    std::make_pair(0.882916019547774,  1e-8), // U at Egamma=2.16
-                    std::make_pair(0.2597033704013,    1e-8), // F_leading_power(2.16)
-                    std::make_pair(-0.0465690290256039 + 0.00392626152208998, 1e-5), // xi(2.16)
-                    std::make_pair(0.0133804021454904 + 0.0, 1e-6), // delta_xi(2.16)
+                    std::make_pair(0.856077632552228,  1e-8), // C at Egamma=2.16
+                    std::make_pair(1.04437026215851,   1e-8), // K_inv at Egamma=2.16
+                    std::make_pair(0.948778129043308,  1e-8), // U at Egamma=2.16
+                    std::make_pair(0.303055287938432,  1e-8), // F_leading_power(2.16)
+                    std::make_pair(-0.0419868760541205, 1e-5), // xi(2.16)
+                    std::make_pair(0.013380027478431 + 0.0, 1e-6), // delta_xi(2.16)
                 };
 
                 Diagnostics diagnostics = ff.diagnostics();
@@ -98,20 +98,84 @@ class AnalyticFormFactorBToGammaQCDFTest :
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.2304410231690338,     1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.2304410231690338,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.274448439362743,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.274448439362743,     1e-8 );
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.2036809682121717,     1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.2036809682121717,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.247688384405881,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.247688384405881,     1e-8 );
 
 
-                // Math integrity test: cross-check complete form factors against Mathematica implementation
+                // Math integrity test: cross-check complete form factors against the corrected implementation
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(4.0),               0.1120729602946285,     1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( ff.F_V(12.0),              0.02616520856223276,    1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(4.0),               0.14854710850733,      1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(12.0),              0.0458074023590614,    1e-8 );
 
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(4.0),               0.109708682955886,      1e-8 );
-                TEST_CHECK_NEARLY_EQUAL( ff.F_A(12.0),              0.02853002542154079,    1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(4.0),               0.146182831168587,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(12.0),              0.0481722192183694,    1e-8 );
+            }
+
+            // "evolution-order" = "LL": check the truncation implemented via switch_nll
+            {
+                Parameters p = Parameters::Defaults();
+                p["B_u::omega_0@FLvD2022"]  = 0.7;
+                p["B_u::mu_0@FLvD2022"]  = 1.3;
+                p["B->gamma::mu@FLvD2022QCDF"]  = 1.3;
+                p["B->gamma::mu_h1@FLvD2022QCDF"]  = 4.7;
+                p["B->gamma::mu_h2@FLvD2022QCDF"]  = 4.5;
+                p["B->gamma::s_0@FLvD2022QCDF"] = 1.59;
+                p["B->gamma::M^2@FLvD2022QCDF"] = 1.35;
+                p["decay-constant::B_u"] = 0.129;
+                p["mass::B_u"] = 5.27929;
+                p["mass::b(MSbar)"] = 4.45432371854873; // fix m_b_pole@1-loop to 4.8
+                p["mass::rho^+"] = 0.7;
+                p["B::lambda_E^2"] = 0.0625;
+                p["B::lambda_H^2"] = 0.125;
+                p["B::LambdaBar"] = 0.5;
+                p["B_u::a^phi+_0@FLvD2022"] =  1.868119356054707;
+                p["B_u::a^phi+_1@FLvD2022"] =  0.151143197362311;
+                p["B_u::a^phi+_2@FLvD2022"] =  1.203196552637887;
+                p["B_u::a^phi+_3@FLvD2022"] =  0.429631987348729;
+                p["B_u::a^phi+_4@FLvD2022"] =  0.304198191688109;
+                p["B_u::a^phi+_5@FLvD2022"] = -0.324469147908141;
+                p["B_u::a^phi+_6@FLvD2022"] =  0.381019563820993;
+                p["B_u::a^phi+_7@FLvD2022"] = -0.246884872397705;
+                p["B_u::a^phi+_8@FLvD2022"] = -0.058121797086248;
+
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, Options{ { "evolution-order"_ok, "LL"_ov } });
+
+                // Only C, K_inv, U, F_leading_power, and xi depend on "evolution-order"; the remaining
+                // functionals reproduce the "NLL" (default) reference values from above unchanged.
+                static const std::vector<std::pair<double, double>> reference = {
+                    std::make_pair(3.39713985820215,    1e-9), // L0()
+                    std::make_pair(3.32067923218836,    1e-9), // L0_incomplete(8.0)
+                    std::make_pair(2.9528207810186,     1e-9), // norm_incomplete(8.0)
+                    std::make_pair(0.156908479594529,   1e-9), // lapltr_incomplete(8.0, 4.0)
+                    std::make_pair(-0.186641425933295,  1e-9), // lapltr_incomplete_dsigma(8.0, 4.0)
+                    std::make_pair(0.272486748944117,   1e-3), // L0_effective(3.0); numerical reference is imprecise
+                    std::make_pair(0.0534704590581136,  1e-3), // L0_effective(2.16)
+                    std::make_pair(10.4492075178413 + -10.4781709714967 + 6.58190087562423 + -8.92720937287174,     1e-3), // L0_incomplete_effective(3.0, 8.0); numerical reference is imprecise
+                    std::make_pair(0.101195623867872 + -0.188854545332271 + 0.334217768087141 + -0.315849218854024, 1e-6), // lapltr_effective_incomplete(3.0, 8.0, 4.0)
+                    std::make_pair(1.0,                1e-14), // C at Egamma=2.16: no O(alpha_s(mu_h1)) matching correction at LL
+                    std::make_pair(1.0,                1e-14), // K_inv at Egamma=2.16: K = 1 identically at LL
+                    std::make_pair(0.968013353629127,  1e-8), // U at Egamma=2.16
+                    std::make_pair(0.345608964545694,  1e-8), // F_leading_power(2.16)
+                    std::make_pair(-0.0494042368401784, 1e-5), // xi(2.16)
+                    std::make_pair(0.013380027478431 + 0.0, 1e-6), // delta_xi(2.16); does not depend on "evolution-order"
+                };
+
+                Diagnostics diagnostics = ff.diagnostics();
+                TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
+
+                Kinematics k = Kinematics({ { "E_gamma", 2.16 } });
+                Options o { {"form-factors"_ok, "FLvD2022QCDF"_ov}, {"evolution-order"_ok, "LL"_ov} };
+                auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
+                auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
+
+                TEST_CHECK_NEARLY_EQUAL( ff.F_V(k["E_gamma"]),      0.309584755183946,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_V->evaluate(),       0.309584755183946,     1e-8 );
+
+                TEST_CHECK_NEARLY_EQUAL( ff.F_A(k["E_gamma"]),      0.282824700227084,     1e-8 );
+                TEST_CHECK_NEARLY_EQUAL( obs_F_A->evaluate(),       0.282824700227084,     1e-8 );
             }
         }
 } analytic_b_to_gamma_qcdf_test;
