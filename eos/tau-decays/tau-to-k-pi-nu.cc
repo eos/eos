@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  * Copyright (c) 2025 Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
@@ -74,11 +74,11 @@ namespace eos
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
                 form_factors(FormFactorFactory<VacuumToPP>::create("0->Kpi::KSvD2025", p, o)),
                 opt_model(o, options, "model"_ok),
-                opt_K(o, options, "K"_ok),
                 model(Model::make(opt_model.value(), p, o)),
                 hbar(p["QM::hbar"], u),
                 g_fermi(p["WET::G_Fermi"], u),
                 m_tau(p["mass::tau"], u),
+                opt_K(o, options, "K"_ok),
                 m_K(p["mass::" + opt_K.value()], u),
                 m_pi(p["mass::pi^" + std::string(opt_K.value() == "K_u" ? "0" : "-")], u),
                 m_s(p["mass::s(2GeV)"], u),
