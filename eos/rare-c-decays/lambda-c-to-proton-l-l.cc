@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2019 Ahmet Kokulu
- * Copyright (c) 2019,2021 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2023 Méril Reboud
  * Copyright (c) 2026 Dominik Suelmann
  *
@@ -229,7 +229,7 @@ namespace eos
                 u.uses(*model);
             }
 
-            const double
+            double
             normalization(const double & q2) const
             {
                 double lam = lambda(m_Lambda_c * m_Lambda_c, m_proton * m_proton, q2);
