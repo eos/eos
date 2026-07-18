@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2010, 2011 Christian Wacker
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014 Christoph Bobeth
@@ -39,6 +39,12 @@ namespace eos
             UsedParameter m_c_MSbar;
             UsedParameter m_s;
 
+            // ``use_simple_sl`` is read by the ``lambda_*`` and ``sl_phase_*``
+            // initializers below, so it (and its option) must be declared -- and
+            // therefore initialized -- first.
+            BooleanOption opt_use_simple_sl;
+            bool use_simple_sl;
+
             UsedParameter lambda_long;
             UsedParameter lambda_par;
             UsedParameter lambda_perp;
@@ -49,11 +55,9 @@ namespace eos
 
             BooleanOption opt_ccbar_resonance;
             BooleanOption opt_use_nlo;
-            BooleanOption opt_use_simple_sl;
 
             bool ccbar_resonance;
             bool use_nlo;
-            bool use_simple_sl;
 
             static const std::vector<OptionSpecification> options;
 
