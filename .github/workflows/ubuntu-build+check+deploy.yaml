@@ -65,9 +65,49 @@ jobs:
               shell: bash
               run: |
                 pushd _build
-                make -j4 all
+                # For g++, emit one SARIF file per translation unit alongside
+                # each object file. Appending the flag to CXX leaves the
+                # configured CXXFLAGS/AM_CXXFLAGS (and thus the set of warnings)
+                # untouched. clang's SARIF output is experimental and is skipped.
+                DIAG=""
+                [[ "${{ matrix.cfg.cxx }}" == g++* ]] && DIAG="-fdiagnostics-format=sarif-file"
+                make -j4 all CXX="${{ matrix.cfg.cxx }} ${DIAG}"
                 popd
                 tar caf _build.tar _build
+
+            - name: Collect compiler warnings (merge SARIF)
+              if: always() && startsWith(matrix.cfg.cxx, 'g++')
+              shell: bash
+              run: |
+                python3 _src/.github/scripts/collect-warnings.py \
+                  --build-dir _build --src-dir _src \
+                  --sarif-out eos.sarif --list-out warnings.txt
+                # Record the ref/sha the SARIF was produced for, so the companion
+                # ``workflow_run`` workflow can attribute the code-scanning results
+                # to the correct commit/PR -- including pull requests from forks,
+                # whose read-only token cannot upload SARIF from this job.
+                {
+                  echo "ref=${{ github.ref }}"
+                  echo "sha=${{ github.sha }}"
+                } > sarif-metadata.txt
+
+            - name: Upload warnings list as artifact
+              if: always() && startsWith(matrix.cfg.cxx, 'g++')
+              uses: actions/upload-artifact@v4
+              with:
+                name: eos-warnings-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+                path: |
+                  eos.sarif
+                  warnings.txt
+                  sarif-metadata.txt
+
+            - name: Fail on new compiler warnings
+              if: always() && startsWith(matrix.cfg.cxx, 'g++')
+              shell: bash
+              run: |
+                python3 _src/.github/scripts/collect-warnings.py \
+                  --list-in warnings.txt \
+                  --baseline _src/.github/warnings-baseline.txt
 
             - name: Upload configured source as artifact
               uses: actions/upload-artifact@v4
