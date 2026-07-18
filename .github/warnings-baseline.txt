@@ -1,0 +1,4 @@
+# Baseline of accepted g++ compiler warnings, one "path<TAB>rule<TAB>message"
+# entry per line. Regenerate from a build tree with:
+#   python3 .github/scripts/collect-warnings.py \
+#     --build-dir <build> --src-dir <src> --write-baseline .github/warnings-baseline.txt
