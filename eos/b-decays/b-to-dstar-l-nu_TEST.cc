@@ -583,13 +583,14 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 3.45575), 0.159154943, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 5.49779), 0.159154943, eps);
 
-                // normalization of the integrated distributions
+                // normalization of the integrated distributions; these are bin-averaged
+                // PDFs (densities), so a full-range bin returns the average density, not 1
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0,  0.0),     0.500000000, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, +1.0),     1.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, +1.0),     0.500000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0,  0.0),     0.388730770, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, +1.0),     1.0,         eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi( 0.0,  +M_PI), 0.500000000, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi(-M_PI, +M_PI), 1.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, +1.0),     0.500000000, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi( 0.0,  +M_PI), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi(-M_PI, +M_PI), 0.159154943, eps);
             }
         }
 } b_to_dstar_l_nu_test;
