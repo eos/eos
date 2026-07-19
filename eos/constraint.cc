@@ -160,12 +160,6 @@ namespace eos
                 out << YAML::Value << "unimplemented";
                 out << YAML::EndMap;
             }
-
-            virtual ConstraintEntry *
-            deserialize(const YAML::Node &) const
-            {
-                return nullptr;
-            }
     };
 
     /// }}}
