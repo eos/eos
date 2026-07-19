@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2025 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2018 Christoph Bobeth
  *
@@ -85,7 +85,6 @@ namespace eos
             Context ctx("When constructing B_q->lnu observable");
 
             using std::placeholders::_1;
-            using std::placeholders::_2;
             switch (opt_q.value())
             {
                 case QuarkFlavor::up:
