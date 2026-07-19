@@ -72,6 +72,53 @@ where we abbreviate:
 
 Here, :math:`\eta` is the polarization vector of the vector meson, and again :math:`q = p - k` is the momentum transfer.
 
+In the case of the decay of a spin-parity :math:`J^P = 1/2^+` baryon (:math:`\mathcal{B}_1`) to another :math:`1/2^+` baryon (:math:`\mathcal{B}_2`),
+EOS uses the following helicity-based definitions.
+Abbreviating :math:`s_\pm \equiv (M_{\mathcal{B}_1} \pm M_{\mathcal{B}_2})^2 - q^2`,
+the vector and axialvector matrix elements are defined as:
+
+.. math::
+   :nowrap:
+
+   \begin{align*}
+      \braket{\mathcal{B}_2(k, s') | \bar{q}_1 \gamma^\mu q_2 | \mathcal{B}_1(p, s)}
+         & = \bar{u}(k, s') \bigg[
+              f_t^V(q^2)\, (M_{\mathcal{B}_1} - M_{\mathcal{B}_2}) \frac{q^\mu}{q^2}
+            + f_0^V(q^2)\, \frac{M_{\mathcal{B}_1} + M_{\mathcal{B}_2}}{s_+} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
+         & \qquad\qquad + f_\perp^V(q^2) \left( \gamma^\mu - \frac{2 M_{\mathcal{B}_2}}{s_+} p^\mu - \frac{2 M_{\mathcal{B}_1}}{s_+} k^\mu \right)
+              \bigg] u(p, s)\,, \\
+      \braket{\mathcal{B}_2(k, s') | \bar{q}_1 \gamma^\mu \gamma_5 q_2 | \mathcal{B}_1(p, s)}
+         & = -\bar{u}(k, s')\, \gamma_5 \bigg[
+              f_t^A(q^2)\, (M_{\mathcal{B}_1} + M_{\mathcal{B}_2}) \frac{q^\mu}{q^2}
+            + f_0^A(q^2)\, \frac{M_{\mathcal{B}_1} - M_{\mathcal{B}_2}}{s_-} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
+         & \qquad\qquad + f_\perp^A(q^2) \left( \gamma^\mu + \frac{2 M_{\mathcal{B}_2}}{s_-} p^\mu - \frac{2 M_{\mathcal{B}_1}}{s_-} k^\mu \right)
+              \bigg] u(p, s)\,,
+   \end{align*}
+
+while the tensor and axialtensor matrix elements are defined as:
+
+.. math::
+   :nowrap:
+
+   \begin{align*}
+      \braket{\mathcal{B}_2(k, s') | \bar{q}_1\, i \sigma^{\mu\nu} q_\nu q_2 | \mathcal{B}_1(p, s)}
+         & = -\bar{u}(k, s') \bigg[
+              f_0^T(q^2)\, \frac{q^2}{s_+} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
+         & \qquad\qquad + f_\perp^T(q^2)\, (M_{\mathcal{B}_1} + M_{\mathcal{B}_2}) \left( \gamma^\mu - \frac{2 M_{\mathcal{B}_2}}{s_+} p^\mu - \frac{2 M_{\mathcal{B}_1}}{s_+} k^\mu \right)
+              \bigg] u(p, s)\,, \\
+      \braket{\mathcal{B}_2(k, s') | \bar{q}_1\, i \sigma^{\mu\nu} q_\nu \gamma_5 q_2 | \mathcal{B}_1(p, s)}
+         & = -\bar{u}(k, s')\, \gamma_5 \bigg[
+              f_0^{T5}(q^2)\, \frac{q^2}{s_-} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
+         & \qquad\qquad + f_\perp^{T5}(q^2)\, (M_{\mathcal{B}_1} - M_{\mathcal{B}_2}) \left( \gamma^\mu + \frac{2 M_{\mathcal{B}_2}}{s_-} p^\mu - \frac{2 M_{\mathcal{B}_1}}{s_-} k^\mu \right)
+              \bigg] u(p, s)\,.
+   \end{align*}
+
+Here, :math:`u(p, s)` and :math:`u(k, s')` are the Dirac spinors of the initial- and final-state baryon,
+and again :math:`q = p - k` is the momentum transfer.
+The ten form factors are labelled by the current (:math:`V`, :math:`A`, :math:`T`, :math:`T5`) and by their helicity:
+:math:`t` (timelike), :math:`0` (longitudinal), and :math:`\perp` (transverse); the tensor currents have no timelike component.
+Within EOS the corresponding parameters carry the labels ``time``, ``long``, and ``perp``.
+
 
 Parametrisation of Semileptonic Form Factors
 --------------------------------------------
