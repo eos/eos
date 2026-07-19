@@ -82,6 +82,7 @@
 - Add further test cases to cover the worst offenders in terms of code coverage (D. van Dyk)
 - Add a ``format_version`` field to the analysis file format, so that EOS rejects files declaring a newer schema version than it supports (issue #1196) (D. van Dyk)
 - Complete the documentation of the figure description format (D. van Dyk)
+- Detect newly introduced C++ compiler warnings in the CI/CD workflows using ``g++``'s SARIF diagnostics output, providing native code-scanning annotations on pull requests and failing the build on any warning not present in a committed baseline (D. van Dyk)
 
 ### Deprecated
 
@@ -136,6 +137,8 @@
 - Fix ``eos.figure.GridFigure`` to forward the analysis file context to each of its plots, so that items resolve relative data and parameter paths against the analysis file's base directory (D. van Dyk)
 - Defer loading of a figure item's ``fixed_parameters_from_file`` from construction to draw time, so that loading an analysis file no longer requires the parameter file (which may be the output of an earlier task such as ``find-mode``) to already exist (issue #1181) (D. van Dyk)
 - Fix the ``B->D^*lnu`` azimuthal (``phi``) 1D distribution, which contained a spurious ``cos(phi)`` term, and the phase-space normalization of the 1D PDFs, previously computed by ``BToDPiLeptonNeutrino`` (D. van Dyk)
+- Fix a latent initialization-order bug in the [GP:2004A] B->K^*ll amplitudes, where the ``lambda_*`` and ``sl_phase_*`` subleading parameters read the ``use_simple_sl`` flag before it was initialized (D. van Dyk)
+- Fix various C++ compiler warnings (``-Wreorder``, ``-Wunused-parameter``, ``-Wignored-qualifiers``, ``-Wunused-variable``, ``-Woverloaded-virtual``) (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
