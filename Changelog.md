@@ -63,6 +63,7 @@
 - Add an output stream operator for ``qnp::OptionValue`` (D. van Dyk)
 - Document the user-facing classes and methods of the ``eos`` Python modules, and auto-generate the analysis file format reference from the ``eos.analysis_file_description`` classes (D. van Dyk)
 - Complete the reference documentation of the ``eos`` Python bindings: fix several incorrect docstrings, name all arguments and add docstrings across the documented C++-bound classes, and document the previously undocumented ``Model``, ``LogLikelihoodBlock``, ``Constraint``, ``ConstraintEntry``, ``ObservableEntry``, ``Reference``, ``References``, and ``SignalPDFEntry`` classes; the list of documented classes now lives in ``eos._api``, shared by the API reference template and by a new unit test that guards argument naming and docstring coverage against regressions (D. van Dyk)
+- Add a top-level ``Physics`` section to the documentation, split off from the reference, covering the physics conventions, the definitions and parametrisations of the hadronic matrix elements of local operators (decay constants and semileptonic form factors, including the ``1/2^+ -> 1/2^+`` baryon form factors), and the observables predicted for semileptonic decays to a pseudoscalar meson, to a vector meson, and to a ``1/2^+`` baryon (D. van Dyk)
 - Add a ``vertical`` plot item that draws a vertical line at a fixed position on the x axis, e.g. to mark a kinematic threshold (D. van Dyk)
 - Add an optional ``size`` field to ``grid`` figures to set the figure size explicitly (D. van Dyk)
 - Add an optional ``watermark_plot`` field to ``grid`` figures to stamp the watermark on a single panel, addressed either by a flattened index or by a ``(row, col)`` pair (D. van Dyk)
@@ -92,6 +93,8 @@
 
 - Deprecate the curtailed Gaussian prior description, i.e. a ``gauss``/``gaussian`` prior with ``min``/``max`` keys; use ``type: gaussian`` without ``min``/``max`` instead (D. van Dyk)
 - Deprecate constraint-based prior descriptions without a ``type`` key; use ``type: constraint`` instead (D. van Dyk)
+- Deprecate the ``eos.plot`` subpackage for removal in version 1.1; use the ``eos.figure`` subpackage instead (D. van Dyk)
+- Deprecate the ``corner-plot`` task for removal in version 1.1; use the ``corner`` figure type (``eos.figure.CornerFigure``) instead (D. van Dyk)
 
 ### Removed
 
@@ -109,6 +112,7 @@
 
 ### Fixed
 
+- Fix typos and errors in the documentation of the semileptonic form factors (D. van Dyk)
 - Fix some linewidth and linestyles arguments in figure framework (D. Suelmann)
 - Fix undefined name errors in Python code (D. van Dyk)
 - Fix usage of mutable default arguments in Python code (D. van Dyk)
