@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -82,8 +82,6 @@ namespace eos
         _l6pone(p[_sslp_prefix(prefix) + "::l_6'(1)@HQET"], *this),
         _l6ppone(p[_sslp_prefix(prefix) + "::l_6''(1)@HQET"], *this)
     {
-        using std::placeholders::_1;
-
         if (_opt_lp_model.value() == "exponential")
         {
             _xi = [=, this](const double & q2) -> double
