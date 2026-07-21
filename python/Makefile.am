@@ -144,6 +144,7 @@ _eos_la_SOURCES = \
 	_eos.cc \
 	_eos/converters.hh \
 	_eos/external-log-likelihood-block.cc _eos/external-log-likelihood-block.hh \
+	_eos/external-log-prior.cc _eos/external-log-prior.hh \
 	_eos/external-observable.cc _eos/external-observable.hh \
 	_eos/log.cc _eos/log.hh \
 	_eos/version.cc _eos/version.hh \

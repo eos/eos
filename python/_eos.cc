@@ -42,6 +42,7 @@
 
 #include "python/_eos/converters.hh"
 #include "python/_eos/external-log-likelihood-block.hh"
+#include "python/_eos/external-log-prior.hh"
 #include "python/_eos/external-observable.hh"
 #include "python/_eos/log.hh"
 #include "python/_eos/version.hh"
@@ -1214,6 +1215,26 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("parameters", "name", "shift", "transform", "min", "max"))
             .staticmethod("Transform")
+            .def("External", &ExternalLogPrior::make, return_value_policy<return_by_value>(), R"(
+            Returns a new external prior as a LogPrior.
+
+            The prior's behaviour is provided by a user-supplied Python object created by the
+            ``factory`` callable. The factory is invoked with a single :class:`Parameters <eos.Parameters>`
+            argument and must return an object that exposes:
+
+             - a callable ``evaluate()`` returning the logarithm of the prior's probability density;
+             - a callable ``sample()`` that sets the varied parameters from their generator values;
+             - a callable ``compute_cdf()`` that sets the varied parameters' generator values from their current values;
+             - an iterable ``varied_parameters`` of the names of the parameters varied by this prior; and
+             - a boolean ``informative`` attribute.
+
+            :param parameters: The parameters to which this LogPrior is bound.
+            :type parameters: eos.Parameters
+            :param factory: The factory callable used to initialize the external prior.
+            :type factory: callable
+        )",
+                 args("parameters", "factory"))
+            .staticmethod("External")
             .def("evaluate", &LogPrior::operator(), R"(
             Returns the logarithm of the prior's probability density at the current parameter values.
 
