@@ -64,7 +64,7 @@ namespace eos
 
         //B^_s(*)->D_s^(*)
         // option to determine if we use the SU3_F-symmetry limit for the subsubleading-power IW functions
-        SwitchOption opt_sslp_limit;
+        BooleanOption opt_sslp_limit;
 
         // parameters for the leading Isgur-Wise function xi
         UsedParameter xispone, xisppone, xispppone;
@@ -94,7 +94,7 @@ namespace eos
 
         std::string _sslp_prefix()
         {
-            if ("1" == opt_sslp_limit.value())
+            if (opt_sslp_limit.value())
                 return "B(*)->D(*)";
 
             return "B_s(*)->D_s(*)";
@@ -130,7 +130,7 @@ namespace eos
             l6one(p["B(*)->D(*)::l_6(1)@HQET"], u),
             l6pone(p["B(*)->D(*)::l_6'(1)@HQET"], u),
             l6ppone(p["B(*)->D(*)::l_6''(1)@HQET"], u),
-            opt_sslp_limit(o, "SU3F-limit-sslp"_ok, { "0"_ov, "1"_ov }, "0"_ov),
+            opt_sslp_limit(o, options, "SU3F-limit-sslp"_ok),
             xispone(p["B_s(*)->D_s(*)::xi'(1)@HQET"], u),
             xisppone(p["B_s(*)->D_s(*)::xi''(1)@HQET"], u),
             xispppone(p["B_s(*)->D_s(*)::xi'''(1)@HQET"], u),
@@ -2223,7 +2223,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<BGLCoefficients>::options
     {
-        { "SU3F-limit-sslp"_ok, { "0"_ov, "1"_ov }, "0"_ov }
+        { "SU3F-limit-sslp"_ok, { "true"_ov, "false"_ov }, "false"_ov }
     };
 
     BGLCoefficients::BGLCoefficients(const Parameters & p, const Options & o) :
@@ -2871,7 +2871,7 @@ namespace eos
     const std::vector<OptionSpecification>
     Implementation<HQETUnitarityBounds>::options
     {
-        { "SU3F-limit-sslp"_ok, { "0"_ov, "1"_ov }, "0"_ov },
+        { "SU3F-limit-sslp"_ok, { "true"_ov, "false"_ov }, "false"_ov },
         { "z-order-bound"_ok,   { "1"_ov, "2"_ov }, "2"_ov }
     };
 
