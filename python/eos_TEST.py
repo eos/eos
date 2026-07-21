@@ -362,5 +362,78 @@ class LoggingTests(unittest.TestCase):
                     [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'P' to value 'pi', overriding user-provided value 'D'"""])
 
 
+class ExternalLogPriorTests(unittest.TestCase):
+
+    def test_creation(self):
+        "Check if an external LogPrior can be created and evaluated."
+        import eos
+        from math import log, pi, sqrt
+
+        parameters = eos.Parameters.Defaults()
+
+        class _GaussianProvider:
+            def __init__(self, parameters):
+                self._p = parameters['mass::b(MSbar)']
+                self._mu, self._sigma = 4.18, 0.02
+
+            varied_parameters = ['mass::b(MSbar)']
+            informative = True
+
+            def evaluate(self):
+                x = self._p.evaluate()
+                return -0.5 * ((x - self._mu) / self._sigma) ** 2 - log(self._sigma * sqrt(2.0 * pi))
+
+            def sample(self):
+                self._p.set(self._mu)
+
+            def compute_cdf(self):
+                self._p.set_generator(0.5)
+
+        try:
+            prior = eos.LogPrior.External(parameters, _GaussianProvider)
+        except Exception as e:
+            self.fail(f'cannot create external LogPrior: {e}')
+
+        # the prior declares the parameters it varies
+        self.assertEqual([p.name() for p in prior.varied_parameters()], ['mass::b(MSbar)'])
+
+        # evaluate() delegates to the provider
+        parameters['mass::b(MSbar)'].set(4.18)
+        self.assertAlmostEqual(prior.evaluate(), -log(0.02 * sqrt(2.0 * pi)), places=13)
+
+        # sample() and compute_cdf() delegate to the provider
+        parameters['mass::b(MSbar)'].set(0.0)
+        prior.sample()
+        self.assertAlmostEqual(parameters['mass::b(MSbar)'].evaluate(), 4.18, places=13)
+
+        # the prior can be used as part of a posterior
+        posterior = eos.LogPosterior(eos.LogLikelihood(parameters))
+        self.assertTrue(posterior.add(prior, False))
+        self.assertAlmostEqual(posterior.evaluate(), prior.evaluate(), places=13)
+
+    def test_incomplete_provider(self):
+        "Check that a provider lacking a required method is rejected at creation."
+        import eos
+
+        parameters = eos.Parameters.Defaults()
+
+        class _IncompleteProvider:
+            def __init__(self, parameters):
+                pass
+
+            varied_parameters = []
+            informative = False
+
+            def evaluate(self):
+                return 0.0
+
+            def compute_cdf(self):
+                pass
+
+        # the missing 'sample()' method must be caught when the prior is created
+        with self.assertRaises(Exception):
+            eos.LogPrior.External(parameters, _IncompleteProvider)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)
