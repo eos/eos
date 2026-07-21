@@ -50,19 +50,20 @@ namespace eos
             unsigned long waiting_for_jobs;
             unsigned long pending_jobs;
 
-            std::list<std::pair<Ticket, std::function<void(void)> *>> queue;
+            std::list<std::pair<Ticket, std::function<void(void)>>> queue;
 
             std::list<Thread *> threads;
 
             void
             thread_function()
             {
-                std::function<void(void)> * job;
-                Ticket                      ticket;
+                std::function<void(void)> job;
+                Ticket                    ticket;
+                bool                      have_job;
 
                 do
                 {
-                    job = 0;
+                    have_job = false;
 
                     {
                         Lock l(*job_mutex);
@@ -91,16 +92,20 @@ namespace eos
                             continue;
                         }
 
-                        ticket = queue.front().first;
-                        job    = queue.front().second;
+                        ticket   = queue.front().first;
+                        job      = std::move(queue.front().second);
+                        have_job = true;
                         queue.pop_front();
                     }
 
                     // Execute the job outside the critical section
-                    if (job)
+                    if (have_job)
                     {
-                        (*job)();
+                        job();
                         ticket.mark();
+
+                        // Release the job (and any state it captured) promptly.
+                        job = nullptr;
                     }
 
                     {
@@ -177,11 +182,11 @@ namespace eos
     Ticket
     ThreadPool::enqueue(const std::function<void(void)> & job)
     {
-        std::pair<Ticket, std::function<void(void)> *> item(Ticket(), new std::function<void(void)>(job));
+        Ticket ticket;
 
         {
             Lock l(*_imp->job_mutex);
-            _imp->queue.push_back(item);
+            _imp->queue.push_back(std::make_pair(ticket, job));
             _imp->pending_jobs += 1;
 
             if (_imp->waiting_for_jobs > 0)
@@ -190,7 +195,7 @@ namespace eos
             }
         }
 
-        return item.first;
+        return ticket;
     }
 
     ThreadPool *
