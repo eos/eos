@@ -73,6 +73,7 @@ def collect(build_dir, src_dir):
     src_root = os.path.abspath(src_dir)
     merged_runs = []
     warnings = set()
+    tool_driver_name = None   # remembered to build a valid empty run if needed
 
     sarif_paths = []
     for root, _, files in os.walk(build_dir):
@@ -86,6 +87,8 @@ def collect(build_dir, src_dir):
             sarif = json.load(f)
 
         for run in sarif.get('runs', []):
+            if tool_driver_name is None:
+                tool_driver_name = run.get('tool', {}).get('driver', {}).get('name')
             kept_results = []
             for result in run.get('results', []):
                 # Track compiler *warnings* only. GCC SARIF can also carry
@@ -137,6 +140,17 @@ def collect(build_dir, src_dir):
                 # build-tree base directory no longer applies.
                 run.pop('originalUriBaseIds', None)
                 merged_runs.append(run)
+
+    if not merged_runs:
+        # A warning-free build must still yield a SARIF with at least one run:
+        # the code-scanning upload API rejects an empty ``runs`` array
+        # ("1 item required; only 0 were supplied"). A single run with no
+        # results is valid and clears any warnings previously reported for this
+        # category.
+        merged_runs.append({
+            'tool': {'driver': {'name': tool_driver_name or 'GCC'}},
+            'results': [],
+        })
 
     merged_sarif = {
         '$schema': 'https://docs.oasis-open.org/sarif/sarif/v2.1.0/errata01/os/schemas/sarif-schema-2.1.0.json',
