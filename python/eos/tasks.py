@@ -661,7 +661,7 @@ class DynestyResultLogger:
 
 # Nested sampling
 @task('sample-nested', 'data/{posterior}/nested')
-def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, seed:int=10, sample:str='auto'):
+def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, min_ess:int=0, seed:int=10, sample:str='auto'):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.
 
@@ -684,6 +684,8 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type maxiter: int, optional
     :param miniter: The minimum number of iterations. If not provided, the sampler will run until the termination condition is reached. Defaults to 0.
     :type miniter: int, optional
+    :param min_ess: The minimum effective sample size (ESS). Samples will be added until the estimated ESS reaches min_ess, even if the termination condition is reached earlier. If 0 (default), dynesty's default ESS target is used.
+    :type min_ess: int, optional
     :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
     :type seed: int, optional
     :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
@@ -692,12 +694,13 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     eos.inprogress('Beginning sampling...')
     analysis = analysis_file.analysis(posterior)
     logger = DynestyResultLogger()
-    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, print_function=logger.print_function, seed=seed, sample=sample)
+    results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, min_ess=min_ess, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
     posterior_values = results.logwt - results.logz[-1]
     weights = _np.exp(posterior_values)
+    ess = _dynesty.utils.get_neff_from_logwt(results.logwt)
     eos.completed('...finished!')
-    eos.info(f'Finished sampling with {len(samples)} samples and evidence estimate {results.logz[-1]:.2f} +/- {results.logzerr[-1]:.2f}')
+    eos.info(f'Finished sampling with {len(samples)} samples (effective sample size {ess:.0f}) and evidence estimate {results.logz[-1]:.2f} +/- {results.logzerr[-1]:.2f}')
     eos.data.DynestyResults.create(os.path.join(base_directory, 'data', posterior, 'nested'), analysis.varied_parameters, results)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)

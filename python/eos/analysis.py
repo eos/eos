@@ -777,7 +777,7 @@ class Analysis:
         return self._u_to_par(u)
 
 
-    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, miniter=0, print_progress=True, print_function=None, seed=10, sample='auto'):
+    def sample_nested(self, bound='multi', nlive=250, dlogz=1.0, maxiter=None, miniter=0, min_ess=0, print_progress=True, print_function=None, seed=10, sample='auto'):
         """
         Return samples of the parameters.
 
@@ -793,6 +793,8 @@ class Analysis:
         :type maxiter: int, optional
         :param miniter: The minimum number of iterations. Defaults to 0. Samples will be added until miniter is reached, even if the termination condition is reached earlier.
         :type miniter: int, optional
+        :param min_ess: The minimum effective sample size (ESS). Defaults to 0. Samples will be added until the estimated ESS reaches min_ess, even if the termination condition is reached earlier. If 0, dynesty's default ESS target is used.
+        :type min_ess: int, optional
         :param print_progress: Whether to print progress messages during sampling. Defaults to True.
         :type print_progress: bool, optional
         :param print_function: The function used to print progress messages. Defaults to using a dynesty-based function.
@@ -808,12 +810,17 @@ class Analysis:
         import dynesty, tqdm
         from functools import partial
 
+        if min_ess < 0:
+            raise ValueError('min_ess must be non-negative')
+
         if print_function is None:
             print_function = partial(dynesty.results.print_fn, pbar=tqdm.tqdm())
 
         sampler = dynesty.DynamicNestedSampler(self.log_likelihood, self._prior_transform, len(self.varied_parameters), bound=bound, nlive=nlive, rstate = np.random.Generator(np.random.MT19937(seed)), sample=sample)
-        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
-        while sampler.results['niter'] < miniter:
+        # a min_ess of 0 defers to dynesty's default ESS target (max(10000, ndim^2))
+        sampler.run_nested(dlogz_init=dlogz, maxiter=maxiter, n_effective=(min_ess if min_ess > 0 else None), print_progress=print_progress, print_func=print_function)
+        # only recompute the ESS when an explicit minimum was requested (min_ess > 0)
+        while sampler.results['niter'] < miniter or (min_ess > 0 and dynesty.utils.get_neff_from_logwt(sampler.results['logwt']) < min_ess):
             # using mode='full' ensures sampling from the entire posterior
             sampler.add_batch(mode='full', dlogz=dlogz, maxiter=maxiter, print_progress=print_progress, print_func=print_function)
         return sampler.results
