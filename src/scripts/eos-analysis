@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # PYTHON_ARGCOMPLETE_OK
 
-# Copyright (c) 2020-2025 Danny van Dyk
+# Copyright (c) 2020-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -263,6 +263,10 @@ In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTE
     parser_sample_nested.add_argument('-l', '--min-number-iterations',
         help = 'The minimum number of iterations. If not provided, the sampler will run until the termination condition is reached.',
         dest = 'miniter', action = 'store', type = int, default = 0
+    )
+    parser_sample_nested.add_argument('-e', '--min-effective-sample-size',
+        help = 'The minimum effective sample size (ESS). Samples will be added until the estimated ESS reaches this value, even if the termination condition is reached earlier. If 0 (default), dynesty\'s default ESS target is used.',
+        dest = 'min_ess', action = 'store', type = int, default = 0
     )
     parser_sample_nested.add_argument('-s', '--use-random-seed',
         help = 'The seed used to initialize the Mersenne Twister pseudo-random number generator.',
