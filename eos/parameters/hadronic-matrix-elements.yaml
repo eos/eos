@@ -249,6 +249,13 @@ groups:
           latex:   '$m_{D_{d,0}}^\mathrm{BSZ}$'
           unit:     'GeV'
           comment: 'See discussion in [DGHKM:2020A]'
+      'mass::D_u,0@BSZ2015' :
+          central: +2.105
+          min:     +2.105
+          max:     +2.105
+          latex:   '$m_{D_{u,0}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+          comment: 'isospin partner of D_d,0'
       'mass::D_s,0@BSZ2015' :
           central: +2.318
           min:     +2.318
@@ -292,6 +299,13 @@ groups:
           max:     +2.420
           latex:   '$m_{D_{d,1}}^\mathrm{BSZ}$'
           unit:    'GeV'
+      'mass::D_u,1@BSZ2015' :
+          central: +2.420
+          min:     +2.420
+          max:     +2.420
+          latex:   '$m_{D_{u,1}}^\mathrm{BSZ}$'
+          unit:    'GeV'
+          comment: 'isospin partner of D_d,1'
       'mass::D_s,1@BSZ2015' :
           central: +2.460
           min:     +2.460
