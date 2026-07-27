@@ -123,20 +123,26 @@ Within EOS the corresponding parameters carry the labels ``time``, ``long``, and
 Parametrisation of Semileptonic Form Factors
 --------------------------------------------
 
-EOS provides one general-purpose parametrisation of all semileptonic form factors. It is referred to as the ``BSZ2015`` parametrisation.
+By default, EOS uses the general-purpose ``SSE`` (Simplified Series Expansion) parametrisation for all semileptonic form factors, which is described in the subsection below.
+The remaining parametrisations require domain-specific knowledge and are discussed in their respective subsections.
+
+General Parametrisation: ``SSE``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+EOS provides one general-purpose parametrisation of all semileptonic form factors. It is referred to as the ``SSE`` parametrisation.
 For a generic form factor :math:`F(q^2)`, it reads:
 
 .. math::
    :nowrap:
 
    \begin{equation*}
-      F(q^2) = \frac{1}{1 - q^2 / M_R^2} \left[\sum_{i=0}^N \alpha^{(F)}_{i} \left(z(q^2) - z(0)\right)^i \right]\,.
+      F(q^2) = \frac{1}{1 - q^2 / M_R^2} \left[\sum_{i=0}^N \alpha^{(F)}_{i}\, z(q^2)^i \right]\,,
    \end{equation*}
 
-Here :math:`M_R` correspond to the mass of the first resonance seen by that form factor and :math:`\alpha_i^{(F)}` are free parameters.
-The coefficients :math:`\alpha_i^{(F)}` are treated as unconstrained free parameters:
-there is no expectation for the magnitude of any individual coefficient, nor is there an expectation that the series of coefficients converges.
-We use the conformal mapping :math:`q^2 \mapsto z(q^2) = z(q^2; t_+, t_0)`, which reads
+with :math:`N = 2` in the current implementation.
+Here :math:`M_R` corresponds to the mass of the first resonance seen by that form factor and :math:`\alpha_i^{(F)}` are free parameters.
+
+This parametrisation uses the conformal mapping :math:`q^2 \mapsto z(q^2) = z(q^2; t_+, t_0)`, which reads
 
 .. math::
    :nowrap:
@@ -145,16 +151,70 @@ We use the conformal mapping :math:`q^2 \mapsto z(q^2) = z(q^2; t_+, t_0)`, whic
       z(q^2; t_+, t_0) = \frac{\sqrt{t_+ - q^2} - \sqrt{t_+ - t_0}}{\sqrt{t_+ - q^2} + \sqrt{t_+ - t_0}}\,.
    \end{equation*}
 
-In the above, :math:`t_+ \equiv (M_1 + M_2)^2` represents the two-body threshold for the respective form factor for a reaction with hadron masses :math:`M_{1,2}`,
-and :math:`t_0 < (M_1 - M_2)^2` is a free parameter.
-Examples for accessing the parameters :math:`\alpha_i^{(F)}` are:
+In the above, :math:`t_+` is the pair-production threshold of the respective form factor, chosen as the *lowest-lying* two- or three-particle
+threshold accessible in the isospin-symmetry limit. The expansion point :math:`t_0` is fixed to its optimised value
+:math:`t_0 = t_+ \left(1 - \sqrt{1 - t_- / t_+}\right)`, where :math:`t_- \equiv (M_1 - M_2)^2` for hadron masses :math:`M_{1,2}`.
 
-+-------------------+--------------+------------------------------+
-| Transition        | Form Factor  | Parameter                    |
-+-------------------+--------------+------------------------------+
-| :math:`B\to K`    | :math:`f_+`  | ``B->K::alpha^f+_0@BSZ2015`` |
-+-------------------+--------------+------------------------------+
-| :math:`D\to K`    | :math:`f_0`  | ``D->K::alpha^f0_2@BSZ2015`` |
-+-------------------+--------------+------------------------------+
-| :math:`B\to K^*`  | :math:`V`    | ``B->K^*::alpha^V_1@BSZ2015``|
-+-------------------+--------------+------------------------------+
+Since the vector and scalar currents couple to a lower-lying threshold than the axial and pseudoscalar currents, EOS distinguishes two thresholds:
+:math:`t_+^V` for the vector/scalar-current form factors (e.g. :math:`V`, :math:`T_1`, and all :math:`P\to P` form factors),
+and :math:`t_+^A` for the (pseudo)scalar/axial-current form factors (e.g. :math:`A_0`, :math:`A_1`, :math:`A_{12}`, :math:`T_2`, :math:`T_{23}`).
+For a :math:`b\to s` transition, for instance, :math:`t_+^V = (M_B + M_K)^2` is the :math:`B K` threshold,
+while :math:`t_+^A = (M_{B_s} + 2 M_\pi)^2` is the lowest isospin-allowed three-particle threshold.
+Both thresholds are themselves accessible as parameters and are set to sensible default values.
+
+The coefficients :math:`\alpha_i^{(F)}` are treated as unconstrained free parameters:
+there is no expectation for the magnitude of any individual coefficient, nor is there an expectation that the series of coefficients converges.
+In contrast to some other parametrisations, the series is expanded directly in :math:`z(q^2)`, and *not* in the shifted variable :math:`z(q^2) - z(0)`.
+
+As a consequence, the kinematic constraints and equations of motion relating individual form factors
+(for example :math:`f_0(0) = f_+(0)` for :math:`P\to P` transitions, or :math:`T_2(0) = T_1(0)` and :math:`A_{12}(0) = R\, A_0(0)` for :math:`P\to V` transitions,
+with :math:`R \equiv (M_P^2 - M_V^2) / (8 M_P M_V)`)
+fix the leading coefficient :math:`\alpha_0^{(F)}` of the constrained form factors. This coefficient is therefore removed from the set of free parameters.
+
+Further relations hold at the kinematic endpoint :math:`t_- = (M_1 - M_2)^2`, where they ensure that the form factors obtained by dividing
+by the Källén function :math:`\lambda(M_1^2, M_2^2, q^2)`, which vanishes at :math:`q^2 = t_-`, remain finite. For :math:`P\to V` transitions these are
+:math:`A_{12}(t_-) = R\, A_1(t_-)`, which renders :math:`A_2` finite and fixes :math:`\alpha_0^{(A_1)}`, and
+:math:`T_{23}(t_-) = K\, T_2(t_-)` with :math:`K \equiv (M_P + M_V)^2 / (4 M_P M_V)`, which renders :math:`T_3` finite and fixes :math:`\alpha_0^{(T_{23})}`.
+For :math:`1/2^+ \to 1/2^+` transitions, the analogous relations are :math:`f_\perp^A(t_-) = f_\text{long}^A(t_-)` and
+:math:`f_\text{long}^{T5}(t_-) = f_\perp^{T5}(t_-)`.
+
+The ``SSE`` parametrisation covers :math:`P\to P` and :math:`P\to V` mesonic transitions as well as :math:`1/2^+ \to 1/2^+` baryonic transitions.
+Examples for accessing the parameters :math:`\alpha_i^{(F)}` and the thresholds are:
+
++-----------------------------+-------------------+---------------------------------------------+
+| Transition                  | Quantity          | Parameter(s)                                |
++=============================+===================+=============================================+
+| :math:`B\to K`              | :math:`f_+`       | ``B->K::alpha^f+_0@SSE``,                   |
+|                             |                   | ``B->K::alpha^f+_1@SSE``,                   |
+|                             |                   | ...                                         |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`B\to K`              | :math:`t_+`       | ``B->K::tp@SSE``                            |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`B\to K`              | :math:`f_0`       | ``B->K::alpha^f0_1@SSE``,                   |
+|                             |                   | ``B->K::alpha^f0_2@SSE``,                   |
+|                             |                   | ...                                         |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`B\to K^*`            | :math:`V`         | ``B->K^*::alpha^V_0@SSE``,                  |
+|                             |                   | ``B->K^*::alpha^V_1@SSE``,                  |
+|                             |                   | ...                                         |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`B\to K^*`            | :math:`t_+^V`     | ``B->K^*::tp_v@SSE``                        |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`B\to K^*`            | :math:`A_1`       | ``B->K^*::alpha^A1_1@SSE``,                 |
+|                             |                   | ``B->K^*::alpha^A1_2@SSE``,                 |
+|                             |                   | ...                                         |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`B\to K^*`            | :math:`t_+^A`     | ``B->K^*::tp_a@SSE``                        |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`\Lambda_b\to\Lambda` | :math:`f_\perp^V` | ``Lambda_b->Lambda::alpha^(perp,V)_0@SSE``, |
+|                             |                   | ``Lambda_b->Lambda::alpha^(perp,V)_1@SSE``, |
+|                             |                   | ...                                         |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`\Lambda_b\to\Lambda` | :math:`t_+^V`     | ``Lambda_b->Lambda::tp_v@SSE``              |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`\Lambda_b\to\Lambda` | :math:`f_0^A`     | ``Lambda_b->Lambda::alpha^(0,A)_0@SSE``,    |
+|                             |                   | ``Lambda_b->Lambda::alpha^(0,A)_1@SSE``,    |
+|                             |                   | ...                                         |
++-----------------------------+-------------------+---------------------------------------------+
+| :math:`\Lambda_b\to\Lambda` | :math:`t_+^A`     | ``Lambda_b->Lambda::tp_a@SSE``              |
++-----------------------------+-------------------+---------------------------------------------+
