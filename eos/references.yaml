@@ -2380,6 +2380,13 @@ M:2016A:
     id: oai:arXiv.org:1611.09696
   inspire-id: Meinel:2016dqj
   title: $\Lambda_c \to \Lambda l^+ \nu_l$ form factors and decay rates from lattice QCD with physical quark masses
+M:2017A:
+  authors: Meinel, Stefan
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1712.05783
+  title: $\Lambda_c \to N$ form factors from lattice QCD and phenomenology of $\Lambda_c \to n \ell^+ \nu_\ell$
+    and $\Lambda_c \to p \mu^+ \mu^-$ decays
 MR:2021A:
   authors: Meinel, S. and Rendon, G.
   eprint:
