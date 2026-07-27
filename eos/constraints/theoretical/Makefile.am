@@ -14,6 +14,7 @@ CONSTRAINTS_FILES = \
 	Ds-to-P-form-factors.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	Lc-to-L-form-factors.yaml \
+	Lc-to-N-form-factors.yaml \
 	wet-constraints.yaml
 
 EXTRA_DIST = $(CONSTRAINTS_FILES)
