@@ -148,6 +148,8 @@
 - Fix a latent initialization-order bug in the [GP:2004A] B->K^*ll amplitudes, where the ``lambda_*`` and ``sl_phase_*`` subleading parameters read the ``use_simple_sl`` flag before it was initialized (D. van Dyk)
 - Fix various C++ compiler warnings (``-Wreorder``, ``-Wunused-parameter``, ``-Wignored-qualifiers``, ``-Wunused-variable``, ``-Woverloaded-virtual``) (D. van Dyk)
 - Fix the workflow that uploads compiler-warning SARIF to code scanning, which failed on warning-free builds because the merged SARIF contained an empty set of runs (D. van Dyk)
+- Fix inconsistency in the expected values for options related to SSLP Isgur-Wise functions in the unitarity bounds (D. van Dyk)
+- Fix a long-standing memory leak in ``ThreadPool`` (D. van Dyk)
 
 
 ## [v1.0.20] - 2026-04-28
