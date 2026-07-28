@@ -147,7 +147,8 @@ def cmd_draw(args):
         yaml_input = yaml.safe_load(f)
 
     figure = FigureFactory.from_dict(**yaml_input)
-    figure.draw(output=args.output_file)
+    figure.draw()
+    figure.save(args.output_file)
 
 
 if __name__ == '__main__':

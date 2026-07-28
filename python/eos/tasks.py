@@ -830,7 +830,9 @@ def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', for
     """
     Draws figures from the analysis file.
 
-    The output files will be stored in EOS_BASE_DIRECTORY/figures/.
+    The output files will be stored in EOS_BASE_DIRECTORY/figures/. If more than one format is
+    requested, the figure is drawn once and stored once per format, since drawing the same figure
+    repeatedly would stack its elements on top of each other.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -838,7 +840,7 @@ def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', for
     :type figure_name: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param format: The file extension of the data files. Can also be a list of file extensions.
+    :param format: The file extension of the figure files. Can also be a list of file extensions.
     :type format: str or list of str, optional
     """
     if figure_name not in analysis_file._figures.keys():
@@ -855,9 +857,12 @@ def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', for
     eos.inprogress(f'Drawing figure {figure_name}')
     context = eos.analysis_file_context.AnalysisFileContext(base_directory=base_directory)
     figure = analysis_file._figures[figure_name]
+    # the figure must be drawn only once: drawing it once per format would stack its elements on
+    # top of each other, thereby distorting the colors of elements with opacity < 1
+    figure.draw(context)
     for fmt in format:
-        eos.info(f'Drawing figure {figure_name} in \'{fmt}\' format')
-        figure.draw(context, output=os.path.join(base_directory, 'figures', f'{figure_name}.{fmt}'))
+        eos.info(f'Saving figure {figure_name} in \'{fmt}\' format')
+        figure.save(os.path.join(base_directory, 'figures', f'{figure_name}.{fmt}'))
     eos.completed('... drawing finished')
 
 

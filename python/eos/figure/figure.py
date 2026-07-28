@@ -47,16 +47,30 @@ class Figure(ABC, Deserializable):
             yield Diagnostic(('name',), Severity.ERROR, f"Invalid whitespace in figure name '{self.name}'")
 
     @abstractmethod
-    def draw(self, context:AnalysisFileContext=None, output:str|None=None):
+    def draw(self, context:AnalysisFileContext=None):
         """Draw the figure.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
-        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
-        :type output: str | list[str] | None
         """
 
         raise NotImplementedError
+
+    def save(self, output:str|list[str]):
+        """Save the figure to one or more output files.
+
+        The figure must have been drawn by a call to :meth:`draw <eos.figure.Figure.draw>` beforehand;
+        saving an undrawn figure yields an empty figure. Drawing the same figure more than once stacks
+        its elements on top of each other, which distorts the colors of elements with opacity < 1;
+        draw once and pass all output files to a single call to this method instead.
+
+        :param output: The path(s) to the output file(s) where the figure is saved. The file format of each
+            output file is determined by its file name extension.
+        :type output: str | list[str]
+        """
+
+        for out in [output] if isinstance(output, str) else output:
+            self._figure.savefig(out, bbox_inches='tight')
 
 
 @dataclass(kw_only=True)
@@ -104,27 +118,19 @@ class SingleFigure(Figure):
             for diagnostic in self.plot.validate_semantics(context)
         )
 
-    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
+    def draw(self, context:AnalysisFileContext=None):
         """Draw the single-plot figure.
 
-        Prepares and draws the figure's plot, adds the watermark, and optionally saves the figure to
-        one or more output files.
+        Prepares and draws the figure's plot and adds the watermark. Use
+        :meth:`save <eos.figure.Figure.save>` to store the drawn figure to one or more output files.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
-        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
-        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
         self.plot.draw(self._ax)
         self.watermark.draw(self._ax)
-        if output is not None:
-            if isinstance(output, list):
-                for out in output:
-                    self._figure.savefig(out, bbox_inches='tight')
-            else:
-                self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -260,13 +266,13 @@ class InsetFigure(Figure):
             for diagnostic in self.inset.validate_semantics(context)
         )
 
-    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
+    def draw(self, context:AnalysisFileContext=None):
         """Draw the inset figure.
+
+        Use :meth:`save <eos.figure.Figure.save>` to store the drawn figure to one or more output files.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
-        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
-        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         self.plot.prepare(context)
@@ -274,12 +280,6 @@ class InsetFigure(Figure):
         self.watermark.draw(self._ax)
         self.inset.prepare(context, self._ax)
         self.inset.draw(self._ax)
-        if output is not None:
-            if isinstance(output, list):
-                for out in output:
-                    self._figure.savefig(out, bbox_inches='tight')
-            else:
-                self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -411,13 +411,13 @@ class GridFigure(Figure):
 
         return idx
 
-    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
+    def draw(self, context:AnalysisFileContext=None):
         """Draw the grid figure.
+
+        Use :meth:`save <eos.figure.Figure.save>` to store the drawn figure to one or more output files.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
-        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
-        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         for idx, plot in enumerate(self.plots):
@@ -428,12 +428,6 @@ class GridFigure(Figure):
 
         if self.tight_layout:
             self._gridspec.tight_layout(self._figure)
-        if output is not None:
-            if isinstance(output, list):
-                for out in output:
-                    self._figure.savefig(out, bbox_inches='tight')
-            else:
-                self._figure.savefig(output, bbox_inches='tight')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -490,13 +484,11 @@ class CornerFigure(Figure):
         if not self.contents:
             raise ValueError("Contents must include at least one item to be plotted.")
 
-    def prepare(self, context:AnalysisFileContext=None, output:str|None=None):
+    def prepare(self, context:AnalysisFileContext=None):
         """Prepare the corner figure for drawing.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
-        :param output: The path to the output file where the figure should be saved. If None, the figure is not saved.
-        :type output: str | None
         """
         context = AnalysisFileContext() if context is None else context
         for content in self.contents:
@@ -616,19 +608,32 @@ class CornerFigure(Figure):
         self._figure = GridFigure(shape=(size, size), plots=plots, padding=(0.0, 0.0))
 
 
-    def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
+    def draw(self, context:AnalysisFileContext=None):
         """Draw the corner figure.
+
+        Use :meth:`save <eos.figure.CornerFigure.save>` to store the drawn figure to one or more output files.
 
         :param context: The analysis file context, which contains the paths to the data files and other relevant information.
         :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
-        :param output: The path(s) to the output file(s) where the figure should be saved. If None, the figure is not saved.
-        :type output: str | list[str] | None
         """
         context = AnalysisFileContext() if context is None else context
         if not hasattr(self, '_figure'):
-            self.prepare(context=context, output=output)
+            self.prepare(context=context)
 
-        self._figure.draw(context=context, output=output)
+        self._figure.draw(context=context)
+
+    def save(self, output:str|list[str]):
+        """Save the corner figure to one or more output files.
+
+        This figure's contents are drawn by an underlying :class:`GridFigure <eos.figure.GridFigure>`,
+        to which saving is delegated.
+
+        :param output: The path(s) to the output file(s) where the figure is saved. The file format of each
+            output file is determined by its file name extension.
+        :type output: str | list[str]
+        """
+
+        self._figure.save(output)
 
 
     @classmethod

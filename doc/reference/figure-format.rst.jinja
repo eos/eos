@@ -282,7 +282,9 @@ Rendering a figure
 ------------------
 
 A standalone figure description can be rendered interactively through the :py:class:`FigureFactory <eos.figure.FigureFactory>`.
-The :py:meth:`from_yaml <eos.figure.FigureFactory.from_yaml>` method turns a YAML description into a figure object, whose :py:meth:`draw <eos.figure.Figure.draw>` method renders it and, optionally, saves it to one or more output files:
+The :py:meth:`from_yaml <eos.figure.FigureFactory.from_yaml>` method turns a YAML description into a figure object, whose
+:py:meth:`draw <eos.figure.Figure.draw>` method renders it. The rendered figure can then be stored to one or more output files
+with its :py:meth:`save <eos.figure.Figure.save>` method:
 
 .. code-block:: python
 
@@ -298,6 +300,11 @@ The :py:meth:`from_yaml <eos.figure.FigureFactory.from_yaml>` method turns a YAM
            variable: 'q2', range: [0.1, 11.6] }
    '''
    figure = eos.figure.FigureFactory.from_yaml(description)
-   figure.draw(output='dBR.pdf')
+   figure.draw()
+   figure.save('dBR.pdf')
+
+A figure must only be drawn once; drawing it repeatedly stacks its elements on top of each other, which distorts the colors of
+elements with an opacity < 1. To store the same figure in several file formats, pass all output files to a single call to
+:py:meth:`save <eos.figure.Figure.save>`, e.g. ``figure.save(['dBR.pdf', 'dBR.png'])``.
 
 When a figure is instead listed among the :ref:`figures <analysis-file-figures>` of an analysis file, it is rendered by the ``draw-figure`` task, and its ``name`` determines the file name under which the rendered figure is stored.
