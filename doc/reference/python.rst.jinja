@@ -270,6 +270,11 @@ the :py:class:`eos.figure.ItemFactory` class, which returns an object of a class
 plot item, such as the curve of an EOS observable, a scatter plot of parameters, a histogram
 or a kernel density estimate, to name some of the options.
 
+A figure is rendered by its :py:meth:`draw <eos.figure.Figure.draw>` method, and the rendered figure
+is stored to one or more output files by its :py:meth:`save <eos.figure.Figure.save>` method. A figure
+must only be drawn once; drawing it repeatedly stacks its elements on top of each other, which distorts
+the colors of elements with an opacity < 1.
+
 
 `Figure` and Related Classes
 ============================

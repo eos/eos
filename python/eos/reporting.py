@@ -197,7 +197,8 @@ class PosteriorData:
             }],
             variables=variables,
         )
-        figure.draw(context=AnalysisFileContext(base_directory=self.base_directory), output=output)
+        figure.draw(context=AnalysisFileContext(base_directory=self.base_directory))
+        figure.save(output)
 
         return filename
 
