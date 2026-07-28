@@ -6386,49 +6386,49 @@ groups:
       # form factor parameters for Lambda_b -> Lambda decays according to
       # [BFvD:2014A], table ?, p. ??
       'Lambda_b->Lambda::f_0^V(0)@BFvD2014' :
-          central: +0.28
+          central: 0.00
           min:     +0.22
           max:     +0.34
           latex:    '$f_0^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
           unit:     '1'
       'Lambda_b->Lambda::b_1_0^V@BFvD2014' :
-          central: -11.00
+          central: 0.00
           min:     -19.00
           max:     -6.00
           latex:    '$b_{1,0}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
           unit:     '1'
       'Lambda_b->Lambda::f_0^A(0)@BFvD2014' :
-          central: +0.27
+          central: 0.00
           min:     +0.21
           max:     +0.33
           latex:    '$f_0^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
           unit:     '1'
       'Lambda_b->Lambda::b_1_0^A@BFvD2014' :
-          central: -8.00
+          central: 0.00
           min:     -16.00
           max:     -5.00
           latex:    '$b_{1,0}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
           unit:     '1'
       'Lambda_b->Lambda::f_perp^V(0)@BFvD2014' :
-          central: +0.28
+          central: 0.00
           min:     +0.22
           max:     +0.34
           latex:    '$f_{\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
           unit:     '1'
       'Lambda_b->Lambda::b_1_perp^V@BFvD2014' :
-          central: -11.00
+          central: 0.00
           min:     -19.00
           max:     -6.00
           latex:    '$b_{1,\perp}^{V,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
           unit:     '1'
       'Lambda_b->Lambda::f_perp^A(0)@BFvD2014' :
-          central: +0.30
+          central: 0.00
           min:     +0.24
           max:     +0.36
           latex:    '$f_{\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}(0)$'
           unit:     '1'
       'Lambda_b->Lambda::b_1_perp^A@BFvD2014' :
-          central: -6.00
+          central: 0.00
           min:     -12.00
           max:     -3.00
           latex:    '$b_{1,\perp}^{A,\Lambda_b \to \Lambda ,\mathrm{BFvD2014}}$'
