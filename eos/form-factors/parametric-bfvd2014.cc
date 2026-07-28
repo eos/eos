@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/parametric-bfvd2014.hh>
+#include <eos/utils/log.hh>
 
 namespace eos
 {
@@ -34,6 +35,13 @@ namespace eos
         _m_lambda_b(p["mass::Lambda_b"], *this),
         _m_lambda(p["mass::Lambda"], *this)
     {
+        static const Log::OneTimeMessage message_BFvD2014_FFs
+        (
+            "BFvD2014FormFactors",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     FormFactors<OneHalfPlusToOneHalfPlus> *
