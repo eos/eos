@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2014      Frederik Beaujean
  * Copyright (c) 2014      Christoph Bobeth
  * Copyright (c) 2021      Méril Reboud
@@ -98,6 +98,10 @@ class BToKDileptonBFS2004BobethCompatibilityTest :
             p["K::a_1@1GeV"] = 0.1;
             p["K::a_2@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
+            // the KMPW2010 parameters default to zero; use the central values of [KMPW:2010A], Table 4, p. 31
+            p["B->K::F^p(0)@KMPW2010"] = +0.34; p["B->K::b^p_1@KMPW2010"] = -2.1;
+                                                p["B->K::b^0_1@KMPW2010"] = -4.3;
+            p["B->K::F^t(0)@KMPW2010"] = +0.39; p["B->K::b^t_1@KMPW2010"] = -2.2;
 
             Options oo
             {

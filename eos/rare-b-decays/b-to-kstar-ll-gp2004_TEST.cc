@@ -713,6 +713,15 @@ class BToKstarDileptonTensorLowRecoilBobethCompatibilityTest :
             // increase sensitivity to m_l^2/q^2 terms
             p["mass::mu"] = 1.5;
 
+            // the KMPW2010 parameters default to zero; use the central values of [KMPW:2010A], Table 4, p. 31
+            p["B->K^*::F^V(0)@KMPW2010"]  = +0.36; p["B->K^*::b^V_1@KMPW2010"]  =  -4.8;
+            p["B->K^*::F^A0(0)@KMPW2010"] = +0.29; p["B->K^*::b^A0_1@KMPW2010"] = -18.2;
+            p["B->K^*::F^A1(0)@KMPW2010"] = +0.25; p["B->K^*::b^A1_1@KMPW2010"] =  +0.34;
+            p["B->K^*::F^A2(0)@KMPW2010"] = +0.23; p["B->K^*::b^A2_1@KMPW2010"] =  -0.85;
+            p["B->K^*::F^T1(0)@KMPW2010"] = +0.31; p["B->K^*::b^T1_1@KMPW2010"] =  -4.6;
+            p["B->K^*::F^T2(0)@KMPW2010"] = +0.31; p["B->K^*::b^T2_1@KMPW2010"] =  -3.2;
+            p["B->K^*::F^T3(0)@KMPW2010"] = +0.22; p["B->K^*::b^T3_1@KMPW2010"] = -10.3;
+
             Options oo;
             oo.declare("model"_ok, "WET"_ov);
             oo.declare("scan-mode"_ok, "cartesian"_ov);

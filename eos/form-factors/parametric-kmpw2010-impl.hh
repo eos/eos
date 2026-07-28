@@ -23,6 +23,7 @@
 
 #include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/log.hh>
 
 namespace eos
 {
@@ -50,6 +51,13 @@ namespace eos
         _f0_T2(p["B->K^*::F^T2(0)@KMPW2010"], *this),   _b1_T2(p["B->K^*::b^T2_1@KMPW2010"],  *this),
         _f0_T3(p["B->K^*::F^T3(0)@KMPW2010"], *this),   _b1_T3(p["B->K^*::b^T3_1@KMPW2010"],  *this)
     {
+        static const Log::OneTimeMessage message_KMPW2010_FFs_PToV
+        (
+            "KMPW2010FormFactors<PToV>",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     FormFactors<PToV> *
@@ -172,6 +180,13 @@ namespace eos
         _f0_p(p["B->K::F^p(0)@KMPW2010"], *this),
         _f0_t(p["B->K::F^t(0)@KMPW2010"], *this)
     {
+        static const Log::OneTimeMessage message_KMPW2010_FFs_PToP
+        (
+            "KMPW2010FormFactors<PToP>",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention. "
+            "By default, it returns zeros for all form factors."
+        );
     }
 
     FormFactors<PToP> *

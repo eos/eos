@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013-2016, 2018 Danny van Dyk
- * Copyright (c) 2015 Christoph Bobeth
+ * Copyright (c) 2010-2026 Danny van Dyk
+ * Copyright (c) 2015      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -36,6 +36,26 @@ class BToKstarKMPW2010FormFactorsTest:
         virtual void run() const
         {
             static const double eps = 5e-6;
+
+            // default values: all parameters are zero, hence the form factors must vanish
+            {
+                Parameters p = Parameters::Defaults();
+                std::shared_ptr<FormFactors<PToV>> ff = FormFactorFactory<PToV>::create("B->K^*::KMPW2010", p, Options{ });
+                TEST_CHECK(0 != ff.get());
+
+                for (const double & s : { 2.3, 4.6, 6.9, 9.2, 11.5, 13.8, 16.1, 18.4 })
+                {
+                    TEST_CHECK_NEARLY_EQUAL(ff->v(s),    0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->a_0(s),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->a_1(s),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->a_2(s),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->a_12(s), 0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->t_1(s),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->t_2(s),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->t_3(s),  0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->t_23(s), 0.0, eps);
+                }
+            }
 
             // central values
             {
@@ -304,6 +324,24 @@ class BToKKMPW2010FormFactorsTest :
             static const double eps = 1e-10;
 
             Parameters p = Parameters::Defaults();
+            // the default values of all parameters are zero; the form factors must vanish
+            {
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::KMPW2010", p, Options{ });
+                TEST_CHECK(0 != ff.get());
+
+                for (const double & s : { 2.3, 4.6, 6.9, 9.2, 11.5, 13.8, 16.1, 18.4, 20.7 })
+                {
+                    TEST_CHECK_NEARLY_EQUAL(ff->f_p(s), 0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->f_0(s), 0.0, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff->f_t(s), 0.0, eps);
+                }
+            }
+
+            // central values as of [KMPW:2010A], Table 4, p. 31
+            p["B->K::F^p(0)@KMPW2010"] = +0.34; p["B->K::b^p_1@KMPW2010"] = -2.1;
+                                                p["B->K::b^0_1@KMPW2010"] = -4.3;
+            p["B->K::F^t(0)@KMPW2010"] = +0.39; p["B->K::b^t_1@KMPW2010"] = -2.2;
+
             std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->K::KMPW2010", p, Options{ });
             TEST_CHECK(0 != ff.get());
 

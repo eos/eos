@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -84,6 +84,14 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["K^*::a_2_para@1GeV"] = 0.1;
             p["K^*::a_2_perp@1GeV"] = 0.1;
             p["B::1/lambda_B_p"] = 1.0 / 0.485;
+            // the KMPW2010 parameters default to zero; use the central values of [KMPW:2010A], Table 4, p. 31
+            p["B->K^*::F^V(0)@KMPW2010"]  = +0.36; p["B->K^*::b^V_1@KMPW2010"]  =  -4.8;
+            p["B->K^*::F^A0(0)@KMPW2010"] = +0.29; p["B->K^*::b^A0_1@KMPW2010"] = -18.2;
+            p["B->K^*::F^A1(0)@KMPW2010"] = +0.25; p["B->K^*::b^A1_1@KMPW2010"] =  +0.34;
+            p["B->K^*::F^A2(0)@KMPW2010"] = +0.23; p["B->K^*::b^A2_1@KMPW2010"] =  -0.85;
+            p["B->K^*::F^T1(0)@KMPW2010"] = +0.31; p["B->K^*::b^T1_1@KMPW2010"] =  -4.6;
+            p["B->K^*::F^T2(0)@KMPW2010"] = +0.31; p["B->K^*::b^T2_1@KMPW2010"] =  -3.2;
+            p["B->K^*::F^T3(0)@KMPW2010"] = +0.22; p["B->K^*::b^T3_1@KMPW2010"] = -10.3;
 
             Options oo
             {
@@ -161,6 +169,15 @@ class BToKstarDileptonBFS2004BobethCompatibilityTest :
             p["b->smumu::Im{cT5}"]  = 1.5;
 
             p["mass::s(2GeV)"] = 0.12;
+
+            // the KMPW2010 parameters default to zero; use the central values of [KMPW:2010A], Table 4, p. 31
+            p["B->K^*::F^V(0)@KMPW2010"]  = +0.36; p["B->K^*::b^V_1@KMPW2010"]  =  -4.8;
+            p["B->K^*::F^A0(0)@KMPW2010"] = +0.29; p["B->K^*::b^A0_1@KMPW2010"] = -18.2;
+            p["B->K^*::F^A1(0)@KMPW2010"] = +0.25; p["B->K^*::b^A1_1@KMPW2010"] =  +0.34;
+            p["B->K^*::F^A2(0)@KMPW2010"] = +0.23; p["B->K^*::b^A2_1@KMPW2010"] =  -0.85;
+            p["B->K^*::F^T1(0)@KMPW2010"] = +0.31; p["B->K^*::b^T1_1@KMPW2010"] =  -4.6;
+            p["B->K^*::F^T2(0)@KMPW2010"] = +0.31; p["B->K^*::b^T2_1@KMPW2010"] =  -3.2;
+            p["B->K^*::F^T3(0)@KMPW2010"] = +0.22; p["B->K^*::b^T3_1@KMPW2010"] = -10.3;
 
             Options oo
             {
