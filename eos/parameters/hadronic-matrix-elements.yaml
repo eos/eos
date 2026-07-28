@@ -1604,31 +1604,31 @@ groups:
           unit:     '1'
       # form factor parameters for B->K according to [KMPW:2010A], Table 4, p. 31
       'B->K::F^p(0)@KMPW2010' :
-          central: +0.34
+          central: 0.00
           min:     +0.32
           max:     +0.39
           latex:    '$F_+^{B\to K,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K::F^t(0)@KMPW2010' :
-          central: +0.39
+          central: 0.00
           min:     +0.36
           max:     +0.44
           latex:    '$F_t^{B\to K,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K::b^p_1@KMPW2010' :
-          central: -2.1
+          central: 0.00
           min:     -3.7
           max:     -1.2
           latex:    '$b_{+,1}^{B \to K,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K::b^0_1@KMPW2010' :
-          central: -4.3
+          central: 0.00
           min:     -5.2
           max:     -3.5
           latex:    '$b_{0,1}^{B \to K,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K::b^t_1@KMPW2010' :
-          central: -2.2
+          central: 0.00
           min:     -4.2
           max:     -1.2
           latex:    '$b_{t,1}^{B \to K,\mathrm{KMPW2010}}$'
@@ -2243,85 +2243,85 @@ groups:
     parameters:
       # form factor parameters for B->K^* according to [KMPW:2010A], Table 4, p. 31
       'B->K^*::F^V(0)@KMPW2010' :
-          central: +0.36
+          central: 0.00
           min:     +0.24
           max:     +0.59
           latex:    '$V^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::F^A0(0)@KMPW2010' :
-          central: +0.29
+          central: 0.00
           min:     +0.22
           max:     +0.39
           latex:    '$A_0^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::F^A1(0)@KMPW2010' :
-          central: +0.25
+          central: 0.00
           min:     +0.15
           max:     +0.41
           latex:    '$A_1^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::F^A2(0)@KMPW2010' :
-          central: +0.23
+          central: 0.00
           min:     +0.13
           max:     +0.42
           latex:    '$A_2^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::F^T1(0)@KMPW2010' :
-          central: +0.31
+          central: 0.00
           min:     +0.21
           max:     +0.49
           latex:    '$T_1^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::F^T2(0)@KMPW2010' :
-          central: +0.31
+          central: 0.00
           min:     +0.21
           max:     +0.49
           latex:    '$T_2^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::F^T3(0)@KMPW2010' :
-          central: +0.22
+          central: 0.00
           min:     +0.12
           max:     +0.39
           latex:    '$T_3^{B \to K^*,\mathrm{KMPW2010}}(0)$'
           unit:     '1'
       'B->K^*::b^V_1@KMPW2010' :
-          central: -4.8
+          central: 0.00
           min:     -5.2
           max:     -4.0
           latex:    '$b_{V,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K^*::b^A0_1@KMPW2010' :
-          central: -18.2
+          central: 0.00
           min:     -21.2
           max:     -16.9
           latex:    '$b_{A_0,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K^*::b^A1_1@KMPW2010' :
-          central: +0.34
+          central: 0.00
           min:     -0.46
           max:     +1.2
           latex:    '$b_{A_1,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K^*::b^A2_1@KMPW2010' :
-          central: -0.85
+          central: 0.00
           min:     -2.2
           max:     +2.03
           latex:    '$b_{A_2,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K^*::b^T1_1@KMPW2010' :
-          central: -4.6
+          central: 0.00
           min:     -5.01
           max:     -3.79
           latex:    '$b_{T_1,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K^*::b^T2_1@KMPW2010' :
-          central: -3.2
+          central: 0.00
           min:     -5.4
           max:     -1.1
           latex:    '$b_{T_2,1}^{B \to K^*,\mathrm{KMPW2010}}$'
           unit:     '1'
       'B->K^*::b^T3_1@KMPW2010' :
-          central: -10.3
+          central: 0.00
           min:     -13.4
           max:     -7.8
           latex:    '$b_{T_3,1}^{B \to K^*,\mathrm{KMPW2010}}$'
