@@ -218,3 +218,52 @@ Examples for accessing the parameters :math:`\alpha_i^{(F)}` and the thresholds 
 +-----------------------------+-------------------+---------------------------------------------+
 | :math:`\Lambda_b\to\Lambda` | :math:`t_+^A`     | ``Lambda_b->Lambda::tp_a@SSE``              |
 +-----------------------------+-------------------+---------------------------------------------+
+
+
+Dispersively Bounded Parametrisation: ``SE``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+EOS further provides a ``Series Expansion`` (``SE``) parametrisation, in which the expansion coefficients are subject to a dispersive bound.
+Using this parametrisation requires domain-specific knowledge and is intended for dedicated form-factor analyses.
+
+The underlying idea goes back to [BGL:1997A]: the analyticity and unitarity of a suitable two-point correlator of the relevant quark current
+imply an upper bound on a weighted integral of the form factors, and thereby on a sum of squared expansion coefficients.
+A generic form factor is written as
+
+.. math::
+   :nowrap:
+
+   \begin{equation*}
+      F(q^2) = \frac{1}{P(q^2)\, \phi_F(q^2)} \sum_{k=0}^{K} a^{(F)}_{k}\, p_k\big(z(q^2)\big)\,,
+   \end{equation*}
+
+where :math:`P(q^2)` is a Blaschke product that removes all sub-threshold resonance poles, :math:`\phi_F` is a process- and form-factor-specific *outer function*,
+and the :math:`p_k` are polynomials in the conformal variable :math:`z(q^2)`.
+The outer functions are constructed such that the dispersive bound assumes the diagonal form
+
+.. math::
+   :nowrap:
+
+   \begin{equation*}
+      \sum_{F \in J^P} \sum_{k} \left(a^{(F)}_{k}\right)^2 \leq 1\,.
+   \end{equation*}
+
+This bound holds channel by channel: for each set of quantum numbers :math:`J^P` of the interpolating current, the first sum runs only over those form factors
+:math:`F` that contribute to the corresponding two-point correlator. EOS therefore provides one saturation observable per channel and current, for example
+``B->K::Saturation[1^-_V]`` and ``B->K::Saturation[0^+_V]``, rather than a single number for the entire transition.
+
+The left-hand side is referred to as the *saturation* of the bound. It is obtained by integrating the squared, outer-function-weighted form factors
+over the arc of the unit circle in the complex :math:`z` plane onto which the pair-production branch cut is mapped.
+Choosing the :math:`p_k` to be orthonormal with respect to (the measure supported on) this arc is precisely what renders the bound diagonal.
+
+Note that EOS absorbs the isospin-degeneracy factor :math:`n_I` of the transition into the normalisation of the outer functions, :math:`\phi_F \propto \sqrt{n_I}`.
+Here :math:`n_I` counts the isospin-related exclusive channels that contribute to the same correlator; for example :math:`n_I = 2` for :math:`B\to K` (accounting for
+both :math:`B^-\to K^-` and :math:`\bar{B}^0 \to \bar{K}^0`) and for :math:`B\to K^*`, while :math:`n_I = 1` for :math:`B_s\to \phi`, :math:`B_s\to K`, and all
+baryonic transitions presently implemented.
+As a consequence, the right-hand side of the bound above equals :math:`1` rather than :math:`1/n_I`, and the coefficients :math:`a^{(F)}_k` are larger by a factor
+of :math:`\sqrt{n_I}` than in conventions that keep :math:`n_I` explicit on the right-hand side.
+
+The concrete implementation in the traditional basis of mesonic form factors used within EOS follows [BFW:2010A].
+For the baryonic :math:`1/2^+ \to 1/2^+` transitions, the dispersive bound, the integration over the arc of the unit circle, and the associated orthonormal polynomials :math:`p_k` follow [BMRvD:2022A].
+The extension to :math:`1/2^+ \to 3/2^-` baryonic transitions follows [ABR:2022A].
+Within EOS the corresponding coefficients carry the label ``SE``, for example ``B->K^*::a^V_0@SE`` or ``Lambda_b->Lambda::a^(0,V)_0@SE``.
