@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/parametric-kkvdz2022.hh>
+#include <eos/utils/log.hh>
 
 using namespace std::literals::complex_literals;
 
@@ -66,6 +67,13 @@ namespace eos
                          UsedParameter(p[_par_name("c_4_1")],  *this),
                          UsedParameter(p[_par_name("c_4_2")],  *this) }}}
     {
+        static const Log::OneTimeMessage message_KKvDZ2022_FFs
+        (
+            "KKvDZ2022FormFactors",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention."
+        );
+
         if (opt_subtracted.value())
         {
             switch_subtracted = 1.0;
