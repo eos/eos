@@ -12,7 +12,7 @@ jobs:
     name: Push branch ``master`` to branch ``release``
     steps:
       - name: Checkout git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
           fetch-depth: 0 # download all history across all branches

@@ -38,7 +38,7 @@ jobs:
       COVERAGE_RCFILE: '${{ github.workspace }}/.coveragerc'
     steps:
       - name: Checkout git repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           path: _src/
 
@@ -138,7 +138,7 @@ jobs:
           python3 -m coverage report || true
 
       - name: Check out the coverage repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           repository: eos/coverage
           token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
