@@ -25,6 +25,7 @@
 #include <eos/form-factors/parametric-fvdv2018.hh>
 #include <eos/maths/integrate-impl.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/log.hh>
 
 namespace eos
 {
@@ -196,6 +197,12 @@ namespace eos
         _F_switch(opt_L.value() && PartialWave::F),
         cub_conf(cubature::Config().epsrel(5e-3))
     {
+        static const Log::OneTimeMessage message_FvDV2018_FFs
+        (
+            "FvDV2018FormFactors",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention."
+        );
     }
 
     template <typename Process_>
