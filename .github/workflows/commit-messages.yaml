@@ -20,7 +20,7 @@ jobs:
       # ``pull_request_target`` context. Only the pull request's commit objects
       # are fetched below, which is all that ``gitlint --commit`` needs in order
       # to inspect their messages.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0 # download all history across all branches
       - name: Fetch the commits of the pull request
@@ -30,7 +30,7 @@ jobs:
         run: |
           git fetch --no-tags origin \
             "+refs/pull/$PR_NUMBER/head:refs/remotes/origin/pull/$PR_NUMBER/head"
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.10.13'
       - name: Install dependencies

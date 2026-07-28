@@ -27,7 +27,7 @@ jobs:
       # performs the upload, so pull requests from forks receive native
       # code-scanning annotations too.
       - name: Download warnings artifact from the triggering run
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         continue-on-error: true # tolerate runs that produced no artifact
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
