@@ -746,8 +746,8 @@ B->K^*::A_12@HPQCD:2013B: # See also Table VIII in [BBvD:2013A]
     - {q2: 15}
     - {q2: 19.21}
   options:
-    - {form-factors: KMPW2010}
-    - {form-factors: KMPW2010}
+    - {form-factors: SSE}
+    - {form-factors: SSE}
   means: [0.371041, 0.440076]
   sigma-stat-hi: [0.0306946, 0.0273783]
   sigma-stat-lo: [0.0306946, 0.0273783]
@@ -764,8 +764,8 @@ B->K^*::A_1@HPQCD:2013B: # See also Table VIII in [BBvD:2013A]
     - {q2: 15}
     - {q2: 19.21}
   options:
-    - {form-factors: KMPW2010}
-    - {form-factors: KMPW2010}
+    - {form-factors: SSE}
+    - {form-factors: SSE}
   means: [0.515837, 0.644548]
   sigma-stat-hi: [0.0293675, 0.0195013]
   sigma-stat-lo: [0.0293675, 0.0195013]
@@ -782,8 +782,8 @@ B->K^*::V@HPQCD:2013B: # See also Table VIII in [BBvD:2013A]
     - {q2: 15}
     - {q2: 19.21}
   options:
-    - {form-factors: KMPW2010}
-    - {form-factors: KMPW2010}
+    - {form-factors: SSE}
+    - {form-factors: SSE}
   means: [1.19122, 1.97758]
   sigma-stat-hi: [0.09991659999999999, 0.112599]
   sigma-stat-lo: [0.09991659999999999, 0.112599]
