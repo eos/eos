@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/observable-impl.hh>
 #include <eos/meson-mixing/bq-mixing.hh>
+#include <eos/observable-impl.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -29,34 +29,33 @@ namespace eos
     ObservableGroup
     make_bs_mixing_group()
     {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $B_s$--$\bar{B}_s$ mixing)",
-            R"()",
-            {
-                make_observable("B_s<->Bbar_s::DeltaM", R"(\Delta M_s(B_s\leftrightarrow \bar{B}_s))",
-                        Unit::InversePicoSecond(),
-                        &BMixing::delta_m,
-                        std::make_tuple(),
-                        Options{ { "q"_ok, "s"_ov } }),
-            }
-        );
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $B_s$--$\bar{B}_s$ mixing)",
+                                                       R"()",
+                                                       {
+                                                           make_observable("B_s<->Bbar_s::DeltaM",
+                                                                           R"(\Delta M_s(B_s\leftrightarrow \bar{B}_s))",
+                                                                           Unit::InversePicoSecond(),
+                                                                           &BMixing::delta_m,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "q"_ok, "s"_ov } }
+                                                                           ),
+        });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     ObservableSection
     make_meson_mixing_section()
     {
-        auto imp = new Implementation<ObservableSection>(
-            "Observables in neutral meson mixing",
-            "",
-            {
-                // B_s <-> Bbar_s
-                make_bs_mixing_group(),
-            }
-        );
+        auto imp = new Implementation<ObservableSection>("Observables in neutral meson mixing",
+                                                         "",
+                                                         {
+                                                             // B_s <-> Bbar_s
+                                                             make_bs_mixing_group(),
+                                                         });
 
         return ObservableSection(imp);
     }
-}
+} // namespace eos

@@ -28,9 +28,7 @@
 
 namespace eos
 {
-    class BMixing :
-        public ParameterUser,
-        public PrivateImplementationPattern<BMixing>
+    class BMixing : public ParameterUser, public PrivateImplementationPattern<BMixing>
     {
         public:
             BMixing(const Parameters & parameters, const Options & options);
@@ -50,6 +48,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif
