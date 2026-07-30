@@ -43,7 +43,7 @@ namespace eos
 
             ChiSquareIterator begin_chi_square() const;
             ChiSquareIterator end_chi_square() const;
-            /// q}
+            ///@}
     };
     extern template class WrappedForwardIterator<GoodnessOfFit::ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
 } // namespace eos
