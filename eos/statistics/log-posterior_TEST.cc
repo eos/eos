@@ -18,15 +18,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <config.h>
-
 #include <eos/statistics/log-posterior_TEST.hh>
+
+#include <config.h>
 
 using namespace test;
 using namespace eos;
 
-class LogPosteriorTest :
-    public TestCase
+class LogPosteriorTest : public TestCase
 {
     public:
         LogPosteriorTest() :
@@ -34,7 +33,8 @@ class LogPosteriorTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             static const double eps = 1e-13;
 
@@ -47,9 +47,9 @@ class LogPosteriorTest :
 
                 // make sure observable's value is not equal to central value
                 Parameter p1 = (*clone1)[0];
-                p1.set(4.3); //posterior mode
+                p1.set(4.3); // posterior mode
                 Parameter p2 = (*clone2)[0];
-                p2.set(4.4); //log_prior mode
+                p2.set(4.4); // log_prior mode
 
                 // for comparison used ipython's log(scipy.stats.norm.pdf(4.3, loc=4.4, scale=0.1))
                 // value at center of both Gaussian distributions. so pdf the same
@@ -67,11 +67,9 @@ class LogPosteriorTest :
                 // now change a parameter which is not scanned
                 TEST_CHECK(log_posterior.parameters()["b->s::Re{c7}"] != 2.599);
                 log_posterior.parameters()["b->s::Re{c7}"] = 2.599;
-                LogPosteriorPtr clone3 = log_posterior.clone();
+                LogPosteriorPtr clone3                     = log_posterior.clone();
 
-                TEST_CHECK_EQUAL(double(log_posterior.parameters()["b->s::Re{c7}"] ),
-                                 double( clone3->parameters()["b->s::Re{c7}"] ));
-
+                TEST_CHECK_EQUAL(double(log_posterior.parameters()["b->s::Re{c7}"]), double(clone3->parameters()["b->s::Re{c7}"]));
             }
 
             // smart parameter adding
@@ -90,9 +88,8 @@ class LogPosteriorTest :
                 log_posterior.add(LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9, 4.3, 4.4, 4.5));
 
 
-
                 Parameter p = log_posterior[0];
-                p.set(4.3); //posterior mode
+                p.set(4.3); // posterior mode
 
 
                 TEST_CHECK_NEARLY_EQUAL(log_posterior.log_likelihood()(), +0.88364655978936768, eps);
@@ -102,8 +99,8 @@ class LogPosteriorTest :
 
                 // now check cloning
 
-                auto clone = log_posterior.clone();
-                Parameter p2 = (*clone)[0];
+                auto      clone = log_posterior.clone();
+                Parameter p2    = (*clone)[0];
 
                 TEST_CHECK_EQUAL(p.evaluate(), p2.evaluate());
 

@@ -28,6 +28,6 @@ namespace eos
     class LogPrior;
 
     using LogPriorPtr = std::shared_ptr<LogPrior>;
-}
+} // namespace eos
 
 #endif

@@ -18,27 +18,25 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <config.h>
-
+#include <eos/maths/power-of.hh>
 #include <eos/statistics/log-posterior.hh>
 #include <eos/utils/density-impl.hh>
 #include <eos/utils/log.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <gsl/gsl_cdf.h>
 
 #include <algorithm>
+#include <config.h>
 
 namespace eos
 {
-    struct RangeError :
-        public Exception
+    struct RangeError : public Exception
     {
-        RangeError(const std::string & message) throw () :
-            Exception("Range Error: " + message)
-        {
-        }
+            RangeError(const std::string & message) throw() :
+                Exception("Range Error: " + message)
+            {
+            }
     };
 
     LogPosterior::LogPosterior(const LogLikelihood & log_likelihood) :
@@ -48,28 +46,28 @@ namespace eos
     {
     }
 
-    LogPosterior::~LogPosterior()
-    {
-    }
+    LogPosterior::~LogPosterior() {}
 
     bool
     LogPosterior::add(const LogPriorPtr & prior, bool /*nuisance*/)
     {
         // clone has correct Parameters object selected
-        LogPriorPtr prior_clone = prior->clone(_parameters);
-        _informative_priors += 1 ? prior->informative() : 0;
+        LogPriorPtr prior_clone  = prior->clone(_parameters);
+        _informative_priors     += 1 ? prior->informative() : 0;
 
         // extract parameters, and record their names to check for duplicates
         std::set<QualifiedName> prior_parameter_names;
-        for (auto p = prior_clone->begin(), p_end = prior_clone->end() ; p != p_end ; ++p)
+        for (auto p = prior_clone->begin(), p_end = prior_clone->end(); p != p_end; ++p)
         {
             prior_parameter_names.insert(p->name());
         }
 
         // check if param exists already
         std::set<QualifiedName> intersection;
-        std::set_intersection(_parameter_names.begin(), _parameter_names.end(),
-                              prior_parameter_names.begin(), prior_parameter_names.end(),
+        std::set_intersection(_parameter_names.begin(),
+                              _parameter_names.end(),
+                              prior_parameter_names.begin(),
+                              prior_parameter_names.end(),
                               std::inserter(intersection, intersection.begin()));
 
         if (intersection.size() > 0)
@@ -79,7 +77,7 @@ namespace eos
 
         // if not, add to prior container and register parameter objects
         _priors.push_back(prior_clone);
-        for (auto p = prior_clone->begin(), p_end = prior_clone->end() ; p != p_end ; ++p)
+        for (auto p = prior_clone->begin(), p_end = prior_clone->end(); p != p_end; ++p)
         {
             _varied_parameters.push_back(*p);
         }
@@ -91,7 +89,7 @@ namespace eos
     LogPosterior::clone() const
     {
         // clone log_likelihood
-        LogLikelihood llh = _log_likelihood.clone();
+        LogLikelihood  llh    = _log_likelihood.clone();
         LogPosterior * result = new LogPosterior(llh);
 
         // add parameters via prior clones
@@ -131,7 +129,9 @@ namespace eos
     LogPosterior::log_prior() const
     {
         if (_priors.empty())
+        {
             throw InternalError("LogPosterior::log_prior(): prior is undefined");
+        }
 
         double result = 0.0;
 
@@ -145,10 +145,9 @@ namespace eos
         return result;
     }
 
-    template <>
-    struct WrappedForwardIteratorTraits<LogPosterior::PriorIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<LogPosterior::PriorIteratorTag>
     {
-        using UnderlyingIterator = std::vector<LogPriorPtr>::const_iterator;
+            using UnderlyingIterator = std::vector<LogPriorPtr>::const_iterator;
     };
     template class WrappedForwardIterator<LogPosterior::PriorIteratorTag, const LogPriorPtr>;
 
@@ -181,4 +180,4 @@ namespace eos
     {
         return _varied_parameters;
     }
-}
+} // namespace eos

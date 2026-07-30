@@ -27,8 +27,7 @@
 
 namespace eos
 {
-    class GoodnessOfFit :
-        public PrivateImplementationPattern<GoodnessOfFit>
+    class GoodnessOfFit : public PrivateImplementationPattern<GoodnessOfFit>
     {
         public:
             GoodnessOfFit(const LogPosterior &);
@@ -37,16 +36,16 @@ namespace eos
             ///@name ChiSquare test statistics
             ///@{
             double total_chi_square() const;
-            int total_degrees_of_freedom() const;
+            int    total_degrees_of_freedom() const;
 
             struct ChiSquareIteratorTag;
             using ChiSquareIterator = WrappedForwardIterator<ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
 
             ChiSquareIterator begin_chi_square() const;
             ChiSquareIterator end_chi_square() const;
-            ///q}
+            /// q}
     };
     extern template class WrappedForwardIterator<GoodnessOfFit::ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
-}
+} // namespace eos
 
 #endif

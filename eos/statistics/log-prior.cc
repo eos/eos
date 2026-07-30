@@ -18,27 +18,26 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/power-of.hh>
 #include <eos/statistics/log-prior.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/log.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
-
-#include <cmath>
-#include <limits>
-#include <numeric>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_cdf.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_randist.h>
 #include <gsl/gsl_sf_gamma.h>
-#include <gsl/gsl_sf_result.h>
 #include <gsl/gsl_sf_psi.h>
+#include <gsl/gsl_sf_result.h>
 #include <gsl/gsl_spline.h>
 
+#include <cmath>
 #include <config.h>
+#include <limits>
+#include <numeric>
 
 #ifdef EOS_USE_GSL_LINALG_CHOLESKY_DECOMP
 #  if (EOS_USE_GSL_LINALG_CHOLESKY_DECOMP == 1)
@@ -52,37 +51,33 @@
 
 namespace eos
 {
-    template <>
-    struct WrappedForwardIteratorTraits<LogPrior::IteratorTag>
+    template <> struct WrappedForwardIteratorTraits<LogPrior::IteratorTag>
     {
-        using UnderlyingIterator = std::vector<Parameter>::iterator;
+            using UnderlyingIterator = std::vector<Parameter>::iterator;
     };
 
     namespace priors
     {
-        struct RangeError :
-            public Exception
+        struct RangeError : public Exception
         {
-            RangeError(const std::string & message) throw () :
-                Exception("Range Error: " + message)
-            {
-            }
+                RangeError(const std::string & message) throw() :
+                    Exception("Range Error: " + message)
+                {
+                }
         };
 
-        struct UnknownPriorError :
-            public Exception
+        struct UnknownPriorError : public Exception
         {
-            UnknownPriorError(const std::string & message) throw () :
-                Exception("Unknown prior error: " + message)
-            {
-            }
+                UnknownPriorError(const std::string & message) throw() :
+                    Exception("Unknown prior error: " + message)
+                {
+                }
         };
 
         /*!
          * Flat or uniform prior
          */
-        class Flat :
-            public LogPrior
+        class Flat : public LogPrior
         {
             private:
                 Parameter _parameter;
@@ -105,43 +100,46 @@ namespace eos
                 {
                     if (_min >= _max)
                     {
-                        throw RangeError("LogPrior::Flat(" + _name +"): minimum (" + stringify(_min)
-                                          + ") must be smaller than maximum (" + stringify(_max) + ")");
+                        throw RangeError("LogPrior::Flat(" + _name + "): minimum (" + stringify(_min) + ") must be smaller than maximum (" + stringify(_max) + ")");
                     }
                     _varied_parameters.push_back(_parameter);
                 }
 
-                virtual ~Flat()
-                {
-                }
+                virtual ~Flat() {}
 
-                virtual std::string as_string() const
+                virtual std::string
+                as_string() const
                 {
                     std::string result = "Parameter: " + _name + ", prior type: flat, range: [" + stringify(_min) + "," + stringify(_max) + "]";
                     return result;
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     return _value;
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::Flat(parameters, _name, _min, _max));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
                     _parameter.set(_parameter.evaluate_generator() * (_max - _min) + _min);
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     _parameter.set_generator((_parameter.evaluate() - _min) / (_max - _min));
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return false;
                 }
@@ -150,8 +148,7 @@ namespace eos
         /*!
          * [asymmetric] Gaussian or Normal prior distribution with finite support
          */
-        class CurtailedGauss :
-            public LogPrior
+        class CurtailedGauss : public LogPrior
         {
             private:
                 Parameter _parameter;
@@ -181,8 +178,8 @@ namespace eos
                 const double _norm_lower, _norm_upper;
 
             public:
-                CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max,
-                        const double & lower, const double & central, const double & upper) :
+                CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max, const double & lower, const double & central,
+                               const double & upper) :
                     LogPrior(parameters),
                     _parameter(parameters[name]),
                     _name(name),
@@ -193,26 +190,23 @@ namespace eos
                     _upper(upper),
                     _sigma_lower(central - lower),
                     _sigma_upper(upper - central),
-                    _c_a(1.0 / ((_sigma_lower / _sigma_upper) * (0.5 - gsl_cdf_gaussian_P(min - central, _sigma_lower))
-                                 + gsl_cdf_gaussian_P(max - central, _sigma_upper) - 0.5)),
-                    _c_b(_sigma_lower/ _sigma_upper * _c_a),
+                    _c_a(1.0 / ((_sigma_lower / _sigma_upper) * (0.5 - gsl_cdf_gaussian_P(min - central, _sigma_lower)) + gsl_cdf_gaussian_P(max - central, _sigma_upper) - 0.5)),
+                    _c_b(_sigma_lower / _sigma_upper * _c_a),
                     _prob_lower(_c_b * (0.5 - gsl_cdf_gaussian_P(min - central, _sigma_lower))),
                     _norm_lower(std::log(_c_b / std::sqrt(2 * M_PI) / _sigma_lower)),
                     _norm_upper(std::log(_c_a / std::sqrt(2 * M_PI) / _sigma_upper))
                 {
                     if (min >= max)
                     {
-                        throw RangeError("LogPrior::Gauss(" + _name +"): minimum (" + stringify(_min)
-                                          + ") must be smaller than maximum (" + stringify(_max) + ")");
+                        throw RangeError("LogPrior::Gauss(" + _name + "): minimum (" + stringify(_min) + ") must be smaller than maximum (" + stringify(_max) + ")");
                     }
                     _varied_parameters.push_back(_parameter);
                 }
 
-                virtual ~CurtailedGauss()
-                {
-                }
+                virtual ~CurtailedGauss() {}
 
-                virtual std::string as_string() const
+                virtual std::string
+                as_string() const
                 {
                     std::string result = "Parameter: " + _name + ", prior type: Gaussian, range: [" + stringify(_min) + "," + stringify(_max) + "]";
 
@@ -228,7 +222,8 @@ namespace eos
                     return result;
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     double sigma = 0.0, norm = 0.0;
 
@@ -238,22 +233,24 @@ namespace eos
                     if (x < _central)
                     {
                         sigma = _sigma_lower;
-                        norm = _norm_lower;
+                        norm  = _norm_lower;
                     }
                     else
                     {
                         sigma = _sigma_upper;
-                        norm = _norm_upper;
+                        norm  = _norm_upper;
                     }
                     return norm - 0.5 * power_of<2>((x - _central) / sigma);
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::CurtailedGauss(parameters, _name, _min, _max, _lower, _central, _upper));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
                     // Invert the CDF F(x) = c (\Phi((x - x_{central}) / \sigma) - 1/2) + _prob_lower,
                     // where (c, \sigma) = (c_b, \sigma_lower) below the central value and
@@ -264,12 +261,17 @@ namespace eos
                     const auto p = _parameter.evaluate_generator();
 
                     if (p < _prob_lower)
-                       _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_b + 0.5,  _sigma_lower) + _central);
+                    {
+                        _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_b + 0.5, _sigma_lower) + _central);
+                    }
                     else
-                       _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5,  _sigma_upper) + _central);
+                    {
+                        _parameter.set(gsl_cdf_gaussian_Pinv((p - _prob_lower) / _c_a + 0.5, _sigma_upper) + _central);
+                    }
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     // Evaluate the CDF F(x) = c (\Phi((x - x_{central}) / \sigma) - 1/2) + _prob_lower,
                     // where (c, \sigma) = (c_b, \sigma_lower) below the central value and
@@ -280,12 +282,17 @@ namespace eos
                     const auto x = _parameter.evaluate();
 
                     if (x < _central)
+                    {
                         _parameter.set_generator(_c_b * (gsl_cdf_gaussian_P((x - _central) / _sigma_lower, 1.0) - 0.5) + _prob_lower);
+                    }
                     else
+                    {
                         _parameter.set_generator(_c_a * (gsl_cdf_gaussian_P((x - _central) / _sigma_upper, 1.0) - 0.5) + _prob_lower);
+                    }
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return true;
                 }
@@ -294,8 +301,7 @@ namespace eos
         /*!
          * Prior distribution for renormalization scales
          */
-        class Scale :
-            public LogPrior
+        class Scale : public LogPrior
         {
             private:
                 Parameter _parameter;
@@ -322,35 +328,39 @@ namespace eos
                     _varied_parameters.push_back(_parameter);
                 }
 
-                virtual ~Scale()
-                {
-                }
+                virtual ~Scale() {}
 
-                virtual std::string as_string() const
+                virtual std::string
+                as_string() const
                 {
-                    std::string result = "Parameter: " + _name + ", prior type: Scale, range: [" + stringify(_mu_0 / _lambda) + "," + stringify(_mu_0 * _lambda) + "]";
-                    result += ", mu_0 = " + stringify(_mu_0) + ", lambda = " + stringify(_lambda);
+                    std::string result  = "Parameter: " + _name + ", prior type: Scale, range: [" + stringify(_mu_0 / _lambda) + "," + stringify(_mu_0 * _lambda) + "]";
+                    result             += ", mu_0 = " + stringify(_mu_0) + ", lambda = " + stringify(_lambda);
 
                     return result;
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     // read parameter's current value
                     double x = _parameter.evaluate();
 
                     if ((x < _min) || (_max < x))
+                    {
                         return -std::numeric_limits<double>::infinity();
+                    }
 
                     return 1.0 / (2.0 * _ln_lambda * x);
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::Scale(parameters, _name, _min, _max, _mu_0, _lambda));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
                     // CDF: p = [\ln x - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
                     // inverse CDF: x = \mu_0 * \lambda^(2 p - 1)
@@ -358,7 +368,8 @@ namespace eos
                     _parameter.set(_mu_0 * std::pow(_lambda, 2.0 * _parameter.evaluate_generator() - 1.0));
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     // CDF: p = [\ln x - \ln \mu_0 + \ln \lambda] / (2.0 \ln \lambda)
                     // inverse CDF: x = \mu_0 * \lambda^(2 p - 1)
@@ -366,7 +377,8 @@ namespace eos
                     _parameter.set_generator((std::log(_parameter.evaluate() / _mu_0) + _ln_lambda) / (2.0 * _ln_lambda));
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return true;
                 }
@@ -375,8 +387,7 @@ namespace eos
         /*!
          * Gaussian prior distribution
          */
-        class Gaussian :
-            public LogPrior
+        class Gaussian : public LogPrior
         {
             private:
                 Parameter _parameter;
@@ -402,39 +413,45 @@ namespace eos
 
                 ~Gaussian() = default;
 
-                virtual std::string as_string() const
+                virtual std::string
+                as_string() const
                 {
                     std::string result = "Parameter: " + _name.full() + ", prior type: gaussian";
                     return result;
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     double x = _parameter.evaluate();
 
                     return _ln_norm - 0.5 * power_of<2>((x - _mu) / _sigma);
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::Gaussian(parameters, _name, _mu, _sigma));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
                     const double u = _parameter.evaluate_generator();
                     const double x = gsl_cdf_gaussian_Pinv(u, _sigma) + _mu;
                     _parameter.set(x);
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     const double x = _parameter.evaluate();
                     const double u = gsl_cdf_gaussian_P(x - _mu, _sigma);
                     _parameter.set_generator(u);
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return true;
                 }
@@ -443,8 +460,7 @@ namespace eos
         /*!
          * Multivariate Gaussian prior distribution
          */
-        class MultivariateGaussian :
-            public LogPrior
+        class MultivariateGaussian : public LogPrior
         {
             private:
                 std::vector<Parameter> _parameters;
@@ -486,13 +502,19 @@ namespace eos
                     _measurements_2(gsl_vector_alloc(_dim))
                 {
                     if (_covariance->size1 != _covariance->size2)
+                    {
                         throw InternalError("priors::MultivariateGaussian: covariance matrix is not a square matrix");
+                    }
 
                     if (_covariance->size1 != _mean->size)
+                    {
                         throw InternalError("priors::MultivariateGaussian: number of parameters and dimension of covariance matrix are not identical");
+                    }
 
                     if (_dim != _mean->size)
+                    {
                         throw InternalError("priors::MultivariateGaussian: number of parameters and dimension of mean vector are not identical");
+                    }
 
                     for (auto & n : names)
                     {
@@ -507,9 +529,9 @@ namespace eos
                     invert_covariance();
 
                     // keep only the lower and diagonal parts, set upper parts to zero
-                    for (unsigned i = 0; i < _dim ; ++i)
+                    for (unsigned i = 0; i < _dim; ++i)
                     {
-                        for (unsigned j = i + 1 ; j < _dim ; ++j)
+                        for (unsigned j = i + 1; j < _dim; ++j)
                         {
                             gsl_matrix_set(_chol, i, j, 0.0);
                         }
@@ -529,7 +551,8 @@ namespace eos
                     gsl_vector_free(_mean);
                 }
 
-                virtual std::string as_string() const
+                virtual std::string
+                as_string() const
                 {
                     throw InternalError("priors::MultivariateGaussian::as_string() not implemented");
 
@@ -538,15 +561,16 @@ namespace eos
 
                 // compute the normalization constant on log scale
                 // -k/2 * log 2 Pi - 1/2 log(abs(det(V^{-1})))
-                double compute_norm()
+                double
+                compute_norm()
                 {
                     // copy covariance matrix
                     gsl_matrix * M = gsl_matrix_alloc(_dim, _dim);
                     gsl_matrix_memcpy(M, _covariance);
 
                     // find LU decomposition
-                    int signum = 0;
-                    gsl_permutation * p = gsl_permutation_alloc(_dim);
+                    int               signum = 0;
+                    gsl_permutation * p      = gsl_permutation_alloc(_dim);
                     gsl_linalg_LU_decomp(M, p, &signum);
 
                     // calculate determinant
@@ -559,7 +583,8 @@ namespace eos
                 }
 
                 // compute cholesky decomposition of covariance matrix
-                void cholesky()
+                void
+                cholesky()
                 {
                     // copy covariance matrix
                     gsl_matrix_memcpy(_chol, _covariance);
@@ -570,7 +595,8 @@ namespace eos
                 }
 
                 // invert covariance matrix based on previously obtained Cholesky decomposition
-                void invert_covariance()
+                void
+                invert_covariance()
                 {
                     // copy cholesky matrix
                     gsl_matrix_memcpy(_covariance_inv, _chol);
@@ -582,9 +608,9 @@ namespace eos
                     }
 
                     // delete upper part of _chol, which contains the elements of the original covariance matrix
-                    for (unsigned i = 0u; i < _dim ; ++i)
+                    for (unsigned i = 0u; i < _dim; ++i)
                     {
-                        for (unsigned j = i + 1u ; j < _dim ; ++j)
+                        for (unsigned j = i + 1u; j < _dim; ++j)
                         {
                             gsl_matrix_set(_chol, i, j, 0.0);
                         }
@@ -596,19 +622,20 @@ namespace eos
                     gsl_linalg_tri_invert(CblasUpper, CblasNonUnit, _chol_inv);
 
                     // delete lower part of _chol_inv, which contains the elements of the original cholesky matrix
-                    for (unsigned i = 0u; i < _dim ; ++i)
+                    for (unsigned i = 0u; i < _dim; ++i)
                     {
-                        for (unsigned j = 0u ; j < i ; ++j)
+                        for (unsigned j = 0u; j < i; ++j)
                         {
                             gsl_matrix_set(_chol_inv, i, j, 0.0);
                         }
                     }
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     // read parameters
-                    for (auto i = 0u ; i < _dim ; ++i)
+                    for (auto i = 0u; i < _dim; ++i)
                     {
                         gsl_vector_set(_observables, i, _parameters[i].evaluate());
                     }
@@ -630,7 +657,8 @@ namespace eos
                     return _norm - 0.5 * chi_square;
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     gsl_vector * mean = gsl_vector_alloc(_dim);
                     gsl_vector_memcpy(mean, _mean);
@@ -641,10 +669,11 @@ namespace eos
                     return LogPriorPtr(new priors::MultivariateGaussian(parameters, _names, mean, covariance));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
                     // generate standard normals in _measurements
-                    for (auto i = 0u ; i < _dim ; ++i)
+                    for (auto i = 0u; i < _dim; ++i)
                     {
                         const double u = _parameters[i].evaluate_generator();
                         const double z = gsl_cdf_ugaussian_Pinv(u);
@@ -658,16 +687,17 @@ namespace eos
                     gsl_vector_add(_measurements_2, _mean);
 
                     // set parameters
-                    for (auto i = 0u ; i < _dim ; ++i)
+                    for (auto i = 0u; i < _dim; ++i)
                     {
                         _parameters[i].set(gsl_vector_get(_measurements_2, i));
                     }
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     // get parameters
-                    for (auto i = 0u ; i < _dim ; ++i)
+                    for (auto i = 0u; i < _dim; ++i)
                     {
                         gsl_vector_set(_measurements_2, i, _parameters[i].evaluate());
                     }
@@ -679,7 +709,7 @@ namespace eos
                     gsl_blas_dgemv(CblasNoTrans, 1.0, _chol_inv, _measurements_2, 0.0, _measurements);
 
                     // compute cdfs for standard normals in _measurements
-                    for (auto i = 0u ; i < _dim ; ++i)
+                    for (auto i = 0u; i < _dim; ++i)
                     {
                         const double z = gsl_vector_get(_measurements, i);
                         const double u = gsl_cdf_ugaussian_P(z);
@@ -687,7 +717,8 @@ namespace eos
                     }
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return true;
                 }
@@ -696,8 +727,7 @@ namespace eos
         /*!
          * Poisson prior distribution
          */
-        class Poisson :
-            public LogPrior
+        class Poisson : public LogPrior
         {
             private:
                 Parameter _parameter;
@@ -715,47 +745,51 @@ namespace eos
                     _name(name),
                     _k(k),
                     _ln_norm(-1.0 * std::log(gsl_sf_gamma(_k + 1.0)) + std::log(_k))
-                    {
-                        _varied_parameters.push_back(_parameter);
-                    }
-
-                virtual ~Poisson()
                 {
+                    _varied_parameters.push_back(_parameter);
                 }
 
-                virtual std::string as_string() const
+                virtual ~Poisson() {}
+
+                virtual std::string
+                as_string() const
                 {
                     std::string result = "Parameter: " + _name + ", prior type: poisson";
                     return result;
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     double lambda = _parameter.evaluate() * _k;
 
                     return _ln_norm - lambda + _k * std::log(lambda);
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     return LogPriorPtr(new priors::Poisson(parameters, _name, _k));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
-                    const double u = _parameter.evaluate_generator();
+                    const double u      = _parameter.evaluate_generator();
                     const double lambda = gsl_cdf_gamma_Pinv(u, _k + 1.0, 1.0);
                     _parameter.set(lambda / _k);
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     const double lambda = _parameter.evaluate() * _k;
-                    const double u = gsl_cdf_gamma_P(lambda, _k + 1.0, 1.0);
+                    const double u      = gsl_cdf_gamma_P(lambda, _k + 1.0, 1.0);
                     _parameter.set_generator(u);
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return true;
                 }
@@ -764,8 +798,7 @@ namespace eos
         /*!
          * Transformed and shifted multivariate uniform prior distribution
          */
-        class Transform :
-            public LogPrior
+        class Transform : public LogPrior
         {
             private:
                 std::vector<Parameter> _parameters;
@@ -783,7 +816,7 @@ namespace eos
 
                 // LU decomposition of the matrix of transformation, and inverse of transformation
                 gsl_permutation * _perm;
-                gsl_matrix * _LU;
+                gsl_matrix *      _LU;
 
                 // temporary storage for evaluation
                 gsl_vector * _tmp;
@@ -791,8 +824,7 @@ namespace eos
                 gsl_vector * _tmpmatrix;
 
             public:
-                Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, gsl_vector * shift, gsl_matrix * transform,
-                        gsl_vector * min, gsl_vector * max) :
+                Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, gsl_vector * shift, gsl_matrix * transform, gsl_vector * min, gsl_vector * max) :
                     LogPrior(parameters),
                     _names(names),
                     _shift(shift),
@@ -806,19 +838,29 @@ namespace eos
                     _tmp2(gsl_vector_alloc(_shift->size))
                 {
                     if (_transform->size1 != _transform->size2)
+                    {
                         throw InternalError("priors::Transform: transform matrix is not a square matrix");
+                    }
 
                     if (_transform->size1 != _names.size())
+                    {
                         throw InternalError("priors::Transform: number of parameters and dimension of transform matrix are not identical");
+                    }
 
                     if (_names.size() != _shift->size)
+                    {
                         throw InternalError("priors::Transform: number of parameters and dimension of shift vector are not identical");
+                    }
 
                     if (_names.size() != _min->size)
+                    {
                         throw InternalError("priors::Transform: number of parameters and minimum range elements are not identical");
+                    }
 
                     if (_names.size() != _max->size)
+                    {
                         throw InternalError("priors::Transform: number of parameters and maximum range elements are not identical");
+                    }
 
 
                     for (auto & n : names)
@@ -843,7 +885,8 @@ namespace eos
                     gsl_vector_free(_shift);
                 }
 
-                virtual std::string as_string() const
+                virtual std::string
+                as_string() const
                 {
                     throw InternalError("priors::Transform::as_string() not implemented");
 
@@ -851,13 +894,16 @@ namespace eos
                 }
 
                 // compute the normalization constant on log scale
-                double compute_log_volume()
+                double
+                compute_log_volume()
                 {
                     double result = 0.0;
                     for (unsigned i = 0u; i < _shift->size; ++i)
                     {
                         if (gsl_vector_get(_min, i) >= gsl_vector_get(_max, i))
+                        {
                             throw InternalError("priors::Transform: min >= max for parameter " + _names[i].full());
+                        }
 
                         result += std::log(gsl_vector_get(_max, i) - gsl_vector_get(_min, i));
                     }
@@ -866,7 +912,8 @@ namespace eos
                 }
 
                 // compute LU decomposition of the transform matrix, compute log determinant and inverse transform
-                void compute_LU_and_det()
+                void
+                compute_LU_and_det()
                 {
                     int signum = 0;
                     gsl_matrix_memcpy(_LU, _transform);
@@ -875,7 +922,8 @@ namespace eos
                     _value -= gsl_linalg_LU_lndet(_LU);
                 }
 
-                virtual double operator()() const
+                virtual double
+                operator() () const
                 {
                     // get parameters
                     for (unsigned i = 0u; i < _tmp2->size; ++i)
@@ -902,7 +950,8 @@ namespace eos
                     return _value;
                 }
 
-                virtual LogPriorPtr clone(const Parameters & parameters) const
+                virtual LogPriorPtr
+                clone(const Parameters & parameters) const
                 {
                     gsl_vector * shift = gsl_vector_alloc(_shift->size);
                     gsl_vector_memcpy(shift, _shift);
@@ -919,15 +968,16 @@ namespace eos
                     return LogPriorPtr(new priors::Transform(parameters, _names, shift, transform, min, max));
                 }
 
-                virtual void sample()
+                virtual void
+                sample()
                 {
                     // generate sample in _tmp
                     gsl_vector_set_zero(_tmp);
                     for (unsigned i = 0u; i < _tmp->size; ++i)
                     {
-                        const double u = _parameters[i].evaluate_generator();
-                        const double min = gsl_vector_get(_min, i);
-                        const double max = gsl_vector_get(_max, i);
+                        const double u     = _parameters[i].evaluate_generator();
+                        const double min   = gsl_vector_get(_min, i);
+                        const double max   = gsl_vector_get(_max, i);
                         const double range = max - min;
 
                         gsl_vector_set(_tmp, i, u * range + min);
@@ -946,7 +996,8 @@ namespace eos
                     }
                 }
 
-                virtual void compute_cdf()
+                virtual void
+                compute_cdf()
                 {
                     // get parameters
                     for (unsigned i = 0u; i < _tmp2->size; ++i)
@@ -963,21 +1014,22 @@ namespace eos
                     // compute cdfs for uniform distributions in _tmp
                     for (unsigned i = 0u; i < _tmp->size; ++i)
                     {
-                        const double x = gsl_vector_get(_tmp, i);
-                        const double min = gsl_vector_get(_min, i);
-                        const double max = gsl_vector_get(_max, i);
+                        const double x     = gsl_vector_get(_tmp, i);
+                        const double min   = gsl_vector_get(_min, i);
+                        const double max   = gsl_vector_get(_max, i);
                         const double range = max - min;
-                        const double u = (x - min) / range;
+                        const double u     = (x - min) / range;
                         _parameters[i].set_generator(u);
                     }
                 }
 
-                virtual bool informative() const
+                virtual bool
+                informative() const
                 {
                     return false;
                 }
         };
-    }
+    } // namespace priors
 
     LogPrior::LogPrior(const Parameters & parameters) :
         _parameters(parameters)
@@ -1005,15 +1057,19 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max,
-            const double & lower, const double & central, const double & upper)
+    LogPrior::CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max, const double & lower, const double & central,
+                             const double & upper)
     {
         // check input
         if (lower >= central)
+        {
             throw InternalError("LogPrior::Gauss: lower value (" + stringify(lower) + ") >= central value (" + stringify(central) + ")");
+        }
 
         if (upper <= central)
+        {
             throw InternalError("LogPrior::Gauss: upper value (" + stringify(upper) + ") <= central value (" + stringify(central) + ")");
+        }
 
         LogPriorPtr prior = std::make_shared<eos::priors::CurtailedGauss>(parameters, name, min, max, lower, central, upper);
 
@@ -1021,15 +1077,18 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::Scale(const Parameters & parameters, const std::string & name, const double & min, const double & max,
-            const double & mu_0, const double & lambda)
+    LogPrior::Scale(const Parameters & parameters, const std::string & name, const double & min, const double & max, const double & mu_0, const double & lambda)
     {
         // check input
         if (mu_0 <= 0.0)
+        {
             throw InternalError("LogPrior::Scale: default value mu_0 must be strictly positive");
+        }
 
         if (lambda <= 1.0)
+        {
             throw InternalError("LogPrior::Scale: scale factor lambda must be strictly larger than 1");
+        }
 
         LogPriorPtr prior = std::make_shared<eos::priors::Scale>(parameters, name, min, max, mu_0, lambda);
 
@@ -1045,8 +1104,7 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names,
-            gsl_vector * mean, gsl_matrix * covariance)
+    LogPrior::MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names, gsl_vector * mean, gsl_matrix * covariance)
     {
         LogPriorPtr prior = std::make_shared<eos::priors::MultivariateGaussian>(parameters, names, mean, covariance);
 
@@ -1062,29 +1120,29 @@ namespace eos
     }
 
     LogPriorPtr
-    LogPrior::Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, const std::vector<double> & shift, const std::vector<std::vector<double>> & transform,
-                        const std::vector<double> &  min, const std::vector<double> & max)
+    LogPrior::Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, const std::vector<double> & shift,
+                        const std::vector<std::vector<double>> & transform, const std::vector<double> & min, const std::vector<double> & max)
     {
         gsl_vector * _shift = gsl_vector_alloc(shift.size());
-        for (unsigned i = 0 ; i < shift.size() ; ++i)
+        for (unsigned i = 0; i < shift.size(); ++i)
         {
             gsl_vector_set(_shift, i, shift[i]);
         }
         gsl_matrix * _transform = gsl_matrix_alloc(transform.size(), transform.size());
-        for (unsigned i = 0 ; i < transform.size() ; ++i)
+        for (unsigned i = 0; i < transform.size(); ++i)
         {
-            for (unsigned j = 0 ; j < transform.size() ; ++j)
+            for (unsigned j = 0; j < transform.size(); ++j)
             {
                 gsl_matrix_set(_transform, i, j, transform[i][j]);
             }
         }
         gsl_vector * _min = gsl_vector_alloc(min.size());
-        for (unsigned i = 0 ; i < min.size() ; ++i)
+        for (unsigned i = 0; i < min.size(); ++i)
         {
             gsl_vector_set(_min, i, min[i]);
         }
         gsl_vector * _max = gsl_vector_alloc(max.size());
-        for (unsigned i = 0 ; i < max.size() ; ++i)
+        for (unsigned i = 0; i < max.size(); ++i)
         {
             gsl_vector_set(_max, i, max[i]);
         }
@@ -1110,12 +1168,12 @@ namespace eos
         std::string prior_type = s.substr(loc1 + 2, loc2 - loc1 - 2);
 
         // extract range
-        loc1 = s.find_first_of('[', loc2 + 1);
-        loc2 = s.find_first_of(',', loc2 + 1);
+        loc1                  = s.find_first_of('[', loc2 + 1);
+        loc2                  = s.find_first_of(',', loc2 + 1);
         std::string range_min = s.substr(loc1 + 1, loc2 - loc1 - 1);
 
-        loc1 = s.find_first_of(',', loc1 + 1);
-        loc2 = s.find_first_of(']', loc1 + 1);
+        loc1                  = s.find_first_of(',', loc1 + 1);
+        loc2                  = s.find_first_of(']', loc1 + 1);
         std::string range_max = s.substr(loc1 + 1, loc2 - loc1 - 1);
 
         const auto & [min, max] = std::tuple(destringify<double>(range_min), destringify<double>(range_max));
@@ -1135,7 +1193,7 @@ namespace eos
             double sigma_upper, sigma_lower;
 
             // extract sigma_upper, lower
-            if ( s[loc2 + 1] == '-')
+            if (s[loc2 + 1] == '-')
             {
                 sigma_upper = destringify<double>(s.substr(loc2 + 3));
                 sigma_lower = sigma_upper;
@@ -1164,11 +1222,13 @@ namespace eos
             }
 
             if (prior_type == "Gaussian")
+            {
                 return CurtailedGauss(parameters, par_name, min, max, central - sigma_lower, central, central + sigma_upper);
+            }
         }
 
         throw priors::UnknownPriorError("Cannot construct prior from '" + s + "'");
     }
 
     template class WrappedForwardIterator<LogPrior::IteratorTag, Parameter>;
-}
+} // namespace eos

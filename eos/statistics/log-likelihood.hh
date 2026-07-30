@@ -22,16 +22,16 @@
 #define EOS_GUARD_SRC_STATISTICS_LIKELIHOOD_HH 1
 
 #include <eos/constraint.hh>
+#include <eos/maths/matrix.hh>
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood-fwd.hh>
 #include <eos/statistics/test-statistic.hh>
-#include <eos/maths/matrix.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
-#include <gsl/gsl_rng.h>
 #include <gsl/gsl_matrix.h>
+#include <gsl/gsl_rng.h>
 #include <gsl/gsl_vector.h>
 
 #include <cmath>
@@ -84,7 +84,7 @@ namespace eos
              *
              * @note The significance is >= 0.
              */
-            virtual double significance() const  = 0;
+            virtual double significance() const = 0;
 
             /*!
              * Calculate the primary test statistic (e.g. a chi^2 or -2 log L) for
@@ -105,9 +105,8 @@ namespace eos
              * @param central    The mean value of the experimental distribution.
              * @param max        The value one sigma above the mean of the experimental distribution.
              */
-            static LogLikelihoodBlockPtr Gaussian(ObservableCache cache, const ObservablePtr & observable,
-                    const double & min, const double & central, const double & max,
-                    const unsigned & number_of_observations = 1u);
+            static LogLikelihoodBlockPtr Gaussian(ObservableCache cache, const ObservablePtr & observable, const double & min, const double & central, const double & max,
+                                                  const unsigned & number_of_observations = 1u);
 
             /*!
              * Create a new LogLikelihoodBlock for one a single observable with asymmetric uncertainties.
@@ -131,10 +130,8 @@ namespace eos
              * @param alpha      The shape parameter of a LogGamma distribution.
              * @param lambda     The scale parameter of a LogGamma distribution.
              */
-            static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable,
-                    const double & min, const double & central, const double & max,
-                    const double & alpha, const double & lambda,
-                    const unsigned & number_of_observations = 1u);
+            static LogLikelihoodBlockPtr LogGamma(ObservableCache cache, const ObservablePtr & observable, const double & min, const double & central, const double & max,
+                                                  const double & alpha, const double & lambda, const unsigned & number_of_observations = 1u);
 
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
@@ -160,11 +157,9 @@ namespace eos
              * @param beta  2nd shape parameter
              * @return
              */
-            static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable,
-                    const double & physical_limit, const double & upper_limit_10,
-                    const double & upper_limit_50, const double & upper_limit_90,
-                    const double & theta, const double & alpha, const double & beta,
-                    const unsigned & number_of_observations = 1u);
+            static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable, const double & physical_limit, const double & upper_limit_10,
+                                                 const double & upper_limit_50, const double & upper_limit_90, const double & theta, const double & alpha, const double & beta,
+                                                 const unsigned & number_of_observations = 1u);
 
             /*!
              * A likelihood contribution representing an upper limit on a quantity x.
@@ -185,13 +180,11 @@ namespace eos
              * @param beta  2nd shape parameter
              * @return
              */
-            static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable,
-                    const double & physical_limit, const double & theta, const double & alpha, const double & beta,
-                    const unsigned & number_of_observations = 1u);
+            static LogLikelihoodBlockPtr Amoroso(ObservableCache cache, const ObservablePtr & observable, const double & physical_limit, const double & theta, const double & alpha,
+                                                 const double & beta, const unsigned & number_of_observations = 1u);
 
             // todo document
-            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components,
-                                                 const std::vector<double> & weights,
+            static LogLikelihoodBlockPtr Mixture(const std::vector<LogLikelihoodBlockPtr> & components, const std::vector<double> & weights,
                                                  const std::vector<std::array<double, 2>> & test_stat);
 
             /*!
@@ -203,8 +196,8 @@ namespace eos
              * @param mean          The vector of means.
              * @param covariance    The covariance matrix
              */
-            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables,
-                    gsl_vector * mean, gsl_matrix * covariance, gsl_matrix * response, const unsigned & number_of_observations);
+            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::vector<ObservablePtr> & observables, gsl_vector * mean, gsl_matrix * covariance,
+                                                              gsl_matrix * response, const unsigned & number_of_observations);
 
             /*!
              * Templated helper to create a new LogLikelihoodBlock for n observables distributed
@@ -216,24 +209,24 @@ namespace eos
              * @param covariance    The covariance matrix
              */
             template <std::size_t n_>
-            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                    const std::array<double, n_> & mean, const std::array<std::array<double, n_>, n_> & covariance,
-                    const unsigned & number_of_observations = n_)
+            static LogLikelihoodBlockPtr
+            MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables, const std::array<double, n_> & mean,
+                                 const std::array<std::array<double, n_>, n_> & covariance, const unsigned & number_of_observations = n_)
             {
                 std::vector<ObservablePtr> _observables(observables.begin(), observables.end());
 
                 // create GSL vector for the mean
                 gsl_vector * _mean = gsl_vector_alloc(n_);
-                for (auto i = 0u ; i < n_ ; ++i)
+                for (auto i = 0u; i < n_; ++i)
                 {
                     gsl_vector_set(_mean, i, mean[i]);
                 }
 
                 // create GSL matrix for the covariance
                 gsl_matrix * _covariance = gsl_matrix_alloc(n_, n_);
-                for (auto i = 0u ; i < n_ ; ++i)
+                for (auto i = 0u; i < n_; ++i)
                 {
-                    for (auto j = 0u ; j < n_ ; ++j)
+                    for (auto j = 0u; j < n_; ++j)
                     {
                         gsl_matrix_set(_covariance, i, j, covariance[i][j]);
                     }
@@ -257,25 +250,24 @@ namespace eos
              * @param correlation   The correlation matrix. Diagonal is assumed to be one.
              */
             template <std::size_t n_>
-            static LogLikelihoodBlockPtr MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables,
-                    const std::array<double, n_> & mean, const std::array<double, n_> & variances,
-                    const std::array<std::array<double, n_>, n_> & correlation,
-                    const unsigned & number_of_observations = n_)
+            static LogLikelihoodBlockPtr
+            MultivariateGaussian(ObservableCache cache, const std::array<ObservablePtr, n_> & observables, const std::array<double, n_> & mean,
+                                 const std::array<double, n_> & variances, const std::array<std::array<double, n_>, n_> & correlation, const unsigned & number_of_observations = n_)
             {
                 std::vector<ObservablePtr> _observables(observables.begin(), observables.end());
 
                 // create GSL vector for the mean
                 gsl_vector * _mean = gsl_vector_alloc(n_);
-                for (auto i = 0u ; i < n_ ; ++i)
+                for (auto i = 0u; i < n_; ++i)
                 {
                     gsl_vector_set(_mean, i, mean[i]);
                 }
 
                 // create GSL matrix for the covariance
                 gsl_matrix * covariance = gsl_matrix_alloc(n_, n_);
-                for (auto i = 0u ; i < n_ ; ++i)
+                for (auto i = 0u; i < n_; ++i)
                 {
-                    for (auto j = 0u ; j < n_ ; ++j)
+                    for (auto j = 0u; j < n_; ++j)
                     {
                         double value = std::sqrt(variances[i] * variances[j]) * correlation[i][j];
                         gsl_matrix_set(covariance, i, j, value);
@@ -297,8 +289,7 @@ namespace eos
              * @param bound The value of the bound.
              * @param uncetainty The uncertainty entering the gaussian-like penalty.
              */
-            static LogLikelihoodBlockPtr UniformBound(ObservableCache cache, const std::vector<ObservablePtr> & observables,
-                                                      const double & bound, const double & uncertainty);
+            static LogLikelihoodBlockPtr UniformBound(ObservableCache cache, const std::vector<ObservablePtr> & observables, const double & bound, const double & uncertainty);
 
             /*!
              * Create a new LogLikelihoodBlock for an unbinned likelihood with a resolution function.
@@ -332,12 +323,8 @@ namespace eos
              * @param observations The observed events, expressed as kinematic variables. Each must lie
              *                     within the range spanned by @p kinematics.
              */
-            static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache,
-                                                    const QualifiedName & pdf_name,
-                                                    const std::vector<Kinematics> & kinematics,
-                                                    const Options & options,
-                                                    const std::vector<double> & resolution,
-                                                    const std::vector<Kinematics> & observations);
+            static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache, const QualifiedName & pdf_name, const std::vector<Kinematics> & kinematics, const Options & options,
+                                                    const std::vector<double> & resolution, const std::vector<Kinematics> & observations);
     };
 
     /*!
@@ -346,11 +333,9 @@ namespace eos
      * Access to any LogLikelihood is coherent, i.e., changes to one object will propagate
      * to every other object copy. To create an independent instance, use clone().
      */
-    class LogLikelihood :
-        public PrivateImplementationPattern<LogLikelihood>
+    class LogLikelihood : public PrivateImplementationPattern<LogLikelihood>
     {
         public:
-
             ///@name Basic Functions
             ///@{
             /*!
@@ -377,8 +362,7 @@ namespace eos
              * @param max                       The upper bound on the measurement.
              * @param number_of_observations    The number of observations associated with the measurement. Defaults to 1.
              */
-            void add(const ObservablePtr & observable, const double & min,
-                    const double & central, const double & max, const unsigned & number_of_observations = 1u);
+            void add(const ObservablePtr & observable, const double & min, const double & central, const double & max, const unsigned & number_of_observations = 1u);
 
             /*!
              * Add one of the libraries experimental constraints.
@@ -414,8 +398,7 @@ namespace eos
              * @return <p-value, uncertainty>, where the uncertainty is
              * estimated from the standard posterior for a Bernoulli experiment.
              */
-            std::pair<double, double>
-            bootstrap_p_value(const unsigned & datasets);
+            std::pair<double, double> bootstrap_p_value(const unsigned & datasets);
 
             /*!
              * Create an independent instance of this LogLikelihood that uses the same set of observables and measurements.
@@ -443,11 +426,11 @@ namespace eos
              * Evaluate the log likelihood, i.e., return @f[ \log \mathcal{L} = \log P(D | \vec{\theta}, M)=  - \frac{\chi^2}{2} + C@f].
              * @note: all observables are recalculated
              */
-            double operator()() const;
+            double operator() () const;
             ///@}
     };
 
     extern template class WrappedForwardIterator<LogLikelihood::ConstraintIteratorTag, Constraint>;
-}
+} // namespace eos
 
 #endif

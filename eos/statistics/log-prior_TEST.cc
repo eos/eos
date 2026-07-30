@@ -18,11 +18,12 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/constraint.hh>
-#include <eos/statistics/log-prior.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/statistics/log-prior.hh>
 #include <eos/utils/exception.hh>
+
+#include <test/test.hh>
 
 #include <cmath>
 #include <string>
@@ -30,8 +31,7 @@
 using namespace test;
 using namespace eos;
 
-class LogPriorTest :
-    public TestCase
+class LogPriorTest : public TestCase
 {
     public:
         LogPriorTest() :
@@ -39,16 +39,17 @@ class LogPriorTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             Parameters parameters = Parameters::Defaults();
 
-            static const double eps = 1e-12;
-            static const double central = 4.3;
+            static const double eps       = 1e-12;
+            static const double central   = 4.3;
             static const double sig_lower = 0.1;
             static const double sig_upper = 0.2;
-            static const double mu_0 = 4.18;
-            static const double lambda = 2.0;
+            static const double mu_0      = 4.18;
+            static const double lambda    = 2.0;
 
             const auto cdf = [](const LogPriorPtr & prior, Parameter & param, const double & x)
             {
@@ -67,12 +68,12 @@ class LogPriorTest :
             // flat prior
             {
                 // use factory
-                LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5 );
-                Parameter param        = parameters["mass::b(MSbar)"];
-                TEST_CHECK_NEARLY_EQUAL((*flat_prior)(),                     1.2039728043259361, eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.0), 4.2,                eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.5), 4.35,               eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 1.0), 4.5,                eps);
+                LogPriorPtr flat_prior = LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5);
+                Parameter   param      = parameters["mass::b(MSbar)"];
+                TEST_CHECK_NEARLY_EQUAL((*flat_prior)(), 1.2039728043259361, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.0), 4.2, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 0.5), 4.35, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(flat_prior, param, 1.0), 4.5, eps);
 
                 // a continuous parameter of interest
                 TEST_CHECK_EQUAL(flat_prior->begin()->name(), "mass::b(MSbar)");
@@ -90,8 +91,7 @@ class LogPriorTest :
              */
             {
                 // use factory
-                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57,
-                        central - sig_lower, central, central + sig_upper);
+                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, central - sig_lower, central, central + sig_upper);
 
                 parameters["mass::b(MSbar)"] = 4.2;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 0.6555737246958322 /*1.0524382901193807*/, eps);
@@ -104,7 +104,7 @@ class LogPriorTest :
 
                 // continuity at zero
                 parameters["mass::b(MSbar)"] = 4.3 - 1e-7;
-                const double lower_limit = (*gauss_prior)();
+                const double lower_limit     = (*gauss_prior)();
 
                 parameters["mass::b(MSbar)"] = 4.3 + 1e-7;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), lower_limit, eps);
@@ -133,12 +133,11 @@ class LogPriorTest :
 
             // cloning
             {
-                Parameters independent = Parameters::Defaults();
-                LogPriorPtr gauss_prior1 = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57,
-                        central - sig_lower, central, central+sig_upper);
+                Parameters  independent  = Parameters::Defaults();
+                LogPriorPtr gauss_prior1 = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, central - sig_lower, central, central + sig_upper);
                 LogPriorPtr gauss_prior2 = gauss_prior1->clone(independent);
 
-                parameters["mass::b(MSbar)"] = 4.389;
+                parameters["mass::b(MSbar)"]  = 4.389;
                 independent["mass::b(MSbar)"] = 4.25;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior1)(), 1.0565612246958278, eps);
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior2)(), 1.0305737246958295, eps);
@@ -146,8 +145,7 @@ class LogPriorTest :
 
             // vary one sigma interval
             {
-                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9,
-                        4.3, 4.4, 4.5);
+                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9, 4.3, 4.4, 4.5);
 
                 parameters["mass::b(MSbar)"] = 4.2;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), -0.616353153557734281, eps);
@@ -158,8 +156,7 @@ class LogPriorTest :
 
             // asymmetric
             {
-                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 0.2, 0.55,
-                            0.319, 0.369, 0.485);
+                LogPriorPtr gauss_prior = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 0.2, 0.55, 0.319, 0.369, 0.485);
 
                 parameters["mass::b(MSbar)"] = 0.32;
                 TEST_CHECK_NEARLY_EQUAL((*gauss_prior)(), 1.176587791815339, eps);
@@ -171,8 +168,7 @@ class LogPriorTest :
             // Scale prior
             {
                 // use factory
-                LogPriorPtr scale_prior = LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0,
-                    mu_0, lambda);
+                LogPriorPtr scale_prior = LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda);
 
                 Parameter param = parameters["mass::b(MSbar)"];
 
@@ -186,7 +182,7 @@ class LogPriorTest :
                 TEST_CHECK_NEARLY_EQUAL((*scale_prior)(), 0.1030496457777831, eps);
 
                 // central value at p = 0.5
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.5), mu_0,          eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.5), mu_0, eps);
                 // lower boundary at p = 0.0
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(scale_prior, param, 0.0), mu_0 / lambda, eps);
                 // upper boundary at p = 1.0
@@ -196,16 +192,16 @@ class LogPriorTest :
             // Gaussian prior (w/ infinite support)
             {
                 // use factory
-                static const double mu    = 0.5;
-                static const double sigma = 0.25;
-                LogPriorPtr gaussian_prior = LogPrior::Gaussian(parameters, "mass::b(MSbar)", mu, sigma);
+                static const double mu             = 0.5;
+                static const double sigma          = 0.25;
+                LogPriorPtr         gaussian_prior = LogPrior::Gaussian(parameters, "mass::b(MSbar)", mu, sigma);
 
                 Parameter param = parameters["mass::b(MSbar)"];
 
                 param = -0.5;
                 TEST_CHECK_NEARLY_EQUAL((*gaussian_prior)(), -7.532644172085, eps);
 
-                param =  0.5;
+                param = 0.5;
                 TEST_CHECK_NEARLY_EQUAL((*gaussian_prior)(), +0.467355827915, eps);
 
                 param = +1.5;
@@ -218,9 +214,9 @@ class LogPriorTest :
 
                 // inverse CDF
                 TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.005), -0.1439573258872, eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.250),  0.3313775624510, eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.900),  0.8203878913862, eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.950),  0.9112134067379, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.250), 0.3313775624510, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.900), 0.8203878913862, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(gaussian_prior, param, 0.950), 0.9112134067379, eps);
             }
 
             // Multivariate Gaussian
@@ -283,38 +279,41 @@ class LogPriorTest :
                 Parameter param = parameters["mass::b(MSbar)"];
 
                 param = 3.0 / k;
-                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -4.815704593400,  eps);
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -4.815704593400, eps);
 
                 param = 7.0 / k;
                 TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -0.3427259895280, eps);
 
                 param = 10.0 / k;
-                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(),  0.2240234498590, eps);
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), 0.2240234498590, eps);
 
                 param = 20.0 / k;
-                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -2.844504744542,  eps);
+                TEST_CHECK_NEARLY_EQUAL((*poisson_prior)(), -2.844504744542, eps);
 
                 // CDF
-                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param,  5 / k), 0.013695268598, eps);
-                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param,  9 / k), 0.294011679659, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param, 5 / k), 0.013695268598, eps);
+                TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param, 9 / k), 0.294011679659, eps);
                 TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param, 11 / k), 0.540111297306, eps);
                 TEST_CHECK_NEARLY_EQUAL(cdf(poisson_prior, param, 20 / k), 0.989188281173, eps);
 
                 // inverse CDF
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.05) * k,  6.169007289395323, eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.25) * k,  8.619809702379529, eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.90) * k, 15.40664117197652,  eps);
-                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.95) * k, 16.9622192357219,   eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.05) * k, 6.169007289395323, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.25) * k, 8.619809702379529, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.90) * k, 15.40664117197652, eps);
+                TEST_CHECK_NEARLY_EQUAL(inverse_cdf(poisson_prior, param, 0.95) * k, 16.9622192357219, eps);
             }
 
             // Transform prior
             {
                 // use factory
-                std::vector<double> shift     = {0.0,0.0};
-                std::vector<std::vector<double>> transform = {{ 0.707106, 0.707106 }, {-0.707106, 0.707106}};
-                std::vector<double> min       = {-2.0,-2.0};
-                std::vector<double> max       = {2.0,2.0};
-                LogPriorPtr transform_prior = LogPrior::Transform(parameters, {"scnuee::Re{cVL}","scnuee::Re{cVR}"}, shift, transform, min, max);
+                std::vector<double>              shift     = { 0.0, 0.0 };
+                std::vector<std::vector<double>> transform = {
+                    {  0.707106, 0.707106 },
+                    { -0.707106, 0.707106 }
+                };
+                std::vector<double> min             = { -2.0, -2.0 };
+                std::vector<double> max             = { 2.0, 2.0 };
+                LogPriorPtr         transform_prior = LogPrior::Transform(parameters, { "scnuee::Re{cVL}", "scnuee::Re{cVR}" }, shift, transform, min, max);
 
                 parameters["scnuee::Re{cVL}"] = 0.0;
                 parameters["scnuee::Re{cVR}"] = 0.0;
@@ -325,7 +324,7 @@ class LogPriorTest :
                 TEST_CHECK(! std::isfinite((*transform_prior)()));
             }
 
-            //Make
+            // Make
             {
                 Parameters p = Parameters::Defaults();
 
@@ -353,8 +352,8 @@ class LogPriorTest :
 
                 // CurtailedGauss as_string() with asymmetric uncertainties (sigma_upper != sigma_lower)
                 {
-                    LogPriorPtr        cg = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, 4.2, 4.3, 4.5);
-                    const std::string  s  = cg->as_string();
+                    LogPriorPtr       cg = LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, 4.2, 4.3, 4.5);
+                    const std::string s  = cg->as_string();
                     TEST_CHECK(s.find(" + ") != std::string::npos);
                     TEST_CHECK(s.find(" - ") != std::string::npos);
                     TEST_CHECK_EQUAL(cg->informative(), true);
@@ -363,12 +362,10 @@ class LogPriorTest :
                 // clone(): the clone is independent and reproduces operator()
                 {
                     Parameters               independent = Parameters::Defaults();
-                    std::vector<LogPriorPtr> priors{
-                        LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5),
-                        LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda),
-                        LogPrior::Gaussian(parameters, "mass::b(MSbar)", 0.5, 0.25),
-                        LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0)
-                    };
+                    std::vector<LogPriorPtr> priors{ LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5),
+                                                     LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda),
+                                                     LogPrior::Gaussian(parameters, "mass::b(MSbar)", 0.5, 0.25),
+                                                     LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0) };
 
                     for (const auto & prior : priors)
                     {
@@ -436,7 +433,7 @@ class LogPriorTest :
 
                     TEST_CHECK_EQUAL(tp->informative(), false);
 
-                    LogPriorPtr c = tp->clone(parameters); // Transform::clone
+                    LogPriorPtr c                 = tp->clone(parameters); // Transform::clone
                     parameters["scnuee::Re{cVL}"] = 0.0;
                     parameters["scnuee::Re{cVR}"] = 0.0;
                     TEST_CHECK_NEARLY_EQUAL((*c)(), (*tp)(), 1e-9);
@@ -483,12 +480,12 @@ class LogPriorTest :
                 // Transform: min >= max (thrown from compute_log_volume() during construction)
                 TEST_CHECK_THROWS(InternalError,
                                   LogPrior::Transform(parameters,
-                                                      { "scnuee::Re{cVL}", "scnuee::Re{cVR}" },
-                                                      { 0.0, 0.0 },
                                                       {
-                                                          { 1.0, 0.0 },
-                                                          { 0.0, 1.0 }
+                                                          "scnuee::Re{cVL}",
+                                                          "scnuee::Re{cVR}"
                 },
+                                                      { 0.0, 0.0 },
+                                                      { { 1.0, 0.0 }, { 0.0, 1.0 } },
                                                       { 2.0, 2.0 },
                                                       { -2.0, -2.0 }));
 

@@ -31,9 +31,9 @@ namespace eos
         class Empty;
 
         class ChiSquare;
-    }
+    } // namespace test_statistics
 
     using TestStatistic = std::variant<test_statistics::Empty, test_statistics::ChiSquare>;
-}
+} // namespace eos
 
 #endif

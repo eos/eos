@@ -21,8 +21,6 @@
 #ifndef EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_HH
 #define EOS_GUARD_SRC_STATISTICS_LOG_POSTERIOR_HH 1
 
-#include <config.h>
-
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-posterior-fwd.hh>
 #include <eos/statistics/log-prior.hh>
@@ -31,6 +29,7 @@
 #include <eos/utils/verify.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <config.h>
 #include <set>
 #include <vector>
 
@@ -131,6 +130,6 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<LogPosterior::PriorIteratorTag, const LogPriorPtr>;
-}
+} // namespace eos
 
 #endif

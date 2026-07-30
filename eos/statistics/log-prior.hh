@@ -25,12 +25,12 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
-#include <vector>
-#include <memory>
-
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_vector.h>
+
+#include <memory>
+#include <vector>
 
 namespace eos
 {
@@ -60,9 +60,7 @@ namespace eos
              */
             LogPrior(const Parameters & parameters);
 
-            virtual ~LogPrior()
-            {
-            }
+            virtual ~LogPrior() {}
 
             virtual std::string as_string() const = 0;
 
@@ -117,20 +115,18 @@ namespace eos
             ///@name Named constructors for 1D prior distributions with finite support
             ///@{
             static LogPriorPtr Flat(const Parameters & parameters, const std::string & name, const double & min, const double & max);
-            static LogPriorPtr CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max,
-                    const double & lower, const double & central, const double & upper);
-            static LogPriorPtr Scale(const Parameters & parameter, const std::string & name, const double & min, const double & max,
-                    const double & mu_0, const double & lambda);
+            static LogPriorPtr CurtailedGauss(const Parameters & parameters, const std::string & name, const double & min, const double & max, const double & lower,
+                                              const double & central, const double & upper);
+            static LogPriorPtr Scale(const Parameters & parameter, const std::string & name, const double & min, const double & max, const double & mu_0, const double & lambda);
             ///@}
 
             ///@name Named constructors for prior distributions with infinite support
             ///@{
             static LogPriorPtr Gaussian(const Parameters & parameters, const QualifiedName & name, const double & mu, const double & sigma);
-            static LogPriorPtr MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names,
-                    gsl_vector * mean, gsl_matrix * covariance);
+            static LogPriorPtr MultivariateGaussian(const Parameters & parameters, const std::vector<QualifiedName> & names, gsl_vector * mean, gsl_matrix * covariance);
             static LogPriorPtr Poisson(const Parameters & parameters, const std::string & name, const double & k);
-            static LogPriorPtr Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, const std::vector<double> & shift, const std::vector<std::vector<double>> & transform,
-                        const std::vector<double> & min, const std::vector<double> & max);
+            static LogPriorPtr Transform(const Parameters & parameters, const std::vector<QualifiedName> & names, const std::vector<double> & shift,
+                                         const std::vector<std::vector<double>> & transform, const std::vector<double> & min, const std::vector<double> & max);
             ///@}
 
             /*!
@@ -144,6 +140,6 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<LogPrior::IteratorTag, Parameter>;
-}
+} // namespace eos
 
 #endif

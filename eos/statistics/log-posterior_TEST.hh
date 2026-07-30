@@ -23,14 +23,14 @@
 #include <eos/statistics/log-posterior.hh>
 #include <eos/utils/observable_stub.hh>
 #include <eos/utils/qualified-name.hh>
+
 #include <test/test.hh>
 
 using namespace test;
 
 namespace eos
 {
-    struct TestObservable :
-        public Observable
+    struct TestObservable : public Observable
     {
             Parameters p;
 
@@ -52,74 +52,80 @@ namespace eos
             {
             }
 
-            virtual ~TestObservable()
-            {
-            }
+            virtual ~TestObservable() {}
 
-            virtual double evaluate() const
+            virtual double
+            evaluate() const
             {
                 return mass();
             }
 
-            virtual ObservablePtr clone() const
+            virtual ObservablePtr
+            clone() const
             {
                 return ObservablePtr(new TestObservable(p.clone(), k.clone(), mass_name));
             }
 
-            virtual ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr
+            clone(const Parameters & parameters) const
             {
                 return ObservablePtr(new TestObservable(parameters, k.clone(), mass_name));
             }
 
-            virtual Parameters parameters()
+            virtual Parameters
+            parameters()
             {
                 return p;
             }
 
-            virtual Kinematics kinematics()
+            virtual Kinematics
+            kinematics()
             {
                 return k;
             }
 
-            virtual Options options()
+            virtual Options
+            options()
             {
                 return o;
             }
 
-            const QualifiedName & name() const
+            const QualifiedName &
+            name() const
             {
                 return n;
             }
 
-            void set_option(const std::string & key, const std::string & value = "")
+            void
+            set_option(const std::string & key, const std::string & value = "")
             {
                 o.declare(key, value);
             }
     };
 
-    struct AbsoluteTestObservable :
-        public TestObservable
+    struct AbsoluteTestObservable : public TestObservable
     {
             AbsoluteTestObservable(const Parameters & p, const Kinematics & k, const QualifiedName & mass_name) :
                 TestObservable(p, k, mass_name)
             {
             }
 
-            virtual ~AbsoluteTestObservable()
-            {
-            }
+            virtual ~AbsoluteTestObservable() {}
 
-            virtual double evaluate() const
+            virtual double
+            evaluate() const
             {
                 return std::fabs(mass());
             }
 
-            virtual ObservablePtr clone() const
+            virtual ObservablePtr
+            clone() const
             {
                 return ObservablePtr(new AbsoluteTestObservable(p.clone(), k.clone(), mass_name));
             }
 
-            virtual ObservablePtr clone(const Parameters & parameters) const
+            virtual ObservablePtr
+            clone(const Parameters & parameters) const
             {
                 return ObservablePtr(new AbsoluteTestObservable(parameters, k.clone(), mass_name));
             }
@@ -132,22 +138,21 @@ namespace eos
      *
      * flat = true turns Gaussian prior into flat prior
      */
-    LogPosterior make_log_posterior(bool flat)
+    LogPosterior
+    make_log_posterior(bool flat)
     {
         Parameters parameters = Parameters::Defaults();
 
         LogLikelihood llh(parameters);
         llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
 
-        LogPriorPtr prior = flat ?
-            LogPrior::Flat(parameters, "mass::b(MSbar)", 3.7, 4.9) :
-            LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9, 4.3, 4.4, 4.5);
+        LogPriorPtr prior = flat ? LogPrior::Flat(parameters, "mass::b(MSbar)", 3.7, 4.9) : LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 3.7, 4.9, 4.3, 4.4, 4.5);
 
         LogPosterior result(llh);
         result.add(prior);
 
         return result;
     }
-}
+} // namespace eos
 
 #endif

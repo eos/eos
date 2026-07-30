@@ -28,6 +28,6 @@ namespace eos
     class LogPosterior;
 
     using LogPosteriorPtr = std::shared_ptr<LogPosterior>;
-}
+} // namespace eos
 
 #endif
