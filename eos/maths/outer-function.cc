@@ -24,26 +24,29 @@
 namespace eos
 {
 
-    complex<double> outer(const std::function<complex<double> (const complex<double> &)> & f, complex<double> z, double relative_precision)
+    complex<double>
+    outer(const std::function<complex<double>(const complex<double> &)> & f, complex<double> z, double relative_precision)
     {
         if (std::abs(z) >= 1.0)
+        {
             throw InternalError("Trying to evaluate outer function outside of unit disk. This is not yet supported.");
+        }
 
-        std::function<complex<double>(const double &)> integrand = [&] (const double & t)
+        std::function<complex<double>(const double &)> integrand = [&](const double & t)
         {
             double x = std::abs(f(std::exp(complex<double>(0, t))));
             if (std::abs(x) < 1e-16)
             {
                 throw InternalError("Trying to compute outer function of function with zero on unit circle");
             }
-            else if (!isfinite(x))
+            else if (! isfinite(x))
             {
                 throw InternalError("Trying to compute outer function of function with pole on unit circle");
             }
             return (std::exp(complex<double>(0, t)) + z) / (std::exp(complex<double>(0, t)) - z) * std::log(x);
         };
 
-        return std::exp(integrate<1, 1, complex<double>>(integrand, 0.0, 2 * M_PI, cubature::Config().epsrel(relative_precision)) / 2.0 / M_PI );
+        return std::exp(integrate<1, 1, complex<double>>(integrand, 0.0, 2 * M_PI, cubature::Config().epsrel(relative_precision)) / 2.0 / M_PI);
     }
 
-}
+} // namespace eos

@@ -19,18 +19,16 @@
 #define EOS_GUARD_EOS_MATHS_DFT_CONTAINER_IMPL_HH 1
 
 #include <eos/maths/dft-container.hh>
-
 #include <eos/utils/exception.hh>
 
 #include <algorithm>
 #include <cstring>
+#include <fftw3.h>
 #include <format>
 #include <functional>
 #include <new>
 #include <stdexcept>
 #include <type_traits>
-
-#include <fftw3.h>
 
 namespace eos
 {
@@ -39,7 +37,8 @@ namespace eos
         namespace impl
         {
             template <std::size_t rank_>
-            std::size_t size_from_dimensions(const std::array<std::size_t, rank_> & dimensions)
+            std::size_t
+            size_from_dimensions(const std::array<std::size_t, rank_> & dimensions)
             {
                 std::size_t result = 1;
                 for (std::size_t d : dimensions)
@@ -51,12 +50,13 @@ namespace eos
             }
 
             template <std::size_t rank_>
-            std::size_t index_from_multi_index(const std::array<std::size_t, rank_> & multi_index, const std::array<std::size_t, rank_> & dimensions)
+            std::size_t
+            index_from_multi_index(const std::array<std::size_t, rank_> & multi_index, const std::array<std::size_t, rank_> & dimensions)
             {
                 // computing the index in row-major order, i.e. the last index is contiguous in memory
                 std::size_t result = 0, stride = 1;
 
-                for (std::size_t i = rank_ - 1; i > 0 ; --i)
+                for (std::size_t i = rank_ - 1; i > 0; --i)
                 {
                     result += multi_index[i] * stride;
                     stride *= dimensions[i];
@@ -66,7 +66,7 @@ namespace eos
 
                 return result;
             }
-        } // namespace eos::dft::impl
+        } // namespace impl
 
         // partial specialization for T_ == double
 
@@ -107,7 +107,8 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        Container<double, rank_> & Container<double, rank_>::operator=(const Container & other)
+        Container<double, rank_> &
+        Container<double, rank_>::operator= (const Container & other)
         {
             if (this == &other)
             {
@@ -136,7 +137,8 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        Container<double, rank_> & Container<double, rank_>::operator=(Container && other)
+        Container<double, rank_> &
+        Container<double, rank_>::operator= (Container && other)
         {
             if (this == &other)
             {
@@ -150,8 +152,8 @@ namespace eos
                 this->_size = 0;
             }
 
-            this->_size = other._size;
-            this->_data = other._data;
+            this->_size       = other._size;
+            this->_data       = other._data;
             this->_dimensions = other._dimensions;
 
             other._data = nullptr;
@@ -160,8 +162,7 @@ namespace eos
             return *this;
         }
 
-        template <std::size_t rank_>
-        Container<double, rank_>::~Container()
+        template <std::size_t rank_> Container<double, rank_>::~Container()
         {
             if (nullptr != this->_data)
             {
@@ -172,13 +173,15 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        const std::array<std::size_t, rank_> & Container<double, rank_>::dimensions() const
+        const std::array<std::size_t, rank_> &
+        Container<double, rank_>::dimensions() const
         {
             return this->_dimensions;
         }
 
         template <std::size_t rank_>
-        double & Container<double, rank_>::operator()(const std::array<std::size_t, rank_> & index)
+        double &
+        Container<double, rank_>::operator() (const std::array<std::size_t, rank_> & index)
         {
             std::size_t _index = impl::index_from_multi_index(index, this->_dimensions);
             if (_index >= this->_size)
@@ -190,7 +193,8 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        const double & Container<double, rank_>::operator()(const std::array<std::size_t, rank_> & index) const
+        const double &
+        Container<double, rank_>::operator() (const std::array<std::size_t, rank_> & index) const
         {
             std::size_t _index = impl::index_from_multi_index(index, this->_dimensions);
 
@@ -245,7 +249,8 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        Container<std::complex<double>, rank_> & Container<std::complex<double>, rank_>::operator=(const Container & other)
+        Container<std::complex<double>, rank_> &
+        Container<std::complex<double>, rank_>::operator= (const Container & other)
         {
             if (this == &other)
             {
@@ -272,7 +277,8 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        Container<std::complex<double>, rank_> & Container<std::complex<double>, rank_>::operator=(Container && other)
+        Container<std::complex<double>, rank_> &
+        Container<std::complex<double>, rank_>::operator= (Container && other)
         {
             if (this == &other)
             {
@@ -285,8 +291,8 @@ namespace eos
                 this->_data = nullptr;
             }
 
-            this->_size = other._size;
-            this->_data = other._data;
+            this->_size       = other._size;
+            this->_data       = other._data;
             this->_dimensions = other._dimensions;
 
             other._data = nullptr;
@@ -295,8 +301,7 @@ namespace eos
             return *this;
         }
 
-        template <std::size_t rank_>
-        Container<std::complex<double>, rank_>::~Container()
+        template <std::size_t rank_> Container<std::complex<double>, rank_>::~Container()
         {
             if (nullptr != this->_data)
             {
@@ -307,13 +312,15 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        const std::array<std::size_t, rank_> & Container<std::complex<double>, rank_>::dimensions() const
+        const std::array<std::size_t, rank_> &
+        Container<std::complex<double>, rank_>::dimensions() const
         {
             return this->_dimensions;
         }
 
         template <std::size_t rank_>
-        std::complex<double> & Container<std::complex<double>, rank_>::operator()(const std::array<std::size_t, rank_> & index)
+        std::complex<double> &
+        Container<std::complex<double>, rank_>::operator() (const std::array<std::size_t, rank_> & index)
         {
             std::size_t _index = impl::index_from_multi_index(index, this->_dimensions);
             if (_index >= this->_size)
@@ -325,7 +332,8 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        const std::complex<double> & Container<std::complex<double>, rank_>::operator()(const std::array<std::size_t, rank_> & index) const
+        const std::complex<double> &
+        Container<std::complex<double>, rank_>::operator() (const std::array<std::size_t, rank_> & index) const
         {
             std::size_t _index = impl::index_from_multi_index(index, this->_dimensions);
 
@@ -338,19 +346,19 @@ namespace eos
         }
 
         template <std::size_t rank_>
-        Container<std::complex<double>, rank_> & Container<std::complex<double>, rank_>::operator*=(const Container & rhs)
+        Container<std::complex<double>, rank_> &
+        Container<std::complex<double>, rank_>::operator*= (const Container & rhs)
         {
             if (this->_dimensions != rhs._dimensions)
             {
                 throw InternalError(std::format("dft::Container<std::complex<double>, {}>: dimension mismatch in operator*=", rank_));
             }
 
-            std::transform(this->_data, this->_data + this->_size, rhs._data, this->_data,
-                std::multiplies<>{});
+            std::transform(this->_data, this->_data + this->_size, rhs._data, this->_data, std::multiplies<>{});
 
             return *this;
         }
-    }
-}
+    } // namespace dft
+} // namespace eos
 
 #endif

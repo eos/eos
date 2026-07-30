@@ -19,13 +19,14 @@
 
 #include <eos/maths/derivative.hh>
 
-#include <limits>
 #include <cmath>
+#include <limits>
 
 namespace eos
 {
     template <>
-    double derivative<1u, deriv::TwoSided>(const std::function<double (const double &)> & f, const double & x0)
+    double
+    derivative<1u, deriv::TwoSided>(const std::function<double(const double &)> & f, const double & x0)
     {
         static const double eps = std::numeric_limits<double>::epsilon(), sqrteps = std::sqrt(eps);
 
@@ -40,14 +41,15 @@ namespace eos
         }
 
         // use a 5-point stencil for the central difference quotient
-        double numerator = f(x0 - 2.0 * h) - 8.0 * f(x0 - h) + 8.0 * f(x0 + h) - f(x0 + 2.0 * h);
+        double numerator   = f(x0 - 2.0 * h) - 8.0 * f(x0 - h) + 8.0 * f(x0 + h) - f(x0 + 2.0 * h);
         double denominator = 12.0 * h;
 
         return numerator / denominator;
     }
 
     template <>
-    double derivative<2u, deriv::TwoSided>(const std::function<double (const double &)> & f, const double & x0)
+    double
+    derivative<2u, deriv::TwoSided>(const std::function<double(const double &)> & f, const double & x0)
     {
         static const double eps = std::numeric_limits<double>::epsilon(), sqrteps = std::sqrt(eps), sqrt2eps = std::sqrt(sqrteps);
 
@@ -62,9 +64,9 @@ namespace eos
         }
 
         // use a 5-point stencil for the central difference quotient
-        double numerator = -f(x0 - 2.0 * h) + 16.0 * f(x0 - h) - 30.0 * f(x0) + 16.0 * f(x0 + h) - f(x0 + 2.0 * h);
+        double numerator   = -f(x0 - 2.0 * h) + 16.0 * f(x0 - h) - 30.0 * f(x0) + 16.0 * f(x0 + h) - f(x0 + 2.0 * h);
         double denominator = 12.0 * h * h;
 
         return numerator / denominator;
     }
-}
+} // namespace eos

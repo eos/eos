@@ -106,16 +106,16 @@ namespace eos
         extern const double ccholder12[100];
         extern const double ccholder32[100];
 
-        extern const double *ccholder21;
-        extern const double *ccholder22;
-        extern const double *ccholder23;
-        extern const double *ccholder24;
-        extern const double *ccholder31;
-        extern const double *ccholder41;
-        extern const double *ccholder42;
-        extern const double *ccholder51;
-        extern const double *ccholder52;
-        extern const double *ccholder53;
+        extern const double * ccholder21;
+        extern const double * ccholder22;
+        extern const double * ccholder23;
+        extern const double * ccholder24;
+        extern const double * ccholder31;
+        extern const double * ccholder41;
+        extern const double * ccholder42;
+        extern const double * ccholder51;
+        extern const double * ccholder52;
+        extern const double * ccholder53;
 
         extern const double ccholderc11;
         extern const double ccholderc12;
@@ -132,7 +132,7 @@ namespace eos
         extern const double ccli22diagonallog[150];
         extern const double ccli22diagonallit[150];
         extern const double ccli22diagonalpow[150][150];
-    }
-}
+    } // namespace li22_impl
+} // namespace eos
 
 #endif

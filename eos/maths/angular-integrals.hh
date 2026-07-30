@@ -33,6 +33,6 @@ namespace eos
 
     // Integral from -1 to 1 over P_l1^m1(x) * P_l2^m2(x) * P_l3^m3(x)
     double three_legendre_integral(const int & l1, const int & m1, const int & l2, const int & m2, const int & l3, const int & m3);
-}
+} // namespace eos
 
 #endif

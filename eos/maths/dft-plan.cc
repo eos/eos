@@ -32,5 +32,5 @@ namespace eos
 
         template class Plan<4, Direction::Forward>;
         template class Plan<4, Direction::Backward>;
-    } // namespace eos::dft
+    } // namespace dft
 } // namespace eos

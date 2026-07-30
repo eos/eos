@@ -25,11 +25,11 @@
 
 namespace eos
 {
-    complex<double> dilog(const complex<double> & z) __attribute__ ((pure));
+    complex<double> dilog(const complex<double> & z) __attribute__((pure));
 
-    complex<double> trilog(const complex<double> & z) __attribute__ ((pure));
+    complex<double> trilog(const complex<double> & z) __attribute__((pure));
 
-    complex<double> quadlog(const complex<double> & z) __attribute__ ((pure));
-}
+    complex<double> quadlog(const complex<double> & z) __attribute__((pure));
+} // namespace eos
 
 #endif

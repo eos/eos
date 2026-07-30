@@ -29,18 +29,16 @@ namespace eos
      * to the only variable x, at point x0. The method of derivation
      * is governed by the template argument Method_.
      */
-    template <unsigned order_, typename Method_>
-    double derivative(const std::function<double (const double &)> & f, const double & x0);
+    template <unsigned order_, typename Method_> double derivative(const std::function<double(const double &)> & f, const double & x0);
 
     namespace deriv
     {
-        class TwoSided{ };
-    }
+        class TwoSided
+        {};
+    } // namespace deriv
 
-    template <>
-    double derivative<1u, deriv::TwoSided>(const std::function<double (const double &)> & f, const double & x0);
-    template <>
-    double derivative<2u, deriv::TwoSided>(const std::function<double (const double &)> & f, const double & x0);
-}
+    template <> double derivative<1u, deriv::TwoSided>(const std::function<double(const double &)> & f, const double & x0);
+    template <> double derivative<2u, deriv::TwoSided>(const std::function<double(const double &)> & f, const double & x0);
+} // namespace eos
 
 #endif

@@ -22,12 +22,13 @@
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 
-#include <array>
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_complex.h>
 #include <gsl/gsl_complex_math.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_matrix.h>
+
+#include <array>
 
 namespace eos
 {
@@ -36,8 +37,7 @@ namespace eos
      * Verblunsky coefficients. We assume real-valued Vernblunsky
      * coefficients.
      */
-    template <unsigned order_>
-    class SzegoPolynomial
+    template <unsigned order_> class SzegoPolynomial
     {
         private:
             const double _norm_measure;
@@ -46,18 +46,19 @@ namespace eos
 
             const std::array<double, order_ + 1> _norms;
 
-            std::array<double, order_ + 1> _calculate_norms() const
+            std::array<double, order_ + 1>
+            _calculate_norms() const
             {
                 std::array<double, order_ + 1> result;
 
                 result[0] = _norm_measure;
 
-                for (unsigned i = 1 ; i <= order_ ; ++i)
+                for (unsigned i = 1; i <= order_; ++i)
                 {
                     result[i] = result[i - 1] * (1.0 - power_of<2>(_verblunsky_coefficients[i - 1]));
                 }
 
-                for (unsigned i = 0 ; i <= order_ ; ++i)
+                for (unsigned i = 0; i <= order_; ++i)
                 {
                     result[i] = std::sqrt(result[i]);
                 }
@@ -73,10 +74,10 @@ namespace eos
             {
             }
 
-            SzegoPolynomial(const SzegoPolynomial &) = default;
-            SzegoPolynomial(SzegoPolynomial &&) = default;
-            ~SzegoPolynomial() = default;
-            SzegoPolynomial & operator= (SzegoPolynomial &&) = default;
+            SzegoPolynomial(const SzegoPolynomial &)              = default;
+            SzegoPolynomial(SzegoPolynomial &&)                   = default;
+            ~SzegoPolynomial()                                    = default;
+            SzegoPolynomial & operator= (SzegoPolynomial &&)      = default;
             SzegoPolynomial & operator= (const SzegoPolynomial &) = default;
 
             static SzegoPolynomial<order_>
@@ -88,14 +89,14 @@ namespace eos
                 // and J[n][i] = Integral[z^i phi_n^*], where the integral is performed over the arc of the unit circle.
                 std::array<std::array<double, order_ + 1>, order_ + 1> I;
                 std::array<std::array<double, order_ + 1>, order_ + 1> J;
-                std::array<double, order_> verblunsky;
+                std::array<double, order_>                             verblunsky;
 
                 // Initialization
                 I[0][0] = norm_measure;
                 J[0][0] = norm_measure;
                 for (unsigned n = 1; n < order_ + 1; ++n)
                 {
-                    I[n][0] = 0.0; // Orthogonality between phi[n] and phi[0] = 1
+                    I[n][0] = 0.0;                                   // Orthogonality between phi[n] and phi[0] = 1
                     I[0][n] = 2.0 / n * sin(0.5 * n * norm_measure); // Integral[z^n] on the arc of the unit circle
                     J[0][n] = 2.0 / n * sin(0.5 * n * norm_measure); // Integral[z^n] on the arc of the unit circle
                 }
@@ -107,8 +108,8 @@ namespace eos
                     for (unsigned i = 0; i < order_; ++i)
                     {
                         // cf. [S:2004B], eq. (1.4), p.2, integrated over the arc of the unit circle
-                        I[n][i] = I[n - 1][i + 1] - verblunsky[n - 1] * J[n - 1][i    ];
-                        J[n][i] = J[n - 1][i]     - verblunsky[n - 1] * I[n - 1][i + 1];
+                        I[n][i] = I[n - 1][i + 1] - verblunsky[n - 1] * J[n - 1][i];
+                        J[n][i] = J[n - 1][i] - verblunsky[n - 1] * I[n - 1][i + 1];
                     }
                     verblunsky[n] = I[n][1] / J[n][0]; // Orthogonality between phi[n] and phi[0] = 1
                 }
@@ -116,7 +117,8 @@ namespace eos
                 return SzegoPolynomial(norm_measure, std::move(verblunsky));
             }
 
-            std::array<double, order_> get_verblunsky()
+            std::array<double, order_>
+            get_verblunsky()
             {
                 return _verblunsky_coefficients;
             }
@@ -124,7 +126,8 @@ namespace eos
             // Evaluate the normalized polynomials at on the real z axis, in the interval [-1, +1].
             // Note that, contrary to the literature [S:2004B], we use an integral measure dmu, which
             // yields \int dmu = `_norm_measure`, rather than the usual \int dmu = 1.
-            std::array<double, order_ + 1> operator() (const double & z) const
+            std::array<double, order_ + 1>
+            operator() (const double & z) const
             {
                 std::array<double, order_ + 1> phi;
                 std::array<double, order_ + 1> phi_star;
@@ -133,17 +136,17 @@ namespace eos
                 phi_star[0] = 1.0;
 
                 // we use real-valued Verblunsky coefficients only.
-                for (unsigned n = 1 ; n <= order_ ; ++n)
+                for (unsigned n = 1; n <= order_; ++n)
                 {
                     // cf. [S:2004B], eq. (1.4), p.2
-                    phi[n]      = z * phi[n - 1]  - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
+                    phi[n] = z * phi[n - 1] - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
 
                     // cf. [S:2004B], eqs. (1.4) and (1.5) in combination;
                     phi_star[n] = phi_star[n - 1] - _verblunsky_coefficients[n - 1] * z * phi[n - 1];
                 }
 
                 std::array<double, order_ + 1> result;
-                for (unsigned n = 0 ; n <= order_ ; ++n)
+                for (unsigned n = 0; n <= order_; ++n)
                 {
                     result[n] = phi[n] / _norms[n];
                 };
@@ -152,7 +155,8 @@ namespace eos
             }
 
             // Trivial generalization to real Verblunsky coefficients and complex z
-            std::array<complex<double>, order_ + 1> operator() (const complex<double> & z) const
+            std::array<complex<double>, order_ + 1>
+            operator() (const complex<double> & z) const
             {
                 std::array<complex<double>, order_ + 1> phi;
                 std::array<complex<double>, order_ + 1> phi_star;
@@ -161,17 +165,17 @@ namespace eos
                 phi_star[0] = 1.0;
 
                 // we use real-valued Verblunsky coefficients only.
-                for (unsigned n = 1 ; n <= order_ ; ++n)
+                for (unsigned n = 1; n <= order_; ++n)
                 {
                     // cf. [S:2004B], eq. (1.4), p.2
-                    phi[n]      = z * phi[n - 1]  - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
+                    phi[n] = z * phi[n - 1] - _verblunsky_coefficients[n - 1] * phi_star[n - 1];
 
                     // cf. [S:2004B], eqs. (1.4) and (1.5) in combination;
                     phi_star[n] = phi_star[n - 1] - _verblunsky_coefficients[n - 1] * z * phi[n - 1];
                 }
 
                 std::array<complex<double>, order_ + 1> result;
-                for (unsigned n = 0 ; n <= order_ ; ++n)
+                for (unsigned n = 0; n <= order_; ++n)
                 {
                     result[n] = phi[n] / _norms[n];
                 };
@@ -183,46 +187,51 @@ namespace eos
             // It can be used e.g. to decompose a polynomial on the orthonormal basis.
             // The coefficients are computed by induction as derivative evaluated at zero.
             // The result is an upper triangle matrix.
-            gsl_matrix * coefficient_matrix() const
+            gsl_matrix *
+            coefficient_matrix() const
             {
                 gsl_matrix * coefficients(gsl_matrix_calloc(order_ + 1, order_ + 1));
                 gsl_matrix * coefficients_star(gsl_matrix_calloc(order_ + 1, order_ + 1));
 
                 // Fill first column
-                gsl_matrix_set(coefficients,      0, 0, 1.);
+                gsl_matrix_set(coefficients, 0, 0, 1.);
                 gsl_matrix_set(coefficients_star, 0, 0, 1.);
 
-                for (unsigned i = 1 ; i <= order_ ; ++i)
+                for (unsigned i = 1; i <= order_; ++i)
                 {
-                    gsl_matrix_set(coefficients,      i, 0, 0.);
+                    gsl_matrix_set(coefficients, i, 0, 0.);
                     gsl_matrix_set(coefficients_star, i, 0, 0.);
                 }
 
                 // Fill first row, cf. [S:2004B], eq. (1.4), p.2
-                for (unsigned k = 1 ; k <= order_ ; ++k)
+                for (unsigned k = 1; k <= order_; ++k)
                 {
-                    gsl_matrix_set(coefficients,      0, k, - _verblunsky_coefficients[k - 1]);
-                    gsl_matrix_set(coefficients_star, 0, k,                                1.);
+                    gsl_matrix_set(coefficients, 0, k, -_verblunsky_coefficients[k - 1]);
+                    gsl_matrix_set(coefficients_star, 0, k, 1.);
                 }
 
                 // Fill the matrix of derivatives. We use real-valued Verblunsky coefficients only.
                 // The relation is derived from [S:2004B], eq. (1.4-5), p.2
-                for (unsigned k = 1 ; k <= order_ ; ++k)
+                for (unsigned k = 1; k <= order_; ++k)
                 {
-                    for (unsigned i = 1 ; i <= order_ ; ++i)
+                    for (unsigned i = 1; i <= order_; ++i)
                     {
-                        gsl_matrix_set(coefficients,      i, k, i * gsl_matrix_get(coefficients, i - 1, k - 1)
-                                        - _verblunsky_coefficients[k - 1] * gsl_matrix_get(coefficients_star, i, k - 1));
-                        gsl_matrix_set(coefficients_star, i, k, gsl_matrix_get(coefficients_star, i, k - 1)
-                                        - i * _verblunsky_coefficients[k - 1] * gsl_matrix_get(coefficients, i - 1, k - 1));
+                        gsl_matrix_set(coefficients,
+                                       i,
+                                       k,
+                                       i * gsl_matrix_get(coefficients, i - 1, k - 1) - _verblunsky_coefficients[k - 1] * gsl_matrix_get(coefficients_star, i, k - 1));
+                        gsl_matrix_set(coefficients_star,
+                                       i,
+                                       k,
+                                       gsl_matrix_get(coefficients_star, i, k - 1) - i * _verblunsky_coefficients[k - 1] * gsl_matrix_get(coefficients, i - 1, k - 1));
                     }
                 }
 
                 // Normalize all coefficients
-                for (unsigned k = 0 ; k <= order_ ; ++k)
+                for (unsigned k = 0; k <= order_; ++k)
                 {
                     unsigned factorial_i = 1;
-                    for (unsigned i = 0 ; i <= order_ ; ++i)
+                    for (unsigned i = 0; i <= order_; ++i)
                     {
                         gsl_matrix_set(coefficients, i, k, gsl_matrix_get(coefficients, i, k) / _norms[k] / factorial_i);
                         factorial_i *= (i + 1);
@@ -232,39 +241,40 @@ namespace eos
                 return coefficients;
             }
 
-            std::array<complex<double>, order_ + 1> derivatives(const complex<double> & z) const
+            std::array<complex<double>, order_ + 1>
+            derivatives(const complex<double> & z) const
             {
                 gsl_matrix * coefficient_matrix = this->coefficient_matrix();
 
                 // Vector of monomial derivatives: V = [0, 1, 2 z, 3 z^2, ...]
                 // Store real and imaginary part separately for simplicity
-                gsl_vector * monomial_derivatives_real(gsl_vector_calloc(order_ + 1));
-                gsl_vector * monomial_derivatives_imag(gsl_vector_calloc(order_ + 1));
-                complex<double> power_of_z(1.0 , 0.0);
+                gsl_vector *    monomial_derivatives_real(gsl_vector_calloc(order_ + 1));
+                gsl_vector *    monomial_derivatives_imag(gsl_vector_calloc(order_ + 1));
+                complex<double> power_of_z(1.0, 0.0);
                 gsl_vector_set(monomial_derivatives_real, 0, 0.0);
                 gsl_vector_set(monomial_derivatives_imag, 0, 0.0);
 
-                for (unsigned i = 1 ; i <= order_ ; ++i)
-                    {
-                        gsl_vector_set(monomial_derivatives_real, i, i * real(power_of_z));
-                        gsl_vector_set(monomial_derivatives_imag, i, i * imag(power_of_z));
-                        power_of_z *= z;
-                    }
+                for (unsigned i = 1; i <= order_; ++i)
+                {
+                    gsl_vector_set(monomial_derivatives_real, i, i * real(power_of_z));
+                    gsl_vector_set(monomial_derivatives_imag, i, i * imag(power_of_z));
+                    power_of_z *= z;
+                }
 
                 // Matrix product result = coefficient_matrix.T * monomial_derivatives
                 // coefficient_matrix is an upper triangular matrix
                 gsl_blas_dtrmv(CblasUpper, CblasTrans, CblasNonUnit, coefficient_matrix, monomial_derivatives_real);
                 gsl_blas_dtrmv(CblasUpper, CblasTrans, CblasNonUnit, coefficient_matrix, monomial_derivatives_imag);
-                std::array<complex<double>, order_ + 1>  result;
+                std::array<complex<double>, order_ + 1> result;
 
-                for (unsigned i = 0 ; i <= order_ ; ++i)
-                    {
-                        result[i] = complex<double>(gsl_vector_get(monomial_derivatives_real, i), gsl_vector_get(monomial_derivatives_imag, i));
-                    }
+                for (unsigned i = 0; i <= order_; ++i)
+                {
+                    result[i] = complex<double>(gsl_vector_get(monomial_derivatives_real, i), gsl_vector_get(monomial_derivatives_imag, i));
+                }
 
                 return result;
             }
     };
-}
+} // namespace eos
 
 #endif

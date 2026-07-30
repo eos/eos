@@ -15,29 +15,30 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
 #include <eos/maths/gegenbauer-polynomial.hh>
+#include <eos/maths/power-of.hh>
 
 #include <cmath>
 #include <vector>
 
 namespace eos
 {
-    std::vector<double> GegenbauerPolynomial::_calculate_coefficients() const
+    std::vector<double>
+    GegenbauerPolynomial::_calculate_coefficients() const
     {
-        const double epsilon = 1e-8;
+        const double        epsilon = 1e-8;
         std::vector<double> result(_half_order + 1);
 
-        for (unsigned int i = 0 ; i <= _half_order ; i++)
+        for (unsigned int i = 0; i <= _half_order; i++)
         {
-            const double entry = pow(2.0, 2.0 * i + _r) * pow(-1.0, 1.0 * (_half_order - i)) *
-                tgamma(_alpha + 1.0 * (_half_order + i) + _r) / (tgamma(1.0 * (_half_order - i + 1)) * tgamma(2.0 * i + _r + 1.0)); // denominator: (half_order - i)! * (2i + r)!;
+            const double entry = pow(2.0, 2.0 * i + _r) * pow(-1.0, 1.0 * (_half_order - i)) * tgamma(_alpha + 1.0 * (_half_order + i) + _r)
+                                 / (tgamma(1.0 * (_half_order - i + 1)) * tgamma(2.0 * i + _r + 1.0)); // denominator: (half_order - i)! * (2i + r)!;
 
             result.at(i) = entry;
         }
 
         double gamma_alpha = (std::abs(_alpha) < epsilon) ? 1.0 : tgamma(_alpha);
-        for (unsigned int i = 0 ; i <= _half_order ; i++)
+        for (unsigned int i = 0; i <= _half_order; i++)
         {
             result[i] /= gamma_alpha;
         }
@@ -45,17 +46,18 @@ namespace eos
         return result;
     }
 
-    double GegenbauerPolynomial::evaluate(const double & z) const
+    double
+    GegenbauerPolynomial::evaluate(const double & z) const
     {
         double result = 0.0;
-        double x = (1 - _r) * 1.0 + _r * z;
+        double x      = (1 - _r) * 1.0 + _r * z;
 
         for (double entry : _coefficients)
         {
             result += entry * x;
-            x *= z * z;
+            x      *= z * z;
         }
 
         return result;
     }
-}
+} // namespace eos

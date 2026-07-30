@@ -20,11 +20,11 @@
 #ifndef EOS_GUARD_EOS_MATHS_GSL_INTERFACE_HH
 #define EOS_GUARD_EOS_MATHS_GSL_INTERFACE_HH 1
 
-#include <memory>
-
 #include <gsl/gsl_matrix.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_vector.h>
+
+#include <memory>
 
 namespace eos
 {
@@ -35,21 +35,23 @@ namespace eos
          */
         struct MatrixDeleter
         {
-            MatrixDeleter() { }
+                MatrixDeleter() {}
 
-            void operator() (gsl_matrix * m)
-            {
-                if (m)
+                void
+                operator() (gsl_matrix * m)
                 {
-                    gsl_matrix_free(m);
+                    if (m)
+                    {
+                        gsl_matrix_free(m);
+                    }
                 }
-            }
         };
-    }
+    } // namespace gsl
 
     using GSLMatrixPtr = std::unique_ptr<gsl_matrix, gsl::MatrixDeleter>;
 
-    GSLMatrixPtr make_gsl_matrix(size_t n1, size_t n2)
+    GSLMatrixPtr
+    make_gsl_matrix(size_t n1, size_t n2)
     {
         gsl_matrix * result = gsl_matrix_calloc(n1, n2);
 
@@ -63,26 +65,28 @@ namespace eos
          */
         struct VectorDeleter
         {
-            VectorDeleter() { }
+                VectorDeleter() {}
 
-            void operator() (gsl_vector * v)
-            {
-                if (v)
+                void
+                operator() (gsl_vector * v)
                 {
-                    gsl_vector_free(v);
+                    if (v)
+                    {
+                        gsl_vector_free(v);
+                    }
                 }
-            }
         };
-    }
+    } // namespace gsl
 
     using GSLVectorPtr = std::unique_ptr<gsl_vector, gsl::VectorDeleter>;
 
-    GSLVectorPtr make_gsl_vector(size_t n)
+    GSLVectorPtr
+    make_gsl_vector(size_t n)
     {
         gsl_vector * result = gsl_vector_calloc(n);
 
         return GSLVectorPtr(result);
     }
-}
+} // namespace eos
 
 #endif
