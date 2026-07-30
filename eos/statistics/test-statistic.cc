@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/statistics/test-statistic.hh>
 #include <eos/statistics/test-statistic-impl.hh>
+#include <eos/statistics/test-statistic.hh>
 
 #include <limits>
 
@@ -55,5 +55,5 @@ namespace eos
         {
             stream << "chi^2 = " << chi2 << " with d.o.f. = " << dof << std::endl;
         }
-    }
-}
+    } // namespace test_statistics
+} // namespace eos

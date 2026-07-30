@@ -27,75 +27,74 @@
 
 namespace
 {
-    template <class... T_> struct overloads : T_... { using T_::operator()...; };
+    template <class... T_> struct overloads : T_...
+    {
+            using T_::operator()...;
+    };
     // the following is strictly only necessary for C++17, but clang-14 fails to perform
     // Class Template Argument Deduction (CTAD) for the overloads struct even in C++20 mode.
     // Minimum clang version for CTAD support in C++20 mode is clang-17.
     template <class... T_> overloads(T_...) -> overloads<T_...>;
-}
+} // namespace
 
 namespace eos
 {
-    template <>
-    struct Implementation<GoodnessOfFit>
+    template <> struct Implementation<GoodnessOfFit>
     {
-        LogPosterior log_posterior;
+            LogPosterior log_posterior;
 
-        double total_chi_square;
-        int total_degrees_of_freedom;
+            double total_chi_square;
+            int    total_degrees_of_freedom;
 
-        std::map<QualifiedName, test_statistics::ChiSquare> chi_squares;
+            std::map<QualifiedName, test_statistics::ChiSquare> chi_squares;
 
-        Constraint * current_constraint;
+            Constraint * current_constraint;
 
-        Implementation(const LogPosterior & log_posterior) :
-            log_posterior(log_posterior),
-            total_chi_square(0.0),
-            total_degrees_of_freedom(log_posterior.informative_priors() - log_posterior.varied_parameters().size()),
-            current_constraint(nullptr)
-        {
-            compute_test_statistics();
-        }
-
-        ~Implementation() = default;
-
-        void compute_test_statistics()
-        {
-            auto log_likelihood = log_posterior.log_likelihood();
-            auto observable_cache = log_likelihood.observable_cache();
-            observable_cache.update();
-
-            /* compute the test statistics for each constraint*/
-            for (auto c = log_likelihood.begin(), c_end = log_likelihood.end() ; c != c_end ; ++c)
+            Implementation(const LogPosterior & log_posterior) :
+                log_posterior(log_posterior),
+                total_chi_square(0.0),
+                total_degrees_of_freedom(log_posterior.informative_priors() - log_posterior.varied_parameters().size()),
+                current_constraint(nullptr)
             {
-                current_constraint = &(*c);
+                compute_test_statistics();
+            }
 
-                /* compute the test statistics for each log-likelihood block */
-                for (auto b = c->begin_blocks(), b_end = c->end_blocks() ; b != b_end ; ++b)
+            ~Implementation() = default;
+
+            void
+            compute_test_statistics()
+            {
+                auto log_likelihood   = log_posterior.log_likelihood();
+                auto observable_cache = log_likelihood.observable_cache();
+                observable_cache.update();
+
+                /* compute the test statistics for each constraint*/
+                for (auto c = log_likelihood.begin(), c_end = log_likelihood.end(); c != c_end; ++c)
                 {
-                    auto test_statistic = (*b)->primary_test_statistic();
+                    current_constraint = &(*c);
 
-                    // apply special treatments based on its type
-                    const auto visitor = overloads
+                    /* compute the test statistics for each log-likelihood block */
+                    for (auto b = c->begin_blocks(), b_end = c->end_blocks(); b != b_end; ++b)
                     {
-                        [this] (const test_statistics::Empty &) { },
-                        [this] (const test_statistics::ChiSquare & c)
+                        auto test_statistic = (*b)->primary_test_statistic();
+
+                        // apply special treatments based on its type
+                        const auto visitor = overloads{ [this](const test_statistics::Empty &) {},
+                                                        [this](const test_statistics::ChiSquare & c)
                         {
                             total_chi_square += c.chi2;
                             total_degrees_of_freedom += c.dof;
                             chi_squares.insert(std::make_pair(current_constraint->name(), c));
-                        }
-                    };
-                    std::visit(visitor, test_statistic);
+                        } };
+                        std::visit(visitor, test_statistic);
+                    }
                 }
             }
-        }
     };
 
-    template <>
-    struct WrappedForwardIteratorTraits<GoodnessOfFit::ChiSquareIteratorTag>
+    template <> struct WrappedForwardIteratorTraits<GoodnessOfFit::ChiSquareIteratorTag>
     {
-        using UnderlyingIterator = std::map<QualifiedName, test_statistics::ChiSquare>::const_iterator;
+            using UnderlyingIterator = std::map<QualifiedName, test_statistics::ChiSquare>::const_iterator;
     };
     template class WrappedForwardIterator<GoodnessOfFit::ChiSquareIteratorTag, const std::pair<const QualifiedName, test_statistics::ChiSquare>>;
 
@@ -129,4 +128,4 @@ namespace eos
     {
         return _imp->chi_squares.end();
     }
-}
+} // namespace eos

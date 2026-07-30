@@ -30,6 +30,6 @@ namespace eos
     class LogLikelihoodBlock;
 
     using LogLikelihoodBlockPtr = std::shared_ptr<LogLikelihoodBlock>;
-}
+} // namespace eos
 
 #endif

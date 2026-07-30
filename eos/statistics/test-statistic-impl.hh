@@ -37,7 +37,7 @@ namespace eos
         {
             public:
                 double chi2;
-                int dof;
+                int    dof;
                 double signed_chi;
 
                 ChiSquare(const double & chi2, const int & dof, const double & signed_chi);
@@ -48,5 +48,5 @@ namespace eos
 
                 virtual void output(std::ostream & stream) const;
         };
-    }
-}
+    } // namespace test_statistics
+} // namespace eos
