@@ -21,7 +21,10 @@ import os
 import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
+from eos.figure.item import CompositeRegionHandle, CompositeRegionHandler
+from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
+from matplotlib import transforms as mtransforms
 from matplotlib.container import ErrorbarContainer
 from matplotlib.lines import Line2D
 from matplotlib.patches import Rectangle
@@ -452,7 +455,7 @@ class TwoDimensionalConstraintItemTests(unittest.TestCase):
 
     def test_legend(self):
 
-        # a labelled 2D constraint contributes a single patch entry
+        # a labelled 2D constraint contributes a single composite entry
         item = eos.figure.ItemFactory.from_yaml("""
         type: 'constraint2D'
         constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
@@ -462,8 +465,68 @@ class TwoDimensionalConstraintItemTests(unittest.TestCase):
         """)
         entries = item.legend()
         self.assertEqual(len(entries), 1)
-        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertIsInstance(entries[0][0], CompositeRegionHandle)
         self.assertEqual(entries[0][1], 'BaBar 2008')
+
+        # a single confidence level yields a single swatch, i.e. the composite key degenerates to
+        # the one-shade key it replaces
+        self.assertEqual(len(entries[0][0].facecolors), 1)
+
+        # the key carries one swatch per drawn region ...
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B^0->K^*0gamma::S_K+C_K@BaBar:2008A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        y: { observable: 'B->K^*gamma::C_K^*gamma' }
+        sigmas: [1.0, 2.0, 3.0]
+        alpha: 0.5
+        color: 'C0'
+        linestyle: 'dashed'
+        label: 'BaBar 2008'
+        """)
+        handle = item.legend()[0][0]
+        self.assertEqual(len(handle.facecolors), 3)
+
+        # ... whose shades are those of the drawn regions, i.e. each region's own opacity
+        # composited onto the opacities of the regions enclosing it. The item draws its regions from
+        # the outermost inwards, whereas the swatches run from the innermost region at the left to
+        # the outermost at the right, so that opacity decreases from left to right.
+        accumulated = []
+        opacity = 0.0
+        for alpha in item._alphas:
+            opacity = opacity + alpha * (1.0 - opacity)
+            accumulated.append(opacity)
+        accumulated.reverse()
+        self.assertEqual(accumulated, sorted(accumulated, reverse=True))
+        for facecolor, opacity in zip(handle.facecolors, accumulated):
+            self.assertAlmostEqual(mcolors.to_rgba(facecolor)[3], opacity, places=12)
+            self.assertEqual(mcolors.to_rgba(facecolor)[:3], mcolors.to_rgba(item.color)[:3])
+
+        # the boundary of the key reflects the line style of the outermost region
+        self.assertEqual(handle.linestyle, 'dashed')
+        self.assertEqual(handle.linewidth, item.linewidth)
+
+        # the key is rendered as one swatch per region plus a single enclosing boundary. The handler
+        # does not consult the legend it is passed, so None suffices here.
+        artists = CompositeRegionHandler().create_artists(None, handle, 0.0, 0.0, 30.0, 10.0, 10.0,
+                                                          mtransforms.IdentityTransform())
+        self.assertEqual(len(artists), len(handle.facecolors) + 1)
+        swatches, boundary = artists[:-1], artists[-1]
+        # the swatches abut and together span exactly the width allotted to the key
+        self.assertAlmostEqual(sum(s.get_width() for s in swatches), 30.0, places=12)
+        for lower, upper in zip(swatches[:-1], swatches[1:]):
+            self.assertAlmostEqual(lower.get_x() + lower.get_width(), upper.get_x(), places=12)
+        # the swatches are not outlined, so that no divider appears between adjacent swatches
+        for swatch in swatches:
+            self.assertEqual(swatch.get_linewidth(), 0.0)
+        # a single unfilled boundary spans the whole key
+        self.assertFalse(boundary.get_fill())
+        self.assertAlmostEqual(boundary.get_width(), 30.0, places=12)
+        self.assertEqual(boundary.get_linestyle(), 'dashed')
+
+        # an empty composite key is rejected rather than rendered as a boundary with no swatches
+        with self.assertRaises(ValueError):
+            CompositeRegionHandle([])
 
         # an unlabelled 2D constraint contributes no entry
         item = eos.figure.ItemFactory.from_yaml("""

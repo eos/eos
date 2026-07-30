@@ -24,6 +24,8 @@ import eos
 import matplotlib as _matplotlib
 import matplotlib.collections
 import matplotlib.container
+import matplotlib.legend
+import matplotlib.legend_handler
 import matplotlib.lines
 import matplotlib.patches
 import matplotlib.transforms
@@ -64,6 +66,101 @@ class ItemColorCycler:
         result = cls._colors[cls._color_idx]
         cls._color_idx = (cls._color_idx + 1) % len(cls._colors)
         return result
+
+
+class CompositeRegionHandle:
+    """A legend handle for items that draw several nested, translucent regions.
+
+    Items such as :class:`TwoDimensionalConstraintItem` render one filled region per confidence
+    level. Since the regions are nested and translucent, the shade the eye actually sees differs
+    from region to region: the outermost region shows a single fill, while an inner region shows
+    its own fill composited on top of every fill enclosing it. A single-shade legend key (as
+    produced by :meth:`Item._legend_patch`) therefore matches none of them.
+
+    This handle instead occupies the same area as an ordinary legend key, but is subdivided
+    horizontally into one abutting swatch per region, each carrying that region's composited
+    shade. A single boundary is drawn around the composite; the individual swatches are not
+    outlined, so they read as one key rather than as several. Rendering is performed by
+    :class:`CompositeRegionHandler`, which is registered as the default legend handler for this
+    class.
+
+    :param facecolors: The fill colors of the swatches, in the order in which they appear from left to right. Each must be a color that matplotlib can resolve, including its opacity. Callers that build the shades by compositing nested regions, such as :meth:`Item._legend_composite_patch`, pass the innermost region's shade first, so that opacity decreases towards the right.
+    :type facecolors: list
+    :param edgecolor: The color of the boundary drawn around the composite key.
+    :type edgecolor: object
+    :param linewidth: The width of the boundary drawn around the composite key.
+    :type linewidth: float
+    :param linestyle: The style of the boundary drawn around the composite key. This is the line style of the outermost region, since that region's outline is what bounds the drawn item.
+    :type linestyle: str
+    """
+
+    def __init__(self, facecolors, edgecolor=None, linewidth=1.0, linestyle='solid'):
+        if not facecolors:
+            raise ValueError('a composite legend handle requires at least one facecolor')
+
+        self.facecolors = list(facecolors)
+        self.edgecolor  = edgecolor
+        self.linewidth  = linewidth
+        self.linestyle  = linestyle
+
+
+class CompositeRegionHandler(_matplotlib.legend_handler.HandlerBase):
+    """Renders a :class:`CompositeRegionHandle` as a row of abutting swatches.
+
+    The swatches divide the width that the legend allots to a single key into equal parts, so that
+    the composite key occupies exactly the area an ordinary one-shade key would. They are drawn
+    without outlines and are followed by an unfilled boundary spanning the entire key, which
+    prevents internal dividers from appearing between adjacent swatches.
+    """
+
+    def create_artists(self, legend, orig_handle, xdescent, ydescent, width, height, fontsize, trans):
+        """Create the artists that make up the composite legend key.
+
+        :param legend: The legend for which the artists are created.
+        :type legend: matplotlib.legend.Legend
+        :param orig_handle: The handle to be rendered.
+        :type orig_handle: CompositeRegionHandle
+        :param xdescent: The offset of the key's left edge, measured to the left of the origin.
+        :type xdescent: float
+        :param ydescent: The offset of the key's bottom edge, measured below the origin.
+        :type ydescent: float
+        :param width: The width allotted to the key.
+        :type width: float
+        :param height: The height allotted to the key.
+        :type height: float
+        :param fontsize: The font size of the legend. Unused; accepted for interface consistency.
+        :type fontsize: float
+        :param trans: The transform to be applied to the artists.
+        :type trans: matplotlib.transforms.Transform
+        :returns: The swatches, followed by the boundary drawn around them.
+        :rtype: list[matplotlib.artist.Artist]
+        """
+        artists = []
+
+        # abutting swatches, one per region and each without an outline, which together span the
+        # full width of the key
+        bounds = _np.linspace(-xdescent, -xdescent + width, len(orig_handle.facecolors) + 1)
+        for facecolor, lower, upper in zip(orig_handle.facecolors, bounds[:-1], bounds[1:]):
+            swatch = _matplotlib.patches.Rectangle((lower, -ydescent), upper - lower, height,
+                                                   facecolor=facecolor, edgecolor='none', linewidth=0.0)
+            swatch.set_transform(trans)
+            artists.append(swatch)
+
+        # a single boundary around the composite, in the line style of the outermost region
+        boundary = _matplotlib.patches.Rectangle((-xdescent, -ydescent), width, height, fill=False,
+                                                 edgecolor=orig_handle.edgecolor,
+                                                 linewidth=orig_handle.linewidth,
+                                                 linestyle=orig_handle.linestyle)
+        boundary.set_transform(trans)
+        artists.append(boundary)
+
+        return artists
+
+
+# make the composite key available to every legend, so that items returning a CompositeRegionHandle
+# need not thread a handler map through the plot's legend
+_matplotlib.legend.Legend.update_default_handler_map({ CompositeRegionHandle: CompositeRegionHandler() })
+
 
 @dataclass(kw_only=True)
 class Item(Deserializable):
@@ -115,6 +212,40 @@ class Item(Deserializable):
         if not self.label:
             return []
         handle = _matplotlib.patches.Rectangle((0, 0), 1, 1, color=self.color, alpha=self.alpha)
+        return [(handle, self.label)]
+
+    def _legend_composite_patch(self, alphas):
+        """A subdivided swatch matching a set of nested, translucent regions.
+
+        The regions are drawn on top of one another, so the opacity the eye perceives for a region
+        is not that region's own opacity but the accumulated opacity of that region and of every
+        region enclosing it. This method composites the given opacities accordingly and returns a
+        :class:`CompositeRegionHandle` whose swatches carry the resulting shades, so that each
+        shade in the key also occurs in the plot.
+
+        The swatches run from the innermost region at the left to the outermost region at the right,
+        so that opacity decreases from left to right.
+
+        :param alphas: The opacities of the regions' fills, ordered from the outermost region to the innermost, as passed to the drawing routine.
+        :type alphas: list[float] | numpy.ndarray
+        :returns: A list containing a single ``(handle, label)`` pair if a label is set, otherwise empty.
+        :rtype: list[tuple[matplotlib.artist.Artist, str]]
+        """
+        if not self.label:
+            return []
+
+        # The opacity accumulated by compositing each region's fill onto the fills enclosing it.
+        # Accumulating requires the outermost region first, while the swatches run the other way
+        # round, so the resulting shades are reversed for display.
+        accumulated = 1.0 - _np.cumprod(1.0 - _np.asarray(alphas, dtype=float))
+        facecolors  = [_matplotlib.colors.to_rgba(self.color, alpha) for alpha in accumulated[::-1]]
+
+        # The outermost region bounds the drawn item, so its line style is the one that bounds the
+        # key. The boundary is drawn opaque rather than at that region's opacity, which would leave
+        # it too faint to read: delineating the key and conveying the line style is the boundary's
+        # purpose here, while the swatches carry the opacity information.
+        handle = CompositeRegionHandle(facecolors, edgecolor=self.color,
+                                       linewidth=self.linewidth, linestyle=self.linestyle)
         return [(handle, self.label)]
 
     def _legend_marker(self, marker, alpha=None):
@@ -2121,7 +2252,8 @@ class TwoDimensionalConstraintItem(Item):
             ywidth = 2.0 * _np.sqrt(1.0 - self._rho)
             for sigma, alpha in zip(self.sigmas, self._alphas):
                 ellipse = _matplotlib.patches.Ellipse((0.0, 0.0), width=xwidth, height=ywidth,
-                                                       alpha=alpha, color=self.color, linewidth=self.linewidth, fill=True)
+                                                       alpha=alpha, color=self.color, linewidth=self.linewidth,
+                                                       linestyle=self.linestyle, fill=True)
                 transf = _matplotlib.transforms.Affine2D() \
                     .rotate_deg(45) \
                     .scale(self._xsigma * sigma, self._ysigma * sigma) \
@@ -2136,7 +2268,8 @@ class TwoDimensionalConstraintItem(Item):
                 xlo = self._mean - sigma * self._sigma_lo
                 xhi = self._mean + sigma * self._sigma_hi
                 ax.add_patch(_matplotlib.patches.Rectangle((xlo, 0), width=xhi - xlo, height=1,
-                                                           transform=transform, alpha=alpha, color=self.color))
+                                                           transform=transform, alpha=alpha, color=self.color,
+                                                           linewidth=self.linewidth, linestyle=self.linestyle))
         elif self._shape == 'rect-y':
             # span the full orthogonal (x) axis: y is in data coordinates, x in axes coordinates,
             # so the band is independent of the x limits at the time this item is drawn
@@ -2145,11 +2278,17 @@ class TwoDimensionalConstraintItem(Item):
                 ylo = self._mean - sigma * self._sigma_lo
                 yhi = self._mean + sigma * self._sigma_hi
                 ax.add_patch(_matplotlib.patches.Rectangle((0, ylo), width=1, height=yhi - ylo,
-                                                           transform=transform, alpha=alpha, color=self.color))
+                                                           transform=transform, alpha=alpha, color=self.color,
+                                                           linewidth=self.linewidth, linestyle=self.linestyle))
 
     def legend(self):
-        """Return the item's legend entry in form of its handle(s) and label(s)."""
-        return self._legend_patch()
+        """Return the item's legend entry in form of its handle(s) and label(s).
+
+        Since this item draws one nested region per requested confidence level, the key is
+        subdivided into one swatch per region, each carrying the shade that region shows in the
+        plot; see :meth:`Item._legend_composite_patch`.
+        """
+        return self._legend_composite_patch(self._alphas)
 
 
 @dataclass(kw_only=True)
