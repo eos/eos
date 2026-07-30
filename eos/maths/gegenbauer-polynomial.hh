@@ -51,6 +51,6 @@ namespace eos
 
             double evaluate(const double & z) const;
     };
-}
+} // namespace eos
 
 #endif

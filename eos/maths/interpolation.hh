@@ -19,21 +19,22 @@
 #ifndef EOS_GUARD_EOS_MATHS_INTERPOLATION_HH
 #define EOS_GUARD_EOS_MATHS_INTERPOLATION_HH 1
 
-#include <vector>
+#include <gsl/gsl_spline.h>
+
 #include <functional>
 #include <memory>
-#include <gsl/gsl_spline.h>
+#include <vector>
 
 namespace eos
 {
     class CSplineInterpolation
     {
         private:
-            const std::vector<double> _data_x;
-            const std::vector<double> _data_y;
+            const std::vector<double>                   _data_x;
+            const std::vector<double>                   _data_y;
             const std::function<double(const double &)> _map_x;
-            const std::shared_ptr<gsl_interp_accel> _acc;
-            const std::shared_ptr<gsl_interp> _interp;
+            const std::shared_ptr<gsl_interp_accel>     _acc;
+            const std::shared_ptr<gsl_interp>           _interp;
 
         public:
             CSplineInterpolation() = delete;
@@ -50,8 +51,8 @@ namespace eos
              *
              * @param x The point at which the function shall be evaluated.
              */
-            double operator()(const double & x) const;
+            double operator() (const double & x) const;
     };
-}
+} // namespace eos
 
 #endif

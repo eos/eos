@@ -29,13 +29,13 @@ namespace eos
 
     /* matrix plus matrix */
     template <typename T_, std::size_t m_, std::size_t n_>
-    std::array<std::array<T_, n_>, m_> operator+ (const std::array<std::array<T_, n_>, m_> & x,
-            const std::array<std::array<T_, n_>, m_> & y)
+    std::array<std::array<T_, n_>, m_>
+    operator+ (const std::array<std::array<T_, n_>, m_> & x, const std::array<std::array<T_, n_>, m_> & y)
     {
         std::array<std::array<T_, n_>, m_> result;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
-            for (std::size_t j(0) ; j < n_ ; ++j)
+            for (std::size_t j(0); j < n_; ++j)
             {
                 result[i][j] = x[i][j] + y[i][j];
             }
@@ -46,13 +46,13 @@ namespace eos
 
     /* matrix minus matrix */
     template <typename T_, std::size_t m_, std::size_t n_>
-    std::array<std::array<T_, n_>, m_> operator- (const std::array<std::array<T_, n_>, m_> & x,
-            const std::array<std::array<T_, n_>, m_> & y)
+    std::array<std::array<T_, n_>, m_>
+    operator- (const std::array<std::array<T_, n_>, m_> & x, const std::array<std::array<T_, n_>, m_> & y)
     {
         std::array<std::array<T_, n_>, m_> result;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
-            for (std::size_t j(0) ; j < n_ ; ++j)
+            for (std::size_t j(0); j < n_; ++j)
             {
                 result[i][j] = x[i][j] - y[i][j];
             }
@@ -63,11 +63,11 @@ namespace eos
 
     /* vector plus vector */
     template <typename T_, std::size_t m_>
-    std::array<T_, m_> operator+ (const std::array<T_, m_> & x,
-            const std::array<T_, m_> & y)
+    std::array<T_, m_>
+    operator+ (const std::array<T_, m_> & x, const std::array<T_, m_> & y)
     {
         std::array<T_, m_> result;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
             result[i] = x[i] + y[i];
         }
@@ -77,11 +77,11 @@ namespace eos
 
     /* vector minus vector */
     template <typename T_, std::size_t m_>
-    std::array<T_, m_> operator- (const std::array<T_, m_> & x,
-            const std::array<T_, m_> & y)
+    std::array<T_, m_>
+    operator- (const std::array<T_, m_> & x, const std::array<T_, m_> & y)
     {
         std::array<T_, m_> result;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
             result[i] = x[i] - y[i];
         }
@@ -93,17 +93,17 @@ namespace eos
 
     /* matrix times matrix */
     template <typename T_, std::size_t m_, std::size_t n_, std::size_t o_>
-    std::array<std::array<T_, n_>, m_> operator* (const std::array<std::array<T_, o_>, m_> & x,
-            const std::array<std::array<T_, n_>, o_> & y)
+    std::array<std::array<T_, n_>, m_>
+    operator* (const std::array<std::array<T_, o_>, m_> & x, const std::array<std::array<T_, n_>, o_> & y)
     {
         std::array<std::array<T_, n_>, m_> result;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
-            for (std::size_t j(0) ; j < n_ ; ++j)
+            for (std::size_t j(0); j < n_; ++j)
             {
                 result[i][j] = 0.0;
 
-                for (std::size_t k(0) ; k < o_ ; ++k)
+                for (std::size_t k(0); k < o_; ++k)
                 {
                     result[i][j] += x[i][k] * y[k][j];
                 }
@@ -115,14 +115,15 @@ namespace eos
 
     /* matrix times vector, right-multiplication */
     template <typename T_, std::size_t m_, std::size_t n_>
-    std::array<T_, m_> operator* (const std::array<std::array<T_, n_>, m_> & x, const std::array<T_, n_> & y)
+    std::array<T_, m_>
+    operator* (const std::array<std::array<T_, n_>, m_> & x, const std::array<T_, n_> & y)
     {
         std::array<T_, m_> result;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
             result[i] = 0.0;
 
-            for (std::size_t j(0) ; j < n_ ; ++j)
+            for (std::size_t j(0); j < n_; ++j)
             {
                 result[i] += x[i][j] * y[j];
             }
@@ -133,13 +134,14 @@ namespace eos
 
     /* matrix times vector, left-multiplication */
     template <typename T_, std::size_t m_, std::size_t n_>
-    std::array<T_, n_> operator^ (const std::array<T_, m_> & x, const std::array<std::array<T_, n_>, m_> & y)
+    std::array<T_, n_>
+    operator^ (const std::array<T_, m_> & x, const std::array<std::array<T_, n_>, m_> & y)
     {
         std::array<T_, n_> result;
-        for (std::size_t i(0) ; i < n_ ; ++i)
+        for (std::size_t i(0); i < n_; ++i)
         {
             result[i] = 0.0;
-            for (std::size_t j(0) ; j < m_ ; ++j)
+            for (std::size_t j(0); j < m_; ++j)
             {
                 result[i] += x[j] * y[j][i];
             }
@@ -150,12 +152,13 @@ namespace eos
 
     /* scalar times matrix */
     template <typename T_, std::size_t m_, std::size_t n_>
-    std::array<std::array<T_, n_>, m_> operator* (const T_ & x, const std::array<std::array<T_, n_>, m_> & y)
+    std::array<std::array<T_, n_>, m_>
+    operator* (const T_ & x, const std::array<std::array<T_, n_>, m_> & y)
     {
         std::array<std::array<T_, n_>, m_> result = y;
-        for (std::size_t i(0) ; i < m_ ; ++i)
+        for (std::size_t i(0); i < m_; ++i)
         {
-            for (std::size_t j(0) ; j < n_ ; ++j)
+            for (std::size_t j(0); j < n_; ++j)
             {
                 result[i][j] *= x;
             }
@@ -166,10 +169,11 @@ namespace eos
 
     /* scalar times vector */
     template <typename T_, std::size_t n_>
-    std::array<T_, n_> operator* (const T_ & x, const std::array<T_, n_> & y)
+    std::array<T_, n_>
+    operator* (const T_ & x, const std::array<T_, n_> & y)
     {
         std::array<T_, n_> result = y;
-        for (std::size_t i(0) ; i < n_ ; ++i)
+        for (std::size_t i(0); i < n_; ++i)
         {
             result[i] *= x;
         }
@@ -179,10 +183,11 @@ namespace eos
 
     /* vector times vector */
     template <typename T_, std::size_t n_>
-    T_ dot(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
+    T_
+    dot(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
     {
         T_ result = 0.0;
-        for (std::size_t i(0) ; i < n_ ; ++i)
+        for (std::size_t i(0); i < n_; ++i)
         {
             result += x[i] * y[i];
         }
@@ -192,10 +197,11 @@ namespace eos
 
     /* component-wise multiplication of two vectors */
     template <typename T_, std::size_t n_>
-    std::array<T_, n_> mult(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
+    std::array<T_, n_>
+    mult(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
     {
         std::array<T_, n_> result;
-        for (std::size_t i(0) ; i < n_ ; ++i)
+        for (std::size_t i(0); i < n_; ++i)
         {
             result[i] = x[i] * y[i];
         }
@@ -205,16 +211,17 @@ namespace eos
 
     /* component-wise division of two vectors */
     template <typename T_, std::size_t n_>
-    std::array<T_, n_> divide(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
+    std::array<T_, n_>
+    divide(const std::array<T_, n_> & x, const std::array<T_, n_> & y)
     {
         std::array<T_, n_> result;
-        for (std::size_t i(0) ; i < n_ ; ++i)
+        for (std::size_t i(0); i < n_; ++i)
         {
             result[i] = x[i] / y[i];
         }
 
         return result;
     }
-}
+} // namespace eos
 
 #endif

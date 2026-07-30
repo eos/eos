@@ -16,13 +16,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <interpolation.hh>
-#include <gsl/gsl_errno.h>
 #include <eos/utils/exception.hh>
+
+#include <gsl/gsl_errno.h>
+
+#include <interpolation.hh>
 
 namespace eos
 {
-    CSplineInterpolation::CSplineInterpolation(const std::vector<double> & data_x, const std::vector<double> & data_y):
+    CSplineInterpolation::CSplineInterpolation(const std::vector<double> & data_x, const std::vector<double> & data_y) :
         _data_x(data_x),
         _data_y(data_y),
         _acc(gsl_interp_accel_alloc(), &gsl_interp_accel_free),
@@ -35,10 +37,11 @@ namespace eos
         gsl_interp_init(_interp.get(), &_data_x[0], &_data_y[0], _data_x.size());
     }
 
-    double CSplineInterpolation::operator()(const double & x) const
+    double
+    CSplineInterpolation::operator() (const double & x) const
     {
-        double res = 0;
-        int gsl_status = 0;
+        double res        = 0;
+        int    gsl_status = 0;
 
         gsl_status = gsl_interp_eval_e(_interp.get(), &_data_x[0], &_data_y[0], x, _acc.get(), &res);
         if (gsl_status)
@@ -48,4 +51,4 @@ namespace eos
 
         return res;
     }
-}
+} // namespace eos

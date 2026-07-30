@@ -19,8 +19,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/matrix.hh>
 
 #include <gsl/gsl_errno.h>
@@ -30,12 +30,13 @@
 
 namespace
 {
-    double gsl_function_adapter(double x, void *params)
+    double
+    gsl_function_adapter(double x, void * params)
     {
-        const auto& f = *static_cast<eos::GSL::fdd*>(params);
+        const auto & f = *static_cast<eos::GSL::fdd *>(params);
         return f(x);
     }
-}
+} // namespace
 
 namespace eos
 {
@@ -47,23 +48,27 @@ namespace eos
         {
         }
 
-        double QNG::Config::epsabs() const
+        double
+        QNG::Config::epsabs() const
         {
             return _epsabs;
         }
 
-        QNG::Config & QNG::Config::epsabs(const double &x)
+        QNG::Config &
+        QNG::Config::epsabs(const double & x)
         {
             _epsabs = x;
             return *this;
         }
 
-        double QNG::Config::epsrel() const
+        double
+        QNG::Config::epsrel() const
         {
             return _epsrel;
         }
 
-        QNG::Config & QNG::Config::epsrel(const double &x)
+        QNG::Config &
+        QNG::Config::epsrel(const double & x)
         {
             _epsrel = x;
             return *this;
@@ -85,51 +90,57 @@ namespace eos
         {
         }
 
-        double QAGS::Config::epsabs() const
+        double
+        QAGS::Config::epsabs() const
         {
             return _qng.epsabs();
         }
 
-        QAGS::Config & QAGS::Config::epsabs(const double &x)
+        QAGS::Config &
+        QAGS::Config::epsabs(const double & x)
         {
             _qng.epsabs(x);
             return *this;
         }
 
-        double QAGS::Config::epsrel() const
+        double
+        QAGS::Config::epsrel() const
         {
             return _qng.epsrel();
         }
 
-        QAGS::Config & QAGS::Config::epsrel(const double &x)
+        QAGS::Config &
+        QAGS::Config::epsrel(const double & x)
         {
             _qng.epsrel(x);
             return *this;
         }
 
-        int QAGS::Config::key() const
+        int
+        QAGS::Config::key() const
         {
             return _key;
         }
 
-        QAGS::Config & QAGS::Config::key(const int & x)
+        QAGS::Config &
+        QAGS::Config::key(const int & x)
         {
             _key = x;
             return *this;
         }
-    }
+    } // namespace GSL
 
     template <>
-    double integrate<GSL::QNG>(const GSL::fdd &f, const double &a, const double &b, const GSL::QNG::Config &config)
+    double
+    integrate<GSL::QNG>(const GSL::fdd & f, const double & a, const double & b, const GSL::QNG::Config & config)
     {
-        double result, abserr;
-        size_t neval;
+        double       result, abserr;
+        size_t       neval;
         gsl_function F;
         F.function = &gsl_function_adapter;
-        F.params = (void*)&f;
+        F.params   = (void *) &f;
 
-        auto status = gsl_integration_qng(&F, a, b, config.epsabs(), config.epsrel(),
-                                          &result, &abserr, &neval);
+        auto status = gsl_integration_qng(&F, a, b, config.epsabs(), config.epsrel(), &result, &abserr, &neval);
 
         if (status)
         {
@@ -139,17 +150,15 @@ namespace eos
     }
 
     template <>
-    double integrate<GSL::QAGS>(const GSL::fdd &f, const double &a, const double &b, const GSL::QAGS::Config &config)
+    double
+    integrate<GSL::QAGS>(const GSL::fdd & f, const double & a, const double & b, const GSL::QAGS::Config & config)
     {
-        double result, abserr;
+        double       result, abserr;
         gsl_function F;
         F.function = &gsl_function_adapter;
-        F.params = (void*)&f;
+        F.params   = (void *) &f;
 
-        auto status = gsl_integration_qag(&F, a, b, config.epsabs(), config.epsrel(),
-                                          GSL::work_space.limit(), config.key(),
-                                          GSL::work_space,
-                                          &result, &abserr);
+        auto status = gsl_integration_qag(&F, a, b, config.epsabs(), config.epsrel(), GSL::work_space.limit(), config.key(), GSL::work_space, &result, &abserr);
 
         if (status)
         {
@@ -166,42 +175,48 @@ namespace eos
         {
         }
 
-        double Config::epsabs() const
+        double
+        Config::epsabs() const
         {
             return _qng.epsabs();
         }
 
-        Config & Config::epsabs(const double &x)
+        Config &
+        Config::epsabs(const double & x)
         {
             _qng.epsabs(x);
             return *this;
         }
 
-        double Config::epsrel() const
+        double
+        Config::epsrel() const
         {
             return _qng.epsrel();
         }
 
-        Config & Config::epsrel(const double &x)
+        Config &
+        Config::epsrel(const double & x)
         {
             _qng.epsrel(x);
             return *this;
         }
 
-        size_t Config::maxeval() const
+        size_t
+        Config::maxeval() const
         {
             return _maxeval;
         }
 
-        Config & Config::maxeval(const size_t& x)
+        Config &
+        Config::maxeval(const size_t & x)
         {
             _maxeval = x;
             return *this;
         }
-    }
+    } // namespace cubature
 
-    IntegrationError::IntegrationError(const std::string & message) throw () :
+    IntegrationError::IntegrationError(const std::string & message) throw() :
         Exception(message)
     {
     }
-}
+} // namespace eos

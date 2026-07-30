@@ -31,8 +31,7 @@ namespace eos
             Backward
         };
 
-        template <std::size_t rank_, Direction direction_>
-        class Plan : public PrivateImplementationPattern<dft::Plan<rank_, direction_>>
+        template <std::size_t rank_, Direction direction_> class Plan : public PrivateImplementationPattern<dft::Plan<rank_, direction_>>
         {
             public:
                 Plan(const std::array<std::size_t, rank_> & dimensions);
@@ -41,8 +40,8 @@ namespace eos
                 // shared_ptr PIMPL) or require rebuilding the FFTW plan, so Plan is move-only.
                 Plan(const Plan & other) = delete;
                 Plan(Plan && other);
-                Plan & operator=(const Plan & other) = delete;
-                Plan & operator=(Plan && other);
+                Plan & operator= (const Plan & other) = delete;
+                Plan & operator= (Plan && other);
                 ~Plan();
 
                 const std::array<std::size_t, rank_> & dimensions() const;
@@ -51,7 +50,7 @@ namespace eos
                 // Backward: transforms from the frequency domain to the time domain.
                 void transform();
 
-                Container<double, rank_> & time_domain_container();
+                Container<double, rank_> &               time_domain_container();
                 Container<std::complex<double>, rank_> & frequency_domain_container();
         };
 
@@ -66,7 +65,7 @@ namespace eos
 
         extern template class Plan<4, Direction::Forward>;
         extern template class Plan<4, Direction::Backward>;
-    } // namespace eos::dft
+    } // namespace dft
 } // namespace eos
 
 #endif

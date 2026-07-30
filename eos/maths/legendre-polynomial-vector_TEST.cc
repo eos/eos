@@ -15,14 +15,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/maths/legendre-polynomial-vector.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class LegendrePolynomialVectorTest :
-    public TestCase
+class LegendrePolynomialVectorTest : public TestCase
 {
     public:
         LegendrePolynomialVectorTest() :
@@ -30,7 +30,8 @@ class LegendrePolynomialVectorTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // test case
             {
@@ -40,13 +41,13 @@ class LegendrePolynomialVectorTest :
 
                     auto resP = P(0.5);
 
-                    TEST_CHECK_RELATIVE_ERROR(resP[0],  1.0,            1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resP[1],  0.5,            1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resP[2],  -0.125,         1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resP[3],  -0.4375,        1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resP[4],  -0.2890625,     1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resP[5],  0.08984375,     1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resP[6],  0.3232421875,   1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[0], 1.0, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[1], 0.5, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[2], -0.125, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[3], -0.4375, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[4], -0.2890625, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[5], 0.08984375, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resP[6], 0.3232421875, 1.0e-10);
                 }
 
                 // Evaluate P
@@ -55,13 +56,13 @@ class LegendrePolynomialVectorTest :
 
                     auto resQ15 = Q(1.5);
 
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[0],    0.8047189562170503,     1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[1],    0.20707843432557507,    1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[2],    0.06356699912401897,    1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[3],    0.02086520825966291,    1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[4],    0.007095922338601302,   1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[5],    0.0024668237064868373,  1.0e-10);
-                    TEST_CHECK_RELATIVE_ERROR(resQ15[6],    0.0008704965773399678,  1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[0], 0.8047189562170503, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[1], 0.20707843432557507, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[2], 0.06356699912401897, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[3], 0.02086520825966291, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[4], 0.007095922338601302, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[5], 0.0024668237064868373, 1.0e-10);
+                    TEST_CHECK_RELATIVE_ERROR(resQ15[6], 0.0008704965773399678, 1.0e-10);
                 }
             }
         }

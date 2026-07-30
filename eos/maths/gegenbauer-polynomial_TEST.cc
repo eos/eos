@@ -17,17 +17,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/maths/gegenbauer-polynomial.hh>
 
-#include <cmath>
+#include <test/test.hh>
+
 #include <array>
+#include <cmath>
 
 using namespace test;
 using namespace eos;
 
-class GegenbauerPolynomialTest :
-    public TestCase
+class GegenbauerPolynomialTest : public TestCase
 {
     public:
         GegenbauerPolynomialTest() :
@@ -35,7 +35,8 @@ class GegenbauerPolynomialTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
                 const GegenbauerPolynomial gp0(2, 0.0);
@@ -43,13 +44,15 @@ class GegenbauerPolynomialTest :
                 const GegenbauerPolynomial gp2(4, 1.5);
 
                 {
-                    const double z[5] = {-1.0, -0.3, 0.0, 0.7, 1.0};
-                    double g[3];
-                    const double v[3][5] = {{  1.0, -0.82,      -1.0,   -0.02,       1.0 },
-                                            { -1.0,  0.3825,     0.0,   -0.1925,     1.0 },
-                                            { 15.0, -0.1685625,  1.875, -1.5335625, 15.0 }};
+                    const double z[5] = { -1.0, -0.3, 0.0, 0.7, 1.0 };
+                    double       g[3];
+                    const double v[3][5] = {
+                        {  1.0,      -0.82,  -1.0,      -0.02,  1.0 },
+                        { -1.0,     0.3825,   0.0,    -0.1925,  1.0 },
+                        { 15.0, -0.1685625, 1.875, -1.5335625, 15.0 }
+                    };
 
-                    for (int i = 0 ; i < 5 ; i++)
+                    for (int i = 0; i < 5; i++)
                     {
                         g[0] = gp0.evaluate(z[i]);
                         g[1] = gp1.evaluate(z[i]);

@@ -24,7 +24,7 @@
 
 namespace eos
 {
-    complex<double> li22(const complex<double> & x, const complex<double> & y) __attribute__ ((pure));
+    complex<double> li22(const complex<double> & x, const complex<double> & y) __attribute__((pure));
 }
 
 #endif

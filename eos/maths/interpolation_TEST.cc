@@ -16,15 +16,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <interpolation.hh>
 #include <eos/utils/parameters.hh>
+
+#include <test/test.hh>
+
+#include <interpolation.hh>
 
 using namespace test;
 using namespace eos;
 
-class InterpolationTest :
-    public TestCase
+class InterpolationTest : public TestCase
 {
     public:
         InterpolationTest() :
@@ -32,19 +33,20 @@ class InterpolationTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // standard initialisation
             {
-                CSplineInterpolation interp = CSplineInterpolation({0.0, 1.0, 2.0}, {0.0, 1.0, 2.0});
+                CSplineInterpolation interp = CSplineInterpolation({ 0.0, 1.0, 2.0 }, { 0.0, 1.0, 2.0 });
                 TEST_CHECK_NEARLY_EQUAL(interp(0.5), 0.5, 1e-14);
             }
 
             // uniform initialization syntax
             {
                 CSplineInterpolation interp = {
-                    {0.0, 1.0, 2.0},
-                    {0.0, 1.0, 2.0}
+                    { 0.0, 1.0, 2.0 },
+                    { 0.0, 1.0, 2.0 }
                 };
                 TEST_CHECK_NEARLY_EQUAL(interp(0.5), 0.5, 1e-14);
             }
@@ -52,17 +54,18 @@ class InterpolationTest :
             // evaluate outside of data range: must throw
             {
                 CSplineInterpolation interp = {
-                    {0.0, 1.0, 2.0},
-                    {0.0, 1.0, 2.0}
+                    { 0.0, 1.0, 2.0 },
+                    { 0.0, 1.0, 2.0 }
                 };
                 TEST_CHECK_THROWS(GSLError, interp(3.0));
             }
 
             // dimension mismatch: must throw
             {
-                TEST_CHECK_THROWS(InternalError, CSplineInterpolation({
-                    {0.0, 1.0, 2.0},
-                    {0.0, 1.0, 2.0, 3.0}
+                TEST_CHECK_THROWS(InternalError,
+                                  CSplineInterpolation({
+                                      { 0.0, 1.0, 2.0 },
+                                      { 0.0, 1.0, 2.0, 3.0 }
                 }));
             }
         }

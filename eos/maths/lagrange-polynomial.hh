@@ -26,41 +26,39 @@
 
 namespace eos
 {
-    template <unsigned order_, unsigned n_>
-    class LagrangePolynomialDerivative;
+    template <unsigned order_, unsigned n_> class LagrangePolynomialDerivative;
 
-    template <unsigned order_, unsigned n_>
-    class LagrangePolynomialCoefficients;
+    template <unsigned order_, unsigned n_> class LagrangePolynomialCoefficients;
 
     /*
      * Representation of a complex Lagrange polynomial.
      * The polynomial L satisfies L(x_values) = y_values.
      */
-    template <unsigned order_>
-    class LagrangePolynomial
+    template <unsigned order_> class LagrangePolynomial
     {
         private:
             const std::array<complex<double>, order_ + 1> _x_values;
 
         public:
-            LagrangePolynomial(std::array<complex<double>, order_ + 1 > && x_values) :
+            LagrangePolynomial(std::array<complex<double>, order_ + 1> && x_values) :
                 _x_values(std::move(x_values))
             {
             }
 
-            LagrangePolynomial(const std::array<complex<double>, order_ + 1 > & x_values) :
+            LagrangePolynomial(const std::array<complex<double>, order_ + 1> & x_values) :
                 _x_values(x_values)
             {
             }
 
-            LagrangePolynomial(const LagrangePolynomial &) = default;
-            LagrangePolynomial(LagrangePolynomial &&) = default;
-            ~LagrangePolynomial() = default;
-            LagrangePolynomial & operator= (LagrangePolynomial &&) = default;
+            LagrangePolynomial(const LagrangePolynomial &)              = default;
+            LagrangePolynomial(LagrangePolynomial &&)                   = default;
+            ~LagrangePolynomial()                                       = default;
+            LagrangePolynomial & operator= (LagrangePolynomial &&)      = default;
             LagrangePolynomial & operator= (const LagrangePolynomial &) = default;
 
             // Evaluate the Lagrange polynomial
-            complex<double> constexpr operator() (const std::array<complex<double>, order_ + 1> & y_values, const complex<double> & z) const
+            constexpr complex<double>
+            operator() (const std::array<complex<double>, order_ + 1> & y_values, const complex<double> & z) const
             {
                 complex<double> result = 0;
                 complex<double> partial_result;
@@ -72,7 +70,7 @@ namespace eos
                     {
                         if (i != j)
                         {
-                            partial_result *= (z - _x_values[j])/(_x_values[i] - _x_values[j]);
+                            partial_result *= (z - _x_values[j]) / (_x_values[i] - _x_values[j]);
                         }
                     }
                     result += partial_result * y_values[i];
@@ -82,7 +80,8 @@ namespace eos
             }
 
             // Returns the coefficients of the polynomial in the monomial basis (z^n)_n
-            std::array<complex<double>, order_ + 1> get_coefficients(const std::array<complex<double>, order_ + 1> & y_values) const
+            std::array<complex<double>, order_ + 1>
+            get_coefficients(const std::array<complex<double>, order_ + 1> & y_values) const
             {
                 LagrangePolynomialCoefficients<order_, order_> lpc;
 
@@ -90,14 +89,11 @@ namespace eos
             }
     };
 
-
-    template <unsigned order_>
-    class LagrangePolynomialDerivative<order_, 0>
+    template <unsigned order_> class LagrangePolynomialDerivative<order_, 0>
     {
         public:
-            complex<double> constexpr evaluate(const std::array<complex<double>, order_ + 1> & x_values,
-                                               const std::array<complex<double>, order_ + 1> & y_values,
-                                               const complex<double> & z) const
+            constexpr complex<double>
+            evaluate(const std::array<complex<double>, order_ + 1> & x_values, const std::array<complex<double>, order_ + 1> & y_values, const complex<double> & z) const
             {
                 LagrangePolynomial<order_> polynomial(x_values);
 
@@ -105,45 +101,39 @@ namespace eos
             }
     };
 
-    template <unsigned n_>
-    class LagrangePolynomialDerivative<0, n_>
+    template <unsigned n_> class LagrangePolynomialDerivative<0, n_>
     {
         public:
-            complex<double> constexpr evaluate(const std::array<complex<double>, 1> &,
-                                               const std::array<complex<double>, 1> &,
-                                               const complex<double> &) const
+            constexpr complex<double>
+            evaluate(const std::array<complex<double>, 1> &, const std::array<complex<double>, 1> &, const complex<double> &) const
             {
                 return 0.;
             }
     };
 
-    template <>
-    class LagrangePolynomialDerivative<0, 0>
+    template <> class LagrangePolynomialDerivative<0, 0>
     {
         public:
-            complex<double> constexpr evaluate(const std::array<complex<double>, 1> &,
-                                               const std::array<complex<double>, 1> & y_values,
-                                               const complex<double> &) const
+            constexpr complex<double>
+            evaluate(const std::array<complex<double>, 1> &, const std::array<complex<double>, 1> & y_values, const complex<double> &) const
             {
                 return y_values[0];
             }
     };
 
-    template <unsigned order_, unsigned n_>
-    class LagrangePolynomialDerivative
+    template <unsigned order_, unsigned n_> class LagrangePolynomialDerivative
     {
         private:
-            std::array<complex<double>, order_ + 1> _make_derivative(const std::array<complex<double>, order_ + 1> & x_values,
-                                                                     const std::array<complex<double>, order_ + 1> & y_values,
-                                                                     const complex<double> & z) const
+            std::array<complex<double>, order_ + 1>
+            _make_derivative(const std::array<complex<double>, order_ + 1> & x_values, const std::array<complex<double>, order_ + 1> & y_values, const complex<double> & z) const
             {
                 std::array<complex<double>, order_ + 1> derivatives;
 
-                for (unsigned i = 0 ; i < order_ + 1 ; ++i)
+                for (unsigned i = 0; i < order_ + 1; ++i)
                 {
                     std::array<complex<double>, order_> new_y_values;
 
-                    for (unsigned k = 0 ; k < order_ + 1 ; ++k)
+                    for (unsigned k = 0; k < order_ + 1; ++k)
                     {
                         if (k < i)
                         {
@@ -169,9 +159,8 @@ namespace eos
 
 
         public:
-            complex<double> constexpr evaluate(const std::array<complex<double>, order_ + 1> & x_values,
-                                               const std::array<complex<double>, order_ + 1> & y_values,
-                                               const complex<double> & z) const
+            constexpr complex<double>
+            evaluate(const std::array<complex<double>, order_ + 1> & x_values, const std::array<complex<double>, order_ + 1> & y_values, const complex<double> & z) const
             {
                 std::array<complex<double>, order_ + 1> derivatives = _make_derivative(x_values, y_values, z);
 
@@ -179,18 +168,18 @@ namespace eos
             }
     };
 
-    template <unsigned order_>
-    class LagrangePolynomialCoefficients<order_, 0>
+    template <unsigned order_> class LagrangePolynomialCoefficients<order_, 0>
     {
         public:
-            unsigned factorial() const
+            unsigned
+            factorial() const
             {
                 return 1;
             }
 
             // Coefficients of the Lagrange polynomial in the monomial basis
-            std::array<complex<double>, order_ + 1> fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values,
-                                                                      const std::array<complex<double>, order_ + 1> & y_values) const
+            std::array<complex<double>, order_ + 1>
+            fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values, const std::array<complex<double>, order_ + 1> & y_values) const
             {
                 std::array<complex<double>, order_ + 1> coefficients;
 
@@ -202,11 +191,11 @@ namespace eos
             }
     };
 
-    template <unsigned order_, unsigned n_>
-    class LagrangePolynomialCoefficients
+    template <unsigned order_, unsigned n_> class LagrangePolynomialCoefficients
     {
         public:
-            unsigned factorial() const
+            unsigned
+            factorial() const
             {
                 LagrangePolynomialCoefficients<order_, n_ - 1> lpc;
 
@@ -214,8 +203,8 @@ namespace eos
             }
 
             // Coefficients of the Lagrange polynomial in the monomial basis
-            std::array<complex<double>, order_ + 1> fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values,
-                                                                      const std::array<complex<double>, order_ + 1> & y_values) const
+            std::array<complex<double>, order_ + 1>
+            fill_coefficients(const std::array<complex<double>, order_ + 1> & x_values, const std::array<complex<double>, order_ + 1> & y_values) const
             {
                 LagrangePolynomialCoefficients<order_, n_ - 1> lpc;
 
@@ -228,6 +217,6 @@ namespace eos
                 return coefficients;
             }
     };
-}
+} // namespace eos
 
 #endif

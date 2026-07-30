@@ -17,14 +17,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/maths/gsl-interface.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class GSLMatrixPtrTestCase :
-    public TestCase
+class GSLMatrixPtrTestCase : public TestCase
 {
     public:
         GSLMatrixPtrTestCase() :
@@ -32,7 +32,8 @@ class GSLMatrixPtrTestCase :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // default construction
             {
@@ -56,8 +57,7 @@ class GSLMatrixPtrTestCase :
         }
 } gsl_matrix_ptr_test_case;
 
-class GSLVectorPtrTestCase :
-    public TestCase
+class GSLVectorPtrTestCase : public TestCase
 {
     public:
         GSLVectorPtrTestCase() :
@@ -65,7 +65,8 @@ class GSLVectorPtrTestCase :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // default construction
             {

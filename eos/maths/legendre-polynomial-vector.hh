@@ -18,11 +18,13 @@
 #ifndef EOS_GUARD_EOS_MATHS_LEGENDRE_POLYNOMIAL_VECTOR_HH
 #define EOS_GUARD_EOS_MATHS_LEGENDRE_POLYNOMIAL_VECTOR_HH 1
 
-#include <array>
-#include <vector>
-#include <complex>
+#include <eos/utils/exception.hh>
 
 #include <boost/math/special_functions/legendre.hpp>
+
+#include <array>
+#include <complex>
+#include <vector>
 
 namespace eos
 {
@@ -31,22 +33,20 @@ namespace eos
      * Representation of a vector of Legendre polynomials for m = 0.
      *
      */
-    template <unsigned order_>
-    class LegendrePVector
+    template <unsigned order_> class LegendrePVector
     {
         public:
-            LegendrePVector()
-            {
-            }
+            LegendrePVector() {}
 
-            LegendrePVector(const LegendrePVector &) = default;
-            LegendrePVector(LegendrePVector &&) = default;
-            ~LegendrePVector() = default;
-            LegendrePVector & operator= (LegendrePVector &&) = default;
+            LegendrePVector(const LegendrePVector &)              = default;
+            LegendrePVector(LegendrePVector &&)                   = default;
+            ~LegendrePVector()                                    = default;
+            LegendrePVector & operator= (LegendrePVector &&)      = default;
             LegendrePVector & operator= (const LegendrePVector &) = default;
 
             // Evaluate the vector of Legendre polynomials
-            std::array<double, order_ + 1> constexpr operator() (const double & z) const
+            constexpr std::array<double, order_ + 1>
+            operator() (const double & z) const
             {
                 std::array<double, order_ + 1> ret_vec;
 
@@ -63,7 +63,7 @@ namespace eos
                 {
                     ret_vec[0] = 1;
                     ret_vec[1] = z;
-                    for (unsigned i = 2 ; i <= order_ ; i++)
+                    for (unsigned i = 2; i <= order_; i++)
                     {
                         ret_vec[i] = (z * ret_vec[i - 1] * (2 * i - 1) - ret_vec[i - 2] * (i - 1)) / i;
                     }
@@ -72,39 +72,40 @@ namespace eos
             }
 
             // Return zeros and compute Gauss-Legendre weights
-            void gauss_legendre(std::array<double, order_> & zeros, std::array<double, order_> & weights)
+            void
+            gauss_legendre(std::array<double, order_> & zeros, std::array<double, order_> & weights)
             {
-                std::vector<double> zerosp = boost::math::legendre_p_zeros<double>(order_);
+                std::vector<double>                         zerosp = boost::math::legendre_p_zeros<double>(order_);
                 std::array<double, order_ / 2 + order_ % 2> weightsp;
-                const unsigned len = order_ / 2 + order_ % 2;
+                const unsigned                              len = order_ / 2 + order_ % 2;
 
-                for (unsigned i = 0 ; i < len ; i++)
+                for (unsigned i = 0; i < len; i++)
                 {
-                    double lp = boost::math::legendre_p<double>(order_ + 1, zerosp[i]);
+                    double lp   = boost::math::legendre_p<double>(order_ + 1, zerosp[i]);
                     weightsp[i] = 2 * (1 - zerosp[i] * zerosp[i]) / ((order_ + 1) * (order_ + 1) * lp * lp);
                 }
 
                 // Flip order for first half
-                for (unsigned i = 0 ; i < len ; i++)
+                for (unsigned i = 0; i < len; i++)
                 {
-                    zeros[i] = -1 * zerosp[len - 1 - i];
+                    zeros[i]   = -1 * zerosp[len - 1 - i];
                     weights[i] = weightsp[len - 1 - i];
                 }
 
                 // Double them, take care in case of odd order_
                 if (order_ % 2 == 1)
                 {
-                    for (unsigned i = 1 ; i < len ; i++)
+                    for (unsigned i = 1; i < len; i++)
                     {
-                        zeros[len + i - 1] = zerosp[i];
+                        zeros[len + i - 1]   = zerosp[i];
                         weights[len + i - 1] = weightsp[i];
                     }
                 }
                 else
                 {
-                    for (unsigned i = 0 ; i < len ; i++)
+                    for (unsigned i = 0; i < len; i++)
                     {
-                        zeros[len + i] = zerosp[i];
+                        zeros[len + i]   = zerosp[i];
                         weights[len + i] = weightsp[i];
                     }
                 }
@@ -116,11 +117,10 @@ namespace eos
      * Implementation is based on Zhang, Shanjie and Jin, Jianming. “Computation of Special Functions”, John Wiley and Sons, 1996.
      *
      */
-    template <unsigned order_>
-    class LegendreReQVector
+    template <unsigned order_> class LegendreReQVector
     {
         private:
-            const double _eps;
+            const double   _eps;
             const unsigned _cut;
 
         public:
@@ -140,16 +140,17 @@ namespace eos
             {
             }
 
-            LegendreReQVector(const LegendreReQVector &) = default;
-            LegendreReQVector(LegendreReQVector &&) = default;
-            ~LegendreReQVector() = default;
-            LegendreReQVector & operator= (LegendreReQVector &&) = default;
+            LegendreReQVector(const LegendreReQVector &)              = default;
+            LegendreReQVector(LegendreReQVector &&)                   = default;
+            ~LegendreReQVector()                                      = default;
+            LegendreReQVector & operator= (LegendreReQVector &&)      = default;
             LegendreReQVector & operator= (const LegendreReQVector &) = default;
 
             // Evaluate the vector of associated Legendre functions
             // Throws exception if algorithm doesn't terminate
             // Returns real part if abs(z) > 1
-            std::array<double, order_ + 1> constexpr operator() (const double & z) const
+            constexpr std::array<double, order_ + 1>
+            operator() (const double & z) const
             {
                 std::array<double, order_ + 1> ret_vec;
 
@@ -169,7 +170,7 @@ namespace eos
                     {
                         ret_vec[0] = std::log((1 + z) / (1 - z)) / 2;
                         ret_vec[1] = z * ret_vec[0] - 1;
-                        for (unsigned i = 2 ; i <= order_ ; i++)
+                        for (unsigned i = 2; i <= order_; i++)
                         {
                             ret_vec[i] = (z * ret_vec[i - 1] * (2 * i - 1) - ret_vec[i - 2] * (i - 1)) / i;
                         }
@@ -191,7 +192,7 @@ namespace eos
                     {
                         double q2 = 1 / z;
                         double q1 = 1;
-                        for (unsigned i = 1 ; i <= order_ ; i++)
+                        for (unsigned i = 1; i <= order_; i++)
                         {
                             q2 *= i / z / (2 * i + 1);
                             if (i == order_ - 1)
@@ -202,7 +203,7 @@ namespace eos
 
                         double t1 = 1;
                         double qr = 1;
-                        for (unsigned k = 1 ; k <= _cut ; k++)
+                        for (unsigned k = 1; k <= _cut; k++)
                         {
                             qr *= (order_ / 2.0 + k - 1) * (k + (order_ - 1) / 2.0) / (z * z * k * ((order_ + k) - 1.0 / 2.0));
                             t1 += qr;
@@ -218,8 +219,8 @@ namespace eos
                         ret_vec[order_ - 1] = t1 * q1;
 
                         double t2 = 1;
-                        qr = 1;
-                        for (unsigned k = 1 ; k <= _cut ; k++)
+                        qr        = 1;
+                        for (unsigned k = 1; k <= _cut; k++)
                         {
                             qr *= ((order_ + 1) / 2.0 + k - 1) * (k + order_ / 2.0) / (z * z * k * ((order_ + 1 + k) - 1.0 / 2.0));
                             t2 += qr;
@@ -234,7 +235,7 @@ namespace eos
                         }
                         ret_vec[order_] = t2 * q2;
 
-                        for (unsigned i = order_ ; i >= 4 ; i--)
+                        for (unsigned i = order_; i >= 4; i--)
                         {
                             ret_vec[i - 2] = ((2 * i - 1) * z * ret_vec[i - 1] - i * ret_vec[i]) / (i - 1);
                         }
@@ -257,7 +258,7 @@ namespace eos
                     {
                         ret_vec[0] = std::log(std::abs((1 + z) / (1 - z))) / 2;
                         ret_vec[1] = z * ret_vec[0] - 1;
-                        for (unsigned i = 2 ; i <= order_ ; i++)
+                        for (unsigned i = 2; i <= order_; i++)
                         {
                             ret_vec[i] = (z * ret_vec[i - 1] * (2 * i - 1) - ret_vec[i - 2] * (i - 1)) / i;
                         }
@@ -266,6 +267,6 @@ namespace eos
                 return ret_vec;
             }
     };
-}
+} // namespace eos
 
 #endif

@@ -17,8 +17,8 @@
 
 #include <eos/maths/dft-container-impl.hh>
 
- namespace eos
- {
+namespace eos
+{
     namespace dft
     {
         template class Container<double, 1>;
@@ -30,5 +30,5 @@
         template class Container<std::complex<double>, 2>;
         template class Container<std::complex<double>, 3>;
         template class Container<std::complex<double>, 4>;
-    }
- }
+    } // namespace dft
+} // namespace eos

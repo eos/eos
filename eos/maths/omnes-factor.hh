@@ -31,8 +31,7 @@
 namespace eos
 {
     // Abstract class implementing the algorithm of [M:1999A] to solve the Omnes integral equation
-    template <unsigned order_, unsigned nints_>
-    class OmnesFactor
+    template <unsigned order_, unsigned nints_> class OmnesFactor
     {
         protected:
             // Vector containing integral borders
@@ -50,13 +49,13 @@ namespace eos
             gsl_vector * _b;
 
             // Array containing Gauss-Legendre weights
-            std::array<double, order_> _weights {};
+            std::array<double, order_> _weights{};
 
             // Array containing zeros of Legendre Polynomials
-            std::array<double, order_> _zeros {};
+            std::array<double, order_> _zeros{};
 
             // Array containing solution weights
-            std::array<double, nints_ * order_> _sol {};
+            std::array<double, nints_ * order_> _sol{};
 
             // Error of approximation
             double _err;
@@ -70,7 +69,7 @@ namespace eos
             // Cached values necessary when evaluating the Omnes factor
             std::array<std::array<double, order_>, nints_> _tanvals;
             std::array<std::array<double, order_>, order_> _p_j_u;
-            std::array<double, (nints_ + 1) * order_> _slist;
+            std::array<double, (nints_ + 1) * order_>      _slist;
 
             // Base constructor
             OmnesFactor(const std::array<double, nints_> & intervals, std::function<double(const double &)> scattering_phase);
@@ -86,28 +85,39 @@ namespace eos
             std::array<double, nints_ * order_> solve_sys(const double & bc_pos);
 
             // Evaluate results
-            double omnes_abs(const double & s) const;
+            double          omnes_abs(const double & s) const;
             complex<double> evaluate_omnes(const double & s) const;
 
         public:
             // Constructors
             OmnesFactor(const std::array<double, nints_> & intervals, std::function<double(const double &)> scattering_phase, const std::array<double, nints_ * order_> & sol) :
-                OmnesFactor(intervals, scattering_phase) { _sol = sol; }
+                OmnesFactor(intervals, scattering_phase)
+            {
+                _sol = sol;
+            }
 
             OmnesFactor(const std::array<double, nints_> & intervals, std::function<double(const double &)> scattering_phase, const double & bcpos) :
-                OmnesFactor(intervals, scattering_phase) { _sol = solve_sys(bcpos); }
+                OmnesFactor(intervals, scattering_phase)
+            {
+                _sol = solve_sys(bcpos);
+            }
 
             // Destructor
             ~OmnesFactor();
 
             // Return weights
-            std::array<double, nints_ * order_> get_weights() { return _sol; }
+            std::array<double, nints_ * order_>
+            get_weights()
+            {
+                return _sol;
+            }
 
             // Return Omnes factor evaluated at s
-            complex<double> constexpr operator() (const double & s) const
+            constexpr complex<double>
+            operator() (const double & s) const
             {
                 double eps = 1e-7;
-                for (unsigned i = 0 ; i < nints_ ; i++)
+                for (unsigned i = 0; i < nints_; i++)
                 {
                     if (std::abs(_intervals[i] - s) < eps)
                     {
@@ -119,6 +129,6 @@ namespace eos
             }
     };
 
-}
+} // namespace eos
 
 #endif

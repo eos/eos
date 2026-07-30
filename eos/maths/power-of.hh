@@ -21,49 +21,53 @@
 #ifndef EOS_GUARD_EOS_MATHS_POWER_OF_HH
 #define EOS_GUARD_EOS_MATHS_POWER_OF_HH 1
 
-#include <complex>
 #include <eos/utils/parameters.hh>
+
+#include <complex>
 
 namespace eos
 {
     namespace impl
     {
-        template <unsigned n_, typename T_>
-        struct PowerOf
+        template <unsigned n_, typename T_> struct PowerOf
         {
-            constexpr inline static T_ calculate(const T_ & x)
-            {
-                return x * PowerOf<n_ - 1, T_>::calculate(x);
-            }
+                inline static constexpr T_
+                calculate(const T_ & x)
+                {
+                    return x * PowerOf<n_ - 1, T_>::calculate(x);
+                }
         };
 
-        template <typename T_>
-        struct PowerOf<0, T_>
+        template <typename T_> struct PowerOf<0, T_>
         {
-            constexpr inline static T_ calculate(const T_ &)
-            {
-                return T_() + 1.0;
-            }
+                inline static constexpr T_
+                calculate(const T_ &)
+                {
+                    return T_() + 1.0;
+                }
         };
-    }
+    } // namespace impl
 
     template <unsigned n_, typename T_>
-    constexpr T_ power_of(const T_ & x)
+    constexpr T_
+    power_of(const T_ & x)
     {
         return impl::PowerOf<n_, T_>::calculate(x);
     }
 
     template <unsigned n_>
-    constexpr double power_of(const Parameter & p)
+    constexpr double
+    power_of(const Parameter & p)
     {
         return impl::PowerOf<n_, double>::calculate(p());
     }
 
     template <unsigned n_>
-    constexpr double power_of(const UsedParameter & p)
+    constexpr double
+    power_of(const UsedParameter & p)
     {
         return impl::PowerOf<n_, double>::calculate(p());
     }
-}
+} // namespace eos
 
 #endif
