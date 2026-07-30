@@ -17,15 +17,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/meson-mixing/bq-mixing.hh>
+#include <eos/observable.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class BsMixingTest :
-    public TestCase
+class BsMixingTest : public TestCase
 {
     public:
         BsMixingTest() :
@@ -33,25 +33,25 @@ class BsMixingTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
-                Parameters p = Parameters::Defaults();
-                p["CKM::lambda"]           =  0.22535;
-                p["CKM::A"]                =  0.827;
-                p["CKM::rhobar"]           =  0.132;
-                p["CKM::etabar"]           =  0.350;
+                Parameters p           = Parameters::Defaults();
+                p["CKM::lambda"]       = 0.22535;
+                p["CKM::A"]            = 0.827;
+                p["CKM::rhobar"]       = 0.132;
+                p["CKM::etabar"]       = 0.350;
                 // Using [DDHLMSW:2019A] inputs for the reduced matrix elements.
-                p["B_s<->Bbar_s::R^1"]     =  0.54200;
-                p["B_s<->Bbar_s::R^2"]     = -0.54500;
-                p["B_s<->Bbar_s::R^3"]     =  0.10900;
-                p["B_s<->Bbar_s::R^4"]     =  0.91250;
-                p["B_s<->Bbar_s::R^5"]     =  0.48625;
+                p["B_s<->Bbar_s::R^1"] = 0.54200;
+                p["B_s<->Bbar_s::R^2"] = -0.54500;
+                p["B_s<->Bbar_s::R^3"] = 0.10900;
+                p["B_s<->Bbar_s::R^4"] = 0.91250;
+                p["B_s<->Bbar_s::R^5"] = 0.48625;
 
-                Options oo
-                {
-                    { "model"_ok,        "SM"_ov         },
-                    { "q"_ok,            "s"_ov          },
+                Options oo{
+                    { "model"_ok, "SM"_ov },
+                    {     "q"_ok,  "s"_ov },
                 };
 
                 BMixing process(p, oo);
