@@ -190,7 +190,6 @@ class PriorDescription:
             elif kwargs['type'] in ("transform",):
                 return Deserializable.make_with_diagnostics(TransformPriorDescription, **_kwargs)
         elif 'constraint' in kwargs:
-            eos.warn('A constraint prior description without a \'type\' key is deprecated and will be removed in a future version of EOS; add \'type: constraint\' instead')
             return Deserializable.make_with_diagnostics(ConstraintPriorDescription, **kwargs)
 
         return InvalidComponent([
@@ -236,8 +235,14 @@ class CurtailedGaussianDescription(_AnalysisFileDeserializable):
     max:float
     type:str=field(repr=False, init=False, default="gaussian")
 
-    def __post_init__(self):
-        pass
+    def _diagnostics(self):
+        yield Diagnostic(
+            (),
+            Severity.WARNING,
+            'The curtailed Gaussian prior description (a \'gauss\'/\'gaussian\' prior with \'min\' and \'max\') '
+            'is deprecated and will be removed in a future version of EOS; use \'type: gaussian\' without the '
+            '\'min\'/\'max\' keys instead',
+        )
 
 @dataclass
 class GaussianPriorDescription(_AnalysisFileDeserializable):
@@ -359,6 +364,27 @@ class PriorComponent(_AnalysisFileDeserializable):
 
     def _diagnostics(self):
         yield from _check_file_local_name(self.name, 'prior name', ('name',))
+        if getattr(self, '_has_legacy_parameters', False):
+            yield Diagnostic(
+                ('parameters',),
+                Severity.WARNING,
+                f'\'parameters\' is in the description of prior component \'{self.name}\', use \'descriptions\' '
+                'instead',
+            )
+        if getattr(self, '_has_descriptions_and_parameters', False):
+            yield Diagnostic(
+                ('parameters',),
+                Severity.WARNING,
+                f'Both \'descriptions\' and \'parameters\' are provided for prior component \'{self.name}\', '
+                'ignoring legacy support for \'parameters\'',
+            )
+        for segment in getattr(self, '_descriptions_without_type', ()):
+            yield Diagnostic(
+                ('descriptions', segment, 'type'),
+                Severity.WARNING,
+                'A constraint prior description without a \'type\' key is deprecated and will be removed in a '
+                'future version of EOS; add \'type: constraint\' instead',
+            )
 
     def validate_structure(self):
         yield from self._diagnostics()
@@ -406,11 +432,9 @@ class PriorComponent(_AnalysisFileDeserializable):
         :rtype: PriorComponent
         """
         _kwargs = _copy.deepcopy(kwargs)
-        if "descriptions" in kwargs:
-            if "parameters" in kwargs:
-                eos.error(f'Both \'descriptions\' and \'parameters\' are provided for prior component \'{kwargs["name"]}\', ignoring legacy support for \'parameters\'')
-        if "parameters" in kwargs:
-            eos.warn(f'\'parameters\' is in the description of prior component \'{kwargs["name"]}\', use \'descriptions\' instead')
+        has_legacy_parameters = "parameters" in kwargs
+        has_descriptions_and_parameters = "descriptions" in kwargs and has_legacy_parameters
+        if has_legacy_parameters:
             _kwargs['descriptions'] = _kwargs.pop("parameters")
         diagnostics = Deserializable.check_keys(cls, _kwargs)
         if diagnostics:
@@ -419,6 +443,13 @@ class PriorComponent(_AnalysisFileDeserializable):
         _kwargs['descriptions'] = [PriorDescription.from_dict(**d) for d in _kwargs['descriptions']]
         result = cls(**_kwargs)
         result._description_segments = description_segments
+        result._has_legacy_parameters = has_legacy_parameters
+        result._has_descriptions_and_parameters = has_descriptions_and_parameters
+        result._descriptions_without_type = tuple(
+            segment
+            for description, segment in zip(kwargs.get('parameters', kwargs.get('descriptions', ())), description_segments)
+            if 'type' not in description and 'constraint' in description
+        )
         return result
 
 
@@ -910,6 +941,14 @@ class TaskComponent(_AnalysisFileDeserializable):
                 ('arguments', argument),
                 Severity.ERROR,
                 f'Task \'{self.task}\' requires provision of argument \'{argument}\'',
+            )
+
+        for argument in sorted(default_arguments - provided_arguments):
+            yield Diagnostic(
+                ('arguments', argument),
+                Severity.WARNING,
+                f'Task \'{self.task}\' has a default value for argument \'{argument}\', which can change across '
+                'versions; consider providing a value explicitly',
             )
 
 

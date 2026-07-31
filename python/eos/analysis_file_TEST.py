@@ -46,9 +46,96 @@ class TestAnalysisFile(unittest.TestCase):
         # a file without a 'likelihoods' section is a legitimate prior-only analysis; it must load
         # and expose no likelihoods. Regression test: this previously raised a KeyError because the
         # (absent) 'likelihoods' entry was accessed unconditionally.
-        af = eos.AnalysisFile(_TESTD / 'no-likelihoods-analysis-file.yaml')
+        with self.assertNoLogs('EOS', level='WARNING'):
+            af = eos.AnalysisFile(_TESTD / 'no-likelihoods-analysis-file.yaml')
         self.assertEqual(dict(af.likelihoods), {})
+        warnings = [
+            diagnostic
+            for diagnostic in af._description.validate_structure()
+            if diagnostic.severity is Severity.WARNING
+        ]
+        self.assertEqual(
+            [(('likelihoods',), 'No likelihood components found in analysis file')],
+            [(diagnostic.path, diagnostic.message) for diagnostic in warnings],
+        )
         af.validate()
+
+    def test_deprecations_are_located_warning_diagnostics(self):
+        with self.assertNoLogs('EOS', level='WARNING'):
+            description = eos.analysis_file_description.AnalysisFileDescription.from_dict(
+                priors=[{
+                    'name': 'legacy-prior',
+                    'parameters': [
+                        {'constraint': 'B->D::f_++f_0@HPQCD:2015A'},
+                        {
+                            'parameter': 'mass::e',
+                            'type': 'gaussian',
+                            'central': 0.5,
+                            'sigma': 0.1,
+                            'min': 0.0,
+                            'max': 1.0,
+                        },
+                    ],
+                }],
+                likelihoods=[{
+                    'name': 'likelihood',
+                    'constraints': ['B->D::f_++f_0@HPQCD:2015A'],
+                }],
+                posteriors=[{
+                    'name': 'posterior',
+                    'prior': ['legacy-prior'],
+                    'likelihood': ['likelihood'],
+                }],
+            )
+            diagnostics = list(description.validate_structure())
+
+        warnings = {
+            diagnostic.path: diagnostic
+            for diagnostic in diagnostics
+            if diagnostic.severity is Severity.WARNING
+        }
+        self.assertIn(('priors', 'legacy-prior', 'parameters'), warnings)
+        self.assertIn(('priors', 'legacy-prior', 'descriptions', 0, 'type'), warnings)
+        self.assertIn(('priors', 'legacy-prior', 'descriptions', 1), warnings)
+
+    def test_both_prior_description_keys_produce_warning_without_logging(self):
+        with self.assertNoLogs('EOS', level='WARNING'):
+            prior = eos.analysis_file_description.PriorComponent.from_dict(
+                name='legacy-prior',
+                descriptions=[{
+                    'parameter': 'mass::e',
+                    'type': 'uniform',
+                    'min': 0.0,
+                    'max': 1.0,
+                }],
+                parameters=[{
+                    'constraint': 'B->D::f_++f_0@HPQCD:2015A',
+                    'type': 'constraint',
+                }],
+            )
+
+        warnings = [
+            diagnostic
+            for diagnostic in prior.validate_structure()
+            if diagnostic.severity is Severity.WARNING
+        ]
+        self.assertEqual(2, len(warnings))
+        self.assertTrue(all(diagnostic.path == ('parameters',) for diagnostic in warnings))
+
+    def test_task_defaults_are_warning_diagnostics_without_logging(self):
+        with self.assertNoLogs('EOS', level='WARNING'):
+            task = eos.analysis_file_description.TaskComponent.from_dict(
+                task='corner-plot',
+                arguments={'posterior': 'posterior'},
+            )
+
+        warnings = [
+            diagnostic
+            for diagnostic in task.validate_structure()
+            if diagnostic.severity is Severity.WARNING
+        ]
+        self.assertTrue(warnings)
+        self.assertTrue(all(diagnostic.path[:1] == ('arguments',) for diagnostic in warnings))
 
     def test_format_version(self):
 
