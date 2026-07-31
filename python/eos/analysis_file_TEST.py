@@ -25,6 +25,8 @@ import eos
 import os
 from pathlib import Path
 
+from eos.diagnostic import Diagnostic, Severity
+
 _TESTD = Path(__file__).parent / 'analysis_file_TEST.d'
 
 class TestAnalysisFile(unittest.TestCase):
@@ -249,7 +251,7 @@ class TestAnalysisFileValidation(unittest.TestCase):
         # validate() collects one message per problem rather than raising; the fixture contains
         # many independent problems, so it must return a non-empty list
         self.assertGreater(len(messages), 0)
-        blob = '\n'.join(messages)
+        blob = '\n'.join(str(diagnostic) for diagnostic in messages)
         # a representative selection of the distinct problem classes in the fixture
         self.assertIn('Not::a-parameter', blob)                 # unknown prior parameter
         self.assertIn('Not::a-constraint@Nowhere:2000A', blob)  # unknown constraint
@@ -261,6 +263,32 @@ class TestAnalysisFileValidation(unittest.TestCase):
         self.assertIn('unknown tasks', blob)                    # step default arguments
         self.assertIn("Posterior 'nonexistent-posterior'", blob)  # step task posterior
         self.assertIn('repeatedly', blob)                       # repeated mask expression name
+        # every message is a Diagnostic, including those from the deep phase, so that callers can
+        # filter by severity and location without special-casing the origin of a message
+        self.assertTrue(all(isinstance(message, Diagnostic) for message in messages))
+        self.assertTrue(any(
+            diagnostic.severity is Severity.ERROR and diagnostic.path[0] in ('posteriors', 'predictions')
+            for diagnostic in messages
+        ))
+        semantic_locations = {
+            (diagnostic.path, diagnostic.severity)
+            for diagnostic in messages
+        }
+        self.assertIn(
+            (('priors', 'BAD-PARAM', 'descriptions', 0, 'parameter'), Severity.ERROR),
+            semantic_locations,
+        )
+        self.assertIn(
+            (
+                ('predictions', 'pred-bad-obs', 'observables', 'B->pilnu::NOTREAL', 'name'),
+                Severity.ERROR,
+            ),
+            semantic_locations,
+        )
+        self.assertIn(
+            (('steps', 'bad-step', 'depends_on'), Severity.ERROR),
+            semantic_locations,
+        )
 
 
 if __name__ == '__main__':

@@ -25,7 +25,7 @@ from .diagnostic import Diagnostic, Severity
 class InvalidComponent:
     diagnostics: list
 
-    def validate(self, *args, **kwargs):
+    def validate_structure(self, *args, **kwargs):
         yield from self.diagnostics
 
 

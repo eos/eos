@@ -58,7 +58,7 @@ class DeserializableTests(unittest.TestCase):
 
         self.assertIsInstance(result, InvalidComponent)
         self.assertEqual(
-            {diagnostic.path for diagnostic in result.validate()},
+            {diagnostic.path for diagnostic in result.validate_structure()},
             {('unknown',), ('second',), ('third',)}
         )
 
