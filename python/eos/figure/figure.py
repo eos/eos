@@ -35,6 +35,9 @@ class Figure(ABC, Deserializable):
     r"""Base class for figures to be drawn using matplotlib."""
     name:str=field(default=None)
 
+    def validate_semantics(self, context):
+        yield from ()
+
     def validate_structure(self):
         if self.name is None:
             return
@@ -95,6 +98,12 @@ class SingleFigure(Figure):
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=self.size)
 
+    def validate_semantics(self, context):
+        yield from (
+            diagnostic.prefixed('plot')
+            for diagnostic in self.plot.validate_semantics(context)
+        )
+
     def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         """Draw the single-plot figure.
 
@@ -153,6 +162,12 @@ class Inset(Deserializable):
 
     def __post_init__(self):
         pass
+
+    def validate_semantics(self, context):
+        yield from (
+            diagnostic.prefixed('plot')
+            for diagnostic in self.plot.validate_semantics(context)
+        )
 
     def prepare(self, context, ax):
         """Prepare the inset plot for drawing.
@@ -234,6 +249,16 @@ class InsetFigure(Figure):
 
     def __post_init__(self):
         self._figure, self._ax = plt.subplots(figsize=self.size)
+
+    def validate_semantics(self, context):
+        yield from (
+            diagnostic.prefixed('plot')
+            for diagnostic in self.plot.validate_semantics(context)
+        )
+        yield from (
+            diagnostic.prefixed('inset')
+            for diagnostic in self.inset.validate_semantics(context)
+        )
 
     def draw(self, context:AnalysisFileContext=None, output:str|list[str]|None=None):
         """Draw the inset figure.
@@ -352,6 +377,13 @@ class GridFigure(Figure):
         axes = self._gridspec.subplots(sharex=sharex, sharey=sharey, squeeze=False)
         self._axes = axes.flatten('C') # flatten to row-major style
         self._watermark_idx = self._resolve_watermark_plot(nrow, ncol)
+
+    def validate_semantics(self, context):
+        for index, plot in enumerate(self.plots):
+            yield from (
+                diagnostic.prefixed('plots', index)
+                for diagnostic in plot.validate_semantics(context)
+            )
 
     def _resolve_watermark_plot(self, nrow, ncol):
         "Resolve the watermark_plot field to a single flattened (row-major) index, or None for all plots."
