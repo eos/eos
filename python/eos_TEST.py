@@ -71,6 +71,20 @@ class QualifiedNameTests(unittest.TestCase):
         self.assertNotEqual(qn1, qn3)
 
 
+class ExpressionAnalysisTests(unittest.TestCase):
+
+    def test_referenced_names_without_registry_mutation(self):
+        "Check expression analysis returns referenced names without changing the observable registry."
+        import eos
+
+        number_of_observables = len(list(eos.Observables()))
+        references = eos.analyze_expression('<<B->pilnu::BR;l=tau>>')
+
+        self.assertEqual([name.full() for name in references.observables], ['B->pilnu::BR;l=tau'])
+        self.assertEqual(references.parameters, [])
+        self.assertEqual(len(list(eos.Observables())), number_of_observables)
+
+
 class ReferenceNameTests(unittest.TestCase):
 
     def test_creation(self):

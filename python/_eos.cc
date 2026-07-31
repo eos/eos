@@ -281,6 +281,13 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("self"));
     implicitly_convertible<std::string, QualifiedName>();
+    ::impl::std_vector_to_python_converter<QualifiedName> converter_vector_qualified_name;
+
+    class_<ExpressionReferences>("ExpressionReferences", no_init)
+            .add_property("observables", make_getter(&ExpressionReferences::observables, return_value_policy<return_by_value>()))
+            .add_property("parameters", make_getter(&ExpressionReferences::parameters, return_value_policy<return_by_value>()));
+
+    def("analyze_expression", &analyze_expression, args("input"));
 
 
     // ParameterSection
