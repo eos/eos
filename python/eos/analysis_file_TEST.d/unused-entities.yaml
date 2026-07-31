@@ -1,0 +1,51 @@
+format_version: 1
+
+priors:
+  - name: used-prior
+    descriptions:
+      - { parameter: 'mass::e', type: uniform, min: 0.0, max: 1.0 }
+  - name: unused-prior
+    descriptions:
+      - { parameter: 'mass::mu', type: uniform, min: 0.0, max: 1.0 }
+
+likelihoods:
+  - name: used-likelihood
+    constraints:
+      - 'B->D::f_++f_0@HPQCD:2015A'
+  - name: unused-likelihood
+    constraints:
+      - 'B->D::f_++f_0@HPQCD:2015A'
+
+posteriors:
+  - name: posterior
+    prior:
+      - used-prior
+    likelihood:
+      - used-likelihood
+
+masks:
+  - name: mask-used-by-mask
+    description:
+      - { name: 'B->Dlnu::BR' }
+  - name: mask-composite
+    description:
+      - { mask_name: mask-used-by-mask }
+  - name: mask-used-by-task
+    description:
+      - { name: 'B->Dlnu::BR' }
+  - name: unused-mask
+    description:
+      - { name: 'B->Dlnu::BR' }
+
+steps:
+  - title: Create masks
+    id: create-masks
+    tasks:
+      - task: create-mask
+        arguments:
+          posterior: posterior
+          mask_name: mask-composite
+      - task: create-mask
+        arguments:
+          posterior: posterior
+          mask_name: mask-used-by-task

@@ -16,6 +16,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+from collections import Counter
 from types import MappingProxyType
 
 from .analysis_file_description import MaskExpressionComponent
@@ -66,6 +67,10 @@ class ValidationContext:
             'mask': frozenset(mask.name for mask in description.masks),
             'posterior': frozenset(posterior.name for posterior in description.posteriors),
         })
+        self._counts = {
+            kind: Counter({name: 0 for name in names})
+            for kind, names in self._shadow.items()
+        }
         self._real_registries = MappingProxyType({
             'observable': eos.Observables(),
             'parameter': eos.Parameters(),
@@ -85,6 +90,7 @@ class ValidationContext:
 
         name = str(qn)
         if name in self._shadow[kind]:
+            self._counts[kind][name] += 1
             return True
 
         if kind in self._LOCAL_KINDS:
@@ -94,22 +100,39 @@ class ValidationContext:
 
         qn = eos.QualifiedName(name)
         if kind == 'parameter':
-            return self._real_registries[kind].has(qn)
-        if kind == 'observable':
-            if qn in self._real_registries[kind]:
-                return True
-            # EOS resolves an observable name through Observable::make, which synthesises a
-            # parameter observable whenever the name names a parameter rather than a registered
-            # observable. A manual constraint may therefore constrain 'decay-constant::K_u'
-            # directly, and an expression may reference it as <<decay-constant::K_u>>. Such a name
-            # is a valid observable name, so fall back to the parameter namespace before reporting
-            # it as unknown.
-            return self.lookup('parameter', qn)
-        if kind == 'constraint':
+            found = self._real_registries[kind].has(qn)
+        elif kind == 'observable':
+            found = qn in self._real_registries[kind]
+        elif kind == 'constraint':
             try:
                 self._real_registries[kind][qn]
-                return True
+                found = True
             except RuntimeError:
-                return False
+                found = False
+        else:
+            raise AssertionError(f'Unhandled validation entity kind: {kind!r}')
 
-        raise AssertionError(f'Unhandled validation entity kind: {kind!r}')
+        if found:
+            self._counts[kind][name] += 1
+            return True
+
+        # EOS resolves an observable name through Observable::make, which synthesises a parameter
+        # observable whenever the name names a parameter rather than a registered observable. A
+        # manual constraint may therefore constrain 'decay-constant::K_u' directly, and an
+        # expression may reference it as <<decay-constant::K_u>>. Such a name is a valid observable
+        # name, so fall back to the parameter namespace before reporting it as unknown; the
+        # reference is then credited to the parameter, which is what it actually uses.
+        if kind == 'observable':
+            return self.lookup('parameter', qn)
+
+        return False
+
+    def unused(self, kind):
+        """Return the names of shadow entities of *kind* that have not been looked up."""
+        if kind not in self._shadow:
+            raise ValueError(f'Unknown validation entity kind: {kind!r}')
+
+        return frozenset(
+            name for name in self._shadow[kind]
+            if self._counts[kind][name] == 0
+        )

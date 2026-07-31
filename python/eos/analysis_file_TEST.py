@@ -26,6 +26,7 @@ import os
 from pathlib import Path
 
 from eos.diagnostic import Diagnostic, Severity
+from eos.validation_context import ValidationContext
 
 _TESTD = Path(__file__).parent / 'analysis_file_TEST.d'
 
@@ -361,6 +362,41 @@ class TestAnalysisFileMethods(unittest.TestCase):
 
 class TestAnalysisFileValidation(unittest.TestCase):
     """The reporting (non-raising) branches of ``validate``."""
+
+    def test_unused_priors_likelihoods_and_masks_are_warnings(self):
+        af = eos.AnalysisFile(_TESTD / 'unused-entities.yaml')
+        description = af._description
+
+        structure = list(description.validate_structure())
+        semantics = list(description.validate_semantics(ValidationContext(description)))
+        self.assertFalse(any(
+            diagnostic.severity is Severity.ERROR
+            for diagnostic in structure + semantics
+        ))
+
+        warnings = [
+            diagnostic
+            for diagnostic in semantics
+            if diagnostic.severity is Severity.WARNING
+        ]
+        self.assertEqual(
+            [
+                ('priors', 'unused-prior'),
+                ('likelihoods', 'unused-likelihood'),
+                ('masks', 'unused-mask'),
+            ],
+            [diagnostic.path for diagnostic in warnings],
+        )
+
+        warned_paths = {diagnostic.path for diagnostic in warnings}
+        for path in (
+            ('priors', 'used-prior'),
+            ('likelihoods', 'used-likelihood'),
+            ('masks', 'mask-used-by-mask'),
+            ('masks', 'mask-composite'),
+            ('masks', 'mask-used-by-task'),
+        ):
+            self.assertNotIn(path, warned_paths)
 
     def test_observables_aggregates_unknown_names(self):
         # observables() reports every unknown observable in a prediction, not just the first

@@ -18,6 +18,7 @@ import unittest
 import eos
 
 from eos.analysis_file_description import AnalysisFileDescription
+from eos.diagnostic import Severity
 from eos.validation_context import ValidationContext
 
 
@@ -142,7 +143,12 @@ class ValidationContextTests(unittest.TestCase):
             list(first_description.validate_semantics(ValidationContext(first_description))),
         )
         self.assertEqual(first_diagnostics, repeated_diagnostics)
-        self.assertEqual(first_diagnostics[1], [])
+        # this test is about idempotence and registry immutability, not about the exact set of
+        # diagnostics: assert only that neither phase reports an error. The fixture legitimately
+        # contains unused entities, which are reported as warnings, and further warning-level
+        # checks may be added without invalidating what is tested here.
+        for phase in first_diagnostics:
+            self.assertEqual([d for d in phase if d.severity is Severity.ERROR], [])
 
         second_description = self._description('idempotent-second')
         list(second_description.validate_structure())
