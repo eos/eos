@@ -16,6 +16,19 @@
 import os as _os
 import yaml as _yaml
 
+from dataclasses import MISSING, dataclass, fields
+
+from .diagnostic import Diagnostic, Severity
+
+
+@dataclass
+class InvalidComponent:
+    diagnostics: list
+
+    def validate(self, *args, **kwargs):
+        yield from self.diagnostics
+
+
 class Deserializable:
     """
     Utility class to create instances of classes from YAML data.
@@ -65,6 +78,35 @@ class Deserializable:
             raise ValueError(f'When creating {cls.__name__} from {kwargs}: {e}')
 
         return result
+
+    @staticmethod
+    def check_keys(cls, kwargs) -> list:
+        known = {f.name for f in fields(cls) if f.init}
+        required = {
+            f.name for f in fields(cls)
+            if f.init and f.default is MISSING and f.default_factory is MISSING
+        }
+        unknown = kwargs.keys() - known
+        missing = required - kwargs.keys()
+
+        diagnostics = [
+            Diagnostic((key,), Severity.ERROR, f"Unknown key '{key}'")
+            for key in sorted(unknown)
+        ]
+        diagnostics.extend(
+            Diagnostic((key,), Severity.ERROR, f"Missing mandatory key '{key}'")
+            for key in sorted(missing)
+        )
+
+        return diagnostics
+
+    @staticmethod
+    def make_with_diagnostics(cls, **kwargs):
+        diagnostics = Deserializable.check_keys(cls, kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
+
+        return cls(**kwargs)
 
     @classmethod
     def from_dict(cls, **kwargs):
