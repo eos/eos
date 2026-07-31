@@ -44,7 +44,15 @@ class _AnalysisFileDeserializable(Deserializable):
 
 def _segments(raw_children, identifier='name'):
     return [
-        child[identifier] if isinstance(child, dict) and identifier in child else index
+        child[identifier]
+        if (
+            isinstance(child, dict)
+            and identifier in child
+            and isinstance(child[identifier], str)
+            and '/' not in child[identifier]
+            and not any(character.isspace() for character in child[identifier])
+        )
+        else index
         for index, child in enumerate(raw_children)
     ]
 
@@ -67,6 +75,13 @@ def _check_qualified(context, value, kind, path):
         return
     if not context.lookup(kind, qn):
         yield Diagnostic(path, Severity.ERROR, f"{kind} '{value}' is unknown to EOS")
+
+
+def _check_file_local_name(value, kind, path):
+    if '/' in value:
+        yield Diagnostic(path, Severity.ERROR, f"Invalid character '/' in {kind} '{value}'")
+    if any(character.isspace() for character in value):
+        yield Diagnostic(path, Severity.ERROR, f"Invalid whitespace in {kind} '{value}'")
 
 
 @dataclass
@@ -342,6 +357,9 @@ class PriorComponent(_AnalysisFileDeserializable):
     name:str
     descriptions:list
 
+    def _diagnostics(self):
+        yield from _check_file_local_name(self.name, 'prior name', ('name',))
+
     def validate_structure(self):
         yield from self._diagnostics()
         segments = getattr(self, '_description_segments', list(range(len(self.descriptions))))
@@ -462,6 +480,7 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     pyhf:PyHFConstraintDescription|None=None
 
     def _diagnostics(self):
+        yield from _check_file_local_name(self.name, 'likelihood name', ('name',))
         if not (self.constraints or self.manual_constraints or self.pyhf):
             yield Diagnostic(
                 (),
@@ -585,6 +604,9 @@ class PosteriorDescription(_AnalysisFileDeserializable):
     global_options:dict=field(default_factory=dict)
     fixed_parameters:dict=field(default_factory=dict)
 
+    def _diagnostics(self):
+        yield from _check_file_local_name(self.name, 'posterior name', ('name',))
+
     def validate_semantics(self, context):
         for parameter in self.fixed_parameters:
             yield from _check_qualified(
@@ -681,6 +703,9 @@ class PredictionDescription(_AnalysisFileDeserializable):
     observables:list
     global_options:dict=field(default_factory=dict)
     fixed_parameters:dict=field(default_factory=dict)
+
+    def _diagnostics(self):
+        yield from _check_file_local_name(self.name, 'prediction name', ('name',))
 
     def validate_structure(self):
         yield from self._diagnostics()
@@ -916,10 +941,7 @@ class StepComponent(_AnalysisFileDeserializable):
         self.default_arguments = defaultdict(dict, self.default_arguments)
 
     def _diagnostics(self):
-        if '/' in self.id:
-            yield Diagnostic(('id',), Severity.ERROR, f'Invalid character \'/\' in step id \'{self.id}\'')
-        if any(character.isspace() for character in self.id):
-            yield Diagnostic(('id',), Severity.ERROR, f'Invalid whitespace in step id \'{self.id}\'')
+        yield from _check_file_local_name(self.id, 'step id', ('id',))
         if not self.tasks:
             yield Diagnostic(('tasks',), Severity.ERROR, f'Step \'{self.id}\' has no tasks')
 
@@ -1083,6 +1105,7 @@ class MaskComponent(_AnalysisFileDeserializable):
         pass
 
     def _diagnostics(self):
+        yield from _check_file_local_name(self.name, 'mask name', ('name',))
         if self.logical_combination not in ('and', 'or'):
             yield Diagnostic(
                 ('logical_combination',),

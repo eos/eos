@@ -18,6 +18,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
+from eos.diagnostic import Diagnostic, Severity
 
 from .plot import Plot, PlotFactory
 from .common import Watermark
@@ -33,6 +34,14 @@ import yaml as _yaml
 class Figure(ABC, Deserializable):
     r"""Base class for figures to be drawn using matplotlib."""
     name:str=field(default=None)
+
+    def validate_structure(self):
+        if self.name is None:
+            return
+        if '/' in self.name:
+            yield Diagnostic(('name',), Severity.ERROR, f"Invalid character '/' in figure name '{self.name}'")
+        if any(character.isspace() for character in self.name):
+            yield Diagnostic(('name',), Severity.ERROR, f"Invalid whitespace in figure name '{self.name}'")
 
     @abstractmethod
     def draw(self, context:AnalysisFileContext=None, output:str|None=None):
