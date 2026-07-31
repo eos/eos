@@ -39,6 +39,7 @@
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-parser.hh>
+#include <eos/utils/expression-referenced-names-reader.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_stub.hh>
@@ -415,5 +416,18 @@ namespace eos
         impl::observable_entries.insert(result);
 
         return result;
+    }
+
+    ExpressionReferences
+    analyze_expression(const std::string & input)
+    {
+        const auto                           expression = exp::parse_expression(input);
+        exp::ExpressionReferencedNamesReader reader;
+        std::visit(reader, *expression);
+
+        return {
+            { reader.observable_names.begin(), reader.observable_names.end() },
+            {  reader.parameter_names.begin(),  reader.parameter_names.end() }
+        };
     }
 } // namespace eos

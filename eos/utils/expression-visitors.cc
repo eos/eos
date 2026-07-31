@@ -25,6 +25,7 @@
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-printer.hh>
+#include <eos/utils/expression-referenced-names-reader.hh>
 #include <eos/utils/expression-used-kinematics-reader.hh>
 #include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/expression.hh>
@@ -39,6 +40,66 @@
 
 namespace eos::exp
 {
+    /*
+     * ExpressionReferencedNamesReader
+     */
+    void
+    ExpressionReferencedNamesReader::operator() (const BinaryExpression & e)
+    {
+        std::visit(*this, *e.lhs);
+        std::visit(*this, *e.rhs);
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const FunctionExpression & e)
+    {
+        std::visit(*this, *e.arg);
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const ConstantExpression &)
+    {
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const ObservableNameExpression & e)
+    {
+        observable_names.insert(e.observable_name);
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const ObservableExpression & e)
+    {
+        observable_names.insert(e.observable->name());
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const ParameterNameExpression & e)
+    {
+        parameter_names.insert(e.parameter_name);
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const ParameterExpression & e)
+    {
+        parameter_names.insert(QualifiedName(e.parameter.name()));
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const KinematicVariableNameExpression &)
+    {
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const KinematicVariableExpression &)
+    {
+    }
+
+    void
+    ExpressionReferencedNamesReader::operator() (const CachedObservableExpression &)
+    {
+    }
+
     /*
      * ExpressionPrinter
      */

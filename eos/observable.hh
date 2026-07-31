@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2016-2019, 2022 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2024 Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
@@ -33,9 +33,18 @@
 
 #include <map>
 #include <string>
+#include <vector>
 
 namespace eos
 {
+    struct ExpressionReferences
+    {
+            std::vector<QualifiedName> observables;
+            std::vector<QualifiedName> parameters;
+    };
+
+    ExpressionReferences analyze_expression(const std::string & input);
+
     /**
      * Observable is internally used to handle the creation,
      * evaluation and cloning of any (pseudo)observable quantities.
