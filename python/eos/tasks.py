@@ -66,7 +66,7 @@ class LogfileHandler:
 
 _tasks = {}
 
-def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
+def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, load_analysis_file=True):
     """Decorator that registers a function as a named EOS task.
 
     The decorated function is wrapped so that, on each invocation, it imports any optional ``modules``,
@@ -88,6 +88,9 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
     :type modules: list[str] | None
     :param logfile: Whether to capture the task's log output into a log file in the output directory. Defaults to True.
     :type logfile: bool
+    :param load_analysis_file: Whether to resolve a string ``analysis_file`` argument into an
+        :class:`eos.AnalysisFile` before invoking the task. Defaults to True.
+    :type load_analysis_file: bool
     :returns: A decorator that registers and returns the wrapped task function.
     """
     if modules is None:
@@ -115,7 +118,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True):
             }
             _args.update(zip(func.__code__.co_varnames, args))
             _args.update(kwargs)
-            if 'analysis_file' in _args and type(_args['analysis_file']) is str:
+            if load_analysis_file and 'analysis_file' in _args and type(_args['analysis_file']) is str:
                 _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
             # create output directory if needed directly or for logging
             if output or logfile:
