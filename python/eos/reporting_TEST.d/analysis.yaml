@@ -11,7 +11,8 @@ priors:
 
 likelihoods:
   - name: LH
-    constraints: []
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
 
 posteriors:
   - name: CKM
