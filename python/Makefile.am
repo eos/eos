@@ -163,6 +163,7 @@ TESTS = \
 	eos/analysis_file_description_TEST.py \
 	eos/datasets_TEST.py \
 	eos/datasets_file_description_TEST.py \
+	eos/deserializable_TEST.py \
 	eos/diagnostic_TEST.py \
 	eos/serializable_TEST.py \
 	eos/tasks_TEST.py \
