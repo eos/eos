@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -60,6 +60,11 @@ namespace eos
     };
 
     extern template struct ExpressionParser<std::string::const_iterator>;
+
+    namespace exp
+    {
+        ExpressionPtr parse_expression(const std::string & input);
+    }
 } // namespace eos
 
 #endif
