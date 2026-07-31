@@ -125,6 +125,46 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             eos.AnalysisFile(_TESTD / 'invalid' / 'unknown-mask-ref.yaml')
 
+    def test_invalid_file_local_component_name(self):
+        with self.assertRaises(RuntimeError) as context:
+            eos.AnalysisFile(_TESTD / 'invalid' / 'bad-component-name.yaml')
+
+        self.assertIn(
+            "likelihoods[1]/name: Invalid character '/' in likelihood name 'a/b'",
+            str(context.exception),
+        )
+
+    def test_slash_in_observable_qualified_name_is_allowed(self):
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict(
+            priors=[{
+                'name': 'prior',
+                'descriptions': [{
+                    'parameter': 'CKM::abs(V_ub)',
+                    'min': 3.0e-3,
+                    'max': 4.5e-3,
+                    'type': 'uniform',
+                }],
+            }],
+            likelihoods=[{
+                'name': 'likelihood',
+                'constraints': ['B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'],
+            }],
+            posteriors=[{
+                'name': 'posterior',
+                'prior': ['prior'],
+                'likelihood': ['likelihood'],
+            }],
+            observables={
+                'Test::ratio/a': {
+                    'latex': r'R/a',
+                    'unit': '1',
+                    'expression': '1.0',
+                },
+            },
+        )
+
+        self.assertEqual([], list(description.validate_structure()))
+
     def test_multiple_structural_errors_are_reported_together(self):
         with self.assertRaises(RuntimeError) as context:
             eos.AnalysisFile(_TESTD / 'invalid' / 'multiple-structural-errors.yaml')
@@ -135,8 +175,8 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
             'likelihoods/empty-likelihood',
             'posteriors/broken-posterior/prior[0]',
             'posteriors/broken-posterior/likelihood[0]',
-            'steps/broken/step/id',
-            'steps/broken/step/tasks[0]/task',
+            'steps[0]/id',
+            'steps[0]/tasks[0]/task',
             'masks/broken-mask/logical_combination',
             'masks/broken-mask/description[0]/mask_name',
         ):

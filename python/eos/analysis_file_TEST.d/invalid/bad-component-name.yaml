@@ -1,0 +1,17 @@
+priors:
+  - name: prior
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 4.5e-3, type: uniform }
+
+likelihoods:
+  - name: likelihood
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+  - name: a/b
+    constraints:
+      - 'B^+->tau^+nu::BR@Belle:2014A;form-factors=BCL2008-4'
+
+posteriors:
+  - name: posterior
+    prior: [ prior ]
+    likelihood: [ likelihood ]
