@@ -32,7 +32,10 @@ import warnings
 import dynesty as _dynesty
 
 from dataclasses import asdict
+from .analysis_file_description import AnalysisFileDescription
+from .diagnostic import Severity
 from .ipython import __ipython__
+from .validation_context import ValidationContext
 
 class LogfileHandler:
     """Context manager that redirects EOS log output to a file for the duration of a ``with`` block.
@@ -978,15 +981,44 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
         fig.savefig(os.path.join(base_directory, 'data', posterior, 'plots', f'{filename}.{f}'))
 
 
-@task('validate', '', logfile=False)
-def validate(analysis_file:str):
+@task('validate', '', logfile=False, load_analysis_file=False)
+def validate(analysis_file:str, deep:bool=True):
     """
-    Validates the analysis file by checking that all posteriors and all prediction sets can be created.
+    Validates the analysis file structurally and semantically, then by default checks that all
+    posteriors and prediction sets can be created. The deep phase inserts declarations into the
+    process-wide EOS registries; once it has run, those registries are contaminated for the
+    remainder of the process. Use ``deep=False`` for idempotent, side-effect-free validation.
 
-    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
-    :type analysis_file: str or :class:`eos.AnalysisFile`
+    :param analysis_file: The name of the analysis file to validate.
+    :type analysis_file: str
+    :param deep: If True, additionally check that all posteriors and prediction sets can be created. Defaults to True.
+    :type deep: bool
     """
-    analysis_file.validate()
+    description = AnalysisFileDescription.from_yaml_file(analysis_file)
+    structural_diagnostics = list(description.validate_structure())
+    if any(diagnostic.severity is Severity.ERROR for diagnostic in structural_diagnostics):
+        for diagnostic in structural_diagnostics:
+            print(diagnostic)
+        return structural_diagnostics
+
+    semantic_diagnostics = list(description.validate_semantics(ValidationContext(description)))
+    diagnostics = structural_diagnostics + semantic_diagnostics
+
+    # Abort before the deep phase if the file is already known to be invalid: constructing an
+    # eos.AnalysisFile declares this file's custom parameters and inserts its custom observables
+    # into the process-wide EOS registries, which cannot be undone. Running it for a file whose
+    # semantics do not hold contaminates the process and yields only cascading errors.
+    if not deep or any(diagnostic.severity is Severity.ERROR for diagnostic in semantic_diagnostics):
+        for diagnostic in diagnostics:
+            print(diagnostic)
+        return diagnostics
+
+    # Only warnings remain at this point. Print them here, since eos.AnalysisFile.validate() reports
+    # the semantic and deep phases but knows nothing about the structural one.
+    for diagnostic in structural_diagnostics:
+        print(diagnostic)
+
+    return structural_diagnostics + eos.AnalysisFile(analysis_file).validate(deep=True)
 
 
 def _calculate_mask(observable: eos.Observable, analysis_parameters: eos.Parameters, data: eos.data.ImportanceSamples):
