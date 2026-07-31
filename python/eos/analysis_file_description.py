@@ -20,7 +20,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 from .deserializable import Deserializable, InvalidComponent
-from .diagnostic import Diagnostic, Severity
+from .diagnostic import Diagnostic, Severity, _check_qualified
 from eos.figure import FigureFactory
 from dataclasses import dataclass, field
 from collections import defaultdict
@@ -65,16 +65,6 @@ def _validate_children(children, segments, prefix):
             validator = getattr(child, 'validate', None)
         if validator is not None:
             yield from (diagnostic.prefixed(prefix, segment) for diagnostic in validator())
-
-
-def _check_qualified(context, value, kind, path):
-    try:
-        qn = eos.QualifiedName(value)
-    except RuntimeError as e:
-        yield Diagnostic(path, Severity.ERROR, f"'{value}' is not a valid qualified name: {e}")
-        return
-    if not context.lookup(kind, qn):
-        yield Diagnostic(path, Severity.ERROR, f"{kind} '{value}' is unknown to EOS")
 
 
 def _check_file_local_name(value, kind, path):
@@ -1420,6 +1410,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('likelihoods', self.likelihoods, '_likelihood_segments'),
             ('posteriors', self.posteriors, '_posterior_segments'),
             ('predictions', self.predictions, '_prediction_segments'),
+            ('figures', self.figures, '_figure_segments'),
             ('observables', self.observables, '_observable_segments'),
             ('parameters', self.parameters, '_parameter_segments'),
             ('steps', self.steps, '_step_segments'),

@@ -58,3 +58,15 @@ class Diagnostic:
 
     def __str__(self) -> str:
         return f'{self.location()}: {self.message}'
+
+
+def _check_qualified(context, value, kind, path):
+    import eos
+
+    try:
+        qn = eos.QualifiedName(value)
+    except RuntimeError as e:
+        yield Diagnostic(path, Severity.ERROR, f"'{value}' is not a valid qualified name: {e}")
+        return
+    if not context.lookup(kind, qn):
+        yield Diagnostic(path, Severity.ERROR, f"{kind} '{value}' is unknown to EOS")

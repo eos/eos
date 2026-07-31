@@ -364,6 +364,9 @@ class YAxis(Deserializable):
 class Plot(ABC, Deserializable):
     r"""Base class for plots to be drawn into a figure."""
 
+    def validate_semantics(self, context):
+        yield from ()
+
     @abstractmethod
     def prepare(self, context:AnalysisFileContext=None):
         """Prepare the plot for drawing.
@@ -425,6 +428,14 @@ class TwoDimensionalPlot(Plot):
     title:str=None
     xaxis:XAxis=field(default_factory=XAxis)
     yaxis:YAxis=field(default_factory=YAxis)
+
+    def validate_semantics(self, context):
+        for index, item in enumerate(self.items):
+            if hasattr(item, 'validate_semantics'):
+                yield from (
+                    diagnostic.prefixed('items', index)
+                    for diagnostic in item.validate_semantics(context)
+                )
 
     _api_doc = inspect.cleandoc("""
     Drawing a 2D Plot Along a Single Set of Axes

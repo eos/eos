@@ -363,6 +363,45 @@ class TestAnalysisFileMethods(unittest.TestCase):
 class TestAnalysisFileValidation(unittest.TestCase):
     """The reporting (non-raising) branches of ``validate``."""
 
+    @staticmethod
+    def _figure_description(observable, observables=None):
+        return eos.analysis_file_description.AnalysisFileDescription.from_dict(
+            figures=[{
+                'name': 'semantic-figure',
+                'type': 'single',
+                'plot': {
+                    'items': [{
+                        'type': 'constraint',
+                        'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',
+                        'variable': 'q2',
+                        'observable': observable,
+                    }],
+                },
+            }],
+            observables=observables or {},
+        )
+
+    def test_figure_unknown_observable_is_located(self):
+        description = self._figure_description('test::unknown-observable')
+        diagnostics = list(description.validate_semantics(ValidationContext(description)))
+
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(
+            ('figures', 'semantic-figure', 'plot', 'items', 0, 'observable'),
+            diagnostics[0].path,
+        )
+        self.assertIn("observable 'test::unknown-observable' is unknown", diagnostics[0].message)
+
+    def test_figure_resolves_custom_observable_from_shadow_registry(self):
+        name = 'test::figure-only'
+        description = self._figure_description(name, {
+            name: {'latex': 'x', 'unit': '1', 'expression': '1.0'},
+        })
+        context = ValidationContext(description)
+
+        self.assertEqual([], list(description.figures[0].validate_semantics(context)))
+        self.assertNotIn(name, context.unused('observable'))
+
     def test_unused_priors_likelihoods_and_masks_are_warnings(self):
         af = eos.AnalysisFile(_TESTD / 'unused-entities.yaml')
         description = af._description

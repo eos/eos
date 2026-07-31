@@ -19,6 +19,7 @@ from abc import abstractmethod
 from dataclasses import dataclass, field
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
+from eos.diagnostic import _check_qualified
 
 import inspect
 import eos
@@ -573,6 +574,13 @@ class ObservableItem(Item):
         self._observable = eos.Observable.make(self.observable, self._parameters, self._kinematics, self._options)
 
         self._xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
+
+    def validate_semantics(self, context):
+        yield from _check_qualified(context, self.observable, 'observable', ('observable',))
+        for parameter in self.fixed_parameters or {}:
+            yield from _check_qualified(
+                context, parameter, 'parameter', ('fixed_parameters', parameter)
+            )
 
 
     def prepare(self, context:AnalysisFileContext=None):
@@ -2055,6 +2063,10 @@ class ConstraintItem(Item):
     range:tuple[int, int]|None=field(default=None)
     rescale_by_width:bool=False
 
+    def validate_semantics(self, context):
+        if self.observable is not None:
+            yield from _check_qualified(context, self.observable, 'observable', ('observable',))
+
     _api_doc = inspect.cleandoc("""\
     Plotting Constraints
     --------------------
@@ -2373,6 +2385,13 @@ class TwoDimensionalConstraintItem(Item):
         self.sigmas = sorted(self.sigmas, reverse=True)
         self._alphas = _np.linspace(0.0, self.alpha, len(self.sigmas) + 1)[1:]
 
+    def validate_semantics(self, context):
+        for axis, spec in (('x', self.x), ('y', self.y)):
+            if spec is not None:
+                yield from _check_qualified(
+                    context, spec['observable'], 'observable', (axis, 'observable')
+                )
+
     @staticmethod
     def _name(observable):
         "Return the bare observable name (without options) used to match an axis observable."
@@ -2558,6 +2577,10 @@ class ConstraintResidueItem(Item):
     range:tuple[int, int]|None=field(default=None)
     parameters:dict[eos.QualifiedName,float]|None=field(default=None)
     rescale_by_width:bool=False
+
+    def validate_semantics(self, context):
+        if self.observable is not None:
+            yield from _check_qualified(context, self.observable, 'observable', ('observable',))
 
     _api_doc = inspect.cleandoc("""\
     Plotting Constraints
@@ -3184,6 +3207,13 @@ class ComplexPlaneItem(Item):
         self._xvalues = _np.linspace(self._xrange[0], self._xrange[1], self.resolution)
         self._yvalues = _np.linspace(self._yrange[0], self._yrange[1], self.resolution)
         self._cvalues = _np.reshape([[x + 1.0j * y for y in self._yvalues] for x in self._xvalues], (self.resolution**2))
+
+    def validate_semantics(self, context):
+        yield from _check_qualified(context, self.observable, 'observable', ('observable',))
+        for parameter in self.fixed_parameters or {}:
+            yield from _check_qualified(
+                context, parameter, 'parameter', ('fixed_parameters', parameter)
+            )
 
     def evaluate(self, c:complex):
         """Evaluate the observable at a complex-valued kinematic variable.

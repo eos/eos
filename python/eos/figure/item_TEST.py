@@ -23,6 +23,7 @@ import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
 from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler
+from eos.validation_context import ValidationContext
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
 from matplotlib import transforms as mtransforms
@@ -53,6 +54,23 @@ class ItemColorCyclerTests(unittest.TestCase):
         self.assertEqual(ItemColorCycler.next_color(), colors[0])
 
 class ObservableItemTests(unittest.TestCase):
+
+    def test_validate_semantics_checks_fixed_parameters(self):
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: observable
+        observable: 'B->Dlnu::dBR/dq2'
+        variable: q2
+        range: [0.1, 1.0]
+        fixed_parameters: { 'test::unknown-parameter': 1.0 }
+        """)
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict()
+        diagnostics = list(item.validate_semantics(ValidationContext(description)))
+
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(
+            ('fixed_parameters', 'test::unknown-parameter'),
+            diagnostics[0].path,
+        )
 
     def test_full(self):
 
