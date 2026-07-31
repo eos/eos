@@ -617,6 +617,33 @@ class ObservableComponent(_AnalysisFileDeserializable):
     expression:str
     options:dict=field(default_factory=dict)
 
+    def validate_semantics(self, context):
+        try:
+            references = eos.analyze_expression(self.expression)
+        except RuntimeError as error:
+            message = str(error)
+            if message.startswith('Parsing Error:'):
+                yield Diagnostic(
+                    ('expression',),
+                    Severity.ERROR,
+                    f'Expression does not parse: {message}',
+                )
+                return
+            elif 'is not a valid qualified name:' in message:
+                yield Diagnostic(
+                    ('expression',),
+                    Severity.ERROR,
+                    f'Expression contains a malformed qualified name: {message}',
+                )
+                return
+            else:
+                raise
+
+        for observable in references.observables:
+            yield from _check_qualified(context, observable.full(), 'observable', ('expression',))
+        for parameter in references.parameters:
+            yield from _check_qualified(context, parameter.full(), 'parameter', ('expression',))
+
 
 
 @dataclass
@@ -986,6 +1013,33 @@ class MaskExpressionComponent(_AnalysisFileDeserializable):
     expression:str
     name:str
 
+    def validate_semantics(self, context):
+        try:
+            references = eos.analyze_expression(self.expression)
+        except RuntimeError as error:
+            message = str(error)
+            if message.startswith('Parsing Error:'):
+                yield Diagnostic(
+                    ('expression',),
+                    Severity.ERROR,
+                    f'Expression does not parse: {message}',
+                )
+                return
+            elif 'is not a valid qualified name:' in message:
+                yield Diagnostic(
+                    ('expression',),
+                    Severity.ERROR,
+                    f'Expression contains a malformed qualified name: {message}',
+                )
+                return
+            else:
+                raise
+
+        for observable in references.observables:
+            yield from _check_qualified(context, observable.full(), 'observable', ('expression',))
+        for parameter in references.parameters:
+            yield from _check_qualified(context, parameter.full(), 'parameter', ('expression',))
+
 @dataclass
 class MaskObservableComponent(_AnalysisFileDeserializable):
     r"""Describes a mask entry given by the name of an existing EOS observable.
@@ -1256,6 +1310,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('likelihoods', self.likelihoods, '_likelihood_segments'),
             ('posteriors', self.posteriors, '_posterior_segments'),
             ('predictions', self.predictions, '_prediction_segments'),
+            ('observables', self.observables, '_observable_segments'),
             ('parameters', self.parameters, '_parameter_segments'),
             ('steps', self.steps, '_step_segments'),
             ('masks', self.masks, '_mask_segments'),
