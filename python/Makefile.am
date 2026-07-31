@@ -19,6 +19,7 @@ EXTRA_DIST = \
 	eos/datasets.py \
 	eos/datasets_TEST.d \
 	eos/datasets_file_description.py \
+	eos/diagnostic.py \
 	eos/deserializable.py \
 	eos/serializable.py \
 	eos/ipython.py \
@@ -97,6 +98,7 @@ eos_SCRIPTS = \
 	eos/datasets.py \
 	eos/datasets_file_description.py \
 	eos/deserializable.py \
+	eos/diagnostic.py \
 	eos/serializable.py \
 	eos/ipython.py \
 	eos/log_likelihood.py \
@@ -161,6 +163,7 @@ TESTS = \
 	eos/analysis_file_description_TEST.py \
 	eos/datasets_TEST.py \
 	eos/datasets_file_description_TEST.py \
+	eos/diagnostic_TEST.py \
 	eos/serializable_TEST.py \
 	eos/tasks_TEST.py \
 	eos/data/dynesty_results_TEST.py \
