@@ -402,7 +402,27 @@ class TestAnalysisFileValidation(unittest.TestCase):
         self.assertEqual([], list(description.figures[0].validate_semantics(context)))
         self.assertNotIn(name, context.unused('observable'))
 
-    def test_unused_priors_likelihoods_and_masks_are_warnings(self):
+    def test_parameter_alias_lookup_credits_declaration(self):
+        name = 'test::aliased-parameter'
+        alias = 'test::parameter-alias'
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict(
+            parameters={
+                name: {
+                    'latex': 'a',
+                    'unit': '1',
+                    'central': 0.0,
+                    'min': -1.0,
+                    'max': +1.0,
+                    'alias_of': [alias],
+                },
+            },
+        )
+        context = ValidationContext(description)
+
+        self.assertTrue(context.lookup('parameter', alias))
+        self.assertNotIn(name, context.unused('parameter'))
+
+    def test_unused_entities_are_warnings(self):
         af = eos.AnalysisFile(_TESTD / 'unused-entities.yaml')
         description = af._description
 
@@ -423,6 +443,10 @@ class TestAnalysisFileValidation(unittest.TestCase):
                 ('priors', 'unused-prior'),
                 ('likelihoods', 'unused-likelihood'),
                 ('masks', 'unused-mask'),
+                ('observables', 'test::unused-observable'),
+                ('parameters', 'test::unused-parameter'),
+                ('masks', 'unused-mask', 'description', 'test::unused-mask-observable'),
+                ('likelihoods', 'unused-likelihood', 'manual_constraints', 'test::unused-constraint'),
             ],
             [diagnostic.path for diagnostic in warnings],
         )
@@ -434,6 +458,11 @@ class TestAnalysisFileValidation(unittest.TestCase):
             ('masks', 'mask-used-by-mask'),
             ('masks', 'mask-composite'),
             ('masks', 'mask-used-by-task'),
+            ('parameters', 'test::aliased-parameter'),
+            ('parameters', 'test::expression-only-parameter'),
+            ('observables', 'test::manual-constraint-observable'),
+            ('observables', 'test::manual-constraint-observable-list'),
+            ('observables', 'test::figure-only-observable'),
         ):
             self.assertNotIn(path, warned_paths)
 

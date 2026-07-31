@@ -49,14 +49,19 @@ class ValidationContext:
             )
 
         parameters = {parameter.name for parameter in description.parameters}
+        parameter_aliases = {}
         for parameter in description.parameters:
             parameters.update(parameter.alias_of)
+            for alias in parameter.alias_of:
+                parameter_aliases.setdefault(alias, set()).add(parameter.name)
 
-        constraints = {
-            constraint.name
-            for likelihood in description.likelihoods
-            for constraint in likelihood.manual_constraints
-        }
+        constraints = set()
+        likelihood_constraints = {}
+        for likelihood in description.likelihoods:
+            names = {constraint.name for constraint in likelihood.manual_constraints}
+            constraints.update(names)
+            if names:
+                likelihood_constraints[likelihood.name] = names
 
         self._shadow = MappingProxyType({
             'observable': frozenset(observables),
@@ -71,6 +76,14 @@ class ValidationContext:
             kind: Counter({name: 0 for name in names})
             for kind, names in self._shadow.items()
         }
+        self._parameter_aliases = MappingProxyType({
+            alias: frozenset(declarations)
+            for alias, declarations in parameter_aliases.items()
+        })
+        self._likelihood_constraints = MappingProxyType({
+            likelihood: frozenset(names)
+            for likelihood, names in likelihood_constraints.items()
+        })
         self._real_registries = MappingProxyType({
             'observable': eos.Observables(),
             'parameter': eos.Parameters(),
@@ -91,6 +104,17 @@ class ValidationContext:
         name = str(qn)
         if name in self._shadow[kind]:
             self._counts[kind][name] += 1
+            if kind == 'parameter':
+                for declaration in self._parameter_aliases.get(name, ()):
+                    self._counts[kind][declaration] += 1
+            elif kind == 'likelihood':
+                # A manual constraint is never referenced by name: it is used by virtue of being
+                # declared inside a likelihood, whose manual_constraints AnalysisFile.analysis()
+                # passes straight to eos.Analysis. Credit a likelihood's manual constraints along
+                # with the likelihood, so that only those in an unused likelihood are reported --
+                # and that likelihood is itself reported alongside them.
+                for constraint in self._likelihood_constraints.get(name, ()):
+                    self._counts['constraint'][constraint] += 1
             return True
 
         if kind in self._LOCAL_KINDS:

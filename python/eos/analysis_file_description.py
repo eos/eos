@@ -545,12 +545,24 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         )
         assert len(self.manual_constraints) == len(manual_segments)
         for manual, segment in zip(self.manual_constraints, manual_segments):
-            yield from _check_qualified(
-                context,
-                manual.name,
-                'constraint',
-                ('manual_constraints', segment, 'name'),
-            )
+            # Manual-constraint schemas vary by block type and are otherwise opaque here. An exotic
+            # block type may therefore hide additional observable references that validation cannot see.
+            if 'observable' in manual.info:
+                yield from _check_qualified(
+                    context,
+                    manual.info['observable'],
+                    'observable',
+                    ('manual_constraints', segment, 'info', 'observable'),
+                )
+            if 'observables' in manual.info:
+                for index, observable in enumerate(manual.info['observables']):
+                    yield from _check_qualified(
+                        context,
+                        observable,
+                        'observable',
+                        ('manual_constraints', segment, 'info', 'observables', index),
+                    )
+
             try:
                 known_constraints[manual.name]
                 yield Diagnostic(
@@ -1467,10 +1479,14 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
                 f"Error in masks: Name '{name}' is used repeatedly",
             )
 
+        # These reports are advisory: parameters can be consumed outside the file (or supplied as
+        # fixed_parameters by a caller), and manual-constraint info is only partially inspectable.
         tracked_sections = (
             ('prior', 'priors', self.priors, '_prior_segments'),
             ('likelihood', 'likelihoods', self.likelihoods, '_likelihood_segments'),
             ('mask', 'masks', self.masks, '_mask_segments'),
+            ('observable', 'observables', self.observables, '_observable_segments'),
+            ('parameter', 'parameters', self.parameters, '_parameter_segments'),
         )
         for kind, section, children, attribute in tracked_sections:
             unused = context.unused(kind)
@@ -1482,6 +1498,49 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
                         (section, segment),
                         Severity.WARNING,
                         f"{kind.capitalize()} '{child.name}' is unused",
+                    )
+
+        unused_observables = context.unused('observable')
+        mask_segments = getattr(self, '_mask_segments', list(range(len(self.masks))))
+        assert len(self.masks) == len(mask_segments)
+        for mask, mask_segment in zip(self.masks, mask_segments):
+            if isinstance(mask, InvalidComponent):
+                continue
+            description_segments = getattr(
+                mask,
+                '_description_segments',
+                list(range(len(mask.description))),
+            )
+            assert len(mask.description) == len(description_segments)
+            for description, description_segment in zip(mask.description, description_segments):
+                if (
+                    isinstance(description, MaskExpressionComponent)
+                    and description.name in unused_observables
+                ):
+                    yield Diagnostic(
+                        ('masks', mask_segment, 'description', description_segment),
+                        Severity.WARNING,
+                        f"Observable '{description.name}' is unused",
+                    )
+
+        unused_constraints = context.unused('constraint')
+        likelihood_segments = getattr(self, '_likelihood_segments', list(range(len(self.likelihoods))))
+        assert len(self.likelihoods) == len(likelihood_segments)
+        for likelihood, likelihood_segment in zip(self.likelihoods, likelihood_segments):
+            if isinstance(likelihood, InvalidComponent):
+                continue
+            manual_segments = getattr(
+                likelihood,
+                '_manual_constraint_segments',
+                list(range(len(likelihood.manual_constraints))),
+            )
+            assert len(likelihood.manual_constraints) == len(manual_segments)
+            for manual, manual_segment in zip(likelihood.manual_constraints, manual_segments):
+                if not isinstance(manual, InvalidComponent) and str(manual.name) in unused_constraints:
+                    yield Diagnostic(
+                        ('likelihoods', likelihood_segment, 'manual_constraints', manual_segment),
+                        Severity.WARNING,
+                        f"Constraint '{manual.name}' is unused",
                     )
 
     @classmethod
