@@ -4,7 +4,12 @@
 
 ### Changed
 
+- Report problems in an analysis file as located ``eos.diagnostic.Diagnostic`` objects in lieu of raising on the first one: loading now enforces a structural validation phase, while a separate and side-effect-free semantic phase resolves the file's own custom parameters, observables and constraints through a per-file validation context, checks expressions through the C++ expression parser without registering them, reports unused priors, likelihoods, masks, and custom entities, and reports parameters that a posterior fixes while one of its own priors varies them or that neither its likelihood nor any of its predictions uses (D. van Dyk)
+- Restrict file-local names in analysis files to exclude `/` and whitespace (D. van Dyk)
+
 ### Added
+
+- Add the function ``eos.analyze_expression``, which reports whether an EOS expression is well-formed and which observables and parameters it references, without registering anything (D. van Dyk)
 
 ### Deprecated
 
