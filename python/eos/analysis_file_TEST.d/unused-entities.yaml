@@ -1,9 +1,56 @@
 format_version: 1
 
+observables:
+  'test::unused-observable':
+    latex: 'O'
+    unit: '1'
+    expression: '1.0'
+  'test::manual-constraint-observable':
+    latex: 'O_M'
+    unit: '1'
+    expression: '1.0'
+  'test::manual-constraint-observable-list':
+    latex: 'O_{M,2}'
+    unit: '1'
+    expression: '1.0'
+  'test::figure-only-observable':
+    latex: 'O_F'
+    unit: '1'
+    expression: '[[test::expression-only-parameter]]'
+
+parameters:
+  'test::unused-parameter':
+    latex: 'p'
+    unit: '1'
+    central: 0.0
+    min: -1.0
+    max: +1.0
+  'test::parameter-alias':
+    latex: 'a_0'
+    unit: '1'
+    central: 0.0
+    min: -1.0
+    max: +1.0
+  'test::expression-only-parameter':
+    latex: 'p_E'
+    unit: '1'
+    central: 0.0
+    min: -1.0
+    max: +1.0
+  'test::aliased-parameter':
+    latex: 'a'
+    unit: '1'
+    central: 0.0
+    min: -1.0
+    max: +1.0
+    alias_of:
+      - 'test::parameter-alias'
+
 priors:
   - name: used-prior
     descriptions:
       - { parameter: 'mass::e', type: uniform, min: 0.0, max: 1.0 }
+      - { parameter: 'test::parameter-alias', type: uniform, min: -1.0, max: +1.0 }
   - name: unused-prior
     descriptions:
       - { parameter: 'mass::mu', type: uniform, min: 0.0, max: 1.0 }
@@ -15,6 +62,11 @@ likelihoods:
   - name: unused-likelihood
     constraints:
       - 'B->D::f_++f_0@HPQCD:2015A'
+    manual_constraints:
+      'test::unused-constraint':
+        observable: 'test::manual-constraint-observable'
+        observables:
+          - 'test::manual-constraint-observable-list'
 
 posteriors:
   - name: posterior
@@ -22,6 +74,16 @@ posteriors:
       - used-prior
     likelihood:
       - used-likelihood
+
+figures:
+  - name: figure-using-custom-observable
+    type: single
+    plot:
+      items:
+        - type: constraint
+          constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+          variable: q2
+          observable: 'test::figure-only-observable'
 
 masks:
   - name: mask-used-by-mask
@@ -36,6 +98,7 @@ masks:
   - name: unused-mask
     description:
       - { name: 'B->Dlnu::BR' }
+      - { name: 'test::unused-mask-observable', expression: '1.0' }
 
 steps:
   - title: Create masks
