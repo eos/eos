@@ -1,0 +1,28 @@
+priors:
+  - name: incomplete-prior
+    descriptions:
+      - type: uniform
+        parameter: CKM::abs(V_ub)
+        min: 0.0
+
+likelihoods:
+  - name: empty-likelihood
+
+posteriors:
+  - name: broken-posterior
+    prior:
+      - missing-prior
+    likelihood:
+      - missing-likelihood
+
+steps:
+  - title: Broken step
+    id: broken/step
+    tasks:
+      - task: not-a-real-task
+
+masks:
+  - name: broken-mask
+    logical_combination: xor
+    description:
+      - mask_name: missing-mask
