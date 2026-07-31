@@ -506,6 +506,10 @@ Validates the analysis file by checking that all posteriors and all prediction s
 ''',
         help = 'Validate the analysis file.'
     )
+    parser_validate.add_argument('--no-deep',
+        help = 'Only perform side-effect-free structural and semantic validation.',
+        dest = 'deep', action = 'store_false', default = True
+    )
     parser_validate.set_defaults(cmd = cmd_validate)
 
 
