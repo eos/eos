@@ -16,6 +16,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/observable.hh>
 #include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
@@ -69,6 +70,30 @@ class ExpressionParserTest : public TestCase
         virtual void
         run() const
         {
+            // Analyze directly referenced names without resolving them.
+            {
+                auto references = analyze_expression("<<A::b>>");
+                TEST_CHECK_EQUAL(std::vector<QualifiedName>({ QualifiedName("A::b") }), references.observables);
+                TEST_CHECK(references.parameters.empty());
+
+                references = analyze_expression("[[A::c]]");
+                TEST_CHECK(references.observables.empty());
+                TEST_CHECK_EQUAL(std::vector<QualifiedName>({ QualifiedName("A::c") }), references.parameters);
+
+                references = analyze_expression("<<A::b;l=tau>>[q2_min=>x] + [[A::c]]");
+                TEST_CHECK_EQUAL(std::vector<QualifiedName>({ QualifiedName("A::b;l=tau") }), references.observables);
+                TEST_CHECK_EQUAL(std::vector<QualifiedName>({ QualifiedName("A::c") }), references.parameters);
+
+                references = analyze_expression("<<B_c->J/psi::FormFactors@HPQCD:2025A>>");
+                TEST_CHECK_EQUAL(std::vector<QualifiedName>({ QualifiedName("B_c->J/psi::FormFactors@HPQCD:2025A") }), references.observables);
+
+                // These names are deliberately unregistered; analysis must not perform a lookup.
+                TEST_CHECK_NO_THROW(analyze_expression("<<Unregistered::observable>> + [[Unregistered::parameter]]"));
+
+                TEST_CHECK_THROWS(ParsingError, analyze_expression("1 /* 2"));
+                TEST_CHECK_THROWS(QualifiedNameSyntaxError, analyze_expression("<<not-a-name>>"));
+            }
+
             // testing parser failure
             {
                 ExpressionTest test("1 /* 2");
