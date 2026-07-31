@@ -639,6 +639,10 @@ class PosteriorDescription(_AnalysisFileDeserializable):
         yield from _check_file_local_name(self.name, 'posterior name', ('name',))
 
     def validate_semantics(self, context):
+        for prior in self.prior:
+            context.lookup('prior', prior)
+        for likelihood in self.likelihood:
+            context.lookup('likelihood', likelihood)
         for parameter in self.fixed_parameters:
             yield from _check_qualified(
                 context,
@@ -892,6 +896,13 @@ _task_argument_map = {
     ('draw-figure', 'F'): 'format', ('draw-figure', 'FORMAT'): 'format',
 }
 
+_mask_task_arguments = frozenset({
+    ('find-mode', 'mask_name'),
+    ('predict-observables', 'mask_name'),
+    ('corner-plot', 'mask_name'),
+    ('create-mask', 'mask_name'),
+})
+
 @dataclass
 class TaskComponent(_AnalysisFileDeserializable):
     r"""Describes a single task invocation within a step, i.e. one entry of a step's ``tasks`` list.
@@ -951,6 +962,18 @@ class TaskComponent(_AnalysisFileDeserializable):
                 'versions; consider providing a value explicitly',
             )
 
+    def validate_semantics(self, context):
+        for task, argument in _mask_task_arguments:
+            if self.task != task or argument not in self.arguments:
+                continue
+            mask_name = self.arguments[argument]
+            if mask_name is not None and not context.lookup('mask', mask_name):
+                yield Diagnostic(
+                    ('arguments', argument),
+                    Severity.ERROR,
+                    f"Task '{self.task}' references unknown mask '{mask_name}'",
+                )
+
 
 @dataclass
 class StepComponent(_AnalysisFileDeserializable):
@@ -998,7 +1021,14 @@ class StepComponent(_AnalysisFileDeserializable):
                 f"Step '{self.id}' has default arguments for unknown tasks: {unknown_tasks}",
             )
 
-        for task_component in self.tasks:
+        task_segments = getattr(self, '_task_segments', list(range(len(self.tasks))))
+        assert len(self.tasks) == len(task_segments)
+        for task_component, task_segment in zip(self.tasks, task_segments):
+            if hasattr(task_component, 'validate_semantics'):
+                yield from (
+                    diagnostic.prefixed('tasks', task_segment)
+                    for diagnostic in task_component.validate_semantics(context)
+                )
             if task_component.task not in eos.tasks._tasks:
                 continue
             task = eos.tasks._tasks[task_component.task]
@@ -1011,6 +1041,20 @@ class StepComponent(_AnalysisFileDeserializable):
                     Severity.ERROR,
                     f"Task '{task_component.task}' does not recognize argument '{argument}'",
                 )
+
+            for registered_task, argument in _mask_task_arguments:
+                if registered_task != task_component.task:
+                    continue
+                arguments = self.default_arguments[task_component.task]
+                if argument not in arguments:
+                    continue
+                mask_name = arguments[argument]
+                if mask_name is not None and not context.lookup('mask', mask_name):
+                    yield Diagnostic(
+                        ('default_arguments', task_component.task, argument),
+                        Severity.ERROR,
+                        f"Task '{task_component.task}' references unknown mask '{mask_name}'",
+                    )
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -1121,6 +1165,10 @@ class MaskNamedComponent(_AnalysisFileDeserializable):
     :type mask_name: str
     """
     mask_name:str
+
+    def validate_semantics(self, context):
+        context.lookup('mask', self.mask_name)
+        yield from ()
 
 @dataclass
 class MaskComponent(_AnalysisFileDeserializable):
@@ -1427,6 +1475,23 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
                 Severity.ERROR,
                 f"Error in masks: Name '{name}' is used repeatedly",
             )
+
+        tracked_sections = (
+            ('prior', 'priors', self.priors, '_prior_segments'),
+            ('likelihood', 'likelihoods', self.likelihoods, '_likelihood_segments'),
+            ('mask', 'masks', self.masks, '_mask_segments'),
+        )
+        for kind, section, children, attribute in tracked_sections:
+            unused = context.unused(kind)
+            segments = getattr(self, attribute, list(range(len(children))))
+            assert len(children) == len(segments)
+            for child, segment in zip(children, segments):
+                if not isinstance(child, InvalidComponent) and child.name in unused:
+                    yield Diagnostic(
+                        (section, segment),
+                        Severity.WARNING,
+                        f"{kind.capitalize()} '{child.name}' is unused",
+                    )
 
     @classmethod
     def from_dict(cls, **kwargs):
