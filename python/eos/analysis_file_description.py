@@ -59,6 +59,16 @@ def _validate_children(children, segments, prefix):
             yield from (diagnostic.prefixed(prefix, segment) for diagnostic in validator())
 
 
+def _check_qualified(context, value, kind, path):
+    try:
+        qn = eos.QualifiedName(value)
+    except RuntimeError as e:
+        yield Diagnostic(path, Severity.ERROR, f"'{value}' is not a valid qualified name: {e}")
+        return
+    if not context.lookup(kind, qn):
+        yield Diagnostic(path, Severity.ERROR, f"{kind} '{value}' is unknown to EOS")
+
+
 @dataclass
 class MetadataAuthorDescription(_AnalysisFileDeserializable):
     """Describes a single author in an analysis file's metadata.
@@ -345,25 +355,27 @@ class PriorComponent(_AnalysisFileDeserializable):
             # single parameter (uniform, scale, gauss, poisson), a single constraint (constraint
             # priors), or a list of parameters (transform priors). An InvalidComponent has none of
             # them and is skipped here; its own diagnostics come from the structural phase.
-            if hasattr(description, 'parameter') and not context.lookup('parameter', description.parameter):
-                yield Diagnostic(
+            if hasattr(description, 'parameter'):
+                yield from _check_qualified(
+                    context,
+                    description.parameter,
+                    'parameter',
                     ('descriptions', segment, 'parameter'),
-                    Severity.ERROR,
-                    f"Error in prior {self.name}: Parameter '{description.parameter}' not known to EOS",
                 )
-            if hasattr(description, 'constraint') and not context.lookup('constraint', description.constraint):
-                yield Diagnostic(
+            if hasattr(description, 'constraint'):
+                yield from _check_qualified(
+                    context,
+                    description.constraint,
+                    'constraint',
                     ('descriptions', segment, 'constraint'),
-                    Severity.ERROR,
-                    f"Error in prior {self.name}: Constraint '{description.constraint}' not known to EOS",
                 )
             for index, parameter in enumerate(getattr(description, 'parameters', ())):
-                if not context.lookup('parameter', parameter):
-                    yield Diagnostic(
-                        ('descriptions', segment, 'parameters', index),
-                        Severity.ERROR,
-                        f"Error in prior {self.name}: Parameter '{parameter}' not known to EOS",
-                    )
+                yield from _check_qualified(
+                    context,
+                    parameter,
+                    'parameter',
+                    ('descriptions', segment, 'parameters', index),
+                )
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -478,12 +490,12 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         constraint_segments = getattr(self, '_constraint_segments', list(range(len(self.constraints))))
         assert len(self.constraints) == len(constraint_segments)
         for description, segment in zip(self.constraints, constraint_segments):
-            if not context.lookup('constraint', description.constraint):
-                yield Diagnostic(
-                    ('constraints', segment),
-                    Severity.ERROR,
-                    f"Error in likelihood {self.name}: Constraint '{description.constraint}'  not known to EOS",
-                )
+            yield from _check_qualified(
+                context,
+                description.constraint,
+                'constraint',
+                ('constraints', segment),
+            )
 
         known_constraints = eos.Constraints()
         manual_segments = getattr(
@@ -493,6 +505,12 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         )
         assert len(self.manual_constraints) == len(manual_segments)
         for manual, segment in zip(self.manual_constraints, manual_segments):
+            yield from _check_qualified(
+                context,
+                manual.name,
+                'constraint',
+                ('manual_constraints', segment, 'name'),
+            )
             try:
                 known_constraints[manual.name]
                 yield Diagnostic(
@@ -569,12 +587,12 @@ class PosteriorDescription(_AnalysisFileDeserializable):
 
     def validate_semantics(self, context):
         for parameter in self.fixed_parameters:
-            if not context.lookup('parameter', parameter):
-                yield Diagnostic(
-                    ('fixed_parameters', parameter),
-                    Severity.ERROR,
-                    f"Error in posterior {self.name}: Fixed parameter '{parameter}' not known to EOS",
-                )
+            yield from _check_qualified(
+                context,
+                parameter,
+                'parameter',
+                ('fixed_parameters', parameter),
+            )
 
 
 
@@ -646,20 +664,20 @@ class PredictionDescription(_AnalysisFileDeserializable):
         segments = getattr(self, '_observable_segments', list(range(len(self.observables))))
         assert len(self.observables) == len(segments)
         for observable, segment in zip(self.observables, segments):
-            if not context.lookup('observable', observable.name):
-                yield Diagnostic(
-                    ('observables', segment, 'name'),
-                    Severity.ERROR,
-                    f"Error in prediction {self.name}: Observable '{observable.name}' not known to EOS",
-                )
+            yield from _check_qualified(
+                context,
+                observable.name,
+                'observable',
+                ('observables', segment, 'name'),
+            )
 
         for parameter in self.fixed_parameters:
-            if not context.lookup('parameter', parameter):
-                yield Diagnostic(
-                    ('fixed_parameters', parameter),
-                    Severity.ERROR,
-                    f"Error in prediction {self.name}: Fixed parameter '{parameter}' not known to EOS",
-                )
+            yield from _check_qualified(
+                context,
+                parameter,
+                'parameter',
+                ('fixed_parameters', parameter),
+            )
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -708,6 +726,15 @@ class ParameterComponent(_AnalysisFileDeserializable):
     min:float
     max:float
     alias_of:list=field(default_factory=list)
+
+    def validate_semantics(self, context):
+        for index, alias in enumerate(self.alias_of):
+            yield from _check_qualified(
+                context,
+                alias,
+                'parameter',
+                ('alias_of', index),
+            )
 
 
 
@@ -968,6 +995,9 @@ class MaskObservableComponent(_AnalysisFileDeserializable):
     """
     name:str
 
+    def validate_semantics(self, context):
+        yield from _check_qualified(context, self.name, 'observable', ('name',))
+
 @dataclass
 class MaskNamedComponent(_AnalysisFileDeserializable):
     r"""Describes a mask entry that refers to another, previously defined mask.
@@ -1010,6 +1040,16 @@ class MaskComponent(_AnalysisFileDeserializable):
         yield from self._diagnostics()
         segments = getattr(self, '_description_segments', list(range(len(self.description))))
         yield from _validate_children(self.description, segments, 'description')
+
+    def validate_semantics(self, context):
+        segments = getattr(self, '_description_segments', list(range(len(self.description))))
+        assert len(self.description) == len(segments)
+        for description, segment in zip(self.description, segments):
+            if hasattr(description, 'validate_semantics'):
+                yield from (
+                    diagnostic.prefixed('description', segment)
+                    for diagnostic in description.validate_semantics(context)
+                )
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -1216,7 +1256,9 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('likelihoods', self.likelihoods, '_likelihood_segments'),
             ('posteriors', self.posteriors, '_posterior_segments'),
             ('predictions', self.predictions, '_prediction_segments'),
+            ('parameters', self.parameters, '_parameter_segments'),
             ('steps', self.steps, '_step_segments'),
+            ('masks', self.masks, '_mask_segments'),
         )
         for section, children, attribute in child_sections:
             segments = getattr(self, attribute, list(range(len(children))))
