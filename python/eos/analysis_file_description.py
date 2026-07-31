@@ -19,16 +19,45 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from .deserializable import Deserializable
+from .deserializable import Deserializable, InvalidComponent
+from .diagnostic import Diagnostic, Severity
 from eos.figure import FigureFactory
 from dataclasses import dataclass, field
 from collections import defaultdict
 import copy as _copy
 import eos
 import inspect
+from collections import Counter
+
+
+class _AnalysisFileDeserializable(Deserializable):
+    @classmethod
+    def from_dict(cls, **kwargs):
+        return Deserializable.make_with_diagnostics(cls, **kwargs)
+
+    def _diagnostics(self):
+        yield from ()
+
+    def validate(self):
+        yield from self._diagnostics()
+
+
+def _segments(raw_children, identifier='name'):
+    return [
+        child[identifier] if isinstance(child, dict) and identifier in child else index
+        for index, child in enumerate(raw_children)
+    ]
+
+
+def _validate_children(children, segments, prefix):
+    assert len(children) == len(segments)
+    for child, segment in zip(children, segments):
+        if hasattr(child, 'validate'):
+            yield from (diagnostic.prefixed(prefix, segment) for diagnostic in child.validate())
+
 
 @dataclass
-class MetadataAuthorDescription(Deserializable):
+class MetadataAuthorDescription(_AnalysisFileDeserializable):
     """Describes a single author in an analysis file's metadata.
 
     :param name: The author's name.
@@ -44,7 +73,7 @@ class MetadataAuthorDescription(Deserializable):
 
 
 @dataclass
-class MetadataDescription(Deserializable):
+class MetadataDescription(_AnalysisFileDeserializable):
     """Describes the metadata of an analysis file.
 
     :param title: A human-readable title for the analysis. Optional.
@@ -58,6 +87,11 @@ class MetadataDescription(Deserializable):
     id:str=''
     authors:list[MetadataAuthorDescription]=field(default_factory=list)
 
+    def validate(self):
+        yield from self._diagnostics()
+        segments = getattr(self, '_author_segments', list(range(len(self.authors))))
+        yield from _validate_children(self.authors, segments, 'authors')
+
     @staticmethod
     def from_dict(**kwargs):
         """Create a :class:`MetadataDescription` from its keyword description.
@@ -68,9 +102,17 @@ class MetadataDescription(Deserializable):
         :rtype: MetadataDescription
         """
         _kwargs = _copy.deepcopy(kwargs)
+        diagnostics = Deserializable.check_keys(MetadataDescription, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
         if 'authors' in kwargs:
+            author_segments = _segments(kwargs['authors'])
             _kwargs['authors'] = [MetadataAuthorDescription.from_dict(**a) for a in kwargs['authors']]
-        return Deserializable.make(MetadataDescription, **_kwargs)
+        else:
+            author_segments = []
+        result = MetadataDescription(**_kwargs)
+        result._author_segments = author_segments
+        return result
 
 
 class PriorDescription:
@@ -92,35 +134,43 @@ class PriorDescription:
         """Create the concrete prior description matching the given keyword description.
 
         :returns: An instance of the concrete :class:`PriorDescription` subtype selected from ``type``.
-        :raises ValueError: If the keys do not identify a known type of prior description.
         """
         if 'type' in kwargs:
             _kwargs = _copy.deepcopy(kwargs)
             _kwargs.pop('type')
             if kwargs['type'] in ("constraint",):
-                return Deserializable.make(ConstraintPriorDescription, **_kwargs)
+                return Deserializable.make_with_diagnostics(ConstraintPriorDescription, **_kwargs)
             elif kwargs['type'] in ("uniform", "flat"):
-                return Deserializable.make(UniformPriorDescription, **_kwargs)
+                return Deserializable.make_with_diagnostics(UniformPriorDescription, **_kwargs)
             elif kwargs['type'] in ("scale",):
-                return Deserializable.make(ScalePriorDescription, **_kwargs)
+                return Deserializable.make_with_diagnostics(ScalePriorDescription, **_kwargs)
             elif kwargs['type'] in ("gauss", "gaussian"):
                 if ('min' in kwargs) != ('max' in kwargs):
-                    raise ValueError('A Gaussian prior description must contain both \'min\' and \'max\' or neither')
+                    missing_bound = 'max' if 'min' in kwargs else 'min'
+                    return InvalidComponent([
+                        Diagnostic(
+                            (missing_bound,),
+                            Severity.ERROR,
+                            'A Gaussian prior description must contain both \'min\' and \'max\' or neither',
+                        ),
+                    ])
                 if 'min' in kwargs:
-                    return Deserializable.make(CurtailedGaussianDescription, **_kwargs)
-                return Deserializable.make(GaussianPriorDescription, **_kwargs)
+                    return Deserializable.make_with_diagnostics(CurtailedGaussianDescription, **_kwargs)
+                return Deserializable.make_with_diagnostics(GaussianPriorDescription, **_kwargs)
             elif kwargs['type'] in ("poisson",):
-                return Deserializable.make(PoissonPriorDescription, **_kwargs)
+                return Deserializable.make_with_diagnostics(PoissonPriorDescription, **_kwargs)
             elif kwargs['type'] in ("transform",):
-                return Deserializable.make(TransformPriorDescription, **_kwargs)
+                return Deserializable.make_with_diagnostics(TransformPriorDescription, **_kwargs)
         elif 'constraint' in kwargs:
             eos.warn('A constraint prior description without a \'type\' key is deprecated and will be removed in a future version of EOS; add \'type: constraint\' instead')
-            return Deserializable.make(ConstraintPriorDescription, **kwargs)
+            return Deserializable.make_with_diagnostics(ConstraintPriorDescription, **kwargs)
 
-        raise ValueError('Unknown type of prior description')
+        return InvalidComponent([
+            Diagnostic(('type',), Severity.ERROR, 'Unknown type of prior description'),
+        ])
 
 @dataclass
-class PoissonPriorDescription(Deserializable):
+class PoissonPriorDescription(_AnalysisFileDeserializable):
     r"""Describes a Poisson prior on a single parameter.
 
     :param parameter: The qualified name of the parameter.
@@ -133,7 +183,7 @@ class PoissonPriorDescription(Deserializable):
     type:str=field(repr=False, init=False, default="poisson")
 
 @dataclass
-class CurtailedGaussianDescription(Deserializable):
+class CurtailedGaussianDescription(_AnalysisFileDeserializable):
     r"""Describes a Gaussian prior truncated to a finite interval (``type: gauss`` with ``min``/``max``).
 
     .. deprecated:: 1.0.21
@@ -159,10 +209,10 @@ class CurtailedGaussianDescription(Deserializable):
     type:str=field(repr=False, init=False, default="gaussian")
 
     def __post_init__(self):
-        eos.warn('The curtailed Gaussian prior description (a \'gauss\'/\'gaussian\' prior with \'min\' and \'max\') is deprecated and will be removed in a future version of EOS; use \'type: gaussian\' without the \'min\'/\'max\' keys instead')
+        pass
 
 @dataclass
-class GaussianPriorDescription(Deserializable):
+class GaussianPriorDescription(_AnalysisFileDeserializable):
     r"""Describes a Gaussian prior on a single parameter.
 
     :param parameter: The qualified name of the parameter.
@@ -179,7 +229,7 @@ class GaussianPriorDescription(Deserializable):
 
 
 @dataclass
-class ScalePriorDescription(Deserializable):
+class ScalePriorDescription(_AnalysisFileDeserializable):
     r"""Describes a prior on a renormalization scale parameter.
 
     :param parameter: The qualified name of the scale parameter.
@@ -201,7 +251,7 @@ class ScalePriorDescription(Deserializable):
     type:str=field(repr=False, init=False, default="scale")
 
 @dataclass
-class UniformPriorDescription(Deserializable):
+class UniformPriorDescription(_AnalysisFileDeserializable):
     r"""Describes a uniform (flat) prior on a single parameter.
 
     :param parameter: The qualified name of the parameter.
@@ -217,7 +267,7 @@ class UniformPriorDescription(Deserializable):
     type:str=field(repr=False, init=False, default="uniform")
 
 @dataclass
-class ConstraintPriorDescription(Deserializable):
+class ConstraintPriorDescription(_AnalysisFileDeserializable):
     r"""Describes a (possibly correlated, multivariate) prior taken from a built-in EOS constraint.
 
     :param constraint: The qualified name of the EOS constraint used as the prior.
@@ -227,7 +277,7 @@ class ConstraintPriorDescription(Deserializable):
     type:str=field(repr=False, init=False, default="constraint")
 
 @dataclass
-class TransformPriorDescription(Deserializable):
+class TransformPriorDescription(_AnalysisFileDeserializable):
     r"""Describes a prior on a linear transformation of several parameters.
 
     :param parameters: The qualified names of the parameters that enter the transformation.
@@ -265,7 +315,7 @@ PriorDescription.registry = {
 }
 
 @dataclass
-class PriorComponent(Deserializable):
+class PriorComponent(_AnalysisFileDeserializable):
     r"""Describes a single named prior, i.e. one entry of an analysis file's ``priors`` list.
 
     A named prior bundles one or more prior descriptions: a single description for a univariate prior, or
@@ -278,6 +328,11 @@ class PriorComponent(Deserializable):
     """
     name:str
     descriptions:list
+
+    def validate(self):
+        yield from self._diagnostics()
+        segments = getattr(self, '_description_segments', list(range(len(self.descriptions))))
+        yield from _validate_children(self.descriptions, segments, 'descriptions')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -293,17 +348,22 @@ class PriorComponent(Deserializable):
         if "descriptions" in kwargs:
             if "parameters" in kwargs:
                 eos.error(f'Both \'descriptions\' and \'parameters\' are provided for prior component \'{kwargs["name"]}\', ignoring legacy support for \'parameters\'')
-            _kwargs['descriptions'] = [PriorDescription.from_dict(**d) for d in kwargs['descriptions']]
         if "parameters" in kwargs:
             eos.warn(f'\'parameters\' is in the description of prior component \'{kwargs["name"]}\', use \'descriptions\' instead')
-            _kwargs.pop("parameters")
-            _kwargs['descriptions'] = [PriorDescription.from_dict(**d) for d in kwargs['parameters']]
-        return Deserializable.make(cls, **_kwargs)
+            _kwargs['descriptions'] = _kwargs.pop("parameters")
+        diagnostics = Deserializable.check_keys(cls, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
+        description_segments = _segments(_kwargs['descriptions'])
+        _kwargs['descriptions'] = [PriorDescription.from_dict(**d) for d in _kwargs['descriptions']]
+        result = cls(**_kwargs)
+        result._description_segments = description_segments
+        return result
 
 
 
 @dataclass
-class ConstraintLikelihoodDescription(Deserializable):
+class ConstraintLikelihoodDescription(_AnalysisFileDeserializable):
     r"""Describes a likelihood contribution taken from a built-in EOS constraint.
 
     :param constraint: The qualified name of the EOS constraint.
@@ -312,7 +372,7 @@ class ConstraintLikelihoodDescription(Deserializable):
     constraint:eos.QualifiedName
 
 @dataclass
-class ManualConstraintDescription(Deserializable):
+class ManualConstraintDescription(_AnalysisFileDeserializable):
     r"""Describes a likelihood contribution from a constraint defined inline in the analysis file.
 
     :param name: The qualified name under which the manual constraint is registered.
@@ -324,7 +384,7 @@ class ManualConstraintDescription(Deserializable):
     info:dict
 
 @dataclass
-class PyHFConstraintDescription(Deserializable):
+class PyHFConstraintDescription(_AnalysisFileDeserializable):
     r"""Describes a likelihood contribution imported from a pyhf workspace.
 
     :param file: The path to the JSON file specifying the pyhf workspace.
@@ -336,7 +396,7 @@ class PyHFConstraintDescription(Deserializable):
     parameter_map:dict=field(default_factory=dict)
 
 @dataclass
-class LikelihoodComponent(Deserializable):
+class LikelihoodComponent(_AnalysisFileDeserializable):
     r"""Describes a single named likelihood, i.e. one entry of an analysis file's ``likelihoods`` list.
 
     A named likelihood may combine any number of built-in constraints, inline (manual) constraints, and
@@ -348,13 +408,40 @@ class LikelihoodComponent(Deserializable):
     :type constraints: list[ConstraintLikelihoodDescription]
     :param manual_constraints: The inline constraint definitions contributing to the likelihood. Optional.
     :type manual_constraints: list[ManualConstraintDescription]
-    :param pyhf: The pyhf-based contribution to the likelihood. Optional.
-    :type pyhf: PyHFConstraintDescription
+    :param pyhf: The pyhf-based contribution to the likelihood, or None if there is none. Optional.
+    :type pyhf: PyHFConstraintDescription | None
     """
     name:str
     constraints:list=field(default_factory=list)
     manual_constraints:list=field(default_factory=list)
-    pyhf:list=field(default_factory=list)
+    # unlike 'constraints' and 'manual_constraints', a likelihood carries at most one pyhf
+    # contribution; from_dict deserializes it into a single PyHFConstraintDescription
+    pyhf:PyHFConstraintDescription|None=None
+
+    def _diagnostics(self):
+        if not (self.constraints or self.manual_constraints or self.pyhf):
+            yield Diagnostic(
+                (),
+                Severity.ERROR,
+                'LikelihoodComponent must have at least one of constraints, manual_constraints, or pyhf',
+            )
+
+    def validate(self):
+        yield from self._diagnostics()
+        constraint_segments = getattr(self, '_constraint_segments', list(range(len(self.constraints))))
+        yield from _validate_children(self.constraints, constraint_segments, 'constraints')
+        manual_constraint_segments = getattr(
+            self,
+            '_manual_constraint_segments',
+            list(range(len(self.manual_constraints))),
+        )
+        yield from _validate_children(
+            self.manual_constraints,
+            manual_constraint_segments,
+            'manual_constraints',
+        )
+        if self.pyhf:
+            yield from (diagnostic.prefixed('pyhf') for diagnostic in self.pyhf.validate())
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -365,23 +452,39 @@ class LikelihoodComponent(Deserializable):
 
         :returns: The instantiated likelihood component.
         :rtype: LikelihoodComponent
-        :raises ValueError: If none of ``constraints``, ``manual_constraints``, or ``pyhf`` is provided.
         """
-        if not ('constraints' in kwargs or 'manual_constraints' in kwargs or 'pyhf' in kwargs):
-            raise ValueError('LikelihoodComponent must have at least one of constraints, manual_constraints, or pyhf')
         _kwargs = _copy.deepcopy(kwargs)
+        diagnostics = Deserializable.check_keys(cls, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
         if 'constraints' in kwargs:
+            constraint_segments = _segments(kwargs['constraints'])
             _kwargs['constraints'] = [ConstraintLikelihoodDescription.from_dict(constraint=c) for c in kwargs['constraints']]
+        else:
+            constraint_segments = []
         if 'manual_constraints' in kwargs:
-            _kwargs['manual_constraints'] = [ManualConstraintDescription.from_dict(name=n, info=d) for n, d in kwargs['manual_constraints'].items()]
+            raw_manual_constraints = [
+                {'name': name, 'info': info}
+                for name, info in kwargs['manual_constraints'].items()
+            ]
+            manual_constraint_segments = _segments(raw_manual_constraints)
+            _kwargs['manual_constraints'] = [
+                ManualConstraintDescription.from_dict(**description)
+                for description in raw_manual_constraints
+            ]
+        else:
+            manual_constraint_segments = []
         if 'pyhf' in kwargs:
             _kwargs['pyhf'] = PyHFConstraintDescription.from_dict(**kwargs['pyhf'])
-        return Deserializable.make(cls, **_kwargs)
+        result = cls(**_kwargs)
+        result._constraint_segments = constraint_segments
+        result._manual_constraint_segments = manual_constraint_segments
+        return result
 
 
 
 @dataclass
-class PosteriorDescription(Deserializable):
+class PosteriorDescription(_AnalysisFileDeserializable):
     r"""Describes a single named posterior, i.e. one entry of an analysis file's ``posteriors`` list.
 
     A posterior combines one or more named priors with one or more named likelihoods, optionally fixing
@@ -407,7 +510,7 @@ class PosteriorDescription(Deserializable):
 
 
 @dataclass
-class ObservableComponent(Deserializable):
+class ObservableComponent(_AnalysisFileDeserializable):
     r"""Describes a custom observable defined in an analysis file's ``observables`` section.
 
     :param name: The qualified name under which the new observable is registered.
@@ -430,7 +533,7 @@ class ObservableComponent(Deserializable):
 
 
 @dataclass
-class PredictionObservableComponent(Deserializable):
+class PredictionObservableComponent(_AnalysisFileDeserializable):
     r"""Describes a single observable to be predicted, i.e. one entry of a prediction's ``observables`` list.
 
     :param name: The qualified name of the observable to predict.
@@ -445,7 +548,7 @@ class PredictionObservableComponent(Deserializable):
     options:dict=field(default_factory=dict)
 
 @dataclass
-class PredictionDescription(Deserializable):
+class PredictionDescription(_AnalysisFileDeserializable):
     r"""Describes a single named prediction, i.e. one entry of an analysis file's ``predictions`` list.
 
     A prediction lists the observables to be evaluated on previously obtained importance samples,
@@ -465,6 +568,11 @@ class PredictionDescription(Deserializable):
     global_options:dict=field(default_factory=dict)
     fixed_parameters:dict=field(default_factory=dict)
 
+    def validate(self):
+        yield from self._diagnostics()
+        segments = getattr(self, '_observable_segments', list(range(len(self.observables))))
+        yield from _validate_children(self.observables, segments, 'observables')
+
     @classmethod
     def from_dict(cls, **kwargs):
         """Create a :class:`PredictionDescription` from its keyword description.
@@ -475,13 +583,19 @@ class PredictionDescription(Deserializable):
         :rtype: PredictionDescription
         """
         _kwargs = _copy.deepcopy(kwargs)
+        diagnostics = Deserializable.check_keys(cls, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
+        observable_segments = _segments(kwargs["observables"])
         _kwargs["observables"] = [PredictionObservableComponent.from_dict(**o) for o in kwargs["observables"]]
-        return Deserializable.make(cls, **_kwargs)
+        result = cls(**_kwargs)
+        result._observable_segments = observable_segments
+        return result
 
 
 
 @dataclass
-class ParameterComponent(Deserializable):
+class ParameterComponent(_AnalysisFileDeserializable):
     r"""Describes a custom parameter defined in an analysis file's ``parameters`` section.
 
     :param name: The new EOS qualified name of the parameter.
@@ -581,7 +695,7 @@ _task_argument_map = {
 }
 
 @dataclass
-class TaskComponent(Deserializable):
+class TaskComponent(_AnalysisFileDeserializable):
     r"""Describes a single task invocation within a step, i.e. one entry of a step's ``tasks`` list.
 
     :param task: The name of the task to run; must be a registered EOS task.
@@ -593,37 +707,47 @@ class TaskComponent(Deserializable):
     arguments:dict=field(default_factory=dict)
 
     def __post_init__(self):
-        if self.task not in eos.tasks._tasks.keys():
-            raise ValueError(f'Task \'{self.task}\' is not a valid task')
-        task = eos.tasks._tasks[self.task]
-
         self.arguments = {
             (_task_argument_map[(self.task, k)] if (self.task, k) in _task_argument_map else k): v
             for k,v in self.arguments.items()
         }
 
-        provided_arguments = set(self.arguments.keys())
-        # inject 'analysis_file' and 'base_directory' into known arguments
-        # these will be provided implicitly when the task is executed
-        provided_arguments.add('analysis_file')
-        provided_arguments.add('base_directory')
+    def _diagnostics(self):
+        if self.task not in eos.tasks._tasks:
+            yield Diagnostic(('task',), Severity.ERROR, f'Task \'{self.task}\' is not a valid task')
+            return
 
-        known_arguments = set(inspect.signature(task).parameters.keys())
-        default_arguments = { k for k, v in inspect.signature(task).parameters.items() if v.default is not inspect.Parameter.empty }
+        task = eos.tasks._tasks[self.task]
+        provided_arguments = set(self.arguments)
+        # 'analysis_file' and 'base_directory' are provided implicitly when the task is executed.
+        provided_arguments.update(('analysis_file', 'base_directory'))
+
+        known_arguments = set(inspect.signature(task).parameters)
+        default_arguments = {
+            key for key, value in inspect.signature(task).parameters.items()
+            if value.default is not inspect.Parameter.empty
+        }
         required_arguments = known_arguments - default_arguments
 
-        for arg in provided_arguments - known_arguments:
-            raise ValueError(f'Task \'{self.task}\' does not recognize argument \'{arg}\'')
+        # This checks TaskComponent.arguments only. StepComponent.default_arguments is checked in
+        # AnalysisFile.validate() for now and will move to StepComponent.validate() in step 5.
+        for argument in sorted(provided_arguments - known_arguments):
+            yield Diagnostic(
+                ('arguments', argument),
+                Severity.ERROR,
+                f'Task \'{self.task}\' does not recognize argument \'{argument}\'',
+            )
 
-        for arg in required_arguments - provided_arguments:
-            raise ValueError(f'Task \'{self.task}\' requires provision of argument \'{arg}\'')
-
-        for arg in default_arguments - provided_arguments:
-            eos.warn(f'Task \'{self.task}\' has a default value for argument \'{arg}\', which can change across versions; consider providing a value explicitly')
+        for argument in sorted(required_arguments - provided_arguments):
+            yield Diagnostic(
+                ('arguments', argument),
+                Severity.ERROR,
+                f'Task \'{self.task}\' requires provision of argument \'{argument}\'',
+            )
 
 
 @dataclass
-class StepComponent(Deserializable):
+class StepComponent(_AnalysisFileDeserializable):
     r"""Describes a single step of a reproducible analysis, i.e. one entry of an analysis file's ``steps`` list.
 
     A step bundles one or more task invocations, may declare dependencies on other steps, and may supply
@@ -647,13 +771,20 @@ class StepComponent(Deserializable):
     default_arguments:defaultdict=field(default_factory=lambda: defaultdict(dict))
 
     def __post_init__(self):
-        if '/' in self.id:
-            raise ValueError(f'Invalid character \'/\' in step id \'{self.id}\'')
-        if ' ' in self.id:
-            raise ValueError(f'Invalid character \' \' in step id \'{self.id}\'')
-        if len(self.tasks) == 0:
-            raise ValueError(f'Step \'{self.id}\' has no tasks')
         self.default_arguments = defaultdict(dict, self.default_arguments)
+
+    def _diagnostics(self):
+        if '/' in self.id:
+            yield Diagnostic(('id',), Severity.ERROR, f'Invalid character \'/\' in step id \'{self.id}\'')
+        if any(character.isspace() for character in self.id):
+            yield Diagnostic(('id',), Severity.ERROR, f'Invalid whitespace in step id \'{self.id}\'')
+        if not self.tasks:
+            yield Diagnostic(('tasks',), Severity.ERROR, f'Step \'{self.id}\' has no tasks')
+
+    def validate(self):
+        yield from self._diagnostics()
+        segments = getattr(self, '_task_segments', list(range(len(self.tasks))))
+        yield from _validate_children(self.tasks, segments, 'tasks')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -672,11 +803,17 @@ class StepComponent(Deserializable):
                     (_task_argument_map[(task, k)] if (task, k) in _task_argument_map else k): v
                     for k, v in args.items()
                 }
+        diagnostics = Deserializable.check_keys(cls, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
+        task_segments = _segments(kwargs["tasks"])
         _kwargs["tasks"] = [TaskComponent.from_dict(**t) for t in kwargs["tasks"]]
-        return Deserializable.make(cls, **_kwargs)
+        result = cls(**_kwargs)
+        result._task_segments = task_segments
+        return result
 
 
-class MaskDescription(Deserializable):
+class MaskDescription(_AnalysisFileDeserializable):
     """Polymorphic description of a single entry in a mask's ``description`` list.
 
     This is a dispatcher rather than a concrete description: :meth:`from_dict` inspects the keys of an
@@ -693,14 +830,14 @@ class MaskDescription(Deserializable):
         :rtype: MaskExpressionComponent | MaskNamedComponent | MaskObservableComponent
         """
         if 'expression' in kwargs:
-            return Deserializable.make(MaskExpressionComponent, **kwargs)
+            return Deserializable.make_with_diagnostics(MaskExpressionComponent, **kwargs)
         if 'mask_name' in kwargs:
-            return Deserializable.make(MaskNamedComponent, **kwargs)
+            return Deserializable.make_with_diagnostics(MaskNamedComponent, **kwargs)
         else:
-            return Deserializable.make(MaskObservableComponent, **kwargs)
+            return Deserializable.make_with_diagnostics(MaskObservableComponent, **kwargs)
 
 @dataclass
-class MaskExpressionComponent(Deserializable):
+class MaskExpressionComponent(_AnalysisFileDeserializable):
     r"""Describes a mask entry given by a new observable defined through an expression.
 
     :param expression: The EOS expression that defines the (pseudo-)observable used for masking.
@@ -712,7 +849,7 @@ class MaskExpressionComponent(Deserializable):
     name:str
 
 @dataclass
-class MaskObservableComponent(Deserializable):
+class MaskObservableComponent(_AnalysisFileDeserializable):
     r"""Describes a mask entry given by the name of an existing EOS observable.
 
     :param name: The qualified name of the observable used for masking.
@@ -721,7 +858,7 @@ class MaskObservableComponent(Deserializable):
     name:str
 
 @dataclass
-class MaskNamedComponent(Deserializable):
+class MaskNamedComponent(_AnalysisFileDeserializable):
     r"""Describes a mask entry that refers to another, previously defined mask.
 
     :param mask_name: The name of the previously defined mask to include.
@@ -730,7 +867,7 @@ class MaskNamedComponent(Deserializable):
     mask_name:str
 
 @dataclass
-class MaskComponent(Deserializable):
+class MaskComponent(_AnalysisFileDeserializable):
     r"""Describes a single named mask, i.e. one entry of an analysis file's ``masks`` list.
 
     A mask selects a subset of posterior samples by combining one or more (pseudo-)observables and/or
@@ -748,8 +885,20 @@ class MaskComponent(Deserializable):
     logical_combination: str = "and"
 
     def __post_init__(self):
-        if self.logical_combination not in ['and', 'or']:
-            raise ValueError(f'Invalid logical combination \'{self.logical_combination}\' for mask \'{self.name}\'')
+        pass
+
+    def _diagnostics(self):
+        if self.logical_combination not in ('and', 'or'):
+            yield Diagnostic(
+                ('logical_combination',),
+                Severity.ERROR,
+                f'Invalid logical combination \'{self.logical_combination}\' for mask \'{self.name}\'',
+            )
+
+    def validate(self):
+        yield from self._diagnostics()
+        segments = getattr(self, '_description_segments', list(range(len(self.description))))
+        yield from _validate_children(self.description, segments, 'description')
 
     @classmethod
     def from_dict(cls, **kwargs):
@@ -761,8 +910,14 @@ class MaskComponent(Deserializable):
         :rtype: MaskComponent
         """
         _kwargs = _copy.deepcopy(kwargs)
+        diagnostics = Deserializable.check_keys(cls, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
+        description_segments = _segments(kwargs['description'])
         _kwargs['description'] = [MaskDescription.from_dict(**d) for d in kwargs['description']]
-        return Deserializable.make(cls, **_kwargs)
+        result = cls(**_kwargs)
+        result._description_segments = description_segments
+        return result
 
 # Maps the discriminating key of a mask-description entry to the corresponding concrete description
 # class. The canonical dispatch logic lives in MaskDescription.from_dict; this mapping mirrors it and
@@ -775,7 +930,7 @@ MaskDescription.registry = {
 
 
 @dataclass
-class AnalysisFileDescription(Deserializable):
+class AnalysisFileDescription(_AnalysisFileDeserializable):
     r"""Structured, deserialized representation of a complete analysis file.
 
     This is the in-memory counterpart of an analysis file's top-level YAML mapping: each field mirrors
@@ -823,6 +978,127 @@ class AnalysisFileDescription(Deserializable):
     steps:list                   = field(default_factory=list)
     masks:list                   = field(default_factory=list)
 
+    def validate(self):
+        yield from self._diagnostics()
+        if self.metadata:
+            yield from (diagnostic.prefixed('metadata') for diagnostic in self.metadata.validate())
+
+        child_sections = (
+            ('priors', self.priors, '_prior_segments'),
+            ('likelihoods', self.likelihoods, '_likelihood_segments'),
+            ('posteriors', self.posteriors, '_posterior_segments'),
+            ('predictions', self.predictions, '_prediction_segments'),
+            ('figures', self.figures, '_figure_segments'),
+            ('observables', self.observables, '_observable_segments'),
+            ('parameters', self.parameters, '_parameter_segments'),
+            ('steps', self.steps, '_step_segments'),
+            ('masks', self.masks, '_mask_segments'),
+        )
+        for section, children, attribute in child_sections:
+            segments = getattr(self, attribute, list(range(len(children))))
+            yield from _validate_children(children, segments, section)
+
+    def validate_structure(self):
+        yield from self.validate()
+
+        present_sections = getattr(self, '_present_sections', set())
+        if 'priors' not in present_sections:
+            yield Diagnostic(
+                ('priors',),
+                Severity.ERROR,
+                'Cannot load analysis file: need at least one prior component',
+            )
+        if 'likelihoods' not in present_sections:
+            yield Diagnostic(
+                ('likelihoods',),
+                Severity.WARNING,
+                'No likelihood components found in analysis file',
+            )
+        if 'posteriors' not in present_sections:
+            yield Diagnostic(
+                ('posteriors',),
+                Severity.ERROR,
+                'Cannot load analysis file: need at least one posterior',
+            )
+
+        prior_names = {
+            prior.name for prior in self.priors
+            if not isinstance(prior, InvalidComponent)
+        }
+        likelihood_names = {
+            likelihood.name for likelihood in self.likelihoods
+            if not isinstance(likelihood, InvalidComponent)
+        }
+        posterior_segments = getattr(self, '_posterior_segments', list(range(len(self.posteriors))))
+        assert len(self.posteriors) == len(posterior_segments)
+        for posterior, segment in zip(self.posteriors, posterior_segments):
+            if isinstance(posterior, InvalidComponent):
+                continue
+            for index, prior in enumerate(posterior.prior):
+                if prior not in prior_names:
+                    yield Diagnostic(
+                        ('posteriors', segment, 'prior', index),
+                        Severity.ERROR,
+                        f'Posterior \'{posterior.name}\' references prior \'{prior}\' which is not defined',
+                    )
+            for index, likelihood in enumerate(posterior.likelihood):
+                if likelihood not in likelihood_names:
+                    yield Diagnostic(
+                        ('posteriors', segment, 'likelihood', index),
+                        Severity.ERROR,
+                        f'Posterior \'{posterior.name}\' references likelihood \'{likelihood}\' which is not defined',
+                    )
+
+        step_ids = [
+            step.id for step in self.steps
+            if not isinstance(step, InvalidComponent)
+        ]
+        duplicate_step_ids = {
+            step_id for step_id, count in Counter(step_ids).items()
+            if count > 1
+        }
+        for step_id in sorted(duplicate_step_ids):
+            yield Diagnostic(
+                ('steps', step_id, 'id'),
+                Severity.ERROR,
+                f'Duplicate step id \'{step_id}\'; all steps must have a unique id',
+            )
+
+        mask_names = [
+            mask.name for mask in self.masks
+            if not isinstance(mask, InvalidComponent)
+        ]
+        duplicate_mask_names = {
+            mask_name for mask_name, count in Counter(mask_names).items()
+            if count > 1
+        }
+        for mask_name in sorted(duplicate_mask_names):
+            yield Diagnostic(
+                ('masks', mask_name, 'name'),
+                Severity.ERROR,
+                f'Duplicate mask name \'{mask_name}\'; all masks must have a unique name',
+            )
+
+        known_masks = set(mask_names)
+        mask_segments = getattr(self, '_mask_segments', list(range(len(self.masks))))
+        assert len(self.masks) == len(mask_segments)
+        for mask, mask_segment in zip(self.masks, mask_segments):
+            if isinstance(mask, InvalidComponent):
+                continue
+            description_segments = getattr(
+                mask,
+                '_description_segments',
+                list(range(len(mask.description))),
+            )
+            assert len(mask.description) == len(description_segments)
+            for description, description_segment in zip(mask.description, description_segments):
+                if isinstance(description, MaskNamedComponent) and description.mask_name not in known_masks:
+                    yield Diagnostic(
+                        ('masks', mask_segment, 'description', description_segment, 'mask_name'),
+                        Severity.ERROR,
+                        f'Mask {mask.name} references unknown mask {description.mask_name}',
+                    )
+
     @classmethod
     def from_dict(cls, **kwargs):
         r"""Create an :class:`AnalysisFileDescription` from the top-level mapping of an analysis file.
@@ -836,27 +1112,76 @@ class AnalysisFileDescription(Deserializable):
         :rtype: AnalysisFileDescription
         """
         _kwargs = dict(kwargs) # shallow copy: only the top-level keys are reassigned below
+        diagnostics = Deserializable.check_keys(cls, _kwargs)
+        if diagnostics:
+            return InvalidComponent(diagnostics)
         if 'metadata' in kwargs:
             _kwargs['metadata'] = MetadataDescription.from_dict(**kwargs['metadata'])
         if 'priors' in kwargs:
+            prior_segments = _segments(kwargs['priors'])
             _kwargs['priors'] = [PriorComponent.from_dict(**p) for p in kwargs['priors']]
+        else:
+            prior_segments = []
         if 'likelihoods' in kwargs:
+            likelihood_segments = _segments(kwargs['likelihoods'])
             _kwargs['likelihoods'] = [LikelihoodComponent.from_dict(**ll) for ll in kwargs['likelihoods']]
+        else:
+            likelihood_segments = []
         if 'posteriors' in kwargs:
+            posterior_segments = _segments(kwargs['posteriors'])
             _kwargs['posteriors'] = [PosteriorDescription.from_dict(**p) for p in kwargs['posteriors']]
+        else:
+            posterior_segments = []
         if 'predictions' in kwargs:
+            prediction_segments = _segments(kwargs['predictions'])
             _kwargs['predictions'] = [PredictionDescription.from_dict(**p) for p in kwargs['predictions']]
+        else:
+            prediction_segments = []
         if 'figures' in kwargs:
+            figure_segments = _segments(kwargs['figures'])
             _kwargs['figures'] = [FigureFactory.from_dict(**f) for f in kwargs['figures']]
+        else:
+            figure_segments = []
         if 'observables' in kwargs:
-            _kwargs['observables'] = [ObservableComponent.from_dict(name=n, **d) for n, d in kwargs['observables'].items()]
+            raw_observables = [
+                {'name': name, **description}
+                for name, description in kwargs['observables'].items()
+            ]
+            observable_segments = _segments(raw_observables)
+            _kwargs['observables'] = [ObservableComponent.from_dict(**o) for o in raw_observables]
+        else:
+            observable_segments = []
         if 'parameters' in kwargs:
-            _kwargs['parameters'] = [ParameterComponent.from_dict(name=n, **d) for n, d in kwargs['parameters'].items()]
+            raw_parameters = [
+                {'name': name, **description}
+                for name, description in kwargs['parameters'].items()
+            ]
+            parameter_segments = _segments(raw_parameters)
+            _kwargs['parameters'] = [ParameterComponent.from_dict(**p) for p in raw_parameters]
+        else:
+            parameter_segments = []
         if 'steps' in kwargs:
+            step_segments = _segments(kwargs['steps'], identifier='id')
             _kwargs['steps'] = [StepComponent.from_dict(**s) for s in kwargs['steps']]
+        else:
+            step_segments = []
         if 'masks' in kwargs:
+            mask_segments = _segments(kwargs['masks'])
             _kwargs['masks'] = [MaskComponent.from_dict(**m) for m in kwargs['masks']]
-        return Deserializable.make(cls, **_kwargs)
+        else:
+            mask_segments = []
+        result = cls(**_kwargs)
+        result._prior_segments = prior_segments
+        result._likelihood_segments = likelihood_segments
+        result._posterior_segments = posterior_segments
+        result._prediction_segments = prediction_segments
+        result._figure_segments = figure_segments
+        result._observable_segments = observable_segments
+        result._parameter_segments = parameter_segments
+        result._step_segments = step_segments
+        result._mask_segments = mask_segments
+        result._present_sections = set(kwargs)
+        return result
 
 # AnalysisFile schema
 

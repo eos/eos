@@ -26,6 +26,7 @@ from collections import Counter
 from dataclasses import asdict
 from eos.analysis_file_description import AnalysisFileDescription, PriorDescription, \
                                        MaskExpressionComponent, MaskNamedComponent
+from eos.diagnostic import Severity
 
 # The highest analysis file format version understood by this version of EOS. Increment this
 # whenever a change to the schema alters how existing files are interpreted. Files that omit the
@@ -74,33 +75,24 @@ class AnalysisFile:
                                f'{SUPPORTED_FORMAT_VERSION}; please update EOS')
 
         # Deserialize the file's structure. AnalysisFileDescription performs the pure YAML->object
-        # mapping and rejects unknown top-level keys; the mandatory-section checks, cross-reference
-        # validation, uniqueness checks, and EOS-runtime side effects below remain here.
+        # mapping and rejects unknown top-level keys. Structural validation is performed by the
+        # description before EOS-runtime side effects are applied.
         self._description = AnalysisFileDescription.from_dict(**self.input_data)
+        if isinstance(self._description, AnalysisFileDescription):
+            structural_diagnostics = list(self._description.validate_structure())
+        else:
+            structural_diagnostics = list(self._description.validate())
+        if any(diagnostic.severity is Severity.ERROR for diagnostic in structural_diagnostics):
+            rendered_diagnostics = '\n'.join(str(diagnostic) for diagnostic in structural_diagnostics)
+            raise RuntimeError(f'Cannot load analysis file:\n{rendered_diagnostics}')
 
         self._metadata = self._description.metadata
 
-        if 'priors' not in self.input_data:
-            raise RuntimeError('Cannot load analysis file: need at least one prior component')
-
         self._priors = { p.name: p for p in self._description.priors }
 
-        if 'likelihoods' not in self.input_data:
-            eos.warn('No likelihood components found in analysis file')
         self._likelihoods = { ll.name: ll for ll in self._description.likelihoods }
 
-        if 'posteriors' not in self.input_data:
-            raise RuntimeError('Cannot load analysis file: need at least one posterior')
-
         self._posteriors = { p.name: p for p in self._description.posteriors }
-        # Check that the priors and likelihoods referenced by the posteriors are defined
-        for pc in self._posteriors.values():
-            for p in pc.prior:
-                if p not in self._priors:
-                    raise RuntimeError(f'Posterior \'{pc.name}\' references prior \'{p}\' which is not defined')
-            for l in pc.likelihood:
-                if l not in self._likelihoods:
-                    raise RuntimeError(f'Posterior \'{pc.name}\' references likelihood \'{l}\' which is not defined')
 
         # Optional: figures
         self._figures = { f.name: f for f in self._description.figures }
@@ -134,12 +126,8 @@ class AnalysisFile:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
-        if len(self._description.steps) != len({s.id for s in self._description.steps}):
-            raise ValueError("All steps must have a unique id")
         self._steps = { s.id: s for s in self._description.steps }
 
-        if len(self._description.masks) != len({m.name for m in self._description.masks}):
-            raise ValueError("All masks must have a unique name")
         self._masks = { m.name: m for m in self._description.masks }
         if self._masks:
             # Insert custom observables using the expression parser
@@ -149,9 +137,6 @@ class AnalysisFile:
                     if isinstance(d, MaskExpressionComponent):
                         eos.Observables().insert(d.name, "", eos.Unit("1"), eos.Options(), d.expression)
                         eos.info(f'Inserted observable: {d.name}')
-                    if isinstance(d, MaskNamedComponent):
-                        if d.mask_name not in self._masks:
-                            raise ValueError(f"Mask {mc.name} references unknown mask {d.mask_name}")
 
 
     def analysis(self, _posterior):

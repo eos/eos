@@ -42,10 +42,9 @@ class TestAnalysisFile(unittest.TestCase):
     def test_prior_only_analysis_file(self):
 
         # a file without a 'likelihoods' section is a legitimate prior-only analysis; it must load
-        # (with a warning) and expose no likelihoods. Regression test: this previously raised a
-        # KeyError because the (absent) 'likelihoods' entry was accessed unconditionally.
-        with self.assertLogs('EOS', level='WARNING'):
-            af = eos.AnalysisFile(_TESTD / 'no-likelihoods-analysis-file.yaml')
+        # and expose no likelihoods. Regression test: this previously raised a KeyError because the
+        # (absent) 'likelihoods' entry was accessed unconditionally.
+        af = eos.AnalysisFile(_TESTD / 'no-likelihoods-analysis-file.yaml')
         self.assertEqual(dict(af.likelihoods), {})
         af.validate()
 
@@ -113,16 +112,33 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
             eos.AnalysisFile(_TESTD / 'invalid' / 'bad-parameter.yaml')
 
     def test_duplicate_step_id(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             eos.AnalysisFile(_TESTD / 'invalid' / 'duplicate-step-id.yaml')
 
     def test_duplicate_mask_name(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             eos.AnalysisFile(_TESTD / 'invalid' / 'duplicate-mask-name.yaml')
 
     def test_unknown_mask_reference(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(RuntimeError):
             eos.AnalysisFile(_TESTD / 'invalid' / 'unknown-mask-ref.yaml')
+
+    def test_multiple_structural_errors_are_reported_together(self):
+        with self.assertRaises(RuntimeError) as context:
+            eos.AnalysisFile(_TESTD / 'invalid' / 'multiple-structural-errors.yaml')
+
+        message = str(context.exception)
+        for fragment in (
+            'priors/incomplete-prior/descriptions[0]/max',
+            'likelihoods/empty-likelihood',
+            'posteriors/broken-posterior/prior[0]',
+            'posteriors/broken-posterior/likelihood[0]',
+            'steps/broken/step/id',
+            'steps/broken/step/tasks[0]/task',
+            'masks/broken-mask/logical_combination',
+            'masks/broken-mask/description[0]/mask_name',
+        ):
+            self.assertIn(fragment, message)
 
 
 class TestAnalysisFileMethods(unittest.TestCase):

@@ -14,9 +14,12 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import unittest
+from dataclasses import asdict
 
 import eos
 
+from eos.deserializable import InvalidComponent
+from eos.diagnostic import Severity
 from eos.analysis_file_description import (
     MetadataAuthorDescription,
     MetadataDescription,
@@ -110,17 +113,29 @@ class PriorDescriptionTests(unittest.TestCase):
             PoissonPriorDescription)
 
     def test_unknown_type(self):
-        with self.assertRaises(ValueError):
-            PriorDescription.from_dict(parameter='p', type='not-a-type')
-        with self.assertRaises(ValueError):
-            PriorDescription.from_dict()
+        unknown = PriorDescription.from_dict(parameter='p', type='not-a-type')
+        missing = PriorDescription.from_dict()
+        for desc in (unknown, missing):
+            self.assertIsInstance(desc, InvalidComponent)
+            diagnostics = list(desc.validate())
+            self.assertEqual(len(diagnostics), 1)
+            self.assertEqual(diagnostics[0].path, ('type',))
+            self.assertEqual(diagnostics[0].severity, Severity.ERROR)
+            self.assertEqual(diagnostics[0].message, 'Unknown type of prior description')
 
     def test_gaussian_requires_both_bounds(self):
         "A gaussian prior with only one of 'min'/'max' is rejected with a clear error."
-        with self.assertRaises(ValueError):
-            PriorDescription.from_dict(parameter='p', type='gaussian', central=0.0, sigma=1.0, min=-1.0)
-        with self.assertRaises(ValueError):
-            PriorDescription.from_dict(parameter='p', type='gaussian', central=0.0, sigma=1.0, max=1.0)
+        missing_max = PriorDescription.from_dict(
+            parameter='p', type='gaussian', central=0.0, sigma=1.0, min=-1.0)
+        missing_min = PriorDescription.from_dict(
+            parameter='p', type='gaussian', central=0.0, sigma=1.0, max=1.0)
+        for desc, path in ((missing_max, ('max',)), (missing_min, ('min',))):
+            self.assertIsInstance(desc, InvalidComponent)
+            diagnostics = list(desc.validate())
+            self.assertEqual(len(diagnostics), 1)
+            self.assertEqual(diagnostics[0].path, path)
+            self.assertEqual(diagnostics[0].severity, Severity.ERROR)
+            self.assertIn('must contain both', diagnostics[0].message)
 
 
 class PoissonPriorDescriptionTests(unittest.TestCase):
@@ -183,8 +198,13 @@ class ScalePriorDescriptionTests(unittest.TestCase):
     def test_missing_field(self):
         "Check that an incomplete scale prior description is rejected."
 
-        with self.assertRaises(ValueError):
-            PriorDescription.from_dict(parameter='mass::b(MSbar)', type='scale', min=0.0, max=1.0)
+        desc = PriorDescription.from_dict(parameter='mass::b(MSbar)', type='scale', min=0.0, max=1.0)
+        self.assertIsInstance(desc, InvalidComponent)
+        self.assertEqual(
+            [(d.path, d.severity, d.message) for d in desc.validate()],
+            [(('lambda_scale',), Severity.ERROR, "Missing mandatory key 'lambda_scale'"),
+             (('mu_0',), Severity.ERROR, "Missing mandatory key 'mu_0'")],
+        )
 
 
 class UniformPriorDescriptionTests(unittest.TestCase):
@@ -305,8 +325,11 @@ class LikelihoodComponentTests(unittest.TestCase):
         self.assertIsInstance(comp.pyhf, PyHFConstraintDescription)
 
     def test_requires_at_least_one_source(self):
-        with self.assertRaises(ValueError):
-            LikelihoodComponent.from_dict(name='empty')
+        comp = LikelihoodComponent.from_dict(name='empty')
+        diagnostics = list(comp._diagnostics())
+        self.assertEqual(len(diagnostics), 1)
+        self.assertEqual(diagnostics[0].severity, Severity.ERROR)
+        self.assertIn('must have at least one', diagnostics[0].message)
 
 
 class PosteriorDescriptionTests(unittest.TestCase):
@@ -416,12 +439,30 @@ class TaskComponentTests(unittest.TestCase):
         self.assertNotIn('F', comp.arguments)
 
     def test_invalid_task(self):
-        with self.assertRaises(ValueError):
-            TaskComponent.from_dict(task='not-a-real-task', arguments={})
+        comp = TaskComponent.from_dict(task='not-a-real-task', arguments={})
+        diagnostics = list(comp._diagnostics())
+        self.assertEqual(len(diagnostics), 1)
+        self.assertEqual(diagnostics[0].path, ('task',))
+        self.assertEqual(diagnostics[0].severity, Severity.ERROR)
 
     def test_unknown_argument(self):
-        with self.assertRaises(ValueError):
-            TaskComponent.from_dict(task='corner-plot', arguments={'posterior': 'CKM-all', 'not_an_argument': 1})
+        comp = TaskComponent.from_dict(
+            task='corner-plot',
+            arguments={'posterior': 'CKM-all', 'not_an_argument': 1},
+        )
+        diagnostics = list(comp._diagnostics())
+        self.assertTrue(any(
+            d.path == ('arguments', 'not_an_argument') and d.severity == Severity.ERROR
+            for d in diagnostics
+        ))
+
+    def test_missing_required_argument(self):
+        comp = TaskComponent.from_dict(task='corner-plot', arguments={})
+        diagnostics = list(comp._diagnostics())
+        self.assertTrue(any(
+            d.path == ('arguments', 'posterior') and d.severity == Severity.ERROR
+            for d in diagnostics
+        ))
 
 
 class StepComponentTests(unittest.TestCase):
@@ -437,14 +478,16 @@ class StepComponentTests(unittest.TestCase):
         self.assertIsInstance(comp.tasks[0], TaskComponent)
 
     def test_invalid_id(self):
-        with self.assertRaises(ValueError):
-            StepComponent.from_dict(title='t', id='has/slash', tasks=self._tasks())
-        with self.assertRaises(ValueError):
-            StepComponent.from_dict(title='t', id='has space', tasks=self._tasks())
+        slash = StepComponent.from_dict(title='t', id='has/slash', tasks=self._tasks())
+        whitespace = StepComponent.from_dict(title='t', id='has space', tasks=self._tasks())
+        self.assertTrue(any(d.path == ('id',) for d in slash._diagnostics()))
+        self.assertTrue(any(d.path == ('id',) for d in whitespace._diagnostics()))
 
     def test_empty_tasks(self):
-        with self.assertRaises(ValueError):
-            StepComponent.from_dict(title='t', id='no-tasks', tasks=[])
+        comp = StepComponent.from_dict(title='t', id='no-tasks', tasks=[])
+        diagnostics = list(comp._diagnostics())
+        self.assertEqual(len(diagnostics), 1)
+        self.assertEqual(diagnostics[0].path, ('tasks',))
 
 
 class MaskDescriptionTests(unittest.TestCase):
@@ -501,12 +544,15 @@ class MaskComponentTests(unittest.TestCase):
         self.assertIsInstance(comp.description[1], MaskNamedComponent)
 
     def test_invalid_logical_combination(self):
-        with self.assertRaises(ValueError):
-            MaskComponent.from_dict(
-                name='my-mask',
-                description=[{'name': 'B->pilnu::BR'}],
-                logical_combination='xor',
-            )
+        comp = MaskComponent.from_dict(
+            name='my-mask',
+            description=[{'name': 'B->pilnu::BR'}],
+            logical_combination='xor',
+        )
+        diagnostics = list(comp._diagnostics())
+        self.assertEqual(len(diagnostics), 1)
+        self.assertEqual(diagnostics[0].path, ('logical_combination',))
+        self.assertEqual(diagnostics[0].severity, Severity.ERROR)
 
 
 class AnalysisFileDescriptionTests(unittest.TestCase):
@@ -565,8 +611,88 @@ class AnalysisFileDescriptionTests(unittest.TestCase):
 
     def test_unknown_top_level_key_is_rejected(self):
         "An unrecognized top-level key is rejected rather than silently ignored."
-        with self.assertRaises(ValueError):
-            AnalysisFileDescription.from_dict(not_a_section=42)
+        desc = AnalysisFileDescription.from_dict(not_a_section=42)
+        self.assertIsInstance(desc, InvalidComponent)
+        diagnostics = list(desc.validate())
+        self.assertEqual(len(diagnostics), 1)
+        self.assertEqual(diagnostics[0].path, ('not_a_section',))
+
+    def test_validate_recurses_and_prefixes_raw_child_segments(self):
+        desc = AnalysisFileDescription.from_dict(
+            priors=[{
+                'name': 'FF',
+                'descriptions': [{'type': 'uniform', 'parameter': 'x', 'min': 0.0}],
+            }],
+            likelihoods=[{'name': 'empty'}],
+            steps=[{
+                'title': 'Broken step',
+                'id': 'broken',
+                'tasks': [{'arguments': {}}],
+            }],
+        )
+
+        diagnostics = list(desc.validate())
+        self.assertIn(('priors', 'FF', 'descriptions', 0, 'max'), [d.path for d in diagnostics])
+        self.assertIn(('likelihoods', 'empty'), [d.path for d in diagnostics])
+        self.assertIn(('steps', 'broken', 'tasks', 0, 'task'), [d.path for d in diagnostics])
+
+    def test_raw_child_segments_are_not_serialized(self):
+        desc = AnalysisFileDescription.from_dict(
+            priors=[{
+                'name': 'P',
+                'descriptions': [
+                    {'type': 'uniform', 'parameter': 'x', 'min': 0.0, 'max': 1.0},
+                ],
+            }],
+        )
+
+        serialized = asdict(desc)
+        self.assertFalse(any(key.startswith('_') for key in serialized))
+        self.assertFalse(any(key.startswith('_') for key in serialized['priors'][0]))
+
+    def test_validate_structure_checks_whole_file(self):
+        desc = AnalysisFileDescription.from_dict(
+            priors=[{
+                'name': 'P',
+                'descriptions': [
+                    {'type': 'uniform', 'parameter': 'x', 'min': 0.0, 'max': 1.0},
+                ],
+            }],
+            likelihoods=[{'name': 'L', 'constraints': ['x::constraint']}],
+            posteriors=[{
+                'name': 'posterior',
+                'prior': ['missing-prior'],
+                'likelihood': ['missing-likelihood'],
+            }],
+            steps=[
+                {'title': 'First', 'id': 'duplicate', 'tasks': []},
+                {'title': 'Second', 'id': 'duplicate', 'tasks': []},
+            ],
+            masks=[
+                {'name': 'duplicate-mask', 'description': [{'mask_name': 'missing-mask'}]},
+                {'name': 'duplicate-mask', 'description': []},
+            ],
+        )
+
+        diagnostics = list(desc.validate_structure())
+        paths = [diagnostic.path for diagnostic in diagnostics]
+        self.assertIn(('posteriors', 'posterior', 'prior', 0), paths)
+        self.assertIn(('posteriors', 'posterior', 'likelihood', 0), paths)
+        self.assertIn(('steps', 'duplicate', 'id'), paths)
+        self.assertIn(('masks', 'duplicate-mask', 'name'), paths)
+        self.assertIn(
+            ('masks', 'duplicate-mask', 'description', 0, 'mask_name'),
+            paths,
+        )
+
+    def test_validate_structure_checks_section_presence(self):
+        desc = AnalysisFileDescription.from_dict()
+        diagnostics = list(desc.validate_structure())
+
+        by_path = {diagnostic.path: diagnostic for diagnostic in diagnostics}
+        self.assertEqual(by_path[('priors',)].severity, Severity.ERROR)
+        self.assertEqual(by_path[('likelihoods',)].severity, Severity.WARNING)
+        self.assertEqual(by_path[('posteriors',)].severity, Severity.ERROR)
 
 
 if __name__ == '__main__':
