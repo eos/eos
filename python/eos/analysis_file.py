@@ -21,12 +21,11 @@ import eos
 import os
 import sys
 import yaml
-import inspect
-from collections import Counter
 from dataclasses import asdict
 from eos.analysis_file_description import AnalysisFileDescription, PriorDescription, \
                                        MaskExpressionComponent, MaskNamedComponent
-from eos.diagnostic import Severity
+from eos.diagnostic import Diagnostic, Severity
+from eos.validation_context import ValidationContext
 
 # The highest analysis file format version understood by this version of EOS. Increment this
 # whenever a change to the schema alters how existing files are interpreted. Files that omit the
@@ -77,11 +76,10 @@ class AnalysisFile:
         # Deserialize the file's structure. AnalysisFileDescription performs the pure YAML->object
         # mapping and rejects unknown top-level keys. Structural validation is performed by the
         # description before EOS-runtime side effects are applied.
+        # from_dict returns an InvalidComponent when the top-level mapping has unknown or missing
+        # keys; it exposes the same validate_structure(), so no special case is needed here.
         self._description = AnalysisFileDescription.from_dict(**self.input_data)
-        if isinstance(self._description, AnalysisFileDescription):
-            structural_diagnostics = list(self._description.validate_structure())
-        else:
-            structural_diagnostics = list(self._description.validate())
+        structural_diagnostics = list(self._description.validate_structure())
         if any(diagnostic.severity is Severity.ERROR for diagnostic in structural_diagnostics):
             rendered_diagnostics = '\n'.join(str(diagnostic) for diagnostic in structural_diagnostics)
             raise RuntimeError(f'Cannot load analysis file:\n{rendered_diagnostics}')
@@ -300,99 +298,47 @@ class AnalysisFile:
         return observable
 
 
-    def validate(self):
-        """Validates the analysis file."""
-        messages = []
-        # Check that all priors are known to EOS
-        known_params = eos.Parameters()
-        for p_name, pc in self._priors.items():
-            for description in pc.descriptions:
-                try:
-                    known_params[description.parameter]
-                except RuntimeError:
-                    messages.append(f"Error in prior {p_name}: Parameter '{description.parameter}' not known to EOS")
-        # Check that all likelihoods contain valid constraints and manual constraints
-        known_constraints = eos.Constraints()
-        for l_name, lc in self._likelihoods.items():
-            for description in lc.constraints:
-                try:
-                    known_constraints[description.constraint]
-                except RuntimeError:
-                    messages.append(f"Error in likelihood {l_name}: Constraint '{description.constraint}'  not known to EOS")
-            for manual in lc.manual_constraints:
-                try:
-                    known_constraints[manual.name]
-                    messages.append(f"Error in likelihood {l_name}: The manual constraint named '{manual.name}' matches an already defined constraint name")
-                except RuntimeError:
-                    pass
-        # Check that all observables in a prediction are known to EOS
-        known_observables = eos.Observables()
-        for pred_name, pd in self._predictions.items():
-            for o in pd.observables:
-                try:
-                    known_observables[o.name]
-                except RuntimeError:
-                    messages.append(f"Error in prediction {pred_name}: Observable '{o.name}' not known to EOS")
-        # Check that any parameters that are fixed (in posteriors or predictions) are known to EOS
-        for p_name, posterior in self._posteriors.items():
-            for param in posterior.fixed_parameters:
-                try:
-                    known_params[param]
-                except RuntimeError:
-                    messages.append(f"Error in posterior {p_name}: Fixed parameter '{param}' not known to EOS")
-        for p_name, prediction in self._predictions.items():
-            for param in prediction.fixed_parameters:
-                try:
-                    known_params[param]
-                except RuntimeError:
-                    messages.append(f"Error in prediction {p_name}: Fixed parameter '{param}' not known to EOS")
-        for step_id, step in self._steps.items():
-            # Check that all the dependencies of a step exist
-            if (unknown_dependencies := step.depends_on - self._steps.keys()):
-                messages.append(f'Step \'{step_id}\' depends on unknown steps: {unknown_dependencies}')
-            # Check that the default arguments correspond to real tasks
-            if (unknown_tasks := step.default_arguments.keys() - eos.tasks._tasks.keys()):
-                messages.append(f'Step \'{step_id}\' has default arguments for unknown tasks: {unknown_tasks}')
-            for tc in step.tasks:
-                # Check all posteriors named in steps exist
-                if 'posterior' in tc.arguments:
-                    if tc.arguments['posterior'] not in self._posteriors:
-                        messages.append(f"Error in step {step_id}: Posterior '{tc.arguments['posterior']}' not known to EOS")
-                # Check that default arguments in steps can be applied to all specified tasks
-                task_func = eos.tasks._tasks[tc.task]
-                provided_arguments = step.default_arguments[tc.task].keys() | tc.arguments.keys()
-                known_arguments = set(inspect.signature(task_func).parameters.keys())
-                for arg in provided_arguments - known_arguments:
-                    messages.append(f'Task \'{tc.task}\' does not recognize argument \'{arg}\'')
-        # Check that any expression observables defined in masks have unique names
-        counts = Counter()
-        for mc in self._masks.values():
-            for d in mc.description:
-                if isinstance(d, MaskExpressionComponent):
-                    counts[d.name] += 1
-        repeated = {name for name, count in counts.items() if count > 1}
-        for name in repeated:
-            messages.append(f"Error in masks: Name '{name}' is used repeatedly")
+    def validate(self, deep:bool=True):
+        """Validates the analysis file semantically and, by default, deeply.
+
+        The deep phase instantiates every posterior and every prediction set, which catches errors
+        that the semantic phase cannot see: invalid options, malformed manual-constraint bodies,
+        inconsistent prior ranges, and unreadable pyhf workspaces. It is enabled by default.
+
+        :param deep: If True, additionally instantiate all posteriors and prediction sets. Defaults to True.
+        :type deep: bool
+        :returns: The diagnostics found, most-structural first.
+        :rtype: list[eos.diagnostic.Diagnostic]
+        """
+        context = ValidationContext(self._description)
+        diagnostics = list(self._description.validate_semantics(context))
 
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
-        for posterior in self._posteriors:
-            try:
-                self.analysis(posterior)
-                eos.info(f'Successfully created analysis for posterior \'{posterior}\'')
+        if deep:
+            for posterior in self._posteriors:
+                try:
+                    self.analysis(posterior)
+                    eos.info(f'Successfully created analysis for posterior \'{posterior}\'')
 
-                for prediction in self._predictions:
-                    try:
-                        self.observables(posterior, prediction, eos.Parameters())
-                        eos.info(f'Successfully created prediction \'{prediction}\' set for posterior \'{posterior}\'')
-                    except Exception as e:
-                        messages.append(f'Error encountered when creating observables for prediction \'{prediction}\' of posterior \'{posterior}\': {e}')
+                    for prediction in self._predictions:
+                        try:
+                            self.observables(posterior, prediction, eos.Parameters())
+                            eos.info(f'Successfully created prediction \'{prediction}\' set for posterior \'{posterior}\'')
+                        except Exception as e:
+                            diagnostics.append(Diagnostic(
+                                ('predictions', prediction), Severity.ERROR,
+                                f'cannot create observables for posterior \'{posterior}\': {e}'
+                            ))
 
-            except Exception as e:
-                messages.append(f'Error encountered when creating posterior \'{posterior}\': {e}')
-        for m in messages:
-            print(m)
-        return messages
+                except Exception as e:
+                    diagnostics.append(Diagnostic(
+                        ('posteriors', posterior), Severity.ERROR,
+                        f'cannot be created: {e}'
+                    ))
+        for diagnostic in diagnostics:
+            print(diagnostic)
+        return diagnostics
 
 
     @property

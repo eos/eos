@@ -14,6 +14,7 @@ EXTRA_DIST = \
 	eos/analysis_file_context.py \
 	eos/analysis_file_context_TEST.py \
 	eos/analysis_file_description.py \
+	eos/validation_context.py \
 	eos/config.py \
 	eos/constraint.py \
 	eos/datasets.py \
@@ -93,6 +94,7 @@ eos_SCRIPTS = \
 	eos/analysis_file.py \
 	eos/analysis_file_context.py \
 	eos/analysis_file_description.py \
+	eos/validation_context.py \
 	eos/config.py \
 	eos/constraint.py \
 	eos/datasets.py \
@@ -161,6 +163,7 @@ TESTS = \
 	eos/analysis_file_TEST.py \
 	eos/analysis_file_context_TEST.py \
 	eos/analysis_file_description_TEST.py \
+	eos/validation_context_TEST.py \
 	eos/datasets_TEST.py \
 	eos/datasets_file_description_TEST.py \
 	eos/deserializable_TEST.py \

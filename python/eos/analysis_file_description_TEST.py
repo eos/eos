@@ -117,7 +117,7 @@ class PriorDescriptionTests(unittest.TestCase):
         missing = PriorDescription.from_dict()
         for desc in (unknown, missing):
             self.assertIsInstance(desc, InvalidComponent)
-            diagnostics = list(desc.validate())
+            diagnostics = list(desc.validate_structure())
             self.assertEqual(len(diagnostics), 1)
             self.assertEqual(diagnostics[0].path, ('type',))
             self.assertEqual(diagnostics[0].severity, Severity.ERROR)
@@ -131,7 +131,7 @@ class PriorDescriptionTests(unittest.TestCase):
             parameter='p', type='gaussian', central=0.0, sigma=1.0, max=1.0)
         for desc, path in ((missing_max, ('max',)), (missing_min, ('min',))):
             self.assertIsInstance(desc, InvalidComponent)
-            diagnostics = list(desc.validate())
+            diagnostics = list(desc.validate_structure())
             self.assertEqual(len(diagnostics), 1)
             self.assertEqual(diagnostics[0].path, path)
             self.assertEqual(diagnostics[0].severity, Severity.ERROR)
@@ -201,7 +201,7 @@ class ScalePriorDescriptionTests(unittest.TestCase):
         desc = PriorDescription.from_dict(parameter='mass::b(MSbar)', type='scale', min=0.0, max=1.0)
         self.assertIsInstance(desc, InvalidComponent)
         self.assertEqual(
-            [(d.path, d.severity, d.message) for d in desc.validate()],
+            [(d.path, d.severity, d.message) for d in desc.validate_structure()],
             [(('lambda_scale',), Severity.ERROR, "Missing mandatory key 'lambda_scale'"),
              (('mu_0',), Severity.ERROR, "Missing mandatory key 'mu_0'")],
         )
@@ -489,6 +489,30 @@ class StepComponentTests(unittest.TestCase):
         self.assertEqual(len(diagnostics), 1)
         self.assertEqual(diagnostics[0].path, ('tasks',))
 
+    def test_task_and_default_arguments_are_checked_in_separate_phases(self):
+        comp = StepComponent.from_dict(
+            title='t',
+            id='separate-argument-checks',
+            tasks=[{
+                'task': 'corner-plot',
+                'arguments': {
+                    'posterior': 'CKM-all',
+                    'not_a_task_argument': 1,
+                },
+            }],
+            default_arguments={
+                'corner-plot': {
+                    'not_a_default_argument': 2,
+                },
+            },
+        )
+
+        structural = list(comp.validate_structure())
+        semantic = list(comp.validate_semantics(None))
+        self.assertTrue(any('not_a_task_argument' in diagnostic.message for diagnostic in structural))
+        self.assertFalse(any('not_a_task_argument' in diagnostic.message for diagnostic in semantic))
+        self.assertTrue(any('not_a_default_argument' in diagnostic.message for diagnostic in semantic))
+
 
 class MaskDescriptionTests(unittest.TestCase):
 
@@ -613,7 +637,7 @@ class AnalysisFileDescriptionTests(unittest.TestCase):
         "An unrecognized top-level key is rejected rather than silently ignored."
         desc = AnalysisFileDescription.from_dict(not_a_section=42)
         self.assertIsInstance(desc, InvalidComponent)
-        diagnostics = list(desc.validate())
+        diagnostics = list(desc.validate_structure())
         self.assertEqual(len(diagnostics), 1)
         self.assertEqual(diagnostics[0].path, ('not_a_section',))
 
@@ -631,7 +655,7 @@ class AnalysisFileDescriptionTests(unittest.TestCase):
             }],
         )
 
-        diagnostics = list(desc.validate())
+        diagnostics = list(desc.validate_structure())
         self.assertIn(('priors', 'FF', 'descriptions', 0, 'max'), [d.path for d in diagnostics])
         self.assertIn(('likelihoods', 'empty'), [d.path for d in diagnostics])
         self.assertIn(('steps', 'broken', 'tasks', 0, 'task'), [d.path for d in diagnostics])
