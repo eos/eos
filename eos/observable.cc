@@ -38,7 +38,7 @@
 #include <eos/utils/concrete_observable.hh>
 #include <eos/utils/expression-fwd.hh>
 #include <eos/utils/expression-observable.hh>
-#include <eos/utils/expression-parser-impl.hh>
+#include <eos/utils/expression-parser.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_stub.hh>
@@ -374,18 +374,7 @@ namespace eos
     void
     Observables::insert(const QualifiedName & name, const std::string & latex, const Unit & unit, const Options & forced_options, const std::string & input) const
     {
-        eos::exp::ExpressionPtr expression(nullptr);
-
-        using It = std::string::const_iterator;
-        ExpressionParser<It> parser;
-
-        It   first(input.begin()), last(input.end());
-        bool completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
-
-        if ((! completed) || (! expression))
-        {
-            throw ParsingError("Could not parse expression '" + input + "'");
-        }
+        eos::exp::ExpressionPtr expression = eos::exp::parse_expression(input);
 
         ExpressionObservableEntry * expression_observable_entry = new ExpressionObservableEntry(name, latex, unit, expression, forced_options);
 
@@ -419,22 +408,7 @@ namespace eos
 
         const QualifiedName qn(name);
         const std::string   input(_expression);
-        ExpressionPtr       expression(nullptr);
-
-        {
-            bool completed;
-
-            using It = std::string::const_iterator;
-            ExpressionParser<It> parser;
-
-            It first(input.begin()), last(input.end());
-            completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
-
-            if ((! completed) || (! expression))
-            {
-                throw InternalError("Error when parsing expression " + std::string(name) + " in make_expression_observable");
-            }
-        }
+        ExpressionPtr       expression = parse_expression(input);
 
         auto result = std::make_pair(qn, ObservableEntryPtr(new ExpressionObservableEntry(qn, std::string(latex), unit, expression, Options{})));
 

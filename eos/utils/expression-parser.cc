@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -15,6 +15,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/utils/exception.hh>
 #include <eos/utils/expression-parser-impl.hh>
 
 #include <string>
@@ -22,4 +23,23 @@
 namespace eos
 {
     template struct ExpressionParser<std::string::const_iterator>;
-}
+
+    exp::ExpressionPtr
+    exp::parse_expression(const std::string & input)
+    {
+        ExpressionPtr expression(nullptr);
+
+        using It = std::string::const_iterator;
+        ExpressionParser<It> parser;
+
+        It         first(input.begin()), last(input.end());
+        const bool completed = qi::phrase_parse(first, last, parser, ascii::space, expression) && (first == last);
+
+        if ((! completed) || (! expression))
+        {
+            throw ParsingError("Could not parse expression '" + input + "'");
+        }
+
+        return expression;
+    }
+} // namespace eos
