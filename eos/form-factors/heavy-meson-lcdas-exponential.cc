@@ -50,6 +50,7 @@ namespace eos
             opt_gminus(o, options, "gminus"_ok),
             opt_lambda_b_source(o, options, "lambda-b-source"_ok),
             lambda_B_parameter(p[opt_lambda_b_source.value() == "legacy" ? parameter("1/lambda_B_p") : parameter("omega_0", true)], *this),
+            lambda_bar(p[parameter("LambdaBar")]),
             lambda_E2(p[parameter("lambda_E^2")], *this),
             lambda_H2(p[parameter("lambda_H^2")], *this),
             switch_gminus(1.0)
@@ -512,6 +513,33 @@ namespace eos
         {
             static const std::array<double, 9> cs = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
             return { cs.begin(), cs.end() };
+        }
+
+        double
+        Exponential::xi_1(const double & omega) const
+        {
+            // cf. [BBJW:2018A], Eq. (4.15), in the equivalent profile-function form following Eq. (A.39).
+            const double omega_0      = lambda_B();
+            const double f            = std::exp(-omega / omega_0) / (omega_0 * omega_0);
+            const double f_prime      = -f / omega_0;
+            const double phi_minus_ww = std::exp(-omega / omega_0) / omega_0;
+            const double kappa        = 1.0 / (lambda_bar * lambda_bar + (2.0 * lambda_E2 + lambda_H2) / 6.0);
+            const double bracket      = omega * omega * f - 2.0 * omega * phi_minus_ww;
+
+            return 2.0 / 3.0 * kappa * (lambda_E2 + 2.0 * lambda_H2) * bracket - 2.0 * omega * phi_minus_ww + 3.0 * omega * omega * f + omega * omega * omega * f_prime;
+        }
+
+        double
+        Exponential::xi_2(const double & omega) const
+        {
+            // cf. [BBJW:2018A], Eq. (4.16), in the equivalent profile-function form following Eq. (A.39).
+            const double omega_0      = lambda_B();
+            const double f            = std::exp(-omega / omega_0) / (omega_0 * omega_0);
+            const double phi_minus_ww = std::exp(-omega / omega_0) / omega_0;
+            const double kappa        = 1.0 / (lambda_bar * lambda_bar + (2.0 * lambda_E2 + lambda_H2) / 6.0);
+            const double bracket      = omega * omega * f - 2.0 * omega * phi_minus_ww;
+
+            return -2.0 / 3.0 * kappa * (lambda_E2 - lambda_H2) * bracket + (lambda_bar - omega) * omega * f - omega * phi_minus_ww;
         }
 
         Diagnostics

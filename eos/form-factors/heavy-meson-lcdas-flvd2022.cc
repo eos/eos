@@ -539,6 +539,18 @@ namespace eos
         }
 
         double
+        FLvD2022::xi_1(const double & /* omega */) const
+        {
+            throw InternalError("The twist-3,4 soft contribution is not implemented for the FLvD2022 LCDA model");
+        }
+
+        double
+        FLvD2022::xi_2(const double & /* omega */) const
+        {
+            throw InternalError("The twist-3,4 soft contribution is not implemented for the FLvD2022 LCDA model");
+        }
+
+        double
         FLvD2022::inverse_lambda_plus() const
         {
             throw InternalError("Function not yet implemented");
