@@ -1403,6 +1403,13 @@ groups:
           latex:    '$\bar\Lambda$'
           unit:     'GeV'
           comments: ''
+      'B_s::LambdaBar' :
+          central: +0.587
+          min:     +0.387
+          max:     +0.787
+          latex:    '$\bar\Lambda_s$'
+          unit:     'GeV'
+          comments: 'B::LambdaBar shifted by the B_s-B mass difference, m_B_s - m_B = 87 MeV'
       'B::lambda_E^2' :
           central: +0.03
           min:     +0.01
