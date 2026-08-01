@@ -61,6 +61,7 @@ namespace eos
                 RestrictedOption opt_lambda_b_source;
 
                 UsedParameter lambda_B_parameter;
+                Parameter lambda_bar;
                 UsedParameter lambda_E2;
                 UsedParameter lambda_H2;
 
@@ -128,6 +129,9 @@ namespace eos
 
                 virtual double psi_bar_bar_4(const double &omega_1, const double &omega_2) const final override;
                 virtual double chi_bar_bar_4(const double &omega_1, const double &omega_2) const final override;
+
+                virtual double xi_1(const double & omega) const final override;
+                virtual double xi_2(const double & omega) const final override;
                 /*!
                  * Pseudo observables for the two-particle LCDAs
                  */

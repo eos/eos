@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -138,6 +138,9 @@ namespace eos
 
                 virtual double psi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
                 virtual double chi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
+
+                virtual double xi_1(const double & omega) const final override;
+                virtual double xi_2(const double & omega) const final override;
 
                 /*!
                 * Pseudo observables for the two-particle LCDAs
