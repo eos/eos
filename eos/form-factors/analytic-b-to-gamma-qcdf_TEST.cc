@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -20,8 +20,12 @@
 
 #include <test/test.hh>
 #include <eos/form-factors/analytic-p-to-gamma-qcdf.hh>
+#include <eos/models/model.hh>
 #include <eos/observable.hh>
 #include <eos/utils/diagnostics.hh>
+
+#include <array>
+#include <cmath>
 
 using namespace test;
 using namespace eos;
@@ -37,6 +41,124 @@ class AnalyticFormFactorBToGammaQCDFTest :
 
         virtual void run() const
         {
+            // Regression tests at the inputs of [BBJW:2018A], Table 1, with sigmahat_1 = 0.
+            {
+                Parameters p = Parameters::Defaults();
+                p["QCD::alpha_s(MZ)"]             = 0.117400;
+                p["mass::b(MSbar)"]               = 4.458251328586803;
+                p["mass::B_u"]                    = 5.27929;
+                p["mass::rho^+"]                  = 0.77526;
+                p["decay-constant::B_u"]          = 0.192;
+                p["B::LambdaBar"]                 = 0.47929;
+                p["B::lambda_E^2"]                = 0.0625;
+                p["B::lambda_H^2"]                = 0.125;
+                p["B->gamma::mu@FLvD2022QCDF"]    = 1.5;
+                p["B->gamma::mu_h1@FLvD2022QCDF"] = 4.8;
+                p["B->gamma::mu_h2@FLvD2022QCDF"] = 4.8;
+                p["B->gamma::s_0@FLvD2022QCDF"]   = 1.5;
+                p["B->gamma::M^2@FLvD2022QCDF"]   = 1.25;
+
+                auto model = Model::make("SM"_ov, p, Options());
+                TEST_CHECK_NEARLY_EQUAL(model->m_b_pole(1), 4.8, 1e-6);
+
+                // Positional access into the diagnostics of AnalyticFormFactorPToGammaQCDF. The
+                // indices used below are, in the order in which diagnostics() emits them:
+                //
+                //    5 -> L0_effective(3.0)      6 -> L0_effective(2.16)
+                //    9 -> C at Egamma=2.16      10 -> K_inv at Egamma=2.16    11 -> U at Egamma=2.16
+                //
+                // Inserting an entry into diagnostics() silently shifts these. That is caught by the
+                // TEST_CHECK_DIAGNOSTICS blocks below, which pin the full ordered list and would fail
+                // first -- keep them in sync when adding a diagnostic.
+                const auto diagnostic = [] (const Diagnostics & d, const unsigned i)
+                {
+                    auto entry = d.begin();
+                    for (unsigned j = 0 ; j < i ; ++j)
+                        ++entry;
+                    return entry->value;
+                };
+
+                const auto average = [] (const AnalyticFormFactorPToGammaQCDF<BToGamma> & ff, const double & E_gamma)
+                {
+                    return 0.5 * (ff.F_V(E_gamma) + ff.F_A(E_gamma));
+                };
+
+                // [BR:2011A], Eq. (2.14): J = L_hat^2 - 1 for the exponential LCDA.
+                for (const double & lambda_B : std::array<double, 2>{ 0.20, 0.35 })
+                {
+                    p["B_u::omega_0@FLvD2022"] = lambda_B;
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, Options{ { "lcda-model"_ok, "exponential"_ov } });
+                    const Diagnostics d = ff.diagnostics();
+
+                    for (const auto & [E_gamma, index] : std::array<std::pair<double, unsigned>, 2>{ { { 3.0, 5 }, { 2.16, 6 } } })
+                    {
+                        const double L_hat = 0.577215664901533 + std::log(1.5 * 1.5 / (2.0 * E_gamma * lambda_B));
+                        TEST_CHECK_NEARLY_EQUAL(diagnostic(d, index) * lambda_B, L_hat * L_hat - 1.0, 1e-12);
+                    }
+                }
+
+                // R / J = C K^-1 U: only J may depend on the LCDA.
+                double perturbative_factor = 0.0;
+                for (const double & lambda_B : std::array<double, 3>{ 0.20, 0.35, 0.50 })
+                {
+                    p["B_u::omega_0@FLvD2022"] = lambda_B;
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, Options{ { "lcda-model"_ok, "exponential"_ov } });
+                    const Diagnostics d = ff.diagnostics();
+                    const double value = diagnostic(d, 9) * diagnostic(d, 10) * diagnostic(d, 11);
+                    if (lambda_B == 0.20)
+                        perturbative_factor = value;
+                    else
+                        TEST_CHECK_NEARLY_EQUAL(value, perturbative_factor, 1e-12);
+                }
+
+                // [BBJW:2018A], Eq. (5.11) and Fig. 4: xi-hat^soft_(LO) at E_gamma = 2 GeV.
+                for (const auto & [lambda_B, published] : std::array<std::pair<double, double>, 3>{ {
+                        { 0.20, -0.7875 }, { 0.35, -0.4085 }, { 0.50, -0.2625 }
+                    } })
+                {
+                    p["B_u::omega_0@FLvD2022"] = lambda_B;
+                    const Options common{ { "lcda-model"_ok, "exponential"_ov }, { "evolution-order"_ok, "LL"_ov } };
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p, common + Options{ { "contributions"_ok, "none"_ov } });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_soft(p, common + Options{ { "contributions"_ok, "soft"_ov } });
+                    const double F_LP = average(ff_none, 2.0);
+                    const double xi_soft = average(ff_soft, 2.0) - F_LP;
+                    TEST_CHECK_NEARLY_EQUAL(2.0 * 2.0 * xi_soft / F_LP, published, 1e-3);
+                }
+
+                // [BBJW:2018A], plots/sigma0.pdf, dash-dotted curve: xi^ht at E_gamma = 2 GeV.
+                for (const auto & [lambda_B, published] : std::array<std::pair<double, double>, 3>{ {
+                        { 0.20, -0.07039 }, { 0.35, -0.08846 }, { 0.50, -0.09570 }
+                    } })
+                {
+                    p["B_u::omega_0@FLvD2022"] = lambda_B;
+                    const Options common{ { "lcda-model"_ok, "exponential"_ov } };
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p, common + Options{ { "contributions"_ok, "none"_ov } });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_ht(p, common + Options{ { "contributions"_ok, "ht"_ov } });
+                    TEST_CHECK_NEARLY_EQUAL(average(ff_ht, 2.0) - average(ff_none, 2.0), published, 1e-4);
+                }
+
+                // [BBJW:2018A], plots/Deltaxi.pdf, black dash-dotted curve: Delta_xi^ht.
+                for (const auto & [E_gamma, published] : std::array<std::pair<double, double>, 3>{ {
+                        { 1.5, +0.05162 }, { 2.0, +0.02464 }, { 2.6, +0.01145 }
+                    } })
+                {
+                    double first = 0.0;
+                    for (const double & lambda_B : std::array<double, 3>{ 0.20, 0.35, 0.50 })
+                    {
+                        p["B_u::omega_0@FLvD2022"] = lambda_B;
+                        AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, Options{
+                                { "lcda-model"_ok, "exponential"_ov }, { "contributions"_ok, "ht"_ov }
+                            });
+                        const double delta_xi = 0.5 * (ff.F_V(E_gamma) - ff.F_A(E_gamma));
+                        TEST_CHECK_NEARLY_EQUAL(delta_xi, published, 1e-4);
+                        if (lambda_B == 0.20)
+                            first = delta_xi;
+                        else
+                            TEST_CHECK_NEARLY_EQUAL(delta_xi, first, 1e-12);
+                    }
+                }
+            }
+
             // Independent numerical reference
             {
                 Parameters p = Parameters::Defaults();
