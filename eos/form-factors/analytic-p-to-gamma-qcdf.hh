@@ -41,6 +41,15 @@ namespace eos
 
     template <> struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
     {
+            // Selects the model of the B-meson LCDAs. Note that the QCDF form factors access the LCDAs
+            // exclusively through HeavyMesonLCDAs::coefficient_range(mu), i.e. through the coefficients
+            // a_k of the expansion of phi_+ in the basis of [FLvD:2022A] with expansion parameter
+            // omega_0. The "exponential" model returns the fixed, scale-independent coefficients
+            // (1, 0, ..., 0), which reproduces phi_+(omega) = omega / omega_0^2 exp(-omega / omega_0)
+            // without any RG evolution; "FLvD2022" uses the full parametrization and evolves the
+            // coefficients from mu_0 to mu. Must be declared before blcdas, which is initialized from it.
+            SwitchOption opt_lcda_model;
+
             std::shared_ptr<HeavyMesonLCDAs> blcdas;
             std::shared_ptr<Model>           model;
 
