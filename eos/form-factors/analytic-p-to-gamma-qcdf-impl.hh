@@ -44,7 +44,8 @@ namespace eos
     /* B^- -> gamma */
 
     AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o) :
-        blcdas(HeavyMesonLCDAs::make("FLvD2022", p, o)),
+        opt_lcda_model(o, "lcda-model"_ok, { "FLvD2022"_ov, "exponential"_ov }, "FLvD2022"_ov),
+        blcdas(HeavyMesonLCDAs::make(opt_lcda_model.value(), p, o)),
         model(Model::make("SM"_ov, p, o))
     {
     }
