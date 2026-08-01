@@ -44,9 +44,13 @@ namespace eos
     /* B^- -> gamma */
 
     AnalyticFormFactorPToGammaQCDFTraits<BToGamma>::AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o) :
-        opt_lcda_model(o, "lcda-model"_ok, { "FLvD2022"_ov, "exponential"_ov }, "FLvD2022"_ov),
-        blcdas(HeavyMesonLCDAs::make(opt_lcda_model.value(), p, o)),
-        model(Model::make("SM"_ov, p, o))
+        opt_lcda_model(o, "lcda-model"_ok,
+                       {
+                           "FLvD2022"_ov,
+                           "exponential"_ov
+    },
+                       "FLvD2022"_ov),
+        blcdas(HeavyMesonLCDAs::make(opt_lcda_model.value(), p, o + Options{ { "lambda-b-source"_ok, "FLvD2022"_ov } })), model(Model::make("SM"_ov, p, o))
     {
     }
 
@@ -111,16 +115,13 @@ namespace eos
         {
             switch_soft = 1.0;
         }
-        if (opt_contributions.value() == "partial-soft-tw-3+4")
+        if ((opt_contributions.value() == "partial-soft-tw-3+4") && (traits.opt_lcda_model.value() != "exponential"))
         {
-            // Exclude this contribution from "all" intentionally because it is incomplete.
-            //
-            // The tw-3,4 contribution is implemented for delta_xi, where it only depends on phi_+,
-            // but not for xi, where higher-twist LCDAs enter (see [BBJW:2018A], Eqs. (4.13) and (4.14)).
-            // We still make the partial implementation accessible as an option.
-            //
-            // To complete the implementation just with phi_+, one should use the ''profile function''
-            // approximation layed out in [BBJW:2018A], allowing to consistently estimate higher-twist contributions.
+            throw InternalError("The twist-3,4 soft contribution requires lcda-model=exponential");
+        }
+
+        if ((opt_contributions.value() == "partial-soft-tw-3+4") || ((opt_contributions.value() == "all") && (traits.opt_lcda_model.value() == "exponential")))
+        {
             switch_soft_tw_3_4 = 1.0;
         }
         if (opt_evolution_order.value() == "NLL")
@@ -275,7 +276,17 @@ namespace eos
                                                 * (lapltr_incomplete(omega_cut, sigma) + C_NLO * lapltr_incomplete_effective(Egamma, omega_cut, sigma))
                                         - (L0_incomplete(omega_cut) + C_NLO * L0_incomplete_effective(Egamma, omega_cut)));
 
-        return switch_ht * term_ht + switch_soft * term_soft_nlo;
+        // cf. [BBJW:2018A], Eq. (4.13), with Xi1 and Xi2 from Eqs. (4.15), (4.16).
+        const auto duality_weight = [this, Egamma](const double & omega)
+        { return 2.0 * Egamma / (m_rho * m_rho) * std::exp(-(2.0 * Egamma * omega - m_rho * m_rho) / M2) - 1.0 / omega; };
+        const auto   integrand_Xi1    = [&](const double & omega) { return duality_weight(omega) * traits.blcdas->xi_1(omega); };
+        const auto   integrand_Xi2    = [&](const double & omega) { return duality_weight(omega) * traits.blcdas->xi_2(omega); };
+        const double term_soft_tw_3_4 = switch_soft_tw_3_4 == 0.0
+                                                ? 0.0
+                                                : e_spectator * m_B * f_B / (4.0 * Egamma * Egamma) * integrate<GSL::QAGS>(integrand_Xi1, 0.0, omega_cut)
+                                                          + e_spectator * m_B * f_B / (4.0 * m_heavy * Egamma) * integrate<GSL::QAGS>(integrand_Xi2, 0.0, omega_cut);
+
+        return switch_ht * term_ht + switch_soft * term_soft_nlo + term_soft_tw_3_4;
     }
 
     template <typename Process_>

@@ -41,13 +41,20 @@ namespace eos
 
     template <> struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
     {
-            // Selects the model of the B-meson LCDAs. Note that the QCDF form factors access the LCDAs
-            // exclusively through HeavyMesonLCDAs::coefficient_range(mu), i.e. through the coefficients
-            // a_k of the expansion of phi_+ in the basis of [FLvD:2022A] with expansion parameter
-            // omega_0. The "exponential" model returns the fixed, scale-independent coefficients
+            // Selects the model of the B-meson LCDAs. Leading-twist functionals access the LCDAs through
+            // HeavyMesonLCDAs::coefficient_range(mu), i.e. through the coefficients a_k of the expansion
+            // of phi_+ in the basis of [FLvD:2022A]. Higher-twist soft terms use the direct LCDA accessors.
+            // For this form factor B_u::omega_0@FLvD2022 is the authoritative inverse-moment scale;
+            // the "exponential" model is constructed to use it rather than its legacy B::1/lambda_B_p
+            // parameter. It returns the fixed, scale-independent coefficients
             // (1, 0, ..., 0), which reproduces phi_+(omega) = omega / omega_0^2 exp(-omega / omega_0)
             // without any RG evolution; "FLvD2022" uses the full parametrization and evolves the
-            // coefficients from mu_0 to mu. Must be declared before blcdas, which is initialized from it.
+            // coefficients from mu_0 to mu. Its direct accessors are not implemented yet, so "all"
+            // contains every contribution supported by FLvD2022 but omits the twist-3,4 soft term;
+            // explicitly requesting that term is rejected. The QCDF construction intentionally forces
+            // ``lambda-b-source=FLvD2022`` (overriding any user value) so its kernels and direct LCDA
+            // accessors share this authoritative scale. Must be declared before blcdas, which is initialized
+            // from it.
             SwitchOption opt_lcda_model;
 
             std::shared_ptr<HeavyMesonLCDAs> blcdas;
@@ -73,8 +80,9 @@ namespace eos
      * We use the results obtained in QCD factorization with subleading
      * power corrections according to Ref. [BBJW:2018A].
      *
-     * We further parametrize the leading LCDA phi_+ as described in
-     * Ref. [FLvD:2022A] and presently omit higher-twist contributions.
+     * We further parametrize the leading LCDA phi_+ as described in Ref. [FLvD:2022A]. Leading-twist
+     * convolutions use its coefficient expansion, while higher-twist soft terms access the LCDA
+     * model directly.
      */
     template <typename Process_> class AnalyticFormFactorPToGammaQCDF : public FormFactors<PToGamma>
     {
