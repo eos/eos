@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -76,11 +76,11 @@ class FLvD2022Test : public TestCase
                 p["B_u::omega_0@FLvD2022"] = 0.55;
                 const double mu            = 1.5;
 
-                // Evolved coefficients below are obtained using numerical evaluation of the exact 1-loop evolution
-                // The test checks the implemented fast *approximation*
+                // Regression reference for the coefficient evolution implemented in coefficient_range().
+                // The inverse-moment test below provides the independent physics check.
                 std::array<double, 9> ref         = { 1.6, 0.8, 0.3, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0 };
-                std::array<double, 9> res_evolved = { 1.4134123399029324,    0.5565559530817631,   0.2504760836874369,    0.12325426840513773, 0.09162847424850495,
-                                                      -0.019314494689795878, 0.015306298689121587, -0.013140355927689062, 0.011614395045637823 };
+                std::array<double, 9> res_evolved = { 1.3684832595861576,  0.5055458502529527, 0.2415628835292180,  0.1069513981135003, 0.0908610730053892,
+                                                      -0.0238057216522631, 0.0190678282263298, -0.0164456740588282, 0.0145822817501768 };
                 for (size_t k = 0; k < ref.size(); k++)
                 {
                     p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = ref[k];
@@ -92,6 +92,29 @@ class FLvD2022Test : public TestCase
                 for (auto it = c; it != c_end; ++it)
                 {
                     TEST_CHECK_NEARLY_EQUAL(*it, res_evolved[std::distance(c, it)], 1e-7);
+                }
+            }
+
+            // Evolution of the inverse moment for the exponential model. The corresponding
+            // O(alpha_s) values from [BR:2011A], Eq. (3.1), are 0.8492, 0.8938, and 0.9223.
+            // These pure inverse-moment ratios differ from breakdown-FV.py's leading-power
+            // ratios, which additionally include the evolution-induced change in the jet function J.
+            {
+                Parameters p = Parameters::Defaults();
+                Options    o;
+
+                p["B_u::mu_0@FLvD2022"]              = 1.0;
+                p["QCD::alpha_s(MZ)"]                = 0.11739977629025072; // reproduces the [BBJW:2018A] Table 1 coupling
+                const double                mu       = 1.5;
+                const std::array<double, 3> omega_0  = { 0.20, 0.35, 0.50 };
+                const std::array<double, 3> expected = { 0.8428320729585771, 0.8846413359198045, 0.9123645542739210 };
+
+                for (unsigned i = 0; i < omega_0.size(); ++i)
+                {
+                    p["B_u::omega_0@FLvD2022"] = omega_0[i];
+                    FLvD2022     blcdas(p, o);
+                    const double evolution_factor = blcdas.inverse_moment(mu) / blcdas.inverse_moment(1.0);
+                    TEST_CHECK_NEARLY_EQUAL(evolution_factor, expected[i], 1e-4);
                 }
             }
 
