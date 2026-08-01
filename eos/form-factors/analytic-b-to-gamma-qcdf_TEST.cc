@@ -137,6 +137,43 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     TEST_CHECK_NEARLY_EQUAL(average(ff_ht, 2.0) - average(ff_none, 2.0), published, 1e-4);
                 }
 
+                // [BBJW:2018A], Eqs. (4.13), (4.15), (4.16): xi^soft_(tw-3,4) at E_gamma = 2 GeV.
+                for (const auto & [lambda_B, expected] : std::array<std::pair<double, double>, 3>{ {
+                        { 0.20, +0.02511170 }, { 0.35, +0.01717038 }, { 0.50, +0.01198488 }
+                    } })
+                {
+                    p["B_u::omega_0@FLvD2022"] = lambda_B;
+                    p["B::1/lambda_B_p"] = 1.0 / 0.46; // deliberately different: QCDF uses omega_0 above
+                    const Options common{ { "lcda-model"_ok, "exponential"_ov } };
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p, common + Options{ { "contributions"_ok, "none"_ov } });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_ht(p, common + Options{ { "contributions"_ok, "ht"_ov } });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_soft(p, common + Options{ { "contributions"_ok, "soft"_ov } });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_all(p, common + Options{ { "contributions"_ok, "all"_ov } });
+                    const double xi_soft_tw_3_4 = average(ff_all, 2.0) - average(ff_ht, 2.0)
+                        - average(ff_soft, 2.0) + average(ff_none, 2.0);
+                    TEST_CHECK_NEARLY_EQUAL(xi_soft_tw_3_4, expected, 1e-6);
+                }
+
+                // FLvD2022 does not implement the direct higher-twist LCDA accessors yet. "all"
+                // contains every supported contribution, while an explicit request must be rejected.
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_all(p, Options{
+                        { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "all"_ov }
+                    });
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_ht(p, Options{
+                        { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "ht"_ov }
+                    });
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_soft(p, Options{
+                        { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "soft"_ov }
+                    });
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_none(p, Options{
+                        { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "none"_ov }
+                    });
+                TEST_CHECK_NEARLY_EQUAL(average(ff_flvd_all, 2.0) - average(ff_flvd_ht, 2.0)
+                        - average(ff_flvd_soft, 2.0) + average(ff_flvd_none, 2.0), 0.0, 1e-12);
+                TEST_CHECK_THROWS(InternalError, AnalyticFormFactorPToGammaQCDF<BToGamma>(p, Options{
+                            { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "partial-soft-tw-3+4"_ov }
+                        }));
+
                 // [BBJW:2018A], plots/Deltaxi.pdf, black dash-dotted curve: Delta_xi^ht.
                 for (const auto & [E_gamma, published] : std::array<std::pair<double, double>, 3>{ {
                         { 1.5, +0.05162 }, { 2.0, +0.02464 }, { 2.6, +0.01145 }
