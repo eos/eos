@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Philip Lüghausen
@@ -46,6 +46,27 @@ class ExponentialTest : public TestCase
         run() const
         {
             static const double eps = 1e-5;
+
+            /* lambda-b-source is public to every user of the exponential LCDA model */
+            {
+                Parameters p               = Parameters::Defaults();
+                p["B::1/lambda_B_p"]       = 2.5;
+                p["B_u::omega_0@FLvD2022"] = 0.5;
+
+                Exponential legacy(p,
+                                   Options{
+                                       {               "q"_ok,      "u"_ov },
+                                       { "lambda-b-source"_ok, "legacy"_ov }
+                });
+                Exponential flvd2022(p,
+                                     Options{
+                                         {               "q"_ok,        "u"_ov },
+                                         { "lambda-b-source"_ok, "FLvD2022"_ov }
+                });
+
+                TEST_CHECK_NEARLY_EQUAL(legacy.inverse_lambda_plus(), 2.5, eps);
+                TEST_CHECK_NEARLY_EQUAL(flvd2022.inverse_lambda_plus(), 2.0, eps);
+            }
 
             /* m_s = u */
             /* test cases in the limit lambda_E2 = lambda_H2 as used in [KMPW:2010A] */

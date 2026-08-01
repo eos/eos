@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2018      Nico Gubernari
  * Copyright (c) 2018      Ahmet Kokulu
  * Copyright (c) 2022      Philip Lüghausen
@@ -38,16 +38,18 @@ namespace eos
         using namespace std::literals::string_literals;
 
         const std::vector<OptionSpecification> Exponential::options{
-            {      "Q"_ok,                   { "b"_ov },        "b"_ov },
-            {      "q"_ok,   { "u"_ov, "d"_ov, "s"_ov },        "u"_ov },
-            { "gminus"_ok, { "zero"_ov, "WW-limit"_ov }, "WW-limit"_ov }
+            {               "Q"_ok,                     { "b"_ov },        "b"_ov },
+            {               "q"_ok,     { "u"_ov, "d"_ov, "s"_ov },        "u"_ov },
+            {          "gminus"_ok,   { "zero"_ov, "WW-limit"_ov }, "WW-limit"_ov },
+            { "lambda-b-source"_ok, { "legacy"_ov, "FLvD2022"_ov },   "legacy"_ov }
         };
 
         Exponential::Exponential(const Parameters & p, const Options & o) :
             opt_Q(o, options, "Q"_ok),
             opt_q(o, options, "q"_ok),
             opt_gminus(o, options, "gminus"_ok),
-            lambda_B_inv(p[parameter("1/lambda_B_p")], *this),
+            opt_lambda_b_source(o, options, "lambda-b-source"_ok),
+            lambda_B_parameter(p[opt_lambda_b_source.value() == "legacy" ? parameter("1/lambda_B_p") : parameter("omega_0", true)], *this),
             lambda_E2(p[parameter("lambda_E^2")], *this),
             lambda_H2(p[parameter("lambda_H^2")], *this),
             switch_gminus(1.0)
@@ -59,7 +61,7 @@ namespace eos
         }
 
         std::string
-        Exponential::parameter(const char * _name) const
+        Exponential::parameter(const char * _name, const bool & flvd2022) const
         {
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, qnp::Prefix> prefixes{
                 {      { QuarkFlavor::bottom, QuarkFlavor::up },   qnp::Prefix("B") },
@@ -71,6 +73,21 @@ namespace eos
             if (it == prefixes.end())
             {
                 throw InternalError("Combination of options Q=" + opt_Q.str() + ", q=" + opt_q.str() + " is not supported");
+            }
+
+            if (flvd2022)
+            {
+                if (opt_q.value() == QuarkFlavor::strange)
+                {
+                    throw InternalError("lambda-b-source=FLvD2022 is not supported for q=s");
+                }
+
+                static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, qnp::Prefix> flvd2022_prefixes{
+                    {   { QuarkFlavor::bottom, QuarkFlavor::up }, qnp::Prefix("B_u") },
+                    { { QuarkFlavor::bottom, QuarkFlavor::down }, qnp::Prefix("B_u") }
+                };
+
+                return QualifiedName(flvd2022_prefixes.at(std::make_tuple(opt_Q.value(), opt_q.value())), qnp::Name(_name), qnp::Suffix("FLvD2022")).str();
             }
 
             return QualifiedName(it->second, qnp::Name(_name)).str();
@@ -86,13 +103,13 @@ namespace eos
         double
         Exponential::lambda_B() const
         {
-            return 1.0 / lambda_B_inv();
+            return opt_lambda_b_source.value() == "legacy" ? 1.0 / lambda_B_parameter() : lambda_B_parameter();
         }
 
         double
         Exponential::inverse_lambda_plus() const
         {
-            return lambda_B_inv();
+            return 1.0 / lambda_B();
         }
 
         /* Leading twist two-particle LCDAs */
