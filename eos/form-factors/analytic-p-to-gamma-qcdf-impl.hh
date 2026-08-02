@@ -81,6 +81,8 @@ namespace eos
         f_B(p[Traits::decay_constant], *this),
         m_B(p[Traits::mass], *this),
         m_rho(p["mass::rho^+"], *this),
+        m_pi(p["mass::pi^+"], *this),
+        f_pi(p["decay-constant::pi"], *this),
         lambda_bar(p[QualifiedName(Traits::hadronic_prefix, qnp::Name("LambdaBar"))], *this),
         lambda_E2(p[QualifiedName(Traits::hadronic_prefix, qnp::Name("lambda_E^2"))], *this),
         lambda_H2(p[QualifiedName(Traits::hadronic_prefix, qnp::Name("lambda_H^2"))], *this),
@@ -88,10 +90,11 @@ namespace eos
         s_0(p[QualifiedName(Traits::process, qnp::Name("s_0"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h1(p[QualifiedName(Traits::process, qnp::Name("mu_h1"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h2(p[QualifiedName(Traits::process, qnp::Name("mu_h2"), qnp::Suffix("FLvD2022QCDF"))], *this),
-        opt_contributions(o, "contributions"_ok, { "all"_ov, "ht"_ov, "soft"_ov, "partial-soft-tw-3+4"_ov, "none"_ov}, "all"_ov),
+        opt_contributions(o, "contributions"_ok, { "all"_ov, "ht"_ov, "soft"_ov, "partial-soft-tw-3+4"_ov, "soft-tw-5+6"_ov, "none"_ov}, "all"_ov),
         switch_ht(0.0),
         switch_soft(0.0),
         switch_soft_tw_3_4(0.0),
+        switch_soft_tw_5_6(0.0),
         opt_evolution_order(o, "evolution-order"_ok, { "LL"_ov, "NLL"_ov }, "NLL"_ov),
         switch_nll(0.0)
     {
@@ -114,10 +117,15 @@ namespace eos
         }
         if ((opt_contributions.value() == "partial-soft-tw-3+4") && (traits.opt_lcda_model.value() != "exponential"))
             throw InternalError("The twist-3,4 soft contribution requires lcda-model=exponential");
+        if ((opt_contributions.value() == "soft-tw-5+6") && (traits.opt_lcda_model.value() != "exponential"))
+            throw InternalError("The twist-5,6 soft contribution requires lcda-model=exponential");
 
         if ((opt_contributions.value() == "partial-soft-tw-3+4")
                 || ((opt_contributions.value() == "all") && (traits.opt_lcda_model.value() == "exponential")))
             switch_soft_tw_3_4 = 1.0;
+        if ((opt_contributions.value() == "soft-tw-5+6")
+                || ((opt_contributions.value() == "all") && (traits.opt_lcda_model.value() == "exponential")))
+            switch_soft_tw_5_6 = 1.0;
         if (opt_evolution_order.value() == "NLL")
         {
             switch_nll = 1.0;
@@ -242,6 +250,24 @@ namespace eos
 
     template <typename Process_>
     double
+    AnalyticFormFactorPToGammaQCDF<Process_>::higher_twist_condensate_coupling() const
+    {
+        // The reference scale is deliberately fixed to the 1 GeV scale of [BBJW:2018A], rather
+        // than reusing B_u::mu_0@FLvD2022 and coupling this correction to an unrelated LCDA-evolution
+        // input. Both alpha_s and <qbar q> are evaluated there, cf. [BBJW:2018A], Sec. 5.
+        static const double mu_0_higher_twist = 1.0;
+        const double cond_qq = -f_pi * f_pi * m_pi * m_pi / (2.0 * model->m_ud_msbar(mu_0_higher_twist));
+        // EOS defaults give <qbar q>(1 GeV) = -0.015458 GeV^3 = -(249.1 MeV)^3, compared with
+        // -(240 +- 15 MeV)^3 at 1 GeV in [BBJW:2018A], Table 1. EOS gives -0.018761 GeV^3 at
+        // 1.5 GeV. EOS also gives alpha_s(1 GeV) = 0.48530, while [BBJW:2018A] tabulate 0.348929:
+        // they keep n_f = 4 fixed, whereas EOS crosses the charm threshold.
+        const double g_s2 = 4.0 * pi * model->alpha_s(mu_0_higher_twist);
+
+        return g_s2 * cond_qq;
+    }
+
+    template <typename Process_>
+    double
     AnalyticFormFactorPToGammaQCDF<Process_>::F_leading_power(const double & Egamma) const
     {
         // cf. [BR:2011A], Eq. (2.10)
@@ -304,7 +330,34 @@ namespace eos
             e_spectator * m_B * f_B / (4.0 * Egamma * Egamma) * integrate<GSL::QAGS>(integrand_Xi1, 0.0, omega_cut)
             + e_spectator * m_B * f_B / (4.0 * m_heavy * Egamma) * integrate<GSL::QAGS>(integrand_Xi2, 0.0, omega_cut);
 
-        return switch_ht * term_ht + switch_soft * term_soft_nlo + term_soft_tw_3_4;
+        const double condensate_coupling = higher_twist_condensate_coupling();
+        const double exp_rho = std::exp(m_rho * m_rho / M2);
+        const auto integrand_tw_5_6_low = [&](const double & omega) {
+            if (omega == 0.0)
+                return -sigma * traits.blcdas->phi_minusWW(0.0);
+            return (std::exp(-sigma * omega) - 1.0) / omega * traits.blcdas->phi_minusWW(omega);
+        };
+        // Map [omega_cut, infinity) to [0, 1); unlike the other soft terms, Eq. (4.19) has an
+        // infinite upper integration boundary.
+        const auto integrand_tw_5_6_high = [&](const double & t) {
+            if (t == 1.0)
+                return 0.0;
+            const double one_minus_t = 1.0 - t;
+            const double omega = omega_cut + t / one_minus_t;
+            return (m_rho * m_rho / (2.0 * Egamma * omega) - exp_rho)
+                * traits.blcdas->phi_minusWW(omega) / omega / (one_minus_t * one_minus_t);
+        };
+        // cf. [BBJW:2018A], Eq. (4.19)
+        const double term_soft_tw_5_6 = switch_soft_tw_5_6 == 0.0 ? 0.0 :
+            e_spectator * condensate_coupling * C_F * f_B * m_B
+                / (48.0 * Egamma * Egamma * m_rho * m_rho) * (
+                    exp_rho * integrate<GSL::QAGS>(integrand_tw_5_6_low, 0.0, omega_cut)
+                    + integrate<GSL::QAGS>(integrand_tw_5_6_high, 0.0, 1.0)
+                    - 5.0 * exp_rho * traits.blcdas->inverse_lambda_plus()
+                );
+
+        return switch_ht * term_ht + switch_soft * term_soft_nlo + term_soft_tw_3_4
+            + term_soft_tw_5_6;
     }
 
     template <typename Process_>
@@ -324,13 +377,22 @@ namespace eos
         const double omega_cut = s_0 / (2.0 * Egamma);
         const double sigma = 2.0 * Egamma / M2;
 
-        const double term_soft_tw_3_4 = e_spectator * m_B * f_B / (4.0 * Egamma * Egamma) * (
+        const double term_soft_tw_3_4 = switch_soft_tw_3_4 == 0.0 ? 0.0 :
+            e_spectator * m_B * f_B / (4.0 * Egamma * Egamma) * (
                 2.0 * Egamma / (m_rho * m_rho) * std::exp(m_rho * m_rho / M2)
                     * lapltr_incomplete_dsigma(omega_cut, sigma) / (-sigma)
                 - norm_incomplete(omega_cut)
             );
 
-        return switch_ht * term_ht + switch_soft * term_soft_nlo + switch_soft_tw_3_4 * term_soft_tw_3_4;
+        // cf. [BBJW:2018A], Eq. (4.19)
+        const double condensate_coupling = higher_twist_condensate_coupling();
+        const double term_soft_tw_5_6 = switch_soft_tw_5_6 == 0.0 ? 0.0 :
+            -e_spectator * condensate_coupling * C_F * f_B * m_B
+                / (48.0 * Egamma * Egamma * m_rho * m_rho) * std::exp(m_rho * m_rho / M2)
+                * traits.blcdas->inverse_lambda_plus();
+
+        return switch_ht * term_ht + switch_soft * term_soft_nlo + term_soft_tw_3_4
+            + term_soft_tw_5_6;
     }
 
     template <typename Process_>

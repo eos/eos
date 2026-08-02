@@ -120,6 +120,9 @@ namespace eos
             UsedParameter f_B;
             UsedParameter m_B;
             UsedParameter m_rho;
+            // Enter the twist-5,6 soft terms through the GMOR quark condensate.
+            UsedParameter m_pi;
+            UsedParameter f_pi;
             UsedParameter lambda_bar;
             UsedParameter lambda_E2;
             UsedParameter lambda_H2;
@@ -132,6 +135,7 @@ namespace eos
             double switch_ht;
             double switch_soft;
             double switch_soft_tw_3_4;
+            double switch_soft_tw_5_6;
 
             // Truncation of the leading-power normalization f_B/lambda_B(mu) * R(Egamma, mu) to
             // leading-logarithmic accuracy. At "LL", switch_nll multiplies to zero every explicit
@@ -164,6 +168,7 @@ namespace eos
              */
             ///@{
             std::tuple<double, double, double> C_K_inv_U(const double & Egamma) const;
+            double higher_twist_condensate_coupling() const;
             double F_leading_power(const double & Egamma) const;
             double xi(const double & Egamma) const;
             double delta_xi(const double & Egamma) const;
