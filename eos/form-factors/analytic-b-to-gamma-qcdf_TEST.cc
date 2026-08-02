@@ -119,7 +119,7 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     p["B_u::omega_0@FLvD2022"] = lambda_B;
                     const Options common{ { "lcda-model"_ok, "exponential"_ov }, { "evolution-order"_ok, "LL"_ov } };
                     AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p, common + Options{ { "contributions"_ok, "none"_ov } });
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_soft(p, common + Options{ { "contributions"_ok, "soft"_ov } });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_soft(p, common + Options{ { "contributions"_ok, "soft-nlo"_ov } });
                     const double F_LP = average(ff_none, 2.0);
                     const double xi_soft = average(ff_soft, 2.0) - F_LP;
                     TEST_CHECK_NEARLY_EQUAL(2.0 * 2.0 * xi_soft / F_LP, published, 1e-3);
@@ -146,13 +146,21 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     p["B::1/lambda_B_p"] = 1.0 / 0.46; // deliberately different: QCDF uses omega_0 above
                     const Options common{ { "lcda-model"_ok, "exponential"_ov } };
                     AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p, common + Options{ { "contributions"_ok, "none"_ov } });
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_tw_3_4(p, common + Options{ { "contributions"_ok, "partial-soft-tw-3+4"_ov } });
-                    const double xi_soft_tw_3_4 = average(ff_tw_3_4, 2.0) - average(ff_none, 2.0);
-                    TEST_CHECK_NEARLY_EQUAL(xi_soft_tw_3_4, expected, 1e-6);
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_tw_3_4(p, common + Options{ { "contributions"_ok, "soft-tw-3+4"_ov } });
+                    TEST_CHECK_NEARLY_EQUAL(average(ff_tw_3_4, 2.0) - average(ff_none, 2.0), expected, 1e-6);
                 }
 
-                // FLvD2022 does not implement the direct higher-twist LCDA accessors yet. "all"
-                // contains every supported contribution, while an explicit request must be rejected.
+                // The higher-twist soft terms are only available with the exponential LCDAs.
+                // Naming one explicitly under FLvD2022 must be rejected rather than ignored.
+                TEST_CHECK_THROWS(InternalError, AnalyticFormFactorPToGammaQCDF<BToGamma>(p, Options{
+                            { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "soft-tw-3+4"_ov }
+                        }));
+                TEST_CHECK_THROWS(InternalError, AnalyticFormFactorPToGammaQCDF<BToGamma>(p, Options{
+                            { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "soft-tw-5+6"_ov }
+                        }));
+
+                // FLvD2022 is the default LCDA model and must reproduce an explicit selection.
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_default(p, Options{});
                 AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_all(p, Options{
                         { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "all"_ov }
                     });
@@ -165,27 +173,66 @@ class AnalyticFormFactorBToGammaQCDFTest :
                 AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_none(p, Options{
                         { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "none"_ov }
                     });
+                TEST_CHECK_NEARLY_EQUAL(ff_flvd_default.F_V(2.0), ff_flvd_all.F_V(2.0), 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(ff_flvd_default.F_A(2.0), ff_flvd_all.F_A(2.0), 1e-12);
                 TEST_CHECK_NEARLY_EQUAL(average(ff_flvd_all, 2.0) - average(ff_flvd_ht, 2.0)
                         - average(ff_flvd_soft, 2.0) + average(ff_flvd_none, 2.0), 0.0, 1e-12);
-                TEST_CHECK_THROWS(InternalError, AnalyticFormFactorPToGammaQCDF<BToGamma>(p, Options{
-                            { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "partial-soft-tw-3+4"_ov }
-                        }));
-                TEST_CHECK_THROWS(InternalError, AnalyticFormFactorPToGammaQCDF<BToGamma>(p, Options{
-                            { "lcda-model"_ok, "FLvD2022"_ov }, { "contributions"_ok, "soft-tw-5+6"_ov }
-                        }));
 
-                // Every contribution included in "all" must also be independently selectable.
+                // Every contribution included in "all" must also be independently selectable, and
+                // the composites must be exactly the sum of their parts. This is the guard that
+                // catches a term being added to "all" without being added to the decomposition.
                 p["B_u::omega_0@FLvD2022"] = 0.35;
                 const Options exponential{ { "lcda-model"_ok, "exponential"_ov } };
                 AnalyticFormFactorPToGammaQCDF<BToGamma> ff_sum_none(p, exponential + Options{ { "contributions"_ok, "none"_ov } });
-                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_sum_all(p, exponential + Options{ { "contributions"_ok, "all"_ov } });
-                double sum_of_parts = 0.0;
-                for (const std::string contribution : { "ht", "soft", "partial-soft-tw-3+4", "soft-tw-5+6" })
+                const double F_V_none = ff_sum_none.F_V(2.0);
+
+                const auto term = [&] (const char * contribution) -> double
                 {
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_part(p, exponential + Options{ { "contributions"_ok, contribution } });
-                    sum_of_parts += ff_part.F_V(2.0) - ff_sum_none.F_V(2.0);
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, exponential + Options{ { "contributions"_ok, qnp::OptionValue(contribution) } });
+                    return ff.F_V(2.0) - F_V_none;
+                };
+
+                // "soft" = xi^soft_(NLO) + xi^soft_(tw-3,4) + xi^soft_(tw-5,6)
+                TEST_CHECK_NEARLY_EQUAL(term("soft"),
+                        term("soft-nlo") + term("soft-tw-3+4") + term("soft-tw-5+6"), 1e-12);
+                // "all" = xi^ht + "soft"
+                TEST_CHECK_NEARLY_EQUAL(term("all"), term("ht") + term("soft"), 1e-12);
+                // ... and therefore "all" is the sum of the four individual terms.
+                TEST_CHECK_NEARLY_EQUAL(term("all"),
+                        term("ht") + term("soft-nlo") + term("soft-tw-3+4") + term("soft-tw-5+6"), 1e-12);
+
+                // Which terms each (lcda-model, contributions) pair actually enables. The four
+                // switches are the last entries of diagnostics(). Without this, "soft" and
+                // "soft-nlo" would be silently indistinguishable under FLvD2022.
+                for (const auto & [lcda_model, contributions, expected] :
+                        std::array<std::tuple<const char *, const char *, std::array<double, 4>>, 12>{ {
+                        // lcda-model      contributions    ht   soft  tw3+4 tw5+6
+                        { "exponential", "none",         { 0.0, 0.0, 0.0, 0.0 } },
+                        { "exponential", "ht",           { 1.0, 0.0, 0.0, 0.0 } },
+                        { "exponential", "soft-nlo",     { 0.0, 1.0, 0.0, 0.0 } },
+                        { "exponential", "soft-tw-3+4",  { 0.0, 0.0, 1.0, 0.0 } },
+                        { "exponential", "soft-tw-5+6",  { 0.0, 0.0, 0.0, 1.0 } },
+                        { "exponential", "soft",         { 0.0, 1.0, 1.0, 1.0 } },
+                        { "exponential", "all",          { 1.0, 1.0, 1.0, 1.0 } },
+                        // FLvD2022 lacks the direct higher-twist accessors, so the composites
+                        // deliver less than under the exponential model. That is deliberate and
+                        // documented; it is pinned here so it cannot change unnoticed.
+                        { "FLvD2022",    "none",         { 0.0, 0.0, 0.0, 0.0 } },
+                        { "FLvD2022",    "ht",           { 1.0, 0.0, 0.0, 0.0 } },
+                        { "FLvD2022",    "soft-nlo",     { 0.0, 1.0, 0.0, 0.0 } },
+                        { "FLvD2022",    "soft",         { 0.0, 1.0, 0.0, 0.0 } },
+                        { "FLvD2022",    "all",          { 1.0, 1.0, 0.0, 0.0 } }
+                    } })
+                {
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p, Options{
+                            { "lcda-model"_ok,    qnp::OptionValue(lcda_model)    },
+                            { "contributions"_ok, qnp::OptionValue(contributions) }
+                        });
+                    const Diagnostics d = ff.diagnostics();
+                    const unsigned first = d.size() - 4u;
+                    for (unsigned i = 0 ; i < 4u ; ++i)
+                        TEST_CHECK_NEARLY_EQUAL(diagnostic(d, first + i), expected[i], 1e-15);
                 }
-                TEST_CHECK_NEARLY_EQUAL(ff_sum_all.F_V(2.0) - ff_sum_none.F_V(2.0), sum_of_parts, 1e-12);
 
                 // [BBJW:2018A], plots/Deltaxi.pdf, black dash-dotted curve: Delta_xi^ht.
                 for (const auto & [E_gamma, published] : std::array<std::pair<double, double>, 3>{ {
@@ -278,6 +325,13 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     std::make_pair(0.303055287938432,  1e-8), // F_leading_power(2.16)
                     std::make_pair(-0.0419868760541205, 1e-5), // xi(2.16)
                     std::make_pair(0.013380027478431 + 0.0, 1e-6), // delta_xi(2.16)
+                    // Active contributions for the default options, i.e. lcda-model=FLvD2022 and
+                    // contributions=all. That model does not implement the direct higher-twist
+                    // LCDA accessors, so the two twist switches are off; cf. the option matrix above.
+                    std::make_pair(1.0, 1e-15), // switch_ht
+                    std::make_pair(1.0, 1e-15), // switch_soft
+                    std::make_pair(0.0, 1e-15), // switch_soft_tw_3_4
+                    std::make_pair(0.0, 1e-15), // switch_soft_tw_5_6
                 };
 
                 Diagnostics diagnostics = ff.diagnostics();
@@ -354,6 +408,12 @@ class AnalyticFormFactorBToGammaQCDFTest :
                     std::make_pair(0.345608964545694,  1e-8), // F_leading_power(2.16)
                     std::make_pair(-0.0494042368401784, 1e-5), // xi(2.16)
                     std::make_pair(0.013380027478431 + 0.0, 1e-6), // delta_xi(2.16); does not depend on "evolution-order"
+                    // Active contributions; "contributions" is at its default "all" here, and the
+                    // twist switches are off because this block uses the default lcda-model=FLvD2022.
+                    std::make_pair(1.0, 1e-15), // switch_ht
+                    std::make_pair(1.0, 1e-15), // switch_soft
+                    std::make_pair(0.0, 1e-15), // switch_soft_tw_3_4
+                    std::make_pair(0.0, 1e-15), // switch_soft_tw_5_6
                 };
 
                 Diagnostics diagnostics = ff.diagnostics();
