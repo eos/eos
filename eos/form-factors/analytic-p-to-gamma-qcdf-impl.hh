@@ -93,7 +93,7 @@ namespace eos
         s_0(p[QualifiedName(Traits::process, qnp::Name("s_0"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h1(p[QualifiedName(Traits::process, qnp::Name("mu_h1"), qnp::Suffix("FLvD2022QCDF"))], *this),
         mu_h2(p[QualifiedName(Traits::process, qnp::Name("mu_h2"), qnp::Suffix("FLvD2022QCDF"))], *this),
-        opt_contributions(o, "contributions"_ok, { "all"_ov, "ht"_ov, "soft"_ov, "partial-soft-tw-3+4"_ov, "soft-tw-5+6"_ov, "none"_ov }, "all"_ov),
+        opt_contributions(o, "contributions"_ok, { "all"_ov, "ht"_ov, "soft"_ov, "soft-nlo"_ov, "soft-tw-3+4"_ov, "soft-tw-5+6"_ov, "none"_ov }, "all"_ov),
         switch_ht(0.0),
         switch_soft(0.0),
         switch_soft_tw_3_4(0.0),
@@ -110,28 +110,34 @@ namespace eos
             throw InternalError("The number of weights implemented is smaller than the number of coefficients of phi_+");
         }
 
-        if ((opt_contributions.value() == "all") || (opt_contributions.value() == "ht"))
+        // The values of "contributions" fall into two groups: one per term of [BBJW:2018A],
+        // Eq. (5.1), and the composites "soft" (all three soft terms) and "all" (everything).
+        //
+        // The higher-twist soft terms require the direct LCDA accessors, which only the
+        // exponential model implements. Naming such a term explicitly is therefore rejected, while
+        // the composites silently deliver what the selected model supports -- "all" is the default,
+        // and a throwing default combination would break every existing caller. To keep that
+        // difference observable rather than silent, diagnostics() reports the four switches below.
+        const auto & contributions               = opt_contributions.value();
+        const bool   higher_twist_soft_available = (traits.opt_lcda_model.value() == "exponential");
+
+        if ((contributions == "all") || (contributions == "ht"))
         {
             switch_ht = 1.0;
         }
-        if ((opt_contributions.value() == "all") || (opt_contributions.value() == "soft"))
+        if ((contributions == "all") || (contributions == "soft") || (contributions == "soft-nlo"))
         {
             switch_soft = 1.0;
         }
-        if ((opt_contributions.value() == "partial-soft-tw-3+4") && (traits.opt_lcda_model.value() != "exponential"))
+        if (((contributions == "soft-tw-3+4") || (contributions == "soft-tw-5+6")) && (! higher_twist_soft_available))
         {
-            throw InternalError("The twist-3,4 soft contribution requires lcda-model=exponential");
+            throw InternalError("The contribution '" + contributions + "' requires lcda-model=exponential");
         }
-        if ((opt_contributions.value() == "soft-tw-5+6") && (traits.opt_lcda_model.value() != "exponential"))
-        {
-            throw InternalError("The twist-5,6 soft contribution requires lcda-model=exponential");
-        }
-
-        if ((opt_contributions.value() == "partial-soft-tw-3+4") || ((opt_contributions.value() == "all") && (traits.opt_lcda_model.value() == "exponential")))
+        if (higher_twist_soft_available && ((contributions == "all") || (contributions == "soft") || (contributions == "soft-tw-3+4")))
         {
             switch_soft_tw_3_4 = 1.0;
         }
-        if ((opt_contributions.value() == "soft-tw-5+6") || ((opt_contributions.value() == "all") && (traits.opt_lcda_model.value() == "exponential")))
+        if (higher_twist_soft_available && ((contributions == "all") || (contributions == "soft") || (contributions == "soft-tw-5+6")))
         {
             switch_soft_tw_5_6 = 1.0;
         }
@@ -2106,6 +2112,16 @@ namespace eos
         results.add({ this->F_leading_power(2.16), "F_leading_power(2.16)" });
         results.add({ this->xi(2.16), "xi(2.16)" });
         results.add({ this->delta_xi(2.16), "delta_xi(2.16)" });
+
+        // Which terms of [BBJW:2018A], Eq. (5.1), the "contributions" and "lcda-model" options
+        // have actually enabled. The composite values "all" and "soft" deliver only what the
+        // selected LCDA model supports; these entries make that observable to a test rather than
+        // leaving two option values silently indistinguishable. Appended last on purpose: the
+        // indices of the entries above are used positionally in the unit test.
+        results.add({ switch_ht, "switch_ht" });
+        results.add({ switch_soft, "switch_soft" });
+        results.add({ switch_soft_tw_3_4, "switch_soft_tw_3_4" });
+        results.add({ switch_soft_tw_5_6, "switch_soft_tw_5_6" });
 
         return results;
     }
