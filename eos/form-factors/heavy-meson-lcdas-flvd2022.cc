@@ -315,6 +315,12 @@ namespace eos
         }
 
         double
+        FLvD2022::phi_minusWW(const double & /* omega */) const
+        {
+            throw InternalError("Function not yet implemented");
+        }
+
+        double
         FLvD2022::phi_minus(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
