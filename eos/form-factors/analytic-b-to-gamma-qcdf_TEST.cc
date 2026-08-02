@@ -185,22 +185,12 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                                                                              + Options{
                                                                                  { "contributions"_ok, "none"_ov }
                     });
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_ht(p,
-                                                                   common
-                                                                           + Options{
-                                                                               { "contributions"_ok, "ht"_ov }
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_tw_3_4(p,
+                                                                       common
+                                                                               + Options{
+                                                                                   { "contributions"_ok, "partial-soft-tw-3+4"_ov }
                     });
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_soft(p,
-                                                                     common
-                                                                             + Options{
-                                                                                 { "contributions"_ok, "soft"_ov }
-                    });
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_all(p,
-                                                                    common
-                                                                            + Options{
-                                                                                { "contributions"_ok, "all"_ov }
-                    });
-                    const double                             xi_soft_tw_3_4 = average(ff_all, 2.0) - average(ff_ht, 2.0) - average(ff_soft, 2.0) + average(ff_none, 2.0);
+                    const double                             xi_soft_tw_3_4 = average(ff_tw_3_4, 2.0) - average(ff_none, 2.0);
                     TEST_CHECK_NEARLY_EQUAL(xi_soft_tw_3_4, expected, 1e-6);
                 }
 
@@ -233,6 +223,39 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                                                                                {    "lcda-model"_ok,            "FLvD2022"_ov },
                                                                                { "contributions"_ok, "partial-soft-tw-3+4"_ov }
                 }));
+                TEST_CHECK_THROWS(InternalError,
+                                  AnalyticFormFactorPToGammaQCDF<BToGamma>(p,
+                                                                           Options{
+                                                                               {    "lcda-model"_ok,    "FLvD2022"_ov },
+                                                                               { "contributions"_ok, "soft-tw-5+6"_ov }
+                }));
+
+                // Every contribution included in "all" must also be independently selectable.
+                p["B_u::omega_0@FLvD2022"] = 0.35;
+                const Options exponential{
+                    { "lcda-model"_ok, "exponential"_ov }
+                };
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_sum_none(p,
+                                                                     exponential
+                                                                             + Options{
+                                                                                 { "contributions"_ok, "none"_ov }
+                });
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_sum_all(p,
+                                                                    exponential
+                                                                            + Options{
+                                                                                { "contributions"_ok, "all"_ov }
+                });
+                double                                   sum_of_parts = 0.0;
+                for (const std::string contribution : { "ht", "soft", "partial-soft-tw-3+4", "soft-tw-5+6" })
+                {
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_part(p,
+                                                                     exponential
+                                                                             + Options{
+                                                                                 { "contributions"_ok, contribution }
+                    });
+                    sum_of_parts += ff_part.F_V(2.0) - ff_sum_none.F_V(2.0);
+                }
+                TEST_CHECK_NEARLY_EQUAL(ff_sum_all.F_V(2.0) - ff_sum_none.F_V(2.0), sum_of_parts, 1e-12);
 
                 // [BBJW:2018A], plots/Deltaxi.pdf, black dash-dotted curve: Delta_xi^ht.
                 for (const auto & [E_gamma, published] : std::array<std::pair<double, double>, 3>{
@@ -259,6 +282,34 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                             TEST_CHECK_NEARLY_EQUAL(delta_xi, first, 1e-12);
                         }
                     }
+                }
+
+                // Complete twist-3--6 soft correction at E_gamma = 2 GeV. With the BBJW Table 1
+                // setup used throughout this block but EOS's threshold-crossing alpha_s and GMOR
+                // condensate, these values exceed the dashed curves in plots/Deltaxi.pdf by 31--36%.
+                // BBJW instead use fixed-n_f=4 alpha_s(1 GeV)=0.348929 and a slightly smaller
+                // condensate. The deterministic result is pinned tightly and the test fails if the
+                // twist-5,6 term is removed.
+                for (const auto & [lambda_B, expected] : std::array<std::pair<double, double>, 3>{
+                         { { 0.20, +0.006630321674412021 }, { 0.35, +0.004272383522116230 }, { 0.50, +0.003003337577852400 } }
+                })
+                {
+                    p["B_u::omega_0@FLvD2022"] = lambda_B;
+                    const Options common{
+                        { "lcda-model"_ok, "exponential"_ov }
+                    };
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_ht(p,
+                                                                   common
+                                                                           + Options{
+                                                                               { "contributions"_ok, "ht"_ov }
+                    });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_all(p,
+                                                                    common
+                                                                            + Options{
+                                                                                { "contributions"_ok, "all"_ov }
+                    });
+                    const double                             delta_xi_soft = 0.5 * ((ff_all.F_V(2.0) - ff_all.F_A(2.0)) - (ff_ht.F_V(2.0) - ff_ht.F_A(2.0)));
+                    TEST_CHECK_NEARLY_EQUAL(delta_xi_soft, expected, 1e-8);
                 }
             }
 
