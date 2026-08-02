@@ -125,12 +125,21 @@ namespace eos
         }
 
         double
+        Exponential::phi_minusWW(const double & omega) const
+        {
+            // phi_-^WW(omega) = int_omega^infinity d eta phi_+(eta) / eta
+            const double omega_0 = lambda_B();
+
+            return 1.0 / omega_0 * std::exp(-omega / omega_0);
+        }
+
+        double
         Exponential::phi_minus(const double & omega) const
         {
             // cf. [KMO:2006A], eq. (53), p. 16
             const double omega_0 = lambda_B();
 
-            const double limitWW = 1.0 / omega_0 * std::exp(-omega / omega_0);
+            const double limitWW = phi_minusWW(omega);
             const double nonWW   = -(lambda_E2 - lambda_H2) / (18.0 * power_of<5>(omega_0)) *
                 (
                     2.0 * omega_0 * omega_0 - 4.0 * omega_0 * omega + omega * omega

@@ -82,9 +82,16 @@ namespace eos
                  * Leading twist two-particle LCDAs in momentum space
                  *
                  * omega: plus-component of the spectator momentum
-                 */
+                */
                 virtual double phi_plus(const double & omega) const final override;
+
+                /*!
+                 * Twist-three two-particle LCDAs
+                 *
+                 * omega: plus-component of the spectator momentum
+                 */
                 virtual double phi_minus(const double & omega) const final override;
+                virtual double phi_minusWW(const double & omega) const final override;
                 virtual double phi_bar(const double & omega) const final override;
                 virtual double phi_bar_d1(const double & omega) const final override;
 
