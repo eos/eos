@@ -777,7 +777,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
                 R"(Form factors for $B\to \gamma$ transitions)",
-                R"(Pseudo observables representing the full basis of $B\to \gamma$ form factors.)",
+                R"(Pseudo observables representing the full basis of $B\to \gamma$ form factors. The FLvD2022QCDF form factors implement [BBJW:2018A], Eq. (5.1). Option `lcda-model` selects the model of the $B$-meson LCDAs, `FLvD2022` (default) or `exponential`; the two differ by more than RG evolution, since their three-particle LCDAs differ. Option `contributions` selects the terms of Eq. (5.1), one value per term plus two composites: `none`, `ht`, `soft-nlo`, `soft-tw-3+4`, `soft-tw-5+6`, `soft` (the three soft terms), and `all` (default). The higher-twist soft terms require accessors that only `exponential` implements, so naming one explicitly under `FLvD2022` is rejected, while `soft` and `all` deliver what the selected model supports and therefore mean less under `FLvD2022`. Option `evolution-order` accepts `NLL` (default) and `LL`. With `exponential` EOS reproduces every published equation of [BBJW:2018A] that can be checked in isolation, but not the curves of their sigma0.pdf and FVerrors.pdf: $F_V(2\,\text{GeV})$ lies some 9-14% above them for $\lambda_B = 0.20\ldots0.50\,\text{GeV}$.)",
                 {
                     make_form_factor_adapter("B->gamma::F_V(E_gamma)", R"(F_V^{B\to \gamma}(E_\gamma))", &FormFactors<PToGamma>::F_V, std::make_tuple("E_gamma")),
 
