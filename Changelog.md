@@ -90,6 +90,8 @@
 - Detect newly introduced C++ compiler warnings in the CI/CD workflows using ``g++``'s SARIF diagnostics output, providing native code-scanning annotations on pull requests and failing the build on any warning not present in a committed baseline (D. van Dyk)
 - Add ``eos.LogPrior.External``, which wraps a user-supplied Python factory (providing ``evaluate()``, ``sample()``, and ``compute_cdf()`` callables) as a prior (D. van Dyk)
 - Add the means to ensure a minimum effective sample size for the final samples produced by ``sample-nested``, exposed through the ``eos-analysis`` command-line interface (D. van Dyk)
+- Add an optional ``levels`` field to ``UncertaintyBandItem`` and ``BinnedUncertaintyItem`` items that modifies the plotted credibility interval (D. Suelmann)
+- Add an optional ``band`` field to ``BinnedUncertaintyItem`` items to plot different parts of the band separately (D. Suelmann)
 
 ### Deprecated
 
