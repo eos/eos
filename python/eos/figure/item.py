@@ -835,7 +835,7 @@ class UncertaintyBandItem(Item):
         elif isinstance(self.band, list):
             self.band = set(self.band)
         elif not isinstance(self.band, set):
-            raise TypeError(f"Parameter 'band' must be a string, list of string, or a set of strings, not {type(self.band).__name__}")
+            raise TypeError(f"Parameter 'band' must be a string, list of strings, or a set of strings, not {type(self.band).__name__}")
 
         for band_type in self.band:
             if band_type not in ['area', 'outer', 'median']:
