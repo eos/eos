@@ -47,6 +47,7 @@ namespace eos
         opt_lcda_model(o, "lcda-model"_ok,
                        {
                            "FLvD2022"_ov,
+                           "FLvD2022+profile"_ov,
                            "exponential"_ov
     },
                        "FLvD2022"_ov),
@@ -121,14 +122,17 @@ namespace eos
         //  - xi^soft_(tw-3,4), Eq. (4.13), needs the kernels Xi_1 and Xi_2, hence the
         //    three-particle LCDAs phi_3 and psi_4 + psitilde_4. [FLvD:2022A] parametrises phi_+
         //    only and defines neither, so the kernels have no meaning in that parametrisation --
-        //    this is a property of the parametrisation, not a missing implementation.
+        //    this is a property of the parametrisation, not a missing implementation. The
+        //    "FLvD2022+profile" model supplies them by the [BBJW:2018A] profile-function ansatz
+        //    instead, i.e. as a model rather than as a parametrisation, so the term is available
+        //    there; cf. heavy-meson-lcdas-flvd2022-profile.hh for what that costs.
         //
         // Naming an unavailable term explicitly is therefore rejected, while the composites
         // silently deliver what the selected model supports -- "all" is the default, and a
         // throwing default combination would break every existing caller. To keep that difference
         // observable rather than silent, diagnostics() reports the four switches below.
         const auto & contributions         = opt_contributions.value();
-        const bool   soft_tw_3_4_available = (traits.opt_lcda_model.value() == "exponential");
+        const bool   soft_tw_3_4_available = (traits.opt_lcda_model.value() == "exponential") || (traits.opt_lcda_model.value() == "FLvD2022+profile");
         const bool   soft_tw_5_6_available = true;
 
         if ((contributions == "all") || (contributions == "ht"))
@@ -141,7 +145,9 @@ namespace eos
         }
         if ((contributions == "soft-tw-3+4") && (! soft_tw_3_4_available))
         {
-            throw InternalError("The contribution '" + contributions + "' requires lcda-model=exponential");
+            throw InternalError("The contribution '" + contributions
+                                + "' requires lcda-model=exponential"
+                                  " or lcda-model=FLvD2022+profile");
         }
         if ((contributions == "soft-tw-5+6") && (! soft_tw_5_6_available))
         {
