@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -954,7 +954,7 @@ namespace eos
     {
         auto imp = new Implementation<ObservableGroup>(
             R"(Form factors for $B\to \gamma$ transitions)",
-            R"(Pseudo observables representing the full basis of $B\to \gamma$ form factors.)",
+            R"(Pseudo observables representing the full basis of $B\to \gamma$ form factors. The FLvD2022QCDF form factors implement [BBJW:2018A], Eq. (5.1). Option `lcda-model` selects the model of the $B$-meson LCDAs, `FLvD2022` (default), `FLvD2022+profile`, or `exponential`; they differ by more than RG evolution, since their three-particle LCDAs differ. `FLvD2022+profile` uses the same $\phi_+$ as `FLvD2022` but *models* the three-particle LCDAs from it by the profile-function ansatz of [BBJW:2018A], so its twist-3,4 soft term carries an unquantifiable modelling error and violates the ansatz's own equation-of-motion relation away from a codimension-one surface in coefficient space; it is a separate model, not a completion of `FLvD2022`. Option `contributions` selects the terms of Eq. (5.1), one value per term plus two composites: `none`, `ht`, `soft-nlo`, `soft-tw-3+4`, `soft-tw-5+6`, `soft` (the three soft terms), and `all` (default). The twist-3,4 soft term requires the three-particle LCDAs, which [FLvD:2022A] does not parametrise, so naming it explicitly under `FLvD2022` is rejected, while `soft` and `all` deliver what the selected model supports and therefore mean one term less under `FLvD2022`. The twist-5,6 soft term needs only $\phi_-^{WW}$ and $1/\lambda_B$ and is available for all models. Option `evolution-order` accepts `NLL` (default) and `LL`. EOS reproduces every published equation of [BBJW:2018A] that can be checked in isolation. Compared against the curves of their FVerrors.pdf at their own inputs — Table 1, $\hat\sigma_1 = 0$, LCDA defined at $\mu_0 = 1\,\text{GeV}$ and evolved to $\mu = 1.5\,\text{GeV}$ — `FLvD2022+profile`, the only model here carrying both that evolution and all four terms of Eq. (5.1), gives an $F_V$ that is 2.6-3.0% low for $\lambda_B = 0.20\ldots0.50\,\text{GeV}$, near-uniformly in $E_\gamma$; almost all of that residual sits in the leading-power term rather than in the soft corrections. `exponential` instead lies 9-15% high, because it omits the RG evolution that [BBJW:2018A] apply.)",
             {
                 make_form_factor_adapter("B->gamma::F_V(E_gamma)", R"(F_V^{B\to \gamma}(E_\gamma))",
                         &FormFactors<PToGamma>::F_V, std::make_tuple("E_gamma")),

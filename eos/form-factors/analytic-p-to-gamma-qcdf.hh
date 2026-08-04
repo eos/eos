@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022-2024 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -43,6 +43,28 @@ namespace eos
     template <>
     struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
     {
+        // Selects the model of the B-meson LCDAs. Leading-twist functionals access the LCDAs through
+        // HeavyMesonLCDAs::coefficient_range(mu), i.e. through the coefficients a_k of the expansion
+        // of phi_+ in the basis of [FLvD:2022A]. Higher-twist soft terms use the direct LCDA accessors.
+        // For this form factor B_u::omega_0@FLvD2022 is the authoritative inverse-moment scale;
+        // the "exponential" model is constructed to use it rather than its legacy B::1/lambda_B_p
+        // parameter. It returns the fixed, scale-independent coefficients
+        // (1, 0, ..., 0), which reproduces phi_+(omega) = omega / omega_0^2 exp(-omega / omega_0)
+        // without any RG evolution; "FLvD2022" uses the full parametrization and evolves the
+        // coefficients from mu_0 to mu. [FLvD:2022A] parametrizes phi_+ alone and defines neither
+        // of the three-particle LCDAs that the twist-3,4 soft kernels require, so under
+        // "FLvD2022" the composite "all" omits that term and requesting it explicitly is
+        // rejected. "FLvD2022+profile" is a third, distinct model: the same phi_+, but with the
+        // three-particle LCDAs *modelled* from it through the [BBJW:2018A] profile-function
+        // ansatz, which makes the twist-3,4 soft term available at the price of an EOM
+        // inconsistency documented on heavy_meson_lcdas::FLvD2022Profile. It is not a variant of
+        // "FLvD2022": both models coincide only in the terms that [FLvD:2022A] itself defines.
+        // The QCDF construction intentionally forces
+        // ``lambda-b-source=FLvD2022`` (overriding any user value) so its kernels and direct LCDA
+        // accessors share this authoritative scale. Must be declared before blcdas, which is initialized
+        // from it.
+        SwitchOption opt_lcda_model;
+
         std::shared_ptr<HeavyMesonLCDAs> blcdas;
         std::shared_ptr<Model> model;
 
@@ -67,8 +89,9 @@ namespace eos
      * We use the results obtained in QCD factorization with subleading
      * power corrections according to Ref. [BBJW:2018A].
      *
-     * We further parametrize the leading LCDA phi_+ as described in
-     * Ref. [FLvD:2022A] and presently omit higher-twist contributions.
+     * We further parametrize the leading LCDA phi_+ as described in Ref. [FLvD:2022A]. Leading-twist
+     * convolutions use its coefficient expansion, while higher-twist soft terms access the LCDA
+     * model directly.
      */
     template <typename Process_>
     class AnalyticFormFactorPToGammaQCDF:
@@ -103,6 +126,9 @@ namespace eos
             UsedParameter f_B;
             UsedParameter m_B;
             UsedParameter m_rho;
+            // Enter the twist-5,6 soft terms through the GMOR quark condensate.
+            UsedParameter m_pi;
+            UsedParameter f_pi;
             UsedParameter lambda_bar;
             UsedParameter lambda_E2;
             UsedParameter lambda_H2;
@@ -115,6 +141,22 @@ namespace eos
             double switch_ht;
             double switch_soft;
             double switch_soft_tw_3_4;
+            double switch_soft_tw_5_6;
+
+            // Truncation of the leading-power normalization f_B/lambda_B(mu) * R(Egamma, mu) to
+            // leading-logarithmic accuracy. At "LL", switch_nll multiplies to zero every explicit
+            // O(alpha_s) correction entering this normalization: the hard matching coefficient C and
+            // the HQET/QCD decay-constant matching factor K (both O(alpha_s(mu_h))); the
+            // O(alpha_s(mu_h)) corrections to the RG evolution factors U1 and U2, cf. [BBJW:2018A],
+            // footnote 3, which retains the two-loop cusp and one-loop non-cusp anomalous dimensions
+            // in the exponents; and the O(alpha_s(mu)) hard-collinear matching correction C_NLO to
+            // J(Egamma, mu) entering F_leading_power() and the soft contribution to xi(). The result
+            // is the leading-power form factor in the form used in [BBJW:2018A], Eq. (4.8).
+            //
+            // Note that this option does not affect the RG evolution of the B-meson LCDA, which
+            // [BBJW:2018A] likewise carry out at leading-logarithmic accuracy.
+            SwitchOption opt_evolution_order;
+            double switch_nll;
 
             static const constexpr double e_spectator = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_spectator;
             static const constexpr double e_heavy     = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_heavy;
@@ -132,6 +174,7 @@ namespace eos
              */
             ///@{
             std::tuple<double, double, double> C_K_inv_U(const double & Egamma) const;
+            double higher_twist_condensate_coupling() const;
             double F_leading_power(const double & Egamma) const;
             double xi(const double & Egamma) const;
             double delta_xi(const double & Egamma) const;
