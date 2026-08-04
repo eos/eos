@@ -111,13 +111,23 @@ namespace eos
         // The values of "contributions" fall into two groups: one per term of [BBJW:2018A],
         // Eq. (5.1), and the composites "soft" (all three soft terms) and "all" (everything).
         //
-        // The higher-twist soft terms require the direct LCDA accessors, which only the
-        // exponential model implements. Naming such a term explicitly is therefore rejected, while
-        // the composites silently deliver what the selected model supports -- "all" is the default,
-        // and a throwing default combination would break every existing caller. To keep that
-        // difference observable rather than silent, diagnostics() reports the four switches below.
+        // The two higher-twist soft terms need different LCDA input, so they are available for
+        // different sets of models:
+        //
+        //  - xi^soft_(tw-5,6), Eq. (4.19), needs only phi_-^WW and 1/lambda_B, both of which
+        //    [FLvD:2022A] defines in closed form. Available for every model.
+        //  - xi^soft_(tw-3,4), Eq. (4.13), needs the kernels Xi_1 and Xi_2, hence the
+        //    three-particle LCDAs phi_3 and psi_4 + psitilde_4. [FLvD:2022A] parametrises phi_+
+        //    only and defines neither, so the kernels have no meaning in that parametrisation --
+        //    this is a property of the parametrisation, not a missing implementation.
+        //
+        // Naming an unavailable term explicitly is therefore rejected, while the composites
+        // silently deliver what the selected model supports -- "all" is the default, and a
+        // throwing default combination would break every existing caller. To keep that difference
+        // observable rather than silent, diagnostics() reports the four switches below.
         const auto & contributions = opt_contributions.value();
-        const bool   higher_twist_soft_available = (traits.opt_lcda_model.value() == "exponential");
+        const bool   soft_tw_3_4_available = (traits.opt_lcda_model.value() == "exponential");
+        const bool   soft_tw_5_6_available = true;
 
         if ((contributions == "all") || (contributions == "ht"))
         {
@@ -127,16 +137,21 @@ namespace eos
         {
             switch_soft = 1.0;
         }
-        if (((contributions == "soft-tw-3+4") || (contributions == "soft-tw-5+6")) && (! higher_twist_soft_available))
+        if ((contributions == "soft-tw-3+4") && (! soft_tw_3_4_available))
         {
             throw InternalError("The contribution '" + contributions + "' requires lcda-model=exponential");
         }
-        if (higher_twist_soft_available
+        if ((contributions == "soft-tw-5+6") && (! soft_tw_5_6_available))
+        {
+            throw InternalError("The contribution '" + contributions + "' is not available for lcda-model="
+                    + traits.opt_lcda_model.value());
+        }
+        if (soft_tw_3_4_available
                 && ((contributions == "all") || (contributions == "soft") || (contributions == "soft-tw-3+4")))
         {
             switch_soft_tw_3_4 = 1.0;
         }
-        if (higher_twist_soft_available
+        if (soft_tw_5_6_available
                 && ((contributions == "all") || (contributions == "soft") || (contributions == "soft-tw-5+6")))
         {
             switch_soft_tw_5_6 = 1.0;
