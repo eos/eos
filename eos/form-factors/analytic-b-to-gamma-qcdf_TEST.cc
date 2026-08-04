@@ -193,20 +193,49 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(average(ff_tw_3_4, 2.0) - average(ff_none, 2.0), expected, 1e-6);
                 }
 
-                // The higher-twist soft terms are only available with the exponential LCDAs.
-                // Naming one explicitly under FLvD2022 must be rejected rather than ignored.
+                // xi^soft_(tw-3,4) needs the kernels Xi_1, Xi_2 and hence the three-particle LCDAs,
+                // which [FLvD:2022A] does not parametrise. Naming it under FLvD2022 must be
+                // rejected rather than ignored. xi^soft_(tw-5,6) needs only phi_-^WW and
+                // 1/lambda_B, which that parametrisation does define, so it is available for both
+                // models and must not throw.
                 TEST_CHECK_THROWS(InternalError,
                                   AnalyticFormFactorPToGammaQCDF<BToGamma>(p,
                                                                            Options{
                                                                                {    "lcda-model"_ok,    "FLvD2022"_ov },
                                                                                { "contributions"_ok, "soft-tw-3+4"_ov }
                 }));
-                TEST_CHECK_THROWS(InternalError,
-                                  AnalyticFormFactorPToGammaQCDF<BToGamma>(p,
-                                                                           Options{
-                                                                               {    "lcda-model"_ok,    "FLvD2022"_ov },
-                                                                               { "contributions"_ok, "soft-tw-5+6"_ov }
-                }));
+
+                // Equal-model anchor: with matched lambda_B, default coefficients and mu_0 = mu, so
+                // that no evolution occurs, both LCDA models must give the same xi^soft_(tw-5,6).
+                // Unlike a kernel generated from phi_+ by a model ansatz, phi_-^WW is independently
+                // defined by each model, so this compares two implementations of one object.
+                {
+                    Parameters q                   = p;
+                    q["B_u::mu_0@FLvD2022"]        = 1.5;
+                    q["B->gamma::mu@FLvD2022QCDF"] = 1.5;
+                    q["B_u::omega_0@FLvD2022"]     = 0.35;
+                    q["B::1/lambda_B_p"]           = 1.0 / 0.35;
+
+                    const auto tw_5_6 = [&q](const char * lcda_model) -> double
+                    {
+                        const Options common{
+                            { "lcda-model"_ok, qnp::OptionValue(lcda_model) }
+                        };
+                        AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(q,
+                                                                         common
+                                                                                 + Options{
+                                                                                     { "contributions"_ok, "none"_ov }
+                        });
+                        AnalyticFormFactorPToGammaQCDF<BToGamma> ff_tw(q,
+                                                                       common
+                                                                               + Options{
+                                                                                   { "contributions"_ok, "soft-tw-5+6"_ov }
+                        });
+                        return ff_tw.F_V(2.0) - ff_none.F_V(2.0);
+                    };
+
+                    TEST_CHECK_NEARLY_EQUAL(tw_5_6("FLvD2022"), tw_5_6("exponential"), 1e-12);
+                }
 
                 // FLvD2022 is the default LCDA model and must reproduce an explicit selection.
                 AnalyticFormFactorPToGammaQCDF<BToGamma> ff_flvd_default(p, Options{});
@@ -268,7 +297,7 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                 // Which terms each (lcda-model, contributions) pair actually enables. The four
                 // switches are the last entries of diagnostics(). Without this, "soft" and
                 // "soft-nlo" would be silently indistinguishable under FLvD2022.
-                for (const auto & [lcda_model, contributions, expected] : std::array<std::tuple<const char *, const char *, std::array<double, 4>>, 12>{
+                for (const auto & [lcda_model, contributions, expected] : std::array<std::tuple<const char *, const char *, std::array<double, 4>>, 13>{
                          { // lcda-model      contributions    ht   soft  tw3+4 tw5+6
                            { "exponential", "none", { 0.0, 0.0, 0.0, 0.0 } },
                           { "exponential", "ht", { 1.0, 0.0, 0.0, 0.0 } },
@@ -277,14 +306,17 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                           { "exponential", "soft-tw-5+6", { 0.0, 0.0, 0.0, 1.0 } },
                           { "exponential", "soft", { 0.0, 1.0, 1.0, 1.0 } },
                           { "exponential", "all", { 1.0, 1.0, 1.0, 1.0 } },
-                          // FLvD2022 lacks the direct higher-twist accessors, so the composites
-                           // deliver less than under the exponential model. That is deliberate and
-                           // documented; it is pinned here so it cannot change unnoticed.
+                          // [FLvD:2022A] does not parametrise the three-particle LCDAs that Xi_1 and
+                           // Xi_2 require, so the twist-3,4 switch stays off under that model and its
+                           // composites deliver one term less than under the exponential model. It
+                           // does define phi_-^WW, so the twist-5,6 switch behaves identically. Both
+                           // facts are pinned here so neither can change unnoticed.
                            { "FLvD2022", "none", { 0.0, 0.0, 0.0, 0.0 } },
                           { "FLvD2022", "ht", { 1.0, 0.0, 0.0, 0.0 } },
                           { "FLvD2022", "soft-nlo", { 0.0, 1.0, 0.0, 0.0 } },
-                          { "FLvD2022", "soft", { 0.0, 1.0, 0.0, 0.0 } },
-                          { "FLvD2022", "all", { 1.0, 1.0, 0.0, 0.0 } } }
+                          { "FLvD2022", "soft-tw-5+6", { 0.0, 0.0, 0.0, 1.0 } },
+                          { "FLvD2022", "soft", { 0.0, 1.0, 0.0, 1.0 } },
+                          { "FLvD2022", "all", { 1.0, 1.0, 0.0, 1.0 } } }
                 })
                 {
                     AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p,
@@ -403,15 +435,16 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                     std::make_pair(1.04437026215851, 1e-8),                                                                // K_inv at Egamma=2.16
                     std::make_pair(0.948778129043308, 1e-8),                                                               // U at Egamma=2.16
                     std::make_pair(0.303055287938432, 1e-8),                                                               // F_leading_power(2.16)
-                    std::make_pair(-0.0419868760541205, 1e-5),                                                             // xi(2.16)
-                    std::make_pair(0.013380027478431 + 0.0, 1e-6),                                                         // delta_xi(2.16)
+                    std::make_pair(-0.0261633822, 1e-5),                                                                   // xi(2.16)
+                    std::make_pair(0.013380027478431 + 0.002539709, 1e-6), // delta_xi(2.16); the second term is Delta_xi^soft_(tw-5,6)
                     // Active contributions for the default options, i.e. lcda-model=FLvD2022 and
-                    // contributions=all. That model does not implement the direct higher-twist
-                    // LCDA accessors, so the two twist switches are off; cf. the option matrix above.
+                    // contributions=all. That model defines phi_-^WW, so the twist-5,6 term is on;
+                    // it does not parametrise the three-particle LCDAs that Xi_1 and Xi_2 need, so
+                    // the twist-3,4 term is off. Cf. the option matrix above.
                     std::make_pair(1.0, 1e-15), // switch_ht
                     std::make_pair(1.0, 1e-15), // switch_soft
                     std::make_pair(0.0, 1e-15), // switch_soft_tw_3_4
-                    std::make_pair(0.0, 1e-15), // switch_soft_tw_5_6
+                    std::make_pair(1.0, 1e-15), // switch_soft_tw_5_6
                 };
 
                 Diagnostics diagnostics = ff.diagnostics();
@@ -429,20 +462,20 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.F_V(k["E_gamma"]), 0.274448439362743, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(obs_F_V->evaluate(), 0.274448439362743, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_V(k["E_gamma"]), 0.292811641821400, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(obs_F_V->evaluate(), 0.292811641821400, 1e-8);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.F_A(k["E_gamma"]), 0.247688384405881, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(obs_F_A->evaluate(), 0.247688384405881, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_A(k["E_gamma"]), 0.260972168867438, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(obs_F_A->evaluate(), 0.260972168867438, 1e-8);
 
 
                 // Math integrity test: cross-check complete form factors against the corrected implementation
 
-                TEST_CHECK_NEARLY_EQUAL(ff.F_V(4.0), 0.14854710850733, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(ff.F_V(12.0), 0.0458074023590614, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_V(4.0), 0.154216592881089, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_V(12.0), 0.046511232564673, 1e-8);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.F_A(4.0), 0.146182831168587, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(ff.F_A(12.0), 0.0481722192183694, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_A(4.0), 0.150371157254392, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_A(12.0), 0.048711476280875, 1e-8);
             }
 
             // "evolution-order" = "LL": check the truncation implemented via switch_nll
@@ -490,18 +523,18 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                     std::make_pair(10.4492075178413 + -10.4781709714967 + 6.58190087562423 + -8.92720937287174,
                                    1e-3), // L0_incomplete_effective(3.0, 8.0); numerical reference is imprecise
                     std::make_pair(0.101195623867872 + -0.188854545332271 + 0.334217768087141 + -0.315849218854024, 1e-6), // lapltr_effective_incomplete(3.0, 8.0, 4.0)
-                    std::make_pair(1.0, 1e-14),                    // C at Egamma=2.16: no O(alpha_s(mu_h1)) matching correction at LL
-                    std::make_pair(1.0, 1e-14),                    // K_inv at Egamma=2.16: K = 1 identically at LL
-                    std::make_pair(0.968013353629127, 1e-8),       // U at Egamma=2.16
-                    std::make_pair(0.345608964545694, 1e-8),       // F_leading_power(2.16)
-                    std::make_pair(-0.0494042368401784, 1e-5),     // xi(2.16)
-                    std::make_pair(0.013380027478431 + 0.0, 1e-6), // delta_xi(2.16); does not depend on "evolution-order"
+                    std::make_pair(1.0, 1e-14),                            // C at Egamma=2.16: no O(alpha_s(mu_h1)) matching correction at LL
+                    std::make_pair(1.0, 1e-14),                            // K_inv at Egamma=2.16: K = 1 identically at LL
+                    std::make_pair(0.968013353629127, 1e-8),               // U at Egamma=2.16
+                    std::make_pair(0.345608964545694, 1e-8),               // F_leading_power(2.16)
+                    std::make_pair(-0.0335807458, 1e-5),                   // xi(2.16)
+                    std::make_pair(0.013380027478431 + 0.002539709, 1e-6), // delta_xi(2.16); the second term is Delta_xi^soft_(tw-5,6); does not depend on "evolution-order"
                     // Active contributions; "contributions" is at its default "all" here, and the
                     // twist switches are off because this block uses the default lcda-model=FLvD2022.
                     std::make_pair(1.0, 1e-15), // switch_ht
                     std::make_pair(1.0, 1e-15), // switch_soft
                     std::make_pair(0.0, 1e-15), // switch_soft_tw_3_4
-                    std::make_pair(0.0, 1e-15), // switch_soft_tw_5_6
+                    std::make_pair(1.0, 1e-15), // switch_soft_tw_5_6
                 };
 
                 Diagnostics diagnostics = ff.diagnostics();
@@ -517,11 +550,11 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                 auto obs_F_V = Observable::make("B->gamma::F_V(E_gamma)", p, k, o);
                 auto obs_F_A = Observable::make("B->gamma::F_A(E_gamma)", p, k, o);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.F_V(k["E_gamma"]), 0.309584755183946, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(obs_F_V->evaluate(), 0.309584755183946, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_V(k["E_gamma"]), 0.327947957642603, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(obs_F_V->evaluate(), 0.327947957642603, 1e-8);
 
-                TEST_CHECK_NEARLY_EQUAL(ff.F_A(k["E_gamma"]), 0.282824700227084, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(obs_F_A->evaluate(), 0.282824700227084, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff.F_A(k["E_gamma"]), 0.296108484688641, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(obs_F_A->evaluate(), 0.296108484688641, 1e-8);
             }
         }
 } analytic_b_to_gamma_qcdf_test;

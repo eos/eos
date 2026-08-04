@@ -315,9 +315,49 @@ namespace eos
         }
 
         double
-        FLvD2022::phi_minusWW(const double & /* omega */) const
+        FLvD2022::phi_minusWW(const double & omega) const
         {
-            throw InternalError("Function not yet implemented");
+            // The Wandzura-Wilczek part of the twist-three LCDA phi_-, i.e.
+            // phi_-^WW(omega) = int_omega^infinity d eta phi_+(eta) / eta.
+            //
+            // cf. [FLvD:2022A], Sec. "Application to Higher Twist". Using the Laguerre generating
+            // function, the omega dependence factorises into exp(-x) times a polynomial in
+            // x = omega / omega_0,
+            //
+            //   phi_-^WW(omega) = exp(-x) / omega_0 sum_k a_k / (1 + k) sum_{j=0}^{k} (-1)^{k-j} L_j(2 x) ,
+            //
+            // which casts it in the same weight-vector form as inverse_moment() below, with the
+            // weights depending on omega. At omega = 0 the inner sums collapse to one and this
+            // reduces to inverse_moment(), as it must; at a_k = (1, 0, ..., 0) the whole
+            // expression reduces to exp(-omega / omega_0) / omega_0, i.e. to the result of the
+            // exponential model.
+            //
+            // Evaluated at mu_0: [BBJW:2018A], Sec. 5, evaluate the higher-twist contributions and
+            // their soft corrections at the reference scale rather than at the hard-collinear one.
+            const double x = omega / omega_0;
+
+            // Laguerre polynomials L_j(2 x) for j = 0 ... number_of_parameters - 1, by the
+            // recurrence (j + 1) L_{j+1}(y) = (2 j + 1 - y) L_j(y) - j L_{j-1}(y).
+            Weights L;
+            L[0] = 1.0;
+            L[1] = 1.0 - 2.0 * x;
+            for (unsigned j = 1; j + 1 < L.size(); ++j)
+            {
+                L[j + 1] = ((2.0 * j + 1.0 - 2.0 * x) * L[j] - j * L[j - 1]) / (j + 1.0);
+            }
+
+            // c_k = 1 / (1 + k) sum_{j=0}^{k} (-1)^{k-j} L_j(2 x), built by the alternating
+            // partial sum s_k = L_k(2 x) - s_{k-1}.
+            Weights c;
+            double  s = 0.0;
+            for (unsigned k = 0; k < c.size(); ++k)
+            {
+                s    = L[k] - s;
+                c[k] = s / (1.0 + k);
+            }
+
+            auto [a_begin, a_end] = this->coefficient_range(mu_0);
+            return std::exp(-x) / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
         }
 
         double
@@ -559,7 +599,9 @@ namespace eos
         double
         FLvD2022::inverse_lambda_plus() const
         {
-            throw InternalError("Function not yet implemented");
+            // 1 / lambda_B(mu_0) = phi_-^WW(0), cf. the comment on phi_minusWW() above for the
+            // choice of scale.
+            return this->inverse_moment(mu_0);
         }
 
         double

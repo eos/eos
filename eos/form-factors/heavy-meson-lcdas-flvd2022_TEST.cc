@@ -118,6 +118,54 @@ class FLvD2022Test : public TestCase
                 }
             }
 
+            // phi_-^WW, the Wandzura-Wilczek part of the twist-three LCDA phi_-,
+            // cf. [FLvD:2022A], Sec. "Application to Higher Twist".
+            {
+                Parameters p = Parameters::Defaults();
+                Options    o;
+
+                p["B_u::mu_0@FLvD2022"]    = 1.0;
+                p["B_u::omega_0@FLvD2022"] = 0.30;
+
+                // At the default coefficients a = (1, 0, ..., 0) the parametrisation reduces to the
+                // exponential model, phi_-^WW(omega) = exp(-omega/omega_0) / omega_0.
+                {
+                    FLvD2022     blcdas(p, o);
+                    const double omega_0 = 0.30;
+
+                    for (const double & omega : std::array<double, 5>{ 0.0, 0.05, 0.20, 0.60, 1.50 })
+                    {
+                        TEST_CHECK_NEARLY_EQUAL(blcdas.phi_minusWW(omega), std::exp(-omega / omega_0) / omega_0, 1e-13);
+                    }
+                }
+
+                // For a generic coefficient vector, against an independent quadrature of the
+                // Wandzura-Wilczek relation phi_-^WW(omega) = int_omega^infinity d eta phi_+(eta)/eta.
+                // Reference values from issues/1206/reference-phi-minus-ww.py, an independent
+                // scipy quadrature. Note phi_-^WW is not positive definite for generic coefficients.
+                {
+                    const std::array<double, 9> a = { 1.0, 0.3, -0.2, 0.15, -0.1, 0.05, -0.03, 0.02, -0.01 };
+                    for (unsigned k = 0; k < a.size(); ++k)
+                    {
+                        p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = a[k];
+                    }
+
+                    FLvD2022 blcdas(p, o);
+
+                    // phi_-^WW(0) is the inverse moment 1/lambda_B, which the parametrisation also
+                    // provides through a fixed weight vector. Two independent routes to one number.
+                    TEST_CHECK_NEARLY_EQUAL(blcdas.phi_minusWW(0.0), blcdas.inverse_moment(1.0), 1e-13);
+                    TEST_CHECK_NEARLY_EQUAL(blcdas.inverse_lambda_plus(), blcdas.inverse_moment(1.0), 1e-13);
+
+                    for (const auto & [omega, expected] : std::array<std::pair<double, double>, 4>{
+                             { { 0.05, +2.4263812104489086 }, { 0.20, +1.1674507347421295 }, { 0.60, -0.0770798485594536 }, { 1.50, -0.2140615260614807 } }
+                    })
+                    {
+                        TEST_CHECK_NEARLY_EQUAL(blcdas.phi_minusWW(omega), expected, 1e-12);
+                    }
+                }
+            }
+
             // pseudo-observables tildephi and the derivative
             {
                 Parameters            p          = Parameters::Defaults();
