@@ -164,7 +164,7 @@ namespace eos
                 virtual double Ybar_A(const double &omega, const double &xi) const final override;
 
                 /*!
-                 * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
+                 * Parameters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
                  *
                  * mu: the renormalization scale
                  */
