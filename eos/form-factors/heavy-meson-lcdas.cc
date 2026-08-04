@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -20,6 +20,7 @@
 
 #include <eos/form-factors/heavy-meson-lcdas-exponential.hh>
 #include <eos/form-factors/heavy-meson-lcdas-flvd2022.hh>
+#include <eos/form-factors/heavy-meson-lcdas-flvd2022-profile.hh>
 #include <eos/utils/exception.hh>
 
 #include <functional>
@@ -38,7 +39,11 @@ namespace eos
         using type = std::function<HeavyMesonLCDAs * (const Parameters &, const Options &)>;
         const std::map<std::string, type> models = {
             { "exponential",      &heavy_meson_lcdas::Exponential::make      },
-            { "FLvD2022",         &heavy_meson_lcdas::FLvD2022::make         }
+            { "FLvD2022",         &heavy_meson_lcdas::FLvD2022::make         },
+            // A [FLvD:2022A] phi_+ with three-particle LCDAs *modelled* from it by the
+            // [BBJW:2018A] profile-function ansatz. A model of its own, not a completion of
+            // "FLvD2022"; see heavy-meson-lcdas-flvd2022-profile.hh for the EOM caveat.
+            { "FLvD2022+profile", &heavy_meson_lcdas::FLvD2022Profile::make  }
         };
 
         auto i = models.find(name);

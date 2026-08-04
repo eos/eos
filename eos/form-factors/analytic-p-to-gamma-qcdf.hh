@@ -51,9 +51,15 @@ namespace eos
         // parameter. It returns the fixed, scale-independent coefficients
         // (1, 0, ..., 0), which reproduces phi_+(omega) = omega / omega_0^2 exp(-omega / omega_0)
         // without any RG evolution; "FLvD2022" uses the full parametrization and evolves the
-        // coefficients from mu_0 to mu. Its direct accessors are not implemented yet, so "all"
-        // contains every contribution supported by FLvD2022 but omits the twist-3,4 soft term;
-        // explicitly requesting that term is rejected. The QCDF construction intentionally forces
+        // coefficients from mu_0 to mu. [FLvD:2022A] parametrizes phi_+ alone and defines neither
+        // of the three-particle LCDAs that the twist-3,4 soft kernels require, so under
+        // "FLvD2022" the composite "all" omits that term and requesting it explicitly is
+        // rejected. "FLvD2022+profile" is a third, distinct model: the same phi_+, but with the
+        // three-particle LCDAs *modelled* from it through the [BBJW:2018A] profile-function
+        // ansatz, which makes the twist-3,4 soft term available at the price of an EOM
+        // inconsistency documented on heavy_meson_lcdas::FLvD2022Profile. It is not a variant of
+        // "FLvD2022": both models coincide only in the terms that [FLvD:2022A] itself defines.
+        // The QCDF construction intentionally forces
         // ``lambda-b-source=FLvD2022`` (overriding any user value) so its kernels and direct LCDA
         // accessors share this authoritative scale. Must be declared before blcdas, which is initialized
         // from it.
