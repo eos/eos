@@ -171,26 +171,38 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                 }
 
                 // [BBJW:2018A], Eqs. (4.13), (4.15), (4.16): xi^soft_(tw-3,4) at E_gamma = 2 GeV.
+                //
+                // Checked for both LCDA models that supply the kernels Xi_1, Xi_2. For
+                // "exponential" this pins the closed forms against the direct numerical
+                // evaluation of Eqs. (4.15), (4.16) reported in issues/1206/DESIGN.md, STEP-04.
+                // For "FLvD2022+profile" it is a **wiring test, not a physics test**: at the
+                // default coefficients a_k = (1, 0, ..., 0) the profile-function ansatz reduces
+                // identically to the exponential kernels, so the agreement holds by construction
+                // (issues/1206/STEP-07-FINDING.md, Sec. 2.3). It pins the implementation and says
+                // nothing about the modelled three-particle LCDAs.
                 for (const auto & [lambda_B, expected] : std::array<std::pair<double, double>, 3>{
                          { { 0.20, +0.02511170 }, { 0.35, +0.01717038 }, { 0.50, +0.01198488 } }
                 })
                 {
                     p["B_u::omega_0@FLvD2022"] = lambda_B;
                     p["B::1/lambda_B_p"]       = 1.0 / 0.46; // deliberately different: QCDF uses omega_0 above
-                    const Options common{
-                        { "lcda-model"_ok, "exponential"_ov }
-                    };
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p,
-                                                                     common
-                                                                             + Options{
-                                                                                 { "contributions"_ok, "none"_ov }
-                    });
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_tw_3_4(p,
-                                                                       common
-                                                                               + Options{
-                                                                                   { "contributions"_ok, "soft-tw-3+4"_ov }
-                    });
-                    TEST_CHECK_NEARLY_EQUAL(average(ff_tw_3_4, 2.0) - average(ff_none, 2.0), expected, 1e-6);
+                    for (const char * lcda_model : { "exponential", "FLvD2022+profile" })
+                    {
+                        const Options common{
+                            { "lcda-model"_ok, qnp::OptionValue(lcda_model) }
+                        };
+                        AnalyticFormFactorPToGammaQCDF<BToGamma> ff_none(p,
+                                                                         common
+                                                                                 + Options{
+                                                                                     { "contributions"_ok, "none"_ov }
+                        });
+                        AnalyticFormFactorPToGammaQCDF<BToGamma> ff_tw_3_4(p,
+                                                                           common
+                                                                                   + Options{
+                                                                                       { "contributions"_ok, "soft-tw-3+4"_ov }
+                        });
+                        TEST_CHECK_NEARLY_EQUAL(average(ff_tw_3_4, 2.0) - average(ff_none, 2.0), expected, 1e-6);
+                    }
                 }
 
                 // xi^soft_(tw-3,4) needs the kernels Xi_1, Xi_2 and hence the three-particle LCDAs,
@@ -203,6 +215,14 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                                                                            Options{
                                                                                {    "lcda-model"_ok,    "FLvD2022"_ov },
                                                                                { "contributions"_ok, "soft-tw-3+4"_ov }
+                }));
+                // FLvD2022+profile models those LCDAs by the [BBJW:2018A] profile-function ansatz,
+                // so the same request must be accepted there. That is a modelling choice, not a
+                // completion of [FLvD:2022A]; see heavy-meson-lcdas-flvd2022-profile.hh.
+                TEST_CHECK_NO_THROW(AnalyticFormFactorPToGammaQCDF<BToGamma>(p,
+                                                                             Options{
+                                                                                 {    "lcda-model"_ok, "FLvD2022+profile"_ov },
+                                                                                 { "contributions"_ok,      "soft-tw-3+4"_ov }
                 }));
 
                 // Equal-model anchor: with matched lambda_B, default coefficients and mu_0 = mu, so
@@ -263,42 +283,80 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(ff_flvd_default.F_A(2.0), ff_flvd_all.F_A(2.0), 1e-12);
                 TEST_CHECK_NEARLY_EQUAL(average(ff_flvd_all, 2.0) - average(ff_flvd_ht, 2.0) - average(ff_flvd_soft, 2.0) + average(ff_flvd_none, 2.0), 0.0, 1e-12);
 
+                // FLvD2022 must not have changed at all by the addition of FLvD2022+profile: the
+                // two models share phi_+, its RG evolution, phi_-^WW and 1/lambda_B, and differ
+                // *only* in the modelled twist-3,4 soft term. Asserted rather than assumed, and in
+                // both form factors, since delta_xi carries the term too.
+                {
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_profile_all(p,
+                                                                            Options{
+                                                                                {    "lcda-model"_ok, "FLvD2022+profile"_ov },
+                                                                                { "contributions"_ok,              "all"_ov }
+                    });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_profile_none(p,
+                                                                             Options{
+                                                                                 {    "lcda-model"_ok, "FLvD2022+profile"_ov },
+                                                                                 { "contributions"_ok,             "none"_ov }
+                    });
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_profile_tw_3_4(p,
+                                                                               Options{
+                                                                                   {    "lcda-model"_ok, "FLvD2022+profile"_ov },
+                                                                                   { "contributions"_ok,      "soft-tw-3+4"_ov }
+                    });
+
+                    // The leading power is untouched by the ansatz.
+                    TEST_CHECK_NEARLY_EQUAL(ff_profile_none.F_V(2.0), ff_flvd_none.F_V(2.0), 1e-12);
+                    TEST_CHECK_NEARLY_EQUAL(ff_profile_none.F_A(2.0), ff_flvd_none.F_A(2.0), 1e-12);
+                    // ... and the whole difference in "all" is the twist-3,4 term.
+                    TEST_CHECK_NEARLY_EQUAL(ff_profile_all.F_V(2.0) - ff_flvd_all.F_V(2.0), ff_profile_tw_3_4.F_V(2.0) - ff_profile_none.F_V(2.0), 1e-12);
+                    TEST_CHECK_NEARLY_EQUAL(ff_profile_all.F_A(2.0) - ff_flvd_all.F_A(2.0), ff_profile_tw_3_4.F_A(2.0) - ff_profile_none.F_A(2.0), 1e-12);
+                    // The term is non-zero, so the checks above are not vacuous.
+                    TEST_CHECK(std::abs(ff_profile_all.F_V(2.0) - ff_flvd_all.F_V(2.0)) > 1e-4);
+                }
+
                 // Every contribution included in "all" must also be independently selectable, and
                 // the composites must be exactly the sum of their parts. This is the guard that
                 // catches a term being added to "all" without being added to the decomposition.
+                // Checked for both models that support all four terms.
                 p["B_u::omega_0@FLvD2022"] = 0.35;
-                const Options exponential{
-                    { "lcda-model"_ok, "exponential"_ov }
-                };
-                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_sum_none(p,
-                                                                     exponential
-                                                                             + Options{
-                                                                                 { "contributions"_ok, "none"_ov }
-                });
-                const double                             F_V_none = ff_sum_none.F_V(2.0);
-
-                const auto term = [&](const char * contribution) -> double
+                for (const char * lcda_model : { "exponential", "FLvD2022+profile" })
                 {
-                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p,
-                                                                exponential
-                                                                        + Options{
-                                                                            { "contributions"_ok, qnp::OptionValue(contribution) }
+                    const Options common{
+                        { "lcda-model"_ok, qnp::OptionValue(lcda_model) }
+                    };
+                    AnalyticFormFactorPToGammaQCDF<BToGamma> ff_sum_none(p,
+                                                                         common
+                                                                                 + Options{
+                                                                                     { "contributions"_ok, "none"_ov }
                     });
-                    return ff.F_V(2.0) - F_V_none;
-                };
+                    const double                             F_V_none = ff_sum_none.F_V(2.0);
 
-                // "soft" = xi^soft_(NLO) + xi^soft_(tw-3,4) + xi^soft_(tw-5,6)
-                TEST_CHECK_NEARLY_EQUAL(term("soft"), term("soft-nlo") + term("soft-tw-3+4") + term("soft-tw-5+6"), 1e-12);
-                // "all" = xi^ht + "soft"
-                TEST_CHECK_NEARLY_EQUAL(term("all"), term("ht") + term("soft"), 1e-12);
-                // ... and therefore "all" is the sum of the four individual terms.
-                TEST_CHECK_NEARLY_EQUAL(term("all"), term("ht") + term("soft-nlo") + term("soft-tw-3+4") + term("soft-tw-5+6"), 1e-12);
+                    const auto term = [&](const char * contribution) -> double
+                    {
+                        AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p,
+                                                                    common
+                                                                            + Options{
+                                                                                { "contributions"_ok, qnp::OptionValue(contribution) }
+                        });
+                        return ff.F_V(2.0) - F_V_none;
+                    };
+
+                    // "soft" = xi^soft_(NLO) + xi^soft_(tw-3,4) + xi^soft_(tw-5,6)
+                    TEST_CHECK_NEARLY_EQUAL(term("soft"), term("soft-nlo") + term("soft-tw-3+4") + term("soft-tw-5+6"), 1e-12);
+                    // "all" = xi^ht + "soft"
+                    TEST_CHECK_NEARLY_EQUAL(term("all"), term("ht") + term("soft"), 1e-12);
+                    // ... and therefore "all" is the sum of the four individual terms.
+                    TEST_CHECK_NEARLY_EQUAL(term("all"), term("ht") + term("soft-nlo") + term("soft-tw-3+4") + term("soft-tw-5+6"), 1e-12);
+                }
 
                 // Which terms each (lcda-model, contributions) pair actually enables. The four
                 // switches are the last entries of diagnostics(). Without this, "soft" and
-                // "soft-nlo" would be silently indistinguishable under FLvD2022.
-                for (const auto & [lcda_model, contributions, expected] : std::array<std::tuple<const char *, const char *, std::array<double, 4>>, 13>{
-                         { // lcda-model      contributions    ht   soft  tw3+4 tw5+6
+                // "soft-nlo" would be silently indistinguishable under FLvD2022. Three models
+                // times seven values of "contributions" is twenty-one combinations; the one
+                // remaining cell is FLvD2022 with "soft-tw-3+4", which throws and is covered
+                // separately above, so twenty rows are pinned here.
+                for (const auto & [lcda_model, contributions, expected] : std::array<std::tuple<const char *, const char *, std::array<double, 4>>, 20>{
+                         { // lcda-model          contributions    ht   soft  tw3+4 tw5+6
                            { "exponential", "none", { 0.0, 0.0, 0.0, 0.0 } },
                           { "exponential", "ht", { 1.0, 0.0, 0.0, 0.0 } },
                           { "exponential", "soft-nlo", { 0.0, 1.0, 0.0, 0.0 } },
@@ -316,7 +374,18 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
                           { "FLvD2022", "soft-nlo", { 0.0, 1.0, 0.0, 0.0 } },
                           { "FLvD2022", "soft-tw-5+6", { 0.0, 0.0, 0.0, 1.0 } },
                           { "FLvD2022", "soft", { 0.0, 1.0, 0.0, 1.0 } },
-                          { "FLvD2022", "all", { 1.0, 1.0, 0.0, 1.0 } } }
+                          { "FLvD2022", "all", { 1.0, 1.0, 0.0, 1.0 } },
+                          // FLvD2022+profile *models* those LCDAs by the [BBJW:2018A] ansatz, so all
+                           // four switches are available and its rows match the exponential model's.
+                           // The identical switch pattern is exactly why the pattern alone cannot tell
+                           // the two models apart; the numerical anchors above do.
+                           { "FLvD2022+profile", "none", { 0.0, 0.0, 0.0, 0.0 } },
+                          { "FLvD2022+profile", "ht", { 1.0, 0.0, 0.0, 0.0 } },
+                          { "FLvD2022+profile", "soft-nlo", { 0.0, 1.0, 0.0, 0.0 } },
+                          { "FLvD2022+profile", "soft-tw-3+4", { 0.0, 0.0, 1.0, 0.0 } },
+                          { "FLvD2022+profile", "soft-tw-5+6", { 0.0, 0.0, 0.0, 1.0 } },
+                          { "FLvD2022+profile", "soft", { 0.0, 1.0, 1.0, 1.0 } },
+                          { "FLvD2022+profile", "all", { 1.0, 1.0, 1.0, 1.0 } } }
                 })
                 {
                     AnalyticFormFactorPToGammaQCDF<BToGamma> ff(p,
@@ -476,6 +545,39 @@ class AnalyticFormFactorBToGammaQCDFTest : public TestCase
 
                 TEST_CHECK_NEARLY_EQUAL(ff.F_A(4.0), 0.150371157254392, 1e-8);
                 TEST_CHECK_NEARLY_EQUAL(ff.F_A(12.0), 0.048711476280875, 1e-8);
+
+
+                // The same generic coefficients under lcda-model=FLvD2022+profile, i.e. with the
+                // modelled twist-3,4 soft term switched on. Regression values.
+                //
+                // These coefficients are far from the surface on which the profile-function ansatz
+                // is EOM-consistent: (1/6) int domega omega^2 phi_+ = 18.3297 GeV^2 against
+                // LambdaBar^2 + (2 lambda_E^2 + lambda_H^2)/6 = 0.2917 GeV^2, a ratio of 62.8. The
+                // ansatz is evaluated anyway, with varkappa taken from the parameter combination,
+                // which is what makes the resulting term a modelling assumption rather than a
+                // controlled correction. The ratio itself is pinned in
+                // heavy-meson-lcdas-flvd2022-profile_TEST.cc.
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_profile(p,
+                                                                    Options{
+                                                                        { "lcda-model"_ok, "FLvD2022+profile"_ov }
+                });
+
+                TEST_CHECK_NEARLY_EQUAL(ff_profile.F_V(k["E_gamma"]), 0.295761908079351, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff_profile.F_A(k["E_gamma"]), 0.260663359999444, 1e-8);
+
+                // FLvD2022 itself is unchanged, and the entire difference is the twist-3,4 term.
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_profile_tw_3_4(p,
+                                                                           Options{
+                                                                               {    "lcda-model"_ok, "FLvD2022+profile"_ov },
+                                                                               { "contributions"_ok,      "soft-tw-3+4"_ov }
+                });
+                AnalyticFormFactorPToGammaQCDF<BToGamma> ff_profile_none(p,
+                                                                         Options{
+                                                                             {    "lcda-model"_ok, "FLvD2022+profile"_ov },
+                                                                             { "contributions"_ok,             "none"_ov }
+                });
+                TEST_CHECK_NEARLY_EQUAL(ff_profile.F_V(k["E_gamma"]) - ff.F_V(k["E_gamma"]), ff_profile_tw_3_4.F_V(k["E_gamma"]) - ff_profile_none.F_V(k["E_gamma"]), 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(ff_profile.F_A(k["E_gamma"]) - ff.F_A(k["E_gamma"]), ff_profile_tw_3_4.F_A(k["E_gamma"]) - ff_profile_none.F_A(k["E_gamma"]), 1e-12);
             }
 
             // "evolution-order" = "LL": check the truncation implemented via switch_nll
