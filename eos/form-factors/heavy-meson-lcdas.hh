@@ -50,7 +50,7 @@ namespace eos
             static std::shared_ptr<HeavyMesonLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
 
             /*!
-             * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
+             * Parameters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
              *
              * mu: the renormalization scale
              */
