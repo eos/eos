@@ -841,6 +841,9 @@ class UncertaintyBandItem(Item):
             if band_type not in ['area', 'outer', 'median']:
                 raise ValueError(f"Unrecognized band type '{band_type}'; must be one of 'area', 'outer', or 'median'")
 
+        if len(self.band) == 0:
+            raise ValueError("Parameter 'band' must contain at least one of 'area', 'outer', or 'median'")
+
         if self.interpolation not in ['linear', 'cubic']:
             raise ValueError(f"Unrecognized interpolation type '{self.interpolation}'; must be either 'linear' or 'cubic'")
 
@@ -990,6 +993,11 @@ class BinnedUncertaintyItem(Item):
 
     This routine expects the uncertainty propagation to have produced a data file.
 
+    :param band: A set of strings that determines which parts of the uncertainty band to draw. Can be any combination of ``'area'``, ``'outer'``, or ``'median'``.
+        Defaults to ``{'area', 'outer', 'median'}``.
+        ``'area'`` fills the area between the lower and upper bounds of the uncertainty band,
+        ``'outer'`` draws the outer lines of the uncertainty band, and ``'median'`` draws the median line of the uncertainty band.
+    :type band: set[str] | list[str] | str
     :param datafile: The path to an existing data file of type :class:`eos.data.Prediction` that contains the uncertainty estimates.
     :type datafile: str
     :param levels: The credibility levels that shall be visualized in percent (optional) ordered from lowest to highest. Defaults to [68.27].
@@ -1020,6 +1028,7 @@ class BinnedUncertaintyItem(Item):
         figure.draw()
     """
 
+    band:set[str]|list[str]|str=field(default_factory=lambda : {'area', 'outer', 'median'})
     datafile:str
     levels:list[float]=field(default_factory=lambda: [68.27])
     range:tuple[float, float]|None=field(default=None)
@@ -1028,6 +1037,20 @@ class BinnedUncertaintyItem(Item):
 
     def __post_init__(self):
         super().__post_init__()
+
+        if isinstance(self.band, str):
+            self.band = {self.band}
+        elif isinstance(self.band, list):
+            self.band = set(self.band)
+        elif not isinstance(self.band, set):
+            raise TypeError(f"Parameter 'band' must be a string, list of strings, or a set of strings, not {type(self.band).__name__}")
+
+        for band_type in self.band:
+            if band_type not in ['area', 'outer', 'median']:
+                raise ValueError(f"Unrecognized band type '{band_type}'; must be one of 'area', 'outer', or 'median'")
+
+        if len(self.band) == 0:
+            raise ValueError("Parameter 'band' must contain at least one of 'area', 'outer', or 'median'")
 
         for level in self.levels:
             if level <= 0 or level >= 100:
@@ -1065,8 +1088,8 @@ class BinnedUncertaintyItem(Item):
     def draw(self, ax):
         """Draw the binned uncertainty band on the provided axes.
 
-        For each bin, the central 68% interval and the median are drawn as a filled box with
-        outer and median lines, optionally rescaled by the inverse of the bin width.
+        Depending on the ``band`` setting, fills the area between the lower and upper bounds,
+        draws the outer lines, and/or draws the median line, optionally all rescaled by the inverse of the bin width.
 
         :param ax: The matplotlib axes onto which the band is drawn.
         :type ax: matplotlib.axes.Axes
@@ -1090,20 +1113,28 @@ class BinnedUncertaintyItem(Item):
                 ocentral /= width
                 ohi      /= width
                 eos.debug(f"{xmin} ... {xmax} -> {ocentral} with interval {olo} .. {ohi}")
-                ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=alpha, label=label)
-                ax.plot([xmin, xmax], [olo,      olo],      color=self.color, alpha=alpha, lw=self.linewidth, ls=self.linestyle)
-                ax.plot([xmin, xmax], [ocentral, ocentral], color=self.color, alpha=alpha, lw=self.linewidth, ls=self.linestyle)
-                ax.plot([xmin, xmax], [ohi,      ohi],      color=self.color, alpha=alpha, lw=self.linewidth, ls=self.linestyle)
+
+                if 'area' in self.band:
+                    ax.fill_between([xmin, xmax], [olo, olo], [ohi, ohi], lw=0, color=self.color, alpha=alpha, label=label)
+                    label = None # do not label anything else if we fill the band area
+                if 'outer' in self.band:
+                    ax.plot([xmin, xmax], [olo,      olo],                              alpha=alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
+                    ax.plot([xmin, xmax], [ohi,      ohi],                              alpha=alpha, color=self.color,              lw=self.linewidth, ls=self.linestyle)
+                    label = None # do not label anything else if we plot the outer lines
+                if 'median' in self.band:
+                    ax.plot([xmin, xmax], [ocentral, ocentral],                         alpha=alpha, color=self.color, label=label, lw=self.linewidth, ls=self.linestyle)
                 label = None
 
     def legend(self):
         """Return the item's legend entry as a list of handle/label pairs.
 
-        Since this item draws one nested region per requested credibility level, the key is
+        The key shows those parts of the band that the ``band`` option selects, i.e. the filled
+        area, the outer lines as the key's boundary, and the median line across its middle. Since
+        this item draws one nested region per requested credibility level, the filled area is
         subdivided into one swatch per region, each carrying the shade that region shows in the
-        plot; see :meth:`Item._legend_composite_patch`.
+        plot; see :meth:`Item._legend_band`.
         """
-        return self._legend_composite_patch(self._alphas)
+        return self._legend_band(self.band, self._alphas)
 
 
 @dataclass(kw_only=True)
