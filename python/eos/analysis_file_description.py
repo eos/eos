@@ -1438,6 +1438,41 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
                         for diagnostic in child.validate_semantics(context)
                     )
 
+        # A posterior must not fix a parameter that one of its own priors varies: the prior wins, so
+        # the fixed value is silently ignored and the file does not describe the intended analysis.
+        # Only the parameters a prior names explicitly are known here; the parameters varied by a
+        # constraint prior are determined by EOS and are therefore not covered.
+        priors_by_name = {
+            prior.name: prior for prior in self.priors
+            if not isinstance(prior, InvalidComponent)
+        }
+        posterior_segments = getattr(self, '_posterior_segments', list(range(len(self.posteriors))))
+        assert len(self.posteriors) == len(posterior_segments)
+        for posterior, segment in zip(self.posteriors, posterior_segments):
+            if isinstance(posterior, InvalidComponent):
+                continue
+            varied = {}
+            for prior_name in posterior.prior:
+                prior = priors_by_name.get(prior_name)
+                if prior is None:
+                    continue
+                for description in prior.descriptions:
+                    names = []
+                    if hasattr(description, 'parameter'):
+                        names.append(description.parameter)
+                    names.extend(getattr(description, 'parameters', ()))
+                    for name in names:
+                        varied.setdefault(str(name), prior_name)
+            for parameter in posterior.fixed_parameters:
+                prior_name = varied.get(str(parameter))
+                if prior_name is not None:
+                    yield Diagnostic(
+                        ('posteriors', segment, 'fixed_parameters', str(parameter)),
+                        Severity.WARNING,
+                        f"Parameter '{parameter}' is fixed by posterior '{posterior.name}' but "
+                        f"varied by its prior '{prior_name}'",
+                    )
+
         step_ids = {step.id for step in self.steps}
         step_segments = getattr(self, '_step_segments', list(range(len(self.steps))))
         assert len(self.steps) == len(step_segments)
