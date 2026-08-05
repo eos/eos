@@ -1,0 +1,24 @@
+# The posterior 'unused-fix' fixes two parameters: one that its likelihood genuinely uses, and one
+# from an unrelated decay (0 -> K pi) that no observable of this analysis can touch. Deep validation
+# must report only the latter.
+likelihoods:
+  - name: TH-pi
+    constraints:
+      - 'B->pi::f_++f_0@RBC+UKQCD:2015A;form-factors=BCL2008-4'
+
+priors:
+  - name: FF-pi
+    descriptions:
+      - { 'parameter': 'B->pi::f_+(0)@BCL2008', 'min': 0.21, 'max': 0.32, 'type': 'uniform' }
+
+posteriors:
+  - name: unused-fix
+    prior:
+      - FF-pi
+    likelihood:
+      - TH-pi
+    global_options:
+      form-factors: 'BCL2008-4'
+    fixed_parameters:
+      'B->pi::b_+^1@BCL2008':      -2.1
+      '0->Kpi::M_(+,0)@KSvD2025':   0.892

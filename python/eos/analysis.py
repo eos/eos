@@ -270,6 +270,12 @@ class Analysis:
             for i in observable.used_parameter_ids():
                 used_parameter_names.add(self.parameters.by_id(i).name())
 
+        # the names of the parameters the likelihood registers as used; consumers (e.g.
+        # eos.AnalysisFile.validate) rely on this rather than recomputing it. Note that an
+        # implementation may register a parameter that its options exclude from the calculation,
+        # so this set is an upper bound on the actual dependence.
+        self.used_parameter_names = frozenset(used_parameter_names)
+
         used_but_unvaried = used_parameter_names - varied_parameter_names - fixed_parameter_names
         if (len(used_but_unvaried) > 0):
             eos.info(f'likelihood probably depends on {len(used_but_unvaried)} parameter(s) that do not appear in the prior; check prior?')
