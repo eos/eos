@@ -4,6 +4,19 @@
 
 ### Changed
 
+### Added
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+
+## [v1.0.21] - 2026-08-05
+
+### Changed
+
 - Rename the following signal PDFs (D. van Dyk)
   - `B->gammalnu::d^2Gamma/dEgamma/dcos(theta_l)` -> `B_u->gammalnu::P(E_gamma,cos(theta_l))`
   - `B_u->enumumu::d^5Gamma` -> `B_u->enumumu::P(q2,k2,z_gamma,z_w,phi)`
