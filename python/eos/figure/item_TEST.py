@@ -227,6 +227,23 @@ class UncertaintyBandItemTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Error when testing item of type 'observable': {e}")
 
+        try:
+            input = """
+            type: uncertainty
+            label: '$\\ell=\\mu$'
+            variable: 'q2'
+            levels: [95]
+            range: [0.02, 11.63]
+            band: ['area']
+            datafile: 'eos/data/prediction_TEST.d/predictions'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'observable': {e}")
+
     def test_legend(self):
 
         # the key of a labelled band is a single entry that reflects the 'band' option; the item
@@ -349,6 +366,73 @@ class BinnedUncertaintyItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'observable': {e}")
+
+        try:
+            input = """
+            type: uncertainty-binned
+            label: '$\\ell=\\mu$'
+            variable: 'q2'
+            range: [0.02, 11.63]
+            band: ['area']
+            datafile: 'eos/data/prediction_TEST.d/predictions-binned'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
+            item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+            _, ax = plt.subplots()
+            item.draw(ax)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'observable': {e}")
+
+    def test_legend(self):
+
+        # as for an unbinned band, the key of a labelled item reflects the 'band' option; the item
+        # need not be prepared, since the key is determined by the item's options alone
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'q2'\ndatafile: 'x'\nlabel: 'band'")
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], BandHandle)
+        self.assertEqual(entries[0][1], 'band')
+
+        # by default every part of the band is drawn, so the key shows a swatch for the single
+        # credibility level, the boundary formed by the outer lines, and the median line
+        handle = entries[0][0]
+        self.assertEqual(len(handle.facecolors), 1)
+        self.assertTrue(handle.boundary)
+        self.assertTrue(handle.median)
+
+        # the filled area carries one swatch per drawn region
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'q2'\ndatafile: 'x'\nlabel: 'band'\n"
+                                                "levels: [68.27, 95.45]")
+        self.assertEqual(len(item.legend()[0][0].facecolors), 2)
+
+        # a band drawn as a median alone is keyed by neither a swatch nor a boundary, i.e. by the
+        # single line that an ordinary line handle would produce
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'q2'\ndatafile: 'x'\nlabel: 'band'\n"
+                                                "band: 'median'")
+        handle = item.legend()[0][0]
+        self.assertEqual(handle.facecolors, [])
+        self.assertFalse(handle.boundary)
+        self.assertTrue(handle.median)
+
+        # the outer lines alone are keyed by an unfilled boundary
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'q2'\ndatafile: 'x'\nlabel: 'band'\n"
+                                                "band: 'outer'")
+        handle = item.legend()[0][0]
+        self.assertEqual(handle.facecolors, [])
+        self.assertTrue(handle.boundary)
+        self.assertFalse(handle.median)
+
+        # the filled area alone is keyed by swatches, with neither a boundary nor a median line
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'q2'\ndatafile: 'x'\nlabel: 'band'\n"
+                                                "band: ['area']")
+        handle = item.legend()[0][0]
+        self.assertEqual(len(handle.facecolors), 1)
+        self.assertFalse(handle.boundary)
+        self.assertFalse(handle.median)
+
+        # an unlabelled band contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'q2'\ndatafile: 'x'")
+        self.assertEqual(list(item.legend()), [])
 
 class ConstraintItemTests(unittest.TestCase):
 
@@ -1318,6 +1402,10 @@ class UncertaintyBandItemValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nband: 'nonsense'")
 
+        # an empty band set is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nband: []")
+
         # an unknown interpolation type is rejected
         with self.assertRaises(ValueError):
             eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\ninterpolation: 'quadratic'")
@@ -1335,6 +1423,35 @@ class UncertaintyBandItemValidationTests(unittest.TestCase):
             eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nrange: [2.0, 1.0]")
 
 class BinnedUncertaintyItemValidationTests(unittest.TestCase):
+
+    def test_band_normalization(self):
+
+        # a single band type given as a string is normalized to a set
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
+                                                "datafile: 'eos/data/prediction_TEST.d/predictions-binned'\nband: 'median'")
+        self.assertEqual(item.band, {'median'})
+
+        # a list of band types is normalized to a set
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
+                                                "datafile: 'eos/data/prediction_TEST.d/predictions-binned'\nband: ['area', 'outer']")
+        self.assertEqual(item.band, {'area', 'outer'})
+
+    def test_invalid(self):
+
+        # a 'band' that is neither a string, list, nor set is rejected
+        with self.assertRaisesRegex(ValueError, "must be a string, list of strings"):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
+                                                "datafile: 'eos/data/prediction_TEST.d/predictions-binned'\nband: 5")
+
+        # an unknown band type is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
+                                                "datafile: 'eos/data/prediction_TEST.d/predictions-binned'\nband: 'nonsense'")
+
+        # an empty band set is rejected
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
+                                                "datafile: 'eos/data/prediction_TEST.d/predictions-binned'\nband: []")
 
     def test_missing_binned_kinematics(self):
 
