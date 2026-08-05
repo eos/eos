@@ -20,6 +20,7 @@ import eos
 
 from eos.deserializable import InvalidComponent
 from eos.diagnostic import Severity
+from eos.validation_context import ValidationContext
 from eos.analysis_file_description import (
     MetadataAuthorDescription,
     MetadataDescription,
@@ -717,6 +718,46 @@ class AnalysisFileDescriptionTests(unittest.TestCase):
         self.assertEqual(by_path[('priors',)].severity, Severity.ERROR)
         self.assertEqual(by_path[('likelihoods',)].severity, Severity.WARNING)
         self.assertEqual(by_path[('posteriors',)].severity, Severity.ERROR)
+
+    def test_fixed_parameter_varied_by_own_prior(self):
+        "A posterior that fixes a parameter one of its own priors varies is contradictory."
+        desc = AnalysisFileDescription.from_dict(
+            priors=[
+                {'name': 'varies-mB', 'descriptions': [
+                    {'type': 'uniform', 'parameter': 'mass::B_d', 'min': 5.2, 'max': 5.4}]},
+                {'name': 'varies-two', 'descriptions': [
+                    {'type': 'transform', 'parameters': ['mass::B_u', 'mass::B_s'],
+                     'shift': [0.0, 0.0], 'transform': [[1.0, 0.0], [0.0, 1.0]],
+                     'min': [5.0, 5.0], 'max': [5.5, 5.5]}]},
+                {'name': 'varies-elsewhere', 'descriptions': [
+                    {'type': 'uniform', 'parameter': 'mass::e', 'min': 0.0, 'max': 1.0}]},
+            ],
+            likelihoods=[{'name': 'll', 'constraints': ['B->pi::f_++f_0@RBC+UKQCD:2015A']}],
+            posteriors=[{
+                'name': 'post',
+                'prior': ['varies-mB', 'varies-two'],
+                'likelihood': ['ll'],
+                'fixed_parameters': {
+                    'mass::B_d': 5.28,   # varied by 'varies-mB'          -> reported
+                    'mass::B_s': 5.37,   # varied by 'varies-two'         -> reported
+                    'mass::e': 0.0005,   # varied by a prior this posterior does not use -> silent
+                    'mass::tau': 1.777,  # varied by no prior at all      -> silent
+                },
+            }],
+        )
+
+        reported = {
+            diagnostic.path[-1]: diagnostic
+            for diagnostic in desc.validate_semantics(ValidationContext(desc))
+            if 'fixed by posterior' in diagnostic.message
+        }
+        self.assertEqual(set(reported), {'mass::B_d', 'mass::B_s'})
+        for diagnostic in reported.values():
+            # a warning, not an error: an error would abort the deep phase and hide every deep
+            # finding elsewhere in the file
+            self.assertEqual(diagnostic.severity, Severity.WARNING)
+        self.assertIn("varied by its prior 'varies-mB'", reported['mass::B_d'].message)
+        self.assertIn("varied by its prior 'varies-two'", reported['mass::B_s'].message)
 
 
 if __name__ == '__main__':
