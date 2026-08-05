@@ -22,7 +22,7 @@ import os
 import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
-from eos.figure.item import CompositeRegionHandle, CompositeRegionHandler
+from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
 from matplotlib import transforms as mtransforms
@@ -226,6 +226,110 @@ class UncertaintyBandItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'observable': {e}")
+
+    def test_legend(self):
+
+        # the key of a labelled band is a single entry that reflects the 'band' option; the item
+        # need not be prepared, since the key is determined by the item's options alone
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlabel: 'band'")
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], BandHandle)
+        self.assertEqual(entries[0][1], 'band')
+
+        # by default every part of the band is drawn, so the key shows a swatch for the single
+        # credibility level, the boundary formed by the outer lines, and the median line
+        handle = entries[0][0]
+        self.assertEqual(len(handle.facecolors), 1)
+        self.assertTrue(handle.boundary)
+        self.assertTrue(handle.median)
+
+        # the filled area carries one swatch per drawn region, with the shades of the drawn regions,
+        # i.e. with opacity decreasing from the innermost region at the left to the outermost at the
+        # right; see CompositeRegionHandle
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlabel: 'band'\nlevels: [68.27, 95.45]")
+        handle = item.legend()[0][0]
+        self.assertEqual(len(handle.facecolors), 2)
+        opacities = [mcolors.to_rgba(facecolor)[3] for facecolor in handle.facecolors]
+        self.assertEqual(opacities, sorted(opacities, reverse=True))
+
+        # a band drawn as a median alone is keyed by neither a swatch nor a boundary ...
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlabel: 'band'\nband: 'median'\n"
+                                                "color: 'C0'\nlinestyle: 'dashed'")
+        handle = item.legend()[0][0]
+        self.assertEqual(handle.facecolors, [])
+        self.assertFalse(handle.boundary)
+        self.assertTrue(handle.median)
+
+        # ... but by a single line across the middle of the key, spanning its full width, i.e. the
+        # key an ordinary line handle would produce. The handler does not consult the legend it is
+        # passed, so None suffices here.
+        artists = BandHandler().create_artists(None, handle, 0.0, 0.0, 30.0, 10.0, 10.0,
+                                              mtransforms.IdentityTransform())
+        self.assertEqual(len(artists), 1)
+        self.assertIsInstance(artists[0], Line2D)
+        self.assertEqual(list(artists[0].get_xdata()), [0.0, 30.0])
+        self.assertEqual(list(artists[0].get_ydata()), [5.0, 5.0])
+        self.assertEqual(mcolors.to_rgba(artists[0].get_color()), mcolors.to_rgba(item.color))
+        self.assertEqual(artists[0].get_linestyle(), '--')
+
+        # the outer lines alone are keyed by an unfilled boundary and nothing else
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlabel: 'band'\nband: 'outer'")
+        handle = item.legend()[0][0]
+        self.assertEqual(handle.facecolors, [])
+        self.assertTrue(handle.boundary)
+        self.assertFalse(handle.median)
+        artists = BandHandler().create_artists(None, handle, 0.0, 0.0, 30.0, 10.0, 10.0,
+                                              mtransforms.IdentityTransform())
+        self.assertEqual(len(artists), 1)
+        self.assertIsInstance(artists[0], Rectangle)
+        self.assertFalse(artists[0].get_fill())
+
+        # the filled area alone is keyed by swatches, with neither a boundary nor a median line
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlabel: 'band'\nband: ['area']\n"
+                                                "levels: [68.27, 95.45]")
+        handle = item.legend()[0][0]
+        self.assertEqual(len(handle.facecolors), 2)
+        self.assertFalse(handle.boundary)
+        self.assertFalse(handle.median)
+        artists = BandHandler().create_artists(None, handle, 0.0, 0.0, 30.0, 10.0, 10.0,
+                                              mtransforms.IdentityTransform())
+        self.assertEqual(len(artists), 2)
+        for swatch in artists:
+            self.assertTrue(swatch.get_fill())
+            self.assertEqual(swatch.get_linewidth(), 0.0)
+
+        # with every part drawn, the key shows the swatches, a boundary around them, and the median
+        # line across their middle, all in the item's line style
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'\nlabel: 'band'\n"
+                                                "band: ['area', 'outer', 'median']\nlevels: [68.27, 95.45]\n"
+                                                "linestyle: 'dashed'")
+        handle = item.legend()[0][0]
+        artists = BandHandler().create_artists(None, handle, 0.0, 0.0, 30.0, 10.0, 10.0,
+                                               mtransforms.IdentityTransform())
+        self.assertEqual(len(artists), len(handle.facecolors) + 2)
+        swatches, boundary, median = artists[:-2], artists[-2], artists[-1]
+        # the swatches abut and together span exactly the width allotted to the key
+        self.assertAlmostEqual(sum(swatch.get_width() for swatch in swatches), 30.0, places=12)
+        for lower, upper in zip(swatches[:-1], swatches[1:]):
+            self.assertAlmostEqual(lower.get_x() + lower.get_width(), upper.get_x(), places=12)
+        # a single unfilled boundary spans the whole key
+        self.assertFalse(boundary.get_fill())
+        self.assertAlmostEqual(boundary.get_width(), 30.0, places=12)
+        self.assertEqual(boundary.get_linestyle(), 'dashed')
+        # the median line is vertically centered within the key and spans its full width
+        self.assertIsInstance(median, Line2D)
+        self.assertEqual(list(median.get_xdata()), [0.0, 30.0])
+        self.assertEqual(list(median.get_ydata()), [5.0, 5.0])
+        self.assertEqual(median.get_linestyle(), '--')
+
+        # a key that shows none of the band's parts is rejected rather than rendered as an empty key
+        with self.assertRaises(ValueError):
+            BandHandle()
+
+        # an unlabelled band contributes no entry
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'x'")
+        self.assertEqual(list(item.legend()), [])
 
 class BinnedUncertaintyItemTests(unittest.TestCase):
 
