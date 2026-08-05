@@ -318,17 +318,38 @@ class AnalysisFile:
         if deep:
             for posterior in self._posteriors:
                 try:
-                    self.analysis(posterior)
+                    analysis = self.analysis(posterior)
                     eos.info(f'Successfully created analysis for posterior \'{posterior}\'')
+                    used_parameters = set(analysis.used_parameter_names)
 
                     for prediction in self._predictions:
                         try:
-                            self.observables(posterior, prediction, eos.Parameters())
+                            observables = self.observables(posterior, prediction, eos.Parameters())
                             eos.info(f'Successfully created prediction \'{prediction}\' set for posterior \'{posterior}\'')
+                            # a posterior's fixed parameters are merged into those of each of its
+                            # predictions, so a parameter the likelihood ignores may still matter here
+                            used_parameters.update(
+                                analysis.parameters.by_id(id).name()
+                                for observable in observables
+                                for id in observable.used_parameter_ids()
+                            )
                         except Exception as e:
                             diagnostics.append(Diagnostic(
                                 ('predictions', prediction), Severity.ERROR,
                                 f'cannot create observables for posterior \'{posterior}\': {e}'
+                            ))
+
+                    # A fixed parameter that neither the likelihood nor any prediction uses has no
+                    # effect. Note that the used-parameter set is an upper bound: an implementation
+                    # may register a parameter that its options exclude from the calculation, so a
+                    # fix that is inert for that reason is not reported here.
+                    for parameter in self._posteriors[posterior].fixed_parameters:
+                        if str(parameter) not in used_parameters:
+                            diagnostics.append(Diagnostic(
+                                ('posteriors', posterior, 'fixed_parameters', str(parameter)),
+                                Severity.WARNING,
+                                f'Parameter \'{parameter}\' is fixed but used by neither the '
+                                f'likelihood nor any prediction of posterior \'{posterior}\''
                             ))
 
                 except Exception as e:

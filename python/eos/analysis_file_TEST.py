@@ -521,6 +521,25 @@ class TestAnalysisFileValidation(unittest.TestCase):
             semantic_locations,
         )
 
+    def test_fixed_but_unused_parameter(self):
+        # the fixture's posterior fixes one parameter its likelihood uses and one from an unrelated
+        # decay; only the latter has no effect and must be reported
+        af = eos.AnalysisFile(_TESTD / 'fixed-but-unused-parameter.yaml')
+
+        reported = {
+            diagnostic.path[-1]
+            for diagnostic in af.validate(deep=True)
+            if 'is fixed but used by neither' in diagnostic.message
+        }
+        self.assertEqual(reported, {'0->Kpi::M_(+,0)@KSvD2025'})
+        self.assertNotIn('B->pi::b_+^1@BCL2008', reported)
+
+        # the check needs the assembled likelihood, so the side-effect-free phases cannot see it
+        self.assertFalse(any(
+            'is fixed but used by neither' in diagnostic.message
+            for diagnostic in af.validate(deep=False)
+        ))
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)
