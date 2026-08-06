@@ -5,15 +5,31 @@ on:
 
 name: Check if the commit messages are well-formed
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
+      # Check out the *base* repository, not the pull request's head: ``gitlint``
+      # reads its configuration -- including ``extra-path``, which imports Python
+      # rules from the working tree -- from the checkout. A fork-controlled tree
+      # would therefore run arbitrary code in this privileged
+      # ``pull_request_target`` context. Only the pull request's commit objects
+      # are fetched below, which is all that ``gitlint --commit`` needs in order
+      # to inspect their messages.
       - uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
           fetch-depth: 0 # download all history across all branches
-          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Fetch the commits of the pull request
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        shell: bash
+        run: |
+          git fetch --no-tags origin \
+            "+refs/pull/$PR_NUMBER/head:refs/remotes/origin/pull/$PR_NUMBER/head"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10.13'
@@ -26,6 +42,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
         shell: bash
         run: |
           echo "Examining commits from $BASE_SHA to $HEAD_SHA"
@@ -43,7 +60,7 @@ jobs:
           done
           if [[ -f comment-body ]] ; then \
             echo "Commenting on PR with gitlint output" ; \
-            gh pr comment ${{ github.event.pull_request.number }} \
+            gh pr comment "$PR_NUMBER" \
               --body-file comment-body ; \
             cat comment-body ; \
           else \
