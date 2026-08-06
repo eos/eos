@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2024 Danny van Dyk
- * Copyright (c) 2025 Matthew Kirk
+ * Copyright (c) 2024-2026 Danny van Dyk
+ * Copyright (c) 2025      Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -93,6 +93,20 @@ namespace eos
                                                                            Unit::None(),
                                                                            &TauToKPiNeutrino::total_branching_ratio,
                                                                            std::make_tuple(),
+                                                                           Options{ { "K"_ok, "K_u"_ov } }
+                                                                           ),
+                                                           make_observable("tau->K_Spinu::d2Gamma/dq2/dcos(theta_K)",
+                                                                           R"(d^2\Gamma(\tau^- \to K_S \pi^- \nu_\tau)/dq^2/d\cos\theta_K)",
+                                                                           Unit::InverseGeV(),
+                                                                           &TauToKPiNeutrino::double_differential_decay_width,
+                                                                           std::make_tuple("q2", "cos(theta_K)"),
+                                                                           Options{ { "K"_ok, "K_S"_ov } }
+                                                                           ),
+                                                           make_observable("tau->K^-pinu::d2Gamma/dq2/dcos(theta_K)",
+                                                                           R"(d^2\Gamma(\tau^- \to K^- \pi^0 \nu_\tau)/dq^2/d\cos\theta_K)",
+                                                                           Unit::InverseGeV(),
+                                                                           &TauToKPiNeutrino::double_differential_decay_width,
+                                                                           std::make_tuple("q2", "cos(theta_K)"),
                                                                            Options{ { "K"_ok, "K_u"_ov } }
                                                                            ),
         });

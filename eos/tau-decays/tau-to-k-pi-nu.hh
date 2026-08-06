@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
- * Copyright (c) 2025 Matthew Kirk
+ * Copyright (c) 2025-2026 Danny van Dyk
+ * Copyright (c) 2025      Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -38,6 +38,10 @@ namespace eos
             // Differential Observables
             double differential_branching_ratio(const double & k2) const;
             double differential_decay_width(const double & k2) const;
+
+            // Two-fold differential observables in q^2 and the Kpi helicity angle theta_K
+            double double_differential_decay_width(const double & k2, const double & cos_theta_k) const;
+            double double_differential_branching_ratio(const double & k2, const double & cos_theta_k) const;
 
             // Integrated Observables
             double total_branching_ratio() const;
