@@ -14,3 +14,15 @@ jobs:
         with:
           python-version: "3.10.13"
       - uses: pre-commit/action@v3.0.1
+
+      # The formatting hooks are required to be idempotent: a second pass must
+      # not introduce any change beyond what the first pass already produced.
+      - name: Check that the formatters are idempotent
+        if: always()
+        shell: bash
+        run: |
+          pre-commit run --all-files > /dev/null 2>&1 || true
+          git diff > "${RUNNER_TEMP}/pass1.diff"
+          pre-commit run --all-files > /dev/null 2>&1 || true
+          git diff > "${RUNNER_TEMP}/pass2.diff"
+          diff "${RUNNER_TEMP}/pass1.diff" "${RUNNER_TEMP}/pass2.diff"
