@@ -2,7 +2,8 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 """Compute the overall C++, Python, and combined code coverage, append the
-result to a CSV file, and generate an SVG badge from the most recent entry.
+result to a CSV file, generate an SVG badge from the most recent entry, and
+optionally write a per-file summary.
 
 This script does *not* create a full coverage report; it only processes the
 intermediate summary files produced by ``gcovr`` and ``coverage.py``.
@@ -14,8 +15,28 @@ import json
 import os
 
 
-def cpp_line_counts(report_path):
-    """Return (covered, total) physical C++ lines from a gcovr JSON report.
+def relative_to_root(path, root):
+    """Return ``path`` relative to ``root`` if it lies below it, else unchanged.
+
+    ``gcovr`` reports paths relative to its ``--root``, while ``coverage.py``
+    reports absolute paths for sources outside the build directory. Making both
+    relative to the source checkout yields comparable, host-independent names in
+    the per-file summary.
+    """
+    if root is None:
+        return path
+    absolute = os.path.abspath(path)
+    prefix   = os.path.abspath(root)
+    if absolute == prefix or absolute.startswith(prefix + os.sep):
+        return os.path.relpath(absolute, prefix)
+    return path
+
+
+def cpp_line_counts(report_path, root=None):
+    """Return per-file and overall physical C++ line counts from a gcovr report.
+
+    The result is a pair ``(per_file, (covered, total))``, where ``per_file``
+    maps a file name to its own ``(covered, total)`` pair.
 
     A template header included in many translation units is instantiated once
     per unit, and ``gcov`` emits a separate coverage record for each
@@ -31,7 +52,8 @@ def cpp_line_counts(report_path):
 
     For robustness we fall back to the top-level ``line_total``/``line_covered``
     fields when the report contains no per-line data (e.g. a ``--json-summary``
-    file); those numbers carry the inflation described above.
+    file); those numbers carry the inflation described above, and no per-file
+    data is available in that case.
     """
     with open(report_path) as f:
         data = json.load(f)
@@ -40,31 +62,55 @@ def cpp_line_counts(report_path):
     if not files or 'lines' not in files[0]:
         total   = int(data.get('line_total', 0))
         covered = int(data.get('line_covered', 0))
-        return covered, total
+        return {}, (covered, total)
 
-    # Maximum hit count seen for each physical (file, line).
+    # Maximum hit count seen for each physical line of each file.
     best = {}
     for entry in files:
-        fname = entry['file']
+        fname    = relative_to_root(entry['file'], root)
+        per_line = best.setdefault(fname, {})
         for line in entry.get('lines', []):
-            key   = (fname, line['line_number'])
-            count = line.get('count', 0)
-            if count > best.get(key, -1):
-                best[key] = count
+            number = line['line_number']
+            count  = line.get('count', 0)
+            if count > per_line.get(number, -1):
+                per_line[number] = count
 
-    total   = len(best)
-    covered = sum(1 for count in best.values() if count > 0)
-    return covered, total
+    per_file = {
+        fname: (sum(1 for count in lines.values() if count > 0), len(lines))
+        for fname, lines in best.items()
+    }
+    covered = sum(entry[0] for entry in per_file.values())
+    total   = sum(entry[1] for entry in per_file.values())
+    return per_file, (covered, total)
 
 
-def python_line_counts(json_path):
-    """Return (covered, total) Python statements from a coverage.py JSON file."""
+def python_line_counts(json_path, root=None):
+    """Return per-file and overall Python statement counts from a coverage.py file.
+
+    The result is a pair ``(per_file, (covered, total))``, where ``per_file``
+    maps a file name to its own ``(covered, total)`` pair. The overall counts
+    are taken from the report's ``totals`` block where available, so that they
+    are unaffected by any normalisation of the file names.
+    """
     with open(json_path) as f:
         data = json.load(f)
-    totals  = data.get('totals', {})
-    covered = int(totals.get('covered_lines', 0))
-    total   = int(totals.get('num_statements', 0))
-    return covered, total
+
+    per_file = {}
+    for fname, entry in (data.get('files') or {}).items():
+        summary = entry.get('summary', {})
+        per_file[relative_to_root(fname, root)] = (
+            int(summary.get('covered_lines', 0)),
+            int(summary.get('num_statements', 0)),
+        )
+
+    totals = data.get('totals') or {}
+    if totals:
+        covered = int(totals.get('covered_lines', 0))
+        total   = int(totals.get('num_statements', 0))
+    else:
+        covered = sum(entry[0] for entry in per_file.values())
+        total   = sum(entry[1] for entry in per_file.values())
+    return per_file, (covered, total)
 
 
 def percentage(covered, total):
@@ -80,6 +126,23 @@ def append_csv(csv_path, date, cpp, python, combined):
         if is_new:
             writer.writerow(['date', 'cpp', 'python', 'combined'])
         writer.writerow([date, f'{cpp:.2f}', f'{python:.2f}', f'{combined:.2f}'])
+
+
+def write_files_csv(csv_path, cpp_per_file, python_per_file):
+    """Write the per-file coverage summary, replacing any previous version.
+
+    In contrast to the historical ``coverage.csv``, this file is overwritten on
+    every run: the time series lives in the git history of the coverage
+    repository, and the file itself stays small (a few tens of kiB) and yields
+    readable diffs. Rows are sorted so that the diffs remain stable.
+    """
+    with open(csv_path, 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['language', 'file', 'covered', 'total', 'percentage'])
+        for language, per_file in (('cpp', cpp_per_file), ('python', python_per_file)):
+            for fname in sorted(per_file):
+                covered, total = per_file[fname]
+                writer.writerow([language, fname, covered, total, f'{percentage(covered, total):.2f}'])
 
 
 def most_recent_entry(csv_path):
@@ -180,10 +243,14 @@ def main():
     parser.add_argument('--python-json', required=True, help='path to the coverage.py JSON file')
     parser.add_argument('--csv',         required=True, help='path to the coverage CSV file to append to')
     parser.add_argument('--badge',       required=True, help='path to the SVG badge file to (re)generate')
+    parser.add_argument('--files-csv',   required=False,
+                        help='path to the per-file coverage CSV file to (re)generate')
+    parser.add_argument('--source-root', required=False,
+                        help='path to the source checkout; file names are reported relative to it')
     args = parser.parse_args()
 
-    cpp_covered, cpp_total       = cpp_line_counts(args.cpp_summary)
-    python_covered, python_total = python_line_counts(args.python_json)
+    cpp_per_file,    (cpp_covered, cpp_total)       = cpp_line_counts(args.cpp_summary, args.source_root)
+    python_per_file, (python_covered, python_total) = python_line_counts(args.python_json, args.source_root)
 
     cpp_pct      = percentage(cpp_covered, cpp_total)
     python_pct   = percentage(python_covered, python_total)
@@ -195,6 +262,11 @@ def main():
           f'({cpp_covered + python_covered}/{cpp_total + python_total})')
 
     append_csv(args.csv, args.date, cpp_pct, python_pct, combined_pct)
+
+    if args.files_csv:
+        write_files_csv(args.files_csv, cpp_per_file, python_per_file)
+        print(f'per-file summary: {len(cpp_per_file)} C++ and {len(python_per_file)} Python files '
+              f'written to {args.files_csv}')
 
     # The badge always reflects the most recent entry in the CSV file.
     cpp_latest, python_latest, combined_latest = most_recent_entry(args.csv)
