@@ -16,14 +16,28 @@ jobs:
       # This workflow deliberately does not check out the pull request's code.
       # ``pull_request_target`` runs with the base repository's token and secrets,
       # so placing a fork's files in the workspace would invite a "pwn request".
-      # The list of changed files is obtained from the API instead.
+      # The labels and the list of changed files are obtained from the API instead.
       - name: Check for Changelog update
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
+          # Changes that do not touch the project's source code -- infrastructure
+          # and workflow changes, for example -- are not recorded in Changelog.md.
+          # Labelling a pull request requires write access to this repository, so
+          # the author of a fork's pull request cannot grant this waiver. Note that
+          # applying the label does not re-run this workflow; re-run it by hand.
+          WAIVER_LABEL: no-changelog
         shell: bash
         run: |
+          labels=$(gh api "repos/$GH_REPO/pulls/$PR_NUMBER" --jq '.labels[].name')
+
+          if grep -Fxq "$WAIVER_LABEL" <<< "$labels"
+          then
+            echo "This pull request carries the '$WAIVER_LABEL' label, not checking for a Changelog.md update."
+            exit 0
+          fi
+
           echo "Checking the files changed by pull request #$PR_NUMBER"
           changed_files=$(gh api --paginate \
             "repos/$GH_REPO/pulls/$PR_NUMBER/files" --jq '.[].filename')
@@ -34,6 +48,6 @@ jobs:
             exit 0
           else
             echo 'PRs should update Changelog.md, commenting on PR.'
-            gh pr comment "$PR_NUMBER" -b 'Please add a summary of your changes to `Changelog.md`'
+            gh pr comment "$PR_NUMBER" -b "Please add a summary of your changes to \`Changelog.md\`. If none of these changes affect the project's source code, a maintainer can apply the \`$WAIVER_LABEL\` label instead."
             exit 1
           fi
