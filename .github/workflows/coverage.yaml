@@ -113,7 +113,7 @@ jobs:
           # 'coverage-summary.py' so that template headers instantiated in
           # many translation units are not counted once per instantiation)
           # while printing a human-readable summary to the log. Neither
-          # report is committed; only the CSV and badge are.
+          # report is committed; only the CSV files and the badge are.
           gcovr \
             --root _src \
             --object-directory _build \
@@ -149,12 +149,17 @@ jobs:
         run: |
           export DATE=$(date -u +%Y-%m-%d)
           # Append the overall percentages to 'coverage.csv' and generate
-          # 'badge.svg' from the most recent entry.
+          # 'badge.svg' from the most recent entry. In addition, write the
+          # per-file summary derived from the same deduplicated data to
+          # 'coverage-by-file.csv'; that file is overwritten on every run, so
+          # its history lives in the git history of the coverage repository.
           python3 _src/.github/scripts/coverage-summary.py \
             --date "${DATE}" \
             --cpp-summary _intermediate/coverage-cpp.json \
             --python-json _intermediate/coverage-python.json \
+            --source-root _src \
             --csv _coverage/coverage.csv \
+            --files-csv _coverage/coverage-by-file.csv \
             --badge _coverage/badge.svg
 
       - name: Commit and push the coverage results
