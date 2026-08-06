@@ -1,11 +1,11 @@
 on:
-    push:
-        branches: [ release, master, testing ]
+  push:
+    branches: [release, master, testing]
 
-    pull_request:
+  pull_request:
 
-    release:
-        types: [ published ]
+  release:
+    types: [published]
 
 name: Build/Check/Deploy on Ubuntu
 
@@ -14,394 +14,394 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-    ubuntu-build:
-        strategy:
-            matrix:
-                cfg:
-                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
-        name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-24.04
-        timeout-minutes: 60
-        container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
-        steps:
-            - name: Checkout git repository
-              uses: actions/checkout@v4
-              with:
-                path: _src/
+  ubuntu-build:
+    strategy:
+      matrix:
+        cfg:
+          - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
+          - { os: resolute, cxx: clang++-20, cxxflags: '-O2 -g -march=x86-64' }
+    name: Build on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v4
+        with:
+          path: _src/
 
-            - name: Fetch tags
-              shell: bash
-              run: |
-                pushd _src
-                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-                popd
+      - name: Fetch tags
+        shell: bash
+        run: |
+          pushd _src
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          popd
 
-            - name: Create build directory
-              shell: bash
-              run: mkdir -p _build
+      - name: Create build directory
+        shell: bash
+        run: mkdir -p _build
 
-            - name: Configure
-              shell: bash
-              env:
-                CXX: "${{ matrix.cfg.cxx }}"
-                CXXFLAGS: "${{ matrix.cfg.cxxflags }}"
-              run: |
-                pushd _src
-                ./autogen.bash
-                popd
-                pushd _build
-                which ${CXX} || ( echo c++ compiler not found ; exit 1 )
-                ../_src/configure \
-                  --enable-python \
-                  --prefix=/opt/venv/ \
-                  --enable-lto \
-                  || ( cat config.log ; exit 2 )
-                popd
-                tar caf _src.tar _src
+      - name: Configure
+        shell: bash
+        env:
+          CXX: '${{ matrix.cfg.cxx }}'
+          CXXFLAGS: '${{ matrix.cfg.cxxflags }}'
+        run: |
+          pushd _src
+          ./autogen.bash
+          popd
+          pushd _build
+          which ${CXX} || ( echo c++ compiler not found ; exit 1 )
+          ../_src/configure \
+            --enable-python \
+            --prefix=/opt/venv/ \
+            --enable-lto \
+            || ( cat config.log ; exit 2 )
+          popd
+          tar caf _src.tar _src
 
-            - name: Build
-              shell: bash
-              run: |
-                pushd _build
-                # For g++, emit one SARIF file per translation unit alongside
-                # each object file. Appending the flag to CXX leaves the
-                # configured CXXFLAGS/AM_CXXFLAGS (and thus the set of warnings)
-                # untouched. clang's SARIF output is experimental and is skipped.
-                DIAG=""
-                [[ "${{ matrix.cfg.cxx }}" == g++* ]] && DIAG="-fdiagnostics-format=sarif-file"
-                make -j4 all CXX="${{ matrix.cfg.cxx }} ${DIAG}"
-                popd
-                tar caf _build.tar _build
+      - name: Build
+        shell: bash
+        run: |
+          pushd _build
+          # For g++, emit one SARIF file per translation unit alongside
+          # each object file. Appending the flag to CXX leaves the
+          # configured CXXFLAGS/AM_CXXFLAGS (and thus the set of warnings)
+          # untouched. clang's SARIF output is experimental and is skipped.
+          DIAG=""
+          [[ "${{ matrix.cfg.cxx }}" == g++* ]] && DIAG="-fdiagnostics-format=sarif-file"
+          make -j4 all CXX="${{ matrix.cfg.cxx }} ${DIAG}"
+          popd
+          tar caf _build.tar _build
 
-            - name: Collect compiler warnings (merge SARIF)
-              if: always() && startsWith(matrix.cfg.cxx, 'g++')
-              shell: bash
-              run: |
-                python3 _src/.github/scripts/collect-warnings.py \
-                  --build-dir _build --src-dir _src \
-                  --sarif-out eos.sarif --list-out warnings.txt
-                # Record the ref/sha the SARIF was produced for, so the companion
-                # ``workflow_run`` workflow can attribute the code-scanning results
-                # to the correct commit/PR -- including pull requests from forks,
-                # whose read-only token cannot upload SARIF from this job.
-                {
-                  echo "ref=${{ github.ref }}"
-                  echo "sha=${{ github.sha }}"
-                } > sarif-metadata.txt
+      - name: Collect compiler warnings (merge SARIF)
+        if: always() && startsWith(matrix.cfg.cxx, 'g++')
+        shell: bash
+        run: |
+          python3 _src/.github/scripts/collect-warnings.py \
+            --build-dir _build --src-dir _src \
+            --sarif-out eos.sarif --list-out warnings.txt
+          # Record the ref/sha the SARIF was produced for, so the companion
+          # ``workflow_run`` workflow can attribute the code-scanning results
+          # to the correct commit/PR -- including pull requests from forks,
+          # whose read-only token cannot upload SARIF from this job.
+          {
+            echo "ref=${{ github.ref }}"
+            echo "sha=${{ github.sha }}"
+          } > sarif-metadata.txt
 
-            - name: Upload warnings list as artifact
-              if: always() && startsWith(matrix.cfg.cxx, 'g++')
-              uses: actions/upload-artifact@v4
-              with:
-                name: eos-warnings-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: |
-                  eos.sarif
-                  warnings.txt
-                  sarif-metadata.txt
+      - name: Upload warnings list as artifact
+        if: always() && startsWith(matrix.cfg.cxx, 'g++')
+        uses: actions/upload-artifact@v4
+        with:
+          name: eos-warnings-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+          path: |
+            eos.sarif
+            warnings.txt
+            sarif-metadata.txt
 
-            - name: Fail on new compiler warnings
-              if: always() && startsWith(matrix.cfg.cxx, 'g++')
-              shell: bash
-              run: |
-                python3 _src/.github/scripts/collect-warnings.py \
-                  --list-in warnings.txt \
-                  --baseline _src/.github/warnings-baseline.txt
+      - name: Fail on new compiler warnings
+        if: always() && startsWith(matrix.cfg.cxx, 'g++')
+        shell: bash
+        run: |
+          python3 _src/.github/scripts/collect-warnings.py \
+            --list-in warnings.txt \
+            --baseline _src/.github/warnings-baseline.txt
 
-            - name: Upload configured source as artifact
-              uses: actions/upload-artifact@v4
-              with:
-                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src.tar
+      - name: Upload configured source as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+          path: _src.tar
 
-            - name: Upload build as artifact
-              uses: actions/upload-artifact@v4
-              with:
-                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _build.tar
+      - name: Upload build as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+          path: _build.tar
 
-    ubuntu-build-doc:
-        needs: ubuntu-build
-        strategy:
-            matrix:
-                cfg:
-                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-        name: Documentation on ${{ matrix.cfg.os }}
-        runs-on: ubuntu-24.04
-        timeout-minutes: 60
-        container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
-        steps:
-            - name: Download configured source as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+  ubuntu-build-doc:
+    needs: ubuntu-build
+    strategy:
+      matrix:
+        cfg:
+          - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
+    name: Documentation on ${{ matrix.cfg.os }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+    steps:
+      - name: Download configured source as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
-            - name: Download build as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+      - name: Download build as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
-            - name: Build documentation
-              shell: bash
-              run: |
-                tar fx _src.tar
-                pushd _src
-                # determine the release id
-                export EOS_RELEASE=$(git describe --abbrev=0 --tags --exact-match HEAD)
-                popd
-                tar fx _build.tar
-                pushd _build
-                make install
-                make -C ../_src/doc/ doc-check
-                make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
-                if [[ -n ${EOS_RELEASE} ]] ; then
-                    mv $(pwd)/doc/html $(pwd)/doc/${EOS_RELEASE}
-                    mkdir $(pwd)/doc/html
-                    mv $(pwd)/doc/${EOS_RELEASE} $(pwd)/doc/html/
-                fi
-                popd
-                tar caf doc.tar _build/doc/html
+      - name: Build documentation
+        shell: bash
+        run: |
+          tar fx _src.tar
+          pushd _src
+          # determine the release id
+          export EOS_RELEASE=$(git describe --abbrev=0 --tags --exact-match HEAD)
+          popd
+          tar fx _build.tar
+          pushd _build
+          make install
+          make -C ../_src/doc/ doc-check
+          make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
+          if [[ -n ${EOS_RELEASE} ]] ; then
+              mv $(pwd)/doc/html $(pwd)/doc/${EOS_RELEASE}
+              mkdir $(pwd)/doc/html
+              mv $(pwd)/doc/${EOS_RELEASE} $(pwd)/doc/html/
+          fi
+          popd
+          tar caf doc.tar _build/doc/html
 
-            - name: Upload documentation as artifact
-              uses: actions/upload-artifact@v4
-              with:
-                name: eos-doc-${{ github.sha }}
-                path: doc.tar
+      - name: Upload documentation as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eos-doc-${{ github.sha }}
+          path: doc.tar
 
-    ubuntu-check:
-        needs: ubuntu-build
-        strategy:
-            matrix:
-                cfg:
-                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
-        name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-24.04
-        timeout-minutes: 60
-        container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
-        steps:
-            - name: Download configured source as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+  ubuntu-check:
+    needs: ubuntu-build
+    strategy:
+      matrix:
+        cfg:
+          - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
+          - { os: resolute, cxx: clang++-20, cxxflags: '-O2 -g -march=x86-64' }
+    name: Check on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+    steps:
+      - name: Download configured source as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
-            - name: Download build as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+      - name: Download build as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
-            - name: Check
-              shell: bash
-              run: |
-                tar fx _src.tar
-                tar fx _build.tar
-                pushd _build
-                make -j4 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-python --prefix=/usr" VERBOSE=1
-                popd
+      - name: Check
+        shell: bash
+        run: |
+          tar fx _src.tar
+          tar fx _build.tar
+          pushd _build
+          make -j4 distcheck DISTCHECK_CONFIGURE_FLAGS="--enable-python --prefix=/usr" VERBOSE=1
+          popd
 
-    ubuntu-examples:
-        needs: ubuntu-build
-        strategy:
-            matrix:
-                cfg:
-                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-                    - { os: resolute, cxx: clang++-20,   cxxflags: '-O2 -g -march=x86-64' }
-        name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-24.04
-        timeout-minutes: 60
-        container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
-        steps:
-            - name: Download configured source as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+  ubuntu-examples:
+    needs: ubuntu-build
+    strategy:
+      matrix:
+        cfg:
+          - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
+          - { os: resolute, cxx: clang++-20, cxxflags: '-O2 -g -march=x86-64' }
+    name: Run examples on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+    steps:
+      - name: Download configured source as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-source-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
-            - name: Download build as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+      - name: Download build as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-build-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
 
-            - name: Run examples
-              shell: bash
-              run: |
-                tar fx _src.tar
-                tar fx _build.tar
-                pushd _build
-                make install
-                popd
-                pushd _src
-                make -C examples/    examples
-                make -C examples/cli examples
-                popd
+      - name: Run examples
+        shell: bash
+        run: |
+          tar fx _src.tar
+          tar fx _build.tar
+          pushd _build
+          make install
+          popd
+          pushd _src
+          make -C examples/    examples
+          make -C examples/cli examples
+          popd
 
-            - name: Upload processed example notebooks as artifact
-              if: always()
-              uses: actions/upload-artifact@v4
-              with:
-                name: eos-examples-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
-                path: _src/examples/*.ipynb
+      - name: Upload processed example notebooks as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eos-examples-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}
+          path: _src/examples/*.ipynb
 
-    ubuntu-deploy:
-        needs: [ ubuntu-build, ubuntu-build-doc, ubuntu-check, ubuntu-examples ]
-        strategy:
-            matrix:
-                cfg:
-                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-        name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
-        runs-on: ubuntu-24.04
-        timeout-minutes: 60
-        container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
-        steps:
-            - name: Checkout git repository
-              uses: actions/checkout@v4
-              with:
-                path: _src/
+  ubuntu-deploy:
+    needs: [ubuntu-build, ubuntu-build-doc, ubuntu-check, ubuntu-examples]
+    strategy:
+      matrix:
+        cfg:
+          - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
+    name: Deploy on ${{ matrix.cfg.os }} using ${{ matrix.cfg.cxx }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    container:
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v4
+        with:
+          path: _src/
 
-            - name: Fetch tags
-              shell: bash
-              run: |
-                pushd _src
-                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-                popd
+      - name: Fetch tags
+        shell: bash
+        run: |
+          pushd _src
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          popd
 
-            - name: Create build directory
-              shell: bash
-              run: mkdir -p _build
+      - name: Create build directory
+        shell: bash
+        run: mkdir -p _build
 
-            # We cannot resuse the configure & build artifacts for deployment,
-            # since we need to target '/usr' rather than the virtual environment
-            # in '/opt/venv', and we need to modify the pythondir.
-            - name: Configure
-              shell: bash
-              env:
-                CXX: "${{ matrix.cfg.cxx }}"
-                CXXFLAGS: "${{ matrix.cfg.cxxflags }}"
-              run: |
-                pushd _src
-                ./autogen.bash
-                popd
-                pushd _build
-                which ${CXX} || ( echo c++ compiler not found ; exit 1 )
-                ../_src/configure \
-                  --enable-python \
-                  --prefix=/usr \
-                  --with-custom-pythondir=dist-packages \
-                  --enable-lto \
-                  || ( cat config.log ; exit 2 )
-                popd
+      # We cannot resuse the configure & build artifacts for deployment,
+      # since we need to target '/usr' rather than the virtual environment
+      # in '/opt/venv', and we need to modify the pythondir.
+      - name: Configure
+        shell: bash
+        env:
+          CXX: '${{ matrix.cfg.cxx }}'
+          CXXFLAGS: '${{ matrix.cfg.cxxflags }}'
+        run: |
+          pushd _src
+          ./autogen.bash
+          popd
+          pushd _build
+          which ${CXX} || ( echo c++ compiler not found ; exit 1 )
+          ../_src/configure \
+            --enable-python \
+            --prefix=/usr \
+            --with-custom-pythondir=dist-packages \
+            --enable-lto \
+            || ( cat config.log ; exit 2 )
+          popd
 
-            - name: Build
-              shell: bash
-              run: |
-                pushd _build
-                make -j4 all
-                popd
+      - name: Build
+        shell: bash
+        run: |
+          pushd _build
+          make -j4 all
+          popd
 
-            - name: Build .deb file
-              shell: bash
-              run: |
-                pushd _src
-                export EOS_VERSION=$(git describe --abbrev=0 --tags)
-                export EOS_VERSION=${EOS_VERSION#v}
-                popd
-                pushd _build
-                echo Building debian package for ${{ matrix.cfg.os }}
-                export DESTDIR=/tmp/eos-${EOS_VERSION}
-                make deb DESTDIR=${DESTDIR} OS=${{ matrix.cfg.os }}
-                dpkg -i /tmp/eos-${EOS_VERSION}.deb
-                popd
+      - name: Build .deb file
+        shell: bash
+        run: |
+          pushd _src
+          export EOS_VERSION=$(git describe --abbrev=0 --tags)
+          export EOS_VERSION=${EOS_VERSION#v}
+          popd
+          pushd _build
+          echo Building debian package for ${{ matrix.cfg.os }}
+          export DESTDIR=/tmp/eos-${EOS_VERSION}
+          make deb DESTDIR=${DESTDIR} OS=${{ matrix.cfg.os }}
+          dpkg -i /tmp/eos-${EOS_VERSION}.deb
+          popd
 
-            - name: Deploy .deb file to Packagecloud.io
-              if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/v')
-              shell: bash
-              env:
-                PACKAGECLOUD_TOKEN: "${{ secrets.PACKAGECLOUD_TOKEN }}"
-              run: |
-                pushd _src
-                export EOS_VERSION=$(git describe --abbrev=0 --tags)
-                export EOS_VERSION=${EOS_VERSION#v}
-                popd
-                package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
+      - name: Deploy .deb file to Packagecloud.io
+        if: github.event_name == 'release' && startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          PACKAGECLOUD_TOKEN: '${{ secrets.PACKAGECLOUD_TOKEN }}'
+        run: |
+          pushd _src
+          export EOS_VERSION=$(git describe --abbrev=0 --tags)
+          export EOS_VERSION=${EOS_VERSION#v}
+          popd
+          package_cloud push eos/eos/ubuntu/${{ matrix.cfg.os }} /tmp/eos-${EOS_VERSION}.deb
 
-            - name: Upload .deb file as artifact
-              uses: actions/upload-artifact@v4
-              with:
-                name: eos-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}.deb
-                path: /tmp/eos-*.deb
+      - name: Upload .deb file as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eos-${{ matrix.cfg.os }}-${{ matrix.cfg.cxx }}-${{ github.sha }}.deb
+          path: /tmp/eos-*.deb
 
-    ubuntu-deploy-doc:
-        needs: ubuntu-build-doc
-        # Share the 'doc-deploy' concurrency group with the documentation cleanup
-        # workflow so that pushes to the 'doc' repository never race each other.
-        concurrency:
-            group: doc-deploy
-            cancel-in-progress: false
-        strategy:
-            matrix:
-                cfg:
-                    - { os: resolute, cxx: g++,          cxxflags: '-O2 -g -march=x86-64' }
-        name: Deploy documentation on ${{ matrix.cfg.os }}
-        runs-on: ubuntu-24.04
-        container:
-            image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
-        steps:
-            - name: Create repository
-              shell: bash
-              env:
-                GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
-              run: |
-                [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
-                git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/doc" _build/doc/html
+  ubuntu-deploy-doc:
+    needs: ubuntu-build-doc
+    # Share the 'doc-deploy' concurrency group with the documentation cleanup
+    # workflow so that pushes to the 'doc' repository never race each other.
+    concurrency:
+      group: doc-deploy
+      cancel-in-progress: false
+    strategy:
+      matrix:
+        cfg:
+          - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
+    name: Deploy documentation on ${{ matrix.cfg.os }}
+    runs-on: ubuntu-24.04
+    container:
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+    steps:
+      - name: Create repository
+        shell: bash
+        env:
+          GITHUB_ACCESS_TOKEN: '${{ secrets.GITHUB_ACCESS_TOKEN }}'
+        run: |
+          [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
+          git clone -o gh "https://eos:${GITHUB_ACCESS_TOKEN}@github.com/eos/doc" _build/doc/html
 
-            - name: Download documentation as artifact
-              uses: actions/download-artifact@v4
-              with:
-                name: eos-doc-${{ github.sha }}
+      - name: Download documentation as artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: eos-doc-${{ github.sha }}
 
-            - name: Deploy documentation
-              shell: bash
-              env:
-                GITHUB_ACCESS_TOKEN: "${{ secrets.GITHUB_ACCESS_TOKEN }}"
-              run: |
-                [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
-                if [[ "${{ github.event_name }}" == "pull_request" ]] ; then
-                    # Running prior to merging the PR: deploy the documentation into a
-                    # per-PR subdirectory 'pr{id}' of the 'doc' repository instead of its root.
-                    PR_SUBDIR="pr${{ github.event.pull_request.number }}"
-                    # Extract the freshly built documentation into a staging area ...
-                    mkdir -p _staging
-                    tar xf doc.tar -C _staging
-                    # ... and (re)populate the per-PR subdirectory within the cloned 'doc' repo.
-                    # Using '/.' preserves dotfiles such as the Sphinx-generated '.nojekyll'.
-                    rm -rf "_build/doc/html/${PR_SUBDIR}"
-                    mkdir -p "_build/doc/html/${PR_SUBDIR}"
-                    cp -a _staging/_build/doc/html/. "_build/doc/html/${PR_SUBDIR}/"
-                    COMMIT_MSG="Updating documentation for pull request #${{ github.event.pull_request.number }} based on EOS revision ${{ github.sha }}"
-                    # always deploy the per-PR preview
-                    PUSH=1
-                else
-                    # Merging to master (or building the 'release' branch / a versioned tag):
-                    # deploy the documentation into the root of the 'doc' repository.
-                    tar xf doc.tar
-                    COMMIT_MSG="Updating documentation based on EOS revision ${{ github.sha }}"
-                    # only push if running for the release branch or for a versioned release
-                    if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
-                        PUSH=1
-                    else
-                        PUSH=0
-                    fi
-                fi
-                pushd _build/doc/html
-                git config user.email "eos-developers@googlegroups.com"
-                git config user.name  "EOS"
-                git add --all
-                git commit --allow-empty -m "${COMMIT_MSG}"
-                if [[ ${PUSH} == "1" ]] ; then
-                    git push
-                fi
-                popd
+      - name: Deploy documentation
+        shell: bash
+        env:
+          GITHUB_ACCESS_TOKEN: '${{ secrets.GITHUB_ACCESS_TOKEN }}'
+        run: |
+          [[ -n ${GITHUB_ACCESS_TOKEN} ]] || exit 0
+          if [[ "${{ github.event_name }}" == "pull_request" ]] ; then
+              # Running prior to merging the PR: deploy the documentation into a
+              # per-PR subdirectory 'pr{id}' of the 'doc' repository instead of its root.
+              PR_SUBDIR="pr${{ github.event.pull_request.number }}"
+              # Extract the freshly built documentation into a staging area ...
+              mkdir -p _staging
+              tar xf doc.tar -C _staging
+              # ... and (re)populate the per-PR subdirectory within the cloned 'doc' repo.
+              # Using '/.' preserves dotfiles such as the Sphinx-generated '.nojekyll'.
+              rm -rf "_build/doc/html/${PR_SUBDIR}"
+              mkdir -p "_build/doc/html/${PR_SUBDIR}"
+              cp -a _staging/_build/doc/html/. "_build/doc/html/${PR_SUBDIR}/"
+              COMMIT_MSG="Updating documentation for pull request #${{ github.event.pull_request.number }} based on EOS revision ${{ github.sha }}"
+              # always deploy the per-PR preview
+              PUSH=1
+          else
+              # Merging to master (or building the 'release' branch / a versioned tag):
+              # deploy the documentation into the root of the 'doc' repository.
+              tar xf doc.tar
+              COMMIT_MSG="Updating documentation based on EOS revision ${{ github.sha }}"
+              # only push if running for the release branch or for a versioned release
+              if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
+                  PUSH=1
+              else
+                  PUSH=0
+              fi
+          fi
+          pushd _build/doc/html
+          git config user.email "eos-developers@googlegroups.com"
+          git config user.name  "EOS"
+          git add --all
+          git commit --allow-empty -m "${COMMIT_MSG}"
+          if [[ ${PUSH} == "1" ]] ; then
+              git push
+          fi
+          popd

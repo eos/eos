@@ -1,11 +1,11 @@
 on:
-    push:
-        branches: [ release, master, testing ]
+  push:
+    branches: [release, master, testing]
 
-    pull_request:
+  pull_request:
 
-    release:
-        types: [ published ]
+  release:
+    types: [published]
 
 name: Build/Check/Deploy for PyPI
 
@@ -14,87 +14,87 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-    build_wheels:
-        strategy:
-            matrix:
-                include:
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04     }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04     }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04     }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04     }
-                  - { arch: x86_64,  cxxflags: '-march=x86-64',    boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04     }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-arm }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04-arm }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm }
-                  - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm }
-        runs-on: ${{ matrix.runner }}
-        name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
-        steps:
-            - name: Checkout git repository
-              uses: actions/checkout@v4
+  build_wheels:
+    strategy:
+      matrix:
+        include:
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04 }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04 }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04 }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04 }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04 }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-arm }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04-arm }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm }
+    runs-on: ${{ matrix.runner }}
+    name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v4
 
-            - name: Create a package directory to make cibuildwheel happy
-              run: |
-                mkdir eoshep
-                touch eoshep/setup.py
+      - name: Create a package directory to make cibuildwheel happy
+        run: |
+          mkdir eoshep
+          touch eoshep/setup.py
 
-            - name: Determine if this is a prerelease build
-              id: prerelease
-              run: |
-                if [[ ${GITHUB_EVENT_NAME} != "release" ]] ; then
-                    echo "option=--enable-prerelease=${{ github.run_number }}" >> $GITHUB_OUTPUT
-                fi
+      - name: Determine if this is a prerelease build
+        id: prerelease
+        run: |
+          if [[ ${GITHUB_EVENT_NAME} != "release" ]] ; then
+              echo "option=--enable-prerelease=${{ github.run_number }}" >> $GITHUB_OUTPUT
+          fi
 
-            - name: Build EOS, run tests, and create wheels
-              timeout-minutes: 60
-              uses: pypa/cibuildwheel@v3.2.1
-              with:
-                package-dir: eoshep
-              env:
-                CIBW_BUILD: ${{ matrix.version}}-*
-                CIBW_SKIP: \*-musllinux_*
-                CIBW_ARCHS: ${{ matrix.arch}}
-                CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:e898974e68ef3a917bdf935d98a31c43bd03baf0d6debe1dbccd357cbd3382c8
-                CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:607f5624b69dc7bc04869332868849686ee9a0a2c415f0f414b34b98fce9cb79
-                CIBW_BEFORE_BUILD_LINUX: |
-                  pushd {project}
-                  ./autogen.bash
-                  export BOOST_PYTHON_SKIP=yes
-                  export CXXFLAGS="-O2 -g ${{ matrix.cxxflags }}"
-                  ./configure \
-                    --disable-cli \
-                    ${{ steps.prerelease.outputs.option }} \
-                    --with-boost-python-suffix=${{ matrix.boost_python_suffix }} \
-                    --enable-lto
-                  make -j4 all
-                  make -j4 check VERBOSE=1
-                  make -C python eoshep-before DESTDIR={package}
-                  popd
-                CIBW_TEST_COMMAND: |
-                  cd /
-                  python3 -c 'import eos ; print(eos.__version__)'
+      - name: Build EOS, run tests, and create wheels
+        timeout-minutes: 60
+        uses: pypa/cibuildwheel@v3.2.1
+        with:
+          package-dir: eoshep
+        env:
+          CIBW_BUILD: ${{ matrix.version}}-*
+          CIBW_SKIP: \*-musllinux_*
+          CIBW_ARCHS: ${{ matrix.arch}}
+          CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:e898974e68ef3a917bdf935d98a31c43bd03baf0d6debe1dbccd357cbd3382c8
+          CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:607f5624b69dc7bc04869332868849686ee9a0a2c415f0f414b34b98fce9cb79
+          CIBW_BEFORE_BUILD_LINUX: |
+            pushd {project}
+            ./autogen.bash
+            export BOOST_PYTHON_SKIP=yes
+            export CXXFLAGS="-O2 -g ${{ matrix.cxxflags }}"
+            ./configure \
+              --disable-cli \
+              ${{ steps.prerelease.outputs.option }} \
+              --with-boost-python-suffix=${{ matrix.boost_python_suffix }} \
+              --enable-lto
+            make -j4 all
+            make -j4 check VERBOSE=1
+            make -C python eoshep-before DESTDIR={package}
+            popd
+          CIBW_TEST_COMMAND: |
+            cd /
+            python3 -c 'import eos ; print(eos.__version__)'
 
-            - name: Upload wheels as artifacts
-              uses: actions/upload-artifact@v4
-              with:
-                name: wheel-${{ matrix.arch }}-${{ matrix.version }}
-                path: ./wheelhouse/*.whl
+      - name: Upload wheels as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.arch }}-${{ matrix.version }}
+          path: ./wheelhouse/*.whl
 
-    upload_pypi:
-        needs: [ build_wheels ]
-        if: ${{ github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/release') }}
-        runs-on: ubuntu-latest
-        name: Deploy EOS wheels to PyPI
-        steps:
-            - uses: actions/download-artifact@v4
-              with:
-                pattern: wheel-*
-                merge-multiple: true
-                path: dist
+  upload_pypi:
+    needs: [build_wheels]
+    if: ${{ github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/release') }}
+    runs-on: ubuntu-latest
+    name: Deploy EOS wheels to PyPI
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: wheel-*
+          merge-multiple: true
+          path: dist
 
-            - uses: pypa/gh-action-pypi-publish@v1.13.0
-              with:
-                user:     ${{ secrets.TWINE_USERNAME }}
-                password: ${{ secrets.TWINE_PASSWORD }}
-                skip_existing: true
+      - uses: pypa/gh-action-pypi-publish@v1.13.0
+        with:
+          user: ${{ secrets.TWINE_USERNAME }}
+          password: ${{ secrets.TWINE_PASSWORD }}
+          skip_existing: true

@@ -1,0 +1,11 @@
+# Formatting rules for infrastructure YAML (.github/ and the root directory).
+# The scope is defined by the 'files' pattern of the prettier hook in
+# .pre-commit-config.yaml; physics data under eos/constraints, eos/parameters,
+# eos/references.yaml and examples/ is deliberately NOT covered here, since a
+# general-purpose formatter cannot preserve their column alignment.
+#
+# printWidth accommodates the longest pre-existing line (153 characters, in
+# .github/workflows/ubuntu-build+check+deploy.yaml) so that build-matrix rows
+# are not broken across several lines.
+printWidth: 160
+singleQuote: true

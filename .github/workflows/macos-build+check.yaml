@@ -1,8 +1,8 @@
 on:
-    push:
-        branches: [ master, testing ]
+  push:
+    branches: [master, testing]
 
-    pull_request:
+  pull_request:
 
 name: Build/Check on MacOS
 
@@ -11,90 +11,90 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-    macos-build-check:
-        name: Build on MacOS
-        runs-on: macos-latest
+  macos-build-check:
+    name: Build on MacOS
+    runs-on: macos-latest
 
-        steps:
-            - name: Checkout git repository
-              uses: actions/checkout@v4
-              with:
-                path: _src/
+    steps:
+      - name: Checkout git repository
+        uses: actions/checkout@v4
+        with:
+          path: _src/
 
-            - name: Fetch tags
-              shell: bash
-              run: |
-                pushd _src
-                git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-                popd
+      - name: Fetch tags
+        shell: bash
+        run: |
+          pushd _src
+          git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+          popd
 
-            - name: Prepare VM
-              shell: bash
-              env:
-                PYTHON: /usr/local/bin/python3.10
-              run: |
-                export HOMEBREW_LOGS=/tmp
-                brew tap eos/eos
-                brew outdated python@3.10 || brew upgrade python@3.10 || true
-                rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
-                brew outdated boost || brew upgrade boost || true
-                brew outdated boost-python3 || brew upgrade boost-python3 || true
-                brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
-                brew link --overwrite --force python@3.10
-                $PYTHON -m pip install -U cython h5py matplotlib networkx numpy PyYAML scipy wilson
-                $PYTHON -m pip install -U "pypmc>=1.2"
+      - name: Prepare VM
+        shell: bash
+        env:
+          PYTHON: /usr/local/bin/python3.10
+        run: |
+          export HOMEBREW_LOGS=/tmp
+          brew tap eos/eos
+          brew outdated python@3.10 || brew upgrade python@3.10 || true
+          rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
+          brew outdated boost || brew upgrade boost || true
+          brew outdated boost-python3 || brew upgrade boost-python3 || true
+          brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
+          brew link --overwrite --force python@3.10
+          $PYTHON -m pip install -U cython h5py matplotlib networkx numpy PyYAML scipy wilson
+          $PYTHON -m pip install -U "pypmc>=1.2"
 
-            - name: Create build directory
-              shell: bash
-              run: mkdir -p _build
+      - name: Create build directory
+        shell: bash
+        run: mkdir -p _build
 
-            - name: Configure
-              shell: bash
-              env:
-                CXXFLAGS: "-O2 -g -march=x86-64"
-                PYTHON: /usr/local/bin/python3.10
-              run: |
-                echo ===
-                ls -ld /usr/local/Cellar/python*
-                echo ===
-                ls -ld /usr/local/Cellar/python@3.10/
-                echo ===
-                find /usr/local/Cellar/python@3.10 -name "python3*"
-                echo ===
-                SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
-                echo using boost-python suffix ${SUFFIX}
-                pushd _src
-                ./autogen.bash
-                popd
-                pushd _build
-                ../_src/configure \
-                    --enable-python \
-                    --with-boost-python-suffix=${SUFFIX} \
-                    --prefix=/usr/local \
-                    PYTHON=${PYTHON}
-                popd
+      - name: Configure
+        shell: bash
+        env:
+          CXXFLAGS: '-O2 -g -march=x86-64'
+          PYTHON: /usr/local/bin/python3.10
+        run: |
+          echo ===
+          ls -ld /usr/local/Cellar/python*
+          echo ===
+          ls -ld /usr/local/Cellar/python@3.10/
+          echo ===
+          find /usr/local/Cellar/python@3.10 -name "python3*"
+          echo ===
+          SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
+          echo using boost-python suffix ${SUFFIX}
+          pushd _src
+          ./autogen.bash
+          popd
+          pushd _build
+          ../_src/configure \
+              --enable-python \
+              --with-boost-python-suffix=${SUFFIX} \
+              --prefix=/usr/local \
+              PYTHON=${PYTHON}
+          popd
 
-            - name: Build & Install
-              shell: bash
-              run: |
-                pushd _build
-                make -j2 all
-                make install
-                popd
+      - name: Build & Install
+        shell: bash
+        run: |
+          pushd _build
+          make -j2 all
+          make install
+          popd
 
-            - name: Check
-              shell: bash
-              run: |
-                pushd _build
-                make check -j2 VERBOSE=1
-                popd
+      - name: Check
+        shell: bash
+        run: |
+          pushd _build
+          make check -j2 VERBOSE=1
+          popd
 
-            - name: Run examples
-              shell: bash
-              run: |
-                pushd _build
-                export PYTHONPATH+=":$(make print-pythondir)"
-                popd
-                pushd _src
-                make -C examples/cli examples
-                popd
+      - name: Run examples
+        shell: bash
+        run: |
+          pushd _build
+          export PYTHONPATH+=":$(make print-pythondir)"
+          popd
+          pushd _src
+          make -C examples/cli examples
+          popd
