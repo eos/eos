@@ -26,7 +26,8 @@ stamp-h1
 *.json
 debian/control-*
 !debian/control-*.in
-python/setup.py
+/setup.py
+/pyproject.toml
 
 # Tests
 *_TEST

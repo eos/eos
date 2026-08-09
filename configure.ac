@@ -491,7 +491,8 @@ AC_CONFIG_FILES([Makefile
 	src/scripts/Makefile
 	test/Makefile
 	python/Makefile
-	python/setup.py
+	pyproject.toml
+	setup.py:python/setup.py.in
 	])
 AC_OUTPUT
 dnl }}}

@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "eoshep"
+version = "@PYPI_VERSION@"
+description = "EOS -- A HEP program for Flavor Observables"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "GPLv2" }
+authors = [
+    { name = "Danny van Dyk and others", email = "danny.van.dyk@gmail.com" },
+]
+classifiers = [
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+    "Programming Language :: C++",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+    "argcomplete",
+    "dynesty",
+    "matplotlib",
+    "numpy>=1.13",
+    "pypandoc",
+    "pypmc>=1.1.4",
+    "pyyaml",
+    "scipy",
+    "tqdm",
+]
+
+[project.urls]
+Homepage = "https://eos.github.io/"
+
+[tool.setuptools]
+zip-safe = false
+packages = ["eos", "eos.data", "eos.plot", "eos.figure", "_eos_data"]
+
+[tool.setuptools.package-dir]
+eos = "python/eos"
+# _eos_data is a PEP 420 namespace package (no __init__.py) rooted at the
+# top-level eos/ data directory, per decision D6 -- keep it there.
+_eos_data = "eos"
+
+[tool.setuptools.package-data]
+_eos_data = ["references.yaml", "constraints/**/*.yaml", "parameters/*.yaml"]
