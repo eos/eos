@@ -18,13 +18,9 @@ jobs:
     strategy:
       matrix:
         include:
-          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04 }
-          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04 }
           - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04 }
           - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04 }
           - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04 }
-          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 310, version: cp310, runner: ubuntu-24.04-arm }
-          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 311, version: cp311, runner: ubuntu-24.04-arm }
           - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm }
           - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm }
           - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm }
@@ -34,11 +30,6 @@ jobs:
       - name: Checkout git repository
         uses: actions/checkout@v4
 
-      - name: Create a package directory to make cibuildwheel happy
-        run: |
-          mkdir eoshep
-          touch eoshep/setup.py
-
       - name: Determine if this is a prerelease build
         id: prerelease
         run: |
@@ -46,40 +37,78 @@ jobs:
               echo "option=--enable-prerelease=${{ github.run_number }}" >> $GITHUB_OUTPUT
           fi
 
+      # cibuildwheel checks for {setup.py, setup.cfg, pyproject.toml} at the
+      # package root before it does anything else -- before CIBW_BEFORE_BUILD
+      # ever runs -- but pyproject.toml is generated from pyproject.toml.in by
+      # './configure' (D2), which is itself part of CIBW_BEFORE_BUILD. A fresh
+      # checkout therefore fails cibuildwheel's own sniff check before it gets
+      # a chance to run configure at all. The placeholder below only has to
+      # exist and parse as TOML; './configure' overwrites it with the real,
+      # version-substituted file before 'pip wheel' (the step that actually
+      # reads project metadata) ever runs.
+      - name: Materialize a placeholder pyproject.toml for cibuildwheel's own package check
+        run: cp pyproject.toml.in pyproject.toml
+
       - name: Build EOS, run tests, and create wheels
         timeout-minutes: 60
         uses: pypa/cibuildwheel@v3.2.1
-        with:
-          package-dir: eoshep
         env:
           CIBW_BUILD: ${{ matrix.version}}-*
           CIBW_SKIP: \*-musllinux_*
           CIBW_ARCHS: ${{ matrix.arch}}
-          CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:e898974e68ef3a917bdf935d98a31c43bd03baf0d6debe1dbccd357cbd3382c8
-          CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:607f5624b69dc7bc04869332868849686ee9a0a2c415f0f414b34b98fce9cb79
+          CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:eebdd3313578a4fe0f1e06cb22b7bed0d0b2ed1621576fcb919ce688970d8c4f
+          CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:99eb6d0d3493fa3c546a67fe92e438e0509447da4050d83452bbbb4b926caa12
+          CIBW_ENVIRONMENT: EOS_STAGING_PREFIX=/tmp/eos-staging LD_LIBRARY_PATH=/tmp/eos-staging/lib
           CIBW_BEFORE_BUILD_LINUX: |
-            pushd {project}
             ./autogen.bash
             export BOOST_PYTHON_SKIP=yes
             export CXXFLAGS="-O2 -g ${{ matrix.cxxflags }}"
             ./configure \
+              --prefix=$EOS_STAGING_PREFIX \
               --disable-cli \
               ${{ steps.prerelease.outputs.option }} \
               --with-boost-python-suffix=${{ matrix.boost_python_suffix }} \
               --enable-lto
             make -j4 all
             make -j4 check VERBOSE=1
-            make -C python eoshep-before DESTDIR={package}
-            popd
+            make -j4 install
+          CIBW_REPAIR_WHEEL_COMMAND_LINUX: |
+            python3 -m pip install --quiet wheel
+            mkdir -p /output
+            for lib in $EOS_STAGING_PREFIX/lib*/libeos*.so*; do
+              [ -L "$lib" ] && continue
+              objcopy --only-keep-debug "$lib" /output/$(basename "$lib").debug
+              strip --strip-debug --strip-unneeded "$lib"
+              objcopy --add-gnu-debuglink=/output/$(basename "$lib").debug "$lib"
+            done
+            unpack_dir=$(mktemp -d)
+            python3 -m wheel unpack {wheel} -d "$unpack_dir"
+            pkg_dir=$(find "$unpack_dir" -mindepth 1 -maxdepth 1 -type d)
+            ext_so=$(find "$pkg_dir" -maxdepth 1 -name '_eos*.so')
+            objcopy --only-keep-debug "$ext_so" /output/$(basename "$ext_so").debug
+            strip --strip-debug --strip-unneeded "$ext_so"
+            objcopy --add-gnu-debuglink=/output/$(basename "$ext_so").debug "$ext_so"
+            stripped_wheel_dir=$(mktemp -d)
+            python3 -m wheel pack "$pkg_dir" -d "$stripped_wheel_dir"
+            auditwheel repair -w {dest_dir} "$stripped_wheel_dir"/*.whl
           CIBW_TEST_COMMAND: |
             cd /
-            python3 -c 'import eos ; print(eos.__version__)'
+            python3 -c 'import eos; assert eos.Parameters()["CKM::A"].evaluate() != 0; assert eos.Observables()["B->Dlnu::dBR/dq2;l=e,q=d"] is not None; print(eos.__version__)'
+            eos-list-references > /dev/null
 
       - name: Upload wheels as artifacts
         uses: actions/upload-artifact@v4
         with:
           name: wheel-${{ matrix.arch }}-${{ matrix.version }}
           path: ./wheelhouse/*.whl
+          if-no-files-found: error
+
+      - name: Upload debug symbols as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-${{ matrix.arch }}-${{ matrix.version }}
+          path: ./wheelhouse/*.debug
+          if-no-files-found: error
 
   upload_pypi:
     needs: [build_wheels]
