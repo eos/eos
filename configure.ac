@@ -367,8 +367,16 @@ if test "x$enable_python" == xyes ; then
 	_LDFLAGS=$LDFLAGS
 	_LIBS=$LIBS
 
-	CXXFLAGS=$PYTHON_CXXFLAGS
-	LDFLAGS=$PYTHON_LDFLAGS
+	# Extend, don't replace, the ambient CXXFLAGS/LDFLAGS: boost_python (and
+	# its headers) may live in a non-default prefix (e.g. Homebrew's
+	# /opt/homebrew) that the caller already put on CXXFLAGS/LDFLAGS for
+	# every other dependency check in this file; discarding that here made
+	# the -lboost_python$BOOST_PYTHON_SUFFIX check below search only the
+	# paths python$PYTHON_VERSION-config reports, missing boost_python
+	# entirely on such a prefix even though -lboost_filesystem and friends
+	# resolve fine just above.
+	CXXFLAGS="$_CXXFLAGS $PYTHON_CXXFLAGS"
+	LDFLAGS="$_LDFLAGS $PYTHON_LDFLAGS"
 	LIBS=$PYTHON_LIBS_CONFTEST
 
 	if test "x$BOOST_PYTHON_SKIP" == "xyes"; then
