@@ -18,12 +18,46 @@ jobs:
     strategy:
       matrix:
         include:
-          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04 }
-          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04 }
-          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04 }
-          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm }
-          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm }
-          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04, lto_option: '--enable-lto' }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04, lto_option: '--enable-lto' }
+          - { arch: x86_64, cxxflags: '-march=x86-64', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04, lto_option: '--enable-lto' }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 312, version: cp312, runner: ubuntu-24.04-arm, lto_option: '--enable-lto' }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 313, version: cp313, runner: ubuntu-24.04-arm, lto_option: '--enable-lto' }
+          - { arch: aarch64, cxxflags: '-march=armv8.5-a', boost_python_suffix: 314, version: cp314, runner: ubuntu-24.04-arm, lto_option: '--enable-lto' }
+          # macOS dependency bundle: ghcr.io/eos/docker.io:macos-arm64-ed9e703,
+          # digest sha256:0b56a73868eba7c2855483aa26906af46f04e23936d7a730e2a05e33495720c0
+          # Do not revert to macos-arm64-7918a26: its Boost/yaml-cpp dylibs carry bare
+          # and unsatisfied-@rpath install names and are not loadable.
+          - {
+              arch: arm64,
+              cxxflags: '-march=armv8.5-a',
+              boost_python_suffix: 312,
+              version: cp312,
+              runner: macos-15,
+              prefix: /opt/homebrew,
+              deployment_target: '14.0',
+              dep_tarball_tag: 'ghcr.io/eos/docker.io:macos-arm64-ed9e703',
+            }
+          - {
+              arch: arm64,
+              cxxflags: '-march=armv8.5-a',
+              boost_python_suffix: 313,
+              version: cp313,
+              runner: macos-15,
+              prefix: /opt/homebrew,
+              deployment_target: '14.0',
+              dep_tarball_tag: 'ghcr.io/eos/docker.io:macos-arm64-ed9e703',
+            }
+          - {
+              arch: arm64,
+              cxxflags: '-march=armv8.5-a',
+              boost_python_suffix: 314,
+              version: cp314,
+              runner: macos-15,
+              prefix: /opt/homebrew,
+              deployment_target: '14.0',
+              dep_tarball_tag: 'ghcr.io/eos/docker.io:macos-arm64-ed9e703',
+            }
     runs-on: ${{ matrix.runner }}
     name: Build and check EOS wheels on ${{ matrix.arch }} for Python version ${{ matrix.version }}
     steps:
@@ -36,6 +70,22 @@ jobs:
           if [[ ${GITHUB_EVENT_NAME} != "release" ]] ; then
               echo "option=--enable-prerelease=${{ github.run_number }}" >> $GITHUB_OUTPUT
           fi
+
+      # macOS-only: Linux gets its dependencies from the CIBW_MANYLINUX_*_IMAGE
+      # containers below; macOS has no equivalent container step, so the
+      # dependency bundle built by eos/docker.io is fetched and unpacked here,
+      # directly into the Homebrew prefix, before cibuildwheel ever runs.
+      # '-m' skips restoring the archive members' modification times: the
+      # bundle's top-level 'opt/' entry maps to the runner's real /opt, which
+      # is root-owned, so a bare 'tar xzf' fails with "opt/: Can't restore
+      # time: Permission denied" even though writing files under the
+      # already-writable /opt/homebrew succeeds.
+      - name: Fetch and unpack the macOS dependency bundle
+        if: matrix.arch == 'arm64'
+        run: |
+          brew install autoconf automake libtool m4 make pkg-config oras
+          oras pull ${{ matrix.dep_tarball_tag }}
+          tar xzmf macos-arm64.tar.gz -C /
 
       # cibuildwheel checks for {setup.py, setup.cfg, pyproject.toml} at the
       # package root before it does anything else -- before CIBW_BEFORE_BUILD
@@ -59,7 +109,38 @@ jobs:
           CIBW_MANYLINUX_X86_64_IMAGE: eoshep/manylinux_2_34@sha256:eebdd3313578a4fe0f1e06cb22b7bed0d0b2ed1621576fcb919ce688970d8c4f
           CIBW_MANYLINUX_AARCH64_IMAGE: eoshep/manylinux_2_34@sha256:99eb6d0d3493fa3c546a67fe92e438e0509447da4050d83452bbbb4b926caa12
           CIBW_ENVIRONMENT: EOS_STAGING_PREFIX=/tmp/eos-staging LD_LIBRARY_PATH=/tmp/eos-staging/lib
-          CIBW_BEFORE_BUILD_LINUX: |
+          # CIBW_ENVIRONMENT_MACOS replaces, rather than extends, CIBW_ENVIRONMENT above,
+          # so EOS_STAGING_PREFIX is repeated here. The dependency bundle lands in
+          # ${{ matrix.prefix }} (Homebrew's arm64 prefix), which is not on any default
+          # compiler or dynamic-linker search path, so it needs the same kind of
+          # explicit wiring auditwheel gets from LD_LIBRARY_PATH on Linux: PKG_CONFIG_PATH
+          # for the GSL/yaml-cpp/FFTW3 pkg-config files the bundle ships, and
+          # CPPFLAGS/LDFLAGS for Boost (which the bundle does not ship a .pc file for).
+          # There is deliberately no DYLD_LIBRARY_PATH: since ed9e703 every dylib in the
+          # bundle carries an absolute install name, so nothing needs it. Do not add one
+          # back -- SIP strips DYLD_* whenever a protected binary (/bin/sh, /usr/bin/*)
+          # is exec'd, so it would not survive to the build in any case; a load failure
+          # here means an install name is wrong and belongs fixed in eos/docker.io.
+          # PATH gains Homebrew's GNU make
+          # (keg-only as ``gmake`` to avoid clobbering /usr/bin/make, with an unprefixed
+          # copy under libexec/gnubin) so the unsuffixed ``make`` calls below keep working
+          # verbatim, matching what autogen.bash already does for glibtool/glibtoolize.
+          CIBW_ENVIRONMENT_MACOS: >-
+            EOS_STAGING_PREFIX=/tmp/eos-staging
+            MACOSX_DEPLOYMENT_TARGET=${{ matrix.deployment_target }}
+            PATH=${{ matrix.prefix }}/opt/make/libexec/gnubin:$PATH
+            PKG_CONFIG_PATH=${{ matrix.prefix }}/lib/pkgconfig
+            CPPFLAGS=-I${{ matrix.prefix }}/include
+            LDFLAGS=-L${{ matrix.prefix }}/lib
+          # matrix.lto_option is '--enable-lto' on Linux and unset (empty) on
+          # macOS: Apple Clang's -flto breaks symbol visibility for the
+          # Log/Singleton machinery on arm64 -- eos/utils/log_TEST.cc fails
+          # (a OneTimeMessage callback silently doesn't fire) and the built
+          # extension fails to even import ("symbol not found in flat
+          # namespace" for InstantiationPolicy<Log, Singleton>::instance()).
+          # Confirmed platform/toolchain-specific: the same flag is fine on
+          # Linux (GCC), and macOS is fine with the flag simply omitted.
+          CIBW_BEFORE_BUILD: |
             ./autogen.bash
             export BOOST_PYTHON_SKIP=yes
             export CXXFLAGS="-O2 -g ${{ matrix.cxxflags }}"
@@ -68,7 +149,7 @@ jobs:
               --disable-cli \
               ${{ steps.prerelease.outputs.option }} \
               --with-boost-python-suffix=${{ matrix.boost_python_suffix }} \
-              --enable-lto
+              ${{ matrix.lto_option }}
             make -j4 all
             make -j4 check VERBOSE=1
             make -j4 install
@@ -91,6 +172,29 @@ jobs:
             stripped_wheel_dir=$(mktemp -d)
             python3 -m wheel pack "$pkg_dir" -d "$stripped_wheel_dir"
             auditwheel repair -w {dest_dir} "$stripped_wheel_dir"/*.whl
+          # There is no container on macOS (unlike CIBW_REPAIR_WHEEL_COMMAND_LINUX's
+          # /output, which the manylinux container copies out wholesale): {dest_dir} is
+          # a plain temp dir on the runner and only the repaired *.whl is ever collected
+          # from it (cibuildwheel/platforms/macos.py, same *.whl-only pattern as
+          # linux.py). Debug symbols are written under $GITHUB_WORKSPACE instead, and
+          # uploaded from there directly, mirroring what 95938557 fixed on Linux.
+          CIBW_REPAIR_WHEEL_COMMAND_MACOS: |
+            python3 -m pip install --quiet wheel
+            mkdir -p "$GITHUB_WORKSPACE/macos-debug"
+            for lib in $EOS_STAGING_PREFIX/lib*/libeos*.dylib; do
+              [ -L "$lib" ] && continue
+              dsymutil "$lib" -o "$GITHUB_WORKSPACE/macos-debug/$(basename "$lib").dSYM"
+              strip -S -x "$lib"
+            done
+            unpack_dir=$(mktemp -d)
+            python3 -m wheel unpack {wheel} -d "$unpack_dir"
+            pkg_dir=$(find "$unpack_dir" -mindepth 1 -maxdepth 1 -type d)
+            ext_so=$(find "$pkg_dir" -maxdepth 1 -name '_eos*.so')
+            dsymutil "$ext_so" -o "$GITHUB_WORKSPACE/macos-debug/$(basename "$ext_so").dSYM"
+            strip -S -x "$ext_so"
+            stripped_wheel_dir=$(mktemp -d)
+            python3 -m wheel pack "$pkg_dir" -d "$stripped_wheel_dir"
+            delocate-wheel --require-archs {delocate_archs} -w {dest_dir} -v "$stripped_wheel_dir"/*.whl
           CIBW_TEST_COMMAND: |
             cd /
             python3 -c 'import eos; assert eos.Parameters()["CKM::A"].evaluate() != 0; assert eos.Observables()["B->Dlnu::dBR/dq2;l=e,q=d"] is not None; print(eos.__version__)'
@@ -104,10 +208,19 @@ jobs:
           if-no-files-found: error
 
       - name: Upload debug symbols as artifacts
+        if: matrix.arch != 'arm64'
         uses: actions/upload-artifact@v4
         with:
           name: debug-${{ matrix.arch }}-${{ matrix.version }}
           path: ./wheelhouse/*.debug
+          if-no-files-found: error
+
+      - name: Upload debug symbols as artifacts (macOS)
+        if: matrix.arch == 'arm64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-${{ matrix.arch }}-${{ matrix.version }}
+          path: ${{ github.workspace }}/macos-debug/*.dSYM
           if-no-files-found: error
 
   upload_pypi:
