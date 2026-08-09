@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2016 Danny van Dyk
- * Copyright (c) 2014 Frederik Beaujean
+ * Copyright (c) 2010-2026 Danny van Dyk
+ * Copyright (c) 2014      Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -116,10 +116,10 @@ namespace test
       {                                                                                                                                                                        \
           auto a_val = (a);                                                                                                                                                    \
           auto b_val = (b);                                                                                                                                                    \
-          if (std::sqrt(std::fabs(a_val)) < std::numeric_limits<double>::epsilon())                                                                                            \
+          if (std::sqrt(std::abs(a_val)) < std::numeric_limits<double>::epsilon())                                                                                             \
               throw TestCaseFailedException(__LINE__, __FILE__, "'" #a "' has been evaluated to the zero within computational accuracy, result = " + stringify(a_val));        \
                                                                                                                                                                                \
-          if (std::sqrt(std::fabs(b_val)) < std::numeric_limits<double>::epsilon())                                                                                            \
+          if (std::sqrt(std::abs(b_val)) < std::numeric_limits<double>::epsilon())                                                                                             \
               throw TestCaseFailedException(__LINE__, __FILE__, "'" #b "' has been evaluated to the zero within computational accuracy, result = " + stringify(b_val));        \
                                                                                                                                                                                \
           if (((std::abs((a_val - b_val) / a_val)) <= eps) && ((std::abs((a_val - b_val) / b_val)) <= eps))                                                                    \
