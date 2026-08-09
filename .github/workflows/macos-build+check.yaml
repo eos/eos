@@ -13,36 +13,71 @@ concurrency:
 jobs:
   macos-build-check:
     name: Build on MacOS
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: _src/
 
       - name: Fetch tags
         shell: bash
         run: |
-          pushd _src
+          cd _src
           git fetch --depth=1 origin +refs/tags/*:refs/tags/*
-          popd
 
-      - name: Prepare VM
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+
+      # Boost/GSL/yaml-cpp/FFTW3 come from the same eos/docker.io dependency
+      # bundle the macOS PyPI wheel leg uses (pypi-build+check+deploy.yaml),
+      # so this workflow exercises the exact library versions the wheels
+      # ship rather than whatever Homebrew happens to carry. Homebrew is used
+      # only for build tooling. Do not revert to macos-arm64-7918a26: its
+      # Boost/yaml-cpp dylibs carry bare and unsatisfied-@rpath install names
+      # and are not loadable.
+      # '-m' skips restoring the archive members' modification times: the
+      # bundle's top-level 'opt/' entry maps to the runner's real /opt, which
+      # is root-owned, so a bare 'tar xzf' fails with "opt/: Can't restore
+      # time: Permission denied" even though writing files under the
+      # already-writable /opt/homebrew succeeds.
+      - name: Fetch and unpack the macOS dependency bundle
         shell: bash
-        env:
-          PYTHON: /usr/local/bin/python3.10
         run: |
-          export HOMEBREW_LOGS=/tmp
-          brew tap eos/eos
-          brew outdated python@3.10 || brew upgrade python@3.10 || true
-          rm -Rf '/usr/local/lib/python2.7/site-packages/numpy/'
-          brew outdated boost || brew upgrade boost || true
-          brew outdated boost-python3 || brew upgrade boost-python3 || true
-          brew install autoconf automake boost-python3 gsl libtool pkg-config yaml-cpp
-          brew link --overwrite --force python@3.10
-          $PYTHON -m pip install -U cython h5py matplotlib networkx numpy PyYAML scipy wilson
-          $PYTHON -m pip install -U "pypmc>=1.2"
+          brew install autoconf automake libtool m4 make pkg-config oras
+          oras pull ghcr.io/eos/docker.io:macos-arm64-ed9e703
+          tar xzmf macos-arm64.tar.gz -C /
+          echo "/opt/homebrew/opt/make/libexec/gnubin" >> "$GITHUB_PATH"
+
+      # jinja2 (eos/tasks.py's report rendering) and pyhf (PyHF likelihoods)
+      # are hard imports exercised by eos/tasks_TEST.py and eos/analysis_TEST.py,
+      # not optional/skip-guarded like e.g. wilson; match the resolute Ubuntu
+      # image's pip install list (eos/docker.io's ubuntu/*/Dockerfile).
+      - name: Install Python dependencies
+        shell: bash
+        run: |
+          python3 -m pip install -U \
+            argcomplete dynesty jinja2 matplotlib "numpy>=1.13" pyhf pypandoc "pypmc>=1.1.4" pyyaml scipy tqdm
+
+      # eos.figure sets matplotlib's text.usetex = True (python/eos/figure/config.py),
+      # so eos/figure/{figure,item}_TEST.py need a real 'latex' and 'dvipng' on PATH;
+      # matches what the resolute/manylinux Ubuntu images install via
+      # texlive-latex-base/texlive-latex-extra/cm-super/dvipng (eos/docker.io's
+      # ubuntu/*/Dockerfile). BasicTeX is the Homebrew equivalent of a minimal
+      # texlive install; the extra packages the config.py preamble and matplotlib's
+      # own usetex support need (amsmath, xcolor, type1cm, cm-super) are not part
+      # of it and must be added via tlmgr.
+      - name: Install LaTeX
+        shell: bash
+        run: |
+          brew install --cask basictex
+          echo "/Library/TeX/texbin" >> "$GITHUB_PATH"
+          export PATH="/Library/TeX/texbin:$PATH"
+          sudo tlmgr update --self
+          sudo tlmgr install dvipng cm-super type1cm amsmath xcolor underscore
 
       - name: Create build directory
         shell: bash
@@ -51,50 +86,62 @@ jobs:
       - name: Configure
         shell: bash
         env:
-          CXXFLAGS: '-O2 -g -march=x86-64'
-          PYTHON: /usr/local/bin/python3.10
+          CXXFLAGS: '-O2 -g -march=armv8.5-a'
+          PKG_CONFIG_PATH: /opt/homebrew/lib/pkgconfig
+          CPPFLAGS: -I/opt/homebrew/include
+          LDFLAGS: -L/opt/homebrew/lib
         run: |
-          echo ===
-          ls -ld /usr/local/Cellar/python*
-          echo ===
-          ls -ld /usr/local/Cellar/python@3.10/
-          echo ===
-          find /usr/local/Cellar/python@3.10 -name "python3*"
-          echo ===
+          PYTHON=$(command -v python3)
           SUFFIX=$($PYTHON -c "import sys; print('{0}{1}'.format(sys.version_info[0], sys.version_info[1]))")
           echo using boost-python suffix ${SUFFIX}
-          pushd _src
+          cd _src
           ./autogen.bash
-          popd
-          pushd _build
+          cd ../_build
           ../_src/configure \
               --enable-python \
               --with-boost-python-suffix=${SUFFIX} \
-              --prefix=/usr/local \
+              --prefix=/tmp/eos-staging \
               PYTHON=${PYTHON}
-          popd
 
       - name: Build & Install
         shell: bash
         run: |
-          pushd _build
-          make -j2 all
+          cd _build
+          make -j3 all
           make install
-          popd
 
       - name: Check
         shell: bash
         run: |
-          pushd _build
-          make check -j2 VERBOSE=1
-          popd
+          cd _build
+          make check -j3 VERBOSE=1
 
+      # 'make -C _build print-pythondir' (the generic 'print-%:' rule in the
+      # top-level Makefile.am) reports what autoconf's AM_PATH_PYTHON
+      # resolved pythondir to at configure time -- but that resolution has
+      # proven to differ across autoconf-archive/automake versions (this
+      # project's checked-in configure uses '${prefix}' directly; a fresh
+      # ./autogen.bash against Homebrew's autoconf/automake instead routes
+      # through '${PYTHON_PREFIX}', and which absolute path that ultimately
+      # expands to is not something this workflow controls or can predict).
+      # Rather than trust that computation, verify directly where 'make
+      # install' actually put the eos package: check whether it is already
+      # importable as-is, and if not, locate it under the staging prefix
+      # and add that to PYTHONPATH. This is correct regardless of which
+      # pythondir convention the toolchain regenerating configure picked.
       - name: Run examples
         shell: bash
         run: |
-          pushd _build
-          export PYTHONPATH+=":$(make print-pythondir)"
-          popd
-          pushd _src
-          make -C examples/cli examples
-          popd
+          export PATH="/tmp/eos-staging/bin:${PATH}"
+          if ! python3 -c "import eos" 2>/dev/null; then
+            eos_init="$(find /tmp/eos-staging -path '*/eos/__init__.py' -print -quit)"
+            if [ -z "${eos_init}" ]; then
+              echo "::error::'make install' did not place an importable 'eos' package anywhere under /tmp/eos-staging" >&2
+              find /tmp/eos-staging -iname '*.py' -o -iname '_eos*.so' >&2
+              exit 1
+            fi
+            eos_pythonpath="$(dirname "$(dirname "${eos_init}")")"
+            echo "eos package found under ${eos_pythonpath}, which is not on the default PYTHONPATH; adding it explicitly"
+            export PYTHONPATH="${eos_pythonpath}:${PYTHONPATH}"
+          fi
+          make -C _src/examples/cli examples
