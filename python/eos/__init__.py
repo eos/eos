@@ -1,5 +1,5 @@
 # Copyright (c) 2018      Frederik Beaujean
-# Copyright (c) 2017-2025 Danny van Dyk
+# Copyright (c) 2017-2026 Danny van Dyk
 # Copyright (c) 2021      Philip Lueghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -31,14 +31,12 @@ from _eos import __version__, __pkg_data_dir__
 # make sure that EOS_HOME points to the location of the wheel supplied data
 # if unset.
 import os as _os
-try:
-    if is_wheel:
-        if not 'EOS_HOME' in _os.environ:
-            _os.environ['EOS_HOME'] = _os.path.normpath(_os.path.join(_os.path.dirname(__file__), '..', '_eos_data/'))
-        _pkg_data_dir = _os.environ['EOS_HOME']
-except NameError:
+if is_wheel:
+    if not 'EOS_HOME' in _os.environ:
+        _os.environ['EOS_HOME'] = _os.path.normpath(_os.path.join(_os.path.dirname(__file__), '..', '_eos_data/'))
+    _pkg_data_dir = _os.environ['EOS_HOME']
+else:
     _pkg_data_dir = __pkg_data_dir__
-    pass
 
 from . import log_likelihood # patches LogLikelihoodBlock.Unbinned1D to accept the resolution in natural order
 from .data import *
