@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2022 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,18 +23,18 @@
 #include <exception>
 #include <memory>
 #include <string>
-#ifdef __clang__
-#  include <experimental/source_location>
-#else
+#if defined(__has_include) && __has_include(<source_location>)
 #  include <source_location>
+#else
+#  include <experimental/source_location>
 #endif
 
 namespace eos
 {
-#ifdef __clang__
-    using source_location = std::experimental::source_location;
-#else
+#if defined(__has_include) && __has_include(<source_location>)
     using source_location = std::source_location;
+#else
+    using source_location = std::experimental::source_location;
 #endif
 
     class Context

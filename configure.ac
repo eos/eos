@@ -89,16 +89,21 @@ AC_MSG_CHECKING([for <source_location>])
 save_CXXFLAGS=$CXXFLAGS
 CXXFLAGS="$CXXFLAGS -std=c++20"
 AC_COMPILE_IFELSE([AC_LANG_SOURCE([
-	#ifdef __clang__
-	#  include <experimental/source_location>
-	#else
+	// Mirrors eos/utils/exception.hh: whether <source_location> exists
+	// depends on the standard library's version, not on the compiler in
+	// use -- recent libc++ has dropped <experimental/source_location> in
+	// favour of the real, standardized header, so branching on __clang__
+	// picks the wrong one on a current Apple toolchain.
+	#if defined(__has_include) && __has_include(<source_location>)
 	#  include <source_location>
+	#else
+	#  include <experimental/source_location>
 	#endif
 
-	#ifdef __clang__
-		using source_location = std::experimental::source_location;
-	#else
+	#if defined(__has_include) && __has_include(<source_location>)
 		using source_location = std::source_location;
+	#else
+		using source_location = std::experimental::source_location;
 	#endif
 
 	int main(int, char **)
