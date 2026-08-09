@@ -2,7 +2,7 @@ CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in configure config/* aclocal.m4 \
 			config.h config.h.in
 AUTOMAKE_OPTIONS = foreign dist-bzip2
-EXTRA_DIST = autogen.bash
+EXTRA_DIST = autogen.bash pyproject.toml.in
 
 # MAYBE_SRC = src by default, and empty when --disable-cli is used
 SUBDIRS = test eos python $(MAYBE_SRC) debian

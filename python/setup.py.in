@@ -1,56 +1,106 @@
 #!/usr/bin/env python3
 
-from setuptools import setup, Extension
+# Everything expressible declaratively (metadata, packages, package-data)
+# lives in pyproject.toml. This file exists only for the _eos extension and
+# the CLI scripts, both of which need Python logic: the former to read the
+# staging prefix from the environment, the latter to stay in sync with
+# automake without being transcribed by hand.
 
-try:
-    from wheel.bdist_wheel import bdist_wheel as _bdist_wheel
-    class bdist_wheel(_bdist_wheel):
-        def finalize_options(self):
-            _bdist_wheel.finalize_options(self)
-            self.root_is_pure = False
-except ImportError:
-    bdist_wheel = None
+import os
+import re
+import shlex
+from pathlib import Path
 
+from setuptools import Extension, setup
+
+ROOT = Path(__file__).resolve().parent
+
+
+def _parse_automake_var(makefile_am, name):
+    lines = Path(makefile_am).read_text().splitlines()
+    tokens = []
+    collecting = False
+    for line in lines:
+        if not collecting:
+            match = re.match(rf'^{re.escape(name)}\s*=\s*(.*)$', line)
+            if match is None:
+                continue
+            collecting = True
+            rest = match.group(1)
+        else:
+            rest = line
+        rest = rest.rstrip()
+        continued = rest.endswith('\\')
+        if continued:
+            rest = rest[:-1]
+        tokens.extend(rest.split())
+        if not continued:
+            return tokens
+    raise RuntimeError(f"'{name}' not found in {makefile_am}")
+
+
+# _eos sources: derived from python/Makefile.am's _eos_la_SOURCES and
+# cross-checked against the .cc files actually present, so the list cannot
+# silently go stale the way it did on the abandoned gh/setuptools branch
+# (which transcribed it by hand and missed later additions).
+_am_sources = _parse_automake_var(ROOT / 'python' / 'Makefile.am', '_eos_la_SOURCES')
+_cc_sources = sorted(t for t in _am_sources if t.endswith('.cc'))
+_present_sources = sorted(
+    str(p.relative_to(ROOT / 'python'))
+    for p in [*(ROOT / 'python').glob('_eos.cc'), *(ROOT / 'python' / '_eos').glob('*.cc')]
+)
+if _cc_sources != _present_sources:
+    raise RuntimeError(
+        "_eos_la_SOURCES in python/Makefile.am lists " + repr(_cc_sources) +
+        " but python/_eos*.cc contains " + repr(_present_sources) +
+        "; update both together"
+    )
+eos_sources = [str(Path('python') / t) for t in _cc_sources]
+
+# CLI scripts (decision D3): ship every script src/scripts/Makefile.am
+# installs, not the 6-of-12 setup.py used to hardcode. This stays correct
+# under --disable-cli, which drops src/ from SUBDIRS but leaves the scripts
+# as ordinary files in srcdir; reading them here relies on the PEP 517 build
+# always running in-tree, which it does since pyproject.toml lives at the
+# repository root.
+_bin_scripts = _parse_automake_var(ROOT / 'src' / 'scripts' / 'Makefile.am', 'bin_SCRIPTS')
+scripts = []
+for name in _bin_scripts:
+    path = ROOT / 'src' / 'scripts' / name
+    if not path.is_file():
+        raise RuntimeError(f"bin_SCRIPTS entry '{name}' does not exist in src/scripts/")
+    scripts.append(str(Path('src') / 'scripts' / name))
+
+staging_prefix = os.environ.get('EOS_STAGING_PREFIX')
+if not staging_prefix:
+    raise RuntimeError(
+        "EOS_STAGING_PREFIX must be set to the prefix produced by "
+        "'configure --prefix=<prefix> && make install', so libeos and "
+        "libeosutils can be found"
+    )
+staging_prefix = Path(staging_prefix)
+library_dirs = [str(d) for d in (staging_prefix / 'lib', staging_prefix / 'lib64') if d.is_dir()]
+if not library_dirs:
+    raise RuntimeError(f"no lib/ or lib64/ found under EOS_STAGING_PREFIX={staging_prefix}")
+
+# extra_compile_args/extra_link_args mirror only the Boost/Python subset of
+# _eos_la_CXXFLAGS / _eos_la_LDFLAGS in python/Makefile.am (via
+# @BOOST_PYTHON_CXXFLAGS@ etc.); libtool-only flags there (-module,
+# -export-symbols-regex) have no setuptools Extension equivalent and are
+# intentionally not carried over. Do not set runtime_library_dirs --
+# auditwheel/delocate own RPATH.
 setup(
-    name='eoshep',
-    version='@PYPI_VERSION@',
-    description='EOS -- A HEP program for Flavor Observables',
-    long_description=open('README.md').read(),
-    long_description_content_type='text/markdown',
-    classifiers=[
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
-        'Operating System :: POSIX :: Linux',
-        'Programming Language :: C++',
-        'Programming Language :: Python :: 3 :: Only',
-        'Programming Language :: Python :: Implementation :: CPython',
-        'Topic :: Scientific/Engineering :: Physics',
+    ext_modules=[
+        Extension(
+            '_eos',
+            sources=eos_sources,
+            libraries=['eos', 'eosutils', 'boost_python@BOOST_PYTHON_SUFFIX@'],
+            library_dirs=library_dirs,
+            extra_compile_args=shlex.split(
+                '@BOOST_PYTHON_CXXFLAGS@ @PYTHON_CXXFLAGS@ @AM_CXXFLAGS@ @GSL_CXXFLAGS@'
+            ),
+            extra_link_args=shlex.split('@BOOST_PYTHON_LDFLAGS@'),
+        ),
     ],
-    author='Danny van Dyk and others',
-    author_email='danny.van.dyk@gmail.com',
-    url='https://eos.github.io/',
-    license='GPLv2',
-    install_requires=[
-        'argcomplete', 'dynesty', 'matplotlib', 'numpy>=1.13', 'pypandoc', 'pypmc>=1.1.4', 'pyyaml', 'scipy', 'tqdm'
-    ],
-    packages=['eos', 'eos.data', 'eos.plot', 'eos.figure', '_eos_libs', '_eos_data'],
-    package_dir={
-        '_eos_libs': '',
-        '_eos_data': '_eos_data',
-    },
-    package_data={
-        '_eos_libs': ['lib*.so*'],
-        '_eos_data': ['*.yaml', 'constraints/**/*.yaml', 'parameters/*.yaml'],
-    },
-    scripts=[
-        'bin/eos-analysis',
-        'bin/eos-list-references',
-        'bin/eos-list-observables',
-        'bin/eos-plot',
-        'bin/eos-figure',
-        'bin/eos-data'
-    ],
-    include_package_data=True,
-    ext_modules=[Extension('_eos', sources=['dummy.cc'])],
-    python_requires='>=3.10'
+    scripts=scripts,
 )
