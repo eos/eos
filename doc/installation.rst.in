@@ -381,3 +381,74 @@ You can determine the correct value by running the following command:
   python3 -c "import sys; print('python{0}.{1}'.format(sys.version_info[0], sys.version_info[1]))"
 
 You can test and debug the installation of the python module as described :ref:`here <faq-check-installation>`.
+
+
+.. _installation-building-a-wheel:
+
+*************************
+Building a Wheel Manually
+*************************
+
+The ``eoshep`` wheels published to PyPI are built by
+``.github/workflows/pypi-build+check+deploy.yaml`` using `cibuildwheel
+<https://cibuildwheel.pypa.io/>`_. You do not need to read or replicate that
+workflow by hand: the repository ships ``build-wheel.bash``, a single script
+at the repository root that drives ``cibuildwheel`` with exactly the settings
+CI uses (matrix row, ``CIBW_*`` environment, before-build/repair/test
+commands), read directly out of the workflow file at run time so the two
+cannot silently drift apart.
+
+Prerequisites
+=============
+
+Linux
+  Docker or Podman. ``cibuildwheel`` builds inside the ``manylinux`` container
+  the workflow references, so no host C++ toolchain, BOOST, GSL, yaml-cpp, or
+  FFTW3 installation is needed.
+
+macOS (arm64 only)
+  Native arm64 hardware (Apple Silicon) and `Homebrew <https://brew.sh/>`_.
+  The script fetches the same pre-built dependency bundle (BOOST, GSL,
+  yaml-cpp, FFTW3) the CI macOS leg uses, via ``oras``.
+
+Both platforms
+  A Python 3 interpreter with `PyYAML <https://pyyaml.org/>`_ installed, used
+  to run the workflow-parsing helper and ``cibuildwheel`` itself;
+  ``cibuildwheel`` is installed automatically if missing. Set
+  ``EOS_BUILD_WHEEL_PYTHON`` to point the script at a specific interpreter;
+  otherwise it looks for one at a fixed development-venv path.
+
+Building
+========
+
+From a clean checkout, configured in place (do not copy or relocate the
+source tree before or during the build -- ``AM_CXXFLAGS`` freezes an absolute
+include path at ``configure`` time):
+
+::
+
+  ./build-wheel.bash
+
+This builds every Python version the workflow currently ships (``cp312``,
+``cp313``, ``cp314``) for the host architecture, and writes the wheel(s) to
+``./wheelhouse``. Useful options:
+
+::
+
+  ./build-wheel.bash --python cp312          # only one interpreter
+  ./build-wheel.bash --quick                 # skip 'make check' for faster iteration
+  ./build-wheel.bash --output-dir /tmp/out   # choose where wheels land
+  ./build-wheel.bash --print-env             # show the resolved CIBW_* settings without building
+  ./build-wheel.bash --help                  # full option list
+
+Installing and testing the result
+=================================
+
+::
+
+  pip install --force-reinstall ./wheelhouse/eoshep-*.whl
+  python3 -c 'import eos; print(eos.__version__)'
+  eos-list-references > /dev/null
+
+This mirrors the ``CIBW_TEST_COMMAND`` the workflow itself runs against every
+wheel it builds.

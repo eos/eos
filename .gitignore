@@ -29,6 +29,10 @@ debian/control-*
 /setup.py
 /pyproject.toml
 
+# Default output of build-wheel.bash: the wheel plus its split debug symbols,
+# which run to a few hundred MB and must never be committed.
+/wheelhouse/
+
 # Tests
 *_TEST
 *.trs
