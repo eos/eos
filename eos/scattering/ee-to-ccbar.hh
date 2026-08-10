@@ -43,6 +43,32 @@ namespace eos
     5   D+   D-       PP (P)       3       4 (isospin)
     */
 
+    // std::atan has branch points at +-i. Channel::chew_mandelstam evaluates
+    // it at z = s / sqrt(s * (mp^2 - s)), which tends to exactly +i as
+    // mp -> 0 (physically negligible channel masses, e.g. the e^+e^-
+    // channel) whenever the Mandelstam variable s is (numerically) real.
+    // Right at that limit, z's real part -- mathematically zero -- is
+    // instead the result of several chained sqrt/division roundings, so its
+    // sign (and hence which side of atan's branch cut is selected) is not
+    // portable across standard library implementations. Pin it to zero, but
+    // only when s itself is real: when the caller supplies a genuinely
+    // complex s (e.g. to move onto a different Riemann sheet), z's small
+    // real part is physically meaningful, not noise, and must not be
+    // touched -- clipping it here previously reintroduced exactly the kind
+    // of platform-dependent branch error this function exists to avoid, in
+    // the opposite direction, for eos/scattering/ee-to-ccbar_TEST.cc's
+    // prepare_complex(3.78, -0.001) case.
+    inline complex<double>
+    atan_near_branch_point(const complex<double> & z, const complex<double> & s)
+    {
+        if ((std::abs(s.imag()) < 1.0e-10) && (std::abs(z.real()) < 1.0e-9 * std::abs(z.imag())))
+        {
+            return std::atan(complex<double>(0.0, z.imag()));
+        }
+
+        return std::atan(z);
+    }
+
     // e^+e^- channel
     template <unsigned nchannels_, unsigned nresonances_>
     struct EEChannel :
@@ -78,7 +104,7 @@ namespace eos
             const complex<double> s = S + complex<double>(0.0, 1e-15);
 
             return -1.0 / 8.0 / pi / pi * std::sqrt(mp * mp - s) *
-                std::atan(s / std::sqrt(s * (mp * mp - s))) / std::sqrt(s);
+                atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / std::sqrt(s);
         }
     };
 
@@ -132,7 +158,7 @@ namespace eos
             else
             {
                 leading_term  = Fsq * power_of<3>(std::sqrt(mp * mp - s)) *
-                    std::atan(s / std::sqrt(s * (mp * mp - s))) / 8.0 / pi / pi / std::sqrt(s);
+                    atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / 8.0 / pi / pi / std::sqrt(s);
             }
 
             const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) *
@@ -190,7 +216,7 @@ namespace eos
             else
             {
                 leading_term  = Fsq * power_of<3>(std::sqrt(mp * mp - s)) *
-                    std::atan(s / std::sqrt(s * (mp * mp - s))) / 8.0 / pi / pi / std::sqrt(s);
+                    atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / 8.0 / pi / pi / std::sqrt(s);
             }
 
             const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) *
