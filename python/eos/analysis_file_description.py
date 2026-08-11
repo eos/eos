@@ -89,6 +89,11 @@ class MetadataAuthorDescription(_AnalysisFileDeserializable):
     affiliation:str=''
     email:str=''
 
+    def _diagnostics(self):
+        for field_name in ('name', 'affiliation', 'email'):
+            if not isinstance(getattr(self, field_name), str):
+                yield Diagnostic((field_name,), Severity.ERROR, f'{field_name} must be a string')
+
 
 @dataclass
 class MetadataDescription(_AnalysisFileDeserializable):
@@ -1034,7 +1039,7 @@ class StepComponent(_AnalysisFileDeserializable):
             if task_component.task not in eos.tasks._tasks:
                 continue
             task = eos.tasks._tasks[task_component.task]
-            # TaskComponent.arguments is checked by TaskComponent._diagnostics() in phase 1.
+            # TaskComponent.arguments is checked by TaskComponent._diagnostics().
             provided_arguments = self.default_arguments[task_component.task].keys()
             known_arguments = set(inspect.signature(task).parameters)
             for argument in provided_arguments - known_arguments:

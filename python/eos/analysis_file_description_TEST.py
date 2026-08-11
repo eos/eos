@@ -66,6 +66,17 @@ class MetadataAuthorDescriptionTests(unittest.TestCase):
         self.assertEqual(author.affiliation, '')
         self.assertEqual(author.email, '')
 
+    def test_fields_must_be_strings(self):
+        for field_name in ('name', 'affiliation', 'email'):
+            with self.subTest(field_name=field_name):
+                values = {'name': 'Jane Doe', 'affiliation': '', 'email': ''}
+                values[field_name] = 7
+                author = MetadataAuthorDescription.from_dict(**values)
+                diagnostics = list(author.validate_structure())
+                self.assertEqual(len(diagnostics), 1)
+                self.assertEqual(diagnostics[0].path, (field_name,))
+                self.assertEqual(diagnostics[0].message, f'{field_name} must be a string')
+
 
 class MetadataDescriptionTests(unittest.TestCase):
 
