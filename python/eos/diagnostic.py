@@ -23,6 +23,7 @@ import enum
 class Severity(enum.Enum):
     ERROR = 'error'
     WARNING = 'warning'
+    INFO = 'info'
 
 
 @dataclass(frozen=True)
