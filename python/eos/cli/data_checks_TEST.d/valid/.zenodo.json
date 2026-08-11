@@ -2,7 +2,10 @@
   "title": "EOS/DATA-2026-01: Supplementary material for EOS/ANALYSIS-2026-01",
   "description": "A minimal dataset description.",
   "creators": [
-    {"name": "Doe, Jane"},
-    {"name": "John Roe"}
-  ]
+    {"name": "Doe, Jane", "affiliation": "Example University"},
+    {"name": "John Roe", "affiliation": "Example Institute"}
+  ],
+  "upload_type": "dataset",
+  "license": "CC-BY-4.0",
+  "grants": []
 }

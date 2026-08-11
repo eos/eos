@@ -68,6 +68,12 @@ class LogfileHandler:
 
 
 _tasks = {}
+_task_outputs = {}
+
+
+def task_output_templates():
+    """Return the registered task output templates without executing any task."""
+    return dict(_task_outputs)
 
 def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, load_analysis_file=True):
     """Decorator that registers a function as a named EOS task.
@@ -150,6 +156,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
                         iaccordion.selected_index = None
                     return result
         _tasks[name] = task_wrapper
+        _task_outputs[name] = output
         return task_wrapper
     return _task
 

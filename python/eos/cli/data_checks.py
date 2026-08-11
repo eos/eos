@@ -49,18 +49,22 @@ class ExitStatus(IntEnum):
 
 class CheckScope(IntEnum):
     BASIC = 1
+    COMPLETE = 2
 
 
 class CacheKey(Enum):
     ANALYSIS_SELECTION_VALID = 'analysis-selection-valid'
     ANALYSIS_METADATA_VALID = 'analysis-metadata-valid'
     ANALYSIS_METADATA = 'analysis-metadata'
+    ANALYSIS_DOCUMENTS = 'analysis-documents'
     ANALYSIS_AUTHOR_NAMES = 'analysis-author-names'
     ANALYSIS_CONSISTENCY_VALID = 'analysis-consistency-valid'
     COMMON_ANALYSIS_ID = 'common-analysis-id'
     COMMON_AUTHORS_NORMALIZED = 'common-authors-normalized'
     ZENODO_CREATORS_VALID = 'zenodo-creators-valid'
     ZENODO_CREATORS_NORMALIZED = 'zenodo-creators-normalized'
+    ZENODO_METADATA = 'zenodo-metadata'
+    FILE_INVENTORY = 'file-inventory'
 
 
 def _immutable_mapping(values: Mapping[str, Any] | None) -> Mapping[str, Any]:
@@ -192,6 +196,8 @@ class CheckFactory:
             if not ready:
                 names = ', '.join(remaining)
                 raise ValueError(f'cyclic check prerequisites: {names}')
+            ready_scope = min(remaining[name].scope for name in ready)
+            ready = [name for name in ready if remaining[name].scope == ready_scope]
             for name in ready:
                 if name in self._checks:
                     ordered.append(self._checks[name])
@@ -502,6 +508,7 @@ def check_analysis_metadata(context: CheckContext) -> Iterable[Finding]:
         return
 
     metadata_by_path: dict[Path, Mapping[str, Any]] = {}
+    documents_by_path: dict[Path, Mapping[str, Any]] = {}
     author_names: dict[Path, tuple[str, ...]] = {}
     valid = True
     for path in context.analysis_paths:
@@ -529,6 +536,7 @@ def check_analysis_metadata(context: CheckContext) -> Iterable[Finding]:
                 details={'field': 'metadata'},
             )
             continue
+        documents_by_path[path] = document
         metadata_by_path[path] = metadata
 
         analysis_id = metadata.get('id')
@@ -570,6 +578,7 @@ def check_analysis_metadata(context: CheckContext) -> Iterable[Finding]:
                     )
 
     context.cache[CacheKey.ANALYSIS_METADATA] = metadata_by_path
+    context.cache[CacheKey.ANALYSIS_DOCUMENTS] = documents_by_path
     context.cache[CacheKey.ANALYSIS_AUTHOR_NAMES] = author_names
     context.cache[CacheKey.ANALYSIS_METADATA_VALID] = valid
 
@@ -676,6 +685,7 @@ def check_zenodo_metadata(context: CheckContext) -> Iterable[Finding]:
     if not isinstance(document, Mapping):
         yield _finding(check_id, Severity.ERROR, '.zenodo.json must contain a JSON object.', path=path)
         return
+    context.cache[CacheKey.ZENODO_METADATA] = document
     creators = document.get('creators')
     creator_names: list[str] = []
     creators_valid = True
