@@ -84,10 +84,12 @@ class MetadataDescriptionTests(unittest.TestCase):
         md = MetadataDescription.from_dict(
             title='My Analysis',
             id='my-analysis',
+            description='A detailed analysis description.',
             authors=[{'name': 'Jane Doe'}, {'name': 'John Roe', 'email': 'john@example.org'}],
         )
         self.assertEqual(md.title, 'My Analysis')
         self.assertEqual(md.id, 'my-analysis')
+        self.assertEqual(md.description, 'A detailed analysis description.')
         # the authors are deserialized into MetadataAuthorDescription instances
         self.assertEqual(len(md.authors), 2)
         self.assertIsInstance(md.authors[0], MetadataAuthorDescription)
@@ -98,6 +100,7 @@ class MetadataDescriptionTests(unittest.TestCase):
         self.assertEqual(md.title, '')
         self.assertEqual(md.id, '')
         self.assertEqual(md.authors, [])
+        self.assertEqual(md.description, '')
 
 
 class PriorDescriptionTests(unittest.TestCase):

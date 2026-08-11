@@ -17,6 +17,11 @@ EXTRA_DIST = \
 	eos/validation_context.py \
 	eos/config.py \
 	eos/constraint.py \
+	eos/cli/__init__.py \
+	eos/cli/data.py \
+	eos/cli/data_checks.py \
+	eos/cli/data_checks_TEST.d \
+	eos/cli/data_checks_TEST.d/valid \
 	eos/datasets.py \
 	eos/datasets_TEST.d \
 	eos/datasets_file_description.py \
@@ -112,6 +117,12 @@ eos_SCRIPTS = \
 	eos/tasks.py \
 	eos/pyhf_likelihood.py
 
+eosclidir = $(pkgpythondir)/cli
+eoscli_SCRIPTS = \
+	eos/cli/__init__.py \
+	eos/cli/data.py \
+	eos/cli/data_checks.py
+
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
 	eos/data/__init__.py \
@@ -163,6 +174,8 @@ TESTS = \
 	eos/analysis_file_TEST.py \
 	eos/analysis_file_context_TEST.py \
 	eos/analysis_file_description_TEST.py \
+	eos/cli/data_checks_TEST.py \
+	eos/cli/data_TEST.py \
 	eos/validation_context_TEST.py \
 	eos/datasets_TEST.py \
 	eos/datasets_file_description_TEST.py \
