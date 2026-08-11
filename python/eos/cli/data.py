@@ -31,12 +31,14 @@ from .data_checks import (
     register_basic_checks,
     run_checks,
 )
+from .data_checks_dataset import register_dataset_checks
 
 
 def create_check_factory() -> CheckFactory:
     """Return the built-in check registry."""
     factory = CheckFactory()
     register_basic_checks(factory)
+    register_dataset_checks(factory)
     return factory
 
 
@@ -177,7 +179,7 @@ def cmd_check(
         ),
     )
     factory = check_factory if check_factory is not None else create_check_factory()
-    result = run_checks(factory, context, scope=CheckScope.BASIC)
+    result = run_checks(factory, context, scope=CheckScope.COMPLETE)
     PlainTextRenderer().write(result, stdout)
     return result.exit_status
 
