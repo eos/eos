@@ -39,7 +39,7 @@ Homepage = "https://eos.github.io/"
 
 [tool.setuptools]
 zip-safe = false
-packages = ["eos", "eos.data", "eos.plot", "eos.figure", "_eos_data"]
+packages = ["eos", "eos.cli", "eos.data", "eos.plot", "eos.figure", "_eos_data"]
 
 [tool.setuptools.package-dir]
 eos = "python/eos"

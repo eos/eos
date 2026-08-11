@@ -21,6 +21,11 @@ from dataclasses import MISSING, dataclass, fields
 from .diagnostic import Diagnostic, Severity
 
 
+def load_yaml_file(path):
+    with open(path, encoding='utf-8') as stream:
+        return _yaml.safe_load(stream)
+
+
 @dataclass
 class InvalidComponent:
     diagnostics: list
@@ -58,8 +63,7 @@ class Deserializable:
         """
         if not _os.path.exists(path) or not _os.path.isfile(path):
             raise RuntimeError(f'Description file {path} does not exist or is not a file')
-        with open(path) as f:
-            data = _yaml.safe_load(f)
+        data = load_yaml_file(path)
         if not isinstance(data, dict):
             raise RuntimeError(f'Description file {path} does not contain a YAML mapping')
         return cls.from_dict(**data)
