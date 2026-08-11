@@ -17,18 +17,27 @@ from __future__ import annotations
 
 import argparse
 from collections.abc import Sequence
-from contextlib import redirect_stderr, redirect_stdout
+from contextlib import contextmanager, redirect_stderr, redirect_stdout
 import logging
 from pathlib import Path
 import sys
 from typing import TextIO
 
-from .data_checks import CheckContext, CheckFactory, CheckScope, PlainTextRenderer, run_checks
+from .data_checks import (
+    CheckContext,
+    CheckFactory,
+    CheckScope,
+    PlainTextRenderer,
+    register_basic_checks,
+    run_checks,
+)
 
 
 def create_check_factory() -> CheckFactory:
-    """Return an empty check registry."""
-    return CheckFactory()
+    """Return the built-in check registry."""
+    factory = CheckFactory()
+    register_basic_checks(factory)
+    return factory
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -101,14 +110,26 @@ def _parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _configure_logging(verbosity: int) -> None:
+@contextmanager
+def _configured_logging(verbosity: int, stderr: TextIO):
+    import eos
+
     levels = {
         0: logging.ERROR,
         1: logging.WARNING,
         2: logging.INFO,
         3: logging.DEBUG,
     }
-    logging.basicConfig(level=levels[min(verbosity, 3)])
+    handler = eos.stderr_handler
+    previous_level = handler.level
+    previous_stream = handler.stream
+    handler.setLevel(levels[min(verbosity, 3)])
+    handler.setStream(stderr)
+    try:
+        yield
+    finally:
+        handler.setStream(previous_stream)
+        handler.setLevel(previous_level)
 
 
 def _datasets():
@@ -122,7 +143,8 @@ def cmd_download(args: argparse.Namespace, **_kwargs) -> int:
     return 0
 
 
-def cmd_list(args: argparse.Namespace, *, stdout: TextIO = sys.stdout, **_kwargs) -> int:
+def cmd_list(args: argparse.Namespace, *, stdout: TextIO | None = None, **_kwargs) -> int:
+    stdout = sys.stdout if stdout is None else stdout
     for dataset_id, dataset in _datasets().datasets():
         print(f'{dataset_id:<9}  -  {dataset.title}', file=stdout)
         print(f'{"":<9}     {", ".join(dataset.authors)}', file=stdout)
@@ -137,16 +159,18 @@ def cmd_update(args: argparse.Namespace, **_kwargs) -> int:
 def cmd_check(
     args: argparse.Namespace,
     *,
-    stdout: TextIO = sys.stdout,
-    stderr: TextIO = sys.stderr,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
     check_factory: CheckFactory | None = None,
 ) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
     if args.interactive:
         print('eos-data check: interactive operation is not yet available', file=stderr)
         return 2
 
     context = CheckContext(
-        dataset_root=Path(args.directory).resolve(),
+        dataset_root=Path(args.directory),
         analysis_paths=tuple(Path(path) for path in (args.analysis_file or ())),
         main_analysis_path=(
             Path(args.main_analysis_file) if args.main_analysis_file is not None else None
@@ -161,10 +185,12 @@ def cmd_check(
 def main(
     argv: Sequence[str] | None = None,
     *,
-    stdout: TextIO = sys.stdout,
-    stderr: TextIO = sys.stderr,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
     check_factory: CheckFactory | None = None,
 ) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
     parser = _parser()
     try:
         with redirect_stdout(stdout), redirect_stderr(stderr):
@@ -174,12 +200,12 @@ def main(
 
     if not hasattr(args, 'cmd') or not callable(args.cmd):
         parser.print_help(file=stdout)
-        return 2
+        return 0
 
-    _configure_logging(args.verbose)
-    return args.cmd(
-        args,
-        stdout=stdout,
-        stderr=stderr,
-        check_factory=check_factory,
-    )
+    with _configured_logging(args.verbose, stderr):
+        return args.cmd(
+            args,
+            stdout=stdout,
+            stderr=stderr,
+            check_factory=check_factory,
+        )

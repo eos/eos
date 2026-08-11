@@ -101,6 +101,8 @@ class MetadataDescription(_AnalysisFileDeserializable):
 
     :param title: A human-readable title for the analysis. Optional.
     :type title: str
+    :param description: A human-readable description of the analysis. Optional.
+    :type description: str
     :param id: A unique identifier for the analysis. Optional.
     :type id: str
     :param authors: The list of authors of the analysis. Optional.
@@ -109,6 +111,7 @@ class MetadataDescription(_AnalysisFileDeserializable):
     title:str=''
     id:str=''
     authors:list[MetadataAuthorDescription]=field(default_factory=list)
+    description:str=''
 
     def validate_structure(self):
         yield from self._diagnostics()
