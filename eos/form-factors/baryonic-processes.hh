@@ -51,7 +51,7 @@ namespace eos
         // initial state mass
         static constexpr double m1 = 5.61951;
         // final state mass
-        static constexpr double m2 = 2.2865;
+        static constexpr double m2 = 2.28646;
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
     };
 
@@ -61,7 +61,7 @@ namespace eos
         static constexpr const char * name_2 = "mass::Lambda";
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange);
         // initial state mass
-        static constexpr double m1 = 2.2865;
+        static constexpr double m1 = 2.28646;
         // final state mass
         static constexpr double m2 = 1.115683;
         // semileptonic kinematic endpoint
@@ -81,7 +81,7 @@ namespace eos
         static constexpr const char * name_2 = "mass::neutron";
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
         // initial state mass
-        static constexpr double m1 = 2.2865;
+        static constexpr double m1 = 2.28646;
         // final state mass
         static constexpr double m2 = 0.9395654205;
         // semileptonic kinematic endpoint
@@ -102,7 +102,7 @@ namespace eos
         // rare (FCNC) c -> u transition
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::up);
         // initial state mass
-        static constexpr double m1 = 2.2865;
+        static constexpr double m1 = 2.28646;
         // final state mass
         static constexpr double m2 = 0.93827208816;
         // semileptonic kinematic endpoint

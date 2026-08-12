@@ -261,16 +261,16 @@ class SEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t5(3.0), 34.31193557, eps);
 
                 const auto tm = LambdaCToLambda::tm;
-                TEST_CHECK_RELATIVE_ERROR(ff.f_time_v (tm), 27.62364063, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_long_v (tm), 30.97555432, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_v (tm), 16.84345485, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_time_a (tm), 53.59744051, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_long_a (tm), 42.88588404, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_a (tm), 42.88588404, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t (tm), 20.44717867, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t (tm), 31.66136446, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t5(tm), 28.73608948, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t5(tm), 28.73608948, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_v (tm), 27.62336324, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_v (tm), 30.97491454, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_v (tm), 16.84302029, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_time_a (tm), 53.59590522, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_a (tm), 42.88555083, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_a (tm), 42.88559731, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t (tm), 20.44665113, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t (tm), 31.66081730, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_t5(tm), 28.73586320, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_t5(tm), 28.73586621, eps);
             }
 
         }
