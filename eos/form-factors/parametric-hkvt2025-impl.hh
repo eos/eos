@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2025 Florian Herren
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,24 +39,24 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     HKVT2025FormFactorTraits<Process_, PToPP>::resonance_0m_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@HME" }
     };
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     HKVT2025FormFactorTraits<Process_, PToPP>::resonance_1m_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@HME" }
     };
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     HKVT2025FormFactorTraits<Process_, PToPP>::resonance_1p_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,1@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,1@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@HME" }
     };
 
     template <typename Process_>

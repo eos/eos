@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2022 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  * Copyright (c) 2021-2022 Muslem Rahimi
  *
  * This file is part of the EOS project. EOS is free software;
@@ -104,10 +104,10 @@ class SEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 p["Lambda_b->Lambda::a^(perp,T5)_3@SE"] = -0.4;
                 p["Lambda_b->Lambda::a^(perp,T5)_4@SE"] = +0.5;
                 // Resonance masses
-                p["mass::B_s@BSZ2015"]   = 5.367;
-                p["mass::B_s,0@BSZ2015"] = 5.711;
-                p["mass::B_s^*@BSZ2015"] = 5.416;
-                p["mass::B_s,1@BSZ2015"] = 5.750;
+                p["mass::B_s@HME"]   = 5.367;
+                p["mass::B_s,0@HME"] = 5.711;
+                p["mass::B_s^*@HME"] = 5.416;
+                p["mass::B_s,1@HME"] = 5.750;
                 // Fix tp_a to tp_v to match the initial publication [BMRvD:2022A]
                 p["Lambda_b->Lambda::tp_a@SE"] = p["Lambda_b->Lambda::tp_v@SE"].evaluate();
 
@@ -230,10 +230,10 @@ class SEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 p["Lambda_c->Lambda::a^(perp,T5)_1@SE"] = -0.2;
                 p["Lambda_c->Lambda::a^(perp,T5)_2@SE"] = +0.3;
                 // Resonance masses
-                p["mass::D_s@BSZ2015"]   = 1.968;
-                p["mass::D_s,0@BSZ2015"] = 2.318;
-                p["mass::D_s^*@BSZ2015"] = 2.112;
-                p["mass::D_s,1@BSZ2015"] = 2.460;
+                p["mass::D_s@HME"]   = 1.968;
+                p["mass::D_s,0@HME"] = 2.318;
+                p["mass::D_s^*@HME"] = 2.112;
+                p["mass::D_s,1@HME"] = 2.460;
 
                 SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus> ff(p, Options{ });
 

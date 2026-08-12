@@ -54,18 +54,18 @@ class BGL1997FormFactorsTest :
                 const double m_V(BToDstar::m_V);
                 const double t_0((m_B + m_V)* power_of<2>(std::sqrt(m_B) - std::sqrt(m_V)));
 
-                p["mass::B_c^*@BSZ2015"] = 6.329;
-                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
-                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
-                p["mass::B_c,1@BSZ2015"] = 6.739;
-                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
-                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
-                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
-                p["mass::B_c@BSZ2015"] = 6.275;
-                p["mass::B_c[1]@BSZ2015"] = 6.871;
-                p["mass::B_c[2]@BSZ2015"] = 7.250;
-                p["mass::B_c,0@BSZ2015"] = 6.704;
-                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+                p["mass::B_c^*@HME"] = 6.329;
+                p["mass::B_c^*[1]@HME"] = 6.910;
+                p["mass::B_c^*[2]@HME"] = 7.020;
+                p["mass::B_c,1@HME"] = 6.739;
+                p["mass::B_c,1[1]@HME"] = 6.750;
+                p["mass::B_c,1[2]@HME"] = 7.145;
+                p["mass::B_c,1[3]@HME"] = 7.150;
+                p["mass::B_c@HME"] = 6.275;
+                p["mass::B_c[1]@HME"] = 6.871;
+                p["mass::B_c[2]@HME"] = 7.250;
+                p["mass::B_c,0@HME"] = 6.704;
+                p["mass::B_c,0[1]@HME"] = 7.122;
 
                 p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
@@ -103,18 +103,18 @@ class BGL1997FormFactorsTest :
                 const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);
                 BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
 
-                p["mass::B_c^*@BSZ2015"] = 6.329;
-                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
-                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
-                p["mass::B_c,1@BSZ2015"] = 6.739;
-                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
-                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
-                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
-                p["mass::B_c@BSZ2015"] = 6.275;
-                p["mass::B_c[1]@BSZ2015"] = 6.871;
-                p["mass::B_c[2]@BSZ2015"] = 7.250;
-                p["mass::B_c,0@BSZ2015"] = 6.704;
-                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+                p["mass::B_c^*@HME"] = 6.329;
+                p["mass::B_c^*[1]@HME"] = 6.910;
+                p["mass::B_c^*[2]@HME"] = 7.020;
+                p["mass::B_c,1@HME"] = 6.739;
+                p["mass::B_c,1[1]@HME"] = 6.750;
+                p["mass::B_c,1[2]@HME"] = 7.145;
+                p["mass::B_c,1[3]@HME"] = 7.150;
+                p["mass::B_c@HME"] = 6.275;
+                p["mass::B_c[1]@HME"] = 6.871;
+                p["mass::B_c[2]@HME"] = 7.250;
+                p["mass::B_c,0@HME"] = 6.704;
+                p["mass::B_c,0[1]@HME"] = 7.122;
 
                 p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
@@ -282,17 +282,17 @@ class BGL1997FormFactorsTest :
             {
                 BGL1997FormFactors<BToD, PToP> ff(p, Options{ });
 
-                p["mass::B_c^*@BSZ2015"] = 6.329;
-                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
-                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
-                p["mass::B_c,0@BSZ2015"] = 6.704;
-                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+                p["mass::B_c^*@HME"] = 6.329;
+                p["mass::B_c^*[1]@HME"] = 6.910;
+                p["mass::B_c^*[2]@HME"] = 7.020;
+                p["mass::B_c,0@HME"] = 6.704;
+                p["mass::B_c,0[1]@HME"] = 7.122;
 
                 p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
                 p["b->c::chiOPE[1^-_T]"] = 0.0004897959184;
 
-                p["mass::D_u@BSZ2015"] = 1.870;
+                p["mass::D_u@HME"] = 1.870;
 
                 p["B->D::a^f+_0@BGL1997"] = 0.1e-02;
                 p["B->D::a^f+_1@BGL1997"] = 0.2e-02;
@@ -367,18 +367,18 @@ class BGL1997FormFactorsTest :
                 BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
                 const double t_0(10.684);
 
-                p["mass::B_c^*@BSZ2015"] = 6.329;
-                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
-                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
-                p["mass::B_c,1@BSZ2015"] = 6.739;
-                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
-                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
-                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
-                p["mass::B_c@BSZ2015"] = 6.275;
-                p["mass::B_c[1]@BSZ2015"] = 6.871;
-                p["mass::B_c[2]@BSZ2015"] = 7.250;
-                p["mass::B_c,0@BSZ2015"] = 6.704;
-                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+                p["mass::B_c^*@HME"] = 6.329;
+                p["mass::B_c^*[1]@HME"] = 6.910;
+                p["mass::B_c^*[2]@HME"] = 7.020;
+                p["mass::B_c,1@HME"] = 6.739;
+                p["mass::B_c,1[1]@HME"] = 6.750;
+                p["mass::B_c,1[2]@HME"] = 7.145;
+                p["mass::B_c,1[3]@HME"] = 7.150;
+                p["mass::B_c@HME"] = 6.275;
+                p["mass::B_c[1]@HME"] = 6.871;
+                p["mass::B_c[2]@HME"] = 7.250;
+                p["mass::B_c,0@HME"] = 6.704;
+                p["mass::B_c,0[1]@HME"] = 7.122;
 
                 p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
@@ -414,18 +414,18 @@ class BGL1997FormFactorsTest :
                 const double F2factor = (1.0 + r) / ((1.0 - r) * (1.0 + wmax) * r * mB * mB);
                 BGL1997FormFactors<BToDstar, PToV> ff(p, Options{ });
 
-                p["mass::B_c^*@BSZ2015"] = 6.329;
-                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
-                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
-                p["mass::B_c,1@BSZ2015"] = 6.739;
-                p["mass::B_c,1[1]@BSZ2015"] = 6.750;
-                p["mass::B_c,1[2]@BSZ2015"] = 7.145;
-                p["mass::B_c,1[3]@BSZ2015"] = 7.150;
-                p["mass::B_c@BSZ2015"] = 6.275;
-                p["mass::B_c[1]@BSZ2015"] = 6.871;
-                p["mass::B_c[2]@BSZ2015"] = 7.250;
-                p["mass::B_c,0@BSZ2015"] = 6.704;
-                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+                p["mass::B_c^*@HME"] = 6.329;
+                p["mass::B_c^*[1]@HME"] = 6.910;
+                p["mass::B_c^*[2]@HME"] = 7.020;
+                p["mass::B_c,1@HME"] = 6.739;
+                p["mass::B_c,1[1]@HME"] = 6.750;
+                p["mass::B_c,1[2]@HME"] = 7.145;
+                p["mass::B_c,1[3]@HME"] = 7.150;
+                p["mass::B_c@HME"] = 6.275;
+                p["mass::B_c[1]@HME"] = 6.871;
+                p["mass::B_c[2]@HME"] = 7.250;
+                p["mass::B_c,0@HME"] = 6.704;
+                p["mass::B_c,0[1]@HME"] = 7.122;
 
                 p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
@@ -586,18 +586,18 @@ class BGL1997FormFactorsTest :
             {
                 BGL1997FormFactors<BToD, PToP> ff(p, Options{ });
 
-                p["mass::B_c^*@BSZ2015"] = 6.329;
-                p["mass::B_c^*[1]@BSZ2015"] = 6.910;
-                p["mass::B_c^*[2]@BSZ2015"] = 7.020;
-                p["mass::B_c,0@BSZ2015"] = 6.704;
-                p["mass::B_c,0[1]@BSZ2015"] = 7.122;
+                p["mass::B_c^*@HME"] = 6.329;
+                p["mass::B_c^*[1]@HME"] = 6.910;
+                p["mass::B_c^*[2]@HME"] = 7.020;
+                p["mass::B_c,0@HME"] = 6.704;
+                p["mass::B_c,0[1]@HME"] = 7.122;
 
                 p["b->c::chiOPE[1^-_V]"] = 5.131e-04;
                 p["b->c::chiOPE[0^+_V]"] = 6.204e-03;
                 p["b->c::chiOPE[1^-_T]"] = 0.0004897959183673469;
 
-                p["mass::B_d@BSZ2015"] = 5.279;
-                p["mass::D_u@BSZ2015"] = 1.870;
+                p["mass::B_d@HME"] = 5.279;
+                p["mass::D_u@HME"] = 1.870;
 
                 p["B->D::a^f+_0@BGL1997"] = 0.1e-02;
                 p["B->D::a^f+_1@BGL1997"] = 0.2e-02;

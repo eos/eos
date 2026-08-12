@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013-2025 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  * Copyright (c) 2024      Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -60,7 +60,7 @@ class BsToKstarLeptonNeutrinoTest :
                 p["mass::mu"] = 0.1056583715;
 
                 // Resonance masses for the form-factors
-                p["mass::B_d,1@BSZ2015"] = 5.723;
+                p["mass::B_d,1@HME"] = 5.723;
 
                 Options oo
                 {

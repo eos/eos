@@ -44,12 +44,12 @@ class BToKSEFormFactorsTest :
                 p["B->K::a^fT_1@SE"]     = -0.04;
                 p["B->K::a^f0_1@SE"]     =  0.05;
 
-                p["mass::B_d@BSZ2015"]        =  5.279;
-                p["mass::K_d@BSZ2015"]        =  0.492;
-                p["mass::B_s@BSZ2015"]        =  5.367;
-                p["mass::B_s^*@BSZ2015"]      =  5.416;
-                p["mass::B_s,0@BSZ2015"]      =  5.711;
-                p["mass::B_s,1@BSZ2015"]      =  5.750;
+                p["mass::B_d@HME"]        =  5.279;
+                p["mass::K_d@HME"]        =  0.492;
+                p["mass::B_s@HME"]        =  5.367;
+                p["mass::B_s^*@HME"]      =  5.416;
+                p["mass::B_s,0@HME"]      =  5.711;
+                p["mass::B_s,1@HME"]      =  5.750;
 
                 // Optimized t0 = (mB + mK) * (sqrt(mB) - sqrt(mK))^2
                 p["B->K::t0@SE"]         =  14.703305673;

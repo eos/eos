@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=120 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020-2026 Danny van Dyk
  * Copyright (c) 2020      Nico Gubernari
  * Copyright (c) 2020      Christoph Bobeth
  * Copyright (c) 2025      Maximilian Hoverath
@@ -64,24 +64,24 @@ namespace eos
             IntegerOption n_bound_states_0p;
 
             BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
-                masses_1m{{ UsedParameter(p["mass::B_c^*@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c^*[1]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c^*[2]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c^*[3]@BSZ2015"], *this)
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@HME"], *this)),
+                masses_1m{{ UsedParameter(p["mass::B_c^*@HME"], *this),
+                            UsedParameter(p["mass::B_c^*[1]@HME"], *this),
+                            UsedParameter(p["mass::B_c^*[2]@HME"], *this),
+                            UsedParameter(p["mass::B_c^*[3]@HME"], *this)
                 }},
-                masses_1p{{ UsedParameter(p["mass::B_c,1@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c,1[1]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c,1[2]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c,1[3]@BSZ2015"], *this)
+                masses_1p{{ UsedParameter(p["mass::B_c,1@HME"], *this),
+                            UsedParameter(p["mass::B_c,1[1]@HME"], *this),
+                            UsedParameter(p["mass::B_c,1[2]@HME"], *this),
+                            UsedParameter(p["mass::B_c,1[3]@HME"], *this)
                 }},
-                masses_0m{{ UsedParameter(p["mass::B_c@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c[1]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c[2]@BSZ2015"], *this)
+                masses_0m{{ UsedParameter(p["mass::B_c@HME"], *this),
+                            UsedParameter(p["mass::B_c[1]@HME"], *this),
+                            UsedParameter(p["mass::B_c[2]@HME"], *this)
                 }},
-                masses_0p{{ UsedParameter(p["mass::B_c,0@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c,0[1]@BSZ2015"], *this)
+                masses_0p{{ UsedParameter(p["mass::B_c,0@HME"], *this),
+                            UsedParameter(p["mass::B_c,0[1]@HME"], *this)
                 }},
                 chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
                 chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
@@ -193,15 +193,15 @@ namespace eos
             IntegerOption n_bound_states_0p;
 
             BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
-                masses_1m{{ UsedParameter(p["mass::B_c^*@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c^*[1]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c^*[2]@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c^*[3]@BSZ2015"], *this)
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_P(UsedParameter(p[std::string(Process_::name_P) + "@HME"], *this)),
+                masses_1m{{ UsedParameter(p["mass::B_c^*@HME"], *this),
+                            UsedParameter(p["mass::B_c^*[1]@HME"], *this),
+                            UsedParameter(p["mass::B_c^*[2]@HME"], *this),
+                            UsedParameter(p["mass::B_c^*[3]@HME"], *this)
                 }},
-                masses_0p{{ UsedParameter(p["mass::B_c,0@BSZ2015"], *this),
-                            UsedParameter(p["mass::B_c,0[1]@BSZ2015"], *this)
+                masses_0p{{ UsedParameter(p["mass::B_c,0@HME"], *this),
+                            UsedParameter(p["mass::B_c,0[1]@HME"], *this)
                 }},
                 chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
                 chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),

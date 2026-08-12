@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2022 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  * Copyright (c) 2021-2022 Muslem Rahimi
  * Copyright (c) 2022 Méril Reboud
  *
@@ -61,8 +61,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
 
             SEFormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@HME"], *this)),
                 m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
                 m_R_1p(UsedParameter(p[resonance_1p_names.at(Process_::partonic_transition)], *this)),
@@ -226,8 +226,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
 
             SEFormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_P(UsedParameter(p[std::string(Process_::name_P) + "@HME"], *this)),
                 m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
                 tp(UsedParameter(p[std::string(Process_::label) + "::tp@SE"], *this)),
@@ -381,8 +381,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
 
             SEFormFactorTraits(const Parameters & p) :
-                m_1(UsedParameter(p[std::string(Process_::name_1) + "@SE"], *this)),
-                m_2(UsedParameter(p[std::string(Process_::name_2) + "@SE"], *this)),
+                m_1(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+                m_2(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this)),
                 m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
                 m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),

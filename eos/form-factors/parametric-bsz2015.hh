@@ -52,8 +52,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
 
             BSZ2015FormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@HME"], *this)),
                 m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
                 m_R_1p(UsedParameter(p[resonance_1p_names.at(Process_::partonic_transition)], *this))
@@ -183,8 +183,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
 
             BSZ2015FormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_P(UsedParameter(p[std::string(Process_::name_P) + "@HME"], *this)),
                 m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this))
             {

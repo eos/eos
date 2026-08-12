@@ -62,8 +62,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
 
             SSEFormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@HME"], *this)),
                 m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
                 m_R_1p(UsedParameter(p[resonance_1p_names.at(Process_::partonic_transition)], *this)),
@@ -210,8 +210,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1m_names;
 
             SSEFormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_P(UsedParameter(p[std::string(Process_::name_P) + "@HME"], *this)),
                 m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),
                 tp(UsedParameter(p[std::string(Process_::label) + "::tp@SSE"], *this))
@@ -303,7 +303,7 @@ namespace eos
         public:
             // m_1 is the mass of the heavier baryon, m_2 the mass of the lighter one.
             // The baryon masses are shared with the [SE] parametrization; the resonance
-            // masses use the same @BSZ2015 inputs as the mesonic SSE parametrization.
+            // masses use the same @HME inputs as the mesonic SSE parametrization.
             UsedParameter m_1, m_2;
             UsedParameter m_R_0m, m_R_0p, m_R_1m, m_R_1p;
             // Pair-production thresholds: tp_v for the vector/scalar and tensor (T)
@@ -316,8 +316,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_1p_names;
 
             SSEFormFactorTraits(const Parameters & p) :
-                m_1(UsedParameter(p[std::string(Process_::name_1) + "@SE"], *this)),
-                m_2(UsedParameter(p[std::string(Process_::name_2) + "@SE"], *this)),
+                m_1(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+                m_2(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this)),
                 m_R_0m(UsedParameter(p[resonance_0m_names.at(Process_::partonic_transition)], *this)),
                 m_R_0p(UsedParameter(p[resonance_0p_names.at(Process_::partonic_transition)], *this)),
                 m_R_1m(UsedParameter(p[resonance_1m_names.at(Process_::partonic_transition)], *this)),

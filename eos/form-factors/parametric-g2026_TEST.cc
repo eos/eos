@@ -46,8 +46,8 @@ class BToKG2026FormFactorsTest :
                 p["B->K::a^fT_0@G2026"]     =  0.03;
                 p["B->K::a^fT_1@G2026"]     = -0.04;
 
-                p["mass::B_d@BSZ2015"]      =  5.279;
-                p["mass::K_d@BSZ2015"]      =  0.494;
+                p["mass::B_d@HME"]      =  5.279;
+                p["mass::K_d@HME"]      =  0.494;
 
                 p["mass::B_s,A^0[1]@G2026"] = 5.367;
                 p["mass::B_s,V^0[1]@G2026"] = 5.711;
@@ -226,8 +226,8 @@ class BToPiG2026FormFactorsTest :
                 p["B->pi::a^fT_0@G2026"]    =  0.03;
                 p["B->pi::a^fT_1@G2026"]    = -0.04;
 
-                p["mass::B_d@BSZ2015"]      =  5.279;
-                p["mass::pi^0@BSZ2015"]     =  0.135;
+                p["mass::B_d@HME"]      =  5.279;
+                p["mass::pi^0@HME"]     =  0.135;
 
                 p["mass::B_d,V^0[1]@G2026"] = 10.0e+10; // very high value to effectively remove fake pole
                 p["mass::B_d,V^1[1]@G2026"] = 5.325;
@@ -297,8 +297,8 @@ class BsToKG2026FormFactorsTest :
                 p["B_s->K::a^fT_0@G2026"]   =  0.03;
                 p["B_s->K::a^fT_1@G2026"]   = -0.04;
 
-                p["mass::B_s@BSZ2015"]      =  5.367;
-                p["mass::K_d@BSZ2015"]      =  0.494;
+                p["mass::B_s@HME"]      =  5.367;
+                p["mass::K_d@HME"]      =  0.494;
 
                 p["mass::B_u,V^0[1]@G2026"] = 10.0e+10; // very high value to effectively remove fake pole
                 p["mass::B_u,V^1[1]@G2026"] = 5.325;
@@ -366,8 +366,8 @@ class BToDG2026FormFactorsTest :
                 p["B->D::a^fT_0@G2026"]     =  0.03;
                 p["B->D::a^fT_1@G2026"]     = -0.04;
 
-                p["mass::B_d@BSZ2015"]      =  5.279;
-                p["mass::D_u@BSZ2015"]      =  1.865;
+                p["mass::B_d@HME"]      =  5.279;
+                p["mass::D_u@HME"]      =  1.865;
 
                 p["mass::B_c,A^0[1]@G2026"] = 6.274;
                 p["mass::B_c,A^0[2]@G2026"] = 6.871;
@@ -439,8 +439,8 @@ class BsToDsG2026FormFactorsTest :
                 p["B_s->D_s::a^fT_0@G2026"]   =  0.03;
                 p["B_s->D_s::a^fT_1@G2026"]   = -0.04;
 
-                p["mass::B_s@BSZ2015"]        =  5.367;
-                p["mass::D_s@BSZ2015"]        =  1.968;
+                p["mass::B_s@HME"]        =  5.367;
+                p["mass::D_s@HME"]        =  1.968;
 
                 p["mass::B_c,A^0[1]@G2026"]   = 6.274;
                 p["mass::B_c,A^0[2]@G2026"]   = 6.871;
@@ -517,8 +517,8 @@ class BsToKstarG2026FormFactorsTest :
                 p["B_s->K^*::a^T2_1@G2026"]    =  0.09;
                 p["B_s->K^*::a^T23_1@G2026"]   = -0.10;
 
-                p["mass::B_s@BSZ2015"]         =  5.367;
-                p["mass::K_d^*@BSZ2015"]       =  0.892;
+                p["mass::B_s@HME"]         =  5.367;
+                p["mass::K_d^*@HME"]       =  0.892;
 
                 p["mass::B_d,A^0[1]@G2026"]    = 5.279;
                 p["mass::B_d,V^1[1]@G2026"]    = 5.325;
@@ -554,8 +554,8 @@ class BsToKstarG2026FormFactorsTest :
                 TEST_CHECK(has_used_parameter("B_s->K^*::eta@G2026"));
 
                 // Test end-point relations
-                const double mB = p["mass::B_s@BSZ2015"];
-                const double mV = p["mass::K_d^*@BSZ2015"];
+                const double mB = p["mass::B_s@HME"];
+                const double mV = p["mass::K_d^*@HME"];
                 const double sm = (mB - mV) * (mB - mV);
 
                 const double factora12a0 = (mB * mB - mV * mV) / 8.0 / mB / mV;
@@ -629,8 +629,8 @@ class BToKstarG2026FormFactorsTest :
                 p["B->K^*::a^T2_1@G2026"]   =  0.09;
                 p["B->K^*::a^T23_1@G2026"]  = -0.10;
 
-                p["mass::B_d@BSZ2015"]      =  5.279;
-                p["mass::K_d^*@BSZ2015"]    =  0.892;
+                p["mass::B_d@HME"]      =  5.279;
+                p["mass::K_d^*@HME"]    =  0.892;
 
                 p["mass::B_s,A^0[1]@G2026"] = 5.367;
                 p["mass::B_s,V^0[1]@G2026"] = 5.711;
@@ -722,8 +722,8 @@ class BToKstarG2026FormFactorsTest :
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
                 // Test end-point relations
-                const double mB = p["mass::B_d@BSZ2015"];
-                const double mV = p["mass::K_d^*@BSZ2015"];
+                const double mB = p["mass::B_d@HME"];
+                const double mV = p["mass::K_d^*@HME"];
                 const double sm = (mB - mV) * (mB - mV);
 
                 const double factora12a0 = (mB * mB - mV * mV) / 8.0 / mB / mV;
@@ -851,8 +851,8 @@ class BsToPhiG2026FormFactorsTest :
                 p["B_s->phi::a^T23_1@G2026"]   = -0.10;
                 p["B_s->phi::a^T23_2@G2026"]   = -0.11;
 
-                p["mass::B_s@BSZ2015"]         =  5.367;
-                p["mass::phi@BSZ2015"]         =  1.020;
+                p["mass::B_s@HME"]         =  5.367;
+                p["mass::phi@HME"]         =  1.020;
 
                 p["mass::B_s,A^0[1]@G2026"]    = 5.367;
                 p["mass::B_s,V^0[1]@G2026"]    = 5.711;
@@ -883,8 +883,8 @@ class BsToPhiG2026FormFactorsTest :
                 TEST_CHECK(has_used_parameter("B_s->phi::eta@G2026"));
 
                 // Test end-point relations
-                const double mB = p["mass::B_s@BSZ2015"];
-                const double mV = p["mass::phi@BSZ2015"];
+                const double mB = p["mass::B_s@HME"];
+                const double mV = p["mass::phi@HME"];
                 const double sm = (mB - mV) * (mB - mV);
 
                 const double factora12a0 = (mB * mB - mV * mV) / 8.0 / mB / mV;
@@ -958,8 +958,8 @@ class BToDstarG2026FormFactorsTest :
                 p["B->D^*::a^T2_1@G2026"]    =  0.09;
                 p["B->D^*::a^T23_1@G2026"]   = -0.10;
 
-                p["mass::B_d@BSZ2015"]       =  5.279;
-                p["mass::D_u^*@BSZ2015"]     =  2.007;
+                p["mass::B_d@HME"]       =  5.279;
+                p["mass::D_u^*@HME"]     =  2.007;
 
                 p["mass::B_c,A^0[1]@G2026"]  = 6.274;
                 p["mass::B_c,A^0[2]@G2026"]  = 6.871;
@@ -990,8 +990,8 @@ class BToDstarG2026FormFactorsTest :
 
                 TEST_CHECK(has_used_parameter("B->D^*::eta@G2026"));
                 // Test end-point relations
-                const double mB = p["mass::B_d@BSZ2015"];
-                const double mV = p["mass::D_u^*@BSZ2015"];
+                const double mB = p["mass::B_d@HME"];
+                const double mV = p["mass::D_u^*@HME"];
                 const double sm = (mB - mV) * (mB - mV);
 
                 const double factora12a0 = (mB * mB - mV * mV) / 8.0 / mB / mV;
@@ -1065,8 +1065,8 @@ class BsToDsstarG2026FormFactorsTest :
                 p["B_s->D_s^*::a^T2_1@G2026"]    =  0.09;
                 p["B_s->D_s^*::a^T23_1@G2026"]   = -0.10;
 
-                p["mass::B_s@BSZ2015"]           =  5.367;
-                p["mass::D_s^*@BSZ2015"]         =  2.112;
+                p["mass::B_s@HME"]           =  5.367;
+                p["mass::D_s^*@HME"]         =  2.112;
 
                 p["mass::B_c,A^0[1]@G2026"]      = 6.274;
                 p["mass::B_c,A^0[2]@G2026"]      = 6.871;
@@ -1098,8 +1098,8 @@ class BsToDsstarG2026FormFactorsTest :
                 TEST_CHECK(has_used_parameter("B_s->D_s^*::eta@G2026"));
 
                 // Test end-point relations
-                const double mB = p["mass::B_s@BSZ2015"];
-                const double mV = p["mass::D_s^*@BSZ2015"];
+                const double mB = p["mass::B_s@HME"];
+                const double mV = p["mass::D_s^*@HME"];
                 const double sm = (mB - mV) * (mB - mV);
 
                 const double factora12a0 = (mB * mB - mV * mV) / 8.0 / mB / mV;

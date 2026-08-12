@@ -74,8 +74,8 @@ class SSEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 p["Lambda_b->Lambda::alpha^(0,T5)_2@SSE"]    = -0.18;
 
                 // t_- computed from the masses used by the parametrisation
-                const double m_1 = p["mass::Lambda_b@SE"].evaluate();
-                const double m_2 = p["mass::Lambda@SE"].evaluate();
+                const double m_1 = p["mass::Lambda_b@HME"].evaluate();
+                const double m_2 = p["mass::Lambda@HME"].evaluate();
                 const double tm  = power_of<2>(m_1 - m_2);
 
                 // key regression assertions: the equations of motion must be enforced exactly.
@@ -147,8 +147,8 @@ class SSEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 p["Lambda_c->neutron::alpha^(0,T5)_1@SSE"]    =  0.43;
                 p["Lambda_c->neutron::alpha^(0,T5)_2@SSE"]    = -0.18;
 
-                const double m_1 = p["mass::Lambda_c@SE"].evaluate();
-                const double m_2 = p["mass::neutron@SE"].evaluate();
+                const double m_1 = p["mass::Lambda_c@HME"].evaluate();
+                const double m_2 = p["mass::neutron@HME"].evaluate();
                 const double tm  = power_of<2>(m_1 - m_2);
 
                 TEST_CHECK_RELATIVE_ERROR(ff->f_time_v(0.0),  ff->f_long_v(0.0),   1.0e-12);
@@ -217,8 +217,8 @@ class SSEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 p["Lambda_c->proton::alpha^(0,T5)_1@SSE"]    =  0.43;
                 p["Lambda_c->proton::alpha^(0,T5)_2@SSE"]    = -0.18;
 
-                const double m_1 = p["mass::Lambda_c@SE"].evaluate();
-                const double m_2 = p["mass::proton@SE"].evaluate();
+                const double m_1 = p["mass::Lambda_c@HME"].evaluate();
+                const double m_2 = p["mass::proton@HME"].evaluate();
                 const double tm  = power_of<2>(m_1 - m_2);
 
                 TEST_CHECK_RELATIVE_ERROR(ff->f_time_v(0.0),  ff->f_long_v(0.0),   1.0e-12);

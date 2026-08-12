@@ -59,8 +59,8 @@ namespace eos
 
 
             G2026FormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_V(UsedParameter(p[std::string(Process_::name_V) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_V(UsedParameter(p[std::string(Process_::name_V) + "@HME"], *this)),
                 sV(UsedParameter(p[std::string(Process_::label) + "::tp_v@G2026"], *this)),
                 sA(UsedParameter(p[std::string(Process_::label) + "::tp_a@G2026"], *this)),
                 s0V(UsedParameter(p[std::string(Process_::label) + "::t0_v@G2026"], *this)),
@@ -282,8 +282,8 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::vector<std::string>> pole_V1_names;
 
             G2026FormFactorTraits(const Parameters & p) :
-                m_B(UsedParameter(p[std::string(Process_::name_B) + "@BSZ2015"], *this)),
-                m_P(UsedParameter(p[std::string(Process_::name_P) + "@BSZ2015"], *this)),
+                m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
+                m_P(UsedParameter(p[std::string(Process_::name_P) + "@HME"], *this)),
                 sV(UsedParameter(p[std::string(Process_::label) + "::tp_v@G2026"], *this)),
                 s0V(UsedParameter(p[std::string(Process_::label) + "::t0_v@G2026"], *this)),
                 Q2(UsedParameter(p[std::string(Process_::label) + "::Q2@G2026"], *this)),
