@@ -66,8 +66,8 @@ class BToKstarSSEFormFactorsTest :
         // expansion coefficients, not just for the default ones.
         static void check_relations(Parameters & p, const FormFactors<PToV> & ff)
         {
-            const double m_B = p["mass::B_d@BSZ2015"];
-            const double m_V = p["mass::K_d^*@BSZ2015"];
+            const double m_B = p["mass::B_d@HME"];
+            const double m_V = p["mass::K_d^*@HME"];
             const double R   = (power_of<2>(m_B) - power_of<2>(m_V)) / (8.0 * m_B * m_V);
             const double K   = power_of<2>(m_B + m_V) / (4.0 * m_B * m_V);
             const double tm  = power_of<2>(m_B - m_V);

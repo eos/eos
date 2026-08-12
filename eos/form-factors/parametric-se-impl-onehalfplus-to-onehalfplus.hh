@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2022 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  * Copyright (c) 2021-2022 Muslem Rahimi
  *
  * This file is part of the EOS project. EOS is free software;
@@ -34,33 +34,33 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0m_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d@BSZ2015" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d@HME" },
     };
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0p_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,0@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,0@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,0@BSZ2015" }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,0@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,0@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,0@HME" }
     };
 
     template <typename Process_>
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1m_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s^*@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d^*@BSZ2015" }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s^*@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d^*@HME" }
 
     };
 
@@ -68,11 +68,11 @@ namespace eos
     const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
     SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1p_names
     {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,1@BSZ2015" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,1@BSZ2015" }
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@HME" },
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,1@HME" },
+        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,1@HME" }
     };
 
     template <typename Process_>

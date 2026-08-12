@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2024 Marta Burgos
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -49,7 +49,7 @@ namespace eos
         P2{ {} },
         Gfermi(p["WET::G_Fermi"], *this),
         mB(p["mass::B_" + opt_q.str()], *this),
-        mB_q_0(p["mass::B_" + opt_q.str() + ",0@BSZ2015"], *this),
+        mB_q_0(p["mass::B_" + opt_q.str() + ",0@HME"], *this),
         mP1(p["mass::" + opt_p1.str()], *this),
         mP2(p["mass::" + opt_p2.str()], *this),
         FP1(p["B_" + opt_q.str() + "->" + opt_p1.str() + "::f_+(0)"], *this),

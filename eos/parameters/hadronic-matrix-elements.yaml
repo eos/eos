@@ -48,342 +48,342 @@ groups:
   - title: 'Masses used in BSZ-like Form Factor Parametrizations'
     description: ''
     parameters:
-      'mass::pi^0@BSZ2015' :
+      'mass::pi^0@HME' :
           central: +0.135
           min:     +0.135
           max:     +0.135
-          latex:    '$m_{\pi^0}^\mathrm{BSZ}$'
+          latex:    '$m_{\pi^0}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::pi^+@BSZ2015' :
+      'mass::pi^+@HME' :
           central: +0.135
           min:     +0.135
           max:     +0.135
-          latex:    '$m_{\pi^\pm}^\mathrm{BSZ}$'
+          latex:    '$m_{\pi^\pm}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::eta@BSZ2015' :
+      'mass::eta@HME' :
           central: +0.548
           min:     +0.548
           max:     +0.548
-          latex:   '$m_{\eta}^\mathrm{BSZ}$'
+          latex:   '$m_{\eta}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::eta_prime@BSZ2015' :
+      'mass::eta_prime@HME' :
           central: +0.958
           min:     +0.958
           max:     +0.958
-          latex:   '$m_{\eta^\prime}^\mathrm{BSZ}$'
+          latex:   '$m_{\eta^\prime}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::K_d@BSZ2015' :
+      'mass::K_d@HME' :
           central: +0.492
           min:     +0.492
           max:     +0.492
-          latex:    '$m_{K_d}^\mathrm{BSZ}$'
+          latex:    '$m_{K_d}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::K_u@BSZ2015' :
+      'mass::K_u@HME' :
           central: +0.492
           min:     +0.492
           max:     +0.492
-          latex:    '$m_{K_u}^\mathrm{BSZ}$'
+          latex:    '$m_{K_u}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::D_d@BSZ2015' :
+      'mass::D_d@HME' :
           central: +1.870
           min:     +1.870
           max:     +1.870
-          latex:   '$m_{D^\pm}^\mathrm{BSZ}$'
+          latex:   '$m_{D^\pm}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::D_u@BSZ2015' :
+      'mass::D_u@HME' :
           central: +1.867
           min:     +1.867
           max:     +1.867
-          latex:   '$m_{D^0}^\mathrm{BSZ}$'
+          latex:   '$m_{D^0}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::D_s@BSZ2015' :
+      'mass::D_s@HME' :
           central: +1.968
           min:     +1.968
           max:     +1.968
-          latex:   '$m_{D_s}^\mathrm{BSZ}$'
+          latex:   '$m_{D_s}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::rho^+@BSZ2015' :
+      'mass::rho^+@HME' :
           central: +0.7751
           min:     +0.7751
           max:     +0.7751
-          latex:   '$m_{\rho^\pm}^\mathrm{BSZ}$'
+          latex:   '$m_{\rho^\pm}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::rho^0@BSZ2015' :
+      'mass::rho^0@HME' :
           central: +0.7751
           min:     +0.7751
           max:     +0.7751
-          latex:   '$m_{\rho^0}^\mathrm{BSZ}$'
+          latex:   '$m_{\rho^0}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::omega@BSZ2015' :
+      'mass::omega@HME' :
           central: +0.7827
           min:     +0.7827
           max:     +0.7827
-          latex:   '$m_{\omega}^\mathrm{BSZ}$'
+          latex:   '$m_{\omega}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::phi@BSZ2015' :
+      'mass::phi@HME' :
           central: +1.02
           min:     +1.02
           max:     +1.02
-          latex:   '$m_{\phi}^\mathrm{BSZ}$'
+          latex:   '$m_{\phi}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::J/psi@BSZ2015' :
+      'mass::J/psi@HME' :
           central: +3.0969
           min:     +3.0969
           max:     +3.0969
-          latex:   '$m_{J/\psi}^\mathrm{BSZ}$'
+          latex:   '$m_{J/\psi}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_d@BSZ2015' :
+      'mass::B_d@HME' :
           central: +5.279
           min:     +5.279
           max:     +5.279
-          latex:    '$m_{B_d}^\mathrm{BSZ}$'
+          latex:    '$m_{B_d}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_u@BSZ2015' :
+      'mass::B_u@HME' :
           central: +5.279
           min:     +5.279
           max:     +5.279
-          latex:    '$m_{B_u}^\mathrm{BSZ}$'
+          latex:    '$m_{B_u}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_s@BSZ2015' :
+      'mass::B_s@HME' :
           central: +5.366
           min:     +5.366
           max:     +5.366
-          latex:    '$m_{B_s}^\mathrm{BSZ}$'
+          latex:    '$m_{B_s}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_c@BSZ2015' :
+      'mass::B_c@HME' :
           central: +6.2751
           min:     +6.2751
           max:     +6.2751
-          latex:    '$m_{B_c}^\mathrm{BSZ}$'
+          latex:    '$m_{B_c}^\mathrm{HME}$'
           unit:     'GeV'
       # B_c higher order taken from [BGS:2017A]
-      'mass::B_c[1]@BSZ2015' :
+      'mass::B_c[1]@HME' :
           central: +6.842
           min:     +6.842
           max:     +6.842
-          latex:   '$m_{B_c}[1]^\mathrm{BSZ}$'
+          latex:   '$m_{B_c}[1]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::B_c[2]@BSZ2015' :
+      'mass::B_c[2]@HME' :
           central: +7.250
           min:     +7.250
           max:     +7.250
-          latex:   '$m_{B_c}[2]^\mathrm{BSZ}$'
+          latex:   '$m_{B_c}[2]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::K_d^*@BSZ2015' :
+      'mass::K_d^*@HME' :
           central: +0.896
           min:     +0.896
           max:     +0.896
-          latex:   '$m_{K^{0*}}^\mathrm{BSZ}$'
+          latex:   '$m_{K^{0*}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::K_u^*@BSZ2015' :
+      'mass::K_u^*@HME' :
           central: +0.896
           min:     +0.896
           max:     +0.896
-          latex:   '$m_{K^{\pm*}}^\mathrm{BSZ}$'
+          latex:   '$m_{K^{\pm*}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::D_d^*@BSZ2015' :
+      'mass::D_d^*@HME' :
           central: +2.0103
           min:     +2.0103
           max:     +2.0103
-          latex:   '$m_{D^{\pm*}}^\mathrm{BSZ}$'
+          latex:   '$m_{D^{\pm*}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::D_u^*@BSZ2015' :
+      'mass::D_u^*@HME' :
           central: +2.0103
           min:     +2.0103
           max:     +2.0103
-          latex:   '$m_{D^{0*}}^\mathrm{BSZ}$'
+          latex:   '$m_{D^{0*}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::D_s^*@BSZ2015' :
+      'mass::D_s^*@HME' :
           central: +2.1121
           min:     +2.1121
           max:     +2.1121
-          latex:   '$m_{D_s^*}^\mathrm{BSZ}$'
+          latex:   '$m_{D_s^*}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_d^*@BSZ2015' :
+      'mass::B_d^*@HME' :
           central: +5.325
           min:     +5.325
           max:     +5.325
-          latex:   '$m_{B^*}^\mathrm{BSZ}$'
+          latex:   '$m_{B^*}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_u^*@BSZ2015' :
+      'mass::B_u^*@HME' :
           central: +5.325
           min:     +5.325
           max:     +5.325
-          latex:   '$m_{B^*}^\mathrm{BSZ}$'
+          latex:   '$m_{B^*}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_s^*@BSZ2015' :
+      'mass::B_s^*@HME' :
           central: +5.415
           min:     +5.415
           max:     +5.415
-          latex:   '$m_{B_s^*}^\mathrm{BSZ}$'
+          latex:   '$m_{B_s^*}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_c^*@BSZ2015' :
+      'mass::B_c^*@HME' :
           central: +6.3311
           min:     +6.3311
           max:     +6.3311
-          latex:   '$m_{B_c^*}^\mathrm{BSZ}$'
+          latex:   '$m_{B_c^*}^\mathrm{HME}$'
           unit:     'GeV'
       # B_c^* higher order taken from [BGS:2017A]
-      'mass::B_c^*[1]@BSZ2015' :
+      'mass::B_c^*[1]@HME' :
           central: +6.910
           min:     +6.910
           max:     +6.910
-          latex:   '$m_{B_c^*}[1]^\mathrm{BSZ}$'
+          latex:   '$m_{B_c^*}[1]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::B_c^*[2]@BSZ2015' :
+      'mass::B_c^*[2]@HME' :
           central: +7.020
           min:     +7.020
           max:     +7.020
-          latex:   '$m_{B_c^*}[2]^\mathrm{BSZ}$'
+          latex:   '$m_{B_c^*}[2]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::B_c^*[3]@BSZ2015' :
+      'mass::B_c^*[3]@HME' :
           central: +7.280
           min:     +7.280
           max:     +7.280
-          latex:   '$m_{B_c^*}[3]^\mathrm{BSZ}$'
+          latex:   '$m_{B_c^*}[3]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::D_d,0@BSZ2015' :
+      'mass::D_d,0@HME' :
           central: +2.105
           min:     +2.105
           max:     +2.105
-          latex:   '$m_{D_{d,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{D_{d,0}}^\mathrm{HME}$'
           unit:     'GeV'
           comment: 'See discussion in [DGHKM:2020A]'
-      'mass::D_u,0@BSZ2015' :
+      'mass::D_u,0@HME' :
           central: +2.105
           min:     +2.105
           max:     +2.105
-          latex:   '$m_{D_{u,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{D_{u,0}}^\mathrm{HME}$'
           unit:     'GeV'
           comment: 'isospin partner of D_d,0'
-      'mass::D_s,0@BSZ2015' :
+      'mass::D_s,0@HME' :
           central: +2.318
           min:     +2.318
           max:     +2.318
-          latex:   '$m_{D_{s,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{D_{s,0}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_d,0@BSZ2015' :
+      'mass::B_d,0@HME' :
           central: +5.540
           min:     +5.540
           max:     +5.540
-          latex:   '$m_{B_{d,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{d,0}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_u,0@BSZ2015' :
+      'mass::B_u,0@HME' :
           central: +5.540
           min:     +5.540
           max:     +5.540
-          latex:   '$m_{B_{u,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{u,0}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_s,0@BSZ2015' :
+      'mass::B_s,0@HME' :
           central: +5.630
           min:     +5.630
           max:     +5.630
-          latex:   '$m_{B_{s,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{s,0}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_c,0@BSZ2015' :
+      'mass::B_c,0@HME' :
           central: +6.420
           min:     +6.420
           max:     +6.420
-          latex:   '$m_{B_{c,0}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,0}}^\mathrm{HME}$'
           unit:     'GeV'
       # B_c,0 higher order taken from [BGS:2017A]
-      'mass::B_c,0[1]@BSZ2015' :
+      'mass::B_c,0[1]@HME' :
           central: +7.122
           min:     +7.122
           max:     +7.122
-          latex:   '$m_{B_{c,0}}[1]^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,0}}[1]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::D_d,1@BSZ2015' :
+      'mass::D_d,1@HME' :
           central: +2.420
           min:     +2.420
           max:     +2.420
-          latex:   '$m_{D_{d,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{D_{d,1}}^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::D_u,1@BSZ2015' :
+      'mass::D_u,1@HME' :
           central: +2.420
           min:     +2.420
           max:     +2.420
-          latex:   '$m_{D_{u,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{D_{u,1}}^\mathrm{HME}$'
           unit:    'GeV'
           comment: 'isospin partner of D_d,1'
-      'mass::D_s,1@BSZ2015' :
+      'mass::D_s,1@HME' :
           central: +2.460
           min:     +2.460
           max:     +2.460
-          latex:   '$m_{D_{s,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{D_{s,1}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_d,1@BSZ2015' :
+      'mass::B_d,1@HME' :
           central: +5.724
           min:     +5.724
           max:     +5.724
-          latex:   '$m_{B_{d,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{d,1}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_u,1@BSZ2015' :
+      'mass::B_u,1@HME' :
           central: +5.724
           min:     +5.724
           max:     +5.724
-          latex:   '$m_{B_{u,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{u,1}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_s,1@BSZ2015' :
+      'mass::B_s,1@HME' :
           central: +5.829
           min:     +5.829
           max:     +5.829
-          latex:   '$m_{B_{s,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{s,1}}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::B_c,1@BSZ2015' :
+      'mass::B_c,1@HME' :
           central: +6.7671
           min:     +6.7671
           max:     +6.7671
-          latex:   '$m_{B_{c,1}}^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,1}}^\mathrm{HME}$'
           unit:     'GeV'
       # B_c,1 higher order taken from [BGS:2017A]
-      'mass::B_c,1[1]@BSZ2015' :
+      'mass::B_c,1[1]@HME' :
           central: +6.750
           min:     +6.750
           max:     +6.750
-          latex:   '$m_{B_{c,1}}[1]^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,1}}[1]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::B_c,1[2]@BSZ2015' :
+      'mass::B_c,1[2]@HME' :
           central: +7.145
           min:     +7.145
           max:     +7.145
-          latex:   '$m_{B_{c,1}}[2]^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,1}}[2]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::B_c,1[3]@BSZ2015' :
+      'mass::B_c,1[3]@HME' :
           central: +7.150
           min:     +7.150
           max:     +7.150
-          latex:   '$m_{B_{c,1}}[3]^\mathrm{BSZ}$'
+          latex:   '$m_{B_{c,1}}[3]^\mathrm{HME}$'
           unit:    'GeV'
-      'mass::proton@SE' :
+      'mass::proton@HME' :
           central: +0.93827208816
           min:     +0.9382720878699999
           max:     +0.93827208845
-          latex:   '$m_{p}^\mathrm{BMRvD}$'
+          latex:   '$m_{p}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::neutron@SE' :
+      'mass::neutron@HME' :
           central: +0.9395654205
           min:     +0.93956542
           max:     +0.939565421
-          latex:   '$m_{n}^\mathrm{BMRvD}$'
+          latex:   '$m_{n}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::Lambda@SE' :
+      'mass::Lambda@HME' :
           central: +1.115683
           min:     +1.115683
           max:     +1.115683
-          latex:   '$m_{\Lambda}^\mathrm{BMRvD}$'
+          latex:   '$m_{\Lambda}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::Lambda_c@SE' :
+      'mass::Lambda_c@HME' :
           central: +2.2865
           min:     +2.2865
           max:     +2.2865
-          latex:   '$m_{\Lambda_c}^\mathrm{BMRvD}$'
+          latex:   '$m_{\Lambda_c}^\mathrm{HME}$'
           unit:     'GeV'
-      'mass::Lambda_b@SE' :
+      'mass::Lambda_b@HME' :
           central: +5.61951
           min:     +5.61951
           max:     +5.61951
-          latex:   '$m_{\Lambda_b}^\mathrm{BMRvD}$'
+          latex:   '$m_{\Lambda_b}^\mathrm{HME}$'
           unit:     'GeV'
   # }}}
 
