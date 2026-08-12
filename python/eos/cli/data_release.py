@@ -427,6 +427,33 @@ class LocalGitClient:
             raise ReleasePlanningError(f"local annotated tag '{tag_name}' has unexpected metadata")
         return result
 
+    def create_registration_commit(
+        self,
+        root: Path,
+        branch_name: str,
+        main_commit_id: str,
+        registry_text: str,
+        message: str,
+    ) -> str:
+        """Create the single registry commit in an isolated local checkout."""
+        if self._run(['rev-parse', 'HEAD^{commit}'], cwd=root) != main_commit_id:
+            raise ReleasePlanningError('materialized main checkout is stale')
+        self._run(['checkout', '-b', branch_name, main_commit_id], cwd=root)
+        (root / 'datasets.yaml').write_text(registry_text, encoding='utf-8')
+        self._run(['add', '--', 'datasets.yaml'], cwd=root)
+        changed = tuple(self._run(
+            ['diff', '--cached', '--name-only'], cwd=root,
+        ).splitlines())
+        if changed != ('datasets.yaml',):
+            raise ReleasePlanningError(
+                f'registration commit must change only datasets.yaml, observed {changed}'
+            )
+        self._run(['commit', '-m', message], cwd=root)
+        commit_id = self._run(['rev-parse', 'HEAD^{commit}'], cwd=root)
+        if self.commit_parents(TargetCheckout(root, 'origin', ''), commit_id) != (main_commit_id,):
+            raise ReleasePlanningError('registration commit has an unexpected parent')
+        return commit_id
+
 
 def github_repository(url: str) -> str | None:
     """Return ``owner/repository`` for supported GitHub SSH/HTTPS URLs."""

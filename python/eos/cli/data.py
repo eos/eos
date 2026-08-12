@@ -40,6 +40,9 @@ from .data_release import (
 from .data_release_execution import (
     ReleaseExecutionError, execute_create, execute_publish,
 )
+from .data_register import (
+    RegistrationError, execute_register, plan_register, render_register_plan,
+)
 
 
 def create_check_factory() -> CheckFactory:
@@ -143,6 +146,21 @@ def _parser() -> argparse.ArgumentParser:
     parser_publish.add_argument('data_id', metavar='DATA_ID')
     parser_publish.add_argument('--dry-run', action='store_true')
     parser_publish.set_defaults(cmd=cmd_publish)
+
+    parser_register = subparsers.add_parser(
+        'register',
+        parents=[common_subparser],
+        description='Register a completed Zenodo release in datasets.yaml.',
+        help='Register a completed Zenodo release.',
+    )
+    parser_register.add_argument('data_id', metavar='ID')
+    parser_register.add_argument('--doi', required=True, metavar='DOI')
+    parser_register.add_argument('--keyword', required=True, action='append', metavar='KEYWORD')
+    parser_register.add_argument('--eos-version', required=True, metavar='VERSION')
+    parser_register.add_argument('--likelihood', action='append', default=None, metavar='NAME:FILENAME:FILETYPE')
+    parser_register.add_argument('--repo', default='eos/data', metavar='OWNER/REPO')
+    parser_register.add_argument('--dry-run', action='store_true')
+    parser_register.set_defaults(cmd=cmd_register)
 
     return parser
 
@@ -299,6 +317,47 @@ def cmd_publish(
         return int(error.result.exit_status)
     except (ReleasePlanningError, ReleaseExecutionError, GitHubError) as error:
         print(f'eos-data publish: {error}', file=stderr)
+        return 2
+
+
+def cmd_register(
+    args: argparse.Namespace,
+    *,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+    check_factory: CheckFactory | None = None,
+    git_client=None,
+    github_client=None,
+) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
+    git = LocalGitClient() if git_client is None else git_client
+    github = GitHubClient(repository=args.repo) if github_client is None else github_client
+    factory = create_check_factory() if check_factory is None else check_factory
+    try:
+        plan = plan_register(
+            args.data_id, doi=args.doi, keywords=args.keyword,
+            eos_version=args.eos_version, likelihoods=args.likelihood or (),
+            repository=args.repo, github=github, check_factory=factory,
+        )
+        if args.dry_run:
+            stdout.write(render_register_plan(plan))
+            return 0
+        result = execute_register(plan, git=git, github=github, check_factory=factory)
+        print(
+            f'Registered {result.data_id} on {result.branch_name} at {result.commit_id}',
+            file=stdout,
+        )
+        print(
+            f"Create a pull request from branch '{result.branch_name}' to complete registration.",
+            file=stdout,
+        )
+        return 0
+    except SourceCheckError as error:
+        print(error, file=stderr)
+        return int(error.result.exit_status)
+    except (RegistrationError, ReleasePlanningError, GitHubError) as error:
+        print(f'eos-data register: {error}', file=stderr)
         return 2
 
 
