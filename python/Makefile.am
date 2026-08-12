@@ -22,6 +22,11 @@ EXTRA_DIST = \
 	eos/cli/data_checks.py \
 	eos/cli/data_checks_dataset.py \
 	eos/cli/data_checks_dataset_TEST.py \
+	eos/cli/data_github.py \
+	eos/cli/data_release.py \
+	eos/cli/data_release_execution.py \
+	eos/cli/data_release_execution_TEST.py \
+	eos/cli/data_release_TEST.py \
 	eos/cli/data_checks_TEST.d \
 	eos/cli/data_checks_TEST.d/valid \
 	eos/datasets.py \
@@ -124,7 +129,10 @@ eoscli_SCRIPTS = \
 	eos/cli/__init__.py \
 	eos/cli/data.py \
 	eos/cli/data_checks.py \
-	eos/cli/data_checks_dataset.py
+	eos/cli/data_checks_dataset.py \
+	eos/cli/data_github.py \
+	eos/cli/data_release.py \
+	eos/cli/data_release_execution.py
 
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
@@ -179,6 +187,8 @@ TESTS = \
 	eos/analysis_file_description_TEST.py \
 	eos/cli/data_checks_TEST.py \
 	eos/cli/data_checks_dataset_TEST.py \
+	eos/cli/data_release_TEST.py \
+	eos/cli/data_release_execution_TEST.py \
 	eos/cli/data_TEST.py \
 	eos/validation_context_TEST.py \
 	eos/datasets_TEST.py \

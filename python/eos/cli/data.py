@@ -32,6 +32,14 @@ from .data_checks import (
     run_checks,
 )
 from .data_checks_dataset import register_dataset_checks
+from .data_github import GitHubClient, GitHubError
+from .data_release import (
+    LocalGitClient, ReleasePlanningError, SourceCheckError,
+    plan_create, plan_publish, render_create_plan, render_publish_plan,
+)
+from .data_release_execution import (
+    ReleaseExecutionError, execute_create, execute_publish,
+)
 
 
 def create_check_factory() -> CheckFactory:
@@ -109,6 +117,33 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser_check.set_defaults(cmd=cmd_check)
 
+    parser_create = subparsers.add_parser(
+        'create',
+        parents=[common_subparser],
+        description='Create an EOS dataset commit and transfer its annotated tag.',
+        help='Create and transfer an EOS dataset tag.',
+    )
+    parser_create.add_argument('base_id', metavar='BASE_ID')
+    parser_create.add_argument('source', metavar='URL_TO_ANALYSIS_REPO')
+    parser_create.add_argument('--analysis-file', action='append', default=None, metavar='PATH')
+    parser_create.add_argument('--main-analysis-file', metavar='PATH')
+    choice = parser_create.add_mutually_exclusive_group()
+    choice.add_argument('--revision', action='store_true')
+    choice.add_argument('--replace', action='store_true')
+    parser_create.add_argument('-i', '--interactive', action='store_true')
+    parser_create.add_argument('--dry-run', action='store_true')
+    parser_create.set_defaults(cmd=cmd_create)
+
+    parser_publish = subparsers.add_parser(
+        'publish',
+        parents=[common_subparser],
+        description='Publish an EOS dataset tag and then update its release branch.',
+        help='Publish an EOS dataset tag.',
+    )
+    parser_publish.add_argument('data_id', metavar='DATA_ID')
+    parser_publish.add_argument('--dry-run', action='store_true')
+    parser_publish.set_defaults(cmd=cmd_publish)
+
     return parser
 
 
@@ -164,6 +199,7 @@ def cmd_check(
     stdout: TextIO | None = None,
     stderr: TextIO | None = None,
     check_factory: CheckFactory | None = None,
+    **_kwargs,
 ) -> int:
     stdout = sys.stdout if stdout is None else stdout
     stderr = sys.stderr if stderr is None else stderr
@@ -184,12 +220,96 @@ def cmd_check(
     return result.exit_status
 
 
+def cmd_create(
+    args: argparse.Namespace,
+    *,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+    check_factory: CheckFactory | None = None,
+    git_client=None,
+    github_client=None,
+) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
+    if args.interactive:
+        print('eos-data create: interactive operation is not yet available', file=stderr)
+        return 2
+    git = LocalGitClient() if git_client is None else git_client
+    github = GitHubClient() if github_client is None else github_client
+    factory = create_check_factory() if check_factory is None else check_factory
+    try:
+        plan = plan_create(
+            args.base_id, args.source, Path.cwd(),
+            analysis_files=args.analysis_file or (),
+            main_analysis_file=args.main_analysis_file,
+            revision=args.revision,
+            replace=args.replace,
+            git=git,
+            github=github,
+            check_factory=factory,
+        )
+        if args.dry_run:
+            stdout.write(render_create_plan(plan))
+            return 0
+        result = execute_create(plan, git=git, github=github, check_factory=factory)
+        print(f'Created {result.data_id} at commit {result.commit_id}', file=stdout)
+        print(f'Local/remote annotated tag object: {result.local_tag_object_id}', file=stdout)
+        if result.old_tag_object_id is not None:
+            print(
+                f'Replaced tag object {result.old_tag_object_id} with {result.remote_tag_object_id}; '
+                f'commit {result.old_commit_id} with {result.commit_id}',
+                file=stdout,
+            )
+        return 0
+    except SourceCheckError as error:
+        print(error, file=stderr)
+        return int(error.result.exit_status)
+    except (ReleasePlanningError, ReleaseExecutionError, GitHubError) as error:
+        print(f'eos-data create: {error}', file=stderr)
+        return 2
+
+
+def cmd_publish(
+    args: argparse.Namespace,
+    *,
+    stdout: TextIO | None = None,
+    stderr: TextIO | None = None,
+    check_factory: CheckFactory | None = None,
+    git_client=None,
+    github_client=None,
+) -> int:
+    stdout = sys.stdout if stdout is None else stdout
+    stderr = sys.stderr if stderr is None else stderr
+    git = LocalGitClient() if git_client is None else git_client
+    github = GitHubClient() if github_client is None else github_client
+    factory = create_check_factory() if check_factory is None else check_factory
+    try:
+        plan = plan_publish(
+            args.data_id, Path.cwd(), git=git, github=github, check_factory=factory,
+        )
+        if args.dry_run:
+            stdout.write(render_publish_plan(plan))
+            return 0
+        result = execute_publish(plan, git=git, github=github, check_factory=factory)
+        print(f'Published {result.data_id}: {result.release_url}', file=stdout)
+        print(f'Remote branch {result.branch_name} -> {result.branch_commit_id}', file=stdout)
+        return 0
+    except SourceCheckError as error:
+        print(error, file=stderr)
+        return int(error.result.exit_status)
+    except (ReleasePlanningError, ReleaseExecutionError, GitHubError) as error:
+        print(f'eos-data publish: {error}', file=stderr)
+        return 2
+
+
 def main(
     argv: Sequence[str] | None = None,
     *,
     stdout: TextIO | None = None,
     stderr: TextIO | None = None,
     check_factory: CheckFactory | None = None,
+    git_client=None,
+    github_client=None,
 ) -> int:
     stdout = sys.stdout if stdout is None else stdout
     stderr = sys.stderr if stderr is None else stderr
@@ -210,4 +330,6 @@ def main(
             stdout=stdout,
             stderr=stderr,
             check_factory=check_factory,
+            git_client=git_client,
+            github_client=github_client,
         )

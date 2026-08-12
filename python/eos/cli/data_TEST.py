@@ -23,6 +23,8 @@ from unittest import mock
 import eos
 
 from eos.cli import data
+from eos.cli.data_checks import CheckResult, Finding, Severity
+from eos.cli.data_release import SourceCheckError
 
 
 FIXTURE = Path(os.environ.get('SOURCE_DIR', Path(__file__).parents[2])) / 'eos/cli/data_checks_TEST.d/valid'
@@ -68,11 +70,38 @@ class ParserCompatibilityTests(unittest.TestCase):
         self.assertEqual(args.main_analysis_file, 'two.yaml')
         self.assertEqual(args.directory, 'dataset')
 
+    def test_create_and_publish_interfaces(self):
+        args = data._parser().parse_args([
+            'create', '2026-01', '/analysis', '--analysis-file', 'one.yaml',
+            '--analysis-file', 'two.yaml', '--main-analysis-file', 'two.yaml',
+            '--revision', '--dry-run',
+        ])
+        self.assertEqual((args.base_id, args.source), ('2026-01', '/analysis'))
+        self.assertEqual(args.analysis_file, ['one.yaml', 'two.yaml'])
+        self.assertTrue(args.revision)
+        self.assertTrue(args.dry_run)
+        args = data._parser().parse_args(['publish', '2026-01v2', '--dry-run'])
+        self.assertEqual(args.data_id, '2026-01v2')
+        self.assertTrue(args.dry_run)
+
+        error = io.StringIO()
+        self.assertEqual(
+            data.main(['create', '2026-01', '/analysis', '--revision', '--replace'], stderr=error),
+            2,
+        )
+
     def test_interactive_aliases_are_rejected(self):
         for option in ('-i', '--interactive'):
             with self.subTest(option=option):
                 error = io.StringIO()
                 self.assertEqual(data.main(['check', option], stderr=error), 2)
+                self.assertIn('not yet available', error.getvalue())
+        for option in ('-i', '--interactive'):
+            with self.subTest(command='create', option=option):
+                error = io.StringIO()
+                self.assertEqual(
+                    data.main(['create', '2026-01', '/analysis', option], stderr=error), 2,
+                )
                 self.assertIn('not yet available', error.getvalue())
 
     def test_help_and_missing_command(self):
@@ -132,6 +161,23 @@ class ParserCompatibilityTests(unittest.TestCase):
             ),
             2,
         )
+
+    def test_create_preserves_source_check_exit_status(self):
+        validation = SourceCheckError(CheckResult(findings=(
+            Finding('analysis.metadata', Severity.ERROR, 'invalid'),
+        )))
+        infrastructure = SourceCheckError(CheckResult(failure='runner unavailable'))
+        for error, expected in ((validation, 1), (infrastructure, 2)):
+            with self.subTest(expected=expected), mock.patch.object(
+                data, 'plan_create', side_effect=error,
+            ):
+                self.assertEqual(
+                    data.main(
+                        ['create', '2026-01', '/analysis'],
+                        stdout=io.StringIO(), stderr=io.StringIO(),
+                    ),
+                    expected,
+                )
 
 
 class IsolationTests(unittest.TestCase):
