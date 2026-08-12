@@ -329,6 +329,41 @@ class GitHubClient:
         finally:
             shutil.rmtree(temporary, ignore_errors=True)
 
+    def transfer_local_branch(
+        self,
+        root: Path,
+        branch_name: str,
+        commit_id: str,
+        main_commit_id: str,
+        tag_name: str,
+        tag_object_id: str,
+    ) -> None:
+        """Atomically push a new branch after confirming the main and tag refs are unchanged."""
+        command = [
+            'git', 'push', '--porcelain', '--atomic',
+            f'--force-with-lease=refs/heads/main:{main_commit_id}',
+            f'--force-with-lease=refs/tags/{tag_name}:{tag_object_id}',
+            f'--force-with-lease=refs/heads/{branch_name}:',
+            'origin',
+            f'{main_commit_id}:refs/heads/main',
+            f'{tag_object_id}:refs/tags/{tag_name}',
+            f'{commit_id}:refs/heads/{branch_name}',
+        ]
+        try:
+            result = self._git_runner(
+                command, cwd=root, capture_output=True, text=True, check=False,
+            )
+        except OSError as error:
+            raise GitHubCommandError(
+                f'cannot execute Git while transferring registration branch: {error}'
+            ) from error
+        if result.returncode != 0:
+            diagnostic = (result.stderr or result.stdout or '').strip()
+            suffix = f': {diagnostic}' if diagnostic else ''
+            raise GitHubCommandError(
+                f'registration branch transfer failed ({result.returncode}){suffix}'
+            )
+
     def _create_ref(self, ref_name: str, object_id: str) -> None:
         document = self._mapping(self._api_json(
             f'repos/{self.repository}/git/refs',
