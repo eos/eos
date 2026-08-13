@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
- * Copyright (c) 2024      Lorenz Gärtner
+ * Copyright (c) 2024-2026 Lorenz Gärtner
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,6 +33,7 @@
 #include "eos/statistics/test-statistic-impl.hh"
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/log.hh"
+#include "eos/utils/memoise.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/parameters.hh"
 #include "eos/utils/qualified-name.hh"
@@ -214,6 +215,21 @@ BOOST_PYTHON_MODULE(_eos)
             .value("DEBUG", ll_debug);
 
     // {{{ eos/utils
+    // MemoisationControl
+    class_<MemoisationControl, boost::noncopyable>("MemoisationControl", R"(
+            Controls the process-wide memoisation caches.
+        )",
+                                                   no_init)
+            .def("instance", &MemoisationControl::instance, return_value_policy<reference_existing_object>(), R"(
+            Returns the process-wide MemoisationControl instance.
+
+            :rtype: eos.MemoisationControl
+        )")
+            .staticmethod("instance")
+            .def("clear", &MemoisationControl::clear, R"(
+            Clears every memoisation cache registered with this instance.
+        )");
+
     // qnp::Prefix
     class_<qnp::Prefix>("qnpPrefix", R"(
             Represents the prefix part of a :class:`QualifiedName <eos.QualifiedName>`, i.e. the part
