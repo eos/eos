@@ -135,33 +135,7 @@ namespace eos
         // Analytic continuation of i * rho * n * n
         complex<double> chew_mandelstam(const complex<double> & S)
         {
-            const double mp = this->mp();
-            const double q0 = this->_q0();
-            // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s = S + complex<double>(0.0, 1e-15);
-            const complex<double> delta = mp * mp - 4.0 * q0 * q0;
-
-            // Blatt-Weisskopf factors, cf eq. (50.26)
-            const complex<double> Fsq = power_of<2>(kmatrix_utils::blatt_weisskopf_factor(1, std::sqrt(s - mp * mp) / 2.0 / q0));
-
-            complex<double> leading_term;
-            // Fix the behavior near threshold by Taylor expanding to second order
-            if (std::abs(s - mp * mp) < 1e-7)
-            {
-                leading_term = Fsq * (mp * mp - s) / 16.0 / mp / mp / pi / pi *
-                    (-2.0 * (mp * mp - s) + mp * pi * std::sqrt(mp * mp - s));
-            }
-            else
-            {
-                leading_term  = Fsq * power_of<3>(std::sqrt(mp * mp - s)) *
-                    atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / 8.0 / pi / pi / std::sqrt(s);
-            }
-
-            const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) *
-                    std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi /
-                    std::sqrt(delta) / (s - delta);
-
-            return (leading_term + loop_correction) / 4.0 / q0 / q0;
+            return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
         }
     };
 
@@ -193,33 +167,7 @@ namespace eos
         // Analytic continuation of i * rho * n * n
         complex<double> chew_mandelstam(const complex<double> & S)
         {
-            const double mp = this->mp();
-            const double q0 = this->_q0();
-            // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s = S + complex<double>(0.0, 1e-15);
-            const complex<double> delta = mp * mp - 4.0 * q0 * q0;
-
-            // Blatt-Weisskopf factors, cf eq. (50.26)
-            const complex<double> Fsq = power_of<2>(kmatrix_utils::blatt_weisskopf_factor(1, std::sqrt(s - mp * mp) / 2.0 / q0));
-
-            complex<double> leading_term;
-            // Fix the behavior near threshold by Taylor expanding to second order
-            if (std::abs(s - mp * mp) < 1e-7)
-            {
-                leading_term = Fsq * (mp * mp - s) / 16.0 / mp / mp / pi / pi *
-                    (-2.0 * (mp * mp - s) + mp * pi * std::sqrt(mp * mp - s));
-            }
-            else
-            {
-                leading_term  = Fsq * power_of<3>(std::sqrt(mp * mp - s)) *
-                    atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / 8.0 / pi / pi / std::sqrt(s);
-            }
-
-            const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) *
-                    std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi /
-                    std::sqrt(delta) / (s - delta);
-
-            return (leading_term + loop_correction) / 4.0 / q0 / q0;
+            return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
         }
     };
 
