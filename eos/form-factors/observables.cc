@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -2635,6 +2635,52 @@ namespace eos
     }
     // }}}
 
+    // Lambda_c -> proton
+    // {{{
+    ObservableGroup
+    make_lambdac_to_proton_form_factors_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(
+            R"(Form factors for $\Lambda_c \to p$ transitions)",
+            R"(Pseudo observables representing the full basis of $\Lambda_c \to p$ form factors. )"
+            R"(The specific parametrization can be chosen via the "form-factors" option.)",
+            {
+                make_form_factor_adapter("Lambda_c->proton::f_time^V(q2)", R"(f_t^{V,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_long^V(q2)", R"(f_0^{V,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_perp^V(q2)", R"(f_\perp^{V,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_v, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_time^A(q2)", R"(f_t^{A,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_time_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_long^A(q2)", R"(f_0^{A,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_perp^A(q2)", R"(f_\perp^{A,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_a, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_long^T(q2)", R"(f_0^{T,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_perp^T(q2)", R"(f_\perp^{T,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_long^T5(q2)", R"(f_0^{T5,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_long_t5, std::make_tuple("q2")),
+
+                make_form_factor_adapter("Lambda_c->proton::f_perp^T5(q2)", R"(f_\perp^{T5,\Lambda_c\to p}(q^2))",
+                        &FormFactors<OneHalfPlusToOneHalfPlus>::f_perp_t5, std::make_tuple("q2"))
+            }
+        );
+
+        return ObservableGroup(imp);
+    }
+    // }}}
+
     // Lambda_b -> Lambda_c
     // {{{
     ObservableGroup
@@ -3277,6 +3323,7 @@ namespace eos
                 make_lambdab_to_lambdac_form_factors_group(),
                 make_lambdac_to_lambda_form_factors_group(),
                 make_lambdac_to_neutron_form_factors_group(),
+                make_lambdac_to_proton_form_factors_group(),
 
                 // Lb -> 3/2^-
                 make_lambdab_to_threehalf_form_factors_group(),
