@@ -18,6 +18,7 @@
 #ifndef EOS_GUARD_EOS_SCATTERING_EETOCCBAR_HH
 #define EOS_GUARD_EOS_SCATTERING_EETOCCBAR_HH 1
 
+#include <eos/maths/chew-mandelstam.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/kmatrix.hh>
@@ -104,11 +105,7 @@ namespace eos
             complex<double>
             chew_mandelstam(const complex<double> & S)
             {
-                const double          mp = this->mp();
-                // Adapt s to match Mathematica's behaviour on the branch cut
-                const complex<double> s  = S + complex<double>(0.0, 1e-15);
-
-                return -1.0 / 8.0 / pi / pi * std::sqrt(mp * mp - s) * atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / std::sqrt(s);
+                return eos::chew_mandelstam::s_wave(S, this->_m1, this->_m2);
             }
     };
 
