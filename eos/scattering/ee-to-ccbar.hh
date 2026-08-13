@@ -20,6 +20,7 @@
 
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/maths/chew-mandelstam.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/stringify.hh>
@@ -99,12 +100,7 @@ namespace eos
         // Analytic continuation of i * rho * n * n
         complex<double> chew_mandelstam(const complex<double> & S)
         {
-            const double mp = this->mp();
-            // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s = S + complex<double>(0.0, 1e-15);
-
-            return -1.0 / 8.0 / pi / pi * std::sqrt(mp * mp - s) *
-                atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / std::sqrt(s);
+            return eos::chew_mandelstam::s_wave(S, this->_m1, this->_m2);
         }
     };
 
