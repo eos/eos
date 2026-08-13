@@ -49,7 +49,8 @@ namespace eos
         { "Lambda_c->Lambda::SE",  &SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make    },
         { "Lambda_c->Lambda::SSE", &SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make   },
         { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make   },
-        { "Lambda_c->neutron::SSE", &SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make }
+        { "Lambda_c->neutron::SSE", &SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make },
+        { "Lambda_c->proton::SSE", &SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>::make   }
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>

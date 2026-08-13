@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2023 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -87,6 +87,28 @@ namespace eos
         // semileptonic kinematic endpoint
         static constexpr double tm = (m1 - m2) * (m1 - m2);
         // OPE results for the unitarity bounds
+        static constexpr double chi_0m = 1.38e-2;
+        static constexpr double chi_0p = 2.51e-2;
+        static constexpr double chi_1m = 1.52e-2 / (1.275 * 1.275);
+        static constexpr double chi_1p = 0.98e-2 / (1.275 * 1.275);
+        static constexpr double chi_t  = 1.12e-2 / (1.275 * 1.275);
+        static constexpr double chi_t5 = 0.88e-2 / (1.275 * 1.275);
+    };
+
+    struct LambdaCToProton {
+        static constexpr const char * label = "Lambda_c->proton";
+        static constexpr const char * name_1 = "mass::Lambda_c";
+        static constexpr const char * name_2 = "mass::proton";
+        // rare (FCNC) c -> u transition
+        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::up);
+        // initial state mass
+        static constexpr double m1 = 2.2865;
+        // final state mass
+        static constexpr double m2 = 0.93827208816;
+        // semileptonic kinematic endpoint
+        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        // OPE results for the unitarity bounds (placeholders shared with the c -> d channel;
+        // used only by the [SE] parametrization, not by [SSE])
         static constexpr double chi_0m = 1.38e-2;
         static constexpr double chi_0p = 2.51e-2;
         static constexpr double chi_1m = 1.52e-2 / (1.275 * 1.275);
