@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2014-2026 Danny van Dyk
  * Copyright (c) 2018      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
@@ -23,6 +23,7 @@
 #include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-bbgorvd2018.hh>
 #include <eos/form-factors/parametric-se.hh>
+#include <eos/form-factors/parametric-sse.hh>
 #include <eos/form-factors/parametric-dkmr2017.hh>
 #include <eos/form-factors/parametric-dm2016.hh>
 #include <eos/utils/destringify.hh>
@@ -43,9 +44,12 @@ namespace eos
         { "Lambda_b->Lambda::BFvD2014",   &BFvD2014FormFactors::make                      },
         { "Lambda_b->Lambda::DM2016",     &DM2016FormFactors<LambdaBToLambda>::make       },
         { "Lambda_b->Lambda::SE",  &SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make    },
+        { "Lambda_b->Lambda::SSE", &SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make   },
         { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make    },
         { "Lambda_c->Lambda::SE",  &SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make    },
-        { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make   }
+        { "Lambda_c->Lambda::SSE", &SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make   },
+        { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make   },
+        { "Lambda_c->neutron::SSE", &SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make }
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
