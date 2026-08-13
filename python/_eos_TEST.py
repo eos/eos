@@ -103,6 +103,7 @@ BINDINGS_FACTORIES = {
     'LogLikelihoodBlock':       lambda: list(_CONSTRAINT.blocks())[0],
     'LogPosterior':             _log_posterior,
     'LogPrior':                 lambda: _eos.LogPrior.Flat(_PARAMETERS, 'mass::b(MSbar)', 4.0, 4.4),
+    'MemoisationControl':       lambda: _eos.MemoisationControl.instance(),
     'Model':                    lambda: _MODEL,
     'Observable':               lambda: _OBSERVABLE,
     'ObservableCache':          _observable_cache,
@@ -215,6 +216,9 @@ BINDINGS_TESTS = {
     ('LogPrior', 'evaluate'):                    (),
     ('LogPrior', 'sample'):                      (),
     ('LogPrior', 'varied_parameters'):           lambda p: list(p.varied_parameters()),
+
+    ('MemoisationControl', 'clear'):             (),
+    ('MemoisationControl', 'instance'):          (),
 
     ('Model', 'alpha_s'):                        (4.2,),
     ('Model', 'ckm_cb'):                         (),
