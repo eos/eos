@@ -373,6 +373,244 @@ groups:
           unit:     'GeV'
   # }}}
 
+  # Pair-production thresholds t_+ used in the SSE form factor parametrization
+  # Chosen as the lowest-lying 2- or 3-particle threshold achievable in the
+  # isospin-symmetry limit. The vector/scalar (V, T_1 and all P->P) form factors
+  # use the lowest 2-particle threshold tp_v; the (pseudo)scalar/axial
+  # (A_0, A_1, A_12, T_2, T_23) form factors use the lowest 3-particle threshold
+  # tp_a = min[(single-heavy meson) + 2 pi, (2-particle pair) + pi].
+  # {{{
+  - title: 'Pair-production thresholds for the SSE Form Factor Parametrization'
+    description: ''
+    parameters:
+      # P -> P (all form factors are vector/scalar -> 2-particle threshold)
+      'B->pi::tp@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{B\to\pi}$'
+          comment:  '(mB + mpi)^2'
+          unit:     'GeV^2'
+      'B->eta::tp@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{B\to\eta}$'
+          comment:  '(mB + mpi)^2 [b->u]'
+          unit:     'GeV^2'
+      'B->eta_prime::tp@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{B\to\eta^\prime}$'
+          comment:  '(mB + mpi)^2 [b->u]'
+          unit:     'GeV^2'
+      'B_s->K::tp@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{B_s\to K}$'
+          comment:  '(mB + mpi)^2 [b->u]'
+          unit:     'GeV^2'
+      'B->K::tp@SSE' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{B\to K}$'
+          comment:  '(mB + mK)^2 [b->s]'
+          unit:     'GeV^2'
+      'B_s->eta::tp@SSE' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{B_s\to\eta}$'
+          comment:  '(mB + mK)^2 [b->s]'
+          unit:     'GeV^2'
+      'B_s->eta_prime::tp@SSE' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{B_s\to\eta^\prime}$'
+          comment:  '(mB + mK)^2 [b->s]'
+          unit:     'GeV^2'
+      'B->D::tp@SSE' :
+          central:  51.065316
+          min:      51.065316
+          max:      51.065316
+          latex:    '$t_+^{B\to D}$'
+          comment:  '(mB + mD)^2 [b->c]'
+          unit:     'GeV^2'
+      'B_s->D_s::tp@SSE' :
+          central:  51.065316
+          min:      51.065316
+          max:      51.065316
+          latex:    '$t_+^{B_s\to D_s}$'
+          comment:  '(mB + mD)^2 [b->c]'
+          unit:     'GeV^2'
+      'D->pi::tp@SSE' :
+          central:  4.008004
+          min:      4.008004
+          max:      4.008004
+          latex:    '$t_+^{D\to\pi}$'
+          comment:  '(mD + mpi)^2 [c->u]'
+          unit:     'GeV^2'
+      'D_s->K::tp@SSE' :
+          central:  4.008004
+          min:      4.008004
+          max:      4.008004
+          latex:    '$t_+^{D_s\to K}$'
+          comment:  '(mD + mpi)^2 [c->u]'
+          unit:     'GeV^2'
+      'D->eta::tp@SSE' :
+          central:  4.008004
+          min:      4.008004
+          max:      4.008004
+          latex:    '$t_+^{D\to\eta}$'
+          comment:  '(mD + mpi)^2 [c->d]'
+          unit:     'GeV^2'
+      'D->eta_prime::tp@SSE' :
+          central:  4.008004
+          min:      4.008004
+          max:      4.008004
+          latex:    '$t_+^{D\to\eta^\prime}$'
+          comment:  '(mD + mpi)^2 [c->d]'
+          unit:     'GeV^2'
+      'D->K::tp@SSE' :
+          central:  5.564881
+          min:      5.564881
+          max:      5.564881
+          latex:    '$t_+^{D\to K}$'
+          comment:  '(mD + mK)^2 [c->s]'
+          unit:     'GeV^2'
+      'D_s->eta::tp@SSE' :
+          central:  5.564881
+          min:      5.564881
+          max:      5.564881
+          latex:    '$t_+^{D_s\to\eta}$'
+          comment:  '(mD + mK)^2 [c->s]'
+          unit:     'GeV^2'
+      'D_s->eta_prime::tp@SSE' :
+          central:  5.564881
+          min:      5.564881
+          max:      5.564881
+          latex:    '$t_+^{D_s\to\eta^\prime}$'
+          comment:  '(mD + mK)^2 [c->s]'
+          unit:     'GeV^2'
+      # P -> V (V, T_1 use tp_v; A_0, A_1, A_12, T_2, T_23 use tp_a)
+      'B->rho::tp_v@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{V, B\to\rho}$'
+          comment:  '(mB + mpi)^2 [b->d]'
+          unit:     'GeV^2'
+      'B->rho::tp_a@SSE' :
+          central:  30.791401
+          min:      30.791401
+          max:      30.791401
+          latex:    '$t_+^{A, B\to\rho}$'
+          comment:  '(mB + 2 mpi)^2 [b->d]'
+          unit:     'GeV^2'
+      'B->omega::tp_v@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{V, B\to\omega}$'
+          comment:  '(mB + mpi)^2 [b->d]'
+          unit:     'GeV^2'
+      'B->omega::tp_a@SSE' :
+          central:  30.791401
+          min:      30.791401
+          max:      30.791401
+          latex:    '$t_+^{A, B\to\omega}$'
+          comment:  '(mB + 2 mpi)^2 [b->d]'
+          unit:     'GeV^2'
+      'B_s->K^*::tp_v@SSE' :
+          central:  29.311396
+          min:      29.311396
+          max:      29.311396
+          latex:    '$t_+^{V, B_s\to K^*}$'
+          comment:  '(mB + mpi)^2 [b->d]'
+          unit:     'GeV^2'
+      'B_s->K^*::tp_a@SSE' :
+          central:  30.791401
+          min:      30.791401
+          max:      30.791401
+          latex:    '$t_+^{A, B_s\to K^*}$'
+          comment:  '(mB + 2 mpi)^2 [b->d]'
+          unit:     'GeV^2'
+      'B->K^*::tp_v@SSE' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{V, B\to K^*}$'
+          comment:  '(mB + mK)^2 [b->s]'
+          unit:     'GeV^2'
+      'B->K^*::tp_a@SSE' :
+          central:  31.764496
+          min:      31.764496
+          max:      31.764496
+          latex:    '$t_+^{A, B\to K^*}$'
+          comment:  '(mBs + 2 mpi)^2 [b->s]'
+          unit:     'GeV^2'
+      'B_s->phi::tp_v@SSE' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{V, B_s\to\phi}$'
+          comment:  '(mB + mK)^2 [b->s]'
+          unit:     'GeV^2'
+      'B_s->phi::tp_a@SSE' :
+          central:  31.764496
+          min:      31.764496
+          max:      31.764496
+          latex:    '$t_+^{A, B_s\to\phi}$'
+          comment:  '(mBs + 2 mpi)^2 [b->s]'
+          unit:     'GeV^2'
+      'B->D^*::tp_v@SSE' :
+          central:  51.065316
+          min:      51.065316
+          max:      51.065316
+          latex:    '$t_+^{V, B\to D^*}$'
+          comment:  '(mB + mD)^2 [b->c]'
+          unit:     'GeV^2'
+      'B->D^*::tp_a@SSE' :
+          central:  42.838334
+          min:      42.838334
+          max:      42.838334
+          latex:    '$t_+^{A, B\to D^*}$'
+          comment:  '(mBc + 2 mpi)^2 [b->c]'
+          unit:     'GeV^2'
+      'B_s->D_s^*::tp_v@SSE' :
+          central:  51.065316
+          min:      51.065316
+          max:      51.065316
+          latex:    '$t_+^{V, B_s\to D_s^*}$'
+          comment:  '(mB + mD)^2 [b->c]'
+          unit:     'GeV^2'
+      'B_s->D_s^*::tp_a@SSE' :
+          central:  42.838334
+          min:      42.838334
+          max:      42.838334
+          latex:    '$t_+^{A, B_s\to D_s^*}$'
+          comment:  '(mBc + 2 mpi)^2 [b->c]'
+          unit:     'GeV^2'
+      'B_c->J/psi::tp_v@SSE' :
+          central:  51.065316
+          min:      51.065316
+          max:      51.065316
+          latex:    '$t_+^{V, B_c\to J/\psi}$'
+          comment:  '(mB + mD)^2 [b->c]'
+          unit:     'GeV^2'
+      'B_c->J/psi::tp_a@SSE' :
+          central:  42.838334
+          min:      42.838334
+          max:      42.838334
+          latex:    '$t_+^{A, B_c\to J/\psi}$'
+          comment:  '(mBc + 2 mpi)^2 [b->c]'
+          unit:     'GeV^2'
+  # }}}
+
   # Masses used in the G2026 form factor parametrization
   # All masses can be found in [G:2026A]
   # {{{
@@ -675,11 +913,23 @@ groups:
           max:     +0.1959500850585235
           latex:    '$\alpha_{+,0}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->pi::alpha^f+_0@SSE' :
+          central: 0.40019
+          min:     0.33883
+          max:     0.46156
+          latex:    '$\alpha_{+,0}^{B \to \pi,\mathrm{SSE}}$'
+          unit:     '1'
       'B->pi::alpha^f+_1@BSZ2015' :
           central: -0.7763565146997043
           min:     -0.7763565146997043
           max:     -0.7763565146997043
           latex:    '$\alpha_{+,1}^{B \to \pi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->pi::alpha^f+_1@SSE' :
+          central: -0.70046
+          min:     -0.99080
+          max:     -0.41013
+          latex:    '$\alpha_{+,1}^{B \to \pi,\mathrm{SSE}}$'
           unit:     '1'
       'B->pi::alpha^f+_2@BSZ2015' :
           central: -0.19660537219243024
@@ -687,11 +937,23 @@ groups:
           max:     -0.19660537219243024
           latex:    '$\alpha_{+,2}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->pi::alpha^f+_2@SSE' :
+          central: -0.52120
+          min:     -1.29444
+          max:     0.25203
+          latex:    '$\alpha_{+,2}^{B \to \pi,\mathrm{SSE}}$'
+          unit:     '1'
       'B->pi::alpha^f0_1@BSZ2015' :
           central: -0.01446803146697799
           min:     -0.01446803146697799
           max:     -0.01446803146697799
           latex:    '$\alpha_{0,1}^{B \to \pi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->pi::alpha^f0_1@SSE' :
+          central: 0.03211
+          min:     -0.10814
+          max:     0.17237
+          latex:    '$\alpha_{0,1}^{B \to \pi,\mathrm{SSE}}$'
           unit:     '1'
       'B->pi::alpha^f0_2@BSZ2015' :
           central: -0.19529667411047308
@@ -699,11 +961,23 @@ groups:
           max:     -0.19529667411047308
           latex:    '$\alpha_{0,2}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->pi::alpha^f0_2@SSE' :
+          central: -0.35053
+          min:     -0.61367
+          max:     -0.08740
+          latex:    '$\alpha_{0,2}^{B \to \pi,\mathrm{SSE}}$'
+          unit:     '1'
       'B->pi::alpha^fT_0@BSZ2015' :
           central: +0.17311654822482725
           min:     +0.17311654822482725
           max:     +0.17311654822482725
           latex:    '$\alpha_{T,0}^{B \to \pi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->pi::alpha^fT_0@SSE' :
+          central: 0.39177
+          min:     0.31329
+          max:     0.47026
+          latex:    '$\alpha_{T,0}^{B \to \pi,\mathrm{SSE}}$'
           unit:     '1'
       'B->pi::alpha^fT_1@BSZ2015' :
           central: -0.40903716524130396
@@ -711,11 +985,23 @@ groups:
           max:     -0.40903716524130396
           latex:    '$\alpha_{T,1}^{B \to \pi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->pi::alpha^fT_1@SSE' :
+          central: -0.69409
+          min:     -1.28298
+          max:     -0.10520
+          latex:    '$\alpha_{T,1}^{B \to \pi,\mathrm{SSE}}$'
+          unit:     '1'
       'B->pi::alpha^fT_2@BSZ2015' :
           central: -0.2580355775883392
           min:     -0.2580355775883392
           max:     -0.2580355775883392
           latex:    '$\alpha_{T,2}^{B \to \pi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->pi::alpha^fT_2@SSE' :
+          central: -0.65676
+          min:     -1.66404
+          max:     0.35051
+          latex:    '$\alpha_{T,2}^{B \to \pi,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B_s->pi
       'B_s->pi::f_+(0)' :
@@ -775,6 +1061,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'B->eta::alpha^f+_0@SSE' :
+          central:  0.26670
+          min:      -0.28754
+          max:      0.82095
+          latex:    '$\alpha_{0, +}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^f+_1@SSE' :
+          central:  -0.48457
+          min:      -4.64442
+          max:      3.67528
+          latex:    '$\alpha_{1, +}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^f+_2@SSE' :
+          central:  0.14434
+          min:      -10.20424
+          max:      10.49292
+          latex:    '$\alpha_{2, +}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^fT_0@SSE' :
+          central:  0.28359
+          min:      -0.29820
+          max:      0.86538
+          latex:    '$\alpha_{0, T}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^fT_1@SSE' :
+          central:  -0.56872
+          min:      -4.99510
+          max:      3.85765
+          latex:    '$\alpha_{1, T}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^fT_2@SSE' :
+          central:  0.27553
+          min:      -10.76788
+          max:      11.31893
+          latex:    '$\alpha_{2, T}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^f0_1@SSE' :
+          central:  -0.01071
+          min:      -3.99762
+          max:      3.97620
+          latex:    '$\alpha_{0, 1}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta::alpha^f0_2@SSE' :
+          central:  0.17418
+          min:      -10.24816
+          max:      10.59652
+          latex:    '$\alpha_{0, 2}^{B \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for B->eta' for [BSZ:2015A] parametrization
       'B->eta_prime::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -790,6 +1124,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'B->eta_prime::alpha^f+_0@SSE' :
+          central:  0.18951
+          min:      -0.17373
+          max:      0.55275
+          latex:    '$\alpha_{0, +}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^f+_1@SSE' :
+          central:  -0.37181
+          min:      -2.92126
+          max:      2.17764
+          latex:    '$\alpha_{1, +}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^f+_2@SSE' :
+          central:  0.16358
+          min:      -8.33778
+          max:      8.66493
+          latex:    '$\alpha_{2, +}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^fT_0@SSE' :
+          central:  0.21015
+          min:      -0.18016
+          max:      0.60045
+          latex:    '$\alpha_{0, T}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^fT_1@SSE' :
+          central:  -0.43399
+          min:      -3.31312
+          max:      2.44515
+          latex:    '$\alpha_{1, T}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^fT_2@SSE' :
+          central:  0.24046
+          min:      -9.40708
+          max:      9.88799
+          latex:    '$\alpha_{2, T}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^f0_1@SSE' :
+          central:  0.01598
+          min:      -2.39632
+          max:      2.42828
+          latex:    '$\alpha_{0, 1}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B->eta_prime::alpha^f0_2@SSE' :
+          central:  0.15832
+          min:      -8.43453
+          max:      8.75116
+          latex:    '$\alpha_{0, 2}^{B \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for B_s->eta for [BSZ:2015A] parametrization
       'B_s->eta::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -805,6 +1187,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'B_s->eta::alpha^f+_0@SSE' :
+          central:  -0.33520
+          min:      -0.68293
+          max:      0.01253
+          latex:    '$\alpha_{0, +}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^f+_1@SSE' :
+          central:  0.63281
+          min:      -3.57567
+          max:      4.84129
+          latex:    '$\alpha_{1, +}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^f+_2@SSE' :
+          central:  -0.18390
+          min:      -12.78208
+          max:      12.41427
+          latex:    '$\alpha_{2, +}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^fT_0@SSE' :
+          central:  -0.34986
+          min:      -0.70358
+          max:      0.00386
+          latex:    '$\alpha_{0, T}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^fT_1@SSE' :
+          central:  0.66938
+          min:      -3.66331
+          max:      5.00208
+          latex:    '$\alpha_{1, T}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^fT_2@SSE' :
+          central:  -0.18319
+          min:      -13.28340
+          max:      12.91702
+          latex:    '$\alpha_{2, T}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^f0_1@SSE' :
+          central:  -0.06306
+          min:      -4.16576
+          max:      4.03964
+          latex:    '$\alpha_{0, 1}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta::alpha^f0_2@SSE' :
+          central:  -0.15887
+          min:      -12.82333
+          max:      12.50559
+          latex:    '$\alpha_{0, 2}^{B_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for B_s->eta' for [BSZ:2015A] parametrization
       'B_s->eta_prime::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -820,6 +1250,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'B_s->eta_prime::alpha^f+_0@SSE' :
+          central:  0.35015
+          min:      0.10274
+          max:      0.59756
+          latex:    '$\alpha_{0, +}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^f+_1@SSE' :
+          central:  -0.67239
+          min:      -4.04865
+          max:      2.70388
+          latex:    '$\alpha_{1, +}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^f+_2@SSE' :
+          central:  0.11257
+          min:      -12.87160
+          max:      13.09674
+          latex:    '$\alpha_{2, +}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^fT_0@SSE' :
+          central:  0.39400
+          min:      0.15173
+          max:      0.63626
+          latex:    '$\alpha_{0, T}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^fT_1@SSE' :
+          central:  -0.78246
+          min:      -4.28419
+          max:      2.71927
+          latex:    '$\alpha_{1, T}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^fT_2@SSE' :
+          central:  0.13992
+          min:      -13.31465
+          max:      13.59448
+          latex:    '$\alpha_{2, T}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^f0_1@SSE' :
+          central:  0.09069
+          min:      -3.19263
+          max:      3.37401
+          latex:    '$\alpha_{0, 1}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->eta_prime::alpha^f0_2@SSE' :
+          central:  0.13858
+          min:      -12.91056
+          max:      13.18773
+          latex:    '$\alpha_{0, 2}^{B_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for B->eta for [BFW:2010A] parametrization
       'B->eta::a^%1%_%2%@SE' :
           central:  0.
@@ -1020,11 +1498,23 @@ groups:
           max:     +0.32908992854636815
           latex:    '$\alpha_{+,0}^{B \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K::alpha^f+_0@SSE' :
+          central: 0.46497
+          min:     0.43418
+          max:     0.49577
+          latex:    '$\alpha_{+,0}^{B \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K::alpha^f+_1@BSZ2015' :
           central: -0.8669465867427438
           min:     -0.8669465867427438
           max:     -0.8669465867427438
           latex:    '$\alpha_{+,1}^{B \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K::alpha^f+_1@SSE' :
+          central: -0.87716
+          min:     -1.12921
+          max:     -0.62511
+          latex:    '$\alpha_{+,1}^{B \to K,\mathrm{SSE}}$'
           unit:     '1'
       'B->K::alpha^f+_2@BSZ2015' :
           central: +0.006095669673341246
@@ -1032,11 +1522,23 @@ groups:
           max:     +0.006095669673341246
           latex:    '$\alpha_{+,2}^{B \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K::alpha^f+_2@SSE' :
+          central: -0.30406
+          min:     -0.75935
+          max:     0.15123
+          latex:    '$\alpha_{+,2}^{B \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K::alpha^f0_1@BSZ2015' :
           central: +0.19511719957037596
           min:     +0.19511719957037596
           max:     +0.19511719957037596
           latex:    '$\alpha_{0,1}^{B \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K::alpha^f0_1@SSE' :
+          central: 0.33314
+          min:     0.14110
+          max:     0.52518
+          latex:    '$\alpha_{0,1}^{B \to K,\mathrm{SSE}}$'
           unit:     '1'
       'B->K::alpha^f0_2@BSZ2015' :
           central: -0.4461264576740431
@@ -1044,11 +1546,23 @@ groups:
           max:     -0.4461264576740431
           latex:    '$\alpha_{0,2}^{B \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K::alpha^f0_2@SSE' :
+          central: 0.00329
+          min:     -0.73107
+          max:     0.73765
+          latex:    '$\alpha_{0,2}^{B \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K::alpha^fT_0@BSZ2015' :
           central: +0.2993831492500477
           min:     +0.2993831492500477
           max:     +0.2993831492500477
           latex:    '$\alpha_{T,0}^{B \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K::alpha^fT_0@SSE' :
+          central: 0.46407
+          min:     0.41953
+          max:     0.50861
+          latex:    '$\alpha_{T,0}^{B \to K,\mathrm{SSE}}$'
           unit:     '1'
       'B->K::alpha^fT_1@BSZ2015' :
           central: -0.7735456824025474
@@ -1056,11 +1570,23 @@ groups:
           max:     -0.7735456824025474
           latex:    '$\alpha_{T,1}^{B \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K::alpha^fT_1@SSE' :
+          central: -0.91269
+          min:     -1.35418
+          max:     -0.47120
+          latex:    '$\alpha_{T,1}^{B \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K::alpha^fT_2@BSZ2015' :
           central: +0.009554375102511888
           min:     +0.009554375102511888
           max:     +0.009554375102511888
           latex:    '$\alpha_{T,2}^{B \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K::alpha^fT_2@SSE' :
+          central: -0.39556
+          min:     -2.11639
+          max:     1.32528
+          latex:    '$\alpha_{T,2}^{B \to K,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B->K according to [KMPW:2010A], Table 4, p. 31
       'B->K::F^p(0)@KMPW2010' :
@@ -1108,11 +1634,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{+,0}^{B_s \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K::alpha^f+_0@SSE' :
+          central: 0.40223
+          min:     0.28475
+          max:     0.51970
+          latex:    '$\alpha_{+,0}^{B_s \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K::alpha^f+_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,1}^{B_s \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K::alpha^f+_1@SSE' :
+          central: -0.70969
+          min:     -0.92329
+          max:     -0.49609
+          latex:    '$\alpha_{+,1}^{B_s \to K,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K::alpha^f+_2@BSZ2015' :
           central:  0.0
@@ -1120,11 +1658,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{+,2}^{B_s \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K::alpha^f+_2@SSE' :
+          central: 0.64684
+          min:     -0.11907
+          max:     1.41276
+          latex:    '$\alpha_{+,2}^{B_s \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K::alpha^f0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{0,1}^{B_s \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K::alpha^f0_1@SSE' :
+          central: 0.22320
+          min:     0.10088
+          max:     0.34551
+          latex:    '$\alpha_{0,1}^{B_s \to K,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K::alpha^f0_2@BSZ2015' :
           central:  0.0
@@ -1132,11 +1682,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{0,2}^{B_s \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K::alpha^f0_2@SSE' :
+          central: -0.06040
+          min:     -0.38203
+          max:     0.26123
+          latex:    '$\alpha_{0,2}^{B_s \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K::alpha^fT_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,0}^{B_s \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K::alpha^fT_0@SSE' :
+          central: 0.37172
+          min:     -1.67316
+          max:     2.41660
+          latex:    '$\alpha_{T,0}^{B_s \to K,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K::alpha^fT_1@BSZ2015' :
           central:  0.0
@@ -1144,11 +1706,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{T,1}^{B_s \to K,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K::alpha^fT_1@SSE' :
+          central: -0.40318
+          min:     -18.08134
+          max:     17.27498
+          latex:    '$\alpha_{T,1}^{B_s \to K,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K::alpha^fT_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,2}^{B_s \to K,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K::alpha^fT_2@SSE' :
+          central: -0.34265
+          min:     -37.78383
+          max:     37.09854
+          latex:    '$\alpha_{T,2}^{B_s \to K,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B_s->K for [BFW:2010A] parametrization
       'B_s->K::a^%1%_%2%@SE' :
@@ -1356,11 +1930,23 @@ groups:
           max:     +0.680881482963591
           latex:    '$\alpha_{+,0}^{B \to D,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D::alpha^f+_0@SSE' :
+          central: 0.74943
+          min:     0.70396
+          max:     0.79490
+          latex:    '$\alpha_{+,0}^{B \to D,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D::alpha^f+_1@BSZ2015' :
           central: -2.221782088112512
           min:     -2.221782088112512
           max:     -2.221782088112512
           latex:    '$\alpha_{+,1}^{B \to D,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D::alpha^f+_1@SSE' :
+          central: -2.98430
+          min:     -3.87158
+          max:     -2.09702
+          latex:    '$\alpha_{+,1}^{B \to D,\mathrm{SSE}}$'
           unit:     '1'
       'B->D::alpha^f+_2@BSZ2015' :
           central: +0.6541000835887975
@@ -1368,11 +1954,23 @@ groups:
           max:     +0.6541000835887975
           latex:    '$\alpha_{+,2}^{B \to D,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D::alpha^f+_2@SSE' :
+          central: 3.85170
+          min:     -7.24212
+          max:     14.94552
+          latex:    '$\alpha_{+,2}^{B \to D,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D::alpha^f0_1@BSZ2015' :
           central: +0.5779088408438552
           min:     +0.5779088408438552
           max:     +0.5779088408438552
           latex:    '$\alpha_{0,1}^{B \to D,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D::alpha^f0_1@SSE' :
+          central: 0.17113
+          min:     -0.82887
+          max:     1.17113
+          latex:    '$\alpha_{0,1}^{B \to D,\mathrm{SSE}}$'
           unit:     '1'
       'B->D::alpha^f0_2@BSZ2015' :
           central: +1.3271162015486215
@@ -1380,11 +1978,23 @@ groups:
           max:     +1.3271162015486215
           latex:    '$\alpha_{0,2}^{B \to D,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D::alpha^f0_2@SSE' :
+          central: -2.34945
+          min:     -13.40053
+          max:     8.70162
+          latex:    '$\alpha_{0,2}^{B \to D,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D::alpha^fT_0@BSZ2015' :
           central: +0.5648201165054019
           min:     +0.5648201165054019
           max:     +0.5648201165054019
           latex:    '$\alpha_{T,0}^{B \to D,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D::alpha^fT_0@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T,0}^{B \to D,\mathrm{SSE}}$'
           unit:     '1'
       'B->D::alpha^fT_1@BSZ2015' :
           central: -2.5027753865334676
@@ -1392,11 +2002,23 @@ groups:
           max:     -2.5027753865334676
           latex:    '$\alpha_{T,1}^{B \to D,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D::alpha^fT_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T,1}^{B \to D,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D::alpha^fT_2@BSZ2015' :
           central: +10.591752810763625
           min:     +10.591752810763625
           max:     +10.591752810763625
           latex:    '$\alpha_{T,2}^{B \to D,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D::alpha^fT_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T,2}^{B \to D,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B(s)->D(s) for [BGL:1997A]
       'B->D::t_0@BGL1997' :
@@ -1448,11 +2070,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{+,0}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->D_s::alpha^f+_0@SSE' :
+          central: 0.76376
+          min:     0.67444
+          max:     0.85307
+          latex:    '$\alpha_{+,0}^{B_s \to D_s,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->D_s::alpha^f+_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{+,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->D_s::alpha^f+_1@SSE' :
+          central: -3.04390
+          min:     -5.17145
+          max:     -0.91634
+          latex:    '$\alpha_{+,1}^{B_s \to D_s,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->D_s::alpha^f+_2@BSZ2015' :
           central:  0.0
@@ -1460,11 +2094,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{+,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->D_s::alpha^f+_2@SSE' :
+          central: -0.56319
+          min:     -8.95693
+          max:     7.83055
+          latex:    '$\alpha_{+,2}^{B_s \to D_s,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->D_s::alpha^f0_1@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{0,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->D_s::alpha^f0_1@SSE' :
+          central: 0.09417
+          min:     -0.98555
+          max:     1.17388
+          latex:    '$\alpha_{0,1}^{B_s \to D_s,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->D_s::alpha^f0_2@BSZ2015' :
           central:  0.0
@@ -1472,11 +2118,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{0,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->D_s::alpha^f0_2@SSE' :
+          central: -1.09508
+          min:     -9.02173
+          max:     6.83157
+          latex:    '$\alpha_{0,2}^{B_s \to D_s,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->D_s::alpha^fT_0@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,0}^{B_s \to D_s,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->D_s::alpha^fT_0@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{T,0}^{B_s \to D_s,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->D_s::alpha^fT_1@BSZ2015' :
           central:  0.0
@@ -1484,11 +2142,23 @@ groups:
           max:      0.0
           latex:    '$\alpha_{T,1}^{B_s \to D_s,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->D_s::alpha^fT_1@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{T,1}^{B_s \to D_s,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->D_s::alpha^fT_2@BSZ2015' :
           central:  0.0
           min:      0.0
           max:      0.0
           latex:    '$\alpha_{T,2}^{B_s \to D_s,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->D_s::alpha^fT_2@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{T,2}^{B_s \to D_s,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B_s->D_s for [G:2026A] parametrization
       'B_s->D_s::a^%1%_%2%@G2026' :
@@ -1741,17 +2411,35 @@ groups:
           max:     +0.375945
           latex:    '$\alpha_{A_0,0}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^A0_0@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_0,0}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^A0_1@BSZ2015' :
           central: -0.826659
           min:     -1.127102
           max:     -0.526216
           latex:    '$\alpha_{A_0,1}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^A0_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_0,1}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^A0_2@BSZ2015' :
           central: +1.42113
           min:     +0.17424
           max:     +2.66802
           latex:    '$\alpha_{A_0,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^A0_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_0,2}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^A1_0@BSZ2015' :
           central: +0.242567
@@ -1765,11 +2453,23 @@ groups:
           max:     +0.582399
           latex:    '$\alpha_{A_1,1}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^A1_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_1,1}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^A1_2@BSZ2015' :
           central: +0.0926204
           min:     -0.4777986
           max:     +0.6630394
           latex:    '$\alpha_{A_1,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^A1_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_1,2}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^A12_1@BSZ2015' :
           central: +0.655890
@@ -1777,11 +2477,23 @@ groups:
           max:     +0.914709
           latex:    '$\alpha_{A_{12},1}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^A12_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_{12},1}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^A12_2@BSZ2015' :
           central: +0.277567
           min:     -0.705228
           max:     +1.260362
           latex:    '$\alpha_{A_{12},2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^A12_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{A_{12},2}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^V_0@BSZ2015' :
           central: +0.304239
@@ -1789,11 +2501,23 @@ groups:
           max:     +0.342446
           latex:    '$\alpha_{V,0}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^V_0@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{V,0}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^V_1@BSZ2015' :
           central: -0.832336
           min:     -1.122775
           max:     -0.541897
           latex:    '$\alpha_{V,1}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^V_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{V,1}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^V_2@BSZ2015' :
           central: +1.71741
@@ -1801,11 +2525,23 @@ groups:
           max:     +2.96039
           latex:    '$\alpha_{V,2}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^V_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{V,2}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^T1_0@BSZ2015' :
           central: +0.251370
           min:     +0.220439
           max:     +0.282301
           latex:    '$\alpha_{T_1,0}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^T1_0@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_1,0}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^T1_1@BSZ2015' :
           central: -0.715314
@@ -1813,11 +2549,23 @@ groups:
           max:     -0.490884
           latex:    '$\alpha_{T_1,1}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^T1_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_1,1}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^T1_2@BSZ2015' :
           central: +1.41463
           min:     +0.40802
           max:     +2.42124
           latex:    '$\alpha_{T_1,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^T1_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_1,2}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^T2_1@BSZ2015' :
           central: +0.412936
@@ -1825,11 +2573,23 @@ groups:
           max:     +0.641547
           latex:    '$\alpha_{T_2,1}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^T2_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_2,1}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^T2_2@BSZ2015' :
           central: +0.460141
           min:     -0.108437
           max:     +1.028719
           latex:    '$\alpha_{T_2,2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^T2_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_2,2}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       'B->omega::alpha^T23_0@BSZ2015' :
           central: +0.682582
@@ -1843,11 +2603,23 @@ groups:
           max:     +2.26539
           latex:    '$\alpha_{T_{23},1}^{B \to \omega,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->omega::alpha^T23_1@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_{23},1}^{B \to \omega,\mathrm{SSE}}$'
+          unit:     '1'
       'B->omega::alpha^T23_2@BSZ2015' :
           central: +2.46950
           min:     +0.27794
           max:     +4.66106
           latex:    '$\alpha_{T_{23},2}^{B \to \omega,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->omega::alpha^T23_2@SSE' :
+          central: 0
+          min:     0
+          max:     0
+          latex:    '$\alpha_{T_{23},2}^{B \to \omega,\mathrm{SSE}}$'
           unit:     '1'
       # form-factor parameters for B->rho
       # new updated results based on LCSR-only fit from the GKvD2018 calculation
@@ -1859,17 +2631,35 @@ groups:
           max:     +0.2925336490766787
           latex:    '$\alpha_{A_0,0}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^A0_0@SSE' :
+          central: 0.37802
+          min:     -0.30366
+          max:     1.05970
+          latex:    '$\alpha_{A_0,0}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^A0_1@BSZ2015' :
           central: -0.7432269609691062
           min:     -0.7432269609691062
           max:     -0.7432269609691062
           latex:    '$\alpha_{A_0,1}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^A0_1@SSE' :
+          central: -0.63532
+          min:     -5.59783
+          max:     4.32719
+          latex:    '$\alpha_{A_0,1}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^A0_2@BSZ2015' :
           central: -0.013648222902133517
           min:     -0.013648222902133517
           max:     -0.013648222902133517
           latex:    '$\alpha_{A_0,2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^A0_2@SSE' :
+          central: -0.01577
+          min:     -14.00711
+          max:     13.97558
+          latex:    '$\alpha_{A_0,2}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^A1_0@BSZ2015' :
           central: +0.2142700210705677
@@ -1883,11 +2673,23 @@ groups:
           max:     +0.4948341716573042
           latex:    '$\alpha_{A_1,1}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^A1_1@SSE' :
+          central: 0.43615
+          min:     -4.06064
+          max:     4.93294
+          latex:    '$\alpha_{A_1,1}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^A1_2@BSZ2015' :
           central: -0.5898416575860281
           min:     -0.5898416575860281
           max:     -0.5898416575860281
           latex:    '$\alpha_{A_1,2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^A1_2@SSE' :
+          central: -0.04900
+          min:     -12.64134
+          max:     12.54333
+          latex:    '$\alpha_{A_1,2}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^A12_1@BSZ2015' :
           central: +0.5301085432518904
@@ -1895,11 +2697,23 @@ groups:
           max:     +0.5301085432518904
           latex:    '$\alpha_{A_{12},1}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^A12_1@SSE' :
+          central: 0.60985
+          min:     -3.03978
+          max:     4.25949
+          latex:    '$\alpha_{A_{12},1}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^A12_2@BSZ2015' :
           central: -0.1698995165626285
           min:     -0.1698995165626285
           max:     -0.1698995165626285
           latex:    '$\alpha_{A_{12},2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^A12_2@SSE' :
+          central: -0.23708
+          min:     -12.97244
+          max:     12.49827
+          latex:    '$\alpha_{A_{12},2}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^V_0@BSZ2015' :
           central: +0.2712565197401259
@@ -1907,11 +2721,23 @@ groups:
           max:     +0.2712565197401259
           latex:    '$\alpha_{V,0}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^V_0@SSE' :
+          central: 0.33284
+          min:     -0.67328
+          max:     1.33895
+          latex:    '$\alpha_{V,0}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^V_1@BSZ2015' :
           central: -0.4925853027266176
           min:     -0.4925853027266176
           max:     -0.4925853027266176
           latex:    '$\alpha_{V,1}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^V_1@SSE' :
+          central: -0.40140
+          min:     -5.72158
+          max:     4.91879
+          latex:    '$\alpha_{V,1}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^V_2@BSZ2015' :
           central: -1.1971343036772617
@@ -1919,11 +2745,23 @@ groups:
           max:     -1.1971343036772617
           latex:    '$\alpha_{V,2}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^V_2@SSE' :
+          central: -0.17472
+          min:     -14.01225
+          max:     13.66281
+          latex:    '$\alpha_{V,2}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^T1_0@BSZ2015' :
           central: +0.2375503875107005
           min:     +0.2375503875107005
           max:     +0.2375503875107005
           latex:    '$\alpha_{T_1,0}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^T1_0@SSE' :
+          central: 0.29300
+          min:     -0.56684
+          max:     1.15283
+          latex:    '$\alpha_{T_1,0}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^T1_1@BSZ2015' :
           central: -0.45934079379480375
@@ -1931,11 +2769,23 @@ groups:
           max:     -0.45934079379480375
           latex:    '$\alpha_{T_1,1}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^T1_1@SSE' :
+          central: -0.37068
+          min:     -5.51048
+          max:     4.76912
+          latex:    '$\alpha_{T_1,1}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^T1_2@BSZ2015' :
           central: -0.8719619977491347
           min:     -0.8719619977491347
           max:     -0.8719619977491347
           latex:    '$\alpha_{T_1,2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^T1_2@SSE' :
+          central: -0.11854
+          min:     -13.71077
+          max:     13.47370
+          latex:    '$\alpha_{T_1,2}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^T2_1@BSZ2015' :
           central: +0.648543608510588
@@ -1943,11 +2793,23 @@ groups:
           max:     +0.648543608510588
           latex:    '$\alpha_{T_2,1}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^T2_1@SSE' :
+          central: 0.31614
+          min:     -2.41818
+          max:     3.05045
+          latex:    '$\alpha_{T_2,1}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^T2_2@BSZ2015' :
           central: -0.8367381225762223
           min:     -0.8367381225762223
           max:     -0.8367381225762223
           latex:    '$\alpha_{T_2,2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^T2_2@SSE' :
+          central: 0.64577
+          min:     -8.04046
+          max:     9.33200
+          latex:    '$\alpha_{T_2,2}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       'B->rho::alpha^T23_0@BSZ2015' :
           central: +0.558651527683086
@@ -1961,11 +2823,23 @@ groups:
           max:     +0.9756780226625973
           latex:    '$\alpha_{T_{23},1}^{B \to \rho,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->rho::alpha^T23_1@SSE' :
+          central: 0.82139
+          min:     -4.31320
+          max:     5.95597
+          latex:    '$\alpha_{T_{23},1}^{B \to \rho,\mathrm{SSE}}$'
+          unit:     '1'
       'B->rho::alpha^T23_2@BSZ2015' :
           central: -0.617057014268725
           min:     -0.617057014268725
           max:     -0.617057014268725
           latex:    '$\alpha_{T_{23},2}^{B \to \rho,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->rho::alpha^T23_2@SSE' :
+          central: -0.04356
+          min:     -14.05209
+          max:     13.96497
+          latex:    '$\alpha_{T_{23},2}^{B \to \rho,\mathrm{SSE}}$'
           unit:     '1'
       # form-factor parameters for B->K*
       # new updated results based on a combined LQCD+LCSR fit from the GKvD2018 calculation
@@ -1976,17 +2850,35 @@ groups:
           max:     +0.333565209671414
           latex:    '$\alpha_{A_0,0}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^A0_0@SSE' :
+          central: 0.45557
+          min:     0.11486
+          max:     0.79627
+          latex:    '$\alpha_{A_0,0}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^A0_1@BSZ2015' :
           central: -1.1164087925500106
           min:     -1.1164087925500106
           max:     -1.1164087925500106
           latex:    '$\alpha_{A_0,1}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^A0_1@SSE' :
+          central: -0.90098
+          min:     -4.89146
+          max:     3.08949
+          latex:    '$\alpha_{A_0,1}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^A0_2@BSZ2015' :
           central: +2.497069832700105
           min:     +2.497069832700105
           max:     +2.497069832700105
           latex:    '$\alpha_{A_0,2}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^A0_2@SSE' :
+          central: 0.15952
+          min:     -13.12483
+          max:     13.44387
+          latex:    '$\alpha_{A_0,2}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^A1_0@BSZ2015' :
           central: +0.28899504979162
@@ -2000,11 +2892,23 @@ groups:
           max:     +0.4566061262798284
           latex:    '$\alpha_{A_1,1}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^A1_1@SSE' :
+          central: 0.19011
+          min:     -0.42225
+          max:     0.80248
+          latex:    '$\alpha_{A_1,1}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^A1_2@BSZ2015' :
           central: +1.1829764611868705
           min:     +1.1829764611868705
           max:     +1.1829764611868705
           latex:    '$\alpha_{A_1,2}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^A1_2@SSE' :
+          central: 0.91862
+          min:     -1.30633
+          max:     3.14358
+          latex:    '$\alpha_{A_1,2}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^A12_1@BSZ2015' :
           central: +0.5041466779610547
@@ -2012,11 +2916,23 @@ groups:
           max:     +0.5041466779610547
           latex:    '$\alpha_{A_{12},1}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^A12_1@SSE' :
+          central: 0.23868
+          min:     -0.27509
+          max:     0.75244
+          latex:    '$\alpha_{A_{12},1}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^A12_2@BSZ2015' :
           central: +0.523751990094357
           min:     +0.523751990094357
           max:     +0.523751990094357
           latex:    '$\alpha_{A_{12},2}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^A12_2@SSE' :
+          central: 0.12758
+          min:     -6.42253
+          max:     6.67769
+          latex:    '$\alpha_{A_{12},2}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^V_0@BSZ2015' :
           central: +0.3641736466070142
@@ -2024,11 +2940,23 @@ groups:
           max:     +0.3641736466070142
           latex:    '$\alpha_{V,0}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^V_0@SSE' :
+          central: 0.52936
+          min:     0.34626
+          max:     0.71247
+          latex:    '$\alpha_{V,0}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^V_1@BSZ2015' :
           central: -1.0924590752515513
           min:     -1.0924590752515513
           max:     -1.0924590752515513
           latex:    '$\alpha_{V,1}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^V_1@SSE' :
+          central: -1.27986
+          min:     -2.56312
+          max:     0.00341
+          latex:    '$\alpha_{V,1}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^V_2@BSZ2015' :
           central: +2.5954783573262934
@@ -2036,11 +2964,23 @@ groups:
           max:     +2.5954783573262934
           latex:    '$\alpha_{V,2}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^V_2@SSE' :
+          central: 1.24522
+          min:     -5.79899
+          max:     8.28944
+          latex:    '$\alpha_{V,2}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^T1_0@BSZ2015' :
           central: +0.31922162296608125
           min:     +0.31922162296608125
           max:     +0.31922162296608125
           latex:    '$\alpha_{T_1,0}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^T1_0@SSE' :
+          central: 0.44509
+          min:     0.10747
+          max:     0.78271
+          latex:    '$\alpha_{T_1,0}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^T1_1@BSZ2015' :
           central: -0.9539833567723242
@@ -2048,11 +2988,23 @@ groups:
           max:     -0.9539833567723242
           latex:    '$\alpha_{T_1,1}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^T1_1@SSE' :
+          central: -0.80779
+          min:     -4.57664
+          max:     2.96105
+          latex:    '$\alpha_{T_1,1}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^T1_2@BSZ2015' :
           central: +2.040771175053964
           min:     +2.040771175053964
           max:     +2.040771175053964
           latex:    '$\alpha_{T_1,2}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^T1_2@SSE' :
+          central: -0.04936
+          min:     -13.26689
+          max:     13.16816
+          latex:    '$\alpha_{T_1,2}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^T2_1@BSZ2015' :
           central: +0.6020794846388718
@@ -2060,11 +3012,23 @@ groups:
           max:     +0.6020794846388718
           latex:    '$\alpha_{T_2,1}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^T2_1@SSE' :
+          central: 0.46509
+          min:     -1.72266
+          max:     2.65283
+          latex:    '$\alpha_{T_2,1}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^T2_2@BSZ2015' :
           central: +1.699282551872677
           min:     +1.699282551872677
           max:     +1.699282551872677
           latex:    '$\alpha_{T_2,2}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^T2_2@SSE' :
+          central: 0.42609
+          min:     -7.91874
+          max:     8.77091
+          latex:    '$\alpha_{T_2,2}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->K^*::alpha^T23_0@BSZ2015' :
           central: +0.6058860992660229
@@ -2078,11 +3042,23 @@ groups:
           max:     +0.8867716020286049
           latex:    '$\alpha_{T_{23},1}^{B \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->K^*::alpha^T23_1@SSE' :
+          central: 0.72095
+          min:     -3.49402
+          max:     4.93592
+          latex:    '$\alpha_{T_{23},1}^{B \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->K^*::alpha^T23_2@BSZ2015' :
           central: +1.8831160249369858
           min:     +1.8831160249369858
           max:     +1.8831160249369858
           latex:    '$\alpha_{T_{23},2}^{B \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->K^*::alpha^T23_2@SSE' :
+          central: -0.23222
+          min:     -14.04528
+          max:     13.58084
+          latex:    '$\alpha_{T_{23},2}^{B \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B->K^* for [BFW:2010A] parametrization
       'B->K^*::a^%1%_%2%@SE' :
@@ -2302,17 +3278,35 @@ groups:
           max:     +0.6759274184148141
           latex:    '$\alpha_{A_0,0}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^A0_0@SSE' :
+          central: 0.66844
+          min:     0.55444
+          max:     0.78244
+          latex:    '$\alpha_{A_0,0}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^A0_1@BSZ2015' :
           central: -2.6637000799846655
           min:     -2.6637000799846655
           max:     -2.6637000799846655
           latex:    '$\alpha_{A_0,1}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^A0_1@SSE' :
+          central: -3.78459
+          min:     -6.87257
+          max:     -0.69660
+          latex:    '$\alpha_{A_0,1}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^A0_2@BSZ2015' :
           central: +9.24495323738047
           min:     +9.24495323738047
           max:     +9.24495323738047
           latex:    '$\alpha_{A_0,2}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^A0_2@SSE' :
+          central: 1.37566
+          min:     -35.34708
+          max:     38.09840
+          latex:    '$\alpha_{A_0,2}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^A1_0@BSZ2015' :
           central: +0.601315572767782
@@ -2326,11 +3320,23 @@ groups:
           max:     +0.2689438444495897
           latex:    '$\alpha_{A_1,1}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^A1_1@SSE' :
+          central: -0.01708
+          min:     -2.26760
+          max:     2.23345
+          latex:    '$\alpha_{A_1,1}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^A1_2@BSZ2015' :
           central: +10.486032487112988
           min:     +10.486032487112988
           max:     +10.486032487112988
           latex:    '$\alpha_{A_1,2}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^A1_2@SSE' :
+          central: -1.44914
+          min:     -35.00919
+          max:     32.11090
+          latex:    '$\alpha_{A_1,2}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^A12_1@BSZ2015' :
           central: -0.14876383294863582
@@ -2338,11 +3344,23 @@ groups:
           max:     -0.14876383294863582
           latex:    '$\alpha_{A_{12},1}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^A12_1@SSE' :
+          central: -0.31059
+          min:     -1.19428
+          max:     0.57309
+          latex:    '$\alpha_{A_{12},1}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^A12_2@BSZ2015' :
           central: +5.724359813703122
           min:     +5.724359813703122
           max:     +5.724359813703122
           latex:    '$\alpha_{A_{12},2}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^A12_2@SSE' :
+          central: -1.48554
+          min:     -13.13366
+          max:     10.16259
+          latex:    '$\alpha_{A_{12},2}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^V_0@BSZ2015' :
           central: +0.6851323923652662
@@ -2350,11 +3368,23 @@ groups:
           max:     +0.6851323923652662
           latex:    '$\alpha_{V,0}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^V_0@SSE' :
+          central: 0.84940
+          min:     0.67836
+          max:     1.02044
+          latex:    '$\alpha_{V,0}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^V_1@BSZ2015' :
           central: -1.1678379355866901
           min:     -1.1678379355866901
           max:     -1.1678379355866901
           latex:    '$\alpha_{V,1}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^V_1@SSE' :
+          central: -4.63807
+          min:     -8.62675
+          max:     -0.64938
+          latex:    '$\alpha_{V,1}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^V_2@BSZ2015' :
           central: -4.016847943717434
@@ -2362,11 +3392,23 @@ groups:
           max:     -4.016847943717434
           latex:    '$\alpha_{V,2}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^V_2@SSE' :
+          central: -0.49684
+          min:     -42.89610
+          max:     41.90243
+          latex:    '$\alpha_{V,2}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^T1_0@BSZ2015' :
           central: +0.6302298493900512
           min:     +0.6302298493900512
           max:     +0.6302298493900512
           latex:    '$\alpha_{T_1,0}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^T1_0@SSE' :
+          central: 0.72725
+          min:     0.57386
+          max:     0.88064
+          latex:    '$\alpha_{T_1,0}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^T1_1@BSZ2015' :
           central: -1.4175767766320952
@@ -2374,11 +3416,23 @@ groups:
           max:     -1.4175767766320952
           latex:    '$\alpha_{T_1,1}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^T1_1@SSE' :
+          central: -3.20681
+          min:     -8.15264
+          max:     1.73903
+          latex:    '$\alpha_{T_1,1}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^T1_2@BSZ2015' :
           central: -0.6878528871949201
           min:     -0.6878528871949201
           max:     -0.6878528871949201
           latex:    '$\alpha_{T_1,2}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^T1_2@SSE' :
+          central: 2.51354
+          min:     -37.23595
+          max:     42.26304
+          latex:    '$\alpha_{T_1,2}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^T2_1@BSZ2015' :
           central: +1.5226848746033717
@@ -2386,11 +3440,23 @@ groups:
           max:     +1.5226848746033717
           latex:    '$\alpha_{T_2,1}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^T2_1@SSE' :
+          central: -0.20608
+          min:     -4.12167
+          max:     3.70952
+          latex:    '$\alpha_{T_2,1}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^T2_2@BSZ2015' :
           central: +0.006625613047247359
           min:     +0.006625613047247359
           max:     +0.006625613047247359
           latex:    '$\alpha_{T_2,2}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^T2_2@SSE' :
+          central: -4.46210
+          min:     -38.83822
+          max:     29.91402
+          latex:    '$\alpha_{T_2,2}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       'B->D^*::alpha^T23_0@BSZ2015' :
           central: +0.806230464649646
@@ -2404,11 +3470,23 @@ groups:
           max:     +0.5855443911134184
           latex:    '$\alpha_{T_{23},1}^{B \to D^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B->D^*::alpha^T23_1@SSE' :
+          central: -0.54124
+          min:     -6.21356
+          max:     5.13107
+          latex:    '$\alpha_{T_{23},1}^{B \to D^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B->D^*::alpha^T23_2@BSZ2015' :
           central: +4.667079193615467
           min:     +4.667079193615467
           max:     +4.667079193615467
           latex:    '$\alpha_{T_{23},2}^{B \to D^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B->D^*::alpha^T23_2@SSE' :
+          central: -0.78084
+          min:     -43.23434
+          max:     41.67267
+          latex:    '$\alpha_{T_{23},2}^{B \to D^*,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B->D^* for [G:2026A] parametrization
       'B->D^*::a^%1%_%2%@G2026' :
@@ -2888,6 +3966,108 @@ groups:
           matrix:
             - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
             - [0, 1, 2, 3]
+      'B_c->J/psi::alpha^A0_0@SSE' :
+          central: 0.61730
+          min:     0.54895
+          max:     0.68565
+          latex:    '$\alpha_{A_0,0}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^A0_1@SSE' :
+          central: -4.95465
+          min:     -6.88071
+          max:     -3.02859
+          latex:    '$\alpha_{A_0,1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^A0_2@SSE' :
+          central: 4.91346
+          min:     -14.58439
+          max:     24.41130
+          latex:    '$\alpha_{A_0,2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^A1_1@SSE' :
+          central: -2.38033
+          min:     -3.67781
+          max:     -1.08286
+          latex:    '$\alpha_{A_1,1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^A1_2@SSE' :
+          central: 6.17128
+          min:     -7.13866
+          max:     19.48121
+          latex:    '$\alpha_{A_1,2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^A12_1@SSE' :
+          central: -0.45235
+          min:     -0.79255
+          max:     -0.11215
+          latex:    '$\alpha_{A_{12},1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^A12_2@SSE' :
+          central: -1.83789
+          min:     -9.26142
+          max:     5.58565
+          latex:    '$\alpha_{A_{12},2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^V_0@SSE' :
+          central: 0.97205
+          min:     0.77645
+          max:     1.16764
+          latex:    '$\alpha_{V,0}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^V_1@SSE' :
+          central: -7.84506
+          min:     -13.42526
+          max:     -2.26486
+          latex:    '$\alpha_{V,1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^V_2@SSE' :
+          central: 0.70107
+          min:     -37.51332
+          max:     38.91546
+          latex:    '$\alpha_{V,2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T1_0@SSE' :
+          central: 0.61956
+          min:     0.56305
+          max:     0.67607
+          latex:    '$\alpha_{T_1,0}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T1_1@SSE' :
+          central: -5.18137
+          min:     -6.99849
+          max:     -3.36424
+          latex:    '$\alpha_{T_1,1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T1_2@SSE' :
+          central: 16.61029
+          min:     -11.75745
+          max:     44.97804
+          latex:    '$\alpha_{T_1,2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T2_1@SSE' :
+          central: -2.22507
+          min:     -3.57982
+          max:     -0.87032
+          latex:    '$\alpha_{T_2,1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T2_2@SSE' :
+          central: -2.95118
+          min:     -22.55434
+          max:     16.65199
+          latex:    '$\alpha_{T_2,2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T23_1@SSE' :
+          central: -3.02447
+          min:     -5.70474
+          max:     -0.34420
+          latex:    '$\alpha_{T_{23},1}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_c->J/psi::alpha^T23_2@SSE' :
+          central: 3.19380
+          min:     -26.04956
+          max:     32.43716
+          latex:    '$\alpha_{T_{23},2}^{B_c \to J/\psi,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for B_c->J/psi for [BGL:1997A]
       'B_c->J/psi::t_0@BGL1997' :
           central:  5.2046809
@@ -2926,17 +4106,35 @@ groups:
           max:      0.362963
           latex:    '$\alpha_{A_0,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^A0_0@SSE' :
+          central: 0.39834
+          min:     0.01098
+          max:     0.78570
+          latex:    '$\alpha_{A_0,0}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^A0_1@BSZ2015' :
           central:  -0.362957
           min:      -0.362957
           max:      -0.362957
           latex:    '$\alpha_{A_0,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^A0_1@SSE' :
+          central: -0.54168
+          min:     -4.93256
+          max:     3.84920
+          latex:    '$\alpha_{A_0,1}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^A0_2@BSZ2015' :
           central:  8.02781
           min:      8.02781
           max:      8.02781
           latex:    '$\alpha_{A_0,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^A0_2@SSE' :
+          central: -0.22878
+          min:     -13.61854
+          max:     13.16098
+          latex:    '$\alpha_{A_0,2}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^A1_0@BSZ2015' :
           central:  0.223059
@@ -2950,11 +4148,23 @@ groups:
           max:      0.239792
           latex:    '$\alpha_{A_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^A1_1@SSE' :
+          central: 0.11305
+          min:     -0.28487
+          max:     0.51096
+          latex:    '$\alpha_{A_1,1}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^A1_2@BSZ2015' :
           central:  1.76787
           min:      1.76787
           max:      1.76787
           latex:    '$\alpha_{A_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^A1_2@SSE' :
+          central: 0.95287
+          min:     -0.67067
+          max:     2.57641
+          latex:    '$\alpha_{A_1,2}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^A12_1@BSZ2015' :
           central:  1.11596
@@ -2962,11 +4172,23 @@ groups:
           max:      1.11596
           latex:    '$\alpha_{A_{12},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^A12_1@SSE' :
+          central: 0.26786
+          min:     -0.17209
+          max:     0.70781
+          latex:    '$\alpha_{A_{12},1}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^A12_2@BSZ2015' :
           central:  3.42926
           min:      3.42926
           max:      3.42926
           latex:    '$\alpha_{A_{12},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^A12_2@SSE' :
+          central: 0.22801
+          min:     -3.52990
+          max:     3.98592
+          latex:    '$\alpha_{A_{12},2}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_0@BSZ2015' :
           central:  0.278079
@@ -2974,11 +4196,23 @@ groups:
           max:      0.278079
           latex:    '$\alpha_{V,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^V_0@SSE' :
+          central: 0.42209
+          min:     0.29537
+          max:     0.54881
+          latex:    '$\alpha_{V,0}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^V_1@BSZ2015' :
           central:  -0.819609
           min:      -0.819609
           max:      -0.819609
           latex:    '$\alpha_{V,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^V_1@SSE' :
+          central: -0.89956
+          min:     -1.66495
+          max:     -0.13416
+          latex:    '$\alpha_{V,1}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^V_2@BSZ2015' :
           central:  5.07652
@@ -2986,11 +4220,23 @@ groups:
           max:      5.07652
           latex:    '$\alpha_{V,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^V_2@SSE' :
+          central: 1.35492
+          min:     -2.52659
+          max:     5.23642
+          latex:    '$\alpha_{V,2}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^T1_0@BSZ2015' :
           central:  0.236867
           min:      0.236867
           max:      0.236867
           latex:    '$\alpha_{T_1,0}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^T1_0@SSE' :
+          central: 0.34606
+          min:     -0.06399
+          max:     0.75610
+          latex:    '$\alpha_{T_1,0}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^T1_1@BSZ2015' :
           central:  -0.74862
@@ -2998,11 +4244,23 @@ groups:
           max:      -0.74862
           latex:    '$\alpha_{T_1,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^T1_1@SSE' :
+          central: -0.34634
+          min:     -4.75825
+          max:     4.06557
+          latex:    '$\alpha_{T_1,1}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^T1_2@BSZ2015' :
           central:  2.49014
           min:      2.49014
           max:      2.49014
           latex:    '$\alpha_{T_1,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^T1_2@SSE' :
+          central: -0.40872
+          min:     -12.84875
+          max:     12.03130
+          latex:    '$\alpha_{T_1,2}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^T2_1@BSZ2015' :
           central:  0.31254
@@ -3010,11 +4268,23 @@ groups:
           max:      0.31254
           latex:    '$\alpha_{T_2,1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^T2_1@SSE' :
+          central: 0.40760
+          min:     -1.90698
+          max:     2.72218
+          latex:    '$\alpha_{T_2,1}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^T2_2@BSZ2015' :
           central:  1.58141
           min:      1.58141
           max:      1.58141
           latex:    '$\alpha_{T_2,2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->K^*::alpha^T2_2@SSE' :
+          central: 0.64428
+          min:     -7.29999
+          max:     8.58855
+          latex:    '$\alpha_{T_2,2}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->K^*::alpha^T23_0@BSZ2015' :
           central:  0.603261
@@ -3028,11 +4298,24 @@ groups:
           max:      2.39992
           latex:    '$\alpha_{T_{23},1}^{B_s \to K^*,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->K^*::alpha^T23_1@SSE' :
+          central: 0.90735
+          min:     -3.66258
+          max:     5.47729
+          latex:    '$\alpha_{T_{23},1}^{B_s \to K^*,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->K^*::alpha^T23_2@BSZ2015' :
           central:  9.64299
           min:      9.64299
           max:      9.64299
           latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{BSZ2015}}$'
+          unit:     '1'
+       # form factor parameters for B_s->phi inspired by [BSZ:2015A]
+      'B_s->K^*::alpha^T23_2@SSE' :
+          central: -0.23925
+          min:     -13.96510
+          max:     13.48659
+          latex:    '$\alpha_{T_{23},2}^{B_s \to K^*,\mathrm{SSE}}$'
           unit:     '1'
        # form factor parameters for B_s->phi inspired by [BSZ:2015A]
       'B_s->phi::alpha^A0_0@BSZ2015' :
@@ -3041,17 +4324,35 @@ groups:
           max:      0.388675
           latex:    '$\alpha_{A_0,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^A0_0@SSE' :
+          central: 0.50752
+          min:     0.33341
+          max:     0.68163
+          latex:    '$\alpha_{A_0,0}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^A0_1@BSZ2015' :
           central:  -0.783874
           min:      -0.783874
           max:      -0.783874
           latex:    '$\alpha_{A_0,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^A0_1@SSE' :
+          central: -1.13547
+          min:     -2.34751
+          max:     0.07656
+          latex:    '$\alpha_{A_0,1}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^A0_2@BSZ2015' :
           central:  2.41473
           min:      2.41473
           max:      2.41473
           latex:    '$\alpha_{A_0,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^A0_2@SSE' :
+          central: 0.62881
+          min:     -8.83697
+          max:     10.09459
+          latex:    '$\alpha_{A_0,2}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^A1_0@BSZ2015' :
           central:  0.295607
@@ -3065,11 +4366,23 @@ groups:
           max:      0.483914
           latex:    '$\alpha_{A_1,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^A1_1@SSE' :
+          central: 0.15273
+          min:     -0.58734
+          max:     0.89279
+          latex:    '$\alpha_{A_1,1}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^A1_2@BSZ2015' :
           central:  0.291817
           min:      0.291817
           max:      0.291817
           latex:    '$\alpha_{A_1,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^A1_2@SSE' :
+          central: 1.16037
+          min:     -3.46977
+          max:     5.79051
+          latex:    '$\alpha_{A_1,2}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^A12_1@BSZ2015' :
           central:  0.764562
@@ -3077,11 +4390,23 @@ groups:
           max:      0.764562
           latex:    '$\alpha_{A_{12},1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^A12_1@SSE' :
+          central: 0.31009
+          min:     -0.26022
+          max:     0.88040
+          latex:    '$\alpha_{A_{12},1}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^A12_2@BSZ2015' :
           central:  0.711083
           min:      0.711083
           max:      0.711083
           latex:    '$\alpha_{A_{12},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^A12_2@SSE' :
+          central: 0.08885
+          min:     -6.62591
+          max:     6.80362
+          latex:    '$\alpha_{A_{12},2}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^V_0@BSZ2015' :
           central:  0.386556
@@ -3089,11 +4414,23 @@ groups:
           max:      0.386556
           latex:    '$\alpha_{V,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^V_0@SSE' :
+          central: 0.48463
+          min:     0.30219
+          max:     0.66708
+          latex:    '$\alpha_{V,0}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^V_1@BSZ2015' :
           central:  -1.02957
           min:      -1.02957
           max:      -1.02957
           latex:    '$\alpha_{V,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^V_1@SSE' :
+          central: -1.05070
+          min:     -2.51500
+          max:     0.41360
+          latex:    '$\alpha_{V,1}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^V_2@BSZ2015' :
           central:  3.50499
@@ -3101,11 +4438,23 @@ groups:
           max:      3.50499
           latex:    '$\alpha_{V,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^V_2@SSE' :
+          central: 1.42006
+          min:     -8.58848
+          max:     11.42861
+          latex:    '$\alpha_{V,2}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^T1_0@BSZ2015' :
           central:  0.309106
           min:      0.309106
           max:      0.309106
           latex:    '$\alpha_{T_1,0}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^T1_0@SSE' :
+          central: 0.40977
+          min:     0.27584
+          max:     0.54370
+          latex:    '$\alpha_{T_1,0}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^T1_1@BSZ2015' :
           central:  -0.867808
@@ -3113,11 +4462,23 @@ groups:
           max:      -0.867808
           latex:    '$\alpha_{T_1,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^T1_1@SSE' :
+          central: -0.63784
+          min:     -1.71862
+          max:     0.44294
+          latex:    '$\alpha_{T_1,1}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^T1_2@BSZ2015' :
           central:  2.74535
           min:      2.74535
           max:      2.74535
           latex:    '$\alpha_{T_1,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^T1_2@SSE' :
+          central: 0.10328
+          min:     -8.03794
+          max:     8.24450
+          latex:    '$\alpha_{T_1,2}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^T2_1@BSZ2015' :
           central:  0.58328
@@ -3125,11 +4486,23 @@ groups:
           max:      0.58328
           latex:    '$\alpha_{T_2,1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^T2_1@SSE' :
+          central: 0.34207
+          min:     -0.44616
+          max:     1.13030
+          latex:    '$\alpha_{T_2,1}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^T2_2@BSZ2015' :
           central:  0.893065
           min:      0.893065
           max:      0.893065
           latex:    '$\alpha_{T_2,2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^T2_2@SSE' :
+          central: 1.15597
+          min:     -5.18144
+          max:     7.49338
+          latex:    '$\alpha_{T_2,2}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       'B_s->phi::alpha^T23_0@BSZ2015' :
           central:  0.675618
@@ -3143,11 +4516,23 @@ groups:
           max:      2.11435
           latex:    '$\alpha_{T_{23},1}^{B_s \to \phi,\mathrm{BSZ2015}}$'
           unit:     '1'
+      'B_s->phi::alpha^T23_1@SSE' :
+          central: 0.65368
+          min:     -0.66088
+          max:     1.96824
+          latex:    '$\alpha_{T_{23},1}^{B_s \to \phi,\mathrm{SSE}}$'
+          unit:     '1'
       'B_s->phi::alpha^T23_2@BSZ2015' :
           central:  4.93525
           min:      4.93525
           max:      4.93525
           latex:    '$\alpha_{T_{23},2}^{B_s \to \phi,\mathrm{BSZ2015}}$'
+          unit:     '1'
+      'B_s->phi::alpha^T23_2@SSE' :
+          central: 1.21295
+          min:     -8.89237
+          max:     11.31828
+          latex:    '$\alpha_{T_{23},2}^{B_s \to \phi,\mathrm{SSE}}$'
           unit:     '1'
       # form factor parameters for B_s->phi for [BFW:2010A] parametrization
       'B_s->phi::a^%1%_%2%@SE' :
@@ -3197,6 +4582,108 @@ groups:
           matrix:
             - ["V", "A0", "A1", "A12", "T1", "T2", "T23"]
             - [0, 1, 2, 3]
+      'B_s->D_s^*::alpha^A0_0@SSE' :
+          central: 0.65294
+          min:     0.49333
+          max:     0.81254
+          latex:    '$\alpha_{A_0,0}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^A0_1@SSE' :
+          central: -4.18348
+          min:     -8.77952
+          max:     0.41255
+          latex:    '$\alpha_{A_0,1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^A0_2@SSE' :
+          central: -1.95477
+          min:     -42.19209
+          max:     38.28255
+          latex:    '$\alpha_{A_0,2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^A1_1@SSE' :
+          central: -0.33156
+          min:     -2.73546
+          max:     2.07233
+          latex:    '$\alpha_{A_1,1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^A1_2@SSE' :
+          central: -3.01817
+          min:     -39.59514
+          max:     33.55880
+          latex:    '$\alpha_{A_1,2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^A12_1@SSE' :
+          central: -0.45021
+          min:     -1.50689
+          max:     0.60648
+          latex:    '$\alpha_{A_{12},1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^A12_2@SSE' :
+          central: -3.07381
+          min:     -24.44604
+          max:     18.29842
+          latex:    '$\alpha_{A_{12},2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^V_0@SSE' :
+          central: 0.88071
+          min:     0.64133
+          max:     1.12009
+          latex:    '$\alpha_{V,0}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^V_1@SSE' :
+          central: -4.50279
+          min:     -12.59200
+          max:     3.58642
+          latex:    '$\alpha_{V,1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^V_2@SSE' :
+          central: 0.52323
+          min:     -42.26667
+          max:     43.31314
+          latex:    '$\alpha_{V,2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T1_0@SSE' :
+          central: 0.73287
+          min:     0.63777
+          max:     0.82798
+          latex:    '$\alpha_{T_1,0}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T1_1@SSE' :
+          central: -3.24790
+          min:     -6.49786
+          max:     0.00206
+          latex:    '$\alpha_{T_1,1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T1_2@SSE' :
+          central: 1.28331
+          min:     -38.94724
+          max:     41.51386
+          latex:    '$\alpha_{T_1,2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T2_1@SSE' :
+          central: -0.33957
+          min:     -2.80854
+          max:     2.12939
+          latex:    '$\alpha_{T_2,1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T2_2@SSE' :
+          central: -5.09335
+          min:     -37.20843
+          max:     27.02173
+          latex:    '$\alpha_{T_2,2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T23_1@SSE' :
+          central: -0.71052
+          min:     -4.68247
+          max:     3.26144
+          latex:    '$\alpha_{T_{23},1}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
+      'B_s->D_s^*::alpha^T23_2@SSE' :
+          central: -1.11085
+          min:     -43.29035
+          max:     41.06865
+          latex:    '$\alpha_{T_{23},2}^{B_s \to D_s^*,\mathrm{SSE}}$'
+          unit:     '1'
   # }}}
 
   # Parameters in B -> gamma Form Factor Parametrizations
@@ -4498,6 +5985,23 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
+      'D->pi::alpha^%1%_%2%@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{%1%,%2%}^{D \to \pi,\mathrm{SSE}}$'
+          unit:     '1'
+          matrix:
+            - ["f+", "fT"]
+            - ["0", "1", "2"]
+      'D->pi::alpha^f0_%1%@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{f0,%1%}^{D \to \pi,\mathrm{SSE}}$'
+          unit:     '1'
+          matrix:
+            - ["1", "2"]
       # form factor parameters for D_s->K inspired by [BSZ:2015A]
       'D_s->K::alpha^%1%_%2%@BSZ2015' :
           central:  0.0
@@ -4508,6 +6012,23 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
+      'D_s->K::alpha^%1%_%2%@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{%1%,%2%}^{D_s \to K,\mathrm{SSE}}$'
+          unit:     '1'
+          matrix:
+            - ["f+", "fT"]
+            - ["0", "1", "2"]
+      'D_s->K::alpha^f0_%1%@SSE' :
+          central:  0
+          min:      0
+          max:      0
+          latex:    '$\alpha_{f0,%1%}^{D_s \to K,\mathrm{SSE}}$'
+          unit:     '1'
+          matrix:
+            - ["1", "2"]
       # form factor parameters for D->K for [BFW:2010A] parametrization
       'D->K::a^%1%_%2%@SE' :
           central:  0.
@@ -4541,6 +6062,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - ["0", "1", "2"]
+      'D->K::alpha^f+_0@SSE' :
+          central: 0.78879
+          min:     0.76049
+          max:     0.81709
+          latex:    '$\alpha_{+,0}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^f+_1@SSE' :
+          central: -0.89720
+          min:     -1.37430
+          max:     -0.42010
+          latex:    '$\alpha_{+,1}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^f+_2@SSE' :
+          central: 0.15750
+          min:     -2.96971
+          max:     3.28470
+          latex:    '$\alpha_{+,2}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^f0_1@SSE' :
+          central: 0.74658
+          min:     0.62584
+          max:     0.86731
+          latex:    '$\alpha_{0,1}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^f0_2@SSE' :
+          central: 0.16602
+          min:     -0.59439
+          max:     0.92644
+          latex:    '$\alpha_{0,2}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^fT_0@SSE' :
+          central: 0.71893
+          min:     0.57605
+          max:     0.86182
+          latex:    '$\alpha_{T,0}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^fT_1@SSE' :
+          central: -0.82621
+          min:     -1.97535
+          max:     0.32293
+          latex:    '$\alpha_{T,1}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->K::alpha^fT_2@SSE' :
+          central: -0.58192
+          min:     -9.22393
+          max:     8.06009
+          latex:    '$\alpha_{T,2}^{D \to K,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for D->eta for [BSZ:2015A] parametrization
       'D->eta::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -4556,6 +6125,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'D->eta::alpha^f+_0@SSE' :
+          central:  0.40059
+          min:      -0.28155
+          max:      1.08274
+          latex:    '$\alpha_{0, +}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^f+_1@SSE' :
+          central:  -0.35117
+          min:      -3.02945
+          max:      2.32710
+          latex:    '$\alpha_{1, +}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^f+_2@SSE' :
+          central:  -0.06244
+          min:      -14.11642
+          max:      13.99155
+          latex:    '$\alpha_{2, +}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^fT_0@SSE' :
+          central:  0.40840
+          min:      -0.29100
+          max:      1.10779
+          latex:    '$\alpha_{0, T}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^fT_1@SSE' :
+          central:  -0.46420
+          min:      -3.21320
+          max:      2.28481
+          latex:    '$\alpha_{1, T}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^fT_2@SSE' :
+          central:  -0.15168
+          min:      -14.30906
+          max:      14.00570
+          latex:    '$\alpha_{2, T}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^f0_1@SSE' :
+          central:  0.11619
+          min:      -2.58331
+          max:      2.81569
+          latex:    '$\alpha_{0, 1}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta::alpha^f0_2@SSE' :
+          central:  0.06124
+          min:      -13.90631
+          max:      14.02880
+          latex:    '$\alpha_{0, 2}^{D \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for D->eta' for [BSZ:2015A] parametrization
       'D->eta_prime::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -4571,6 +6188,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'D->eta_prime::alpha^f+_0@SSE' :
+          central:  0.28160
+          min:      -0.30779
+          max:      0.87100
+          latex:    '$\alpha_{0, +}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^f+_1@SSE' :
+          central:  -0.30546
+          min:      -2.08981
+          max:      1.47888
+          latex:    '$\alpha_{1, +}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^f+_2@SSE' :
+          central:  -0.05738
+          min:      -13.77781
+          max:      13.66306
+          latex:    '$\alpha_{2, +}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^fT_0@SSE' :
+          central:  0.33887
+          min:      -0.37286
+          max:      1.05061
+          latex:    '$\alpha_{0, T}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^fT_1@SSE' :
+          central:  -0.45019
+          min:      -2.66969
+          max:      1.76931
+          latex:    '$\alpha_{1, T}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^fT_2@SSE' :
+          central:  -0.32060
+          min:      -14.32049
+          max:      13.67929
+          latex:    '$\alpha_{2, T}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^f0_1@SSE' :
+          central:  0.45859
+          min:      -1.11230
+          max:      2.02949
+          latex:    '$\alpha_{0, 1}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D->eta_prime::alpha^f0_2@SSE' :
+          central:  -0.39078
+          min:      -13.97401
+          max:      13.19246
+          latex:    '$\alpha_{0, 2}^{D \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for D_s->eta for [BSZ:2015A] parametrization
       'D_s->eta::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -4586,6 +6251,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'D_s->eta::alpha^f+_0@SSE' :
+          central:  -0.49446
+          min:      -0.65029
+          max:      -0.33864
+          latex:    '$\alpha_{0, +}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^f+_1@SSE' :
+          central:  0.53612
+          min:      -2.27536
+          max:      3.34761
+          latex:    '$\alpha_{1, +}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^f+_2@SSE' :
+          central:  0.09425
+          min:      -14.25775
+          max:      14.44625
+          latex:    '$\alpha_{2, +}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^fT_0@SSE' :
+          central:  -0.47721
+          min:      -0.66850
+          max:      -0.28592
+          latex:    '$\alpha_{0, T}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^fT_1@SSE' :
+          central:  0.47697
+          min:      -2.58065
+          max:      3.53459
+          latex:    '$\alpha_{1, T}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^fT_2@SSE' :
+          central:  0.16574
+          min:      -14.20856
+          max:      14.54005
+          latex:    '$\alpha_{2, T}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^f0_1@SSE' :
+          central:  0.39269
+          min:      -2.45073
+          max:      3.23611
+          latex:    '$\alpha_{0, 1}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta::alpha^f0_2@SSE' :
+          central:  0.03943
+          min:      -14.23720
+          max:      14.31607
+          latex:    '$\alpha_{0, 2}^{D_s \to \eta,\mathrm{SSE}}$'
+          unit:     '1'
       # form factor parameters for D_s->eta' for [BSZ:2015A] parametrization
       'D_s->eta_prime::alpha^%1%_%2%@BSZ2015' :
           central:  0.
@@ -4601,6 +6314,54 @@ groups:
           matrix:
             - ["f+", "f0", "fT"]
             - [0, 1, 2, 3]
+      'D_s->eta_prime::alpha^f+_0@SSE' :
+          central:  0.50614
+          min:      0.26004
+          max:      0.75224
+          latex:    '$\alpha_{0, +}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^f+_1@SSE' :
+          central:  -0.53891
+          min:      -2.91754
+          max:      1.83973
+          latex:    '$\alpha_{1, +}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^f+_2@SSE' :
+          central:  -0.10114
+          min:      -14.41930
+          max:      14.21702
+          latex:    '$\alpha_{2, +}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^fT_0@SSE' :
+          central:  0.57565
+          min:      0.29616
+          max:      0.85514
+          latex:    '$\alpha_{0, T}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^fT_1@SSE' :
+          central:  -0.40203
+          min:      -3.64832
+          max:      2.84427
+          latex:    '$\alpha_{1, T}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^fT_2@SSE' :
+          central:  -0.17181
+          min:      -14.59817
+          max:      14.25455
+          latex:    '$\alpha_{2, T}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^f0_1@SSE' :
+          central:  0.16751
+          min:      -2.33137
+          max:      2.66638
+          latex:    '$\alpha_{0, 1}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
+      'D_s->eta_prime::alpha^f0_2@SSE' :
+          central:  -0.00162
+          min:      -14.31260
+          max:      14.30936
+          latex:    '$\alpha_{0, 2}^{D_s \to \eta^\prime,\mathrm{SSE}}$'
+          unit:     '1'
   # }}}
 
   # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations
@@ -5489,6 +7250,675 @@ groups:
           max:     +0.000
           unit:     '1'
           latex:    '$a_{\perp,2}^{T5,\Lambda_b \to \Lambda_c ,\mathrm{DKMR2017}}$'
+  # }}}
+
+  # Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations (SSE)
+  # Pair-production thresholds chosen as the lowest-lying 2- or 3-particle
+  # threshold achievable in the isospin-symmetry limit (see the mesonic SSE).
+  # {{{
+  - title: 'Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations (SSE)'
+    description: ''
+    parameters:
+      # form factor parameters for Lambda_b->Lambda in the SSE parametrization
+      'Lambda_b->Lambda::tp_v@SSE' :
+          central:  33.304441
+          min:      33.304441
+          max:      33.304441
+          latex:    '$t_+^{V, \Lambda_b \to \Lambda}$'
+          comment:  '(mB + mK)^2 [b->s]'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda::tp_a@SSE' :
+          central:  31.764496
+          min:      31.764496
+          max:      31.764496
+          latex:    '$t_+^{A, \Lambda_b \to \Lambda}$'
+          comment:  '(mBs + 2 mpi)^2 [b->s]'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda::alpha^(0,V)_0@SSE' :
+          central: 0.28865
+          min:     0.20498
+          max:     0.37232
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,V)_1@SSE' :
+          central: -1.16378
+          min:     -2.30874
+          max:     -0.01881
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,V)_2@SSE' :
+          central: 0.14965
+          min:     -5.54769
+          max:     5.84699
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,V)_0@SSE' :
+          central: 0.35520
+          min:     0.23250
+          max:     0.47791
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,V)_1@SSE' :
+          central: -1.44867
+          min:     -3.17145
+          max:     0.27412
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,V)_2@SSE' :
+          central: 0.15991
+          min:     -7.98216
+          max:     8.30199
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,A)_0@SSE' :
+          central: 0.25200
+          min:     0.17200
+          max:     0.33201
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,A)_1@SSE' :
+          central: -0.88021
+          min:     -1.75840
+          max:     -0.00201
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,A)_2@SSE' :
+          central: 0.22172
+          min:     -4.21337
+          max:     4.65681
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,T)_0@SSE' :
+          central: 0.36010
+          min:     0.20015
+          max:     0.52004
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{T,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,T)_1@SSE' :
+          central: -1.21640
+          min:     -3.09334
+          max:     0.66055
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,T)_2@SSE' :
+          central: 0.12467
+          min:     -8.09906
+          max:     8.34840
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,T5)_0@SSE' :
+          central: 0.25489
+          min:     0.15853
+          max:     0.35125
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{T5,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,T5)_1@SSE' :
+          central: -0.77857
+          min:     -1.60063
+          max:     0.04349
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T5,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,T5)_2@SSE' :
+          central: 0.18218
+          min:     -3.46095
+          max:     3.82532
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T5,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(t,V)_1@SSE' :
+          central: -0.87674
+          min:     -2.03056
+          max:     0.27708
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(t,V)_2@SSE' :
+          central: -0.22583
+          min:     -5.92611
+          max:     5.47445
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{V,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(t,A)_1@SSE' :
+          central: -1.06049
+          min:     -2.01585
+          max:     -0.10514
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(t,A)_2@SSE' :
+          central: -0.01961
+          min:     -4.27833
+          max:     4.23910
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,A)_1@SSE' :
+          central: -0.98948
+          min:     -2.23821
+          max:     0.25924
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,A)_2@SSE' :
+          central: 0.22274
+          min:     -5.58350
+          max:     6.02898
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{A,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,T)_1@SSE' :
+          central: -0.99611
+          min:     -1.97277
+          max:     -0.01946
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(perp,T)_2@SSE' :
+          central: 0.12176
+          min:     -4.62406
+          max:     4.86757
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,T5)_1@SSE' :
+          central: -0.74774
+          min:     -1.75402
+          max:     0.25854
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T5,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_b->Lambda::alpha^(0,T5)_2@SSE' :
+          central: 0.18238
+          min:     -3.97026
+          max:     4.33502
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T5,\Lambda_b \to \Lambda,\mathrm{SSE}}$'
+      # form factor parameters for Lambda_c->Lambda in the SSE parametrization
+      'Lambda_c->Lambda::tp_v@SSE' :
+          central:  5.564881
+          min:      5.564881
+          max:      5.564881
+          latex:    '$t_+^{V, \Lambda_c \to \Lambda}$'
+          comment:  '(mD + mK)^2 [c->s]'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::tp_a@SSE' :
+          central:  5.008644
+          min:      5.008644
+          max:      5.008644
+          latex:    '$t_+^{A, \Lambda_c \to \Lambda}$'
+          comment:  '(mDs + 2 mpi)^2 [c->s]'
+          unit:     'GeV^2'
+      'Lambda_c->Lambda::alpha^(0,V)_0@SSE' :
+          central: 0.71569
+          min:     0.59644
+          max:     0.83493
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,V)_1@SSE' :
+          central: -2.33343
+          min:     -4.80771
+          max:     0.14085
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,V)_2@SSE' :
+          central: 6.91468
+          min:     -13.70942
+          max:     27.53877
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,V)_0@SSE' :
+          central: 1.19165
+          min:     0.93095
+          max:     1.45234
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,V)_1@SSE' :
+          central: -2.77238
+          min:     -8.44241
+          max:     2.89765
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,V)_2@SSE' :
+          central: 2.93298
+          min:     -34.04381
+          max:     39.90977
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,A)_0@SSE' :
+          central: 0.60745
+          min:     0.52194
+          max:     0.69295
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,A)_1@SSE' :
+          central: -1.30666
+          min:     -2.50134
+          max:     -0.11199
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,A)_2@SSE' :
+          central: 10.34167
+          min:     1.86643
+          max:     18.81692
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,T)_0@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{T,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,T)_1@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,T)_2@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,T5)_0@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{T5,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,T5)_1@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T5,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,T5)_2@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T5,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(t,V)_1@SSE' :
+          central: -1.85637
+          min:     -4.14796
+          max:     0.43521
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(t,V)_2@SSE' :
+          central: 4.59973
+          min:     -17.98477
+          max:     27.18424
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{V,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(t,A)_1@SSE' :
+          central: -1.79736
+          min:     -3.64344
+          max:     0.04873
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(t,A)_2@SSE' :
+          central: 8.74883
+          min:     -1.17847
+          max:     18.67613
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,A)_1@SSE' :
+          central: -1.30368
+          min:     -3.03665
+          max:     0.42929
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,A)_2@SSE' :
+          central: 4.36202
+          min:     -16.28094
+          max:     25.00499
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{A,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,T)_1@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(perp,T)_2@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,T5)_1@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T5,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      'Lambda_c->Lambda::alpha^(0,T5)_2@SSE' :
+          central:  0.0
+          min:     -1.0
+          max:     +1.0
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T5,\Lambda_c \to \Lambda,\mathrm{SSE}}$'
+      # form factor parameters for Lambda_c->neutron in the SSE parametrization
+      'Lambda_c->neutron::tp_v@SSE' :
+          central:  4.008004
+          min:      4.008004
+          max:      4.008004
+          latex:    '$t_+^{V, \Lambda_c \to n}$'
+          comment:  '(mD + mpi)^2 [c->d]'
+          unit:     'GeV^2'
+      'Lambda_c->neutron::tp_a@SSE' :
+          central:  4.566769
+          min:      4.566769
+          max:      4.566769
+          latex:    '$t_+^{A, \Lambda_c \to n}$'
+          comment:  '(mD + 2 mpi)^2 [c->d]'
+          unit:     'GeV^2'
+      'Lambda_c->neutron::alpha^(0,V)_0@SSE' :
+          central: 0.68733
+          min:     0.52577
+          max:     0.84890
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,V)_1@SSE' :
+          central: -0.97873
+          min:     -2.70727
+          max:     0.74980
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,V)_2@SSE' :
+          central: 7.92951
+          min:     -7.17390
+          max:     23.03293
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,V)_0@SSE' :
+          central: 1.21333
+          min:     0.90898
+          max:     1.51769
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,V)_1@SSE' :
+          central: -1.41267
+          min:     -4.11125
+          max:     1.28591
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,V)_2@SSE' :
+          central: 0.66886
+          min:     -19.89716
+          max:     21.23488
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,A)_0@SSE' :
+          central: 0.61822
+          min:     0.49349
+          max:     0.74295
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,A)_1@SSE' :
+          central: -0.59039
+          min:     -2.00278
+          max:     0.82200
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,A)_2@SSE' :
+          central: 4.36440
+          min:     -10.40989
+          max:     19.13870
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,T)_0@SSE' :
+          central: 1.03601
+          min:     0.67827
+          max:     1.39374
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{T,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,T)_1@SSE' :
+          central: -1.04440
+          min:     -3.93018
+          max:     1.84137
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,T)_2@SSE' :
+          central: -2.11746
+          min:     -26.20190
+          max:     21.96699
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,T5)_0@SSE' :
+          central: 0.54315
+          min:     0.37836
+          max:     0.70793
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{T5,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,T5)_1@SSE' :
+          central: -0.82649
+          min:     -3.06469
+          max:     1.41172
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T5,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,T5)_2@SSE' :
+          central: 5.76245
+          min:     -17.71871
+          max:     29.24361
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T5,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(t,V)_1@SSE' :
+          central: -0.47732
+          min:     -2.17147
+          max:     1.21682
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(t,V)_2@SSE' :
+          central: 8.49521
+          min:     -6.29495
+          max:     23.28538
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{V,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(t,A)_1@SSE' :
+          central: -0.86214
+          min:     -2.91728
+          max:     1.19301
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(t,A)_2@SSE' :
+          central: 1.80236
+          min:     -15.81624
+          max:     19.42096
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,A)_1@SSE' :
+          central: -0.57658
+          min:     -2.24905
+          max:     1.09589
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,A)_2@SSE' :
+          central: 1.30775
+          min:     -13.47230
+          max:     16.08779
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{A,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,T)_1@SSE' :
+          central: -0.68103
+          min:     -2.26251
+          max:     0.90046
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(perp,T)_2@SSE' :
+          central: 1.22387
+          min:     -11.69972
+          max:     14.14747
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,T5)_1@SSE' :
+          central: -0.66562
+          min:     -3.04782
+          max:     1.71658
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T5,\Lambda_c \to n,\mathrm{SSE}}$'
+      'Lambda_c->neutron::alpha^(0,T5)_2@SSE' :
+          central: 4.67335
+          min:     -19.99248
+          max:     29.33919
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T5,\Lambda_c \to n,\mathrm{SSE}}$'
+      # form factor parameters for Lambda_c->proton (rare c -> u) in the SSE parametrization
+      'Lambda_c->proton::tp_v@SSE' :
+          central:  4.008004
+          min:      4.008004
+          max:      4.008004
+          latex:    '$t_+^{V, \Lambda_c \to p}$'
+          comment:  '(mD + mpi)^2 [c->u]'
+          unit:     'GeV^2'
+      'Lambda_c->proton::tp_a@SSE' :
+          central:  4.566769
+          min:      4.566769
+          max:      4.566769
+          latex:    '$t_+^{A, \Lambda_c \to p}$'
+          comment:  '(mD + 2 mpi)^2 [c->u]'
+          unit:     'GeV^2'
+      'Lambda_c->proton::alpha^(0,V)_0@SSE' :
+          central: 0.68771
+          min:     0.52590
+          max:     0.84952
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,V)_1@SSE' :
+          central: -0.98353
+          min:     -2.70934
+          max:     0.74228
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,V)_2@SSE' :
+          central: 7.89392
+          min:     -7.25734
+          max:     23.04518
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,V)_0@SSE' :
+          central: 1.21464
+          min:     0.90767
+          max:     1.52161
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,V)_1@SSE' :
+          central: -1.40725
+          min:     -4.11978
+          max:     1.30528
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,V)_2@SSE' :
+          central: 0.60353
+          min:     -19.90784
+          max:     21.11491
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,A)_0@SSE' :
+          central: 0.61823
+          min:     0.49229
+          max:     0.74416
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,A)_1@SSE' :
+          central: -0.59249
+          min:     -1.99533
+          max:     0.81034
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,A)_2@SSE' :
+          central: 4.35571
+          min:     -10.42691
+          max:     19.13833
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,T)_0@SSE' :
+          central: 1.03607
+          min:     0.67841
+          max:     1.39374
+          unit:     '1'
+          latex:    '$\alpha_{0,0}^{T,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,T)_1@SSE' :
+          central: -1.02322
+          min:     -3.91290
+          max:     1.86647
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,T)_2@SSE' :
+          central: -2.22044
+          min:     -26.19136
+          max:     21.75047
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,T5)_0@SSE' :
+          central: 0.54276
+          min:     0.37635
+          max:     0.70918
+          unit:     '1'
+          latex:    '$\alpha_{\perp,0}^{T5,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,T5)_1@SSE' :
+          central: -0.82937
+          min:     -3.08897
+          max:     1.43023
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T5,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,T5)_2@SSE' :
+          central: 5.71728
+          min:     -17.74706
+          max:     29.18162
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T5,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(t,V)_1@SSE' :
+          central: -0.47616
+          min:     -2.17047
+          max:     1.21815
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(t,V)_2@SSE' :
+          central: 8.46118
+          min:     -6.33162
+          max:     23.25397
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{V,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(t,A)_1@SSE' :
+          central: -0.84531
+          min:     -2.89507
+          max:     1.20444
+          unit:     '1'
+          latex:    '$\alpha_{t,1}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(t,A)_2@SSE' :
+          central: 1.77796
+          min:     -15.93706
+          max:     19.49298
+          unit:     '1'
+          latex:    '$\alpha_{t,2}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,A)_1@SSE' :
+          central: -0.58127
+          min:     -2.23951
+          max:     1.07696
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,A)_2@SSE' :
+          central: 1.33270
+          min:     -13.29268
+          max:     15.95808
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{A,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,T)_1@SSE' :
+          central: -0.68477
+          min:     -2.24896
+          max:     0.87942
+          unit:     '1'
+          latex:    '$\alpha_{\perp,1}^{T,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(perp,T)_2@SSE' :
+          central: 1.21156
+          min:     -11.71095
+          max:     14.13408
+          unit:     '1'
+          latex:    '$\alpha_{\perp,2}^{T,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,T5)_1@SSE' :
+          central: -0.66439
+          min:     -3.06457
+          max:     1.73579
+          unit:     '1'
+          latex:    '$\alpha_{0,1}^{T5,\Lambda_c \to p,\mathrm{SSE}}$'
+      'Lambda_c->proton::alpha^(0,T5)_2@SSE' :
+          central: 4.70545
+          min:     -20.05614
+          max:     29.46704
+          unit:     '1'
+          latex:    '$\alpha_{0,2}^{T5,\Lambda_c \to p,\mathrm{SSE}}$'
   # }}}
 
   # Parameters of the Heavy Quark Expansion of Heavy-to-Heavy Form Factors
