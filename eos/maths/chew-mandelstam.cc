@@ -18,6 +18,7 @@
  */
 
 #include <eos/maths/chew-mandelstam.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/utils/exception.hh>
 
 #include <cmath>
@@ -67,6 +68,41 @@ namespace eos
             const complex<double> s  = S + complex<double>(0.0, 1e-15);
 
             return -1.0 / 8.0 / pi / pi * std::sqrt(mp * mp - s) * impl::atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / std::sqrt(s);
+        }
+
+        complex<double>
+        p_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            if (m1 != m2)
+            {
+                throw InternalError("chew_mandelstam::p_wave: only equal masses (m1 == m2) are currently implemented");
+            }
+
+            static const double pi = M_PI;
+
+            const double          mp    = m1 + m2;
+            // Adapt s to match Mathematica's behaviour on the branch cut
+            const complex<double> s     = S + complex<double>(0.0, 1e-15);
+            const complex<double> delta = mp * mp - 4.0 * q0 * q0;
+
+            // Squared Blatt-Weisskopf form factor for l = 1, cf. PDG's resonance review, eq. (50.26):
+            // F(z)^2 = 1 / (z^2 + 1), with z = sqrt(s - mp^2) / (2 q0)
+            const complex<double> Fsq = 1.0 / ((s - mp * mp) / (4.0 * q0 * q0) + 1.0);
+
+            complex<double> leading_term;
+            // Fix the behavior near threshold by Taylor expanding to second order
+            if (std::abs(s - mp * mp) < 1e-7)
+            {
+                leading_term = Fsq * (mp * mp - s) / 16.0 / mp / mp / pi / pi * (-2.0 * (mp * mp - s) + mp * pi * std::sqrt(mp * mp - s));
+            }
+            else
+            {
+                leading_term = Fsq * power_of<3>(std::sqrt(mp * mp - s)) * impl::atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / 8.0 / pi / pi / std::sqrt(s);
+            }
+
+            const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) * std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi / std::sqrt(delta) / (s - delta);
+
+            return (leading_term + loop_correction) / 4.0 / q0 / q0;
         }
     } // namespace chew_mandelstam
 } // namespace eos
