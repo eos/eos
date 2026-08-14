@@ -15,18 +15,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
+#include <eos/maths/power-of.hh>
+#include <eos/models/model.hh>
 #include <eos/scattering/scattering-amplitudes.hh>
 #include <eos/scattering/single-channel.hh>
 
-#include <eos/models/model.hh>
-#include <eos/maths/power-of.hh>
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class PPToPPScatteringAmplitudesTest :
-    public TestCase
+class PPToPPScatteringAmplitudesTest : public TestCase
 {
     public:
         PPToPPScatteringAmplitudesTest() :
@@ -34,7 +33,8 @@ class PPToPPScatteringAmplitudesTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {

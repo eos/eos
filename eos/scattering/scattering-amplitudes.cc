@@ -25,4 +25,4 @@ namespace eos
         Exception("No scattering amplitude found for process '" + process + "' and tag '" + tag + "'!")
     {
     }
-}
+} // namespace eos

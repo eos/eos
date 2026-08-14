@@ -20,11 +20,11 @@
 #ifndef EOS_GUARD_EOS_SCATTERING_PARAMETRIC_GMKPRDEY2011_HH
 #define EOS_GUARD_EOS_SCATTERING_PARAMETRIC_GMKPRDEY2011_HH 1
 
-#include <eos/scattering/single-channel.hh>
-#include <eos/scattering/single-channel-processes.hh>
 #include <eos/maths/complex.hh>
 #include <eos/maths/omnes-factor.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/scattering/single-channel-processes.hh>
+#include <eos/scattering/single-channel.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/quantum-numbers.hh>
@@ -34,8 +34,7 @@
 
 namespace eos
 {
-    class GMKPRDEY2011ScatteringAmplitudes :
-        public ScatteringAmplitudes<PPToPP>
+    class GMKPRDEY2011ScatteringAmplitudes : public ScatteringAmplitudes<PPToPP>
     {
         private:
             // S0-wave has 9 parameters aside from masses
@@ -54,17 +53,17 @@ namespace eos
             const UsedParameter _cont_pow_S0, _cont_pow_P1, _cont_pow_D0;
 
             // Omnes factors, we do not have the S0 wave since we need a two-channel treatment
-            std::array<double, 4> _intervals_P1;
-            std::array<double, 5> _intervals_D0;
+            std::array<double, 4>                 _intervals_P1;
+            std::array<double, 5>                 _intervals_D0;
             std::function<double(const double &)> _f_phase_P1, _f_phase_D0;
-            OmnesFactor<30, 4> _omnes_P1;
-            OmnesFactor<40, 5> _omnes_D0;
+            OmnesFactor<30, 4>                    _omnes_P1;
+            OmnesFactor<40, 5>                    _omnes_D0;
 
             QualifiedName _par_name(const std::string & partial_wave, const std::string & par_name, unsigned idx) const;
             QualifiedName _par_name(const std::string & partial_wave, const std::string & par_name) const;
 
-            double _calc_w(const double & s, const double & s0) const;
-            double _calc_s(const complex<double> & z, const double & sp, const double & s0) const;
+            double          _calc_w(const double & s, const double & s0) const;
+            double          _calc_s(const complex<double> & z, const double & sp, const double & s0) const;
             complex<double> _calc_z(const double & s, const double & sp, const double & s0) const;
 
             // Scattering phases
@@ -82,7 +81,8 @@ namespace eos
             virtual complex<double> scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const;
             virtual complex<double> omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const;
             virtual complex<double> isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const;
-            virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l, const IsospinRepresentation & i) const;
+            virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l,
+                                                         const IsospinRepresentation & i) const;
 
             Diagnostics diagnostics() const;
 
@@ -96,8 +96,8 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
-}
+} // namespace eos
 
 #endif
