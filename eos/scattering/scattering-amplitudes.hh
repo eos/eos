@@ -25,12 +25,11 @@
 
 namespace eos
 {
-    class NoSuchScatteringAmplitudeError :
-        public Exception
+    class NoSuchScatteringAmplitudeError : public Exception
     {
         public:
             NoSuchScatteringAmplitudeError(const std::string & process, const std::string & tag);
     };
-}
+} // namespace eos
 
 #endif

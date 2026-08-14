@@ -20,10 +20,10 @@
 #ifndef EOS_GUARD_SRC_SCATTERING_SINGLE_CHANNEL_HH
 #define EOS_GUARD_SRC_SCATTERING_SINGLE_CHANNEL_HH 1
 
-#include <eos/scattering/scattering-amplitudes-fwd.hh>
 #include <eos/maths/complex.hh>
-#include <eos/utils/parameters.hh>
+#include <eos/scattering/scattering-amplitudes-fwd.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/transitions.hh>
@@ -33,34 +33,31 @@
 
 namespace eos
 {
-    template <>
-    class ScatteringAmplitudes<PPToPP> :
-        public virtual ParameterUser
+    template <> class ScatteringAmplitudes<PPToPP> : public virtual ParameterUser
     {
         public:
             virtual ~ScatteringAmplitudes();
 
             virtual complex<double> scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
-            virtual complex<double> omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
-            virtual complex<double> isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const = 0;
-            virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l, const IsospinRepresentation & i) const = 0;
-
+            virtual complex<double> omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const         = 0;
+            virtual complex<double> isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const     = 0;
+            virtual complex<double> omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l,
+                                                         const IsospinRepresentation & i) const                                       = 0;
     };
 
-    template <>
-    class ScatteringAmplitudeFactory<PPToPP>
+    template <> class ScatteringAmplitudeFactory<PPToPP>
     {
         public:
-            using KeyType = QualifiedName;
-            using ValueType = std::function<ScatteringAmplitudes<PPToPP> * (const Parameters &, const Options &)>;
+            using KeyType   = QualifiedName;
+            using ValueType = std::function<ScatteringAmplitudes<PPToPP> *(const Parameters &, const Options &)>;
 
             static const std::map<KeyType, ValueType> scattering_amplitudes;
 
-            static std::shared_ptr<ScatteringAmplitudes<PPToPP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{ });
-            static OptionSpecification option_specification(const qnp::Prefix & process);
-            static OptionSpecification option_specification();
+            static std::shared_ptr<ScatteringAmplitudes<PPToPP>> create(const QualifiedName & label, const Parameters & parameters, const Options & options = Options{});
+            static OptionSpecification                           option_specification(const qnp::Prefix & process);
+            static OptionSpecification                           option_specification();
     };
 
-}
+} // namespace eos
 
 #endif
