@@ -18,9 +18,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/scattering/scattering-amplitudes.hh>
 #include <eos/scattering/parametric-gmkprdey2011.hh>
 #include <eos/scattering/parametric-hkvt2025.hh>
+#include <eos/scattering/scattering-amplitudes.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -33,15 +33,11 @@ namespace eos
 
     /* PP -> PP Processes */
 
-    ScatteringAmplitudes<PPToPP>::~ScatteringAmplitudes()
-    {
-    }
+    ScatteringAmplitudes<PPToPP>::~ScatteringAmplitudes() {}
 
-    const std::map<ScatteringAmplitudeFactory<PPToPP>::KeyType, ScatteringAmplitudeFactory<PPToPP>::ValueType>
-    ScatteringAmplitudeFactory<PPToPP>::scattering_amplitudes
-    {
-        { "pipi->pipi::GMKPRDEY2011",   &GMKPRDEY2011ScatteringAmplitudes::make    },
-        { "pipi->pipi::HKvT2025",       &HKVT2025ScatteringAmplitudes::make    }
+    const std::map<ScatteringAmplitudeFactory<PPToPP>::KeyType, ScatteringAmplitudeFactory<PPToPP>::ValueType> ScatteringAmplitudeFactory<PPToPP>::scattering_amplitudes{
+        { "pipi->pipi::GMKPRDEY2011", &GMKPRDEY2011ScatteringAmplitudes::make },
+        {     "pipi->pipi::HKvT2025",     &HKVT2025ScatteringAmplitudes::make }
     };
 
     std::shared_ptr<ScatteringAmplitudes<PPToPP>>
@@ -70,7 +66,9 @@ namespace eos
         for (const auto & t : ScatteringAmplitudeFactory<PPToPP>::scattering_amplitudes)
         {
             if (process == std::get<0>(t).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(t).name_part().str());
+            }
         }
 
         return { "scattering-amplitudes"_ok, allowed_values };
@@ -85,8 +83,8 @@ namespace eos
             allowed_values.insert(std::get<0>(t).name_part().str());
         }
 
-        OptionSpecification result { "scattering-amplitudes"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "scattering-amplitudes"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
-}
+} // namespace eos

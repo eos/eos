@@ -28,13 +28,14 @@ namespace eos
 {
     /* PP -> PP Processes */
 
-    struct PiPiToPiPi {
-        using Transition = PPToPP;
-        static constexpr const char * label = "pipi->pipi";
-        static constexpr const char * name_P = "mass::pi^+";
-        static constexpr const std::array<IsospinRepresentation, 3> iso = { IsospinRepresentation::zero, IsospinRepresentation::one, IsospinRepresentation::two };
+    struct PiPiToPiPi
+    {
+            using Transition                                                   = PPToPP;
+            static const constexpr char *                               label  = "pipi->pipi";
+            static const constexpr char *                               name_P = "mass::pi^+";
+            static const constexpr std::array<IsospinRepresentation, 3> iso    = { IsospinRepresentation::zero, IsospinRepresentation::one, IsospinRepresentation::two };
     };
 
-}
+} // namespace eos
 
 #endif

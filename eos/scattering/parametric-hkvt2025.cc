@@ -17,43 +17,54 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/scattering/parametric-hkvt2025.hh>
 #include <eos/maths/omnes-factor-impl.hh>
 #include <eos/maths/outer-function.hh>
+#include <eos/scattering/parametric-hkvt2025.hh>
 
 #include <functional>
 #include <iostream>
 
 namespace eos
 {
-    double HKVT2025ScatteringAmplitudes::_calc_w(const double & s, const double & s0) const
+    double
+    HKVT2025ScatteringAmplitudes::_calc_w(const double & s, const double & s0) const
     {
         if (s > s0)
+        {
             throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(s0));
+        }
 
         return (std::sqrt(s) - std::sqrt(s0 - s)) / (std::sqrt(s) + std::sqrt(s0 - s));
     }
 
-    double HKVT2025ScatteringAmplitudes::_calc_s(const complex<double> & z, const double & sp, const double & s0) const
+    double
+    HKVT2025ScatteringAmplitudes::_calc_s(const complex<double> & z, const double & sp, const double & s0) const
     {
         if (s0 > sp)
+        {
             throw InternalError("The inverse conformal mapping is used with s_+ < s_0: " + stringify(sp) + " < " + stringify(s0));
+        }
 
         return std::abs((-4.0 * sp * z + s0 * power_of<2>(1.0 + z)) / power_of<2>(z - 1.0));
     }
 
-    complex<double> HKVT2025ScatteringAmplitudes::_calc_z(const double & s, const double & sp, const double & s0) const
+    complex<double>
+    HKVT2025ScatteringAmplitudes::_calc_z(const double & s, const double & sp, const double & s0) const
     {
         if (s0 > sp)
+        {
             throw InternalError("The conformal mapping is used with s_+ < s_0: " + stringify(sp) + " < " + stringify(s0));
+        }
 
         return (std::sqrt(complex<double>(sp - s, 0.0)) - std::sqrt(sp - s0)) / (std::sqrt(complex<double>(sp - s, 0.0)) + std::sqrt(sp - s0));
     }
 
     // S0 wave Omnes factor from [DHK:2015A] and [RHK:2018A]
-    complex<double> HKVT2025ScatteringAmplitudes::_omnes_S0(const double & s) const
+    complex<double>
+    HKVT2025ScatteringAmplitudes::_omnes_S0(const double & s) const
     {
-        const static thread_local OmnesInterpolation Om11_interpolation = {
+        // clang-format off
+        static const thread_local OmnesInterpolation Om11_interpolation = {
                 {
                     #include "svalues-om-dhk.hh"
                 },
@@ -65,7 +76,7 @@ namespace eos
                 }
         };
 
-        const static thread_local OmnesInterpolation Om12_interpolation = {
+        static const thread_local OmnesInterpolation Om12_interpolation = {
                 {
                     #include "svalues-om-dhk.hh"
                 },
@@ -76,6 +87,7 @@ namespace eos
                     #include "imom12-dhk.hh"
                 }
         };
+        // clang-format on
 
         if (std::sqrt(s) <= 9.88873)
         {
@@ -83,14 +95,17 @@ namespace eos
         }
         else
         {
-            return (complex<double>(_Gamma_pi_0) * Om11_interpolation(9.88873) + complex<double>(_Gamma_K_0) * 2.0 / std::sqrt(3.0) * Om12_interpolation(9.88873)) * 9.88873 * 9.88873 / s;
+            return (complex<double>(_Gamma_pi_0) * Om11_interpolation(9.88873) + complex<double>(_Gamma_K_0) * 2.0 / std::sqrt(3.0) * Om12_interpolation(9.88873)) * 9.88873
+                   * 9.88873 / s;
         }
     }
 
     // P1 wave phase-shift from [CHS:2018A]
-    double HKVT2025ScatteringAmplitudes::_phase_P1(const double & s) const
+    double
+    HKVT2025ScatteringAmplitudes::_phase_P1(const double & s) const
     {
-        const static thread_local PhaseInterpolation CHS_interpolation = {
+        // clang-format off
+        static const thread_local PhaseInterpolation CHS_interpolation = {
                 {
                     #include "svalues-chs.hh"
                 },
@@ -98,6 +113,7 @@ namespace eos
                     #include "delvalues-chs.hh"
                 }
         };
+        // clang-format on
 
         if (s <= 1.69)
         {
@@ -107,25 +123,25 @@ namespace eos
         {
             return M_PI + (CHS_interpolation(1.69) - M_PI) * 2.0 / (1.0 + std::pow(s / 1.69, _cont_pow_P1));
         }
-
     }
 
     // D0 wave phase-shift from [GMKPRDEY:2011A]
-    double HKVT2025ScatteringAmplitudes::_phase_D0(const double & s) const
+    double
+    HKVT2025ScatteringAmplitudes::_phase_D0(const double & s) const
     {
-        double mpi2 = _mPi * _mPi;
-        double mf22 = _mF2 * _mF2;
+        double mpi2   = _mPi * _mPi;
+        double mf22   = _mF2 * _mF2;
         double sqrts2 = std::sqrt(s) / 2.0;
-        double k = std::sqrt(s / 4.0 - mpi2);
+        double k      = std::sqrt(s / 4.0 - mpi2);
 
         if (s <= _s0_D0)
         {
-            return std::atan( power_of<5>(k) / sqrts2 / (mf22 - s) / mpi2 / (_params_D0[0] + _params_D0[1] * _calc_w(s, _s0_D0)) );
+            return std::atan(power_of<5>(k) / sqrts2 / (mf22 - s) / mpi2 / (_params_D0[0] + _params_D0[1] * _calc_w(s, _s0_D0)));
         }
         else if (s <= 2.0164)
         {
             double Bh0 = _params_D0[0] + _params_D0[1] - _params_D0[2] * _calc_w(_s0_D0, _sh_D0);
-            return M_PI/2 - std::atan( sqrts2 / power_of<5>(k) * (mf22 - s) * mpi2 * (Bh0 + _params_D0[2] * _calc_w(s, _sh_D0)) );
+            return M_PI / 2 - std::atan(sqrts2 / power_of<5>(k) * (mf22 - s) * mpi2 * (Bh0 + _params_D0[2] * _calc_w(s, _sh_D0)));
         }
         else
         {
@@ -134,23 +150,20 @@ namespace eos
     }
 
     HKVT2025ScatteringAmplitudes::HKVT2025ScatteringAmplitudes(const Parameters & p, const Options &) :
-        _params_D0 {    UsedParameter(p[_par_name("D0", "B", 0)],   *this),
-                        UsedParameter(p[_par_name("D0", "B", 1)],   *this),
-                        UsedParameter(p[_par_name("D0", "Bh", 1)],  *this)
-        },
+        _params_D0{ UsedParameter(p[_par_name("D0", "B", 0)], *this), UsedParameter(p[_par_name("D0", "B", 1)], *this), UsedParameter(p[_par_name("D0", "Bh", 1)], *this) },
         _mPi(UsedParameter(p["mass::pi^+@GMKPRDEY2011"], *this)),
         _mF2(UsedParameter(p["mass::f_2@GMKPRDEY2011"], *this)),
         _mOmega(UsedParameter(p["mass::omega@GMKPRDEY2011"], *this)),
         _GammaOmega(UsedParameter(p["width::omega@GMKPRDEY2011"], *this)),
         _kappa(UsedParameter(p["mixing::kappaEM@GMKPRDEY2011"], *this)),
-        _s0_D0(UsedParameter(p[_par_name("D0", "s0")],  *this)),
-        _sh_D0(UsedParameter(p[_par_name("D0", "sh")],  *this)),
-        _cont_pow_P1(UsedParameter(p[_par_name("P1", "n")],  *this)),
-        _cont_pow_D0(UsedParameter(p[_par_name("D0", "n")],  *this)),
+        _s0_D0(UsedParameter(p[_par_name("D0", "s0")], *this)),
+        _sh_D0(UsedParameter(p[_par_name("D0", "sh")], *this)),
+        _cont_pow_P1(UsedParameter(p[_par_name("P1", "n")], *this)),
+        _cont_pow_D0(UsedParameter(p[_par_name("D0", "n")], *this)),
         _Gamma_pi_0(UsedParameter(p["pipi->pipi::Gamman0_pi@HKvT2025"], *this)),
         _Gamma_K_0(UsedParameter(p["pipi->pipi::Gamman0_K@HKvT2025"], *this)),
-        _intervals_P1({4.0 * _mPi * _mPi , 0.5 , 1.0 , 2.0 }),
-        _intervals_D0({4.0 * _mPi * _mPi , 0.7, 1.1, 1.45, 2.0 }),
+        _intervals_P1({ 4.0 * _mPi * _mPi, 0.5, 1.0, 2.0 }),
+        _intervals_D0({ 4.0 * _mPi * _mPi, 0.7, 1.1, 1.45, 2.0 }),
         _f_phase_P1(std::bind(&HKVT2025ScatteringAmplitudes::_phase_P1, this, std::placeholders::_1)),
         _f_phase_D0(std::bind(&HKVT2025ScatteringAmplitudes::_phase_D0, this, std::placeholders::_1)),
         _omnes_P1(_intervals_P1, _f_phase_P1, 0.0),
@@ -178,7 +191,8 @@ namespace eos
         return QualifiedName(stringify(PiPiToPiPi::label) + "::" + partial_wave + "_" + par_name + "@GMKPRDEY2011");
     }
 
-    complex<double> HKVT2025ScatteringAmplitudes::scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    HKVT2025ScatteringAmplitudes::scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const
     {
         if (s <= 4 * _mPi * _mPi)
         {
@@ -208,7 +222,8 @@ namespace eos
         }
     }
 
-    complex<double> HKVT2025ScatteringAmplitudes::omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    HKVT2025ScatteringAmplitudes::omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const
     {
         if ((l == 0) && (i == IsospinRepresentation::zero))
         {
@@ -229,9 +244,10 @@ namespace eos
     }
 
     // Simplified isospin-breaking correction following [CHS:2018A]
-    complex<double> HKVT2025ScatteringAmplitudes::isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    HKVT2025ScatteringAmplitudes::isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const
     {
-        if ( (l == 1) && (i == IsospinRepresentation::one) )
+        if ((l == 1) && (i == IsospinRepresentation::one))
         {
             return 1.0 + s * _kappa / (_mOmega * _mOmega - s - complex<double>(0, _mOmega * _GammaOmega));
         }
@@ -242,7 +258,9 @@ namespace eos
     }
 
     // Note: all our omnes factors go like 1/s for large s. Thus we need to take out a factor of (1 - z)^2 which would cause issues with the integration
-    complex<double> HKVT2025ScatteringAmplitudes::omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    HKVT2025ScatteringAmplitudes::omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l,
+                                                       const IsospinRepresentation & i) const
     {
         // Point to extract asymptotic behaviour at
         const double sM = 1000000.0;
@@ -251,12 +269,12 @@ namespace eos
         {
             complex<double> zeval = _calc_z(s, sp, s0);
 
-            std::function<complex<double>(const complex<double> &)> integrand = [&] (const complex<double> & z)
+            std::function<complex<double>(const complex<double> &)> integrand = [&](const complex<double> & z)
             {
                 // Ensure we provide a real s to Omnes factor
                 double sArg = _calc_s(z, sp, s0);
 
-                if (!isfinite(sArg) || (sArg > sM))
+                if (! isfinite(sArg) || (sArg > sM))
                 {
                     // Here we fix the constant Omega(s) ~ c/s for large s and take into account the rest of the conformal mapping
                     return sM * _omnes_S0(sM) / (-4.0 * sp * z + s0 * power_of<2>(z + 1.0));
@@ -273,12 +291,12 @@ namespace eos
         {
             complex<double> zeval = _calc_z(s, sp, s0);
 
-            std::function<complex<double>(const complex<double> &)> integrand = [&] (const complex<double> & z)
+            std::function<complex<double>(const complex<double> &)> integrand = [&](const complex<double> & z)
             {
                 // Ensure we provide a real s to Omnes factor
                 double sArg = _calc_s(z, sp, s0);
 
-                if (!isfinite(sArg) || (sArg > sM))
+                if (! isfinite(sArg) || (sArg > sM))
                 {
                     // Here we fix the constant Omega(s) ~ c/s for large s and take into account the rest of the conformal mapping
                     return sM * _omnes_P1(sM) / (-4.0 * sp * z + s0 * power_of<2>(z + 1.0));
@@ -295,12 +313,12 @@ namespace eos
         {
             complex<double> zeval = _calc_z(s, sp, s0);
 
-            std::function<complex<double>(const complex<double> &)> integrand = [&] (const complex<double> & z)
+            std::function<complex<double>(const complex<double> &)> integrand = [&](const complex<double> & z)
             {
                 // Ensure we provide a real s to Omnes factor
                 double sArg = _calc_s(z, sp, s0);
 
-                if (!isfinite(sArg) || (sArg > sM))
+                if (! isfinite(sArg) || (sArg > sM))
                 {
                     // Here we fix the constant Omega(s) ~ c/s for large s and take into account the rest of the conformal mapping
                     return sM * _omnes_D0(sM) / (-4.0 * sp * z + s0 * power_of<2>(z + 1.0));
@@ -324,34 +342,25 @@ namespace eos
     {
         Diagnostics results;
 
-        results.add({ _calc_w(0.0,  _s0_D0), "w_D0(s =  0.0)" });
-        results.add({ _calc_w(1.0,  _s0_D0), "w_D0(s =  1.0)" });
+        results.add({ _calc_w(0.0, _s0_D0), "w_D0(s =  0.0)" });
+        results.add({ _calc_w(1.0, _s0_D0), "w_D0(s =  1.0)" });
 
-        results.add({ _phase_P1(0.25),  "del_P1(s =  0.25)" });
-        results.add({ _phase_P1(0.9),   "del_P1(s =  0.9)"  });
-        results.add({ _phase_P1(1.44),  "del_P1(s =  1.44)" });
-        results.add({ _phase_P1(4.0),   "del_P1(s =  4.0)" });
+        results.add({ _phase_P1(0.25), "del_P1(s =  0.25)" });
+        results.add({ _phase_P1(0.9), "del_P1(s =  0.9)" });
+        results.add({ _phase_P1(1.44), "del_P1(s =  1.44)" });
+        results.add({ _phase_P1(4.0), "del_P1(s =  4.0)" });
 
-        results.add({ _phase_D0(0.25),  "del_D0(s =  0.25)" });
-        results.add({ _phase_D0(0.9),   "del_D0(s =  0.9)"  });
-        results.add({ _phase_D0(1.44),  "del_D0(s =  1.44)" });
-        results.add({ _phase_D0(4.0),   "del_D0(s =  4.0)"  });
+        results.add({ _phase_D0(0.25), "del_D0(s =  0.25)" });
+        results.add({ _phase_D0(0.9), "del_D0(s =  0.9)" });
+        results.add({ _phase_D0(1.44), "del_D0(s =  1.44)" });
+        results.add({ _phase_D0(4.0), "del_D0(s =  4.0)" });
 
         return results;
     }
 
-    const std::set<ReferenceName> HKVT2025ScatteringAmplitudes::references
-    {
-        "HKvT:2025A"_rn,
-        "DHK:2015A"_rn,
-        "RHK:2018A"_rn,
-        "CHS:2018A"_rn,
-        "GMKPRDEY:2011A"_rn
-    };
+    const std::set<ReferenceName> HKVT2025ScatteringAmplitudes::references{ "HKvT:2025A"_rn, "DHK:2015A"_rn, "RHK:2018A"_rn, "CHS:2018A"_rn, "GMKPRDEY:2011A"_rn };
 
-    const std::vector<OptionSpecification> HKVT2025ScatteringAmplitudes::options
-    {
-    };
+    const std::vector<OptionSpecification> HKVT2025ScatteringAmplitudes::options{};
 
     std::vector<OptionSpecification>::const_iterator
     HKVT2025ScatteringAmplitudes::begin_options()
@@ -364,4 +373,4 @@ namespace eos
     {
         return options.cend();
     }
-}
+} // namespace eos

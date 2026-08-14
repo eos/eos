@@ -22,11 +22,9 @@
 
 namespace eos
 {
-    template <typename Transition_>
-    class ScatteringAmplitudes;
+    template <typename Transition_> class ScatteringAmplitudes;
 
-    template <typename Transition_>
-    class ScatteringAmplitudeFactory;
-}
+    template <typename Transition_> class ScatteringAmplitudeFactory;
+} // namespace eos
 
 #endif

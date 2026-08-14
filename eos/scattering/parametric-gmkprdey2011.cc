@@ -17,73 +17,86 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/scattering/parametric-gmkprdey2011.hh>
 #include <eos/maths/omnes-factor-impl.hh>
 #include <eos/maths/outer-function.hh>
-
+#include <eos/scattering/parametric-gmkprdey2011.hh>
 
 #include <functional>
 
 namespace eos
 {
 
-    double GMKPRDEY2011ScatteringAmplitudes::_calc_w(const double & s, const double & s0) const
+    double
+    GMKPRDEY2011ScatteringAmplitudes::_calc_w(const double & s, const double & s0) const
     {
         if (s > s0)
+        {
             throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(s0));
+        }
 
         return (std::sqrt(s) - std::sqrt(s0 - s)) / (std::sqrt(s) + std::sqrt(s0 - s));
     }
 
-    double GMKPRDEY2011ScatteringAmplitudes::_calc_s(const complex<double> & z, const double & sp, const double & s0) const
+    double
+    GMKPRDEY2011ScatteringAmplitudes::_calc_s(const complex<double> & z, const double & sp, const double & s0) const
     {
         if (s0 > sp)
+        {
             throw InternalError("The inverse conformal mapping is used with s_+ < s_0: " + stringify(sp) + " < " + stringify(s0));
+        }
 
         return std::abs((-4.0 * sp * z + s0 * power_of<2>(1.0 + z)) / power_of<2>(z - 1.0));
     }
 
-    complex<double> GMKPRDEY2011ScatteringAmplitudes::_calc_z(const double & s, const double & sp, const double & s0) const
+    complex<double>
+    GMKPRDEY2011ScatteringAmplitudes::_calc_z(const double & s, const double & sp, const double & s0) const
     {
         if (s0 > sp)
+        {
             throw InternalError("The conformal mapping is used with s_+ < s_0: " + stringify(sp) + " < " + stringify(s0));
+        }
 
         return (std::sqrt(complex<double>(sp - s, 0.0)) - std::sqrt(sp - s0)) / (std::sqrt(complex<double>(sp - s, 0.0)) + std::sqrt(sp - s0));
     }
 
     // S0 wave
-    double GMKPRDEY2011ScatteringAmplitudes::_phase_S0(const double & s) const
+    double
+    GMKPRDEY2011ScatteringAmplitudes::_phase_S0(const double & s) const
     {
-        double mpi2 = _mPi * _mPi;
-        double mk2 = _mK * _mK;
+        double mpi2  = _mPi * _mPi;
+        double mk2   = _mK * _mK;
         double meta2 = _mEta * _mEta;
         double sqrts = std::sqrt(s);
 
         if (s <= _sM_S0)
         {
-            double k = std::sqrt(s / 4.0 - mpi2);
+            double k  = std::sqrt(s / 4.0 - mpi2);
             double ws = _calc_w(s, 4.0 * mk2);
             if (s <= 0.6) // Avoid division by 0 for s = 4*mpi2 and s approx 0.7
             {
-                 return std::atan(2.0 * k / sqrts * (s - mpi2 / 2.0) / mpi2 / (_mPi / sqrts + _params_S0[0] + _params_S0[1] * ws + _params_S0[2] * power_of<2>(ws) + _params_S0[3] * power_of<3>(ws)));
+                return std::atan(2.0 * k / sqrts * (s - mpi2 / 2.0) / mpi2
+                                 / (_mPi / sqrts + _params_S0[0] + _params_S0[1] * ws + _params_S0[2] * power_of<2>(ws) + _params_S0[3] * power_of<3>(ws)));
             }
             else
             {
-                 return M_PI / 2.0 - std::atan(sqrts * mpi2 / 2.0 / k / (s - mpi2 / 2.0) * (_mPi / sqrts + _params_S0[0] + _params_S0[1] * ws + _params_S0[2] * power_of<2>(ws) + _params_S0[3] * power_of<3>(ws)));
+                return M_PI / 2.0
+                       - std::atan(sqrts * mpi2 / 2.0 / k / (s - mpi2 / 2.0)
+                                   * (_mPi / sqrts + _params_S0[0] + _params_S0[1] * ws + _params_S0[2] * power_of<2>(ws) + _params_S0[3] * power_of<3>(ws)));
             }
         }
         else if (s <= 4.0 * mk2)
         {
             // Quantities entering the derivative of the phase at s = _sM_s0
-            double mpi3 = mpi2 * _mPi;
-            double sqrtsM = std::sqrt(_sM_S0);
-            double kMpi = std::sqrt(_sM_S0 / 4.0 - mpi2);
+            double mpi3     = mpi2 * _mPi;
+            double sqrtsM   = std::sqrt(_sM_S0);
+            double kMpi     = std::sqrt(_sM_S0 / 4.0 - mpi2);
             double sqrts0sM = std::sqrt(4.0 * mk2 - _sM_S0);
-            double wM = _calc_w(_sM_S0, 4.0 * mk2);
-            double Bsum = std::sqrt(mpi2 / _sM_S0) + _params_S0[0] + _params_S0[1] * wM + _params_S0[2] * power_of<2>(wM) + _params_S0[3] * power_of<3>(wM);
+            double wM       = _calc_w(_sM_S0, 4.0 * mk2);
+            double Bsum     = std::sqrt(mpi2 / _sM_S0) + _params_S0[0] + _params_S0[1] * wM + _params_S0[2] * power_of<2>(wM) + _params_S0[3] * power_of<3>(wM);
 
             // Individual pieces entering the derivative
-            double x1 = mpi2 * ((mpi2 - 2.0 * _sM_S0) * _sM_S0 - 4.0 * power_of<2>(kMpi) * (mpi2 + 2.0 * _sM_S0)) * Bsum / (8.0 * sqrtsM * power_of<2>(mpi2 - 2.0 * _sM_S0) * power_of<3>(kMpi));
+            double x1 = mpi2 * ((mpi2 - 2.0 * _sM_S0) * _sM_S0 - 4.0 * power_of<2>(kMpi) * (mpi2 + 2.0 * _sM_S0)) * Bsum
+                        / (8.0 * sqrtsM * power_of<2>(mpi2 - 2.0 * _sM_S0) * power_of<3>(kMpi));
             double x2 = mpi3 / kMpi / 2.0 / _sM_S0 / (mpi2 - 2.0 * _sM_S0);
             double x3 = -mpi2 / 2.0 / (mpi2 - 2.0 * _sM_S0) / kMpi / sqrts0sM * ((1.0 - wM) * sqrts0sM + (1.0 + wM) * sqrtsM) / (sqrtsM + sqrts0sM);
             double x4 = _sM_S0 * power_of<2>(mpi2 * Bsum / (mpi2 - 2.0 * _sM_S0) / kMpi);
@@ -93,10 +106,11 @@ namespace eos
 
             // Remaining quantities entering the parametrization of the phase
             double absk2 = std::sqrt(mk2 - s / 4.0);
-            double kM = std::sqrt(mk2 - _sM_S0 / 4.0);
-            double mk3 = mk2 * _mK;
+            double kM    = std::sqrt(mk2 - _sM_S0 / 4.0);
+            double mk3   = mk2 * _mK;
 
-            return _params_S0[4] * power_of<2>(1.0 - absk2 / kM) + _phase_S0(_sM_S0) * absk2 / kM * (2.0 - absk2 / kM) + absk2 * (kM - absk2) * (8.0 * delpM + _params_S0[5] * (kM - absk2) / mk3);
+            return _params_S0[4] * power_of<2>(1.0 - absk2 / kM) + _phase_S0(_sM_S0) * absk2 / kM * (2.0 - absk2 / kM)
+                   + absk2 * (kM - absk2) * (8.0 * delpM + _params_S0[5] * (kM - absk2) / mk3);
         }
         else if (s <= 4.0 * meta2)
         {
@@ -118,18 +132,19 @@ namespace eos
     }
 
     // P wave
-    double GMKPRDEY2011ScatteringAmplitudes::_phase_P1(const double & s) const
+    double
+    GMKPRDEY2011ScatteringAmplitudes::_phase_P1(const double & s) const
     {
-        const double mpi2 = _mPi * _mPi;
-        const double mk2 = _mK * _mK;
+        const double mpi2   = _mPi * _mPi;
+        const double mk2    = _mK * _mK;
         const double sqrts2 = std::sqrt(s) / 2.0;
 
         if (s <= 4.0 * mk2)
         {
             const double mrho2 = _mRho * _mRho;
-            const double mpi3 = _mPi * mpi2;
-            const double k = std::sqrt(s / 4.0 - mpi2);
-            if ( s <= 0.5 ) // Avoid divide by 0 for s = 4*mpi2 and s = mrho2
+            const double mpi3  = _mPi * mpi2;
+            const double k     = std::sqrt(s / 4.0 - mpi2);
+            if (s <= 0.5) // Avoid divide by 0 for s = 4*mpi2 and s = mrho2
             {
                 return std::atan(power_of<3>(k) / sqrts2 / (mrho2 - s) / (mpi3 / mrho2 / sqrts2 + _params_P1[0] + _params_P1[1] * _calc_w(s, _s0_P1)));
             }
@@ -150,12 +165,13 @@ namespace eos
     }
 
     // D0 wave
-    double GMKPRDEY2011ScatteringAmplitudes::_phase_D0(const double & s) const
+    double
+    GMKPRDEY2011ScatteringAmplitudes::_phase_D0(const double & s) const
     {
-        double mpi2 = _mPi * _mPi;
-        double mf22 = _mF2 * _mF2;
+        double mpi2   = _mPi * _mPi;
+        double mf22   = _mF2 * _mF2;
         double sqrts2 = std::sqrt(s) / 2.0;
-        double k = std::sqrt(s / 4.0 - mpi2);
+        double k      = std::sqrt(s / 4.0 - mpi2);
 
         if (s <= _s0_D0)
         {
@@ -173,25 +189,14 @@ namespace eos
     }
 
     GMKPRDEY2011ScatteringAmplitudes::GMKPRDEY2011ScatteringAmplitudes(const Parameters & p, const Options &) :
-        _params_S0 {    UsedParameter(p[_par_name("S0", "B", 0)],   *this),
-                        UsedParameter(p[_par_name("S0", "B", 1)],   *this),
-                        UsedParameter(p[_par_name("S0", "B", 2)],   *this),
-                        UsedParameter(p[_par_name("S0", "B", 3)],   *this),
-                        UsedParameter(p[_par_name("S0", "d", 0)],   *this),
-                        UsedParameter(p[_par_name("S0", "c")],      *this),
-                        UsedParameter(p[_par_name("S0", "B")],      *this),
-                        UsedParameter(p[_par_name("S0", "C")],      *this),
-                        UsedParameter(p[_par_name("S0", "D")],      *this)
-        },
-        _params_P1 {    UsedParameter(p[_par_name("P1", "B", 0)],   *this),
-                        UsedParameter(p[_par_name("P1", "B", 1)],   *this),
-                        UsedParameter(p[_par_name("P1", "lam", 1)], *this),
-                        UsedParameter(p[_par_name("P1", "lam", 2)], *this)
-        },
-        _params_D0 {    UsedParameter(p[_par_name("D0", "B", 0)],   *this),
-                        UsedParameter(p[_par_name("D0", "B", 1)],   *this),
-                        UsedParameter(p[_par_name("D0", "Bh", 1)],  *this)
-        },
+        _params_S0{ UsedParameter(p[_par_name("S0", "B", 0)], *this), UsedParameter(p[_par_name("S0", "B", 1)], *this), UsedParameter(p[_par_name("S0", "B", 2)], *this),
+                    UsedParameter(p[_par_name("S0", "B", 3)], *this), UsedParameter(p[_par_name("S0", "d", 0)], *this), UsedParameter(p[_par_name("S0", "c")], *this),
+                    UsedParameter(p[_par_name("S0", "B")], *this),    UsedParameter(p[_par_name("S0", "C")], *this),    UsedParameter(p[_par_name("S0", "D")], *this) },
+        _params_P1{ UsedParameter(p[_par_name("P1", "B", 0)], *this),
+                    UsedParameter(p[_par_name("P1", "B", 1)], *this),
+                    UsedParameter(p[_par_name("P1", "lam", 1)], *this),
+                    UsedParameter(p[_par_name("P1", "lam", 2)], *this) },
+        _params_D0{ UsedParameter(p[_par_name("D0", "B", 0)], *this), UsedParameter(p[_par_name("D0", "B", 1)], *this), UsedParameter(p[_par_name("D0", "Bh", 1)], *this) },
         _mPi(UsedParameter(p["mass::pi^+@GMKPRDEY2011"], *this)),
         _mK(UsedParameter(p["mass::K_u@GMKPRDEY2011"], *this)),
         _mEta(UsedParameter(p["mass::eta@GMKPRDEY2011"], *this)),
@@ -200,15 +205,15 @@ namespace eos
         _mOmega(UsedParameter(p["mass::omega@GMKPRDEY2011"], *this)),
         _GammaOmega(UsedParameter(p["width::omega@GMKPRDEY2011"], *this)),
         _kappa(UsedParameter(p["mixing::kappaEM@GMKPRDEY2011"], *this)),
-        _sM_S0(UsedParameter(p[_par_name("S0", "sM")],  *this)),
-        _s0_P1(UsedParameter(p[_par_name("P1", "s0")],  *this)),
-        _s0_D0(UsedParameter(p[_par_name("D0", "s0")],  *this)),
-        _sh_D0(UsedParameter(p[_par_name("D0", "sh")],  *this)),
-        _cont_pow_S0(UsedParameter(p[_par_name("S0", "n")],  *this)),
-        _cont_pow_P1(UsedParameter(p[_par_name("P1", "n")],  *this)),
-        _cont_pow_D0(UsedParameter(p[_par_name("D0", "n")],  *this)),
-        _intervals_P1({4.0 * _mPi * _mPi , 0.5 , 1.0 , 2.0 }),
-        _intervals_D0({4.0 * _mPi * _mPi , 0.7, 1.1, 1.45, 2.0 }),
+        _sM_S0(UsedParameter(p[_par_name("S0", "sM")], *this)),
+        _s0_P1(UsedParameter(p[_par_name("P1", "s0")], *this)),
+        _s0_D0(UsedParameter(p[_par_name("D0", "s0")], *this)),
+        _sh_D0(UsedParameter(p[_par_name("D0", "sh")], *this)),
+        _cont_pow_S0(UsedParameter(p[_par_name("S0", "n")], *this)),
+        _cont_pow_P1(UsedParameter(p[_par_name("P1", "n")], *this)),
+        _cont_pow_D0(UsedParameter(p[_par_name("D0", "n")], *this)),
+        _intervals_P1({ 4.0 * _mPi * _mPi, 0.5, 1.0, 2.0 }),
+        _intervals_D0({ 4.0 * _mPi * _mPi, 0.7, 1.1, 1.45, 2.0 }),
         _f_phase_P1(std::bind(&GMKPRDEY2011ScatteringAmplitudes::_phase_P1, this, std::placeholders::_1)),
         _f_phase_D0(std::bind(&GMKPRDEY2011ScatteringAmplitudes::_phase_D0, this, std::placeholders::_1)),
         _omnes_P1(_intervals_P1, _f_phase_P1, 0.0),
@@ -236,7 +241,8 @@ namespace eos
         return QualifiedName(stringify(PiPiToPiPi::label) + "::" + partial_wave + "_" + par_name + "@GMKPRDEY2011");
     }
 
-    complex<double> GMKPRDEY2011ScatteringAmplitudes::scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    GMKPRDEY2011ScatteringAmplitudes::scattering_amplitude(const double & s, const unsigned & l, const IsospinRepresentation & i) const
     {
         if (s <= 4 * _mPi * _mPi)
         {
@@ -266,7 +272,8 @@ namespace eos
         }
     }
 
-    complex<double> GMKPRDEY2011ScatteringAmplitudes::omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    GMKPRDEY2011ScatteringAmplitudes::omnes_factor(const double & s, const unsigned & l, const IsospinRepresentation & i) const
     {
         if ((l == 0) && (i == IsospinRepresentation::zero))
         {
@@ -288,9 +295,10 @@ namespace eos
     }
 
     // Simplified isospin-breaking correction following [CHS:2018A]
-    complex<double> GMKPRDEY2011ScatteringAmplitudes::isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    GMKPRDEY2011ScatteringAmplitudes::isospin_breaking(const double & s, const unsigned & l, const IsospinRepresentation & i) const
     {
-        if ( (l == 1) || (i == IsospinRepresentation::one) )
+        if ((l == 1) || (i == IsospinRepresentation::one))
         {
             return 1.0 + s * _kappa / (_mOmega * _mOmega - s - complex<double>(0, _mOmega * _GammaOmega));
         }
@@ -301,7 +309,9 @@ namespace eos
     }
 
     // Note: all our omnes factors go like 1/s for large s. Thus we need to take out a factor of (1 - z)^2 which would cause issues with the integration
-    complex<double> GMKPRDEY2011ScatteringAmplitudes::omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l, const IsospinRepresentation & i) const
+    complex<double>
+    GMKPRDEY2011ScatteringAmplitudes::omnes_outer_function(const double & s, const double & sp, const double & s0, const double & prec, const unsigned & l,
+                                                           const IsospinRepresentation & i) const
     {
         // Point to extract asymptotic behaviour at.
         const double sM = 1000000.0;
@@ -314,12 +324,12 @@ namespace eos
         {
             complex<double> zeval = _calc_z(s, sp, s0);
 
-            std::function<complex<double>(const complex<double> &)> integrand = [&] (const complex<double> & z)
+            std::function<complex<double>(const complex<double> &)> integrand = [&](const complex<double> & z)
             {
                 // Ensure we provide a real s to Omnes factor
                 double sArg = _calc_s(z, sp, s0);
 
-                if (!isfinite(sArg) || (sArg > sM))
+                if (! isfinite(sArg) || (sArg > sM))
                 {
                     // Here we fix the constant Omega(s) ~ c/s for large s and take into account the rest of the conformal mapping
                     return sM * _omnes_P1(sM) / (-4.0 * sp * z + s0 * power_of<2>(z + 1.0));
@@ -336,12 +346,12 @@ namespace eos
         {
             complex<double> zeval = _calc_z(s, sp, s0);
 
-            std::function<complex<double>(const complex<double> &)> integrand = [&] (const complex<double> & z)
+            std::function<complex<double>(const complex<double> &)> integrand = [&](const complex<double> & z)
             {
                 // Ensure we provide a real s to Omnes factor
                 double sArg = _calc_s(z, sp, s0);
 
-                if (!isfinite(sArg) || (sArg > sM))
+                if (! isfinite(sArg) || (sArg > sM))
                 {
                     // Here we fix the constant Omega(s) ~ c/s for large s and take into account the rest of the conformal mapping
                     return sM * _omnes_D0(sM) / (-4.0 * sp * z + s0 * power_of<2>(z + 1.0));
@@ -365,37 +375,31 @@ namespace eos
     {
         Diagnostics results;
 
-        results.add({ _calc_w(0.0,  _s0_P1), "w_P1(s =  0.0)" });
-        results.add({ _calc_w(1.0,  _s0_P1), "w_P1(s =  1.0)" });
+        results.add({ _calc_w(0.0, _s0_P1), "w_P1(s =  0.0)" });
+        results.add({ _calc_w(1.0, _s0_P1), "w_P1(s =  1.0)" });
 
-        results.add({ _phase_S0(0.25),  "del_S0(s =  0.25)" });
-        results.add({ _phase_S0(0.72),  "del_S0(s =  0.72)" });
-        results.add({ _phase_S0(0.9),   "del_S0(s =  0.9)"  });
-        results.add({ _phase_S0(1.44),  "del_S0(s =  1.44)" });
-        results.add({ _phase_S0(4.0),   "del_S0(s =  4.0)"  });
+        results.add({ _phase_S0(0.25), "del_S0(s =  0.25)" });
+        results.add({ _phase_S0(0.72), "del_S0(s =  0.72)" });
+        results.add({ _phase_S0(0.9), "del_S0(s =  0.9)" });
+        results.add({ _phase_S0(1.44), "del_S0(s =  1.44)" });
+        results.add({ _phase_S0(4.0), "del_S0(s =  4.0)" });
 
-        results.add({ _phase_P1(0.25),  "del_P1(s =  0.25)" });
-        results.add({ _phase_P1(0.9),   "del_P1(s =  0.9)"  });
-        results.add({ _phase_P1(1.0),   "del_P1(s =  1.0)"  });
-        results.add({ _phase_P1(4.0),   "del_P1(s =  4.0)"  });
+        results.add({ _phase_P1(0.25), "del_P1(s =  0.25)" });
+        results.add({ _phase_P1(0.9), "del_P1(s =  0.9)" });
+        results.add({ _phase_P1(1.0), "del_P1(s =  1.0)" });
+        results.add({ _phase_P1(4.0), "del_P1(s =  4.0)" });
 
-        results.add({ _phase_D0(0.25),  "del_D0(s =  0.25)" });
-        results.add({ _phase_D0(0.9),   "del_D0(s =  0.9)"  });
-        results.add({ _phase_D0(1.44),  "del_D0(s =  1.44)" });
-        results.add({ _phase_D0(4.0),   "del_D0(s =  4.0)"  });
+        results.add({ _phase_D0(0.25), "del_D0(s =  0.25)" });
+        results.add({ _phase_D0(0.9), "del_D0(s =  0.9)" });
+        results.add({ _phase_D0(1.44), "del_D0(s =  1.44)" });
+        results.add({ _phase_D0(4.0), "del_D0(s =  4.0)" });
 
         return results;
     }
 
-    const std::set<ReferenceName> GMKPRDEY2011ScatteringAmplitudes::references
-    {
-        "GMKPRDEY:2011A"_rn,
-        "CHS:2018A"_rn
-    };
+    const std::set<ReferenceName> GMKPRDEY2011ScatteringAmplitudes::references{ "GMKPRDEY:2011A"_rn, "CHS:2018A"_rn };
 
-    const std::vector<OptionSpecification> GMKPRDEY2011ScatteringAmplitudes::options
-    {
-    };
+    const std::vector<OptionSpecification> GMKPRDEY2011ScatteringAmplitudes::options{};
 
     std::vector<OptionSpecification>::const_iterator
     GMKPRDEY2011ScatteringAmplitudes::begin_options()
@@ -408,4 +412,4 @@ namespace eos
     {
         return options.cend();
     }
-}
+} // namespace eos
