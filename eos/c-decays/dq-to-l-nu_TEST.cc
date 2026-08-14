@@ -17,16 +17,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/c-decays/dq-to-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -35,8 +36,7 @@
 using namespace test;
 using namespace eos;
 
-class DqToLeptonNeutrinoTest :
-    public TestCase
+class DqToLeptonNeutrinoTest : public TestCase
 {
     public:
         DqToLeptonNeutrinoTest() :
@@ -44,11 +44,12 @@ class DqToLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // D^+ -> l^+ nu
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p             = Parameters::Defaults();
                 p["WET::G_Fermi"]        = 1.000;
                 p["CKM::abs(V_cd)"]      = 1.000;
                 p["mass::D_d"]           = 4.000;
@@ -57,26 +58,22 @@ class DqToLeptonNeutrinoTest :
                 p["QM::hbar"]            = 1.000;
                 p["life_time::D_d"]      = 0.500;
 
-                Options oo
-                {
+                Options oo{
                     { "model"_ok, "CKM"_ov },
-                    { "l"_ok,     "e"_ov   },
-                    { "q"_ok,     "d"_ov   }
+                    {     "l"_ok,   "e"_ov },
+                    {     "q"_ok,   "d"_ov }
                 };
 
                 DqToLeptonNeutrino d(p, oo);
 
                 const double eps = 2.0e-5;
 
-                TEST_CHECK_NEARLY_EQUAL(
-                        d.branching_ratio(),
-                        0.5 * std::pow(1.01033 * 3., 2) * std::pow((1.-std::pow(1./4., 2)), 2) * 4. / (8. * M_PI),
-                        eps);
+                TEST_CHECK_NEARLY_EQUAL(d.branching_ratio(), 0.5 * std::pow(1.01033 * 3., 2) * std::pow((1. - std::pow(1. / 4., 2)), 2) * 4. / (8. * M_PI), eps);
             }
 
             // D_s^+ -> l^+ nu
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p             = Parameters::Defaults();
                 p["WET::G_Fermi"]        = 1.000;
                 p["CKM::abs(V_cs)"]      = 1.000;
                 p["mass::D_s"]           = 2.000;
@@ -86,21 +83,17 @@ class DqToLeptonNeutrinoTest :
                 p["life_time::D_s"]      = 1.000;
                 p["scnuee::Re{cVL}"]     = 1.000;
 
-                Options oo
-                {
+                Options oo{
                     { "model"_ok, "CKM"_ov },
-                    { "l"_ok,     "e"_ov   },
-                    { "q"_ok,     "s"_ov   }
+                    {     "l"_ok,   "e"_ov },
+                    {     "q"_ok,   "s"_ov }
                 };
 
                 DqToLeptonNeutrino d(p, oo);
 
                 const double eps = 1e-6;
 
-                TEST_CHECK_NEARLY_EQUAL(
-                        d.branching_ratio(),
-                        std::pow(1.01033 * 1., 2) * std::pow((1.-std::pow(1./2., 2)), 2) * 2. / (8. * M_PI),
-                        eps);
+                TEST_CHECK_NEARLY_EQUAL(d.branching_ratio(), std::pow(1.01033 * 1., 2) * std::pow((1. - std::pow(1. / 2., 2)), 2) * 2. / (8. * M_PI), eps);
             }
         }
 } dq_to_l_nu_test;
