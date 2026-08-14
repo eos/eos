@@ -18,16 +18,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/c-decays/d-to-psd-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -35,8 +36,7 @@
 using namespace test;
 using namespace eos;
 
-class DToKLeptonNeutrinoTest :
-    public TestCase
+class DToKLeptonNeutrinoTest : public TestCase
 {
     public:
         DToKLeptonNeutrinoTest() :
@@ -44,13 +44,14 @@ class DToKLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
-                Parameters p = Parameters::Defaults();
-                p["CKM::abs(V_cs)"] =  0.9734;
-                p["mass::D_u"]      =  1.86483;
-                p["mass::K_u"]      =  0.493677;
+                Parameters p        = Parameters::Defaults();
+                p["CKM::abs(V_cs)"] = 0.9734;
+                p["mass::D_u"]      = 1.86483;
+                p["mass::K_u"]      = 0.493677;
 
                 p["D->K::alpha^f+_0@BSZ2015"] = 1.;
                 p["D->K::alpha^f+_1@BSZ2015"] = 0.;
@@ -61,21 +62,20 @@ class DToKLeptonNeutrinoTest :
                 p["D->K::alpha^fT_1@BSZ2015"] = 0.;
                 p["D->K::alpha^fT_2@BSZ2015"] = 0.;
 
-                Options oo
-                {
-                    { "model"_ok,        "CKM"_ov     },
+                Options oo{
+                    {        "model"_ok,     "CKM"_ov },
                     { "form-factors"_ok, "BSZ2015"_ov },
-                    { "P"_ok,            "K"_ov       },
-                    { "q"_ok,            "u"_ov       },
-                    { "l"_ok,            "e"_ov       },
+                    {            "P"_ok,       "K"_ov },
+                    {            "q"_ok,       "u"_ov },
+                    {            "l"_ok,       "e"_ov },
                 };
 
                 DToPseudoscalarLeptonNeutrino d(p, oo);
 
                 const double eps = 1e-5;
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.01,  1.  ), 0.04916404, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.  ,  1.88), 0.06059538, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.01, 1.), 0.04916404, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0., 1.88), 0.06059538, eps);
             }
         }
 } d_to_k_l_nu_test;

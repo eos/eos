@@ -18,16 +18,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/c-decays/lambdac-to-onehalfplus-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -35,8 +36,7 @@
 using namespace test;
 using namespace eos;
 
-class LambdaCToLambdaLeptonNeutrinoTest :
-    public TestCase
+class LambdaCToLambdaLeptonNeutrinoTest : public TestCase
 {
     public:
         LambdaCToLambdaLeptonNeutrinoTest() :
@@ -44,7 +44,8 @@ class LambdaCToLambdaLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
                 Parameters p = Parameters::Defaults();
@@ -65,12 +66,11 @@ class LambdaCToLambdaLeptonNeutrinoTest :
                 p["Lambda_c->Lambda::a^(perp,T5)_0@SE"] = -0.14;
                 p["Lambda_c->Lambda::a^(perp,T5)_1@SE"] = +0.15;
 
-                Options oo
-                {
-                    { "model"_ok,        "WET"_ov        },
-                    { "form-factors"_ok, "SE"_ov  },
-                    { "l"_ok,            "mu"_ov         },
-                    { "B"_ok,            "Lambda"_ov     }
+                Options oo{
+                    {        "model"_ok,    "WET"_ov },
+                    { "form-factors"_ok,     "SE"_ov },
+                    {            "l"_ok,     "mu"_ov },
+                    {            "B"_ok, "Lambda"_ov }
                 };
 
                 LambdaCToOneHalfPlusLeptonNeutrino d(p, oo);

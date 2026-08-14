@@ -18,11 +18,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/observable-impl.hh>
+#include <eos/c-decays/d-to-psd-l-nu.hh>
 #include <eos/c-decays/dq-to-l-nu.hh>
 #include <eos/c-decays/dstarq-to-l-nu.hh>
-#include <eos/c-decays/d-to-psd-l-nu.hh>
 #include <eos/c-decays/lambdac-to-onehalfplus-l-nu.hh>
+#include <eos/observable-impl.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
@@ -33,38 +33,45 @@ namespace eos
     ObservableGroup
     make_dq_to_l_nu_group()
     {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $D_q^{(*)+}\to \ell^+\nu$ decays)",
-            R"(The option "l" selects the charged lepton flavor.)",
-            {
-                make_observable("D->lnu::BR", R"(\mathcal{B}(D^+ \to \ell^+\nu))",
-                        Unit::None(),
-                        &DqToLeptonNeutrino::branching_ratio,
-                        std::make_tuple(),
-                        Options{ { "q"_ok, "d"_ov } }),
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $D_q^{(*)+}\to \ell^+\nu$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor.)",
+                                                       {
+                                                           make_observable("D->lnu::BR",
+                                                                           R"(\mathcal{B}(D^+ \to \ell^+\nu))",
+                                                                           Unit::None(),
+                                                                           &DqToLeptonNeutrino::branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "q"_ok, "d"_ov } }
+                                                                           ),
 
-                make_observable("D^*->lnu::BR", R"(\mathcal{B}(D^{*+} \to \ell^+\nu))",
-                        Unit::None(),
-                        &DstarqToLeptonNeutrino::branching_ratio,
-                        std::make_tuple(),
-                        Options{ { "q"_ok, "d"_ov } }),
+                                                           make_observable("D^*->lnu::BR",
+                                                                           R"(\mathcal{B}(D^{*+} \to \ell^+\nu))",
+                                                                           Unit::None(),
+                                                                           &DstarqToLeptonNeutrino::branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "q"_ok, "d"_ov } }
+                                                                           ),
 
-                make_observable("D_s->lnu::BR", R"(\mathcal{B}(D_s^+ \to \ell^+\nu))",
-                        Unit::None(),
-                        &DqToLeptonNeutrino::branching_ratio,
-                        std::make_tuple(),
-                        Options{ { "q"_ok, "s"_ov } }),
+                                                           make_observable("D_s->lnu::BR",
+                                                                           R"(\mathcal{B}(D_s^+ \to \ell^+\nu))",
+                                                                           Unit::None(),
+                                                                           &DqToLeptonNeutrino::branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "q"_ok, "s"_ov } }
+                                                                           ),
 
-                make_observable("D_s^*->lnu::BR", R"(\mathcal{B}(D_s^{*+} \to \ell^+\nu))",
-                        Unit::None(),
-                        &DstarqToLeptonNeutrino::branching_ratio,
-                        std::make_tuple(),
-                        Options{ { "q"_ok, "s"_ov } }),
-            }
-        );
+                                                           make_observable("D_s^*->lnu::BR",
+                                                                           R"(\mathcal{B}(D_s^{*+} \to \ell^+\nu))",
+                                                                           Unit::None(),
+                                                                           &DstarqToLeptonNeutrino::branching_ratio,
+                                                                           std::make_tuple(),
+                                                                           Options{ { "q"_ok, "s"_ov } }
+                                                                           ),
+        });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     // Semileptonic D -> P(seudoscalar) decays
@@ -75,45 +82,54 @@ namespace eos
     ObservableGroup
     make_d_to_k_l_nu_group()
     {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $D\to K \ell^+ \nu$ decays)",
-            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
-            R"(The option "form-factors" selects the form factor parametrization.)",
-            {
-                make_observable("D->Klnu::dBR/dq2", R"(d\mathcal{B}(D\to K\ell^+ \nu)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "P"_ok, "K"_ov } }),
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $D\to K \ell^+ \nu$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
+                                                       R"(The option "form-factors" selects the form factor parametrization.)",
+                                                       {
+                                                           make_observable("D->Klnu::dBR/dq2",
+                                                                           R"(d\mathcal{B}(D\to K\ell^+ \nu)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "K"_ov } }
+                                                                           ),
 
-                make_observable("D->Klnu::BR", R"(\mathcal{B}(D\to K\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "K"_ov } }),
+                                                           make_observable("D->Klnu::BR",
+                                                                           R"(\mathcal{B}(D\to K\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "K"_ov } }
+                                                                           ),
 
-                make_observable("D->Klnu::width", R"(\Gamma(D\to K\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "K"_ov } }),
+                                                           make_observable("D->Klnu::width",
+                                                                           R"(\Gamma(D\to K\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "K"_ov } }
+                                                                           ),
 
-                make_observable("D->Klnu::P(q2_min,q2_max)", R"(P(D\to K\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "K"_ov } }),
+                                                           make_observable("D->Klnu::P(q2_min,q2_max)",
+                                                                           R"(P(D\to K\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "K"_ov } }
+                                                                           ),
 
-                make_observable("D->Klnu::P(q2)", R"(dP(D\to K\ell^+ \nu)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
-                        std::make_tuple("q2"),
-                        Options{ { "P"_ok, "K"_ov } }),
-            }
-        );
+                                                           make_observable("D->Klnu::P(q2)",
+                                                                           R"(dP(D\to K\ell^+ \nu)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "K"_ov } }
+                                                                           ),
+        });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     // D -> eta l nu
@@ -121,87 +137,110 @@ namespace eos
     ObservableGroup
     make_d_to_eta_l_nu_group()
     {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $D_q\to\eta^{(\prime)}\ell^+ \nu$ decays)",
-            R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
-            R"(The option "form-factors" selects the form factor parametrization.)",
-            {
-                make_observable("D->etalnu::dBR/dq2", R"(d\mathcal{B}(D\to\eta\ell^+ \nu)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "P"_ok, "eta"_ov } }),
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $D_q\to\eta^{(\prime)}\ell^+ \nu$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavor. )"
+                                                       R"(The option "form-factors" selects the form factor parametrization.)",
+                                                       {
+                                                           make_observable("D->etalnu::dBR/dq2",
+                                                                           R"(d\mathcal{B}(D\to\eta\ell^+ \nu)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{       { "P"_ok, "eta"_ov } }
+                                                                           ),
 
-                make_observable("D->etalnu::BR", R"(\mathcal{B}(D\to\eta\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta"_ov } }),
+                                                           make_observable("D->etalnu::BR",
+                                                                           R"(\mathcal{B}(D\to\eta\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{       { "P"_ok, "eta"_ov } }
+                                                                           ),
 
-                make_observable("D->etalnu::width", R"(\Gamma(D\to\eta\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta"_ov } }),
+                                                           make_observable("D->etalnu::width",
+                                                                           R"(\Gamma(D\to\eta\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{       { "P"_ok, "eta"_ov } }
+                                                                           ),
 
-                make_observable("D->etalnu::P(q2_min,q2_max)", R"(P(D\to\eta\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta"_ov } }),
+                                                           make_observable("D->etalnu::P(q2_min,q2_max)",
+                                                                           R"(P(D\to\eta\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{       { "P"_ok, "eta"_ov } }
+                                                                           ),
 
-                make_observable("D->etalnu::P(q2)", R"(dP(D\to\eta\ell^+ \nu)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
-                        std::make_tuple("q2"),
-                        Options{ { "P"_ok, "eta"_ov } }),
+                                                           make_observable("D->etalnu::P(q2)",
+                                                                           R"(dP(D\to\eta\ell^+ \nu)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{       { "P"_ok, "eta"_ov } }
+                                                                           ),
 
-                make_observable("D->etalnu::A_FB", R"(A_{\mathrm{FB}}(D\to\eta\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta"_ov } }),
+                                                           make_observable("D->etalnu::A_FB",
+                                                                           R"(A_{\mathrm{FB}}(D\to\eta\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{       { "P"_ok, "eta"_ov } }
+                                                                           ),
 
-                make_observable("D->eta_primelnu::dBR/dq2", R"(d\mathcal{B}(D\to\eta'\ell^+ \nu)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "P"_ok, "eta_prime"_ov } }),
+                                                           make_observable("D->eta_primelnu::dBR/dq2",
+                                                                           R"(d\mathcal{B}(D\to\eta'\ell^+ \nu)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonNeutrino::differential_branching_ratio,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov } }
+                                                                           ),
 
-                make_observable("D->eta_primelnu::BR", R"(\mathcal{B}(D\to\eta'\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta_prime"_ov } }),
+                                                           make_observable("D->eta_primelnu::BR",
+                                                                           R"(\mathcal{B}(D\to\eta'\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov } }
+                                                                           ),
 
-                make_observable("D->eta_primelnu::width", R"(\Gamma(D\to\eta'\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta_prime"_ov } }),
+                                                           make_observable("D->eta_primelnu::width",
+                                                                           R"(\Gamma(D\to\eta'\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov } }
+                                                                           ),
 
-                make_observable("D->eta_primelnu::P(q2_min,q2_max)", R"(P(D\to\eta'\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta_prime"_ov } }),
+                                                           make_observable("D->eta_primelnu::P(q2_min,q2_max)",
+                                                                           R"(P(D\to\eta'\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_pdf_q2,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov } }
+                                                                           ),
 
-                make_observable("D->eta_primelnu::P(q2)", R"(dP(D\to\eta'\ell^+ \nu)/dq^2)",
-                        Unit::InverseGeV2(),
-                        &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
-                        std::make_tuple("q2"),
-                        Options{ { "P"_ok, "eta_prime"_ov } }),
+                                                           make_observable("D->eta_primelnu::P(q2)",
+                                                                           R"(dP(D\to\eta'\ell^+ \nu)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonNeutrino::differential_pdf_q2,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov } }
+                                                                           ),
 
-                make_observable("D->eta_primelnu::A_FB", R"(A_{\mathrm{FB}}(D\to\eta'\ell^+ \nu))",
-                        Unit::None(),
-                        &DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "P"_ok, "eta_prime"_ov } }),
-            }
-        );
+                                                           make_observable("D->eta_primelnu::A_FB",
+                                                                           R"(A_{\mathrm{FB}}(D\to\eta'\ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonNeutrino::integrated_a_fb_leptonic,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov } }
+                                                                           ),
+        });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     // Lambda_c decays
@@ -210,26 +249,29 @@ namespace eos
     ObservableGroup
     make_lambdac_to_lambda_l_nu_group()
     {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $\Lambda_c \to \Lambda \ell^+ \nu$ decays)",
-            R"(The option "l" selects the charged lepton flavor.)",
-            {
-                make_observable("Lambda_c->Lambdalnu::BR", R"(\mathcal{B}(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
-                        Unit::None(),
-                        &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "B"_ok, "Lambda"_ov } }),
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $\Lambda_c \to \Lambda \ell^+ \nu$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor.)",
+                                                       {
+                                                           make_observable("Lambda_c->Lambdalnu::BR",
+                                                                           R"(\mathcal{B}(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "B"_ok, "Lambda"_ov } }
+                                                                           ),
 
-                make_observable("Lambda_c->Lambdalnu::dBR/dq2", R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
-                        Unit::InverseGeV2(),
-                        &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "B"_ok, "Lambda"_ov } }),
-            }
-        );
+                                                           make_observable("Lambda_c->Lambdalnu::dBR/dq2",
+                                                                           R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to \Lambda \ell^+ \nu))",
+                                                                           Unit::InverseGeV2(),
+                                                                           &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "B"_ok, "Lambda"_ov } }
+                                                                           ),
+        });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     // Lambda_c -> Neutron l nu
@@ -237,48 +279,47 @@ namespace eos
     ObservableGroup
     make_lambdac_to_neutron_l_nu_group()
     {
-        auto imp = new Implementation<ObservableGroup>(
-            R"(Observables in $\Lambda_c \to n \ell^+ \nu$ decays)",
-            R"(The option "l" selects the charged lepton flavor.)",
-            {
-                make_observable("Lambda_c->Neutronlnu::BR", R"(\mathcal{B}(\Lambda_c^+ \to n \ell^+ \nu))",
-                        Unit::None(),
-                        &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
-                        std::make_tuple("q2_min", "q2_max"),
-                        Options{ { "B"_ok, "Neutron"_ov } }),
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $\Lambda_c \to n \ell^+ \nu$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor.)",
+                                                       {
+                                                           make_observable("Lambda_c->Neutronlnu::BR",
+                                                                           R"(\mathcal{B}(\Lambda_c^+ \to n \ell^+ \nu))",
+                                                                           Unit::None(),
+                                                                           &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "B"_ok, "Neutron"_ov } }
+                                                                           ),
 
-                make_observable("Lambda_c->Neutronlnu::dBR/dq2", R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to n \ell^+ \nu))",
-                        Unit::InverseGeV2(),
-                        &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
-                        std::make_tuple("q2"),
-                        Options{ { "B"_ok, "Neutron"_ov } }),
-            }
-        );
+                                                           make_observable("Lambda_c->Neutronlnu::dBR/dq2",
+                                                                           R"(d\mathcal{B}/dq^2(\Lambda_c^+ \to n \ell^+ \nu))",
+                                                                           Unit::InverseGeV2(),
+                                                                           &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "B"_ok, "Neutron"_ov } }
+                                                                           ),
+        });
 
         return ObservableGroup(imp);
     }
+
     // }}}
 
     ObservableSection
     make_c_decays_section()
     {
-        auto imp = new Implementation<ObservableSection>(
-            "Observables in (semi)leptonic $c$-hadron decays",
-            "",
-            {
-                // D_q^+ -> l^+ nu
-                make_dq_to_l_nu_group(),
+        auto imp = new Implementation<ObservableSection>("Observables in (semi)leptonic $c$-hadron decays",
+                                                         "",
+                                                         { // D_q^+ -> l^+ nu
+                                                           make_dq_to_l_nu_group(),
 
-                // D -> P l^+ nu
-                make_d_to_k_l_nu_group(),
-                make_d_to_eta_l_nu_group(),
+                                                           // D -> P l^+ nu
+                                                           make_d_to_k_l_nu_group(),
+                                                           make_d_to_eta_l_nu_group(),
 
-                // Lc -> Baryon(1/2+) l^+ nu
-                make_lambdac_to_lambda_l_nu_group(),
-                make_lambdac_to_neutron_l_nu_group()
-            }
-        );
+                                                           // Lc -> Baryon(1/2+) l^+ nu
+                                                           make_lambdac_to_lambda_l_nu_group(),
+                                                           make_lambdac_to_neutron_l_nu_group() });
 
         return ObservableSection(imp);
     }
-}
+} // namespace eos

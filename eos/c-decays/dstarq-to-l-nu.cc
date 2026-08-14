@@ -34,118 +34,113 @@ namespace eos
     /*
      * Decay: D^*_q -> lbar nu, based on [PS:2023A]
      */
-    template <>
-    struct Implementation<DstarqToLeptonNeutrino>
+    template <> struct Implementation<DstarqToLeptonNeutrino>
     {
-        SpecifiedOption opt_model;
+            SpecifiedOption opt_model;
 
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        QuarkFlavorOption opt_q;
+            QuarkFlavorOption opt_q;
 
-        UsedParameter hbar;
+            UsedParameter hbar;
 
-        UsedParameter g_fermi;
+            UsedParameter g_fermi;
 
-        UsedParameter m_Dstarq;
+            UsedParameter m_Dstarq;
 
-        UsedParameter f_Dstarq;
+            UsedParameter f_Dstarq;
 
-        UsedParameter f_perp_Dstarq;
+            UsedParameter f_perp_Dstarq;
 
-        UsedParameter tau_Dstarq;
+            UsedParameter tau_Dstarq;
 
-        LeptonFlavorOption opt_l;
+            LeptonFlavorOption opt_l;
 
-        UsedParameter m_l;
+            UsedParameter m_l;
 
-        BooleanOption opt_cp_conjugate;
+            BooleanOption opt_cp_conjugate;
 
-        bool cp_conjugate;
+            bool cp_conjugate;
 
-        UsedParameter mu;
+            UsedParameter mu;
 
-        std::function<double (const double &)> m_D_msbar;
-        std::function<complex<double> ()> v_cD;
-        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
+            std::function<double(const double &)>                                 m_D_msbar;
+            std::function<complex<double>()>                                      v_cD;
+            std::function<WilsonCoefficients<ChargedCurrent>(LeptonFlavor, bool)> wc;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, options, "model"_ok),
-            model(Model::make(opt_model.value(), p, o)),
-            opt_q(o, options, "q"_ok),
-            hbar(p["QM::hbar"], u),
-            g_fermi(p["WET::G_Fermi"], u),
-            m_Dstarq(p["mass::D_" + opt_q.str() + "^*"], u),
-            f_Dstarq(p["decay-constant::D_" + opt_q.str() + "^*"], u),
-            f_perp_Dstarq(p["decay-constant::D_" + opt_q.str() + "^*,T"], u),
-            tau_Dstarq(p["life_time::D_" + opt_q.str() + "^*"], u),
-            opt_l(o, options, "l"_ok),
-            m_l(p["mass::" + opt_l.str()], u),
-            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            cp_conjugate(opt_cp_conjugate.value()),
-            mu(p[opt_q.str() + "c" + "nu" + opt_l.str() + opt_l.str() + "::mu"], u)
-        {
-            Context ctx("When constructing D_q^*+->l^+nu observable");
-
-            switch (opt_q.value())
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                opt_model(o, options, "model"_ok),
+                model(Model::make(opt_model.value(), p, o)),
+                opt_q(o, options, "q"_ok),
+                hbar(p["QM::hbar"], u),
+                g_fermi(p["WET::G_Fermi"], u),
+                m_Dstarq(p["mass::D_" + opt_q.str() + "^*"], u),
+                f_Dstarq(p["decay-constant::D_" + opt_q.str() + "^*"], u),
+                f_perp_Dstarq(p["decay-constant::D_" + opt_q.str() + "^*,T"], u),
+                tau_Dstarq(p["life_time::D_" + opt_q.str() + "^*"], u),
+                opt_l(o, options, "l"_ok),
+                m_l(p["mass::" + opt_l.str()], u),
+                opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+                cp_conjugate(opt_cp_conjugate.value()),
+                mu(p[opt_q.str() + "c" + "nu" + opt_l.str() + opt_l.str() + "::mu"], u)
             {
-                case QuarkFlavor::down:
-                    m_D_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
-                    v_cD      = [this]() -> complex<double> { return model->ckm_cd(); };
-                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
-                    break;
-                case QuarkFlavor::strange:
-                    m_D_msbar = [this](const double & mu) -> double { return model->m_s_msbar(mu); };
-                    v_cD      = [this]() -> complex<double> { return model->ckm_cs(); };
-                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_scnul(l, cp); };
-                    break;
-                default:
-                    throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
+                Context ctx("When constructing D_q^*+->l^+nu observable");
+
+                switch (opt_q.value())
+                {
+                    case QuarkFlavor::down:
+                        m_D_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
+                        v_cD      = [this]() -> complex<double> { return model->ckm_cd(); };
+                        wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
+                        break;
+                    case QuarkFlavor::strange:
+                        m_D_msbar = [this](const double & mu) -> double { return model->m_s_msbar(mu); };
+                        v_cD      = [this]() -> complex<double> { return model->ckm_cs(); };
+                        wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_scnul(l, cp); };
+                        break;
+                    default: throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
+                }
+                u.uses(*model);
             }
-            u.uses(*model);
-        }
 
-        inline double beta_l() const
-        {
-            return 1.0 - power_of<2>(m_l() / m_Dstarq());
-        }
+            inline double
+            beta_l() const
+            {
+                return 1.0 - power_of<2>(m_l() / m_Dstarq());
+            }
 
-        double decay_width() const
-        {
-            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), cp_conjugate);
+            double
+            decay_width() const
+            {
+                const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value(), cp_conjugate);
 
-            // masses
-            const double m_Dstarq = this->m_Dstarq(), m_Dstarq2 = m_Dstarq * m_Dstarq;
-            const double m_l      = this->m_l(),      m_l2      = m_l      * m_l;
+                // masses
+                const double m_Dstarq = this->m_Dstarq(), m_Dstarq2 = m_Dstarq * m_Dstarq;
+                const double m_l = this->m_l(), m_l2 = m_l * m_l;
 
-            // decay constants
-            const double f_Dstarq      = this->f_Dstarq(),      f_Dstarq2      = f_Dstarq      * f_Dstarq;
-            const double f_perp_Dstarq = this->f_perp_Dstarq(), f_perp_Dstarq2 = f_perp_Dstarq * f_perp_Dstarq;
+                // decay constants
+                const double f_Dstarq = this->f_Dstarq(), f_Dstarq2 = f_Dstarq * f_Dstarq;
+                const double f_perp_Dstarq = this->f_perp_Dstarq(), f_perp_Dstarq2 = f_perp_Dstarq * f_perp_Dstarq;
 
-            // cf. [PS:2023A], eq. (54), p. 17, using that all operators with right-handed neutrinos do not contribute
-            return power_of<2>(g_fermi * std::abs(this->v_cD()) * beta_l())
-                * m_Dstarq / (24.0 * M_PI)
-                * (
-                    f_Dstarq2 * (m_l2 + 2.0 * m_Dstarq2) * norm(wc.cvl() + wc.cvr())
-                    + 16.0 * f_perp_Dstarq2 * (2.0 * m_l2 + m_Dstarq2) * norm(wc.ct())
-                );
-        }
+                // cf. [PS:2023A], eq. (54), p. 17, using that all operators with right-handed neutrinos do not contribute
+                return power_of<2>(g_fermi * std::abs(this->v_cD()) * beta_l()) * m_Dstarq / (24.0 * M_PI)
+                       * (f_Dstarq2 * (m_l2 + 2.0 * m_Dstarq2) * norm(wc.cvl() + wc.cvr()) + 16.0 * f_perp_Dstarq2 * (2.0 * m_l2 + m_Dstarq2) * norm(wc.ct()));
+            }
 
-        double branching_ratio() const
-        {
-            return decay_width() * tau_Dstarq / hbar;
-        }
+            double
+            branching_ratio() const
+            {
+                return decay_width() * tau_Dstarq / hbar;
+            }
     };
 
-    const std::vector<OptionSpecification>
-    Implementation<DstarqToLeptonNeutrino>::options
-    {
+    const std::vector<OptionSpecification> Implementation<DstarqToLeptonNeutrino>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },   "false"_ov },
-        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov    },
-        { "q"_ok,            { "d"_ov, "s"_ov } }
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "q"_ok, { "d"_ov, "s"_ov } }
     };
 
     DstarqToLeptonNeutrino::DstarqToLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -153,9 +148,7 @@ namespace eos
     {
     }
 
-    DstarqToLeptonNeutrino::~DstarqToLeptonNeutrino()
-    {
-    }
+    DstarqToLeptonNeutrino::~DstarqToLeptonNeutrino() {}
 
     double
     DstarqToLeptonNeutrino::branching_ratio() const
@@ -169,11 +162,7 @@ namespace eos
         return _imp->decay_width();
     }
 
-    const std::set<ReferenceName>
-    DstarqToLeptonNeutrino::references
-    {
-        "DBG:2013A"_rn
-    };
+    const std::set<ReferenceName> DstarqToLeptonNeutrino::references{ "DBG:2013A"_rn };
 
     std::vector<OptionSpecification>::const_iterator
     DstarqToLeptonNeutrino::begin_options()
@@ -186,4 +175,4 @@ namespace eos
     {
         return Implementation<DstarqToLeptonNeutrino>::options.cend();
     }
-}
+} // namespace eos

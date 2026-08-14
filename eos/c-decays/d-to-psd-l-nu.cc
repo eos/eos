@@ -40,411 +40,418 @@ namespace eos
     {
         struct Amplitudes
         {
-            // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
-            complex<double> h_0;
-            complex<double> h_t;
-            complex<double> h_S;
-            complex<double> h_T;
-            complex<double> h_tS;
-            double v;
-            double p;
-            double NF;
+                // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
+                complex<double> h_0;
+                complex<double> h_t;
+                complex<double> h_S;
+                complex<double> h_T;
+                complex<double> h_tS;
+                double          v;
+                double          p;
+                double          NF;
         };
-    }
+    } // namespace d_to_psd_l_nu
 
-    template <>
-    struct Implementation<DToPseudoscalarLeptonNeutrino>
+    template <> struct Implementation<DToPseudoscalarLeptonNeutrino>
     {
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        Parameters parameters;
+            Parameters parameters;
 
-        QuarkFlavorOption opt_q;
-        SpecifiedOption opt_P;
+            QuarkFlavorOption opt_q;
+            SpecifiedOption   opt_P;
 
-        UsedParameter m_D;
+            UsedParameter m_D;
 
-        UsedParameter tau_D;
+            UsedParameter tau_D;
 
-        UsedParameter m_P;
+            UsedParameter m_P;
 
-        LeptonFlavorOption opt_l;
+            LeptonFlavorOption opt_l;
 
-        UsedParameter m_l;
+            UsedParameter m_l;
 
-        UsedParameter g_fermi;
+            UsedParameter g_fermi;
 
-        UsedParameter hbar;
+            UsedParameter hbar;
 
-        const double isospin_factor;
+            const double isospin_factor;
 
-        UsedParameter mu;
+            UsedParameter mu;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        std::function<double (const double &)> m_Q_msbar;
-        std::function<complex<double> ()> v_cQ;
-        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor, bool)> wc;
+            std::function<double(const double &)>                                 m_Q_msbar;
+            std::function<complex<double>()>                                      v_cQ;
+            std::function<WilsonCoefficients<ChargedCurrent>(LeptonFlavor, bool)> wc;
 
-        GSL::QAGS::Config int_config;
+            GSL::QAGS::Config int_config;
 
-        BooleanOption opt_cp_conjugate;
+            BooleanOption opt_cp_conjugate;
 
-        std::shared_ptr<FormFactors<PToP>> form_factors;
+            std::shared_ptr<FormFactors<PToP>> form_factors;
 
-        // { q, P } -> { process, Q, D_name, P_name, c_I }
-        // q: u, d, s: the spectar quark flavor
-        // P: K, pi, eta, eta_prime: the type of daughter meson
-        // process: string that can be used to obtain the form factor
-        // Q: the quark flavor in the weak transition
-        // D_name: name of the D meson
-        // P_name: name of the daughter meson
-        // c_I: isospin factor by which the amplitudes are multiplied
-        static const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>> process_map;
+            // { q, P } -> { process, Q, D_name, P_name, c_I }
+            // q: u, d, s: the spectar quark flavor
+            // P: K, pi, eta, eta_prime: the type of daughter meson
+            // process: string that can be used to obtain the form factor
+            // Q: the quark flavor in the weak transition
+            // D_name: name of the D meson
+            // P_name: name of the daughter meson
+            // c_I: isospin factor by which the amplitudes are multiplied
+            static const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>> process_map;
 
-        inline std::string _process() const
-        {
-            const QuarkFlavor q = opt_q.value();
-            const std::string P = opt_P.value();
-            const auto p = process_map.find(std::make_tuple(q, P));
-
-            if (p == process_map.end())
-                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
-
-            return std::get<0>(p->second);
-        }
-
-        inline QuarkFlavor _Q() const
-        {
-            const QuarkFlavor q = opt_q.value();
-            const std::string P = opt_P.value();
-            const auto p = process_map.find(std::make_tuple(q, P));
-
-            if (p == process_map.end())
-                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
-
-            return std::get<1>(p->second);
-        }
-
-
-        inline std::string _D() const
-        {
-            const QuarkFlavor q = opt_q.value();
-            const std::string P = opt_P.value();
-            const auto p = process_map.find(std::make_tuple(q, P));
-
-            if (p == process_map.end())
-                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
-
-            return std::get<2>(p->second);
-        }
-
-        inline std::string _P() const
-        {
-            const QuarkFlavor q = opt_q.value();
-            const std::string P = opt_P.value();
-            const auto p = process_map.find(std::make_tuple(q, P));
-
-            if (p == process_map.end())
-                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
-
-            return std::get<3>(p->second);
-        }
-
-        inline double _isospin_factor() const
-        {
-            const QuarkFlavor q = opt_q.value();
-            const std::string P = opt_P.value();
-            const auto p = process_map.find(std::make_tuple(q, P));
-
-            if (p == process_map.end())
-                throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
-
-            return std::get<4>(p->second);
-        }
-
-
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-            parameters(p),
-            opt_q(o, options, "q"_ok),
-            opt_P(o, options, "P"_ok),
-            m_D(p["mass::" + _D()], u),
-            tau_D(p["life_time::" + _D()], u),
-            m_P(p["mass::" + _P()], u),
-            opt_l(o, options, "l"_ok),
-            m_l(p["mass::" + opt_l.str()], u),
-            g_fermi(p["WET::G_Fermi"], u),
-            hbar(p["QM::hbar"], u),
-            isospin_factor(_isospin_factor()),
-            mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
-            int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
-            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
-        {
-            Context ctx("When constructing D->Plnu observable");
-
-            switch (_Q())
+            inline std::string
+            _process() const
             {
-                case QuarkFlavor::strange:
-                    m_Q_msbar = [this](const double & mu) -> double { return model->m_s_msbar(mu); };
-                    v_cQ      = [this]() -> complex<double> { return model->ckm_cs(); };
-                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_scnul(l, cp); };
-                    break;
-                case QuarkFlavor::down:
-                    m_Q_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
-                    v_cQ      = [this]() -> complex<double> { return model->ckm_cd(); };
-                    wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
-                    break;
-                default:
-                    throw InternalError("Invalid quark flavor: " + stringify(_Q()));
+                const QuarkFlavor q = opt_q.value();
+                const std::string P = opt_P.value();
+                const auto        p = process_map.find(std::make_tuple(q, P));
+
+                if (p == process_map.end())
+                {
+                    throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
+                }
+
+                return std::get<0>(p->second);
             }
 
-            u.uses(*form_factors);
-            u.uses(*model);
-        }
-
-        d_to_psd_l_nu::Amplitudes amplitudes(const double & q2) const
-        {
-            // NP contributions in EFT including tensor operator (cf. [DDS:2014A]).
-            auto wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
-            const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0); // in SM cvl=1 => gV contains NP contribution of cvl
-            const complex<double> gS = wc.csr() + wc.csl();
-            const complex<double> gT = wc.ct();
-
-            // form factors
-            const double fp = form_factors->f_p(q2);
-            const double f0 = form_factors->f_0(q2);
-            const double fT = form_factors->f_t(q2);
-
-            // running quark masses
-            const double mcatmu = model->m_c_msbar(mu);
-            const double mDatmu = m_Q_msbar(mu);
-
-            const double m_D = this->m_D(), m_D2 = m_D * m_D;
-            const double m_P = this->m_P(), m_P2 = m_P * m_P;
-            const double lam = eos::lambda(m_D2, m_P2, q2);
-            const double p = std::sqrt(lam) / (2.0 * m_D);
-
-            // v = lepton velocity in the dilepton rest frame
-            const double m_l = this->m_l();
-            const double v = (1.0 - m_l * m_l / q2);
-            const double ml_hat = std::sqrt(1.0 - v);
-            const double NF = v * v * q2 * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI) * m_D2);
-
-            // isospin factor
-            const double isospin = this->isospin_factor;
-
-            // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
-            d_to_psd_l_nu::Amplitudes result;
-
-            if (q2 >= power_of<2>(m_l) && q2 <= power_of<2>(m_D - m_P))
+            inline QuarkFlavor
+            _Q() const
             {
-                result.h_0  =   isospin * 2.0 * m_D * p * fp * (1.0 + gV) / std::sqrt(q2);
-                result.h_t  =   isospin * (1.0 + gV) * (m_D2 - m_P2) * f0 / std::sqrt(q2);
-                result.h_S  = - isospin * gS * (m_D2 - m_P2) * f0 / (mcatmu - mDatmu);
-                result.h_T  = - isospin * 2.0 * m_D * p * fT * gT / (m_D + m_P);
+                const QuarkFlavor q = opt_q.value();
+                const std::string P = opt_P.value();
+                const auto        p = process_map.find(std::make_tuple(q, P));
 
-                result.h_tS = result.h_t - result.h_S / ml_hat;
+                if (p == process_map.end())
+                {
+                    throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
+                }
 
-                result.v  = v;
-                result.p  = p;
-                result.NF = NF;
-            }
-            else // set amplitudes to zero outside of physical phase space
-            {
-                result.h_0  = 0.0;
-                result.h_t  = 0.0;
-                result.h_S  = 0.0;
-                result.h_T  = 0.0;
-
-                result.h_tS = 0.0;
-
-                result.v  = 0.99; // avoid NaN in std::sqrt(1.0 - v);
-                result.p  = 0.0;
-                result.NF = 0.0;
+                return std::get<1>(p->second);
             }
 
-            return result;
-        }
+            inline std::string
+            _D() const
+            {
+                const QuarkFlavor q = opt_q.value();
+                const std::string P = opt_P.value();
+                const auto        p = process_map.find(std::make_tuple(q, P));
 
-        // normalized (|V_cQ| = 1) two-fold-distribution, cf. [DDS:2014A], eq. (12), p. 6
-        double normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const
-        {
-            //  d^2 Gamma, cf. [DDS:2014A], p. 6, eq. (13)
-            double c_thl_2 = c_theta_l * c_theta_l;
-            double s_thl_2 = 1.0 - c_thl_2;
-            double c_2_thl = 2.0 * c_thl_2 - 1.0;
+                if (p == process_map.end())
+                {
+                    throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
+                }
 
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+                return std::get<2>(p->second);
+            }
 
-            return 2.0 * amp.NF * amp.p * (
-                       std::norm(amp.h_0) * s_thl_2
-                       + (1.0 - amp.v) * std::norm(amp.h_0 * c_theta_l - amp.h_tS)
-                       + 8.0 * ( ((2.0 - amp.v) + amp.v * c_2_thl) * std::norm(amp.h_T)
-                           - std::sqrt(1.0 - amp.v) * std::real(amp.h_T * (std::conj(amp.h_0) - std::conj(amp.h_tS) * c_theta_l)))
-                   );
-        }
+            inline std::string
+            _P() const
+            {
+                const QuarkFlavor q = opt_q.value();
+                const std::string P = opt_P.value();
+                const auto        p = process_map.find(std::make_tuple(q, P));
 
-        // normalized to |V_cQ = 1|, obtained using cf. [DDS:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
-        double normalized_differential_decay_width(const double & q2) const
-        {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+                if (p == process_map.end())
+                {
+                    throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
+                }
 
-            return 4.0 / 3.0 * amp.NF * amp.p * (
-                       std::norm(amp.h_0) * (3.0 - amp.v)
-                       + 3.0 * std::norm(amp.h_tS) * (1.0 - amp.v)
-                       + 16.0 * std::norm(amp.h_T) * (3.0 - 2.0 * amp.v)
-                       - 24.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0))
-                   );
-        }
+                return std::get<3>(p->second);
+            }
 
-        double normalized_differential_decay_width_p(const double & q2) const
-        {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+            inline double
+            _isospin_factor() const
+            {
+                const QuarkFlavor q = opt_q.value();
+                const std::string P = opt_P.value();
+                const auto        p = process_map.find(std::make_tuple(q, P));
 
-            return 4.0 / 3.0 * amp.NF * amp.p * (
-                       std::norm(amp.h_0) * (3.0 - amp.v)
-                       );
-        }
+                if (p == process_map.end())
+                {
+                    throw InternalError("Unsupported combination of q = " + stringify(q) + ", P = " + P);
+                }
 
-        double normalized_differential_decay_width_0(const double & q2) const
-        {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+                return std::get<4>(p->second);
+            }
 
-            return 4.0 / 3.0 * amp.NF * amp.p * (
-                       3.0 * std::norm(amp.h_t) * (1.0 - amp.v)
-                   );
-        }
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+                parameters(p),
+                opt_q(o, options, "q"_ok),
+                opt_P(o, options, "P"_ok),
+                m_D(p["mass::" + _D()], u),
+                tau_D(p["life_time::" + _D()], u),
+                m_P(p["mass::" + _P()], u),
+                opt_l(o, options, "l"_ok),
+                m_l(p["mass::" + opt_l.str()], u),
+                g_fermi(p["WET::G_Fermi"], u),
+                hbar(p["QM::hbar"], u),
+                isospin_factor(_isospin_factor()),
+                mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
+                int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
+                opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+                form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
+            {
+                Context ctx("When constructing D->Plnu observable");
 
-        // obtained using cf. [DDS:2014A], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
-        // in eq. (12) from cf. [DDS:2014A], (H0 * cos(theta) - HtS)^2 we interpret as |H0 * cos(theta) - HtS|^2
-        // crosschecked against [BFNT:2019A] and [STTW:2013A]
-        double numerator_differential_a_fb_leptonic(const double & q2) const
-        {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+                switch (_Q())
+                {
+                    case QuarkFlavor::strange:
+                        m_Q_msbar = [this](const double & mu) -> double { return model->m_s_msbar(mu); };
+                        v_cQ      = [this]() -> complex<double> { return model->ckm_cs(); };
+                        wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_scnul(l, cp); };
+                        break;
+                    case QuarkFlavor::down:
+                        m_Q_msbar = [this](const double & mu) -> double { return model->m_d_msbar(mu); };
+                        v_cQ      = [this]() -> complex<double> { return model->ckm_cd(); };
+                        wc        = [this](LeptonFlavor l, bool cp) -> WilsonCoefficients<ChargedCurrent> { return model->wet_dcnul(l, cp); };
+                        break;
+                    default: throw InternalError("Invalid quark flavor: " + stringify(_Q()));
+                }
 
-            return - 4.0 * amp.NF * amp.p * (
-                       std::real(amp.h_0 * std::conj(amp.h_tS)) * (1.0 - amp.v)
-                       - 4.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_tS))
-                   );
-        }
+                u.uses(*form_factors);
+                u.uses(*model);
+            }
 
-        // obtained using cf. [DDS:2014A], eq. (12) and [BHP:2007A] eq.(1.2)
-        double numerator_differential_flat_term(const double & q2) const
-        {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+            d_to_psd_l_nu::Amplitudes
+            amplitudes(const double & q2) const
+            {
+                // NP contributions in EFT including tensor operator (cf. [DDS:2014A]).
+                auto                  wc = this->wc(opt_l.value(), opt_cp_conjugate.value());
+                const complex<double> gV = wc.cvr() + (wc.cvl() - 1.0); // in SM cvl=1 => gV contains NP contribution of cvl
+                const complex<double> gS = wc.csr() + wc.csl();
+                const complex<double> gT = wc.ct();
 
-            return amp.NF * amp.p * (
-                       (std::norm(amp.h_0) + std::norm(amp.h_tS)) * (1.0 - amp.v)
-                       + 16.0 * std::norm(amp.h_T)
-                       - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0))
-                   );
-        }
+                // form factors
+                const double fp = form_factors->f_p(q2);
+                const double f0 = form_factors->f_0(q2);
+                const double fT = form_factors->f_t(q2);
 
-        // obtained using cf. [STTW:2013A], eq. (49a - 49b)
-        double numerator_differential_lepton_polarization(const double & q2) const
-        {
-            d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+                // running quark masses
+                const double mcatmu = model->m_c_msbar(mu);
+                const double mDatmu = m_Q_msbar(mu);
 
-            const double dGplus = (std::norm(amp.h_0) + 3.0 * std::norm(amp.h_t)) * (1.0 - amp.v) / 2.0
-                                + 3.0 / 2.0 * std::norm(amp.h_S)
-                                + 8.0 * std::norm(amp.h_T)
-                                - std::sqrt(1.0 - amp.v) * std::real(3.0 * amp.h_t * std::conj(amp.h_S)
-                                                                   + 4.0 * amp.h_0 * std::conj(amp.h_T));
-            const double dGminus = std::norm(amp.h_0)
-                                 + 16.0 * std::norm(amp.h_T) * (1.0 - amp.v)
-                                 - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_0 * std::conj(amp.h_T));
+                const double m_D = this->m_D(), m_D2 = m_D * m_D;
+                const double m_P = this->m_P(), m_P2 = m_P * m_P;
+                const double lam = eos::lambda(m_D2, m_P2, q2);
+                const double p   = std::sqrt(lam) / (2.0 * m_D);
 
-            return 8.0 / 3.0 * amp.NF * amp.p * (dGplus - dGminus);
-        }
+                // v = lepton velocity in the dilepton rest frame
+                const double m_l    = this->m_l();
+                const double v      = (1.0 - m_l * m_l / q2);
+                const double ml_hat = std::sqrt(1.0 - v);
+                const double NF     = v * v * q2 * power_of<2>(g_fermi()) / (256.0 * power_of<3>(M_PI) * m_D2);
 
-        // differential decay width
-        double differential_decay_width(const double & q2) const
-        {
-            return normalized_differential_decay_width(q2) * std::norm(v_cQ());
-        }
+                // isospin factor
+                const double isospin = this->isospin_factor;
 
-        // differential branching_ratio
-        double differential_branching_ratio(const double & q2) const
-        {
-            return differential_decay_width(q2) * tau_D / hbar;
-        }
+                // helicity amplitudes, cf. [DDS:2014A] eqs. 13-14
+                d_to_psd_l_nu::Amplitudes result;
 
-        // "normalized" (|V_cQ|=1) differential branching_ratio
-        double normalized_differential_branching_ratio(const double & q2) const
-        {
-            return normalized_differential_decay_width(q2) * tau_D / hbar;
-        }
+                if (q2 >= power_of<2>(m_l) && q2 <= power_of<2>(m_D - m_P))
+                {
+                    result.h_0 = isospin * 2.0 * m_D * p * fp * (1.0 + gV) / std::sqrt(q2);
+                    result.h_t = isospin * (1.0 + gV) * (m_D2 - m_P2) * f0 / std::sqrt(q2);
+                    result.h_S = -isospin * gS * (m_D2 - m_P2) * f0 / (mcatmu - mDatmu);
+                    result.h_T = -isospin * 2.0 * m_D * p * fT * gT / (m_D + m_P);
 
-        double pdf_q2(const double & q2) const
-        {
-            const double q2_min = power_of<2>(m_l());
-            const double q2_max = power_of<2>(m_D() - m_P());
+                    result.h_tS = result.h_t - result.h_S / ml_hat;
 
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
-            const double num   = normalized_differential_branching_ratio(q2);
-            const double denom = integrate<GSL::QAGS>(f, q2_min, q2_max, int_config);
+                    result.v  = v;
+                    result.p  = p;
+                    result.NF = NF;
+                }
+                else // set amplitudes to zero outside of physical phase space
+                {
+                    result.h_0 = 0.0;
+                    result.h_t = 0.0;
+                    result.h_S = 0.0;
+                    result.h_T = 0.0;
 
-            return num / denom;
-        }
+                    result.h_tS = 0.0;
 
-        double pdf_w(const double & w) const
-        {
-            const double m_D = this->m_D(), m_D2 = m_D * m_D;
-            const double m_P = this->m_P(), m_P2 = m_P * m_P;
-            const double q2  = m_D2 + m_P2 - 2.0 * m_D * m_P * w;
+                    result.v  = 0.99; // avoid NaN in std::sqrt(1.0 - v);
+                    result.p  = 0.0;
+                    result.NF = 0.0;
+                }
 
-            return 2.0 * m_D * m_P * pdf_q2(q2);
-        }
+                return result;
+            }
 
-        double integrated_pdf_q2(const double & q2_min, const double & q2_max) const
-        {
-            const double q2_abs_min = power_of<2>(m_l());
-            const double q2_abs_max = power_of<2>(m_D() - m_P());
+            // normalized (|V_cQ| = 1) two-fold-distribution, cf. [DDS:2014A], eq. (12), p. 6
+            double
+            normalized_two_differential_decay_width(const double & q2, const double & c_theta_l) const
+            {
+                //  d^2 Gamma, cf. [DDS:2014A], p. 6, eq. (13)
+                double c_thl_2 = c_theta_l * c_theta_l;
+                double s_thl_2 = 1.0 - c_thl_2;
+                double c_2_thl = 2.0 * c_thl_2 - 1.0;
 
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
-            const double num   = integrate<GSL::QAGS>(f, q2_min,     q2_max,     int_config);
-            const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max, int_config);
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
-            return num / denom / (q2_max - q2_min);
-        }
+                return 2.0 * amp.NF * amp.p
+                       * (std::norm(amp.h_0) * s_thl_2 + (1.0 - amp.v) * std::norm(amp.h_0 * c_theta_l - amp.h_tS)
+                          + 8.0
+                                    * (((2.0 - amp.v) + amp.v * c_2_thl) * std::norm(amp.h_T)
+                                       - std::sqrt(1.0 - amp.v) * std::real(amp.h_T * (std::conj(amp.h_0) - std::conj(amp.h_tS) * c_theta_l))));
+            }
 
-        double integrated_pdf_w(const double & w_min, const double & w_max) const
-        {
-            const double m_D    = this->m_D(), m_D2 = m_D * m_D;
-            const double m_P    = this->m_P(), m_P2 = m_P * m_P;
-            const double q2_max = m_D2 + m_P2 - 2.0 * m_D * m_P * w_min;
-            const double q2_min = m_D2 + m_P2 - 2.0 * m_D * m_P * w_max;
+            // normalized to |V_cQ = 1|, obtained using cf. [DDS:2014A], eq. (12), agrees with Sakaki'13 et al cf. [STTW:2013A]
+            double
+            normalized_differential_decay_width(const double & q2) const
+            {
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
 
-            return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
-        }
+                return 4.0 / 3.0 * amp.NF * amp.p
+                       * (std::norm(amp.h_0) * (3.0 - amp.v) + 3.0 * std::norm(amp.h_tS) * (1.0 - amp.v) + 16.0 * std::norm(amp.h_T) * (3.0 - 2.0 * amp.v)
+                          - 24.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0)));
+            }
+
+            double
+            normalized_differential_decay_width_p(const double & q2) const
+            {
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+
+                return 4.0 / 3.0 * amp.NF * amp.p * (std::norm(amp.h_0) * (3.0 - amp.v));
+            }
+
+            double
+            normalized_differential_decay_width_0(const double & q2) const
+            {
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+
+                return 4.0 / 3.0 * amp.NF * amp.p * (3.0 * std::norm(amp.h_t) * (1.0 - amp.v));
+            }
+
+            // obtained using cf. [DDS:2014A], eq. (12), defined as int_1^0 d^2Gamma - int_0^-1 d^2Gamma
+            // in eq. (12) from cf. [DDS:2014A], (H0 * cos(theta) - HtS)^2 we interpret as |H0 * cos(theta) - HtS|^2
+            // crosschecked against [BFNT:2019A] and [STTW:2013A]
+            double
+            numerator_differential_a_fb_leptonic(const double & q2) const
+            {
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+
+                return -4.0 * amp.NF * amp.p * (std::real(amp.h_0 * std::conj(amp.h_tS)) * (1.0 - amp.v) - 4.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_tS)));
+            }
+
+            // obtained using cf. [DDS:2014A], eq. (12) and [BHP:2007A] eq.(1.2)
+            double
+            numerator_differential_flat_term(const double & q2) const
+            {
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+
+                return amp.NF * amp.p
+                       * ((std::norm(amp.h_0) + std::norm(amp.h_tS)) * (1.0 - amp.v) + 16.0 * std::norm(amp.h_T)
+                          - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_T * std::conj(amp.h_0)));
+            }
+
+            // obtained using cf. [STTW:2013A], eq. (49a - 49b)
+            double
+            numerator_differential_lepton_polarization(const double & q2) const
+            {
+                d_to_psd_l_nu::Amplitudes amp(this->amplitudes(q2));
+
+                const double dGplus = (std::norm(amp.h_0) + 3.0 * std::norm(amp.h_t)) * (1.0 - amp.v) / 2.0 + 3.0 / 2.0 * std::norm(amp.h_S) + 8.0 * std::norm(amp.h_T)
+                                      - std::sqrt(1.0 - amp.v) * std::real(3.0 * amp.h_t * std::conj(amp.h_S) + 4.0 * amp.h_0 * std::conj(amp.h_T));
+                const double dGminus = std::norm(amp.h_0) + 16.0 * std::norm(amp.h_T) * (1.0 - amp.v) - 8.0 * std::sqrt(1.0 - amp.v) * std::real(amp.h_0 * std::conj(amp.h_T));
+
+                return 8.0 / 3.0 * amp.NF * amp.p * (dGplus - dGminus);
+            }
+
+            // differential decay width
+            double
+            differential_decay_width(const double & q2) const
+            {
+                return normalized_differential_decay_width(q2) * std::norm(v_cQ());
+            }
+
+            // differential branching_ratio
+            double
+            differential_branching_ratio(const double & q2) const
+            {
+                return differential_decay_width(q2) * tau_D / hbar;
+            }
+
+            // "normalized" (|V_cQ|=1) differential branching_ratio
+            double
+            normalized_differential_branching_ratio(const double & q2) const
+            {
+                return normalized_differential_decay_width(q2) * tau_D / hbar;
+            }
+
+            double
+            pdf_q2(const double & q2) const
+            {
+                const double q2_min = power_of<2>(m_l());
+                const double q2_max = power_of<2>(m_D() - m_P());
+
+                std::function<double(const double &)> f =
+                        std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
+                const double num   = normalized_differential_branching_ratio(q2);
+                const double denom = integrate<GSL::QAGS>(f, q2_min, q2_max, int_config);
+
+                return num / denom;
+            }
+
+            double
+            pdf_w(const double & w) const
+            {
+                const double m_D = this->m_D(), m_D2 = m_D * m_D;
+                const double m_P = this->m_P(), m_P2 = m_P * m_P;
+                const double q2 = m_D2 + m_P2 - 2.0 * m_D * m_P * w;
+
+                return 2.0 * m_D * m_P * pdf_q2(q2);
+            }
+
+            double
+            integrated_pdf_q2(const double & q2_min, const double & q2_max) const
+            {
+                const double q2_abs_min = power_of<2>(m_l());
+                const double q2_abs_max = power_of<2>(m_D() - m_P());
+
+                std::function<double(const double &)> f =
+                        std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, this, std::placeholders::_1);
+                const double num   = integrate<GSL::QAGS>(f, q2_min, q2_max, int_config);
+                const double denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max, int_config);
+
+                return num / denom / (q2_max - q2_min);
+            }
+
+            double
+            integrated_pdf_w(const double & w_min, const double & w_max) const
+            {
+                const double m_D = this->m_D(), m_D2 = m_D * m_D;
+                const double m_P = this->m_P(), m_P2 = m_P * m_P;
+                const double q2_max = m_D2 + m_P2 - 2.0 * m_D * m_P * w_min;
+                const double q2_min = m_D2 + m_P2 - 2.0 * m_D * m_P * w_max;
+
+                return integrated_pdf_q2(q2_min, q2_max) * (q2_max - q2_min) / (w_max - w_min);
+            }
     };
 
     const std::map<std::tuple<QuarkFlavor, std::string>, std::tuple<std::string, QuarkFlavor, std::string, std::string, double>>
-    Implementation<DToPseudoscalarLeptonNeutrino>::Implementation::process_map
-    {
-        { { QuarkFlavor::up,      "pi"        }, { "D->pi",          QuarkFlavor::down,    "D_u", "pi^+",      1.0                  } },
-        { { QuarkFlavor::down,    "pi"        }, { "D->pi",          QuarkFlavor::down,    "D_d", "pi^0",      1.0 / std::sqrt(2.0) } },
-        { { QuarkFlavor::strange, "K"         }, { "D_s->K",         QuarkFlavor::down,    "D_s", "K_d",       1.0                  } },
-        { { QuarkFlavor::up,      "K"         }, { "D->K",           QuarkFlavor::strange, "D_u", "K_u",       1.0                  } },
-        { { QuarkFlavor::down,    "K"         }, { "D->K",           QuarkFlavor::strange, "D_d", "K_d",       1.0                  } },
-        // Due to eta-eta' mixing, we implement all the isospin factors at the level of the form-factors.
-        { { QuarkFlavor::down,    "eta"       }, { "D->eta",         QuarkFlavor::down,    "D_d", "eta",       1.0                  } },
-        { { QuarkFlavor::down,    "eta_prime" }, { "D->eta_prime",   QuarkFlavor::down,    "D_d", "eta_prime", 1.0                  } },
-        { { QuarkFlavor::strange, "eta"       }, { "D_s->eta",       QuarkFlavor::strange, "D_s", "eta",       1.0                  } },
-        { { QuarkFlavor::strange, "eta_prime" }, { "D_s->eta_prime", QuarkFlavor::strange, "D_s", "eta_prime", 1.0                  } },
+            Implementation<DToPseudoscalarLeptonNeutrino>::Implementation::process_map{
+                {             { QuarkFlavor::up, "pi" },                  { "D->pi", QuarkFlavor::down, "D_u", "pi^+", 1.0 } },
+                {           { QuarkFlavor::down, "pi" }, { "D->pi", QuarkFlavor::down, "D_d", "pi^0", 1.0 / std::sqrt(2.0) } },
+                {         { QuarkFlavor::strange, "K" },                  { "D_s->K", QuarkFlavor::down, "D_s", "K_d", 1.0 } },
+                {              { QuarkFlavor::up, "K" },                 { "D->K", QuarkFlavor::strange, "D_u", "K_u", 1.0 } },
+                {            { QuarkFlavor::down, "K" },                 { "D->K", QuarkFlavor::strange, "D_d", "K_d", 1.0 } },
+                // Due to eta-eta' mixing, we implement all the isospin factors at the level of the form-factors.
+                {          { QuarkFlavor::down, "eta" },                  { "D->eta", QuarkFlavor::down, "D_d", "eta", 1.0 } },
+                {    { QuarkFlavor::down, "eta_prime" },      { "D->eta_prime", QuarkFlavor::down, "D_d", "eta_prime", 1.0 } },
+                {       { QuarkFlavor::strange, "eta" },             { "D_s->eta", QuarkFlavor::strange, "D_s", "eta", 1.0 } },
+                { { QuarkFlavor::strange, "eta_prime" }, { "D_s->eta_prime", QuarkFlavor::strange, "D_s", "eta_prime", 1.0 } },
     };
 
-    const std::vector<OptionSpecification>
-    Implementation<DToPseudoscalarLeptonNeutrino>::options
-    {
+    const std::vector<OptionSpecification> Implementation<DToPseudoscalarLeptonNeutrino>::options{
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },                 "false"_ov },
-        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov },               "mu"_ov    },
-        { "P"_ok,            { "pi"_ov, "K"_ov, "eta"_ov, "eta_prime"_ov } },
-        { "q"_ok,            { "u"_ov, "d"_ov, "s"_ov },                  "u"_ov     },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "P"_ok, { "pi"_ov, "K"_ov, "eta"_ov, "eta_prime"_ov } },
+        { "q"_ok, { "u"_ov, "d"_ov, "s"_ov }, "u"_ov },
     };
 
     DToPseudoscalarLeptonNeutrino::DToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -452,9 +459,7 @@ namespace eos
     {
     }
 
-    DToPseudoscalarLeptonNeutrino::~DToPseudoscalarLeptonNeutrino()
-    {
-    }
+    DToPseudoscalarLeptonNeutrino::~DToPseudoscalarLeptonNeutrino() {}
 
     // normalized (|V_cQ|=1) two-fold-distribution, cf. [DDS:2014A], eq. (13), p. 6
     double
@@ -472,8 +477,7 @@ namespace eos
     double
     DToPseudoscalarLeptonNeutrino::integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::differential_branching_ratio,
-                _imp.get(), std::placeholders::_1);
+        std::function<double(const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::differential_branching_ratio, _imp.get(), std::placeholders::_1);
 
         return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
@@ -489,8 +493,8 @@ namespace eos
     double
     DToPseudoscalarLeptonNeutrino::normalized_integrated_branching_ratio(const double & q2_min, const double & q2_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio,
-                                                             _imp.get(), std::placeholders::_1);
+        std::function<double(const double &)> f =
+                std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_branching_ratio, _imp.get(), std::placeholders::_1);
 
         return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
@@ -499,8 +503,8 @@ namespace eos
     double
     DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_p(const double & q2_min, const double & q2_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_p,
-                                                             _imp.get(), std::placeholders::_1);
+        std::function<double(const double &)> f =
+                std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_p, _imp.get(), std::placeholders::_1);
 
         return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
@@ -508,8 +512,8 @@ namespace eos
     double
     DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width_0(const double & q2_min, const double & q2_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_0,
-                                                             _imp.get(), std::placeholders::_1);
+        std::function<double(const double &)> f =
+                std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width_0, _imp.get(), std::placeholders::_1);
 
         return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
@@ -517,8 +521,7 @@ namespace eos
     double
     DToPseudoscalarLeptonNeutrino::normalized_integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
-        std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
-                                                             _imp.get(), std::placeholders::_1);
+        std::function<double(const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width, _imp.get(), std::placeholders::_1);
 
         return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
     }
@@ -534,15 +537,15 @@ namespace eos
     {
         double integrated_numerator;
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_a_fb_leptonic,
-                                                                 _imp.get(), std::placeholders::_1);
+            std::function<double(const double &)> f =
+                    std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_a_fb_leptonic, _imp.get(), std::placeholders::_1);
             integrated_numerator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         double integrated_denominator;
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
-                                                                 _imp.get(), std::placeholders::_1);
+            std::function<double(const double &)> f =
+                    std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width, _imp.get(), std::placeholders::_1);
             integrated_denominator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
@@ -560,15 +563,15 @@ namespace eos
     {
         double integrated_numerator;
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_flat_term,
-                                                                 _imp.get(), std::placeholders::_1);
+            std::function<double(const double &)> f =
+                    std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_flat_term, _imp.get(), std::placeholders::_1);
             integrated_numerator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         double integrated_denominator;
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
-                                                                 _imp.get(), std::placeholders::_1);
+            std::function<double(const double &)> f =
+                    std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width, _imp.get(), std::placeholders::_1);
             integrated_denominator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
@@ -586,15 +589,15 @@ namespace eos
     {
         double integrated_numerator;
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_lepton_polarization,
-                                                                 _imp.get(), std::placeholders::_1);
+            std::function<double(const double &)> f =
+                    std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::numerator_differential_lepton_polarization, _imp.get(), std::placeholders::_1);
             integrated_numerator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
         double integrated_denominator;
         {
-            std::function<double (const double &)> f = std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width,
-                                                                 _imp.get(), std::placeholders::_1);
+            std::function<double(const double &)> f =
+                    std::bind(&Implementation<DToPseudoscalarLeptonNeutrino>::normalized_differential_decay_width, _imp.get(), std::placeholders::_1);
             integrated_denominator = integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
         }
 
@@ -625,29 +628,19 @@ namespace eos
         return _imp->integrated_pdf_w(w_min, w_max);
     }
 
-    const std::string
-    DToPseudoscalarLeptonNeutrino::description = "\
+    const std::string DToPseudoscalarLeptonNeutrino::description = "\
     The decay D->P l nu, where both D=(c qbar) and P=(Q qbar) are pseudoscalars, and l=e,mu,tau is a lepton.";
 
-    const std::string
-    DToPseudoscalarLeptonNeutrino::kinematics_description_q2 = "\
+    const std::string DToPseudoscalarLeptonNeutrino::kinematics_description_q2 = "\
     The invariant mass of the l-nubar pair in GeV^2.";
 
-    const std::string
-    DToPseudoscalarLeptonNeutrino::kinematics_description_w = "\
+    const std::string DToPseudoscalarLeptonNeutrino::kinematics_description_w = "\
     The recoil parameter of the D and P states, with w=1 corresponding to zero recoil.";
 
-    const std::string
-    DToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l = "\
+    const std::string DToPseudoscalarLeptonNeutrino::kinematics_description_c_theta_l = "\
     The cosine of the polar angle theta_l between the charged lepton and the direction opposite to P(seudoscalar) meson in the l-nubar rest frame.";
 
-    const std::set<ReferenceName>
-    DToPseudoscalarLeptonNeutrino::references
-    {
-        "S:1982A"_rn,
-        "DDS:2014A"_rn,
-        "STTW:2013A"_rn
-    };
+    const std::set<ReferenceName> DToPseudoscalarLeptonNeutrino::references{ "S:1982A"_rn, "DDS:2014A"_rn, "STTW:2013A"_rn };
 
     std::vector<OptionSpecification>::const_iterator
     DToPseudoscalarLeptonNeutrino::begin_options()
@@ -660,4 +653,4 @@ namespace eos
     {
         return Implementation<DToPseudoscalarLeptonNeutrino>::options.cend();
     }
-}
+} // namespace eos

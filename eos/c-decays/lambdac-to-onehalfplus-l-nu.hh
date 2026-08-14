@@ -33,9 +33,7 @@ namespace eos
     /*
      * Decay: Lambda_c -> Baryon(1/2+) lnu
      */
-    class LambdaCToOneHalfPlusLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaCToOneHalfPlusLeptonNeutrino>
+    class LambdaCToOneHalfPlusLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<LambdaCToOneHalfPlusLeptonNeutrino>
     {
         public:
             LambdaCToOneHalfPlusLeptonNeutrino(const Parameters &, const Options &);
@@ -67,8 +65,8 @@ namespace eos
             double integrated_k4s(const double & q2_min, const double & q2_max) const;
 
             /*!
-            * Descriptions of the process and its kinematics.
-            */
+             * Descriptions of the process and its kinematics.
+             */
             static const std::string description;
             static const std::string kinematics_description_q2;
             static const std::string kinematics_description_c_theta_l;
@@ -86,6 +84,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif
