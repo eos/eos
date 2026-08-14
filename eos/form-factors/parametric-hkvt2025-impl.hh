@@ -26,6 +26,7 @@
 #include <eos/maths/power-of.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/diagnostics.hh>
+#include <eos/utils/log.hh>
 
 #include <boost/math/special_functions/legendre.hpp>
 
@@ -157,6 +158,13 @@ namespace eos
         scattering_amplitudes(ScatteringAmplitudeFactory<PPToPP>::create("pipi->pipi::" + o.get("scattering-amplitudes"_ok, "HKvT2025"_ov).str(), p, o)),
         charge(traits.charge_map.at(opt_C.value()))
     {
+        static const Log::OneTimeMessage message_HKvT2025_FFs
+        (
+            "HKvT2025FormFactors",
+            ll_warning,
+            "This form factor parametrization is not a general one and requires careful attention."
+        );
+
         switch_L[0] = (opt_L.value() && PartialWave::S);
         switch_L[1] = (opt_L.value() && PartialWave::P);
         switch_L[2] = (opt_L.value() && PartialWave::D);
