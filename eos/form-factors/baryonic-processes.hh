@@ -117,14 +117,8 @@ namespace eos
 
     struct LambdaBToLambdaC2595 {
         static constexpr const char * label = "Lambda_b->Lambda_c(2595)";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 2.59225;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // pair production threshold: Lambda_b + Lambda_c(2625)
-        static constexpr double tp = (m1 + m2) * (m1 + m2);
+        static constexpr const char * name_1 = "mass::Lambda_b";
+        static constexpr const char * name_2 = "mass::Lambda_c(2595)";
         // first resonances sorted by spin/parity
         // we use the shifts from [DLM:2015A], table VII.
         static constexpr double mBc = 6.2751;
@@ -140,14 +134,8 @@ namespace eos
 
     struct LambdaBToLambdaC2625 {
         static constexpr const char * label = "Lambda_b->Lambda_c(2625)";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 2.62811;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
-        // pair production threshold: Lambda_b + Lambda_c(2625)
-        static constexpr double tp = (m1 + m2) * (m1 + m2);
+        static constexpr const char * name_1 = "mass::Lambda_b";
+        static constexpr const char * name_2 = "mass::Lambda_c(2625)";
         // first resonances sorted by spin/parity
         // we use the shifts from [DLM:2015A], table VII.
         static constexpr double mBc = 6.2751;

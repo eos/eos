@@ -385,6 +385,20 @@ groups:
           max:     +5.61951
           latex:   '$m_{\Lambda_b}^\mathrm{HME}$'
           unit:     'GeV'
+      'mass::Lambda_c(2595)@HME' :
+          central: +2.59225
+          min:     +2.59225
+          max:     +2.59225
+          latex:   '$m_{\Lambda_c(2595)}^\mathrm{HME}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG:2016A], p. 175'
+      'mass::Lambda_c(2625)@HME' :
+          central: +2.62811
+          min:     +2.62811
+          max:     +2.62811
+          latex:   '$m_{\Lambda_c(2625)}^\mathrm{HME}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG:2016A], p. 175'
   # }}}
 
   # Pair-production thresholds t_+ used in the SSE form factor parametrization
