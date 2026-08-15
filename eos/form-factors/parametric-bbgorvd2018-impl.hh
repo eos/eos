@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2016, 2017 Danny van Dyk
- * Copyright (c) 2017 Elena Graverini
- * Copyright (c) 2017, 2018 Marzia Bordone
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2014-2026 Danny van Dyk
+ * Copyright (c) 2017      Elena Graverini
+ * Copyright (c) 2017-2018 Marzia Bordone
+ * Copyright (c) 2018      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -37,7 +37,9 @@ namespace eos
         _zeta_max(p["Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET"], *this),
         _rho(p["Lambda_b->Lambda_c^*::rho@HQET"], *this),
         _delta_3b(p["Lambda_b->Lambda_c^*::delta_3b@HQET"], *this),
-        _rho_3b(p["Lambda_b->Lambda_c^*::rho_3b@HQET"], *this)
+        _rho_3b(p["Lambda_b->Lambda_c^*::rho_3b@HQET"], *this),
+        mLb(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+        mLcs(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this))
     {
         uses(_b_to_c);
     }
@@ -67,8 +69,8 @@ namespace eos
 
         // leading-power IWF
         double result = C_1 * sp;
-        result += (mLb + mLcs) / (mLb - mLcs) * (mLb2 - mLcs2 + s) / (2.0 * mLb ) * (lambdabar      + C_2 * sp / (mLb + mLcs));
-        result -= (mLb + mLcs) / (mLb - mLcs) * (mLb2 - mLcs2 - s) / (2.0 * mLcs) * (lambdabarprime - C_3 * sp / (mLb + mLcs));
+        result += (mLb + mLcs) / (mLb - mLcs) * (mLb2() - mLcs2() + s) / (2.0 * mLb ) * (lambdabar()      + C_2 * sp / (mLb + mLcs));
+        result -= (mLb + mLcs) / (mLb - mLcs) * (mLb2() - mLcs2() - s) / (2.0 * mLcs) * (lambdabarprime() - C_3 * sp / (mLb + mLcs));
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -95,7 +97,7 @@ namespace eos
         // leading-power IWF
         double result = C_1 + sp * (C_2 * mLcs + C_3 * mLb) / (2.0 * mLb * mLcs * (mLb + mLcs));
         result *= sm;
-        result += (mLb - mLcs) / (mLb + mLcs) * ((mLb2 - mLcs2 + s) / (2.0 * mLb) * lambdabar - (mLb2 - mLcs2 - s) / (2.0 * mLcs) * lambdabarprime);
+        result += (mLb - mLcs) / (mLb + mLcs) * ((mLb2() - mLcs2() + s) / (2.0 * mLb) * lambdabar() - (mLb2() - mLcs2() - s) / (2.0 * mLcs) * lambdabarprime());
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -118,7 +120,7 @@ namespace eos
         const double C_1 = _b_to_c.c_1_vector(omegabar);
 
         // leading-power IWF
-        double result = C_1 * sm + (3.0 * mLb2 + mLcs2 - s) / (2.0 * mLb) * lambdabar - (mLb2 + 3.0 * mLcs2 - s) / (2.0 * mLcs) * lambdabarprime;
+        double result = C_1 * sm + (3.0 * mLb2() + mLcs2() - s) / (2.0 * mLb) * lambdabar() - (mLb2() + 3.0 * mLcs2() - s) / (2.0 * mLcs) * lambdabarprime();
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -145,8 +147,8 @@ namespace eos
 
         // leading-power IWF
         double result = C_1 * sm;
-        result += (mLb - mLcs) / (mLb + mLcs) * (mLb2 - mLcs2 + s) / (2.0 * mLb ) * (lambdabar      - C_2 * sm / (mLb - mLcs));
-        result -= (mLb - mLcs) / (mLb + mLcs) * (mLb2 - mLcs2 - s) / (2.0 * mLcs) * (lambdabarprime + C_3 * sm / (mLb - mLcs));
+        result += (mLb - mLcs) / (mLb + mLcs) * (mLb2() - mLcs2() + s) / (2.0 * mLb ) * (lambdabar()      - C_2 * sm / (mLb - mLcs));
+        result -= (mLb - mLcs) / (mLb + mLcs) * (mLb2() - mLcs2() - s) / (2.0 * mLcs) * (lambdabarprime() + C_3 * sm / (mLb - mLcs));
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -173,7 +175,7 @@ namespace eos
         // leading-power IWF
         double result = C_1 - sm * (C_2 * mLcs + C_3 * mLb) / (2.0 * mLb * mLcs * (mLb - mLcs));
         result *= sp;
-        result += (mLb + mLcs) / (mLb - mLcs) * ((mLb2 - mLcs2 + s) / (2.0 * mLb) * lambdabar - (mLb2 - mLcs2 - s) / (2.0 * mLcs) * lambdabarprime);
+        result += (mLb + mLcs) / (mLb - mLcs) * ((mLb2() - mLcs2() + s) / (2.0 * mLb) * lambdabar() - (mLb2() - mLcs2() - s) / (2.0 * mLcs) * lambdabarprime());
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -196,7 +198,7 @@ namespace eos
         const double C_1 = _b_to_c.c_1_axialvector(omegabar);
 
         // leading-power IWF
-        double result = C_1 * sp + (3.0 * mLb2 + mLcs2 - s) / (2.0 * mLb) * lambdabar - (mLb2 + 3.0 * mLcs2 - s) / (2.0 * mLcs) * lambdabarprime;
+        double result = C_1 * sp + (3.0 * mLb2() + mLcs2() - s) / (2.0 * mLb) * lambdabar() - (mLb2() + 3.0 * mLcs2() - s) / (2.0 * mLcs) * lambdabarprime();
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -214,9 +216,9 @@ namespace eos
     {
         Diagnostics results;
 
-        // s = s_max
+        // s = s_max()
         {
-            const double s        = s_max;
+            const double s        = s_max();
             const double omega    = this->omega(s);
             const double omegabar = this->omegabar(s);
             const double C_1_v    = _b_to_c.c_1_vector(omegabar);
@@ -236,8 +238,8 @@ namespace eos
             results.add({ C_1_a,          "C_1_a(s_max)"    });
             results.add({ C_2_a,          "C_2_a(s_max)"    });
             results.add({ C_3_a,          "C_3_a(s_max)"    });
-            results.add({ lambdabar,      "LambdaBar"       });
-            results.add({ lambdabarprime, "LambdaBar'"      });
+            results.add({ lambdabar(),      "LambdaBar"     });
+            results.add({ lambdabarprime(), "LambdaBar'"    });
             results.add({ f_time_v(s),    "f_{time}"        });
             results.add({ f_long_v(s),    "f_{long}"        });
             results.add({ f_perp_v(s),    "f_{perp}"        });
@@ -246,9 +248,9 @@ namespace eos
             results.add({ f_perp_a(s),    "g_{perp}"        });
         }
 
-        // s = s_max - 3.0
+        // s = s_max() - 3.0
         {
-            const double s        = s_max - 3.0;
+            const double s        = s_max() - 3.0;
             const double omega    = this->omega(s);
             const double omegabar = this->omegabar(s);
             const double C_1_v    = _b_to_c.c_1_vector(omegabar);
@@ -268,8 +270,8 @@ namespace eos
             results.add({ C_1_a,          "C_1_a(s_max)"    });
             results.add({ C_2_a,          "C_2_a(s_max)"    });
             results.add({ C_3_a,          "C_3_a(s_max)"    });
-            results.add({ lambdabar,      "LambdaBar"       });
-            results.add({ lambdabarprime , "LambdaBar'"      });
+            results.add({ lambdabar(),      "LambdaBar"     });
+            results.add({ lambdabarprime(), "LambdaBar'"    });
             results.add({ f_time_v(s),    "f_{time}"        });
             results.add({ f_long_v(s),    "f_{long}"        });
             results.add({ f_perp_v(s),    "f_{perp}"        });
@@ -291,7 +293,9 @@ namespace eos
         _zeta_max(p["Lambda_b->Lambda_c^*::zeta(q^2_max)@HQET"], *this),
         _rho(p["Lambda_b->Lambda_c^*::rho@HQET"], *this),
         _delta_3b(p["Lambda_b->Lambda_c^*::delta_3b@HQET"], *this),
-        _rho_3b(p["Lambda_b->Lambda_c^*::rho_3b@HQET"], *this)
+        _rho_3b(p["Lambda_b->Lambda_c^*::rho_3b@HQET"], *this),
+        mLb(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+        mLcs(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this))
     {
         uses(_b_to_c);
     }
@@ -321,8 +325,8 @@ namespace eos
 
         // leading-power IWF
         double result = C_1 * sp;
-        result += (mLb + mLcs) / (mLb - mLcs) * (mLb2 - mLcs2 + s) / (2.0 * mLb ) * (lambdabar      + C_2 * sp / (mLb + mLcs));
-        result -= (mLb + mLcs) / (mLb - mLcs) * (mLb2 - mLcs2 - s) / (2.0 * mLcs) * (lambdabarprime - C_3 * sp / (mLb + mLcs));
+        result += (mLb + mLcs) / (mLb - mLcs) * (mLb2() - mLcs2() + s) / (2.0 * mLb ) * (lambdabar()      + C_2 * sp / (mLb + mLcs));
+        result -= (mLb + mLcs) / (mLb - mLcs) * (mLb2() - mLcs2() - s) / (2.0 * mLcs) * (lambdabarprime() - C_3 * sp / (mLb + mLcs));
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -349,7 +353,7 @@ namespace eos
         // leading-power IWF
         double result = C_1 + sp * (C_2 * mLcs + C_3 * mLb) / (2.0 * mLb * mLcs * (mLb + mLcs));
         result *= sm;
-        result += (mLb - mLcs) / (mLb + mLcs) * ((mLb2 - mLcs2 + s) / (2.0 * mLb) * lambdabar - (mLb2 - mLcs2 - s) / (2.0 * mLcs) * lambdabarprime);
+        result += (mLb - mLcs) / (mLb + mLcs) * ((mLb2() - mLcs2() + s) / (2.0 * mLb) * lambdabar() - (mLb2() - mLcs2() - s) / (2.0 * mLcs) * lambdabarprime());
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -372,7 +376,7 @@ namespace eos
         const double C_1 = _b_to_c.c_1_vector(omegabar);
 
         // leading-power IWF
-        double result = C_1 * sm + (3.0 * mLb2 + mLcs2 - s) / (2.0 * mLb) * lambdabar - (mLb2 + 3.0 * mLcs2 - s) / (2.0 * mLcs) * lambdabarprime;
+        double result = C_1 * sm + (3.0 * mLb2() + mLcs2() - s) / (2.0 * mLb) * lambdabar() - (mLb2() + 3.0 * mLcs2() - s) / (2.0 * mLcs) * lambdabarprime();
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -411,8 +415,8 @@ namespace eos
 
         // leading-power IWF
         double result = C_1 * sm;
-        result += (mLb - mLcs) / (mLb + mLcs) * (mLb2 - mLcs2 + s) / (2.0 * mLb ) * (lambdabar      - C_2 * sm / (mLb - mLcs));
-        result -= (mLb - mLcs) / (mLb + mLcs) * (mLb2 - mLcs2 - s) / (2.0 * mLcs) * (lambdabarprime + C_3 * sm / (mLb - mLcs));
+        result += (mLb - mLcs) / (mLb + mLcs) * (mLb2() - mLcs2() + s) / (2.0 * mLb ) * (lambdabar()      - C_2 * sm / (mLb - mLcs));
+        result -= (mLb - mLcs) / (mLb + mLcs) * (mLb2() - mLcs2() - s) / (2.0 * mLcs) * (lambdabarprime() + C_3 * sm / (mLb - mLcs));
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -439,7 +443,7 @@ namespace eos
         // leading-power IWF
         double result = C_1 - sm * (C_2 * mLcs + C_3 * mLb) / (2.0 * mLb * mLcs * (mLb - mLcs));
         result *= sp;
-        result += (mLb + mLcs) / (mLb - mLcs) * ((mLb2 - mLcs2 + s) / (2.0 * mLb) * lambdabar - (mLb2 - mLcs2 - s) / (2.0 * mLcs) * lambdabarprime);
+        result += (mLb + mLcs) / (mLb - mLcs) * ((mLb2() - mLcs2() + s) / (2.0 * mLb) * lambdabar() - (mLb2() - mLcs2() - s) / (2.0 * mLcs) * lambdabarprime());
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -462,7 +466,7 @@ namespace eos
         const double C_1 = _b_to_c.c_1_axialvector(omegabar);
 
         // leading-power IWF
-        double result = C_1 * sp + (3.0 * mLb2 + mLcs2 - s) / (2.0 * mLb) * lambdabar - (mLb2 + 3.0 * mLcs2 - s) / (2.0 * mLcs) * lambdabarprime;
+        double result = C_1 * sp + (3.0 * mLb2() + mLcs2() - s) / (2.0 * mLb) * lambdabar() - (mLb2() + 3.0 * mLcs2() - s) / (2.0 * mLcs) * lambdabarprime();
         result *= _z(s);
 
         // next-to-leading-power IWF
@@ -492,9 +496,9 @@ namespace eos
     {
         Diagnostics results;
 
-        // s = s_max
+        // s = s_max()
         {
-            const double s        = s_max;
+            const double s        = s_max();
             const double omega    = this->omega(s);
             const double omegabar = this->omegabar(s);
             const double C_1_v    = _b_to_c.c_1_vector(omegabar);
@@ -514,8 +518,8 @@ namespace eos
             results.add({ C_1_a,          "C_1_a(s_max)"    });
             results.add({ C_2_a,          "C_2_a(s_max)"    });
             results.add({ C_3_a,          "C_3_a(s_max)"    });
-            results.add({ lambdabar,      "LambdaBar"       });
-            results.add({ lambdabarprime, "LambdaBar'"      });
+            results.add({ lambdabar(),      "LambdaBar"     });
+            results.add({ lambdabarprime(), "LambdaBar'"    });
             results.add({ f_time12_v(s),  "F_{1/2,time}"    });
             results.add({ f_long12_v(s),  "F_{1/2,long}"    });
             results.add({ f_perp12_v(s),  "F_{1/2,perp}"    });
@@ -526,9 +530,9 @@ namespace eos
             results.add({ f_perp32_a(s),  "G_{3/2,perp}"    });
         }
 
-        // s = s_max - 3.0
+        // s = s_max() - 3.0
         {
-            const double s        = s_max - 3.0;
+            const double s        = s_max() - 3.0;
             const double omega    = this->omega(s);
             const double omegabar = this->omegabar(s);
             const double C_1_v    = _b_to_c.c_1_vector(omegabar);
@@ -548,8 +552,8 @@ namespace eos
             results.add({ C_1_a,          "C_1_a(s_max)"    });
             results.add({ C_2_a,          "C_2_a(s_max)"    });
             results.add({ C_3_a,          "C_3_a(s_max)"    });
-            results.add({ lambdabar,      "LambdaBar"       });
-            results.add({ lambdabarprime, "LambdaBar'"      });
+            results.add({ lambdabar(),      "LambdaBar"     });
+            results.add({ lambdabarprime(), "LambdaBar'"    });
             results.add({ f_time12_v(s),  "F_{1/2,time}"    });
             results.add({ f_long12_v(s),  "F_{1/2,long}"    });
             results.add({ f_perp12_v(s),  "F_{1/2,perp}"    });

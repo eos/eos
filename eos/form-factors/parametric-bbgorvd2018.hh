@@ -1,10 +1,10 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014, 2015, 2016, 2017 Danny van Dyk
- * Copyright (c) 2017 Elena Graverini
- * Copyright (c) 2017, 2018 Marzia Bordone
- * Copyright (c) 2018 Ahmet Kokulu
+ * Copyright (c) 2014-2026 Danny van Dyk
+ * Copyright (c) 2017      Elena Graverini
+ * Copyright (c) 2017-2018 Marzia Bordone
+ * Copyright (c) 2018      Ahmet Kokulu
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,25 +50,25 @@ namespace eos
 
             UsedParameter _zeta_max, _rho, _delta_3b, _rho_3b;
 
-            static constexpr double mLb = Process_::m1;
-            static constexpr double mLcs = Process_::m2;
-            static constexpr double mLb2 = mLb * mLb;
-            static constexpr double mLcs2 = mLcs * mLcs;
+            UsedParameter mLb, mLcs;
 
             static constexpr double m_b_pole = 4.8;
             static constexpr double m_c_pole = 1.4;
 
-            static constexpr double lambdabar = mLb - m_b_pole;
-            static constexpr double lambdabarprime = mLcs - m_c_pole;
+            double mLb2() const { return mLb * mLb; }
+            double mLcs2() const { return mLcs * mLcs; }
 
-            static constexpr double s_max = (mLb - mLcs) * (mLb - mLcs);
+            double lambdabar() const { return mLb - m_b_pole; }
+            double lambdabarprime() const { return mLcs - m_c_pole; }
+
+            double s_max() const { return power_of<2>(mLb - mLcs); }
 
             // auxiliary kinematics functions
-            static constexpr double _s_plus(const double & s)
+            double _s_plus(const double & s) const
             {
                 return power_of<2>(mLb + mLcs) - s;
             }
-            static constexpr double _s_minus(const double & s)
+            double _s_minus(const double & s) const
             {
                 return power_of<2>(mLb - mLcs) - s;
             }
@@ -76,23 +76,23 @@ namespace eos
             // parametrization of the Isgur-Wise functions
             double _z(const double & s) const
             {
-                return _zeta_max * (1.0 + _rho * (s / s_max - 1.0));
+                return _zeta_max * (1.0 + _rho * (s / s_max() - 1.0));
             }
 
             double _z3b(const double & s) const
             {
-                return _zeta_max * (_delta_3b + _rho_3b * (s / s_max - 1.0));
+                return _zeta_max * (_delta_3b + _rho_3b * (s / s_max() - 1.0));
             }
 
             inline double omega(const double & s) const
             {
-                return (mLb2 + mLcs2 - s) / (2.0 * mLb * mLcs);
+                return (mLb2() + mLcs2() - s) / (2.0 * mLb * mLcs);
             }
 
             inline double omegabar(const double & s) const
             {
-                return omega(s) * (1.0 + lambdabar / m_b_pole + lambdabarprime / m_c_pole)
-                    - (lambdabar / m_c_pole + lambdabarprime / m_b_pole);
+                return omega(s) * (1.0 + lambdabar() / m_b_pole + lambdabarprime() / m_c_pole)
+                    - (lambdabar() / m_c_pole + lambdabarprime() / m_b_pole);
             }
 
         public:
@@ -129,25 +129,25 @@ namespace eos
 
             UsedParameter _zeta_max, _rho, _delta_3b, _rho_3b;
 
-            static constexpr double mLb = Process_::m1;
-            static constexpr double mLcs = Process_::m2;
-            static constexpr double mLb2 = mLb * mLb;
-            static constexpr double mLcs2 = mLcs * mLcs;
+            UsedParameter mLb, mLcs;
 
             static constexpr double m_b_pole = 4.8;
             static constexpr double m_c_pole = 1.4;
 
-            static constexpr double lambdabar = mLb - m_b_pole;
-            static constexpr double lambdabarprime = mLcs - m_c_pole;
+            double mLb2() const { return mLb * mLb; }
+            double mLcs2() const { return mLcs * mLcs; }
 
-            static constexpr double s_max = (mLb - mLcs) * (mLb - mLcs);
+            double lambdabar() const { return mLb - m_b_pole; }
+            double lambdabarprime() const { return mLcs - m_c_pole; }
+
+            double s_max() const { return power_of<2>(mLb - mLcs); }
 
             // auxiliary kinematics functions
-            static constexpr double _s_plus(const double & s)
+            double _s_plus(const double & s) const
             {
                 return power_of<2>((mLb + mLcs)) - s;
             }
-            static constexpr double _s_minus(const double & s)
+            double _s_minus(const double & s) const
             {
                 return power_of<2>((mLb - mLcs)) - s;
             }
@@ -155,23 +155,23 @@ namespace eos
             // parametrization of the Isgur-Wise functions
             double _z(const double & s) const
             {
-                return _zeta_max * (1.0 + _rho * (s / s_max - 1.0));
+                return _zeta_max * (1.0 + _rho * (s / s_max() - 1.0));
             }
 
             double _z3b(const double & s) const
             {
-                return _zeta_max * (_delta_3b + _rho_3b * (s / s_max - 1.0));
+                return _zeta_max * (_delta_3b + _rho_3b * (s / s_max() - 1.0));
             }
 
             inline double omega(const double & s) const
             {
-                return (mLb2 + mLcs2 - s) / (2.0 * mLb * mLcs);
+                return (mLb2() + mLcs2() - s) / (2.0 * mLb * mLcs);
             }
 
             inline double omegabar(const double & s) const
             {
-                return omega(s) * (1.0 + lambdabar / m_b_pole + lambdabarprime / m_c_pole)
-                    - (lambdabar / m_c_pole + lambdabarprime / m_b_pole);
+                return omega(s) * (1.0 + lambdabar() / m_b_pole + lambdabarprime() / m_c_pole)
+                    - (lambdabar() / m_c_pole + lambdabarprime() / m_b_pole);
             }
 
         public:
