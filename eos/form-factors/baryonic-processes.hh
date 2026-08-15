@@ -33,10 +33,6 @@ namespace eos
         static constexpr const char * name_1 = "mass::Lambda_b";
         static constexpr const char * name_2 = "mass::Lambda";
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange);
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 1.115683;
         // OPE results for the unitarity bounds
         static constexpr double chi_0m = 1.57e-2;
         static constexpr double chi_0p = 1.42e-2;

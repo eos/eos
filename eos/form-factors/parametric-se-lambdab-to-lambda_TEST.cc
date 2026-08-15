@@ -110,7 +110,8 @@ class SEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 p["mass::B_s,1@HME"] = 5.750;
                 // Fix tp_a to tp_v to match the initial publication [BMRvD:2022A]
                 p["Lambda_b->Lambda::tp_a@SE"] = p["Lambda_b->Lambda::tp_v@SE"].evaluate();
-
+                auto m1 = p["mass::Lambda_b@HME"];
+                auto m2 = p["mass::Lambda@HME"];
 
                 SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus> ff(p, Options{ });
 
@@ -177,7 +178,7 @@ class SEOneHalfPlusToOneHalfPlusFormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL(ff.f_long_t5(10.0), 27.11308541, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_perp_t5(10.0), 27.65566599, eps);
 
-                const auto tm = power_of<2>(LambdaBToLambda::m1 - LambdaBToLambda::m2);
+                const auto tm = power_of<2>(m1 - m2);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_time_v (tm),   59.87052714, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_long_v (tm),   88.45600970, eps);
                 TEST_CHECK_NEARLY_EQUAL(ff.f_perp_v (tm),   44.89007817, eps);
