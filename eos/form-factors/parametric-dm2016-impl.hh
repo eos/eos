@@ -1,8 +1,8 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2023 Danny van Dyk
- * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2014-2026 Danny van Dyk
+ * Copyright (c) 2022      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,11 +32,9 @@ namespace eos
         public:
             // The following parameters are part of the parameterization and must match the
             // the ones used for the extraction of the coefficients of the z-expension
-            const double m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
             const double m_R_0m, m_R_0p, m_R_1m, m_R_1p;
-            const double tp; // pair production thresholds
-            const double tm; // kinematic endpoint
-            const double t0; // z(t_0) = 0, t_m is the endpoint of the semileptonic process
+            const double tp; // pair production threshold
 
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0m_masses;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0p_masses;
@@ -45,17 +43,27 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> threshold_tp_values;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> config_t0_values;
 
-            DM2016FormFactorTraits(const Parameters & /* p */) :
-                m_1(Process_::m1),
-                m_2(Process_::m2),
+            DM2016FormFactorTraits(const Parameters & p) :
+                m_1(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+                m_2(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this)),
                 m_R_0m(resonance_0m_masses.at(Process_::partonic_transition)),
                 m_R_0p(resonance_0p_masses.at(Process_::partonic_transition)),
                 m_R_1m(resonance_1m_masses.at(Process_::partonic_transition)),
                 m_R_1p(resonance_1p_masses.at(Process_::partonic_transition)),
-                tp(threshold_tp_values.at(Process_::partonic_transition)),
-                tm((m_1 - m_2) * (m_1 - m_2)),
-                t0(tm)
+                tp(threshold_tp_values.at(Process_::partonic_transition))
             {
+            }
+
+            // kinematic endpoint
+            double tm() const
+            {
+                return (m_1 - m_2) * (m_1 - m_2);
+            }
+
+            // z(t_0) = 0, t_m is the endpoint of the semileptonic process
+            double t0() const
+            {
+                return tm();
             }
 
             complex<double> calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
@@ -73,7 +81,7 @@ namespace eos
 
             double calc_z(const double & t) const
             {
-                return calc_z(t, this->tp, this->tm);
+                return calc_z(t, this->tp, this->tm());
             }
     };
 
