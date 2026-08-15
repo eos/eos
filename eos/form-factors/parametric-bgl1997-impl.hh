@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020-2026 Danny van Dyk
  * Copyright (c) 2020      Nico Gubernari
  * Copyright (c) 2020      Christoph Bobeth
  * Copyright (c) 2025      Maximilian Hoverath
@@ -227,7 +227,7 @@ namespace eos
     template<typename Process_>
     double BGL1997FormFactors<Process_, PToV>::t_1(const double & s) const
     {
-        const double phi      = _phi(s, _traits.t_0, 24.0, 3, 3, 2, _traits.chi_T_1m);
+        const double phi      = _phi(s, _traits.t_0, 16.0, 3, 3, 2, _traits.chi_T_1m);
         const double z        = _traits._z(s, _traits.t_0, _traits.tp());
         const double series   = _a_T1[0] + _a_T1[1] * z + _a_T1[2] * z * z + _a_T1[3] * z * z * z;
         const double blaschke = _traits.blaschke_1m(s);
@@ -255,7 +255,7 @@ namespace eos
     template<typename Process_>
     double BGL1997FormFactors<Process_, PToV>::t_2(const double & s) const
     {
-        const double phi      = _phi(s, _traits.t_0, 24.0 / (_traits.tp() * _traits.tm()), 1, 1, 2, _traits.chi_T_1p);
+        const double phi      = _phi(s, _traits.t_0, 16.0 / (_traits.tp() * _traits.tm()), 1, 1, 2, _traits.chi_T_1p);
         const double z        = _traits._z(s, _traits.t_0, _traits.tp());
         const double series   = a_T2_0() + _a_T2[0] * z + _a_T2[1] * z * z + _a_T2[2] * z * z * z;
         const double blaschke = _traits.blaschke_1p(s);
@@ -275,9 +275,11 @@ namespace eos
     template<typename Process_>
     double BGL1997FormFactors<Process_, PToV>::a_T23_0() const
     {
+        /* a_T23_0 determined from T2(t_-) = 8 mB mV^2 / ((mB + mV) * (mB^2 + 3 mV^2 - t_-)) T23(t_-) */
+        /* note: T_i ~ 1.0 / x_i * sum_n a_n z^n */
         const double z = _traits._z(_traits.tm(), _traits.t_0, _traits.tp());
-        const double x_T2 = _traits.blaschke_1p(_traits.tm()) * _phi(_traits.tm(), _traits.t_0, 24.0 / (_traits.tp() * _traits.tm()), 1, 1, 2, _traits.chi_T_1p);
-        const double x_T23 = _traits.blaschke_1p(_traits.tm()) * _phi(_traits.tm(), _traits.t_0, 3.0 * _traits.tp() / (power_of<2>(_mB) * power_of<2>(_mV)), 1, 1, 1, _traits.chi_T_1p) / (8.0 * _mB * power_of<2>(_mV)) * ((_mB + _mV) * (power_of<2>(_mB) + 3.0 * power_of<2>(_mV) - _traits.tm()));
+        const double x_T2 = _traits.blaschke_1p(_traits.tm()) * _phi(_traits.tm(), _traits.t_0, 16.0 / (_traits.tp() * _traits.tm()), 1, 1, 2, _traits.chi_T_1p);
+        const double x_T23 = _traits.blaschke_1p(_traits.tm()) * _phi(_traits.tm(), _traits.t_0, _traits.tp() / (power_of<2>(_mB) * power_of<2>(_mV)), 1, 1, 1, _traits.chi_T_1p) / (8.0 * _mB * power_of<2>(_mV)) * ((_mB + _mV) * (power_of<2>(_mB) + 3.0 * power_of<2>(_mV) - _traits.tm()));
         std::array<double, 4> an, zn;
         zn[0] = 1.0;
         an[0]  = x_T23 * this->a_T2_0() * zn[0]; // a_T2[0] is the linear coefficient; we need the constant part
@@ -292,7 +294,7 @@ namespace eos
     template<typename Process_>
     double BGL1997FormFactors<Process_, PToV>::t_23(const double & s) const
     {
-        const double phi      = _phi(s, _traits.t_0, 3.0 * _traits.tp() / (power_of<2>(_mB) * power_of<2>(_mV)), 1.0, 1.0, 1.0, _traits.chi_T_1p);
+        const double phi      = _phi(s, _traits.t_0, _traits.tp() / (power_of<2>(_mB) * power_of<2>(_mV)), 1.0, 1.0, 1.0, _traits.chi_T_1p);
         const double z        = _traits._z(s, _traits.t_0, _traits.tp());
         const double series   = a_T23_0() + _a_T23[0] * z + _a_T23[1] * z * z + _a_T23[2] * z * z * z;
         const double blaschke = _traits.blaschke_1p(s);
@@ -519,7 +521,7 @@ namespace eos
     template<typename Process_>
     double BGL1997FormFactors<Process_, PToP>::f_t(const double & s) const
     {
-        const double phi      = _phi(s, _traits.t_0, 48.0 * _traits.tp(), 3, 3, 1, _traits.chi_T_1m);
+        const double phi      = _phi(s, _traits.t_0, 16.0 * _traits.tp(), 3, 3, 1, _traits.chi_T_1m);
         const double z        = _traits._z(s, _traits.t_0, _traits.tp());
         const double series   = _a_f_t[0] + _a_f_t[1] * z + _a_f_t[2] * z * z + _a_f_t[3] * z * z * z;
         const double blaschke = _traits.blaschke_1m(s);
