@@ -13,6 +13,7 @@
 - Determine ``eos.is_wheel`` at runtime from the presence of the ``_eos_data`` package, in lieu of appending a line to a copy of ``eos/config.py`` while building the wheel; the file in the source tree and the file in the wheel are now identical (D. van Dyk)
 - Split ``Figure.draw()`` into ``Figure.draw()`` and ``Figure.save()`` (D. van Dyk)
 - Update the documentation to discuss the ``SE`` and ``SSE`` form factor parametrizations, reflect that ``SSE`` is now the default choice (D. van Dyk)
+- Default the ``--with-boost-python-suffix`` used at ``./configure`` time to the Python major+minor version (e.g. ``312`` for CPython 3.12), matching the modern Boost.Python naming convention used by conda-forge and current Debian/Ubuntu/Fedora releases, in lieu of the previous OS/codename-based detection (D. van Dyk)
 
 ### Added
 
