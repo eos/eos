@@ -1,9 +1,9 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018 Ahmet Kokulu
- * Copyright (c) 2022 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2018      Ahmet Kokulu
+ * Copyright (c) 2022      Méril Reboud
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,9 +33,8 @@ namespace eos
         public:
             // The following parameters are part of the parameterization and should match the
             // the ones used for the extraction of the coefficients of the z-expension
-            const double m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
             const double m_R_0m, m_R_0p, m_R_1m, m_R_1p;
-            const double tm;
             const double tp_0m, tp_0p, tp_1m, tp_1p; // pair production thresholds
 
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0m_masses;
@@ -43,19 +42,23 @@ namespace eos
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_1m_masses;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_1p_masses;
 
-            DKMR2017FormFactorTraits(const Parameters & /* p */) :
-                m_1(Process_::m1),
-                m_2(Process_::m2),
+            DKMR2017FormFactorTraits(const Parameters & p) :
+                m_1(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+                m_2(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this)),
                 m_R_0m(resonance_0m_masses.at(Process_::partonic_transition)),
                 m_R_0p(resonance_0p_masses.at(Process_::partonic_transition)),
                 m_R_1m(resonance_1m_masses.at(Process_::partonic_transition)),
                 m_R_1p(resonance_1p_masses.at(Process_::partonic_transition)),
-                tm((m_1 - m_2) * (m_1 - m_2)),
                 tp_0m(m_R_0m * m_R_0m),
                 tp_0p(m_R_0p * m_R_0p),
                 tp_1m(m_R_1m * m_R_1m),
                 tp_1p(m_R_1p * m_R_1p)
             {
+            }
+
+            double tm() const
+            {
+                return (m_1 - m_2) * (m_1 - m_2);
             }
 
             complex<double> calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
@@ -161,7 +164,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_0p * _traits->m_R_0p;
 
-        const double z = _traits->calc_z(s, _traits->tp_0p, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_0p, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_v() + _alpha_1_time_v() * z + _alpha_2_time_v() * z2);
     }
@@ -172,7 +175,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1m * _traits->m_R_1m;
 
-        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_v() + _alpha_1_long_v() * z + _alpha_2_long_v() * z2);
     }
@@ -183,7 +186,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1m * _traits->m_R_1m;
 
-        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_v() + _alpha_1_perp_v() * z + _alpha_2_perp_v() * z2);
     }
@@ -195,7 +198,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_0m * _traits->m_R_0m;
 
-        const double z = _traits->calc_z(s, _traits->tp_0m, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_0m, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_time_a() + _alpha_1_time_a() * z + _alpha_2_time_a() * z2);
     }
@@ -206,7 +209,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1p * _traits->m_R_1p;
 
-        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_a() + _alpha_1_long_a() * z + _alpha_2_long_a() * z2);
     }
@@ -217,7 +220,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1p * _traits->m_R_1p;
 
-        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm()), z2 = z * z;
 
         // Using alpha_0_long_a instead of alpha_0_perp_a, in order to
         // fulfill relation eq. (7), [DM:2016A], p. 3.
@@ -231,7 +234,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1m * _traits->m_R_1m;
 
-        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t() + _alpha_1_long_t() * z + _alpha_2_long_t() * z2);
     }
@@ -242,7 +245,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1m * _traits->m_R_1m;
 
-        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1m, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_perp_t() + _alpha_1_perp_t() * z + _alpha_2_perp_t() * z2);
     }
@@ -254,7 +257,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1p * _traits->m_R_1p;
 
-        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm()), z2 = z * z;
 
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_long_t5() * z + _alpha_2_long_t5() * z2);
     }
@@ -265,7 +268,7 @@ namespace eos
     {
         const double mR2 = _traits->m_R_1p * _traits->m_R_1p;
 
-        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm), z2 = z * z;
+        const double z = _traits->calc_z(s, _traits->tp_1p, _traits->tm()), z2 = z * z;
 
         // Using alpha_0_long_t5 instead of alpha_0_perp_t5, in order to
         // fulfill relation eq. (8), [DM:2016A], p. 3.

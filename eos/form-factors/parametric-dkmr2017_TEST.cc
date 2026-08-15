@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Méril Reboud
+ * Copyright (c) 2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,7 +35,7 @@ public:
 
     virtual void run() const
     {
-        static const double eps = 1e-3;
+        static const double eps = 1e-5;
 
         Parameters p = Parameters::Defaults();
         std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::DKMR2017", p);
@@ -78,8 +79,8 @@ public:
         p["Lambda_b->Lambda_c::a_1_perp^T5@DKMR2017"]   =  3.14;
         p["Lambda_b->Lambda_c::a_2_perp^T5@DKMR2017"]   =  0.00;
 
-        p["mass::Lambda_b"]                             = 5.61951;
-        p["mass::Lambda_c"]                             = 2.2865;
+        p["mass::Lambda_b@HME"]                         = 5.61951;
+        p["mass::Lambda_c@HME"]                         = 2.28646;
 
         // test of the ten baryonic FFs
         TEST_CHECK_NEARLY_EQUAL(ff->f_time_v( 0.0),  0.299748,  eps);
