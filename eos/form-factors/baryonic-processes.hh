@@ -48,10 +48,8 @@ namespace eos
 
     struct LambdaBToLambdaC {
         static constexpr const char * label = "Lambda_b->Lambda_c";
-        // initial state mass
-        static constexpr double m1 = 5.61951;
-        // final state mass
-        static constexpr double m2 = 2.28646;
+        static constexpr const char * name_1 = "mass::Lambda_b";
+        static constexpr const char * name_2 = "mass::Lambda_c";
         static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
     };
 
