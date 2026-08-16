@@ -65,7 +65,8 @@ libeosutils_la_SOURCES = \
 	verify.cc verify.hh \
 	visitor.hh visitor-fwd.hh \
 	wilson-polynomial.cc wilson-polynomial.hh \
-	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
+	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh \
+	yaml-schema.cc yaml-schema.hh
 
 libeosutils_la_LIBADD = \
 	-lboost_filesystem \
@@ -119,7 +120,8 @@ include_eos_utils_HEADERS = \
 	units.hh \
 	verify.hh \
 	wilson-polynomial.hh \
-	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh
+	wrapped_forward_iterator.hh wrapped_forward_iterator-fwd.hh wrapped_forward_iterator-impl.hh \
+	yaml-schema.hh
 
 AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
@@ -152,7 +154,8 @@ TESTS = \
 	rge_TEST \
 	stringify_TEST \
 	verify_TEST \
-	wilson-polynomial_TEST
+	wilson-polynomial_TEST \
+	yaml-schema_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
 	libeosutils.la \
@@ -209,3 +212,5 @@ stringify_TEST_SOURCES = stringify_TEST.cc
 verify_TEST_SOURCES = verify_TEST.cc
 
 wilson_polynomial_TEST_SOURCES = wilson-polynomial_TEST.cc
+
+yaml_schema_TEST_SOURCES = yaml-schema_TEST.cc
