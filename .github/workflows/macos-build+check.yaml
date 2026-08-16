@@ -76,7 +76,12 @@ jobs:
           brew install --cask basictex
           echo "/Library/TeX/texbin" >> "$GITHUB_PATH"
           export PATH="/Library/TeX/texbin:$PATH"
-          sudo tlmgr update --self
+          # CTAN's redirector can hand different, out-of-sync mirrors to successive
+          # calls, making tlmgr's self-check flap indefinitely; pin one mirror here.
+          # The `||` (not two bare calls, since this step runs under `set -e`) covers
+          # the routine post-infra-update self-check.
+          sudo tlmgr option repository https://mirrors.mit.edu/CTAN/systems/texlive/tlnet
+          sudo tlmgr update --self || sudo tlmgr update --self
           sudo tlmgr install dvipng cm-super type1cm amsmath xcolor underscore
 
       - name: Create build directory
