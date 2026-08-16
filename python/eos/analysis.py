@@ -141,6 +141,10 @@ class Analysis:
                 prior_type = prior['type'] if 'type' in prior else 'uniform'
                 parameter = prior['parameter']
 
+                p = self.parameters[parameter]
+                if p.name() in self.varied_parameter_names:
+                    raise ValueError(f'Parameter \'{p.name()}\' is repeated in a univariate prior.')
+
                 if prior_type in ['uniform', 'flat', 'scale']: # min / max is mandatory
                     minv = float(prior['min'])
                     maxv = float(prior['max'])
@@ -192,9 +196,6 @@ class Analysis:
                 else:
                     raise ValueError(f'Unknown prior type \'{prior_type}\'')
 
-                p = self.parameters[parameter]
-                if p.name() in self.varied_parameter_names:
-                    raise ValueError(f'Parameter \'{p.name()}\' is repeated in a univariate prior.')
                 self.varied_parameters.append(p)
                 self.varied_parameter_names.append(p.name())
             elif 'parameters' in prior:
@@ -222,10 +223,13 @@ class Analysis:
                 constraint_name = eos.QualifiedName(prior['constraint'])
                 constraint_entry = eos.Constraints()[constraint_name]
                 log_prior = constraint_entry.make_prior(self.parameters, constraint_name.options_part())
-                self._log_posterior.add(log_prior, False)
+
                 for p in log_prior.varied_parameters():
                     if p.name() in self.varied_parameter_names:
                         raise ValueError(f'Parameter \'{p.name()}\' is repeated in a prior using constraint {constraint_name}')
+
+                self._log_posterior.add(log_prior, False)
+                for p in log_prior.varied_parameters():
                     self.varied_parameters.append(p)
                     self.varied_parameter_names.append(p.name())
             else:
