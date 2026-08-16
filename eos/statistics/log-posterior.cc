@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2015-2023 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -77,6 +77,7 @@ namespace eos
 
         // if not, add to prior container and register parameter objects
         _priors.push_back(prior_clone);
+        _parameter_names.insert(prior_parameter_names.begin(), prior_parameter_names.end());
         for (auto p = prior_clone->begin(), p_end = prior_clone->end(); p != p_end; ++p)
         {
             _varied_parameters.push_back(*p);
