@@ -22,6 +22,8 @@
 - Add the ``SSE`` (Simplified Series Expansion) form factor parametrization for pseudoscalar-to-pseudoscalar, pseudoscalar-to-vector, and 1/2^+ -> 1/2^+ transitions (D. van Dyk)
 - Add the ``M:2017A`` reference and its constraints on the ``Lambda_c->proton`` and ``Lambda_c->neutron`` form factors (D. van Dyk)
 - Add the ``mass::D_u,0@HME`` and ``mass::D_u,1@HME`` parameters (D. van Dyk)
+- Add the ``mass::Lambda_c(2595)@HME``, ``mass::Lambda_c(2625)@HME``, and ``mass::Lambda(1520)@HME`` parameters (D. van Dyk)
+- Add the ``Lambda_b->Lambda(1520)::tp_v@SE``, ``Lambda_b->Lambda(1520)::tp_a@SE``, and ``Lambda_b->Lambda(1520)::t0@SE`` parameters (D. van Dyk)
 
 ### Deprecated
 
@@ -30,6 +32,7 @@
 ### Fixed
 
 - Correct the ``Lambda_c`` mass entering the ``Lambda_b->Lambda_c``, ``Lambda_c->Lambda``, ``Lambda_c->proton``, and ``Lambda_c->neutron`` unitarity-bound thresholds to match the canonical ``mass::Lambda_c`` parameter (D. van Dyk)
+- Convert the ``Lambda_b->Lambda_c::DKMR2017``, ``Lambda_b->Lambda::DM2016``, ``Lambda_b->Lambda_c(2595)::HQET``, ``Lambda_b->Lambda_c(2625)::HQET``, and ``Lambda_b->Lambda(1520)::SE`` form factors to read their initial- and final-state masses from ``Parameters`` in lieu of hardcoded compile-time constants that could silently drift from the corresponding ``@HME`` parameter values (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
