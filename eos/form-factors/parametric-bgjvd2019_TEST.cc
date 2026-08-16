@@ -2009,5 +2009,14 @@ class BstarToDDstarTensorRelationsTest : public TestCase
                 // proportional to C_{T_4}, which vanishes at this order
                 TEST_CHECK_NEARLY_EQUAL(h_T10, 0.0, eps);
             }
+
+            // a q2 computed from the meson masses reaches w = 1 only up to rounding,
+            // and the form factors must not depend on which side it lands on
+            {
+                static const double delta = 1.0e-12;
+
+                TEST_CHECK_NEARLY_EQUAL(ff_bstar_d.h_tbar_1(q2(m_Bst, m_D, 1.0 - delta)), ff_bstar_d.h_tbar_1(q2(m_Bst, m_D, 1.0)), 1.0e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff_bstar_dstar.h_t5(q2(m_Bst, m_Dst, 1.0 - delta)), ff_bstar_dstar.h_t5(q2(m_Bst, m_Dst, 1.0)), 1.0e-8);
+            }
         }
 } bstar_to_d_dstar_tensor_relations_test;
