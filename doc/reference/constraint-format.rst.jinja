@@ -1,0 +1,38 @@
+==================
+Constraint Format
+==================
+
+Every entry of :class:`eos.Constraints` is described on disk by a YAML map whose ``type`` key selects one of the concrete field schemas below.
+The full list of constraints currently shipped with EOS is documented separately on the :doc:`constraints` page.
+
+{% for type_name, fields, example in constraint_types %}
+
+``{{ type_name }}``
+{{ '~' * (type_name|length + 4) }}
+
+.. list-table::
+   :widths: auto
+   :header-rows: 1
+
+   * - key
+     - kind
+     - required
+     - description
+   {% for field in fields %}
+   * - ``{{ field.key }}``
+     - {{ field.kind }}
+     - {{ 'yes' if field.required else 'no' }}
+     - {{ field.description }}
+   {% endfor %}
+
+{% if example %}
+Example:
+
+.. code-block:: yaml
+
+{{ example | indent(3, true) }}
+{% else %}
+No curated example is available yet for this type.
+{% endif %}
+
+{% endfor %}

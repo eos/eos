@@ -11,6 +11,7 @@ This section
    command-line-interface
    defining-observables
    analysis-file-format
+   constraint-format
    figure-format
    constraints
    observables
