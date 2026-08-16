@@ -147,12 +147,8 @@ namespace eos
 
     struct LambdaBToLambda1520 {
         static constexpr const char * label = "Lambda_b->Lambda(1520)";
-        // initial state mass
-        static constexpr double m1 = 5.620;
-        // final state mass
-        static constexpr double m2 = 1.520;
-        // semileptonic kinematic endpoint
-        static constexpr double tm = (m1 - m2) * (m1 - m2);
+        static constexpr const char * name_1 = "mass::Lambda_b";
+        static constexpr const char * name_2 = "mass::Lambda(1520)";
         // scalar pair production threshold: B + K
         static constexpr double tp = (5.279 + 0.494) * (5.279 + 0.494);
         // // vector pair production threshold: B + K*
