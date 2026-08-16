@@ -534,14 +534,53 @@ namespace eos
 
     // 1/2+ -> 3/2-
     template <typename Process_>
+    class SEFormFactorTraits<Process_, OneHalfPlusToThreeHalfMinus> :
+        public virtual ParameterUser
+    {
+        public:
+            // The following parameters are part of the parameterization and should match
+            // the ones used for the extraction of the coefficients of the z-expansion
+            UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            // tp_v is used by the scalar, vector, and tensor form factors; tp_a by the
+            // pseudoscalar, axial-vector, and tensor+gamma5 form factors.
+            UsedParameter tp_v, tp_a, t0;
+
+            SEFormFactorTraits(const Parameters & p) :
+                m_1(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
+                m_2(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this)),
+                tp_v(UsedParameter(p[std::string(Process_::label) + "::tp_v@SE"], *this)),
+                tp_a(UsedParameter(p[std::string(Process_::label) + "::tp_a@SE"], *this)),
+                t0(UsedParameter(p[std::string(Process_::label) + "::t0@SE"], *this))
+            {
+            }
+
+            double tm() const
+            {
+                return power_of<2>(m_1 - m_2);
+            }
+
+            complex<double> calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
+            {
+                return (std::sqrt(sp - s) - std::sqrt(sp - s0)) / (std::sqrt(sp - s) + std::sqrt(sp - s0));
+            }
+
+            double calc_z(const double & s, const double & sp, const double & s0) const
+            {
+                if (s > sp)
+                    throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
+
+                return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
+            }
+    };
+
+    template <typename Process_>
     class SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus> :
         public FormFactors<OneHalfPlusToThreeHalfMinus>
     {
         private:
-            UsedParameter _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
-            const double _t_0, _t_p; // z(t_0) = 0, and t_p is the pair production threshold
+            const SEFormFactorTraits<Process_, OneHalfPlusToThreeHalfMinus> _traits;
 
-            double _t_m() const; // the endpoint of the semileptonic process
+            const UsedParameter & _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
 
             const std::array<UsedParameter, 4> _a_time12_v;  // a_0^(time12,V) is obtained from the EoM f_time12^V(q2 = 0) \propto f_long12^V(q2 = 0)
             const std::array<UsedParameter, 4> _a_long12_v;  // a_0^(long12,V) is obtained from f_long12^V(q2 = q2max) \propto f_perp32^V(q2 = q2max)
@@ -559,8 +598,8 @@ namespace eos
             const std::array<UsedParameter, 4> _a_perp32_t5; // a_0^(perp32,T5) is obtained from the EoM f_perp32^T5(q2 = 0) \propto f_perp32^T(q2 = 0)
 
             QualifiedName _par_name(const std::string & pol, const std::string & current, unsigned idx) const;
-            double _z(const double & t, const double & t_0) const;
-            double _phi(const double & s, const double & chi, const double & A, const double & B, const double & d, const double & e,
+            double _z(const double & t, const double & t_p, const double & t_0) const;
+            double _phi(const double & s, const double & t_p, const double & chi, const double & A, const double & B, const double & d, const double & e,
                         const double & f, const double & g, const double & n) const;
 
             inline double _phi_time12_v(const double & q2) const;

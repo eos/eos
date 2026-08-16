@@ -31,10 +31,9 @@ namespace eos
 {
     template <typename Process_>
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::SEFormFactors(const Parameters & p, const Options &) :
-        _m_1(UsedParameter(p[std::string(Process_::name_1) + "@HME"], *this)),
-        _m_2(UsedParameter(p[std::string(Process_::name_2) + "@HME"], *this)),
-        _t_0(Process_::t0),
-        _t_p(Process_::tp),
+        _traits(p),
+        _m_1(_traits.m_1),
+        _m_2(_traits.m_2),
         _a_time12_v{
             UsedParameter(p[_par_name("t12", "V", 1)], *this),
             UsedParameter(p[_par_name("t12", "V", 2)], *this),
@@ -133,13 +132,6 @@ namespace eos
     }
 
     template <typename Process_>
-    double
-    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_t_m() const
-    {
-        return power_of<2>(_m_1 - _m_2);
-    }
-
-    template <typename Process_>
     QualifiedName
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_par_name(const std::string & pol, const std::string & current, unsigned idx) const
     {
@@ -148,29 +140,29 @@ namespace eos
 
     template <typename Process_>
     double
-    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_z(const double & t, const double & t_0) const
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_z(const double & t, const double & t_p, const double & t_0) const
     {
-        return (std::sqrt(_t_p - t) - std::sqrt(_t_p - t_0)) / (std::sqrt(_t_p - t) + std::sqrt(_t_p - t_0));
+        return (std::sqrt(t_p - t) - std::sqrt(t_p - t_0)) / (std::sqrt(t_p - t) + std::sqrt(t_p - t_0));
     }
 
     template <typename Process_>
     double
-    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi(const double & s, const double & chi, const double & A, const double & B,
+    SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi(const double & s, const double & t_p, const double & chi, const double & A, const double & B,
                                        const double & d, const double & e, const double & f, const double & g,
                                        const double & n) const
     {
         using std::pow;
         using std::sqrt;
 
-        const double z = _z(s, _t_0);
+        const double z = _z(s, t_p, _traits.t0);
         const double t_pb = power_of<2>(_m_1 + _m_2);
         const double t_mb = power_of<2>(_m_1 - _m_2);
 
         const double norm   = pow(t_pb, 0.5 * A) * pow(t_mb, 0.5 * B) * pow(1 - z, n + g - 0.5 * (e + f + 3.0)) * sqrt(1 + z)
-                            * sqrt(4.0 * (_t_p - _t_0)) / sqrt(16.0 * d * M_PI * M_PI * chi);
-        const double phi1 = - 1.0 / (_t_0 * power_of<2>(1 + z) - 2.0 * _t_p * (1 + z*z) - 2.0 * (1 - z*z) * sqrt(_t_p) * sqrt(_t_p - _t_0));
-        const double phi2 = - power_of<2>(1 - z) * t_mb - power_of<2>(1 + z) * _t_0 + 2.0 * _t_p * (1 + z*z) + 2.0 * (1 - z*z) * sqrt(_t_p - t_mb) * sqrt(_t_p - _t_0);
-        const double phi3 = power_of<2>(1 - z) * t_pb - power_of<2>(1 + z) * _t_0 + 4.0 * _t_p * z;
+                            * sqrt(4.0 * (t_p - _traits.t0)) / sqrt(16.0 * d * M_PI * M_PI * chi);
+        const double phi1 = - 1.0 / (_traits.t0 * power_of<2>(1 + z) - 2.0 * t_p * (1 + z*z) - 2.0 * (1 - z*z) * sqrt(t_p) * sqrt(t_p - _traits.t0));
+        const double phi2 = - power_of<2>(1 - z) * t_mb - power_of<2>(1 + z) * _traits.t0 + 2.0 * t_p * (1 + z*z) + 2.0 * (1 - z*z) * sqrt(t_p - t_mb) * sqrt(t_p - _traits.t0);
+        const double phi3 = power_of<2>(1 - z) * t_pb - power_of<2>(1 + z) * _traits.t0 + 4.0 * t_p * z;
 
         return norm * pow(phi1, 0.5 * (n + g)) * pow(phi2, e / 4.0) * pow(phi3, f / 4.0);
     }
@@ -179,98 +171,98 @@ namespace eos
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_time12_v(const double & q2) const
     {
-        return _phi(q2, Process_::chi_0p_v, 0.0, 1.0,  6.0, 3.0, 1.0, 3.0, 1.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_0p_v, 0.0, 1.0,  6.0, 3.0, 1.0, 3.0, 1.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_v(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1m_v, 1.0, 0.0, 18.0, 1.0, 3.0, 3.0, 2.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_1m_v, 1.0, 0.0, 18.0, 1.0, 3.0, 3.0, 2.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_v(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1m_v, 0.0, 0.0,  9.0, 1.0, 3.0, 2.0, 2.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_1m_v, 0.0, 0.0,  9.0, 1.0, 3.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_v(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1m_v, 0.0, 0.0,  3.0, 1.0, 3.0, 2.0, 2.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_1m_v, 0.0, 0.0,  3.0, 1.0, 3.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_time12_a(const double & q2) const
     {
-        return _phi(q2, Process_::chi_0m_a, 1.0, 0.0,  6.0, 1.0, 3.0, 3.0, 1.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_0m_a, 1.0, 0.0,  6.0, 1.0, 3.0, 3.0, 1.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_a(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1p_a, 0.0, 1.0, 18.0, 3.0, 1.0, 3.0, 2.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_1p_a, 0.0, 1.0, 18.0, 3.0, 1.0, 3.0, 2.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_a(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1p_a, 0.0, 0.0,  9.0, 3.0, 1.0, 2.0, 2.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_1p_a, 0.0, 0.0,  9.0, 3.0, 1.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_a(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1p_a, 0.0, 0.0,  3.0, 3.0, 1.0, 2.0, 2.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_1p_a, 0.0, 0.0,  3.0, 3.0, 1.0, 2.0, 2.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_t(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1m_t, 0.0, 0.0, 18.0, 1.0, 3.0, 1.0, 3.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_1m_t, 0.0, 0.0, 18.0, 1.0, 3.0, 1.0, 3.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_t(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1m_t, 1.0, 0.0,  9.0, 1.0, 3.0, 2.0, 3.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_1m_t, 1.0, 0.0,  9.0, 1.0, 3.0, 2.0, 3.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_t(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1m_t, 1.0, 0.0,  3.0, 1.0, 3.0, 2.0, 3.0);
+        return _phi(q2, _traits.tp_v, Process_::chi_1m_t, 1.0, 0.0,  3.0, 1.0, 3.0, 2.0, 3.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_long12_t5(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1p_t5, 0.0, 0.0, 18.0, 3.0, 1.0, 1.0, 3.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_1p_t5, 0.0, 0.0, 18.0, 3.0, 1.0, 1.0, 3.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp12_t5(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1p_t5, 0.0, 1.0,  9.0, 3.0, 1.0, 2.0, 3.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_1p_t5, 0.0, 1.0,  9.0, 3.0, 1.0, 2.0, 3.0);
     }
 
     template <typename Process_>
     inline double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_phi_perp32_t5(const double & q2) const
     {
-        return _phi(q2, Process_::chi_1p_t5, 0.0, 1.0,  3.0, 3.0, 1.0, 2.0, 3.0);
+        return _phi(q2, _traits.tp_a, Process_::chi_1p_t5, 0.0, 1.0,  3.0, 3.0, 1.0, 2.0, 3.0);
     }
 
 
@@ -278,15 +270,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_v_0() const
     {
-        const double x_long12_v = this->_phi_long12_v(_t_m()) * 2.0 * (_m_1 - _m_2) / (_m_1 + _m_2);
-        const double x_perp32_v = this->_phi_perp32_v(_t_m());
+        const double x_long12_v = this->_phi_long12_v(_traits.tm()) * 2.0 * (_m_1 - _m_2) / (_m_1 + _m_2);
+        const double x_perp32_v = this->_phi_perp32_v(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_long12_v * this->_a_perp32_v[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_long12_v * this->_a_perp32_v[i] - x_perp32_v * this->_a_long12_v[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_v, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp32_v);
     }
 
@@ -294,15 +286,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_v_0() const
     {
-        const double x_perp12_v = - this->_phi_perp12_v(_t_m());
-        const double x_perp32_v =   this->_phi_perp32_v(_t_m());
+        const double x_perp12_v = - this->_phi_perp12_v(_traits.tm());
+        const double x_perp32_v =   this->_phi_perp32_v(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_perp12_v * this->_a_perp32_v[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_perp12_v * this->_a_perp32_v[i] - x_perp32_v * this->_a_perp12_v[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_v, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp32_v);
     }
 
@@ -316,7 +308,7 @@ namespace eos
         {
             a[i] = - this->_a_time12_a[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / polynomials[0];
     }
 
@@ -324,15 +316,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_t_0() const
     {
-        const double x_long12_t = this->_phi_long12_t(_t_m()) * 2.0 * (_m_1 + _m_2) / (_m_1 - _m_2);
-        const double x_perp32_t = this->_phi_perp32_t(_t_m());
+        const double x_long12_t = this->_phi_long12_t(_traits.tm()) * 2.0 * (_m_1 + _m_2) / (_m_1 - _m_2);
+        const double x_perp32_t = this->_phi_perp32_t(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_long12_t * this->_a_perp32_t[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_long12_t * this->_a_perp32_t[i] - x_perp32_t * this->_a_long12_t[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_v, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp32_t);
     }
 
@@ -340,15 +332,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_t_0() const
     {
-        const double x_perp12_t = - this->_phi_perp12_t(_t_m());
-        const double x_perp32_t =   this->_phi_perp32_t(_t_m());
+        const double x_perp12_t = - this->_phi_perp12_t(_traits.tm());
+        const double x_perp32_t =   this->_phi_perp32_t(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_perp12_t * this->_a_perp32_t[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_perp12_t * this->_a_perp32_t[i] - x_perp32_t * this->_a_perp12_t[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_v, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp32_t);
     }
 
@@ -356,15 +348,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp32_t5_0() const
     {
-        const double x_perp32_t5 = - this->_z(0.0, Process_::mR2_1p) * this->_phi_perp32_t5(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
-        const double x_perp32_t  =   this->_z(0.0, Process_::mR2_1m) * this->_phi_perp32_t(0.0);
+        const double x_perp32_t5 = - this->_z(0.0, _traits.tp_a, Process_::mR2_1p) * this->_phi_perp32_t5(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
+        const double x_perp32_t  =   this->_z(0.0, _traits.tp_v, Process_::mR2_1m) * this->_phi_perp32_t(0.0);
         std::array<double, 5> a;
         a[0] = x_perp32_t5 * this->_a_perp32_t[0];
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_perp32_t5 * this->_a_perp32_t[i] - x_perp32_t * this->_a_perp32_t5[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp32_t);
     }
 
@@ -372,15 +364,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_time12_v_0() const
     {
-        const double x_time12_v = this->_z(0.0, Process_::mR2_0p) * this->_phi_time12_v(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
-        const double x_long12_v = this->_z(0.0, Process_::mR2_1m) * this->_phi_long12_v(0.0);
+        const double x_time12_v = this->_z(0.0, _traits.tp_v, Process_::mR2_0p) * this->_phi_time12_v(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
+        const double x_long12_v = this->_z(0.0, _traits.tp_v, Process_::mR2_1m) * this->_phi_long12_v(0.0);
         std::array<double, 5> a;
         a[0] = x_time12_v * this->_a_long12_v_0();
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_time12_v * this->_a_long12_v[i - 1] - x_long12_v * this->_a_time12_v[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _traits.tp_v, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_long12_v);
     }
 
@@ -388,15 +380,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_a_0() const
     {
-        const double x_long12_a = this->_z(0.0, Process_::mR2_1p) * this->_phi_long12_a(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
-        const double x_time12_a = this->_z(0.0, Process_::mR2_0m) * this->_phi_time12_a(0.0);
+        const double x_long12_a = this->_z(0.0, _traits.tp_a, Process_::mR2_1p) * this->_phi_long12_a(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
+        const double x_time12_a = this->_z(0.0, _traits.tp_a, Process_::mR2_0m) * this->_phi_time12_a(0.0);
         std::array<double, 5> a;
         a[0] = x_long12_a * this->_a_time12_a_0();
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_long12_a * this->_a_time12_a[i - 1] - x_time12_a * this->_a_long12_a[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_time12_a);
     }
 
@@ -404,15 +396,15 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_t5_0() const
     {
-        const double x_perp12_t5 = this->_z(0.0, Process_::mR2_1p) * this->_phi_perp12_t5(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
-        const double x_perp12_t  = this->_z(0.0, Process_::mR2_1m) * this->_phi_perp12_t(0.0);
+        const double x_perp12_t5 = this->_z(0.0, _traits.tp_a, Process_::mR2_1p) * this->_phi_perp12_t5(0.0) * power_of<2>((_m_1 + _m_2) / (_m_1 - _m_2));
+        const double x_perp12_t  = this->_z(0.0, _traits.tp_v, Process_::mR2_1m) * this->_phi_perp12_t(0.0);
         std::array<double, 5> a;
         a[0] = x_perp12_t5 * this->_a_perp12_t_0();
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_perp12_t5 * this->_a_perp12_t[i - 1] - x_perp12_t * this->_a_perp12_t5[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(0.0, _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / (polynomials[0] * x_perp12_t);
     }
 
@@ -420,16 +412,16 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_perp12_a_0() const
     {
-        const double x_perp12_a = this->_phi_perp12_a(_t_m());
-        const double x_long12_a = this->_phi_long12_a(_t_m());
-        const double x_perp32_a = this->_phi_perp32_a(_t_m());
+        const double x_perp12_a = this->_phi_perp12_a(_traits.tm());
+        const double x_long12_a = this->_phi_long12_a(_traits.tm());
+        const double x_perp32_a = this->_phi_perp32_a(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_perp12_a * (this->_a_long12_a_0() / x_long12_a + this->_a_perp32_a[0] / x_perp32_a);
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_perp12_a * (this->_a_long12_a[i - 1] / x_long12_a + this->_a_perp32_a[i] / x_perp32_a) - this->_a_perp12_a[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / polynomials[0];
     }
 
@@ -437,16 +429,16 @@ namespace eos
     double
     SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus>::_a_long12_t5_0() const
     {
-        const double x_long12_t5 = this->_phi_long12_t5(_t_m());
-        const double x_perp12_t5 = this->_phi_perp12_t5(_t_m());
-        const double x_perp32_t5 = this->_phi_perp32_t5(_t_m());
+        const double x_long12_t5 = this->_phi_long12_t5(_traits.tm());
+        const double x_perp12_t5 = this->_phi_perp12_t5(_traits.tm());
+        const double x_perp32_t5 = this->_phi_perp32_t5(_traits.tm());
         std::array<double, 5> a;
         a[0] = x_long12_t5 * (this->_a_perp12_t5_0() / x_perp12_t5 - this->_a_perp32_t5_0() / x_perp32_t5);
         for (unsigned i = 1 ; i < a.size() ; ++i)
         {
             a[i] = x_long12_t5 * (this->_a_perp12_t5[i - 1] / x_perp12_t5 - this->_a_perp32_t5[i - 1] / x_perp32_t5) - this->_a_long12_t5[i - 1];
         }
-        const auto polynomials = Process_::orthonormal_polynomials(_z(_t_m(), _t_0));
+        const auto polynomials = Process_::orthonormal_polynomials(_z(_traits.tm(), _traits.tp_a, _traits.t0));
         return std::inner_product(a.begin(), a.end(), polynomials.begin(), 0.0) / polynomials[0];
     }
 
@@ -459,9 +451,9 @@ namespace eos
         coefficients[0] = _a_time12_v_0();
         std::copy(_a_time12_v.begin(), _a_time12_v.end(), coefficients.begin() + 1);
         // resonances for 0^+
-        const double blaschke     = _z(q2, Process_::mR2_0p);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_0p);
         const double phi          = _phi_time12_v(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -476,9 +468,9 @@ namespace eos
         coefficients[0] = _a_long12_v_0();
         std::copy(_a_long12_v.begin(), _a_long12_v.end(), coefficients.begin() + 1);
         // resonances for 1^-
-        const double blaschke     = _z(q2, Process_::mR2_1m);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_1m);
         const double phi          = _phi_long12_v(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -493,9 +485,9 @@ namespace eos
         coefficients[0] = _a_perp12_v_0();
         std::copy(_a_perp12_v.begin(), _a_perp12_v.end(), coefficients.begin() + 1);
         // resonances for 1^-
-        const double blaschke     = _z(q2, Process_::mR2_1m);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_1m);
         const double phi          = _phi_perp12_v(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -509,9 +501,9 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_perp32_v.begin(), _a_perp32_v.end(), coefficients.begin());
         // resonances for 1^-
-        const double blaschke     = _z(q2, Process_::mR2_1m);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_1m);
         const double phi          = _phi_perp32_v(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -526,9 +518,9 @@ namespace eos
         coefficients[0] = _a_time12_a_0();
         std::copy(_a_time12_a.begin(), _a_time12_a.end(), coefficients.begin() + 1);
         // resonances for 0^-
-        const double blaschke     = _z(q2, Process_::mR2_0m);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_0m);
         const double phi          = _phi_time12_a(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -543,9 +535,9 @@ namespace eos
         coefficients[0] = _a_long12_a_0();
         std::copy(_a_long12_a.begin(), _a_long12_a.end(), coefficients.begin() + 1);
         // resonances for 1^+
-        const double blaschke     = _z(q2, Process_::mR2_1p);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_1p);
         const double phi          = _phi_long12_a(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -560,9 +552,9 @@ namespace eos
         coefficients[0] = _a_perp12_a_0();
         std::copy(_a_perp12_a.begin(), _a_perp12_a.end(), coefficients.begin() + 1);
         // resonances for 1^+
-        const double blaschke     = _z(q2, Process_::mR2_1p);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_1p);
         const double phi          = _phi_perp12_a(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -576,9 +568,9 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_perp32_a.begin(), _a_perp32_a.end(), coefficients.begin());
         // resonances for 1^+
-        const double blaschke     = _z(q2, Process_::mR2_1p);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_1p);
         const double phi          = _phi_perp32_a(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -593,9 +585,9 @@ namespace eos
         coefficients[0] = _a_long12_t_0();
         std::copy(_a_long12_t.begin(), _a_long12_t.end(), coefficients.begin() + 1);
         // resonances for T (1^- state)
-        const double blaschke     = _z(q2, Process_::mR2_1m);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_1m);
         const double phi          = _phi_long12_t(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -610,9 +602,9 @@ namespace eos
         coefficients[0] = _a_perp12_t_0();
         std::copy(_a_perp12_t.begin(), _a_perp12_t.end(), coefficients.begin() + 1);
         // resonances for T (1^- state)
-        const double blaschke     = _z(q2, Process_::mR2_1m);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_1m);
         const double phi          = _phi_perp12_t(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -626,9 +618,9 @@ namespace eos
         std::array<double, 5> coefficients;
         std::copy(_a_perp32_t.begin(), _a_perp32_t.end(), coefficients.begin() );
         // resonances for T (1^- state)
-        const double blaschke     = _z(q2, Process_::mR2_1m);
+        const double blaschke     = _z(q2, _traits.tp_v, Process_::mR2_1m);
         const double phi          = _phi_perp32_t(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_v, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -643,9 +635,9 @@ namespace eos
         coefficients[0] = _a_long12_t5_0();
         std::copy(_a_long12_t5.begin(), _a_long12_t5.end(), coefficients.begin() + 1);
         // resonances for T5 (1^+ state)
-        const double blaschke     = _z(q2, Process_::mR2_1p);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_1p);
         const double phi          = _phi_long12_t5(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -660,9 +652,9 @@ namespace eos
         coefficients[0] = _a_perp12_t5_0();
         std::copy(_a_perp12_t5.begin(), _a_perp12_t5.end(), coefficients.begin() + 1);
         // resonances for T5 (1^+ state)
-        const double blaschke     = _z(q2, Process_::mR2_1p);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_1p);
         const double phi          = _phi_perp12_t5(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -677,9 +669,9 @@ namespace eos
         coefficients[0] = _a_perp32_t5_0();
         std::copy(_a_perp32_t5.begin(), _a_perp32_t5.end(), coefficients.begin() + 1);
         // resonances for T5 (1^+ state)
-        const double blaschke     = _z(q2, Process_::mR2_1p);
+        const double blaschke     = _z(q2, _traits.tp_a, Process_::mR2_1p);
         const double phi          = _phi_perp32_t5(q2);
-        const double z            = _z(q2, _t_0);
+        const double z            = _z(q2, _traits.tp_a, _traits.t0);
         const auto   polynomials  = Process_::orthonormal_polynomials(z);
         const double series       = std::inner_product(coefficients.begin(), coefficients.end(), polynomials.begin(), 0.0);
 
@@ -797,8 +789,10 @@ namespace eos
     {
         Diagnostics results;
 
-        results.add({ _z(0.0, Process_::t0),  "z(q2 =  0)" });
-        results.add({ _z(10.0, Process_::t0), "z(q2 = 10)" });
+        // report z(q2) for the "V"-family threshold; tp_a differs in general but
+        // defaults to the same value as tp_v for this process
+        results.add({ _z(0.0, _traits.tp_v, _traits.t0),  "z(q2 =  0)" });
+        results.add({ _z(10.0, _traits.tp_v, _traits.t0), "z(q2 = 10)" });
 
         {
             const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials(0.0);
@@ -811,7 +805,7 @@ namespace eos
         }
 
         {
-            const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials(_z(10.0, Process_::t0));
+            const auto & [p0, p1, p2, p3, p4, p5] = Process_::orthonormal_polynomials(_z(10.0, _traits.tp_v, _traits.t0));
             results.add({ p0,                     "p_0(z = z(q2 = 10))" });
             results.add({ p1,                     "p_1(z = z(q2 = 10))" });
             results.add({ p2,                     "p_2(z = z(q2 = 10))" });

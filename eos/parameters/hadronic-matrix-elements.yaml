@@ -8420,6 +8420,26 @@ groups:
             - ["V", "A", "T", "T5"]
             - [0, 1, 2, 3, 4]
           comments: ''
+      'Lambda_b->Lambda(1520)::tp_v@SE' :
+          central: +33.327529
+          min:     +33.327529
+          max:     +33.327529
+          latex:    '$t_+^{V, \Lambda_b \to \Lambda(1520) ,\mathrm{SE}}$'
+          comment:  '(mB + mK)^2, scalar/vector/tensor pair-production threshold'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda(1520)::tp_a@SE' :
+          central: +33.327529
+          min:     +33.327529
+          max:     +33.327529
+          latex:    '$t_+^{A, \Lambda_b \to \Lambda(1520) ,\mathrm{SE}}$'
+          comment:  '(mB + mK)^2, pseudoscalar/axialvector/tensor+gamma5 pair-production threshold'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda(1520)::t0@SE' :
+          central: +9.865
+          min:     +9.865
+          max:     +9.865
+          latex:   '$t_0^{\Lambda_b \to \Lambda(1520) ,\mathrm{SE}}$'
+          unit:     'GeV^2'
   # }}}
 
   #
