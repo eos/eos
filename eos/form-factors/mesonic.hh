@@ -332,6 +332,15 @@ namespace eos
             virtual double h_8(const double & s) const  = 0;
             virtual double h_9(const double & s) const  = 0;
             virtual double h_10(const double & s) const = 0;
+
+            // tensor current
+            virtual double h_t4(const double & s) const  = 0;
+            virtual double h_t5(const double & s) const  = 0;
+            virtual double h_t6(const double & s) const  = 0;
+            virtual double h_t7(const double & s) const  = 0;
+            virtual double h_t8(const double & s) const  = 0;
+            virtual double h_t9(const double & s) const  = 0;
+            virtual double h_t10(const double & s) const = 0;
     };
 
     template <> class FormFactorFactory<VToV>
