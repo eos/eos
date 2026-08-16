@@ -150,12 +150,12 @@ class Analysis:
                     maxv = float(prior['max'])
 
                     if 'uniform' == prior_type or 'flat' == prior_type:
-                        self._log_posterior.add(eos.LogPrior.Flat(self.parameters, parameter, minv, maxv), False)
+                        self._add_prior(eos.LogPrior.Flat(self.parameters, parameter, minv, maxv))
                     elif 'scale' == prior_type:
                         mu_0 = prior['mu_0']
                         lambda_scale = prior['lambda']
-                        self._log_posterior.add(eos.LogPrior.Scale(self.parameters,
-                            parameter, minv, maxv, mu_0, lambda_scale), False)
+                        self._add_prior(eos.LogPrior.Scale(self.parameters,
+                            parameter, minv, maxv, mu_0, lambda_scale))
                 elif prior_type in ['gauss', 'gaussian']: # min / max is optional
                     if ('min' in prior) != ('max' in prior):
                         raise ValueError('Prior specification must contain both min and max or neither')
@@ -174,25 +174,22 @@ class Analysis:
                         else:
                             sigma_lo = sigma
                             sigma_hi = sigma
-                        self._log_posterior.add(
+                        self._add_prior(
                             eos.LogPrior.CurtailedGauss(
                                 self.parameters, parameter, minv, maxv,
                                 central - sigma_lo, central, central + sigma_hi
-                            ),
-                            False)
+                            ))
                     else:
                         if type(sigma) is list or type(sigma) is tuple:
                             raise ValueError('Prior specification must contain a scalar sigma value for a gaussian prior with infinite support')
-                        self._log_posterior.add(
+                        self._add_prior(
                             eos.LogPrior.Gaussian(
                                 self.parameters, parameter, central, sigma
-                            ),
-                            False)
+                            ))
                 elif prior_type == 'poisson':
                     k = float(prior['k'])
-                    self._log_posterior.add(
-                        eos.LogPrior.Poisson(self.parameters, parameter, k),
-                        False)
+                    self._add_prior(
+                        eos.LogPrior.Poisson(self.parameters, parameter, k))
                 else:
                     raise ValueError(f'Unknown prior type \'{prior_type}\'')
 
@@ -212,7 +209,7 @@ class Analysis:
                     maxv = list[float](prior['max'])
                     shift = list[float](prior['shift'])
                     transform = list[list[float]](prior['transform'])
-                    self._log_posterior.add(eos.LogPrior.Transform(self.parameters, parameters, shift, transform, minv, maxv), False)
+                    self._add_prior(eos.LogPrior.Transform(self.parameters, parameters, shift, transform, minv, maxv))
                 else:
                     raise ValueError(f'Unknown prior type \'{prior_type}\'')
             elif 'constraint' in prior:
@@ -228,7 +225,7 @@ class Analysis:
                     if p.name() in self.varied_parameter_names:
                         raise ValueError(f'Parameter \'{p.name()}\' is repeated in a prior using constraint {constraint_name}')
 
-                self._log_posterior.add(log_prior, False)
+                self._add_prior(log_prior)
                 for p in log_prior.varied_parameters():
                     self.varied_parameters.append(p)
                     self.varied_parameter_names.append(p.name())
@@ -287,6 +284,19 @@ class Analysis:
             eos.debug(f'used, but not included in any prior: \'{n}\'')
         for n in varied_parameter_names - used_parameter_names:
             eos.warn(f'likelihood does not depend on parameter \'{n}\'; remove from prior or check options!')
+
+
+    def _add_prior(self, log_prior):
+        """Internal function that adds a prior to the log(posterior), asserting that it is not rejected as a duplicate.
+
+        Callers are expected to have already checked self.varied_parameter_names for an overlap with
+        log_prior's parameters; this is a defense-in-depth safety net against LogPosterior disagreeing.
+        """
+        if not self._log_posterior.add(log_prior, False):
+            names = [p.name() for p in log_prior.varied_parameters()]
+            raise RuntimeError(f'LogPosterior rejected prior for parameter(s) {names} as a duplicate; '
+                                f'this should have been caught earlier in Analysis.__init__')
+        return log_prior
 
 
     def _u_to_par(self, u):
