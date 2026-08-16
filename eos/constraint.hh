@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2018 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -100,6 +100,16 @@ namespace eos
 
             /// Create a new ConstraintEntry by derializing a string.
             static ConstraintEntry * FromYAML(const QualifiedName & name, const std::string &);
+
+            /// Return the list of constraint types known to EOS.
+            static std::vector<std::string> known_types();
+
+            /*!
+             * Return the YAML-encoded field schema for a given constraint type.
+             *
+             * @param type One of the type names returned by known_types().
+             */
+            static std::string schema_as_yaml(const std::string & type);
 
             /// Destructor
             virtual ~ConstraintEntry();

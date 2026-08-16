@@ -1502,6 +1502,45 @@ class ConstraintDeserializationTest : public TestCase
                                                                        "components: 1\n"
                                                                        "weights: [1.0]\n"
                                                                        "test statistics: {sigma: [], densities: []}")));
+
+                // a component missing 'means'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Mixture",
+                                                            YAML::Load("type: Mixture\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "components:\n"
+                                                                       "  - covariance: [[0.01, 0.003], [0.003, 0.0025]]\n"
+                                                                       "weights: [1.0]\n"
+                                                                       "test statistics: {sigma: [], densities: []}")));
+
+                // non-scalar 'dof'
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Mixture",
+                                                            YAML::Load("type: Mixture\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "components:\n"
+                                                                       "  - means: [4.3, 1.1]\n"
+                                                                       "    covariance: [[0.01, 0.003], [0.003, 0.0025]]\n"
+                                                                       "weights: [1.0]\n"
+                                                                       "test statistics: {sigma: [], densities: []}\n"
+                                                                       "dof: [1, 2]")));
+
+                // 'test statistics' mapped to a sequence, not a map
+                TEST_CHECK_THROWS(ConstraintDeserializationError,
+                                  ConstraintEntry::FromYAML("Test::Mixture",
+                                                            YAML::Load("type: Mixture\n"
+                                                                       "observables: [mass::b(MSbar), mass::c]\n"
+                                                                       "kinematics: [{}, {}]\n"
+                                                                       "options: [{}, {}]\n"
+                                                                       "components:\n"
+                                                                       "  - means: [4.3, 1.1]\n"
+                                                                       "    covariance: [[0.01, 0.003], [0.003, 0.0025]]\n"
+                                                                       "weights: [1.0]\n"
+                                                                       "test statistics: [1, 2]")));
             }
             // }}}
 
