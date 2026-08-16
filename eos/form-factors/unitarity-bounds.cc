@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=140 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2019-2024 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
@@ -3499,7 +3499,7 @@ namespace eos
 
     BGLCoefficients::~BGLCoefficients() = default;
 
-    const std::set<ReferenceName> BGLCoefficients::references{};
+    const std::set<ReferenceName> BGLCoefficients::references{ "BGJvD:2019A"_rn, "BGJvD:2025A"_rn };
 
     // B -> D form factors
     // {{{
@@ -5201,7 +5201,7 @@ namespace eos
         return _imp->bound_1m_T();
     }
 
-    const std::set<ReferenceName> HQETUnitarityBounds::references{};
+    const std::set<ReferenceName> HQETUnitarityBounds::references{ "BGJvD:2019A"_rn, "BGJvD:2025A"_rn };
 
     // clang-format off
     std::vector<OptionSpecification>::const_iterator
