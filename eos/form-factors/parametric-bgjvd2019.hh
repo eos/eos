@@ -174,26 +174,28 @@ namespace eos
             inline double _wp(const double & w) const { return w + std::sqrt(w * w - 1.0); }
             inline double _wm(const double & w) const { return w - std::sqrt(w * w - 1.0); }
 
+            // the expansion is used on both sides of w = 1, since a q2 computed from
+            // the meson masses reaches the endpoint only up to rounding
             inline double _r(const double & w) const
             {
+                if (std::abs(w - 1.0) < 1.0e-5)
+                    return 1.0 - (w - 1.0) / 3.0;
+
                 if (w < 1.0)
                     return std::numeric_limits<double>::quiet_NaN();
-
-                if (w - 1.0 < 1.0e-5)
-                    return 1.0 - (w - 1.0) / 3.0;
 
                 return std::log(_wp(w)) / std::sqrt(w * w - 1.0);
             }
 
             inline double _Omega(const double & w, const double & z) const
             {
-                if (w < 1.0)
-                    return std::numeric_limits<double>::quiet_NaN();
-
                 const double lnz = std::log(z);
 
-                if (w - 1.0 < 1.0e-5)
+                if (std::abs(w - 1.0) < 1.0e-5)
                     return -1.0 - (1.0 + z) / (1.0 - z) * lnz;
+
+                if (w < 1.0)
+                    return std::numeric_limits<double>::quiet_NaN();
 
                 const double wm = _wm(w);
                 const double wp = _wp(w);
