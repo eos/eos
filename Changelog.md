@@ -12,6 +12,8 @@
 - Write each task's outputs to a temporary directory that replaces the final one only once the task succeeds, so that a failed task leaves previous results untouched and no incomplete output directory behind; ``sample-mcmc`` now fails on a run time error in lieu of logging it and succeeding (issue #1291) (D. van Dyk)
 
 ### Added
+- Add the ``Bbar^*->D`` and ``Bbar^*->D^*`` tensor form factors in the HQE parametrisation, following [BGJvD:2025A]; the ``FormFactors<VToP>`` and ``FormFactors<VToV>`` interfaces gain ``h_tbar_1`` to ``h_tbar_3`` and ``h_t4`` to ``h_t10`` respectively (D. van Dyk)
+- Add the reference [BGJvD:2025A] and cite it from ``BGLCoefficients`` and ``HQETUnitarityBounds``, which implement its BGL coefficients for the tensor form factors and its ``1^+`` and ``1^-`` tensor bounds (D. van Dyk)
 
 - Add the ``eos-analysis`` task ``model-comparison``, which compares a group of posteriors sharing the same likelihood by their nested-sampling evidences: it corrects for differing uniform or transform priors of shared parameters and records their log prior volumes, grades all pairwise Bayes factors on Jeffreys' scale, and flags pairs whose conclusion is unstable under the evidence uncertainties or the prior-volume correction. The result is stored as the new ``eos.data.ModelComparison``, exposed to reports through ``AnalysisData.model_comparisons``, and shown at the top of the example report template (issue #1282) (D. van Dyk)
 
@@ -21,6 +23,9 @@
 
 ### Fixed
 - Fix ``eos.set_log_level`` to set the level of the default log handler rather than that of the logger, so that DEBUG messages are shown; correct the FAQ on setting the log level, which caused messages to be printed twice #1290 (D. van Dyk)
+- Use the mass parameters, rather than compile-time constants, when converting ``q2`` to ``w`` in the ``V->V`` HQE form factors, as the other three transitions already did; setting ``mass::B_d^*`` or ``mass::D_u^*`` previously had no effect on the ``Bbar^*->D^*`` form factors (D. van Dyk)
+- Correct the normalization constants ``K`` passed to the outer function ``_phi`` for the tensor form factors ``t_1``, ``t_2``, ``t_23``, and ``f_t`` in the ``BGL1997``-like parametrization (D. van Dyk)
+- Evaluate the HQET form factors at zero recoil independently of the compiler's use of fused multiply-add: reconstructing ``q2`` from the meson masses reproduces ``w = 1`` only up to rounding, and the auxiliary functions ``r`` and ``Omega`` returned NaN whenever it landed a few ulps below the endpoint (D. van Dyk)
 
 
 ## [v1.1] - 2026-09-25
