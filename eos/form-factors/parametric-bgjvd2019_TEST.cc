@@ -1978,10 +1978,6 @@ class BstarToDDstarTensorRelationsTest :
             const double m_Bst = p["mass::B_d^*"].evaluate();
             const double m_D   = p["mass::D_u"].evaluate();
             const double m_Dst = p["mass::D_u^*"].evaluate();
-            // unlike the other three transitions, V->V converts q2 to w with the
-            // compile-time masses of the process rather than with the parameters
-            const double m_Bst_vv = BstarToDstar::m_V1;
-            const double m_Dst_vv = BstarToDstar::m_V2;
 
             auto q2 = [] (const double & m_1, const double & m_2, const double & w) -> double
             {
@@ -2000,13 +1996,13 @@ class BstarToDDstarTensorRelationsTest :
                 const double h_T2bar  = ff_bstar_d.h_tbar_2(q2(m_Bst, m_D, w));
                 const double h_T3bar  = ff_bstar_d.h_tbar_3(q2(m_Bst, m_D, w));
 
-                const double h_T4     = ff_bstar_dstar.h_t4(q2(m_Bst_vv, m_Dst_vv, w));
-                const double h_T5     = ff_bstar_dstar.h_t5(q2(m_Bst_vv, m_Dst_vv, w));
-                const double h_T6     = ff_bstar_dstar.h_t6(q2(m_Bst_vv, m_Dst_vv, w));
-                const double h_T7     = ff_bstar_dstar.h_t7(q2(m_Bst_vv, m_Dst_vv, w));
-                const double h_T8     = ff_bstar_dstar.h_t8(q2(m_Bst_vv, m_Dst_vv, w));
-                const double h_T9     = ff_bstar_dstar.h_t9(q2(m_Bst_vv, m_Dst_vv, w));
-                const double h_T10    = ff_bstar_dstar.h_t10(q2(m_Bst_vv, m_Dst_vv, w));
+                const double h_T4     = ff_bstar_dstar.h_t4(q2(m_Bst, m_Dst, w));
+                const double h_T5     = ff_bstar_dstar.h_t5(q2(m_Bst, m_Dst, w));
+                const double h_T6     = ff_bstar_dstar.h_t6(q2(m_Bst, m_Dst, w));
+                const double h_T7     = ff_bstar_dstar.h_t7(q2(m_Bst, m_Dst, w));
+                const double h_T8     = ff_bstar_dstar.h_t8(q2(m_Bst, m_Dst, w));
+                const double h_T9     = ff_bstar_dstar.h_t9(q2(m_Bst, m_Dst, w));
+                const double h_T10    = ff_bstar_dstar.h_t10(q2(m_Bst, m_Dst, w));
 
                 // C_{T_1}: h_T1 and h_Tbar1 share their alpha_s term
                 TEST_CHECK_NEARLY_EQUAL(h_T1bar,                            h_T1,        eps);

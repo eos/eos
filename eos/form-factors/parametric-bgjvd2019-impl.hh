@@ -1421,25 +1421,27 @@ namespace eos
     double
     HQETFormFactors<Process_, VToV>::_w(const double & q2) const
     {
-        static constexpr double mV1 = Process_::m_V1, mV12 = power_of<2>(Process_::m_V1);
-        static constexpr double mV2 = Process_::m_V2, mV22 = power_of<2>(Process_::m_V2);
+        const double m_Bst = this->_m_Bst(), m_Bst2 = power_of<2>(m_Bst);
+        const double m_V   = this->_m_V(),   m_V2   = power_of<2>(m_V);
 
-        return (mV12 + mV22 - q2) / (2.0 * mV1 * mV2);
+        return (m_Bst2 + m_V2 - q2) / (2.0 * m_Bst * m_V);
     }
 
     template <typename Process_>
     double
     HQETFormFactors<Process_, VToV>::_q2(const double & w) const
     {
-        static constexpr double mV1 = Process_::m_V1, mV12 = power_of<2>(Process_::m_V1);
-        static constexpr double mV2 = Process_::m_V2, mV22 = power_of<2>(Process_::m_V2);
+        const double m_Bst = this->_m_Bst(), m_Bst2 = power_of<2>(m_Bst);
+        const double m_V   = this->_m_V(),   m_V2   = power_of<2>(m_V);
 
-        return mV12 + mV22 - 2.0 * mV1 * mV2 * w;
+        return m_Bst2 + m_V2 - 2.0 * m_Bst * m_V * w;
     }
 
     template <typename Process_>
     HQETFormFactors<Process_, VToV>::HQETFormFactors(const Parameters & p, const Options & o) :
-        HQETFormFactorBase(p, o, Process_::hqe_prefix)
+        HQETFormFactorBase(p, o, Process_::hqe_prefix),
+        _m_Bst(p[Process_::name_Bst], *static_cast<ParameterUser *>(this)),
+        _m_V(p[Process_::name_V], *static_cast<ParameterUser *>(this))
     {
         static const Log::OneTimeMessage message_HQET_FFs_VToV
         (
