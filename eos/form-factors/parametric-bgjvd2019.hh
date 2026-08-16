@@ -428,6 +428,15 @@ namespace eos
             virtual double h_9(const double & q2) const override;
             virtual double h_10(const double & q2) const override;
 
+            // tensor current, cf. [BGJvD:2025A], eqs. (2.35) to (2.41)
+            virtual double h_t4(const double & q2) const override;
+            virtual double h_t5(const double & q2) const override;
+            virtual double h_t6(const double & q2) const override;
+            virtual double h_t7(const double & q2) const override;
+            virtual double h_t8(const double & q2) const override;
+            virtual double h_t9(const double & q2) const override;
+            virtual double h_t10(const double & q2) const override;
+
             Diagnostics diagnostics() const;
 
             using HQETFormFactorBase::references;

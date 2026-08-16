@@ -1760,6 +1760,200 @@ namespace eos
         return result * xi;
     }
 
+    // tensor current
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t4(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double chi3 = _chi3(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L2 = -4.0 * chi3;
+        const double L5 = -1.0;
+
+        double result = (1.0 + as * _CT1(w, z));
+        result += (eps_b + eps_c) * (L2 - (w - 1.0) / (w + 1.0) * L5);
+        result += eps_c * eps_c * (_l2(w) - (w - 1.0) / (w + 1.0) * _l5(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t5(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double eta = _eta(q2);
+        const double chi2 = _chi2(q2);
+        const double chi3 = _chi3(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L2 = -4.0 * chi3;
+        const double L3 = 4.0 * chi2;
+        const double L5 = -1.0;
+        const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+        double result = (1.0 + as * (_CT1(w, z) + _CT3(w, z)));
+        result += eps_b * (L2 - L5);
+        result += eps_c * (L2 + L6 - L3 - L5);
+        result += eps_c * eps_c * (_l2(w) + _l6(w) - _l3(w) - _l5(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t6(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double eta = _eta(q2);
+        const double chi2 = _chi2(q2);
+        const double chi3 = _chi3(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L2 = -4.0 * chi3;
+        const double L3 = 4.0 * chi2;
+        const double L5 = -1.0;
+        const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+        double result = (1.0 + as * (_CT1(w, z) - _CT2(w, z)));
+        result += eps_b * (L2 + L6 - L3 - L5);
+        result += eps_c * (L2 - L5);
+        result += eps_c * eps_c * (_l2(w) - _l5(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t7(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double chi3 = _chi3(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L2 = -4.0 * chi3;
+        const double L5 = -1.0;
+
+        // C_{T_4} vanishes at this order, cf. [BGJvD:2025A] below eq. (2.27)
+        double result = (1.0 + as * (_CT1(w, z) - _CT2(w, z) + _CT3(w, z)));
+        result += (eps_b + eps_c) * (L2 - L5);
+        result += eps_c * eps_c * (_l2(w) - _l5(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t8(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double eta = _eta(q2);
+        const double chi2 = _chi2(q2);
+
+        const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L3 = 4.0 * chi2;
+        const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+        double result = (0.0 + as * _CT3(w, z));
+        result -= eps_b * (L3 + L6);
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t9(const double & q2) const
+    {
+        const double m_b_pole = _m_b_pole();
+        const double m_c_pole = _m_c_pole();
+
+        const double w = this->_w(q2);
+        const double z = m_c_pole / m_b_pole;
+
+        const double as = _alpha_s() / M_PI;
+
+        const double xi  = _xi(q2);
+        const double eta = _eta(q2);
+        const double chi2 = _chi2(q2);
+
+        const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
+
+        // chi_1 is absorbed into def. of xi for LP and LV
+        const double L3 = 4.0 * chi2;
+        const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
+
+        double result = (0.0 + as * _CT2(w, z));
+        result += eps_c * (L3 + L6);
+        result += eps_c * eps_c * (_l3(w) + _l6(w));
+
+        return result * xi;
+    }
+
+    template <typename Process_>
+    double
+    HQETFormFactors<Process_, VToV>::h_t10(const double &) const
+    {
+        // proportional to C_{T_4}, which vanishes to the order we are working at,
+        // cf. [BGJvD:2025A], eq. (2.41) and the discussion below eq. (2.44)
+        return 0.0;
+    }
+
     template <typename Process_>
     Diagnostics
     HQETFormFactors<Process_, VToV>::diagnostics() const
@@ -1897,6 +2091,13 @@ namespace eos
             results.add(Diagnostics::Entry{ h_8(_q2(1.4)),  "h_8 (w = 1.4)" });
             results.add(Diagnostics::Entry{ h_9(_q2(1.4)),  "h_9 (w = 1.4)" });
             results.add(Diagnostics::Entry{ h_10(_q2(1.4)), "h_10(w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t4(_q2(1.4)),  "h_T4 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t5(_q2(1.4)),  "h_T5 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t6(_q2(1.4)),  "h_T6 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t7(_q2(1.4)),  "h_T7 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t8(_q2(1.4)),  "h_T8 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t9(_q2(1.4)),  "h_T9 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_t10(_q2(1.4)), "h_T10(w = 1.4)" });
 
             results.add(Diagnostics::Entry{ h_1(_q2(1.2)),  "h_1 (w = 1.2)" });
             results.add(Diagnostics::Entry{ h_2(_q2(1.2)),  "h_2 (w = 1.2)" });
@@ -1908,6 +2109,13 @@ namespace eos
             results.add(Diagnostics::Entry{ h_8(_q2(1.2)),  "h_8 (w = 1.2)" });
             results.add(Diagnostics::Entry{ h_9(_q2(1.2)),  "h_9 (w = 1.2)" });
             results.add(Diagnostics::Entry{ h_10(_q2(1.2)), "h_10(w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t4(_q2(1.2)),  "h_T4 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t5(_q2(1.2)),  "h_T5 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t6(_q2(1.2)),  "h_T6 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t7(_q2(1.2)),  "h_T7 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t8(_q2(1.2)),  "h_T8 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t9(_q2(1.2)),  "h_T9 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_t10(_q2(1.2)), "h_T10(w = 1.2)" });
 
             results.add(Diagnostics::Entry{ h_1(_q2(1.0)),  "h_1 (w = 1.0)" });
             results.add(Diagnostics::Entry{ h_2(_q2(1.0)),  "h_2 (w = 1.0)" });
@@ -1919,6 +2127,13 @@ namespace eos
             results.add(Diagnostics::Entry{ h_8(_q2(1.0)),  "h_8 (w = 1.0)" });
             results.add(Diagnostics::Entry{ h_9(_q2(1.0)),  "h_9 (w = 1.0)" });
             results.add(Diagnostics::Entry{ h_10(_q2(1.0)), "h_10(w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t4(_q2(1.0)),  "h_T4 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t5(_q2(1.0)),  "h_T5 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t6(_q2(1.0)),  "h_T6 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t7(_q2(1.0)),  "h_T7 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t8(_q2(1.0)),  "h_T8 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t9(_q2(1.0)),  "h_T9 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_t10(_q2(1.0)), "h_T10(w = 1.0)" });
         }
 
         return results;
