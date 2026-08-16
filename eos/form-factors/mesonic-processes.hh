@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020-2026 Danny van Dyk
  * Copyright (c) 2025      Florian Herren
  * Copyright (c) 2026      Nico Gubernari
  *
@@ -473,8 +473,6 @@ namespace eos
         static constexpr const char * label = "B^*->D^*";
         static constexpr const char * name_Bst = "mass::B_d^*";
         static constexpr const char * name_V   = "mass::D_u^*";
-        static constexpr const double m_V1 = 5.324;
-        static constexpr const double m_V2 = 2.010;
         static constexpr const double m_Bc = 6.2751;
         static constexpr const double mR2_0m = (m_Bc + 0.000) * (m_Bc + 0.000);
         static constexpr const double mR2_1m = (m_Bc + 0.056) * (m_Bc + 0.056);

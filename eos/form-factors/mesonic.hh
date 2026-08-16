@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2022 Stephan Kuerten
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
@@ -255,6 +255,11 @@ namespace eos
             virtual double h_abar_1(const double & s) const = 0;
             virtual double h_abar_2(const double & s) const = 0;
             virtual double h_abar_3(const double & s) const = 0;
+
+            // tensor current
+            virtual double h_tbar_1(const double & s) const = 0;
+            virtual double h_tbar_2(const double & s) const = 0;
+            virtual double h_tbar_3(const double & s) const = 0;
     };
 
     template <>
@@ -290,6 +295,15 @@ namespace eos
             virtual double h_8(const double & s) const = 0;
             virtual double h_9(const double & s) const = 0;
             virtual double h_10(const double & s) const = 0;
+
+            // tensor current
+            virtual double h_t4(const double & s) const = 0;
+            virtual double h_t5(const double & s) const = 0;
+            virtual double h_t6(const double & s) const = 0;
+            virtual double h_t7(const double & s) const = 0;
+            virtual double h_t8(const double & s) const = 0;
+            virtual double h_t9(const double & s) const = 0;
+            virtual double h_t10(const double & s) const = 0;
     };
 
     template <>
