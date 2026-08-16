@@ -466,6 +466,9 @@ namespace eos
     template <typename Process_> class HQETFormFactors<Process_, VToV> : public HQETFormFactorBase, public FormFactors<VToV>
     {
         private:
+            UsedParameter _m_Bst;
+            UsedParameter _m_V;
+
             /*
              * Kinematics
              */
