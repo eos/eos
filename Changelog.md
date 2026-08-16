@@ -21,6 +21,8 @@
 - Add the ``SSE`` (Simplified Series Expansion) form factor parametrization for pseudoscalar-to-pseudoscalar, pseudoscalar-to-vector, and 1/2^+ -> 1/2^+ transitions (D. van Dyk)
 - Add the ``M:2017A`` reference and its constraints on the ``Lambda_c->proton`` and ``Lambda_c->neutron`` form factors (D. van Dyk)
 - Add the ``mass::D_u,0@HME`` and ``mass::D_u,1@HME`` parameters (D. van Dyk)
+- Add the ``Bbar^*->D`` and ``Bbar^*->D^*`` tensor form factors in the HQE parametrisation, following [BGJvD:2025A]; the ``FormFactors<VToP>`` and ``FormFactors<VToV>`` interfaces gain ``h_tbar_1`` to ``h_tbar_3`` and ``h_t4`` to ``h_t10`` respectively (D. van Dyk)
+- Add the reference [BGJvD:2025A] and cite it from ``BGLCoefficients`` and ``HQETUnitarityBounds``, which implement its BGL coefficients for the tensor form factors and its ``1^+`` and ``1^-`` tensor bounds (D. van Dyk)
 
 ### Deprecated
 
@@ -29,6 +31,9 @@
 ### Fixed
 
 - Correct the ``Lambda_c`` mass entering the ``Lambda_b->Lambda_c``, ``Lambda_c->Lambda``, ``Lambda_c->proton``, and ``Lambda_c->neutron`` unitarity-bound thresholds to match the canonical ``mass::Lambda_c`` parameter (D. van Dyk)
+- Use the mass parameters, rather than compile-time constants, when converting ``q2`` to ``w`` in the ``V->V`` HQE form factors, as the other three transitions already did; setting ``mass::B_d^*`` or ``mass::D_u^*`` previously had no effect on the ``Bbar^*->D^*`` form factors (D. van Dyk)
+- Correct the normalization constants ``K`` passed to the outer function ``_phi`` for the tensor form factors ``t_1``, ``t_2``, ``t_23``, and ``f_t`` in the ``BGL1997``-like parametrization (D. van Dyk)
+- Evaluate the HQET form factors at zero recoil independently of the compiler's use of fused multiply-add: reconstructing ``q2`` from the meson masses reproduces ``w = 1`` only up to rounding, and the auxiliary functions ``r`` and ``Omega`` returned NaN whenever it landed a few ulps below the endpoint (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
