@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=120 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018-2023 Danny van Dyk
+ * Copyright (c) 2018-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -378,6 +378,11 @@ namespace eos
             virtual double h_abar_2(const double & q2) const override;
             virtual double h_abar_3(const double & q2) const override;
             virtual double h_vbar(const double & q2) const override;
+
+            // tensor current, cf. [BGJvD:2025A], eqs. (2.32) to (2.34)
+            virtual double h_tbar_1(const double & q2) const override;
+            virtual double h_tbar_2(const double & q2) const override;
+            virtual double h_tbar_3(const double & q2) const override;
 
             Diagnostics diagnostics() const;
 
