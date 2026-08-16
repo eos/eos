@@ -149,13 +149,6 @@ namespace eos
         static constexpr const char * label = "Lambda_b->Lambda(1520)";
         static constexpr const char * name_1 = "mass::Lambda_b";
         static constexpr const char * name_2 = "mass::Lambda(1520)";
-        // scalar pair production threshold: B + K
-        static constexpr double tp = (5.279 + 0.494) * (5.279 + 0.494);
-        // // vector pair production threshold: B + K*
-        // static constexpr double tpv = (5.279 + 0.896) * (5.279 + 0.896);
-        // zero of the conformal mapping: z(t0, t0) = 0.0
-        // This optimal value follows from z(0, t0) = - z(tm, t0)
-        static constexpr double t0 = 9.865;
         // first resonances sorted by spin/parity
         static constexpr double mR2_0m = 5.367 * 5.367;
         static constexpr double mR2_0p = 5.711 * 5.711;
