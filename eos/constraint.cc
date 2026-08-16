@@ -1033,6 +1033,9 @@ namespace eos
 
                 unsigned subdim = end - begin;
 
+                // restrict the observable names to the same subset [begin, end) as means and covariance
+                std::vector<QualifiedName> restricted_observable_names(this->observable_names.begin() + begin, this->observable_names.begin() + end);
+
                 // create GSL vector for the mean
                 gsl_vector * means = gsl_vector_alloc(subdim);
                 for (auto i = begin; i < end; ++i)
@@ -1063,7 +1066,7 @@ namespace eos
                     }
                 }
 
-                return LogPrior::MultivariateGaussian(parameters, observable_names, means, covariance);
+                return LogPrior::MultivariateGaussian(parameters, restricted_observable_names, means, covariance);
             }
 
             virtual std::ostream &
@@ -1527,6 +1530,9 @@ namespace eos
 
                 unsigned subdim_meas = end - begin;
 
+                // restrict the observable names to the same subset [begin, end) as means and covariance
+                std::vector<QualifiedName> restricted_observables(this->observables.begin() + begin, this->observables.begin() + end);
+
                 // create GSL vector for the mean
                 gsl_vector *    means        = gsl_vector_alloc(subdim_meas);
                 gsl_vector_view means_subset = gsl_vector_subvector(this->means.get(), begin, subdim_meas);
@@ -1537,7 +1543,7 @@ namespace eos
                 gsl_matrix_view covariance_subset = gsl_matrix_submatrix(this->covariance.get(), begin, begin, subdim_meas, subdim_meas);
                 gsl_matrix_memcpy(covariance, &(covariance_subset.matrix));
 
-                return LogPrior::MultivariateGaussian(parameters, observables, means, covariance);
+                return LogPrior::MultivariateGaussian(parameters, restricted_observables, means, covariance);
             }
 
             virtual std::ostream &
