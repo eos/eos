@@ -41,7 +41,14 @@ class SEOneHalfPlusToThreeHalfMinusFormFactorsTest :
             {
                 Parameters p = Parameters::Defaults();
 
-                const auto ratio = (LambdaBToLambda1520::m1 + LambdaBToLambda1520::m2) / (LambdaBToLambda1520::m1 - LambdaBToLambda1520::m2);
+                // Pin to the masses originally used to extract the coefficients below
+                // (mass::Lambda_b@HME's current default, 5.61951, differs from 5.620).
+                p["mass::Lambda_b@HME"]    = 5.620;
+                p["mass::Lambda(1520)@HME"] = 1.520;
+
+                const double m1 = p["mass::Lambda_b@HME"].evaluate();
+                const double m2 = p["mass::Lambda(1520)@HME"].evaluate();
+                const auto ratio = (m1 + m2) / (m1 - m2);
 
                 p["Lambda_b->Lambda(1520)::a^(t12,V)_1@SE"]     =  0.1;
                 p["Lambda_b->Lambda(1520)::a^(012,V)_1@SE"]     = -0.2;
@@ -109,7 +116,7 @@ class SEOneHalfPlusToThreeHalfMinusFormFactorsTest :
                 TEST_CHECK_NEARLY_EQUAL( ff.f_perp12_t5(0.0),   power_of<2>(ratio) * ff.f_perp12_t(0.0), eps);
                 TEST_CHECK_NEARLY_EQUAL( ff.f_perp32_t5(0.0), - power_of<2>(ratio) * ff.f_perp32_t(0.0), eps);
 
-                const auto tm = LambdaBToLambda1520::tm;
+                const auto tm = power_of<2>(m1 - m2);
 
                 TEST_CHECK_NEARLY_EQUAL( ff.f_perp12_v(tm),  - ff.f_perp32_v(tm),                       eps);
                 TEST_CHECK_NEARLY_EQUAL( ff.f_long12_v(tm),    2.0 / ratio * ff.f_perp32_v(tm),         eps);

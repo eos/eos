@@ -108,6 +108,7 @@ class LambdaBToLambda1520DileptonNaiveTest :
             p["QED::alpha_e(m_b)"] = 1.;
             p["WET::G_Fermi"] = 1.;
             p["mass::Lambda_b"] = 5.62;
+            p["mass::Lambda_b@HME"] = 5.62;
             p["mass::Lambda(1520)"] = 1.52;
 
             Options oo

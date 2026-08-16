@@ -538,8 +538,10 @@ namespace eos
         public FormFactors<OneHalfPlusToThreeHalfMinus>
     {
         private:
-            const double _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
-            const double _t_0, _t_m, _t_p; // z(t_0) = 0, t_m is the endpoint of the semileptonic process, and t_p is the pair production threshold,
+            UsedParameter _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            const double _t_0, _t_p; // z(t_0) = 0, and t_p is the pair production threshold
+
+            double _t_m() const; // the endpoint of the semileptonic process
 
             const std::array<UsedParameter, 4> _a_time12_v;  // a_0^(time12,V) is obtained from the EoM f_time12^V(q2 = 0) \propto f_long12^V(q2 = 0)
             const std::array<UsedParameter, 4> _a_long12_v;  // a_0^(long12,V) is obtained from f_long12^V(q2 = q2max) \propto f_perp32^V(q2 = q2max)
