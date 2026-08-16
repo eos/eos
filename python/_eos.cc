@@ -1068,7 +1068,23 @@ BOOST_PYTHON_MODULE(_eos)
             :rtype: eos.ConstraintEntry
         )",
                  args("name", "yaml"))
-            .staticmethod("deserialize");
+            .staticmethod("deserialize")
+            .def("known_types", &ConstraintEntry::known_types, R"(
+            Returns the list of constraint types known to EOS, e.g. ``Gaussian`` or ``MultivariateGaussian``.
+
+            :rtype: list[str]
+        )")
+            .staticmethod("known_types")
+            .def("schema_as_yaml", &ConstraintEntry::schema_as_yaml, return_value_policy<return_by_value>(), R"(
+            Returns the YAML-encoded field schema of a constraint type, for use with :func:`yaml.safe_load`.
+
+            :param type: One of the type names returned by :meth:`known_types <eos.ConstraintEntry.known_types>`.
+            :type type: str
+
+            :rtype: str
+        )",
+                 args("type"))
+            .staticmethod("schema_as_yaml");
 
     // Constraints
     ::impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<const ConstraintEntry>> converter_constraints_iter;
