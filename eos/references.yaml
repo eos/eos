@@ -372,6 +372,15 @@ BESIII:2023C:
     id: oai:arXiv.org:2304.12159
   inspire-id: BESIII:2023zjq
   title: First Experimental Study of the Purely Leptonic Decay $D_s^{*+} \to e^+ \nu_e$
+BESIII:2026A:
+  authors: Ablikim, M. and others
+  collaboration: BESIII
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2607.23945
+  inspire-id: BESIII:2026qqu
+  title: Precision measurements of semileptonic decays $D^0 \to \pi^-\ell^+\nu_\ell$ and
+    $D^+ \to \pi^0\ell^+\nu_\ell$ ($\ell = e,\mu$)
 BF:2001A:
   authors: Beneke, M. and Feldmann, T.
   eprint:
