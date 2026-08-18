@@ -26,6 +26,7 @@ CONSTRAINTS_FILES = \
 	Dq-to-dilepton.yaml \
 	Ds-to-eta-l-nu.yaml \
 	D-to-eta-l-nu.yaml \
+	D-to-pi-l-nu.yaml \
 	D-to-K-l-nu.yaml \
 	ee-to-ccbar.yaml \
 	ee-to-pipi.yaml \
