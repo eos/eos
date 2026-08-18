@@ -321,6 +321,10 @@ class GridFigure(Figure):
     :type tight_layout: bool
     :param shared_axes: Which axes the panels share, one of ``None``, ``'x'``, ``'y'``, or ``'both'``. ``'x'`` shares the x-axis per column (``sharex='col'``), ``'y'`` shares the y-axis per row (``sharey='row'``), and ``'both'`` shares both; a shared axis gives one common range per group and tick labels only on the outer edge. Defaults to None (independent axes).
     :type shared_axes: str | None
+    :param height_ratios: The relative height of each row, e.g. ``[4, 1]`` for a 2-row grid whose second row is a quarter as tall as the first. Must have one entry per row. Defaults to None (equal heights).
+    :type height_ratios: list[float] | None
+    :param width_ratios: The relative width of each column, analogous to ``height_ratios``. Must have one entry per column. Defaults to None (equal widths).
+    :type width_ratios: list[float] | None
     """
 
     type:str=field(repr=False, init=False, default='grid')
@@ -333,6 +337,8 @@ class GridFigure(Figure):
     watermark_plot:int|tuple[int, int]|None=field(default=None)
     tight_layout:bool=field(default=True)
     shared_axes:str|None=field(default=None)
+    height_ratios:list[float]|None=field(default=None)
+    width_ratios:list[float]|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Producing a Figure with a Grid of Plots
@@ -362,13 +368,25 @@ class GridFigure(Figure):
             the x-axis per column, ``'y'`` shares the y-axis per row, ``'both'`` shares both; a shared axis gives one common range per group
             and tick labels only on the outer edge. Defaults to None (independent axes).
 
+        * ``height_ratios`` (*list[float]*) -- The relative height of each row, one entry per row, e.g. ``[4, 1]`` for a 2-row grid whose
+            second row is a quarter as tall as the first. Defaults to None (equal heights).
+
+        * ``width_ratios`` (*list[float]*) -- The relative width of each column, analogous to ``height_ratios``. Defaults to None (equal widths).
+
 
     """)
     def __post_init__(self):
         nrow, ncol = self.shape
         figsize = self.size if self.size is not None else (3.0 * ncol, 3.0 * nrow)
         self._figure = plt.figure(figsize=figsize)
-        self._gridspec = self._figure.add_gridspec(nrow, ncol, hspace=self.padding[0], wspace=self.padding[1])
+
+        if self.height_ratios is not None and len(self.height_ratios) != nrow:
+            raise ValueError(f"'height_ratios' must have {nrow} entries (one per row), got {len(self.height_ratios)}")
+        if self.width_ratios is not None and len(self.width_ratios) != ncol:
+            raise ValueError(f"'width_ratios' must have {ncol} entries (one per column), got {len(self.width_ratios)}")
+
+        self._gridspec = self._figure.add_gridspec(nrow, ncol, hspace=self.padding[0], wspace=self.padding[1],
+                                                    height_ratios=self.height_ratios, width_ratios=self.width_ratios)
         if self.shared_axes not in (None, 'x', 'y', 'both'):
             raise ValueError(f"'shared_axes' must be one of None, 'x', 'y', 'both', got {self.shared_axes!r}")
         sharex = 'col' if self.shared_axes in ('x', 'both') else False
