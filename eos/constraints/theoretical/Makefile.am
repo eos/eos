@@ -12,6 +12,7 @@ CONSTRAINTS_FILES = \
 	Ds-decay-constants.yaml \
 	D-to-pi-form-factors.yaml \
 	D-to-P-form-factors.yaml \
+	Ds-to-K-form-factors.yaml \
 	Ds-to-P-form-factors.yaml \
 	Lb-to-Lq-form-factors.yaml \
 	Lc-to-L-form-factors.yaml \
