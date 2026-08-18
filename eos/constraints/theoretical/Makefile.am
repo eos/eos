@@ -10,6 +10,7 @@ CONSTRAINTS_FILES = \
 	Bs-to-V-form-factors.yaml \
 	dispersive-bounds.yaml \
 	Ds-decay-constants.yaml \
+	D-to-pi-form-factors.yaml \
 	D-to-P-form-factors.yaml \
 	Ds-to-P-form-factors.yaml \
 	Lb-to-Lq-form-factors.yaml \
