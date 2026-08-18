@@ -186,6 +186,30 @@ class GridFigureTests(unittest.TestCase):
         self.assertAlmostEqual(size[0], 6.0) # 3.0 * ncol = 3.0 * 2
         self.assertAlmostEqual(size[1], 3.0) # 3.0 * nrow = 3.0 * 1
 
+    def test_height_ratios(self):
+
+        input = self._grid_yaml('[2, 1]', 2, extra='height_ratios: [4, 1]')
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        self.assertEqual(list(figure._gridspec.get_height_ratios()), [4, 1])
+
+    def test_width_ratios(self):
+
+        input = self._grid_yaml('[1, 2]', 2, extra='width_ratios: [3, 1]')
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        self.assertEqual(list(figure._gridspec.get_width_ratios()), [3, 1])
+
+    def test_height_ratios_wrong_length(self):
+
+        input = self._grid_yaml('[2, 1]', 2, extra='height_ratios: [1, 2, 3]')
+        with self.assertRaises(Exception):
+            eos.figure.FigureFactory.from_yaml(input)
+
+    def test_width_ratios_wrong_length(self):
+
+        input = self._grid_yaml('[1, 2]', 2, extra='width_ratios: [1]')
+        with self.assertRaises(Exception):
+            eos.figure.FigureFactory.from_yaml(input)
+
     def test_single_cell(self):
 
         # a 1x1 grid must work: subplots() squeezes to a bare Axes by default, which
