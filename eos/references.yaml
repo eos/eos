@@ -767,6 +767,15 @@ BaBar:2013A:
   inspire-id: Lees:2013nxa
   title: Measurement of the $B \to X_s \ell^+\ell^-$ branching fraction and search for direct
     CP violation from a sum of exclusive final states
+BaBar:2014A:
+  authors: Lees, J. P. and others
+  collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1412.5502
+  inspire-id: BaBar:2014xzf
+  title: Measurement of the $D^0 \to \pi^- e^+ \nu_e$ differential decay branching fraction
+    as a function of $q^2$ and study of form factor parameterizations
 Belle:2004A:
   authors: Nakao, M. et al.
   collaboration: Belle
