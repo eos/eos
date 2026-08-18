@@ -1786,6 +1786,15 @@ HLMW:2015A:
     id: oai:arXiv.org:1501.00367
   inspire-id: Horgan:2015vla
   title: Rare $B$ decays using lattice QCD form factors
+HPQCD:2011A:
+  authors: Na, Heechang and Davies, Christine T. H. and Follana, Eduardo and Koponen,
+    Jonna and Lepage, G. Peter and Shigemitsu, Junko
+  collaboration: HPQCD
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1109.1501
+  inspire-id: Na:2011mc
+  title: $D \rightarrow \pi, l \nu$ Semileptonic Decays, $|V_{cd}|$ and 2$^{nd}$ Row Unitarity from Lattice QCD
 HPQCD:2013A:
   authors: Bouchard, Chris and Lepage, G. Peter and Monahan, Christopher and Na, Heechang and Shigemitsu, Junko
   collaboration: HPQCD
