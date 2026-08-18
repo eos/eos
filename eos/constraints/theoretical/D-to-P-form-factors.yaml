@@ -72,7 +72,7 @@ D->K::f_0+f_++f_T@HPQCD:2022A:
               ]
   references: ['HPQCD:2022A']
 
-D->K::f_++f_0@FNALMILC:2022A:
+D->K::f_++f_0@FNAL+MILC:2022A:
   type: 'MultivariateGaussian(Covariance)'
   observables:  [ 'D->K::f_0(q2)',  'D->K::f_0(q2)',  'D->K::f_0(q2)',  'D->K::f_0(q2)',  'D->K::f_+(q2)',  'D->K::f_+(q2)',  'D->K::f_+(q2)'  ]
   kinematics:   [ {q2: +0.188009},  {q2: +0.695633},  {q2: +1.18446},   {q2: +1.69208},   {q2: +0.695633},  {q2: +1.18446},   {q2: +1.69208}   ]
