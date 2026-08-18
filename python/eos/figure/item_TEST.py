@@ -17,6 +17,7 @@
 import unittest
 
 import eos
+import eos.data
 import eos.figure
 import os
 import tempfile
@@ -499,6 +500,23 @@ class ConstraintItemTests(unittest.TestCase):
 
 class ConstraintResidueItemTests(unittest.TestCase):
 
+    class _Parameter:
+        "Minimal stand-in for eos.Parameter, exposing the name/min/max accessors that Mode.create() uses."
+
+        def __init__(self, name, minimum, maximum):
+            self._name = name
+            self._min  = minimum
+            self._max  = maximum
+
+        def name(self):
+            return self._name
+
+        def min(self):
+            return self._min
+
+        def max(self):
+            return self._max
+
     def test_full(self):
 
         try:
@@ -541,6 +559,62 @@ class ConstraintResidueItemTests(unittest.TestCase):
         entry = item.legend()[0][0]
         self.assertTrue(entry.has_xerr)
         self.assertTrue(entry.has_yerr)
+
+    def test_mode_file(self):
+
+        # 'mode_file' loads the best-fit parameter values from a stored eos.data.Mode, deferred to
+        # prepare() so that the file need not exist at load time
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'mode-default')
+            eos.data.Mode.create(path, [self._Parameter('mass::e', 0.0, 1.0)], [0.5], None, [], None, None)
+
+            item = eos.figure.ItemFactory.from_yaml(f"""
+            type: 'constraint-residue'
+            constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+            observable: 'B->Dlnu::BR'
+            variable: 'q2'
+            rescale_by_width: true
+            mode_file: '{path}'
+            """)
+            item.prepare()
+            self.assertEqual(item._parameters['mass::e'].evaluate(), 0.5)
+
+    def test_mode_file_relative_to_base_directory(self):
+
+        # a relative 'mode_file' is resolved against the analysis file context's base_directory,
+        # exactly like 'fixed_parameters_from_file' and 'parameters_from_file' elsewhere
+        with tempfile.TemporaryDirectory() as d:
+            eos.data.Mode.create(os.path.join(d, 'mode-default'), [self._Parameter('mass::e', 0.0, 1.0)], [0.5], None, [], None, None)
+
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint-residue'
+            constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+            observable: 'B->Dlnu::BR'
+            variable: 'q2'
+            rescale_by_width: true
+            mode_file: 'mode-default'
+            """)
+            item.prepare(context=AnalysisFileContext(base_directory=d))
+            self.assertEqual(item._parameters['mass::e'].evaluate(), 0.5)
+
+    def test_mode_file_overridden_by_parameters(self):
+
+        # an explicit 'parameters' entry takes precedence over the value loaded from 'mode_file'
+        with tempfile.TemporaryDirectory() as d:
+            path = os.path.join(d, 'mode-default')
+            eos.data.Mode.create(path, [self._Parameter('mass::e', 0.0, 1.0)], [0.5], None, [], None, None)
+
+            item = eos.figure.ItemFactory.from_yaml(f"""
+            type: 'constraint-residue'
+            constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+            observable: 'B->Dlnu::BR'
+            variable: 'q2'
+            rescale_by_width: true
+            mode_file: '{path}'
+            parameters: {{"mass::e": 1.0}}
+            """)
+            item.prepare()
+            self.assertEqual(item._parameters['mass::e'].evaluate(), 1.0)
 
 class TwoDimensionalConstraintItemTests(unittest.TestCase):
 

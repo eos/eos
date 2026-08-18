@@ -2541,10 +2541,12 @@ class ConstraintResidueItem(Item):
     :type observable: eos.QualifiedName | None
     :param range: The interval in which the observable is plotted in the case of a multivariate constraint.
     :type range: tuple[int, int] | None
-    :param parameters: The set of parameters used to evaluate the constraint's observables, given as a dictionary mapping parameter names to their values.
+    :param parameters: The set of parameters used to evaluate the constraint's observables, given as a dictionary mapping parameter names to their values. Values given here take precedence over those loaded from ``mode_file``.
     :type parameters: dict[eos.QualifiedName, float] | None
     :param rescale_by_width: Rescales binned constraints by the inverse of the bin width. This is often required to compare theory (integrated) predictions and experimental (averaged) measurements. Defaults to false.
     :type rescale_by_width: bool
+    :param mode_file: Path to a stored :class:`eos.data.Mode`, whose best-fit parameter values are used to evaluate the constraint's observables. Values given via ``parameters`` override the corresponding entries loaded from this file.
+    :type mode_file: str | None
 
     Example:
 
@@ -2577,6 +2579,7 @@ class ConstraintResidueItem(Item):
     range:tuple[int, int]|None=field(default=None)
     parameters:dict[eos.QualifiedName,float]|None=field(default=None)
     rescale_by_width:bool=False
+    mode_file:str|None=field(default=None)
 
     def validate_semantics(self, context):
         if self.observable is not None:
@@ -2603,9 +2606,13 @@ class ConstraintResidueItem(Item):
 
         * ``range`` (list of int) -- The interval in which the observable is plotted in the case of a multivariate constraint.
         * ``parameters`` (dict of [eos.QualifiedName, float]) -- The set of parameters used to evaluate the constraint's observables,
-        given as a dictionary mapping parameter names to their values. If None, EOS default parameters will be used.
+        given as a dictionary mapping parameter names to their values. If None, EOS default parameters will be used. Values given
+        here take precedence over those loaded from ``mode_file``.
         * ``rescale_by_width`` (*bool*) -- Rescales binned constraints by the inverse of the bin width. This is often required
         to compare theory (integrated) predictions and experimental (averaged) measurements. Defaults to false.
+        * ``mode_file`` (*str*) -- Path to a stored :class:`eos.data.Mode`, e.g. as written by :func:`eos.tasks.find_mode`.
+        Its best-fit parameter values are used to evaluate the constraint's observables. Values given via ``parameters``
+        override the corresponding entries loaded from this file.
 
     Example:
 
@@ -2640,9 +2647,6 @@ class ConstraintResidueItem(Item):
             raise TypeError(f'constraints must be a QualifiedName or a list of QualifiedNames, not {type(self.constraints)}')
 
         self._parameters = eos.Parameters.Defaults()
-        if self.parameters is not None and type(self.parameters) is dict:
-            for key, value in self.parameters.items():
-                self._parameters.set(key, value)
 
     def prepare(self, context:AnalysisFileContext=None):
         """Prepare the constraint residues for drawing.
@@ -2652,11 +2656,25 @@ class ConstraintResidueItem(Item):
         together with their uncertainties as a function of the kinematic ``variable``, optionally
         rescaling binned constraints by the inverse of the bin width.
 
-        :param context: The analysis file context. Accepted for interface consistency; this item
-            does not read any data files. If ``None``, a default context is used.
+        :param context: The analysis file context, used to resolve ``mode_file`` relative to the
+            analysis file's base directory. If ``None``, a default context is used.
         :type context: AnalysisFileContext | None
         """
         context = AnalysisFileContext() if context is None else context
+
+        # Override parameters from the mode file (resolved relative to the analysis file's base
+        # directory) and/or from explicit values, with explicit values taking precedence. Done here
+        # rather than in __post_init__ so that the mode file need not exist at load time.
+        if self.mode_file is not None:
+            mode = eos.data.Mode(context.data_path(self.mode_file))
+            for parameter, value in zip(mode.varied_parameters, mode.mode):
+                self._parameters.set(parameter['name'], value)
+
+        if self.parameters is not None and type(self.parameters) is dict:
+            if self.mode_file is not None:
+                eos.warn('Overriding values read from \'mode_file\' with explicit values in \'parameters\'')
+            for key, value in self.parameters.items():
+                self._parameters.set(key, value)
 
         import yaml
 
