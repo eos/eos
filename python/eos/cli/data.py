@@ -19,8 +19,16 @@ import argparse
 from collections.abc import Sequence
 from contextlib import redirect_stderr, redirect_stdout
 import logging
+from pathlib import Path
 import sys
 from typing import TextIO
+
+from .data_checks import CheckContext, CheckFactory, CheckScope, PlainTextRenderer, run_checks
+
+
+def create_check_factory() -> CheckFactory:
+    """Return an empty check registry."""
+    return CheckFactory()
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -58,6 +66,38 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser_update.set_defaults(cmd=cmd_update)
 
+    parser_check = subparsers.add_parser(
+        'check',
+        parents=[common_subparser],
+        description='Check an EOS dataset candidate.',
+        help='Check an EOS dataset candidate.',
+    )
+    parser_check.add_argument(
+        '--analysis-file',
+        action='append',
+        default=None,
+        metavar='PATH',
+        help='Select an analysis file relative to DIRECTORY; repeat for multiple files.',
+    )
+    parser_check.add_argument(
+        '--main-analysis-file',
+        metavar='PATH',
+        help='Select the main analysis file from the analysis files.',
+    )
+    parser_check.add_argument(
+        '-i', '--interactive',
+        action='store_true',
+        help='Use interactive checking (not yet available).',
+    )
+    parser_check.add_argument(
+        'directory',
+        nargs='?',
+        default='.',
+        metavar='DIRECTORY',
+        help='Dataset directory to check (default: current directory).',
+    )
+    parser_check.set_defaults(cmd=cmd_check)
+
     return parser
 
 
@@ -94,11 +134,36 @@ def cmd_update(args: argparse.Namespace, **_kwargs) -> int:
     return 0
 
 
+def cmd_check(
+    args: argparse.Namespace,
+    *,
+    stdout: TextIO = sys.stdout,
+    stderr: TextIO = sys.stderr,
+    check_factory: CheckFactory | None = None,
+) -> int:
+    if args.interactive:
+        print('eos-data check: interactive operation is not yet available', file=stderr)
+        return 2
+
+    context = CheckContext(
+        dataset_root=Path(args.directory).resolve(),
+        analysis_paths=tuple(Path(path) for path in (args.analysis_file or ())),
+        main_analysis_path=(
+            Path(args.main_analysis_file) if args.main_analysis_file is not None else None
+        ),
+    )
+    factory = check_factory if check_factory is not None else create_check_factory()
+    result = run_checks(factory, context, scope=CheckScope.BASIC)
+    PlainTextRenderer().write(result, stdout)
+    return result.exit_status
+
+
 def main(
     argv: Sequence[str] | None = None,
     *,
     stdout: TextIO = sys.stdout,
     stderr: TextIO = sys.stderr,
+    check_factory: CheckFactory | None = None,
 ) -> int:
     parser = _parser()
     try:
@@ -116,4 +181,5 @@ def main(
         args,
         stdout=stdout,
         stderr=stderr,
+        check_factory=check_factory,
     )
