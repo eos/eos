@@ -210,6 +210,20 @@ class XTicksTests(unittest.TestCase):
         with self.assertLogs('EOS', level='WARNING'):
             XTicks.from_dict(scaling_factor=1e-3).draw(ax)
 
+    def test_locations(self):
+        import matplotlib.ticker
+        from eos.figure.plot import XTicks
+
+        # defaults to None (automatic tick placement)
+        self.assertIsNone(XTicks.from_dict().locations)
+
+        # explicit locations install a FixedLocator, overriding the automatic placement
+        _, ax = plt.subplots()
+        ax.set_xlim(-2.5, 2.5)
+        XTicks.from_dict(locations=[-2, 0, 2]).draw(ax)
+        self.assertIsInstance(ax.xaxis.get_major_locator(), matplotlib.ticker.FixedLocator)
+        self.assertEqual(list(ax.get_xticks()), [-2, 0, 2])
+
 
 class YTicksTests(unittest.TestCase):
 
@@ -293,6 +307,20 @@ class YTicksTests(unittest.TestCase):
         ax.set_yscale('log')
         with self.assertLogs('EOS', level='WARNING'):
             YTicks.from_dict(scaling_factor=1e-3).draw(ax)
+
+    def test_locations(self):
+        import matplotlib.ticker
+        from eos.figure.plot import YTicks
+
+        # defaults to None (automatic tick placement)
+        self.assertIsNone(YTicks.from_dict().locations)
+
+        # explicit locations install a FixedLocator, overriding the automatic placement
+        _, ax = plt.subplots()
+        ax.set_ylim(-2.5, 2.5)
+        YTicks.from_dict(locations=[-2, 0, 2]).draw(ax)
+        self.assertIsInstance(ax.yaxis.get_major_locator(), matplotlib.ticker.FixedLocator)
+        self.assertEqual(list(ax.get_yticks()), [-2, 0, 2])
 
 
 class XAxisTests(unittest.TestCase):

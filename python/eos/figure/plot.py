@@ -107,6 +107,11 @@ class XTicks(Deserializable):
         way should be communicated through the axis ``label`` or ``unit``. Intended for linear axes.
         Defaults to None (no rescaling).
     :type scaling_factor: float | None
+    :param locations: Explicit positions for the major ticks, e.g. ``[-2, 0, 2]``. Overrides the
+        automatic tick placement, which otherwise chooses a step (and so which values end up
+        labelled) based on the axes' rendered size rather than on the data range alone. Defaults to
+        None (automatic placement).
+    :type locations: list[float] | None
     """
 
     minor:bool=field(default=True)
@@ -114,6 +119,7 @@ class XTicks(Deserializable):
     visible:bool=field(default=True)
     format:str|None=field(default=None)
     scaling_factor:float|None=field(default=None)
+    locations:list[float]|None=field(default=None)
 
     def __post_init__(self):
         POSITIONS = ['bottom', 'top', 'both']
@@ -138,7 +144,9 @@ class XTicks(Deserializable):
             ax.xaxis.set_tick_params(bottom=False, top=False)
         else:
             log_scale = ax.xaxis.get_scale() == 'log'
-            if not log_scale:
+            if self.locations is not None:
+                ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator(self.locations))
+            elif not log_scale:
                 ax.xaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             else:
                 ax.xaxis.set_major_locator(matplotlib.ticker.LogLocator(base=10.0))
@@ -245,6 +253,11 @@ class YTicks(Deserializable):
         way should be communicated through the axis ``label`` or ``unit``. Intended for linear axes.
         Defaults to None (no rescaling).
     :type scaling_factor: float | None
+    :param locations: Explicit positions for the major ticks, e.g. ``[-2, 0, 2]``. Overrides the
+        automatic tick placement, which otherwise chooses a step (and so which values end up
+        labelled) based on the axes' rendered size rather than on the data range alone. Defaults to
+        None (automatic placement).
+    :type locations: list[float] | None
     """
 
     minor:bool=field(default=True)
@@ -252,6 +265,7 @@ class YTicks(Deserializable):
     visible:bool=field(default=True)
     format:str|None=field(default=None)
     scaling_factor:float|None=field(default=None)
+    locations:list[float]|None=field(default=None)
 
     def __post_init__(self):
         POSITIONS = ['left', 'right', 'both']
@@ -276,7 +290,9 @@ class YTicks(Deserializable):
             ax.yaxis.set_tick_params(left=False, right=False)
         else:
             log_scale = ax.yaxis.get_scale() == 'log'
-            if not log_scale:
+            if self.locations is not None:
+                ax.yaxis.set_major_locator(matplotlib.ticker.FixedLocator(self.locations))
+            elif not log_scale:
                 ax.yaxis.set_major_locator(matplotlib.ticker.AutoLocator())
             else:
                 ax.yaxis.set_major_locator(matplotlib.ticker.LogLocator(base=10.0))
