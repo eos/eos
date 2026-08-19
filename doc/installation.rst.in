@@ -133,6 +133,19 @@ software dependencies.
 Installing the dependencies on Linux
 ====================================
 
+.. note::
+
+   As an alternative to installing the dependencies listed below yourself, you can use the Docker
+   image provided by the `eos/docker.io <https://github.com/eos/docker.io>`_ repository and
+   published on Docker Hub as ``eoshep/ubuntu-resolute``. This image has all of EOS's build
+   dependencies pre-installed; after starting a container from it, e.g. with
+
+   ::
+
+     docker run -it --rm eoshep/ubuntu-resolute bash
+
+   you can skip ahead to `Installing EOS`_.
+
 The dependencies can be roughly categorized as either system software, Python-related software, or scientific software.
 
 EOS requires the following system software:
