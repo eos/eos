@@ -30,6 +30,7 @@
 - Add the ``mass::Lambda_c(2595)@HME``, ``mass::Lambda_c(2625)@HME``, and ``mass::Lambda(1520)@HME`` parameters (D. van Dyk)
 - Add the ``Lambda_b->Lambda(1520)::tp_v@SE``, ``Lambda_b->Lambda(1520)::tp_a@SE``, and ``Lambda_b->Lambda(1520)::t0@SE`` parameters (D. van Dyk)
 - Add the ``eos-data check``, ``create``, ``publish``, and ``register`` commands for validating analysis datasets, creating citable dataset tags, publishing GitHub releases for Zenodo, and registering published datasets (D. van Dyk)
+- Document the ``eoshep/ubuntu-resolute`` Docker image, which ships all of EOS's build dependencies pre-installed, as an alternative to installing them by hand (D. van Dyk)
 
 ### Deprecated
 
