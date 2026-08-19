@@ -19,11 +19,12 @@ import unittest
 import eos
 import eos.data
 import eos.figure
+import math
 import os
 import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
-from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler
+from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler, ConstraintResidueItem
 from eos.validation_context import ValidationContext
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
@@ -519,6 +520,7 @@ class ConstraintResidueItemTests(unittest.TestCase):
 
     def test_full(self):
 
+        # the default style is 'pull', drawing a bar per residue
         try:
             input = """
             type: 'constraint-residue'
@@ -530,16 +532,63 @@ class ConstraintResidueItemTests(unittest.TestCase):
             rescale_by_width: true
             """
             item = eos.figure.ItemFactory.from_yaml(input)
+            self.assertEqual(item.style, 'pull')
+            item.prepare()
+            _, ax = plt.subplots()
+            item.draw(ax)
+            self.assertGreater(len(ax.patches), 0)
+        except Exception as e:
+            self.fail(f"Error when testing item of type 'constraint': {e}")
+
+    def test_full_delta_style(self):
+
+        # 'delta' falls back to the original error-bar drawing
+        try:
+            input = """
+            type: 'constraint-residue'
+            label: r'Belle 2015 $\\ell=e,\\, q=d$'
+            constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+            observable: 'B->Dlnu::BR'
+            variable: 'q2'
+            parameters: {"mass::e": 1.0}
+            rescale_by_width: true
+            style: 'delta'
+            """
+            item = eos.figure.ItemFactory.from_yaml(input)
             item.prepare()
             _, ax = plt.subplots()
             item.draw(ax)
         except Exception as e:
-            self.fail(f"Error when testing item of type 'constraint': {e}")
+            self.fail(f"Error when testing item of type 'constraint-residue' with style 'delta': {e}")
+
+    def test_invalid_style(self):
+
+        with self.assertRaises(Exception):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'constraint-residue'
+            constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+            observable: 'B->Dlnu::BR'
+            variable: 'q2'
+            style: 'unknown'
+            """)
+
+    def test_pull(self):
+
+        # a symmetric error is a plain division
+        self.assertAlmostEqual(ConstraintResidueItem._pull(2.0, 1.0), 2.0)
+        self.assertAlmostEqual(ConstraintResidueItem._pull(-2.0, 1.0), -2.0)
+
+        # an asymmetric error uses the side towards zero: sigma_lo for a positive residue
+        # (measured above the prediction), sigma_hi for a negative one
+        self.assertAlmostEqual(ConstraintResidueItem._pull(2.0, (1.0, 0.5)), 4.0)
+        self.assertAlmostEqual(ConstraintResidueItem._pull(-2.0, (1.0, 0.5)), -2.0)
+
+        # a vanishing standard deviation yields NaN rather than raising ZeroDivisionError
+        self.assertTrue(math.isnan(ConstraintResidueItem._pull(1.0, 0.0)))
 
     def test_legend(self):
 
-        # a labelled residue item contributes a single error-bar entry (a capped bar
-        # rendered by HandlerErrorbar), matching how the residues are drawn
+        # a labelled residue item in the 'pull' style contributes a single filled-bar entry
         item = eos.figure.ItemFactory.from_yaml("""
         type: 'constraint-residue'
         label: 'Belle'
@@ -547,6 +596,24 @@ class ConstraintResidueItemTests(unittest.TestCase):
         observable: 'B->Dlnu::BR'
         variable: 'q2'
         rescale_by_width: true
+        """)
+        entries = item.legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'Belle')
+
+    def test_legend_delta_style(self):
+
+        # in the 'delta' style, a labelled residue item contributes a single error-bar entry
+        # (a capped bar rendered by HandlerErrorbar), matching how the residues are drawn
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        label: 'Belle'
+        constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+        observable: 'B->Dlnu::BR'
+        variable: 'q2'
+        rescale_by_width: true
+        style: 'delta'
         """)
         entries = item.legend()
         self.assertEqual(len(entries), 1)
