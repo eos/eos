@@ -46,6 +46,7 @@
 - Accept the lepton flavor as a ``str`` in ``eos.Model.wilson_coefficients_b_to_s``, which no Python call could satisfy before for want of a converter (D. van Dyk)
 - Add ``ThreadPool::WaitGuard``, a guard that a thread holds while it waits for the work it enqueued, so that an embedding runtime can relinquish exclusive access to its own state for as long as the pool's threads need it in turn; the Python bindings install one that detaches the calling thread from the interpreter (D. van Dyk)
 - Add a test case that races sixteen threads for a singleton's first ``instance()`` call and checks that exactly one instance is constructed (D. van Dyk)
+- Document the ``eoshep/ubuntu-resolute`` Docker image, which ships all of EOS's build dependencies pre-installed, as an alternative to installing them by hand (D. van Dyk)
 
 ### Deprecated
 
