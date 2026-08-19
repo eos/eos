@@ -6,6 +6,7 @@
 
 - **Breaking:** Rename the ``BFW2010``, ``BMRvD2022`` and ``ABR2022`` form factor parametrizations to ``SE`` (D. van Dyk)
 - **Breaking:** Rename the hadronic-matrix-element mass parameters shared by the ``BSZ2015``, ``SE``, ``SSE``, ``BGL1997``, and ``HKVT2025`` form factor parametrizations from an ``@BSZ2015``/``@SE`` suffix to ``@HME``, since these are shared parametrization inputs rather than parametrization-specific fit outputs or physical masses; any saved parameter samples or analysis files that name a ``mass::...@BSZ2015`` or ``mass::...@SE`` parameter explicitly must be updated to ``@HME`` (D. van Dyk)
+- **Breaking:** Default ``eos.figure.ConstraintResidueItem`` to a new ``style: 'pull'``, drawing each residue as a bar in units of standard deviations; the previous error-bar drawing of the absolute deviation is still available via ``style: 'delta'`` (D. van Dyk)
 - Report problems in an analysis file as located ``eos.diagnostic.Diagnostic`` objects in lieu of raising on the first one: loading now enforces a structural validation phase, while a separate and side-effect-free semantic phase resolves the file's own custom parameters, observables and constraints through a per-file validation context, checks expressions through the C++ expression parser without registering them, reports unused priors, likelihoods, masks, and custom entities, and reports parameters that a posterior fixes while one of its own priors varies them or that neither its likelihood nor any of its predictions uses (D. van Dyk)
 - Restrict file-local names in analysis files to exclude `/` and whitespace (D. van Dyk)
 - Replace the hand-rolled ``eoshep-before`` wheel-preparation recipe with a PEP 517 build driven by ``pyproject.toml`` and ``setup.py``: ``setuptools`` now compiles the ``_eos`` extension from source against a staged installation prefix, and ``auditwheel``/``delocate`` perform all library bundling and ``RPATH``/install-name rewriting, in lieu of a hand-maintained shared-object regex, manual ``chrpath`` calls, and an ``_eos_libs`` package that duplicated the libraries the repair tools bundle anyway; the ``cp312`` Linux wheel shrinks from 88 MB to 21 MB as a result (D. van Dyk)
@@ -14,9 +15,13 @@
 - Split ``Figure.draw()`` into ``Figure.draw()`` and ``Figure.save()`` (D. van Dyk)
 - Update the documentation to discuss the ``SE`` and ``SSE`` form factor parametrizations, reflect that ``SSE`` is now the default choice (D. van Dyk)
 - Default the ``--with-boost-python-suffix`` used at ``./configure`` time to the Python major+minor version (e.g. ``312`` for CPython 3.12), matching the modern Boost.Python naming convention used by conda-forge and current Debian/Ubuntu/Fedora releases, in lieu of the previous OS/codename-based detection (D. van Dyk)
+- Extend the ``inference`` example figure with a residual panel showing each constraint's pull below the main panel (D. van Dyk)
 
 ### Added
 
+- Add ``height_ratios`` and ``width_ratios`` to ``eos.figure.GridFigure``, for sizing a grid's rows and columns unevenly (D. van Dyk)
+- Add a ``mode_file`` key to ``eos.figure.ConstraintResidueItem``, reading the best-fit parameter values directly from a stored ``eos.data.Mode`` (e.g. as written by ``eos.tasks.find_mode``) in lieu of an explicit ``parameters`` dictionary (D. van Dyk)
+- Add a ``locations`` key to ``eos.figure.plot.XTicks`` and ``YTicks`` for pinning explicit major-tick positions, since automatic tick placement chooses its step from the axes' rendered size and can otherwise label a small panel differently than intended (D. van Dyk)
 - Add the function ``eos.analyze_expression``, which reports whether an EOS expression is well-formed and which observables and parameters it references, without registering anything (D. van Dyk)
 - Document how to build an ``eoshep`` wheel manually, in a new "Building a Wheel Manually" section of the installation guide (D. van Dyk)
 - Add the ``SSE`` (Simplified Series Expansion) form factor parametrization for pseudoscalar-to-pseudoscalar, pseudoscalar-to-vector, and 1/2^+ -> 1/2^+ transitions (D. van Dyk)
