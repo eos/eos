@@ -73,6 +73,8 @@
 - Check the LaTeX representation of every observable in ``doc/doc_TEST.py``, mirroring the existing check of the parameters (D. van Dyk)
 - Declare the ``ipywidgets`` dependency, which ``eos.tasks`` imports whenever a task runs under IPython (D. van Dyk)
 - Expose ``url()`` property of ``eos.Reference`` to Python, so that the URL of a reference can be retrieved (M. Kirk)
+- Document the ``eoshep/ubuntu-resolute`` Docker image, which ships all of EOS's build dependencies pre-installed, as an alternative to installing them by hand (D. van Dyk, M. Kirk)
+- Add a workflow to generate Docker images with each released version of EOS preinstalled, and document them (M. Kirk)
 
 ### Deprecated
 
