@@ -2547,6 +2547,8 @@ class ConstraintResidueItem(Item):
     :type rescale_by_width: bool
     :param mode_file: Path to a stored :class:`eos.data.Mode`, whose best-fit parameter values are used to evaluate the constraint's observables. Values given via ``parameters`` override the corresponding entries loaded from this file.
     :type mode_file: str | None
+    :param style: The drawing style, either ``'pull'`` (default) or ``'delta'``. ``'pull'`` draws each residue as a bar showing the deviation in units of standard deviations; ``'delta'`` draws each residue as an error bar showing the absolute deviation.
+    :type style: str
 
     Example:
 
@@ -2562,10 +2564,10 @@ class ConstraintResidueItem(Item):
                 variable: 'q2', range: [ 0.02, 11.63 ], color: 'black'
               }
             - { type: 'constraint-residue', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=e,\\, q=d$',
-                variable: 'q2', 'parameters': {"mass::e": 1.0}, rescale_by_width: true
+                variable: 'q2', 'parameters': {"mass::e": 1.0}, rescale_by_width: true, style: 'delta'
               }
             - { type: 'constraint-residue', 'constraints': 'B^0->D^+mu^-nu::BRs@Belle:2015A', observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=\\mu,\\, q=d$',
-                variable: 'q2', 'parameters': {"mass::e": 1.0}, rescale_by_width: true
+                variable: 'q2', 'parameters': {"mass::e": 1.0}, rescale_by_width: true, style: 'delta'
               }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
@@ -2580,6 +2582,7 @@ class ConstraintResidueItem(Item):
     parameters:dict[eos.QualifiedName,float]|None=field(default=None)
     rescale_by_width:bool=False
     mode_file:str|None=field(default=None)
+    style:str=field(default='pull')
 
     def validate_semantics(self, context):
         if self.observable is not None:
@@ -2613,6 +2616,9 @@ class ConstraintResidueItem(Item):
         * ``mode_file`` (*str*) -- Path to a stored :class:`eos.data.Mode`, e.g. as written by :func:`eos.tasks.find_mode`.
         Its best-fit parameter values are used to evaluate the constraint's observables. Values given via ``parameters``
         override the corresponding entries loaded from this file.
+        * ``style`` (*str*) -- The drawing style, either ``'pull'`` (default) or ``'delta'``. ``'pull'`` draws each residue
+        as a bar showing the deviation in units of standard deviations; ``'delta'`` draws each residue as an error bar
+        showing the absolute deviation, using a horizontal error bar to indicate the bin width of binned constraints.
 
     Example:
 
@@ -2621,7 +2627,7 @@ class ConstraintResidueItem(Item):
         figure_args = '''
         plot:
           xaxis: { label: r'$q^2$', unit: r'$\\textnormal{GeV}^2$', range: [0.0, 11.63] }
-          yaxis: { label: r'$d\\mathcal{B}/dq^2$ residues',         range: [-2e-3,  2e-3] }
+          yaxis: { label: r'pull',                                  range: [-3,  3] }
           legend: { position: 'lower left' }
           items:
             - { type: 'constraint-residue', 'constraints': 'B^0->D^+e^-nu::BRs@Belle:2015A',  observable: 'B->Dlnu::BR', label: r'Belle 2015 $\\ell=e,\\, q=d$',
@@ -2638,6 +2644,9 @@ class ConstraintResidueItem(Item):
 
     def __post_init__(self):
         super().__post_init__()
+
+        if self.style not in ('pull', 'delta'):
+            raise ValueError(f"'style' must be one of 'pull', 'delta', got {self.style!r}")
 
         if type(self.constraints) == str:
             self.constraints = [eos.QualifiedName(self.constraints)]
@@ -2822,17 +2831,39 @@ class ConstraintResidueItem(Item):
         self._xerrors = _np.array(xerrors)
         self._yvalues = _np.array(yvalues)
         self._yerrors = _np.array(yerrors)
+        self._pulls = _np.array([self._pull(yv, yerr) for yv, yerr in zip(yvalues, yerrors)])
 
         if self.range:
             self._mask = _np.logical_and(self._xvalues > min(self.range), self._xvalues < max(self.range))
         else:
             self._mask = _np.array([True] * len(self._xvalues))
 
+    @staticmethod
+    def _pull(yvalue, yerror):
+        """The deviation in units of standard deviations, i.e. ``yvalue / sigma``.
+
+        For an asymmetric error, the standard deviation on the side towards zero is used, since
+        that side measures how far the point sits from perfect agreement with the prediction.
+
+        :param yvalue: The residue (measured value minus prediction).
+        :type yvalue: float
+        :param yerror: The residue's standard deviation, either a single value or a ``(sigma_hi, sigma_lo)`` pair.
+        :type yerror: float | tuple[float, float]
+        """
+        if _np.ndim(yerror) > 0:
+            sigma_hi, sigma_lo = yerror
+            sigma = sigma_lo if yvalue >= 0 else sigma_hi
+        else:
+            sigma = yerror
+        return yvalue / sigma if sigma != 0 else _np.nan
+
     def draw(self, ax):
         """Draw the constraint residues on the provided axes.
 
-        Renders each residue as an error bar, using horizontal error bars to indicate the bin
-        width of binned constraints.
+        In the default ``'pull'`` style, draws each residue as a bar showing the deviation in units
+        of standard deviations. In the ``'delta'`` style, draws each residue as an error bar showing
+        the absolute deviation, using a horizontal error bar to indicate the bin width of binned
+        constraints.
 
         :param ax: The matplotlib axes onto which the residues are drawn.
         :type ax: matplotlib.axes.Axes
@@ -2841,6 +2872,13 @@ class ConstraintResidueItem(Item):
         if len(self._xvalues) == 0:
             return
 
+        if self.style == 'pull':
+            self._draw_pull(ax)
+        else:
+            self._draw_delta(ax)
+
+    def _draw_delta(self, ax):
+        "Draw each residue as an error bar showing the absolute deviation (the 'delta' style)."
         xvalues = self._xvalues[self._mask]
         yvalues = self._yvalues[self._mask]
         xerrors = self._xerrors[self._mask]
@@ -2863,8 +2901,30 @@ class ConstraintResidueItem(Item):
             # disable the label for subsequent plots
             label = None
 
+    def _draw_pull(self, ax):
+        "Draw each residue as a bar showing the deviation in units of standard deviations (the 'pull' style)."
+        xvalues = self._xvalues[self._mask]
+        xerrors = self._xerrors[self._mask]
+        pulls = self._pulls[self._mask]
+
+        # bars span the full bin width for binned constraints; an unbinned point (no bin width
+        # available) falls back to a fraction of the smallest spacing between this item's own
+        # x values, or 1.0 if there is only a single, unbinned point
+        if len(xvalues) > 1:
+            spacings = _np.diff(_np.sort(xvalues))
+            spacings = spacings[spacings > 0]
+        else:
+            spacings = _np.array([])
+        fallback_width = 0.8 * _np.min(spacings) if len(spacings) else 1.0
+        widths = _np.array([2 * xerr if xerr is not None else fallback_width for xerr in xerrors])
+
+        ax.bar(xvalues, pulls, width=widths, color=self.color, alpha=self.alpha, label=self.label)
+
     def legend(self):
         """Return the item's legend entry in form of its handle(s) and label(s)."""
+        if self.style == 'pull':
+            return self._legend_patch()
+
         # the residues are drawn as capped error bars (always a y error, plus an x error
         # for binned constraints), so the swatch must match. The x error is only known
         # after prepare(); fall back to a y-only swatch if the data is not yet available.
