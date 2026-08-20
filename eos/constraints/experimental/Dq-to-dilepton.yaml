@@ -5,18 +5,20 @@
 ############################
 # {{{
 D_s^+->mu^+nu::BR@BESIII:2023B:
-    type: Gaussian
-    observable: D_s->lnu::BR
-    kinematics: {}
-    options: {q: s, l: mu}
-    mean: 0.5294e-2
-    sigma-stat: { hi: 0.0108e-2, lo: 0.0108e-2 }
-    sigma-sys: { hi: 0.0085e-2, lo: 0.0085e-2 }
+  type: 'Gaussian'
+  observable: 'D_s->lnu::BR'
+  kinematics: {}
+  options: {q: 's', l: 'mu'}
+  mean: +5.294e-03
+  sigma-stat: {hi: +1.08e-04, lo: +1.08e-04}
+  sigma-sys: {hi: +8.5e-05, lo: +8.5e-05}
+
 D_s^*->e^+nu::BR@BESIII:2023C:
-    type: Gaussian
-    observable: D_s^*->lnu::BR
-    kinematics: {}
-    options: {l: e}
-    mean: 2.1e-5
-    sigma-stat: { hi: 1.2e-5, lo: 0.9e-5 }
-    sigma-sys: { hi: 0.2e-5, lo: 0.2e-5 }
+  type: 'Gaussian'
+  observable: 'D_s^*->lnu::BR'
+  kinematics: {}
+  options: {l: 'e'}
+  mean: +2.1e-05
+  sigma-stat: {hi: +1.2e-05, lo: +9.0e-06}
+  sigma-sys: {hi: +2.0e-06, lo: +2.0e-06}
+# }}}

@@ -6,35 +6,38 @@
 #
 # {{{
 B^0->K^0Jpsi::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->Kpsi::BR
-    kinematics: {}
-    options: {q: d, psi: J/psi}
-    mean: 8.68e-4
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 3.e-5, lo: 3.e-5}
+  type: 'Gaussian'
+  observable: 'B->Kpsi::BR'
+  kinematics: {}
+  options: {q: 'd', psi: 'J/psi'}
+  mean: +8.68e-04
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +3.0e-05, lo: +3.0e-05}
+
 B^0->K^0psi2S::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->Kpsi::BR
-    kinematics: {}
-    options: {q: d, psi: psi(2S)}
-    mean: 5.8e-4
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 5.e-5, lo: 5.e-5}
+  type: 'Gaussian'
+  observable: 'B->Kpsi::BR'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: +5.8e-04
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +5.0e-05, lo: +5.0e-05}
+
 B->KJpsi::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->Kpsi::BR
-    kinematics: {}
-    options: {q: u, psi: J/psi}
-    mean: 10.06e-4
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 2.7e-5, lo: 2.7e-5}
+  type: 'Gaussian'
+  observable: 'B->Kpsi::BR'
+  kinematics: {}
+  options: {q: 'u', psi: 'J/psi'}
+  mean: +1.006e-03
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +2.7e-05, lo: +2.7e-05}
+
 B->Kpsi2S::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->Kpsi::BR
-    kinematics: {}
-    options: {q: u, psi: psi(2S)}
-    mean: 6.19e-4
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 2.2e-5, lo: 2.2e-5}
+  type: 'Gaussian'
+  observable: 'B->Kpsi::BR'
+  kinematics: {}
+  options: {q: 'u', psi: 'psi(2S)'}
+  mean: +6.19e-04
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +2.2e-05, lo: +2.2e-05}
 # }}}

@@ -3,22 +3,21 @@
 ###########################
 # {{{
 b->u::MesonicBound[1^-_V]:
-    type: UniformBound
-    observables:
-        - 'B_u^*::Saturation[1^-_V]'
-        - 'B->pipi::Saturation[1^-_V]'
-    kinematics: [ {}, {} ]
-    options: [ {}, { C: +- } ]
-    bound: 1.0
-    uncertainty: 0.05
+  type: 'UniformBound'
+  observables: [ 'B_u^*::Saturation[1^-_V]', 'B->pipi::Saturation[1^-_V]' ]
+  kinematics:  [ {},                         {}                           ]
+  options:     [ {},                         {C: '+-'}                    ]
+  bound: +1.0
+  uncertainty: +0.05
+
 b->u::MesonicBound[1^+_A]:
-    type: UniformBound
-    observables:
-        - 'B->pipi::Saturation[1^+_A]'
-    kinematics: [ {} ]
-    options: [ { C: +- } ]
-    bound: 1.0
-    uncertainty: 0.05
+  type: 'UniformBound'
+  observables:
+    - 'B->pipi::Saturation[1^+_A]'
+  kinematics: [{}]
+  options: [{C: '+-'}]
+  bound: +1.0
+  uncertainty: +0.05
 # }}}
 
 ###########################
@@ -26,53 +25,58 @@ b->u::MesonicBound[1^+_A]:
 ###########################
 # {{{
 b->c::Bound[0^+]:
-    type: UniformBound
-    observables: [ 'b->c::Bound[0^+]@CLN' ]
-    kinematics: [ {} ]
-    options: [ {} ]
-    bound: 1.0
-    # cf. [BG:2016A], eq. (2.8), p.5
-    uncertainty: 0.0130561
+  type: 'UniformBound'
+  observables: ['b->c::Bound[0^+]@CLN']
+  kinematics: [{}]
+  options: [{}]
+  bound: +1.0
+  # cf. [BG:2016A], eq. (2.8), p.5
+  uncertainty: +0.0130561
+
 b->c::Bound[0^-]:
-    type: UniformBound
-    observables: [ 'b->c::Bound[0^-]@CLN' ]
-    kinematics: [ {} ]
-    options: [ {} ]
-    bound: 1.0
-    # using the same relative uncertainty as for 0^+, cf. [BG:2016A], eq. (2.8), p.5
-    uncertainty: 0.0130561
+  type: 'UniformBound'
+  observables: ['b->c::Bound[0^-]@CLN']
+  kinematics: [{}]
+  options: [{}]
+  bound: +1.0
+  # using the same relative uncertainty as for 0^+, cf. [BG:2016A], eq. (2.8), p.5
+  uncertainty: +0.0130561
+
 b->c::Bound[1^+]:
-    type: UniformBound
-    observables: [ 'b->c::Bound[1^+]@CLN' ]
-    kinematics: [ {} ]
-    options: [ {} ]
-    bound: 1.0
-    # cf. [BG:2016A], eq. (2.8), p.5
-    uncertainty: 0.0093549
+  type: 'UniformBound'
+  observables: ['b->c::Bound[1^+]@CLN']
+  kinematics: [{}]
+  options: [{}]
+  bound: +1.0
+  # cf. [BG:2016A], eq. (2.8), p.5
+  uncertainty: +0.0093549
+
 b->c::Bound[1^-]:
-    type: UniformBound
-    observables: [ 'b->c::Bound[1^-]@CLN' ]
-    kinematics: [ {} ]
-    options: [ {} ]
-    bound: 1.0
-    # same relative uncertainty as for 1^+, cf. [BG:2016A], eq. (2.8), p.5
-    uncertainty: 0.0093549
+  type: 'UniformBound'
+  observables: ['b->c::Bound[1^-]@CLN']
+  kinematics: [{}]
+  options: [{}]
+  bound: +1.0
+  # same relative uncertainty as for 1^+, cf. [BG:2016A], eq. (2.8), p.5
+  uncertainty: +0.0093549
+
 b->c::Bound[1^+,T]:
-    type: UniformBound
-    observables: [ 'b->c::Bound[1^+,T]@CLN' ]
-    kinematics: [ {} ]
-    options: [ {} ]
-    bound: 1.0
-    # estimate of relative uncertainty based on the value of alpha_s^2
-    uncertainty: 0.08
+  type: 'UniformBound'
+  observables: ['b->c::Bound[1^+,T]@CLN']
+  kinematics: [{}]
+  options: [{}]
+  bound: +1.0
+  # estimate of relative uncertainty based on the value of alpha_s^2
+  uncertainty: +0.08
+
 b->c::Bound[1^-,T]:
-    type: UniformBound
-    observables: [ 'b->c::Bound[1^-,T]@CLN' ]
-    kinematics: [ {} ]
-    options: [ {} ]
-    bound: 1.0
-    # estimate of relative uncertainty based on the value of alpha_s^2
-    uncertainty: 0.08
+  type: 'UniformBound'
+  observables: ['b->c::Bound[1^-,T]@CLN']
+  kinematics: [{}]
+  options: [{}]
+  bound: +1.0
+  # estimate of relative uncertainty based on the value of alpha_s^2
+  uncertainty: +0.08
 # }}}
 
 ###########################
@@ -81,148 +85,99 @@ b->c::Bound[1^-,T]:
 # {{{
 # Mesonic bound
 b->s::MesonicBound[0^+_V]:
-    type: UniformBound
-    observables:
-        - 'B_s0::Saturation[0^+_V]'
-        - 'B->K::Saturation[0^+_V]'
-        - 'B->K^*::Saturation[0^+_V]'
-        - 'B_s->phi::Saturation[0^+_V]'
-    kinematics: [ {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s0::Saturation[0^+_V]', 'B->K::Saturation[0^+_V]', 'B->K^*::Saturation[0^+_V]', 'B_s->phi::Saturation[0^+_V]' ]
+  kinematics:  [ {},                        {},                        {},                          {}                            ]
+  options:     [ {},                        {},                        {},                          {}                            ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::MesonicBound[0^-_A]:
-    type: UniformBound
-    observables:
-        - 'B_s::Saturation[0^-_A]'
-        - 'B->K::Saturation[0^-_A]'
-        - 'B->K^*::Saturation[0^-_A]'
-        - 'B_s->phi::Saturation[0^-_A]'
-    kinematics: [ {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s::Saturation[0^-_A]', 'B->K::Saturation[0^-_A]', 'B->K^*::Saturation[0^-_A]', 'B_s->phi::Saturation[0^-_A]' ]
+  kinematics:  [ {},                       {},                        {},                          {}                            ]
+  options:     [ {},                       {},                        {},                          {}                            ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::MesonicBound[1^-_V]:
-    type: UniformBound
-    observables:
-        - 'B_s^*::Saturation[1^-_V]'
-        - 'B->K::Saturation[1^-_V]'
-        - 'B->K^*::Saturation[1^-_V]'
-        - 'B_s->phi::Saturation[1^-_V]'
-    kinematics: [ {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s^*::Saturation[1^-_V]', 'B->K::Saturation[1^-_V]', 'B->K^*::Saturation[1^-_V]', 'B_s->phi::Saturation[1^-_V]' ]
+  kinematics:  [ {},                         {},                        {},                          {}                            ]
+  options:     [ {},                         {},                        {},                          {}                            ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::MesonicBound[1^+_A]:
-    type: UniformBound
-    observables:
-        - 'B_s1::Saturation[1^+_A]'
-        - 'B->K::Saturation[1^+_A]'
-        - 'B->K^*::Saturation[1^+_A]'
-        - 'B_s->phi::Saturation[1^+_A]'
-    kinematics: [ {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s1::Saturation[1^+_A]', 'B->K::Saturation[1^+_A]', 'B->K^*::Saturation[1^+_A]', 'B_s->phi::Saturation[1^+_A]' ]
+  kinematics:  [ {},                        {},                        {},                          {}                            ]
+  options:     [ {},                        {},                        {},                          {}                            ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::MesonicBound[1^-_T]:
-    type: UniformBound
-    observables:
-        - 'B_s^*::Saturation[1^-_T]'
-        - 'B->K::Saturation[1^-_T]'
-        - 'B->K^*::Saturation[1^-_T]'
-        - 'B_s->phi::Saturation[1^-_T]'
-    kinematics: [ {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s^*::Saturation[1^-_T]', 'B->K::Saturation[1^-_T]', 'B->K^*::Saturation[1^-_T]', 'B_s->phi::Saturation[1^-_T]' ]
+  kinematics:  [ {},                         {},                        {},                          {}                            ]
+  options:     [ {},                         {},                        {},                          {}                            ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::MesonicBound[1^+_T5]:
-    type: UniformBound
-    observables:
-        - 'B_s1::Saturation[1^+_T5]'
-        - 'B->K::Saturation[1^+_T5]'
-        - 'B->K^*::Saturation[1^+_T5]'
-        - 'B_s->phi::Saturation[1^+_T5]'
-    kinematics: [ {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s1::Saturation[1^+_T5]', 'B->K::Saturation[1^+_T5]', 'B->K^*::Saturation[1^+_T5]', 'B_s->phi::Saturation[1^+_T5]' ]
+  kinematics:  [ {},                         {},                         {},                           {}                             ]
+  options:     [ {},                         {},                         {},                           {}                             ]
+  bound: +1.0
+  uncertainty: +0.1
+
 # Hadronic bound
 b->s::Bound[0^+_V]:
-    type: UniformBound
-    observables:
-        - 'B_s0::Saturation[0^+_V]'
-        - 'B->K::Saturation[0^+_V]'
-        - 'B->K^*::Saturation[0^+_V]'
-        - 'B_s->phi::Saturation[0^+_V]'
-        - 'Lambda_b->Lambda::Saturation[0^+_V]'
-        - 'Lambda_b->Lambda(1520)::Saturation[0^+_V]'
-    kinematics: [ {}, {}, {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s0::Saturation[0^+_V]', 'B->K::Saturation[0^+_V]', 'B->K^*::Saturation[0^+_V]', 'B_s->phi::Saturation[0^+_V]', 'Lambda_b->Lambda::Saturation[0^+_V]', 'Lambda_b->Lambda(1520)::Saturation[0^+_V]' ]
+  kinematics:  [ {},                        {},                        {},                          {},                            {},                                    {}                                          ]
+  options:     [ {},                        {},                        {},                          {},                            {},                                    {}                                          ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::Bound[0^-_A]:
-    type: UniformBound
-    observables:
-        - 'B_s::Saturation[0^-_A]'
-        - 'B->K::Saturation[0^-_A]'
-        - 'B->K^*::Saturation[0^-_A]'
-        - 'B_s->phi::Saturation[0^-_A]'
-        - 'Lambda_b->Lambda::Saturation[0^-_A]'
-        - 'Lambda_b->Lambda(1520)::Saturation[0^-_A]'
-    kinematics: [ {}, {}, {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s::Saturation[0^-_A]', 'B->K::Saturation[0^-_A]', 'B->K^*::Saturation[0^-_A]', 'B_s->phi::Saturation[0^-_A]', 'Lambda_b->Lambda::Saturation[0^-_A]', 'Lambda_b->Lambda(1520)::Saturation[0^-_A]' ]
+  kinematics:  [ {},                       {},                        {},                          {},                            {},                                    {}                                          ]
+  options:     [ {},                       {},                        {},                          {},                            {},                                    {}                                          ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::Bound[1^-_V]:
-    type: UniformBound
-    observables:
-        - 'B_s^*::Saturation[1^-_V]'
-        - 'B->K::Saturation[1^-_V]'
-        - 'B->K^*::Saturation[1^-_V]'
-        - 'B_s->phi::Saturation[1^-_V]'
-        - 'Lambda_b->Lambda::Saturation[1^-_V]'
-        - 'Lambda_b->Lambda(1520)::Saturation[1^-_V]'
-    kinematics: [ {}, {}, {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s^*::Saturation[1^-_V]', 'B->K::Saturation[1^-_V]', 'B->K^*::Saturation[1^-_V]', 'B_s->phi::Saturation[1^-_V]', 'Lambda_b->Lambda::Saturation[1^-_V]', 'Lambda_b->Lambda(1520)::Saturation[1^-_V]' ]
+  kinematics:  [ {},                         {},                        {},                          {},                            {},                                    {}                                          ]
+  options:     [ {},                         {},                        {},                          {},                            {},                                    {}                                          ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::Bound[1^+_A]:
-    type: UniformBound
-    observables:
-        - 'B_s1::Saturation[1^+_A]'
-        - 'B->K::Saturation[1^+_A]'
-        - 'B->K^*::Saturation[1^+_A]'
-        - 'B_s->phi::Saturation[1^+_A]'
-        - 'Lambda_b->Lambda::Saturation[1^+_A]'
-        - 'Lambda_b->Lambda(1520)::Saturation[1^+_A]'
-    kinematics: [ {}, {}, {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s1::Saturation[1^+_A]', 'B->K::Saturation[1^+_A]', 'B->K^*::Saturation[1^+_A]', 'B_s->phi::Saturation[1^+_A]', 'Lambda_b->Lambda::Saturation[1^+_A]', 'Lambda_b->Lambda(1520)::Saturation[1^+_A]' ]
+  kinematics:  [ {},                        {},                        {},                          {},                            {},                                    {}                                          ]
+  options:     [ {},                        {},                        {},                          {},                            {},                                    {}                                          ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::Bound[1^-_T]:
-    type: UniformBound
-    observables:
-        - 'B_s^*::Saturation[1^-_T]'
-        - 'B->K::Saturation[1^-_T]'
-        - 'B->K^*::Saturation[1^-_T]'
-        - 'B_s->phi::Saturation[1^-_T]'
-        - 'Lambda_b->Lambda::Saturation[1^-_T]'
-        - 'Lambda_b->Lambda(1520)::Saturation[1^-_T]'
-    kinematics: [ {}, {}, {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s^*::Saturation[1^-_T]', 'B->K::Saturation[1^-_T]', 'B->K^*::Saturation[1^-_T]', 'B_s->phi::Saturation[1^-_T]', 'Lambda_b->Lambda::Saturation[1^-_T]', 'Lambda_b->Lambda(1520)::Saturation[1^-_T]' ]
+  kinematics:  [ {},                         {},                        {},                          {},                            {},                                    {}                                          ]
+  options:     [ {},                         {},                        {},                          {},                            {},                                    {}                                          ]
+  bound: +1.0
+  uncertainty: +0.1
+
 b->s::Bound[1^+_T5]:
-    type: UniformBound
-    observables:
-        - 'B_s1::Saturation[1^+_T5]'
-        - 'B->K::Saturation[1^+_T5]'
-        - 'B->K^*::Saturation[1^+_T5]'
-        - 'B_s->phi::Saturation[1^+_T5]'
-        - 'Lambda_b->Lambda::Saturation[1^+_T5]'
-        - 'Lambda_b->Lambda(1520)::Saturation[1^+_T5]'
-    kinematics: [ {}, {}, {}, {}, {}, {} ]
-    options: [ {}, {}, {}, {}, {}, {} ]
-    bound: 1.0
-    uncertainty: 0.1
+  type: 'UniformBound'
+  observables: [ 'B_s1::Saturation[1^+_T5]', 'B->K::Saturation[1^+_T5]', 'B->K^*::Saturation[1^+_T5]', 'B_s->phi::Saturation[1^+_T5]', 'Lambda_b->Lambda::Saturation[1^+_T5]', 'Lambda_b->Lambda(1520)::Saturation[1^+_T5]' ]
+  kinematics:  [ {},                         {},                         {},                           {},                             {},                                     {}                                           ]
+  options:     [ {},                         {},                         {},                           {},                             {},                                     {}                                           ]
+  bound: +1.0
+  uncertainty: +0.1
 # }}}
