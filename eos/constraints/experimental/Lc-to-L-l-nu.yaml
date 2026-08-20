@@ -6,19 +6,20 @@
 #
 # {{{
 Lambda_c->Lambdae^+nu::BR[0.0,q2max]@BESIII:2022A:
-    type: Gaussian
-    observable: Lambda_c->Lambdalnu::BR
-    kinematics: {q2_min: 5.0e-6, q2_max: 1.3707} # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
-    options: {l: e}
-    mean: 3.56e-02
-    sigma-stat: {hi: 0.11e-02, lo: -0.11e-02}
-    sigma-sys: {hi: 0.07e-02, lo: -0.07e-02}
+  type: 'Gaussian'
+  observable: 'Lambda_c->Lambdalnu::BR'
+  kinematics: {q2_min: +5.0e-06, q2_max: +1.3707}  # q2_min is set to 5.0e-6 to avoid the numerical effect of the kinematic pole
+  options: {l: 'e'}
+  mean: +3.56e-02
+  sigma-stat: {hi: +1.1e-03, lo: -1.1e-03}
+  sigma-sys: {hi: +7.0e-04, lo: -7.0e-04}
+
 Lambda_c->Lambdamu^+nu::BR[0.0,q2max]@BESIII:2023A:
-    type: Gaussian
-    observable: Lambda_c->Lambdalnu::BR
-    kinematics: {q2_min: 0.0112, q2_max: 1.3707}
-    options: {l: mu}
-    mean: 3.48e-02
-    sigma-stat: {hi: 0.14e-02, lo: -0.14e-02}
-    sigma-sys: {hi: 0.10e-02, lo: -0.10e-02}
+  type: 'Gaussian'
+  observable: 'Lambda_c->Lambdalnu::BR'
+  kinematics: {q2_min: +0.0112, q2_max: +1.3707}
+  options: {l: 'mu'}
+  mean: +3.48e-02
+  sigma-stat: {hi: +1.4e-03, lo: -1.4e-03}
+  sigma-sys: {hi: +1.0e-03, lo: -1.0e-03}
 # }}}
