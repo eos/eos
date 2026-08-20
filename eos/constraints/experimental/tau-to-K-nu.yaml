@@ -5,11 +5,11 @@
 # [PDG:2024A]
 # {{{
 tau->Knu::BR@PDG:2024A:
-    type: Gaussian
-    observable: tau->Knu::BR
-    kinematics: {}
-    options: {}
-    mean: 0.685e-2
-    sigma-stat: {hi: 0.023e-2, lo: 0.023e-2}
-    sigma-sys: {hi: 0, lo: 0}
+  type: 'Gaussian'
+  observable: 'tau->Knu::BR'
+  kinematics: {}
+  options: {}
+  mean: +6.85e-03
+  sigma-stat: {hi: +2.3e-04, lo: +2.3e-04}
+  sigma-sys: {hi: 0, lo: 0}
 # }}}

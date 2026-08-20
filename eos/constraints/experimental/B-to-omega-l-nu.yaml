@@ -8,33 +8,23 @@
 #
 # {{{
 B^+->omegalnu::BR@BPR:2021A:
-    type: MultivariateGaussian
-    observables:
-      - B->omegalnu::BR
-      - B->omegalnu::BR
-      - B->omegalnu::BR
-      - B->omegalnu::BR
-      - B->omegalnu::BR
-    kinematics:
-      - {q2_min: 0, q2_max: 4}
-      - {q2_min: 4, q2_max: 8}
-      - {q2_min: 8, q2_max: 10}
-      - {q2_min: 10, q2_max: 12}
-      - {q2_min: 12, q2_max: 21}
-    options:
-      - {l: e}
-      - {l: e}
-      - {l: e}
-      - {l: e}
-      - {l: e}
-    means: [1.506e-5, 1.815e-5, 1.471e-5, 1.715e-5, 4.981e-5]
-    sigma-stat-hi: [0, 0, 0, 0, 0]
-    sigma-stat-lo: [0, 0, 0, 0, 0]
-    sigma-sys: [0.459e-5, 0.349e-5, 0.279e-5, 0.294e-5, 0.898e-5]
-    correlations:
-      - [ 1   , -0.15,  0.08,  0.04, 0.06]
-      - [-0.15, 1    ,  0.09,  0.09, 0.15]
-      - [ 0.08,  0.09,  1   , -0.01, 0.12]
-      - [ 0.04,  0.09, -0.01,  1   , 0.15]
-      - [ 0.06,  0.15,  0.12,  0.15, 1   ]
+  type: 'MultivariateGaussian'
+  observables:    [ 'B->omegalnu::BR', 'B->omegalnu::BR', 'B->omegalnu::BR', 'B->omegalnu::BR', 'B->omegalnu::BR' ]
+  kinematics:
+    - {q2_min: 0, q2_max: 4}
+    - {q2_min: 4, q2_max: 8}
+    - {q2_min: 8, q2_max: 10}
+    - {q2_min: 10, q2_max: 12}
+    - {q2_min: 12, q2_max: 21}
+  options:        [ {l: 'e'},          {l: 'e'},          {l: 'e'},          {l: 'e'},          {l: 'e'}          ]
+  means:          [ +1.506e-05,        +1.815e-05,        +1.471e-05,        +1.715e-05,        +4.981e-05        ]
+  sigma-stat-hi:  [ 0,                 0,                 0,                 0,                 0                 ]
+  sigma-stat-lo:  [ 0,                 0,                 0,                 0,                 0                 ]
+  sigma-sys:      [ +4.59e-06,         +3.49e-06,         +2.79e-06,         +2.94e-06,         +8.98e-06         ]
+  correlations: [ [ +1.00,             -0.15,             +0.08,             +0.04,             +0.06             ],
+                  [ -0.15,             +1.00,             +0.09,             +0.09,             +0.15             ],
+                  [ +0.08,             +0.09,             +1.00,             -0.01,             +0.12             ],
+                  [ +0.04,             +0.09,             -0.01,             +1.00,             +0.15             ],
+                  [ +0.06,             +0.15,             +0.12,             +0.15,             +1.00             ]
+                ]
 # }}}

@@ -8,13 +8,13 @@
 #
 # {{{
 B^0_s->mu^+mu^-::BR@ATLAS:2018A:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    mean: 2.8e-9
-    sigma-stat: { hi: 0.8e-9, lo: 0.7e-9 }
-    sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
+  type: 'Gaussian'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  mean: +2.8e-09
+  sigma-stat: {hi: +8.0e-10, lo: +7.0e-10}
+  sigma-sys: {hi: +0.0e+00, lo: +0.0e+00}
 # }}}
 
 #######
@@ -25,40 +25,42 @@ B^0_s->mu^+mu^-::BR@ATLAS:2018A:
 #
 # {{{
 B^0_s->mu^+mu^-::BR@CMS:2013B:
-    type: Amoroso
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    physical-limit: 0
-    theta: 1.985963346e-09
-    alpha: 2.7971996021
-    beta: 2.0218845762
+  type: 'Amoroso'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  physical-limit: 0
+  theta: +1.985963346e-09
+  alpha: +2.7971996021
+  beta: +2.0218845762
 # }}}
+
 #
 # 2016
 #
 # {{{
 B^0_s->mu^+mu^-::BR@CMS:2016A:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    mean: 3.0e-9
-    sigma-stat: { hi: 1.0e-9, lo: 0.9e-9 }
-    sigma-sys: { hi: 0.0e-9, lo: 0.0e-9 }
+  type: 'Gaussian'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  mean: +3.0e-09
+  sigma-stat: {hi: +1.0e-09, lo: +9.0e-10}
+  sigma-sys: {hi: +0.0e+00, lo: +0.0e+00}
 # }}}
+
 #
 # 2019
 #
 # {{{
 B^0_s->mu^+mu^-::BR@CMS:2019A:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    mean: 2.9e-9
-    sigma-stat: { hi: 0.7e-9, lo: 0.6e-9 }
-    sigma-sys: { hi: 0.2e-9, lo: 0.2e-9 }
+  type: 'Gaussian'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  mean: +2.9e-09
+  sigma-stat: {hi: +7.0e-10, lo: +6.0e-10}
+  sigma-sys: {hi: +2.0e-10, lo: +2.0e-10}
 # }}}
 
 ##############
@@ -69,14 +71,14 @@ B^0_s->mu^+mu^-::BR@CMS:2019A:
 #
 # {{{
 B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A:
-    type: Amoroso
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    physical-limit: 0
-    theta: 1.54243e-10
-    alpha: 19.4025
-    beta: 1.0048
+  type: 'Amoroso'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  physical-limit: 0
+  theta: +1.54243e-10
+  alpha: +19.4025
+  beta: +1.0048
 # }}}
 
 ######################
@@ -87,13 +89,13 @@ B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A:
 #
 # {{{
 B^0_s->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    mean: 2.69e-9
-    sigma-stat: { hi: 0., lo: 0. }
-    sigma-sys: { hi: 0.37e-9, lo: 0.35e-9 }
+  type: 'Gaussian'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  mean: +2.69e-09
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +3.7e-10, lo: +3.5e-10}
 # }}}
 
 ########
@@ -104,40 +106,42 @@ B^0_s->mu^+mu^-::BR@ATLAS+CMS+LHCb:2020A:
 #
 # {{{
 B^0_s->mu^+mu^-::BR@LHCb:2013D:
-    type: Amoroso
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    physical-limit: 0
-    theta: 2.23067e-09
-    alpha: 2.19078
-    beta: 2.00322
+  type: 'Amoroso'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  physical-limit: 0
+  theta: +2.23067e-09
+  alpha: +2.19078
+  beta: +2.00322
 # }}}
+
 #
 # 2017
 #
 # {{{
 B^0_s->mu^+mu^-::BR@LHCb:2017A:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    mean: 3.0e-9
-    sigma-stat: { hi: 0.6e-9, lo: 0.6e-9 }
-    sigma-sys: { hi: 0.3e-9, lo: 0.2e-9 }
+  type: 'Gaussian'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  mean: +3.0e-09
+  sigma-stat: {hi: +6.0e-10, lo: +6.0e-10}
+  sigma-sys: {hi: +3.0e-10, lo: +2.0e-10}
 # }}}
+
 #
 # 2021
 #
 # {{{
 B^0_s->mu^+mu^-::BR@LHCb:2021B:
-    type: Gaussian
-    observable: B_q->ll::BR@Untagged
-    kinematics: {}
-    options: {l: mu, q: s}
-    mean: 3.09e-9
-    sigma-stat: { hi: 0.46e-9, lo: 0.43e-9 }
-    sigma-sys: { hi: 0.15e-9, lo: 0.11e-9 }
+  type: 'Gaussian'
+  observable: 'B_q->ll::BR@Untagged'
+  kinematics: {}
+  options: {l: 'mu', q: 's'}
+  mean: +3.09e-09
+  sigma-stat: {hi: +4.6e-10, lo: +4.3e-10}
+  sigma-sys: {hi: +1.5e-10, lo: +1.1e-10}
 # }}}
 
 #########
@@ -148,24 +152,25 @@ B^0_s->mu^+mu^-::BR@LHCb:2021B:
 #
 # {{{
 B^+->tau^+nu::BR@Belle:2014A:
-    type: Gaussian
-    observable: B_u->lnu::BR
-    kinematics: {}
-    options: {l: tau}
-    mean: 1.25e-4
-    sigma-stat: { hi: 0.28e-4, lo: 0.28e-4 }
-    sigma-sys: { hi: 0.27e-4, lo: 0.27e-4 }
+  type: 'Gaussian'
+  observable: 'B_u->lnu::BR'
+  kinematics: {}
+  options: {l: 'tau'}
+  mean: +1.25e-04
+  sigma-stat: {hi: +2.8e-05, lo: +2.8e-05}
+  sigma-sys: {hi: +2.7e-05, lo: +2.7e-05}
 # }}}
+
 #
 # 2019
 #
 # {{{
 B^+->mu^+nu::BR@Belle:2019A:
-    type: Gaussian
-    observable: B_u->lnu::BR
-    kinematics: {}
-    options: {l: mu}
-    mean: 5.3e-7
-    sigma-stat: { hi: 2.0e-7, lo: 2.0e-7 }
-    sigma-sys: { hi: 0.9e-7, lo: 0.9e-7 }
+  type: 'Gaussian'
+  observable: 'B_u->lnu::BR'
+  kinematics: {}
+  options: {l: 'mu'}
+  mean: +5.3e-07
+  sigma-stat: {hi: +2.0e-07, lo: +2.0e-07}
+  sigma-sys: {hi: +9.0e-08, lo: +9.0e-08}
 # }}}

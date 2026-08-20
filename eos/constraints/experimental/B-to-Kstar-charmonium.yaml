@@ -6,39 +6,41 @@
 #
 # {{{
 B^0->K^*0Jpsi::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->K^*psi::BR
-    kinematics: {}
-    options: {q: d, psi: "J/psi"}
-    mean: 1.27e-3
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 5.e-5, lo: 5.e-5}
-B^0->K^*0psi2S::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->K^*psi::BR
-    kinematics: {}
-    options: {q: d, psi: "psi(2S)"}
-    mean: 5.9e-4
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 4.e-5, lo: 4.e-5}
-B->K^*Jpsi::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->K^*psi::BR
-    kinematics: {}
-    options: {q: u, psi: "J/psi"}
-    mean: 1.43e-3
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 8.e-5, lo: 8.e-5}
-B->K^*psi2S::BR@PDG:2020A:
-    type: Gaussian
-    observable: B->K^*psi::BR
-    kinematics: {}
-    options: {q: u, psi: "psi(2S)"}
-    mean: 6.7e-4
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 1.4e-4, lo: 1.4e-4}
-# }}}
+  type: 'Gaussian'
+  observable: 'B->K^*psi::BR'
+  kinematics: {}
+  options: {q: 'd', psi: 'J/psi'}
+  mean: +1.27e-03
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +5.0e-05, lo: +5.0e-05}
 
+B^0->K^*0psi2S::BR@PDG:2020A:
+  type: 'Gaussian'
+  observable: 'B->K^*psi::BR'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: +5.9e-04
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +4.0e-05, lo: +4.0e-05}
+
+B->K^*Jpsi::BR@PDG:2020A:
+  type: 'Gaussian'
+  observable: 'B->K^*psi::BR'
+  kinematics: {}
+  options: {q: 'u', psi: 'J/psi'}
+  mean: +1.43e-03
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +8.0e-05, lo: +8.0e-05}
+
+B->K^*psi2S::BR@PDG:2020A:
+  type: 'Gaussian'
+  observable: 'B->K^*psi::BR'
+  kinematics: {}
+  options: {q: 'u', psi: 'psi(2S)'}
+  mean: +6.7e-04
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +1.4e-04, lo: +1.4e-04}
+# }}}
 
 ########
 # LHCb #
@@ -48,26 +50,20 @@ B->K^*psi2S::BR@PDG:2020A:
 #
 # {{{
 B^0->K^*0Jpsi::PolarizationAmplitude@LHCb:2013E:
-    type: MultivariateGaussian
-    observables:
-        - B->K^*psi::para_polarization
-        - B->K^*psi::perp_polarization
-        - B->K^*psi::delta_para_long
-        - B->K^*psi::delta_perp_long
-    kinematics:
-        [ {}, {}, {}, {} ]
-    options:
-        [ {q: d, psi: "J/psi"}, {q: d, psi: "J/psi"}, {q: d, psi: "J/psi"}, {q: d, psi: "J/psi"} ]
-    means: [ 0.227, 0.201, -2.94, 2.94 ]
-    sigma-stat-hi: [ 0.004, 0.004, 0.02, 0.02 ]
-    sigma-stat-lo: [ 0.004, 0.004, 0.02, 0.02 ]
-    sigma-sys: [ 0.011, 0.008, 0.03, 0.02 ]
-    correlations:
-        - [ 1.00,-0.70, 0.12, 0.04 ]
-        - [-0.70, 1.00,-0.14,-0.01 ]
-        - [ 0.12,-0.14, 1.00, 0.64 ]
-        - [ 0.04,-0.01, 0.64, 1.00 ]
-    dof: 4
+  type: 'MultivariateGaussian'
+  observables:    [ 'B->K^*psi::para_polarization', 'B->K^*psi::perp_polarization', 'B->K^*psi::delta_para_long', 'B->K^*psi::delta_perp_long' ]
+  kinematics:     [ {},                             {},                             {},                           {}                           ]
+  options:        [ {q: 'd', psi: 'J/psi'},         {q: 'd', psi: 'J/psi'},         {q: 'd', psi: 'J/psi'},       {q: 'd', psi: 'J/psi'}       ]
+  means:          [ +0.227,                         +0.201,                         -2.940,                       +2.940                       ]
+  sigma-stat-hi:  [ +0.004,                         +0.004,                         +0.020,                       +0.020                       ]
+  sigma-stat-lo:  [ +0.004,                         +0.004,                         +0.020,                       +0.020                       ]
+  sigma-sys:      [ +0.011,                         +0.008,                         +0.030,                       +0.020                       ]
+  correlations: [ [ +1.00,                          -0.70,                          +0.12,                        +0.04                        ],
+                  [ -0.70,                          +1.00,                          -0.14,                        -0.01                        ],
+                  [ +0.12,                          -0.14,                          +1.00,                        +0.64                        ],
+                  [ +0.04,                          -0.01,                          +0.64,                        +1.00                        ]
+                ]
+  dof: 4
 # }}}
 
 #########
@@ -78,43 +74,47 @@ B^0->K^*0Jpsi::PolarizationAmplitude@LHCb:2013E:
 #
 # {{{
 B^0->K^*0psi2S::S_1s@BaBar:2007A:
-    type: Gaussian
-    observable: B->K^*psi::S_1s@LHCb
-    kinematics: {}
-    options: {q: d, psi: "psi(2S)"}
-    mean: 0.39
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.04, lo: 0.04}
+  type: 'Gaussian'
+  observable: 'B->K^*psi::S_1s@LHCb'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: +0.39
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +0.04, lo: +0.04}
+
 B^0->K^*0psi2S::S_3@BaBar:2007A:
-    type: Gaussian
-    observable: B->K^*psi::S_3@LHCb
-    kinematics: {}
-    options: {q: d, psi: "psi(2S)"}
-    mean: 0.04
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.06, lo: 0.06}
+  type: 'Gaussian'
+  observable: 'B->K^*psi::S_3@LHCb'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: +0.04
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +0.06, lo: +0.06}
+
 B^0->K^*0psi2S::S_4@BaBar:2007A:
-    type: Gaussian
-    observable: B->K^*psi::S_4@LHCb
-    kinematics: {}
-    options: {q: d, psi: "psi(2S)"}
-    mean: -0.20
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.04, lo: 0.04}
+  type: 'Gaussian'
+  observable: 'B->K^*psi::S_4@LHCb'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: -0.2
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +0.04, lo: +0.04}
+
 B^0->K^*0psi2S::S_8@BaBar:2007A:
-    type: Gaussian
-    observable: B->K^*psi::S_8@LHCb
-    kinematics: {}
-    options: {q: d, psi: "psi(2S)"}
-    mean: -0.09
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.08, lo: 0.08}
+  type: 'Gaussian'
+  observable: 'B->K^*psi::S_8@LHCb'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: -0.09
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +0.08, lo: +0.08}
+
 B^0->K^*0psi2S::S_9@BaBar:2007A:
-    type: Gaussian
-    observable: B->K^*psi::S_9@LHCb
-    kinematics: {}
-    options: {q: d, psi: "psi(2S)"}
-    mean: -0.15
-    sigma-stat: {hi: 0., lo: 0.}
-    sigma-sys: {hi: 0.06, lo: 0.06}
+  type: 'Gaussian'
+  observable: 'B->K^*psi::S_9@LHCb'
+  kinematics: {}
+  options: {q: 'd', psi: 'psi(2S)'}
+  mean: -0.15
+  sigma-stat: {hi: +0.0, lo: +0.0}
+  sigma-sys: {hi: +0.06, lo: +0.06}
 # }}}
