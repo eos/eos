@@ -33,9 +33,6 @@ jobs:
       # the C++ coverage data is meaningful and complete.
       CXXFLAGS: '-O0 -g --coverage -fprofile-update=atomic'
       LDFLAGS: '--coverage'
-      # Collect the Python coverage data files in a single, fixed location.
-      COVERAGE_FILE: '${{ github.workspace }}/.coverage'
-      COVERAGE_RCFILE: '${{ github.workspace }}/.coveragerc'
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v7
@@ -58,13 +55,19 @@ jobs:
       - name: Create coverage configuration
         shell: bash
         run: |
+          # Collect the Python coverage data files in a single, fixed location; the
+          # 'github.workspace' context is the host path, not the container's.
+          echo "COVERAGE_FILE=${GITHUB_WORKSPACE}/.coverage"     >> "${GITHUB_ENV}"
+          echo "COVERAGE_RCFILE=${GITHUB_WORKSPACE}/.coveragerc" >> "${GITHUB_ENV}"
           # Restrict the Python coverage to the 'eos' package and run in
           # parallel mode, since 'make check' executes each test in its
           # own process.
-          cat > "${COVERAGE_RCFILE}" <<'EOF'
+          cat > "${GITHUB_WORKSPACE}/.coveragerc" <<'EOF'
           [run]
           parallel = True
-          source = eos
+          # 'source' would match the empty 'eos' directory that the test harness
+          # creates in the build tree, and nothing at all would be measured.
+          source_pkgs = eos
           # Exclude the test drivers themselves from the coverage
           # measurement; they are the tests, not the code under test.
           omit =
