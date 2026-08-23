@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2019 Danny van Dyk
+# Copyright (c) 2019-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -101,19 +101,21 @@ class Constraints(_Constraints):
             </a>'''
             refname     = str(qn.suffix_part())
             reflink     = ''
-            try:
-                ref         = references[refname]
-                if 'arXiv' == ref.eprint_archive():
-                    reflink = fr' href="https://arxiv.org/abs/{ref.eprint_id().split(":")[-1]}"'
-            except KeyError:
-                pass
+            # constraints that are not tied to a publication have an empty suffix part
+            if refname:
+                try:
+                    ref     = references[refname]
+                    if 'arXiv' == ref.eprint_archive():
+                        reflink = fr' href="https://arxiv.org/abs/{ref.eprint_id().split(":")[-1]}"'
+                except KeyError:
+                    pass
 
             result += fr'''
                 <tr>
                     <td><tt>{qn}</tt></td>
                     <td>{observables}</td>
                     <td>{entry.type()}</td>
-                    <td><a "{reflink}">{refname}</a></td>
+                    <td><a{reflink}>{refname}</a></td>
                 </tr>'''
         result += '''
             </table>
