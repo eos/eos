@@ -18,6 +18,7 @@ EXTRA_DIST = \
 	eos/config.py \
 	eos/constraint.py \
 	eos/cli/__init__.py \
+	eos/cli/analysis.py \
 	eos/cli/data.py \
 	eos/cli/data_checks.py \
 	eos/cli/data_checks_dataset.py \
@@ -129,6 +130,7 @@ eos_SCRIPTS = \
 eosclidir = $(pkgpythondir)/cli
 eoscli_SCRIPTS = \
 	eos/cli/__init__.py \
+	eos/cli/analysis.py \
 	eos/cli/data.py \
 	eos/cli/data_checks.py \
 	eos/cli/data_checks_dataset.py \
