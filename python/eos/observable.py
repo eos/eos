@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2019 Danny van Dyk
+# Copyright (c) 2019-2026 Danny van Dyk
 # Copyright (c) 2021 Philip Lüghausen
 #
 # This file is part of the EOS project. EOS is free software;
@@ -151,10 +151,6 @@ class Observables(_Observables):
                         unit = '&mdash;'
                     else:
                         unit = fr'$$\left[ {unit} \right]$$'
-                    if not self.filter_entry(qn):
-                        continue
-                    if (0 == len(latex)) and not self.showall:
-                        continue
 
                     kinematic_variables = r'<br>'.join(['<tt>' + str(kv) + '</tt>' for kv in entry.kinematic_variables()])
                     if len(kinematic_variables) == 0:
