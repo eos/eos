@@ -24,7 +24,7 @@ Note that the CLI verbosity can be changed using the EOS_VERBOSITY environment v
 Similarly, verbosity can be set for an individual command using the ``-v`` or ``--verbose`` argument.
 
 .. argparse::
-   :filename: ../src/scripts/eos-analysis
+   :module: eos.cli.analysis
    :func: _parser
    :prog: eos-analysis
    :nodescription:
