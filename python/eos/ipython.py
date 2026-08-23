@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2018 Danny van Dyk
+# Copyright (c) 2018-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -191,23 +191,11 @@ def __format_Reference(ref):
     return(result)
 
 
+# The formatters are registered with IPython in eos/__init__.py, where the classes
+# they are registered for are in scope.
 __ipython__ = False
 try:
     if __IPYTHON__:
         __ipython__ = True
-        ip = get_ipython()
-        html_formatter = ip.display_formatter.formatters['text/html']
-
-        from .ipython import __format_Parameter, __format_KinematicVariable, __format_Kinematics, __format_Options
-        from .ipython import __format_Observable, __format_ObservableEntry, __format_GoodnessOfFit, __format_Reference
-        html_formatter.for_type(Parameter, __format_Parameter)
-        html_formatter.for_type(KinematicVariable, __format_KinematicVariable)
-        html_formatter.for_type(Kinematics, __format_Kinematics)
-        html_formatter.for_type(Options, __format_Options)
-        html_formatter.for_type(Observable, __format_Observable)
-        html_formatter.for_type(ObservableEntry, __format_ObservableEntry)
-        html_formatter.for_type(GoodnessOfFit, __format_GoodnessOfFit)
-        html_formatter.for_type(Reference, __format_Reference)
-
-except NameError as e:
+except NameError:
     pass
