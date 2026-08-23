@@ -1,4 +1,4 @@
-# Copyright (c) 2017-2021 Danny van Dyk
+# Copyright (c) 2017-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -223,19 +223,19 @@ class Parameters(_Parameters):
         parameters = _Parameters.Defaults()
         for name, value in wc.dict.items():
             qn     = QualifiedName(name)
-            prefix = qn.prefix_part()
-            coeff  = qn.name_part()
+            prefix = str(qn.prefix_part())
+            coeff  = str(qn.name_part())
 
             # Add values provided by WCxf to EOS central (SM) values
             if (prefix == 'b->s') and (coeff in real_coeffs):
                 if (abs(value.imag) > 1.0e-10):
                     raise ValueError(f'imaginary part of WC {name} larger than 10^-10 threshold, which is not supported at present')
 
-                p = parameters[str(prefix) + '::' + str(coeff)]
+                p = parameters[prefix + '::' + coeff]
                 p.set(p.central() + value.real)
             else:
-                pr = parameters[str(prefix) + '::Re{' + str(coeff) + '}']
-                pi = parameters[str(prefix) + '::Im{' + str(coeff) + '}']
+                pr = parameters[prefix + '::Re{' + coeff + '}']
+                pi = parameters[prefix + '::Im{' + coeff + '}']
                 pr.set(pr.central() + value.real)
                 pi.set(pi.central() + value.imag)
 
