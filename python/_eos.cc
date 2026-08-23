@@ -868,12 +868,42 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("self"));
 
+    // rnp::Name
+    class_<rnp::Name>("rnpName", init<std::string>())
+            .def("__repr__", &rnp::Name::str, return_value_policy<copy_const_reference>())
+            .def("__str__", &rnp::Name::str, return_value_policy<copy_const_reference>())
+            .def("__lt__", &rnp::Name::operator<);
+
+    // rnp::Year
+    class_<rnp::Year>("rnpYear", init<std::string>())
+            .def("__repr__", &rnp::Year::str, return_value_policy<copy_const_reference>())
+            .def("__str__", &rnp::Year::str, return_value_policy<copy_const_reference>())
+            .def("__lt__", &rnp::Year::operator<);
+
+    // rnp::Index
+    class_<rnp::Index>("rnpIndex", init<std::string>())
+            .def("__repr__", &rnp::Index::str, return_value_policy<copy_const_reference>())
+            .def("__str__", &rnp::Index::str, return_value_policy<copy_const_reference>())
+            .def("__lt__", &rnp::Index::operator<);
+
     // ReferenceName
     class_<ReferenceName>("ReferenceName", init<std::string>())
             .def("__str__", &ReferenceName::str, return_value_policy<copy_const_reference>())
             .def("__eq__", &ReferenceName::operator==)
             .def("__ne__", &ReferenceName::operator!=)
-            .def("__lt__", &ReferenceName::operator<);
+            .def("__lt__", &ReferenceName::operator<)
+            .def("name_part", &ReferenceName::name_part, return_value_policy<copy_const_reference>(), R"(
+            Returns the name part of the reference name, i.e., the part preceeding the ':'.
+        )",
+                 args("self"))
+            .def("year_part", &ReferenceName::year_part, return_value_policy<copy_const_reference>(), R"(
+            Returns the year part of the reference name, i.e., the four digits following the ':'.
+        )",
+                 args("self"))
+            .def("index_part", &ReferenceName::index_part, return_value_policy<copy_const_reference>(), R"(
+            Returns the index part of the reference name, i.e., the letters following the year part.
+        )",
+                 args("self"));
     implicitly_convertible<std::string, ReferenceName>();
 
     // }}}
