@@ -213,6 +213,7 @@ TESTS = \
 	eos/_api_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
+	eos/reference_TEST.py \
 	eos/reporting_TEST.py \
 	eos/figure/common_TEST.py \
 	eos/figure/data_TEST.py \
