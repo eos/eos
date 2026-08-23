@@ -16,6 +16,7 @@
 - Update the documentation to discuss the ``SE`` and ``SSE`` form factor parametrizations, reflect that ``SSE`` is now the default choice (D. van Dyk)
 - Default the ``--with-boost-python-suffix`` used at ``./configure`` time to the Python major+minor version (e.g. ``312`` for CPython 3.12), matching the modern Boost.Python naming convention used by conda-forge and current Debian/Ubuntu/Fedora releases, in lieu of the previous OS/codename-based detection (D. van Dyk)
 - Extend the ``inference`` example figure with a residual panel showing each constraint's pull below the main panel (D. van Dyk)
+- Move the implementation of the ``eos-analysis`` command into the new module ``eos.cli.analysis``, leaving the script as a shim, so that its subcommands can be tested and called from Python (D. van Dyk)
 
 ### Added
 
@@ -30,6 +31,8 @@
 - Add the ``mass::Lambda_c(2595)@HME``, ``mass::Lambda_c(2625)@HME``, and ``mass::Lambda(1520)@HME`` parameters (D. van Dyk)
 - Add the ``Lambda_b->Lambda(1520)::tp_v@SE``, ``Lambda_b->Lambda(1520)::tp_a@SE``, and ``Lambda_b->Lambda(1520)::t0@SE`` parameters (D. van Dyk)
 - Add the ``eos-data check``, ``create``, ``publish``, and ``register`` commands for validating analysis datasets, creating citable dataset tags, publishing GitHub releases for Zenodo, and registering published datasets (D. van Dyk)
+- Expose the ``name_part()``, ``year_part()``, and ``index_part()`` accessors of ``eos.ReferenceName`` to Python, which ``eos.References``' ``year`` and ``index`` filters require (D. van Dyk)
+- Add a ``has()`` member function to the ``Constraints``, ``Kinematics``, ``Observables``, ``Options``, ``Parameters``, ``References``, and ``SignalPDFs`` classes, and export it to Python as ``__contains__``, so that ``name in eos.Constraints()`` and its analogues report membership (D. van Dyk)
 
 ### Deprecated
 
@@ -39,6 +42,17 @@
 
 - Correct the ``Lambda_c`` mass entering the ``Lambda_b->Lambda_c``, ``Lambda_c->Lambda``, ``Lambda_c->proton``, and ``Lambda_c->neutron`` unitarity-bound thresholds to match the canonical ``mass::Lambda_c`` parameter (D. van Dyk)
 - Convert the ``Lambda_b->Lambda_c::DKMR2017``, ``Lambda_b->Lambda::DM2016``, ``Lambda_b->Lambda_c(2595)::HQET``, ``Lambda_b->Lambda_c(2625)::HQET``, and ``Lambda_b->Lambda(1520)::SE`` form factors to read their initial- and final-state masses from ``Parameters`` in lieu of hardcoded compile-time constants that could silently drift from the corresponding ``@HME`` parameter values (D. van Dyk)
+- Fix displaying ``eos.Constraints`` in a notebook, which raised for the 20 constraints whose qualified name has no suffix part and therefore no associated reference (D. van Dyk)
+- Fix ``eos.References``' ``year`` and ``index`` filters, which raised an ``AttributeError`` on every entry (D. van Dyk)
+- Fix ``eos.Parameters.FromWCxf`` for the ``b->s`` Wilson coefficients that EOS treats as real-valued, which raised an "Unknown parameter" error in lieu of taking their real-valued branch (D. van Dyk)
+- Fix membership tests on ``eos.Constraints``, ``eos.Kinematics``, ``eos.Options``, ``eos.Parameters``, ``eos.References``, and ``eos.SignalPDFs``, which fell through to iteration over ``(name, entry)`` pairs and therefore reported ``False`` for every name, including names that exist (D. van Dyk)
+- Fix ``Observables::has()``, which consulted the copy of the observable registry taken when the ``Observables`` object was created in lieu of the registry that ``Observables::operator[]`` consults, and therefore did not find observables inserted at run time (D. van Dyk)
+- Fix ``eos-analysis list-likelihoods --display``, which addressed the likelihood description as a dictionary and reported every likelihood as specifying neither the ``constraints`` nor the ``manual_constraints`` key; the command now also lists a likelihood's ``pyhf`` file (D. van Dyk)
+- Fix ``eos.tasks.find_mode`` to include the first optimization when searching for the best-fit point: a single optimization step previously raised an ``AttributeError``, and any run silently discarded the result of the first step (D. van Dyk)
+- Fix ``eos.figure.ConstraintItem`` for ``MultivariateGaussian`` constraints, which raised an ``UnboundLocalError`` whenever the ``observable`` key carried an options part (D. van Dyk)
+- Fix ``eos.figure.UncertaintyBandItem`` to compare the options of the requested ``observable`` against those recorded in the data file as strings, in lieu of comparing them against ``qnp::OptionKey`` and ``qnp::OptionValue`` objects that never equal them, which silently plotted predictions computed with other options (D. van Dyk)
+- Fix ``eos.figure.ConstraintItem``, ``ConstraintResidueItem``, and ``TwoDimensionalConstraintItem`` to report an unknown constraint as a ``ValueError``, in lieu of the ``RuntimeError`` that reached the user because the guard tested the looked-up entry for falsiness after the lookup had already raised (D. van Dyk)
+- Fix three diagnostic messages in ``eos.figure.ConstraintItem`` and ``eos.figure.ConstraintResidueItem`` that lacked an ``f`` prefix and therefore reported the names of skipped observables as literal braces (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
