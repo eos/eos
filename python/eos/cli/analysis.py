@@ -26,7 +26,7 @@ import traceback
 from typing import TextIO
 
 import eos
-from eos import error, info
+from eos import info
 
 try:
     from termcolor import colored
@@ -877,15 +877,14 @@ def cmd_list_likelihoods(args):
         if not args.display:
             continue
 
-        if not 'constraints' in lh and not 'manual_constraints' in lh:
-            error(f'Likelihoods {name} specifies neither the \'constraints\' nor the \'manual_constraints\' key')
-            continue
+        for c in lh.constraints:
+            print(f' - {c.constraint}')
 
-        for c in lh['constraints'] if 'constraints' in lh else []:
-            print(f' - {c}')
+        for mc in lh.manual_constraints:
+            print(f' - {mc.name} [manual]')
 
-        for mc in lh['manual_constraints'] if 'manual_constraints' in lh else {}:
-            print(f' - {mc} [manual]')
+        if lh.pyhf:
+            print(f' - {lh.pyhf.file} [pyhf]')
 
 
 # List predictions
