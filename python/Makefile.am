@@ -211,6 +211,7 @@ TESTS = \
 	eos/data/pmc_sampler_TEST.py \
 	eos/data/prediction_TEST.py \
 	eos/_api_TEST.py \
+	eos/constraint_TEST.py \
 	eos/observable_TEST.py \
 	eos/parameter_TEST.py \
 	eos/reference_TEST.py \
