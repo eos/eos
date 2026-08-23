@@ -135,23 +135,3 @@ echo running draw-figure tests ... >&2
         CKM-Vub-v-FF \
         -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
-
-####################
-## Listing things ##
-####################
-echo running test for list-priors command ... >&2
-    $PYTHON ${SOURCE_DIR}/eos-analysis list-priors \
-        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
-echo ... success >&2
-echo running test for list-likelihoods command ... >&2
-    $PYTHON ${SOURCE_DIR}/eos-analysis list-likelihoods \
-        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
-echo ... success >&2
-echo running test for list-posteriors command ... >&2
-    $PYTHON ${SOURCE_DIR}/eos-analysis list-posteriors \
-        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
-echo ... success >&2
-echo running test for list-predictions command ... >&2
-    $PYTHON ${SOURCE_DIR}/eos-analysis list-predictions \
-        -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
-echo ... success >&2

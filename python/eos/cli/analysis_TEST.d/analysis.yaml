@@ -1,0 +1,171 @@
+parameters:
+  'ublnul::Re{cVL}' :
+      alias_of: [ 'ubenue::Re{cVL}', 'ubmunumu::Re{cVL}', 'ubtaunutau::Re{cVL}' ]
+      central: +1.0
+      min:     +1.0
+      max:     +1.0
+      unit:     '1'
+      latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\ell}\nu_\ell}_{V_L}$'
+
+likelihoods:
+  - name: lattice
+    constraints:
+      - B->pi::f_++f_0@RBC+UKQCD:2015A
+  - name: lcsr
+    constraints:
+      - B->pi::f_+@KMO:2006A
+  - name: BaBar
+    constraints:
+      - B^0->pi^+lnu::BR@BaBar:2010B
+  - name: Belle
+    constraints:
+      - B^0->pi^+lnu::BR@Belle:2010A
+
+priors:
+  - name: CKM
+    parameters:
+      - parameter: CKM::abs(V_ub)
+        min:  3.0e-3
+        max:  5.0e-3
+        type: uniform
+  - name: FF-norm
+    parameters:
+      - parameter: B->pi::f_+(0)@BCL2008
+        min: 0.15
+        max: 0.30
+        type: uniform
+  - name: FF-shape
+    parameters:
+      - parameter: B->pi::b_+^1@BCL2008
+        min: -4
+        max: +4
+        type: uniform
+      - parameter: B->pi::b_+^2@BCL2008
+        min: -4
+        max: +4
+        type: uniform
+      - parameter: B->pi::b_0^1@BCL2008
+        min: -4
+        max: +4
+        type: uniform
+      - parameter: B->pi::b_0^2@BCL2008
+        min: -4
+        max: +4
+        type: uniform
+
+posteriors:
+  - name: FF
+    global_options:
+        model: CKM
+        form-factors: BCL2008
+    likelihood:
+      - lattice
+      - lcsr
+    prior:
+      - FF-norm
+      - FF-shape
+
+  - name: CKM+FF
+    global_options:
+        model: CKM
+        form-factors: BCL2008
+    likelihood:
+      - lattice
+      - lcsr
+      - BaBar
+      - Belle
+    prior:
+      - CKM
+      - FF-norm
+      - FF-shape
+
+figures:
+  - name: CKM-Vub
+    type: single
+    plot:
+      legend:
+        position: 'lower left'
+      xaxis:
+        label: '$|V_{ub}|$'
+      yaxis:
+        label: 'Posterior Density'
+      items:
+      - type: 'histogram1D'
+        datafile: 'data/CKM+FF/samples'
+        variable: 'CKM::abs(V_ub)'
+      - type: 'kde1D'
+        datafile: 'data/CKM+FF/samples'
+        variable: 'CKM::abs(V_ub)'
+  - name: CKM-Vub-v-FF
+    type: 'corner'
+    contents:
+      - path: 'data/CKM+FF/samples'
+        label: 'CKM+FF'
+    variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+
+predictions:
+  - name: PDF
+    global_options:
+        model: CKM
+        form-factors: BCL2008
+    observables:
+      - name: B->pilnu::P(q2_min,q2_max)
+        kinematics: [{'q2_min': 0.01, 'q2_max': 0.5}, {'q2_min': 0.5, 'q2_max': 1.0}, {'q2_min': 1.0, 'q2_max': 1.5}, {'q2_min': 1.5, 'q2_max': 2.0}]
+  - name: dBRdq2
+    global_options:
+        model: CKM
+        form-factors: BCL2008
+    observables:
+      - name: B->pilnu::dBR/dq2
+        kinematics: [{ 'q2': 0.01}, { 'q2': 0.5}, { 'q2': 1.0}, {'q2': 1.5}, {'q2': 2.0}]
+  - name: BR
+    global_options:
+        model: CKM
+        form-factors: BCL2008
+    fixed_parameters:
+        mass::e: 5.0e-4  # This is meant to test the "fixed_parameters" key
+    observables:
+      - name: B_u->lnu::BR
+        kinematics: {'q2_min': 0.01, 'q2_max': 2.0 }
+
+steps:
+  - title: 'Optimize posterior CKM+FF'
+    id: CKM+FF.find-mode
+    tasks:
+      - task: find-mode
+        arguments:
+          posterior: CKM+FF
+          seed: 123
+          label: 'seed-{seed}'
+
+  - title: 'Sample from posterior CKM+FF'
+    id: CKM+FF.sample
+    depends_on:
+      - CKM+FF.find-mode
+    tasks:
+      - task: sample-mcmc
+        arguments:
+          posterior: CKM+FF
+          chain: 0
+          pre_N: 500
+
+      - task: find-clusters
+        arguments:
+          posterior: CKM+FF
+
+      - task: sample-pmc
+        arguments:
+          posterior: CKM+FF
+          step_N: 1000
+
+  - title: 'Sample from posteriors FF & CKM+FF'
+    id: both.sample
+    default_arguments:
+      sample-nested: { 'nlive': 100, 'dlogz': 1.0, 'maxiter': 4000 }
+    tasks:
+      - task: sample-nested
+        arguments:
+          posterior: FF
+      - task: sample-nested
+        arguments:
+          posterior: CKM+FF
