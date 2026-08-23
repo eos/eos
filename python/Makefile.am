@@ -217,6 +217,7 @@ TESTS = \
 	eos/parameter_TEST.py \
 	eos/reference_TEST.py \
 	eos/reporting_TEST.py \
+	eos/signal_pdf_TEST.py \
 	eos/figure/common_TEST.py \
 	eos/figure/data_TEST.py \
 	eos/figure/figure_TEST.py \
