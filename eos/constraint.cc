@@ -2927,6 +2927,12 @@ namespace eos
         return i->second;
     }
 
+    bool
+    Constraints::has(const QualifiedName & name) const
+    {
+        return _imp->constraint_entries.cend() != _imp->constraint_entries.find(name);
+    }
+
     std::shared_ptr<const ConstraintEntry>
     Constraints::insert(const QualifiedName & name, const std::string & entry) const
     {
