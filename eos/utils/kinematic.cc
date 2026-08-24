@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -170,6 +170,13 @@ namespace eos
         }
 
         throw UnknownKinematicVariableError(name);
+    }
+
+    bool
+    Kinematics::has(const std::string & name) const
+    {
+        // aliases resolve through operator[] just as variables do, and must be found here too
+        return (_imp->variables_map.cend() != _imp->variables_map.find(name)) || (_imp->alias_map.cend() != _imp->alias_map.find(name));
     }
 
     std::string

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011, 2018 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -71,6 +71,26 @@ class KinematicsTest : public TestCase
                 kinematics.clear_aliases();
                 TEST_CHECK_EQUAL(1.0, aliased);
                 TEST_CHECK_EQUAL(1.0, alias);
+            }
+
+            // Testing has(), for variables as well as for aliases
+            {
+                Kinematics kinematics{
+                    { "s_min", 1.0 },
+                    { "s_max", 6.0 },
+                };
+                kinematics.alias("q2_min", "s_min");
+
+                TEST_CHECK_EQUAL(kinematics.has("s_min"), true);
+                TEST_CHECK_EQUAL(kinematics.has("q2_min"), true);
+                TEST_CHECK_EQUAL(kinematics.has("q2_max"), false);
+
+                // an alias is no longer found once the alias map has been cleared
+                kinematics.clear_aliases();
+
+                TEST_CHECK_EQUAL(kinematics.has("s_min"), true);
+                TEST_CHECK_EQUAL(kinematics.has("q2_min"), false);
+                TEST_CHECK_THROWS(UnknownKinematicVariableError, kinematics["q2_min"]);
             }
 
             // Access
