@@ -2227,6 +2227,7 @@ class ConstraintItem(Item):
                 sigma = _np.sqrt(_np.power(sigma_sys, 2) + 0.25 * _np.power(sigma_stat_hi + sigma_stat_lo, 2))
                 observables = constraint['observables']
                 means = constraint['means']
+                options = constraint['options']
                 dim = len(means)
                 kinematics = constraint['kinematics']
 
