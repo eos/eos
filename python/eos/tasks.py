@@ -26,7 +26,6 @@ import eos.analysis_file_context
 import numpy as _np
 import os
 import scipy
-import sys
 import copy as _copy
 import warnings
 import dynesty as _dynesty
@@ -231,9 +230,6 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         mask = slice(None) # Equivalent to mask = : but allowed
 
     analysis = analysis_file.analysis(posterior)
-    min_chi2 = sys.float_info.max
-    gof = None
-    bfp = None
 
     eos.inprogress(f'Beginning minimization in {optimizations} points')
     if not start_point is None:
@@ -284,19 +280,25 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         _chi2 = _gof.total_chi_square()
 
     eos.info('First optimization finished')
+    # the first optimization provides the baseline, even if its chi^2 is not finite
+    bfp      = _bfp
+    gof      = _gof
+    min_chi2 = _chi2
+
     for i in range(optimizations - 1):
         starting_point = [float(p) for p in analysis.varied_parameters]
         _bfp = analysis.optimize(start_point = starting_point)
         _gof = eos.GoodnessOfFit(analysis._log_posterior)
         _chi2 = _gof.total_chi_square()
-        if _chi2 < min_chi2:
+        # a non-finite chi^2 never replaces the baseline, and never compares as an improvement
+        if _np.isfinite(_chi2) and (not _np.isfinite(min_chi2) or _chi2 < min_chi2):
             gof = _gof
             bfp = _bfp
             min_chi2 = _chi2
 
     eos.completed('... optimization finished')
     eos.info('The best-fit point is:')
-    for p, v in zip(analysis.varied_parameters, _bfp.point):
+    for p, v in zip(analysis.varied_parameters, bfp.point):
         eos.info(f'  - {p.name()} -> {v}')
     eos.info(f'total chi^2 = {min_chi2:.2f}')
     eos.info(f'total dof   = {gof.total_degrees_of_freedom()}')
