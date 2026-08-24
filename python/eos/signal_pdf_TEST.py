@@ -103,6 +103,20 @@ class SampleMCMCTests(unittest.TestCase):
         self.assertTrue(np.all(np.isfinite(weights)))
 
 
+class SignalPDFsContainsTests(unittest.TestCase):
+
+    def test_known_signal_pdf(self):
+        "A known signal PDF is found, by string as well as by qualified name."
+
+        self.assertIn('B->Dlnu::P(q2)', eos.SignalPDFs())
+        self.assertIn(eos.QualifiedName('B->Dlnu::P(q2)'), eos.SignalPDFs())
+
+    def test_unknown_signal_pdf(self):
+        "An unknown signal PDF is not found."
+
+        self.assertNotIn('B->pi::NOSUCH', eos.SignalPDFs())
+
+
 class SignalPDFsFilterTests(unittest.TestCase):
 
     _QN = eos.QualifiedName('B->Dlnu::P(q2)')

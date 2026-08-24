@@ -320,6 +320,14 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("self", "id"))
             .def("__iter__", range(&Parameters::begin, &Parameters::end))
+            .def("__contains__", &Parameters::has, R"(
+            Returns whether a parameter with the given name is part of this set of parameters.
+
+            :param name: The name of the parameter.
+            :type name: eos.QualifiedName
+            :rtype: bool
+        )",
+                 args("self", "name"))
             .def("declare", &Parameters::declare,
                  R"(
             Declare a new parameter as part of the default parameter set.
@@ -530,6 +538,14 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__add__", &Kinematics::operator+)
             .def("__iter__", range(&Kinematics::begin, &Kinematics::end))
             .def("__getitem__", (KinematicVariable(Kinematics::*)(const std::string &) const) &Kinematics::operator[])
+            .def("__contains__", &Kinematics::has, R"(
+            Returns whether a kinematic variable, or an alias thereof, with the given name is part of this set of kinematic variables.
+
+            :param name: The name of the kinematic variable.
+            :type name: str
+            :rtype: bool
+        )",
+                 args("self", "name"))
             .def("declare", &Kinematics::declare, return_value_policy<return_by_value>(), R"(
             Declares a new kinematic variable.
 
@@ -578,7 +594,15 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self", "key", "value"))
             .def("__str__", &Options::as_string)
             .def("__eq__", &Options::operator==)
-            .def("__getitem__", &Options::operator[], return_value_policy<copy_const_reference>());
+            .def("__getitem__", &Options::operator[], return_value_policy<copy_const_reference>())
+            .def("__contains__", &Options::has, R"(
+            Returns whether an option with the given key is part of this set of options.
+
+            :param key: The key of the option.
+            :type key: str
+            :rtype: bool
+        )",
+                 args("self", "key"));
 
     // OptionSpecification
     ::impl::std_vector_to_python_converter<std::string> converter_option_specifications;
@@ -1105,6 +1129,17 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Constraints>("_Constraints")
             .def("__getitem__", (std::shared_ptr<const ConstraintEntry>(Constraints::*)(const QualifiedName &) const) & Constraints::operator[])
             .def("__iter__", range(&Constraints::begin, &Constraints::end))
+            .def("__contains__", &Constraints::has, R"(
+            Returns whether a constraint with the given name is known to EOS.
+
+            Constraints inserted at run time only become visible to instances of this class that
+            are created after the insertion.
+
+            :param name: The name of the constraint.
+            :type name: eos.QualifiedName
+            :rtype: bool
+        )",
+                 args("self", "name"))
             .def("insert", &Constraints::insert, R"(
             Inserts a new constraint into EOS at run time by parsing its YAML representation.
 
@@ -1404,7 +1439,17 @@ BOOST_PYTHON_MODULE(_eos)
 
     // References
     ::impl::std_pair_to_python_converter<const ReferenceName, ReferencePtr> converter_references_iter;
-    class_<References>("_References").def("__getitem__", &References::operator[]).def("__iter__", range(&References::begin, &References::end));
+    class_<References>("_References")
+            .def("__getitem__", &References::operator[])
+            .def("__iter__", range(&References::begin, &References::end))
+            .def("__contains__", &References::has, R"(
+            Returns whether a reference with the given name is known to EOS.
+
+            :param name: The name of the reference.
+            :type name: eos.ReferenceName
+            :rtype: bool
+        )",
+                 args("self", "name"));
 
     // ReferenceUser
     class_<ReferenceUser>("ReferenceUser", no_init).def("references", range(&ReferenceUser::begin_references, &ReferenceUser::end_references));
@@ -1585,7 +1630,14 @@ BOOST_PYTHON_MODULE(_eos)
             :type expression: str
         )",
                  args("self", "name", "latex", "unit", "options", "expression"))
-            .def("__contains__", &Observables::has)
+            .def("__contains__", &Observables::has, R"(
+            Returns whether an observable with the given name is known to EOS.
+
+            :param name: The name of the observable.
+            :type name: eos.QualifiedName
+            :rtype: bool
+        )",
+                 args("self", "name"))
             .def("sections", range(&Observables::begin_sections, &Observables::end_sections), R"(
             Returns an iterator over the sections into which the known observables are grouped.
         )");
@@ -1686,6 +1738,14 @@ BOOST_PYTHON_MODULE(_eos)
     class_<SignalPDFs>("_SignalPDFs")
             .def("__getitem__", &SignalPDFs::operator[])
             .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
+            .def("__contains__", &SignalPDFs::has, R"(
+            Returns whether a signal PDF with the given name is known to EOS.
+
+            :param name: The name of the signal PDF.
+            :type name: eos.QualifiedName
+            :rtype: bool
+        )",
+                 args("self", "name"))
             .def("insert", &SignalPDFs::insert, R"(
             Insert a new signal PDF to EOS, built at run time from two existing observables.
 

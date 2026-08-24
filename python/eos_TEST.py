@@ -134,6 +134,18 @@ class KinematicsTests(unittest.TestCase):
             self.fail(f'cannot initialize Kinematics with explicit kwargs: {e}')
 
 
+    def test_contains(self):
+        "Check that a kinematic variable is found."
+        # 'Kinematics::alias' is not exported, so the alias lookup is covered by kinematic_TEST.cc
+        from eos import Kinematics
+
+        kinematics = Kinematics(s_min=1.0, s_max=6.0)
+
+        self.assertIn('s_min', kinematics)
+        self.assertIn('s_max', kinematics)
+        self.assertNotIn('q2_min', kinematics)
+
+
 class OptionsTests(unittest.TestCase):
 
     def test_creation(self):
@@ -154,6 +166,16 @@ class OptionsTests(unittest.TestCase):
             Options(**{'foo': 'bar', 'baz': 'harr'})
         except Exception as e:
             self.fail(f'cannot initialize Options with explicit kwargs: {e}')
+
+
+    def test_contains(self):
+        "Check that an option key is found."
+        from eos import Options
+
+        options = Options(foo='bar')
+
+        self.assertIn('foo', options)
+        self.assertNotIn('baz', options)
 
 
 class ParametersTests(unittest.TestCase):
