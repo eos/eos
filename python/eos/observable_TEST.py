@@ -53,6 +53,30 @@ class FilterTests(unittest.TestCase):
         self.assertFalse(eos.Observables(prefix='B->pi', name='f_+', suffix='BSZ2015').filter_entry(self._QN))
 
 
+class ContainsTests(unittest.TestCase):
+
+    def test_known_observable(self):
+        "A known observable is found, by string as well as by qualified name."
+
+        self.assertIn('B->pilnu::BR', eos.Observables())
+        self.assertIn(eos.QualifiedName('B->pilnu::BR'), eos.Observables())
+
+    def test_unknown_observable(self):
+        "An unknown observable is not found."
+
+        self.assertNotIn('B->pi::NOSUCH', eos.Observables())
+
+    def test_runtime_insertion(self):
+        "An observable inserted at run time is found immediately."
+
+        name = 'mass::ratio@contains'
+        observables = eos.Observables()
+        observables.insert(eos.QualifiedName(name), 'm_r', eos.Unit.Unity(), eos.Options(), '<<mass::mu>> / <<mass::tau>>')
+
+        self.assertIn(name, observables)
+        self.assertIn(name, eos.Observables())
+
+
 class ReprHTMLTests(unittest.TestCase):
 
     def test_complete_list(self):

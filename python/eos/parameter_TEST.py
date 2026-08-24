@@ -103,6 +103,20 @@ class FilterTests(unittest.TestCase):
         self.assertFalse(eos.Parameters(prefix='B->pi', name='f_+', suffix='BSZ2015').filter_entry(self._QN))
 
 
+class ContainsTests(unittest.TestCase):
+
+    def test_known_parameter(self):
+        "A known parameter is found, by string as well as by qualified name."
+
+        self.assertIn('mass::tau', eos.Parameters.Defaults())
+        self.assertIn(eos.QualifiedName('mass::tau'), eos.Parameters.Defaults())
+
+    def test_unknown_parameter(self):
+        "An unknown parameter is not found."
+
+        self.assertNotIn('mass::boing747', eos.Parameters.Defaults())
+
+
 class KeyTests(unittest.TestCase):
 
     def test_qualified_name(self):

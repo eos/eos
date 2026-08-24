@@ -54,6 +54,44 @@ class FilterTests(unittest.TestCase):
         self.assertFalse(eos.Constraints(prefix='B->pi', name='f_+', suffix='KMO').filter_entry(self._QN))
 
 
+class ContainsTests(unittest.TestCase):
+
+    _NAME = 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+
+    def test_known_constraint(self):
+        "A known constraint is found, by string as well as by qualified name."
+
+        self.assertIn(self._NAME, eos.Constraints())
+        self.assertIn(eos.QualifiedName(self._NAME), eos.Constraints())
+
+    def test_unknown_constraint(self):
+        "An unknown constraint is not found."
+
+        self.assertNotIn('B->pi::NOSUCH@Nobody:2000A', eos.Constraints())
+
+    def test_runtime_insertion(self):
+        "A constraint inserted at run time is found by every instance created thereafter."
+
+        name = 'B->pi::TEST@BaBar:2010A'
+        entry = """
+        type: Gaussian
+        observable: B->pilnu::BR
+        kinematics: {q2_min: 0.0, q2_max: 4.0}
+        options: {q: d}
+        mean: 1.0e-04
+        sigma-stat: {hi: 1.0e-05, lo: -1.0e-05}
+        sigma-sys: {hi: 0.0, lo: -0.0}
+        references: []
+        """
+
+        constraints = eos.Constraints()
+        constraints.insert(eos.QualifiedName(name), entry)
+
+        # the inserting instance holds the entries as of its own creation
+        self.assertNotIn(name, constraints)
+        self.assertIn(name, eos.Constraints())
+
+
 class ReprHTMLTests(unittest.TestCase):
 
     def test_complete_list(self):

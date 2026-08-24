@@ -51,6 +51,20 @@ class FilterTests(unittest.TestCase):
         self.assertFalse(eos.References(year='2014', index='B').filter_entry(self._RN))
 
 
+class ContainsTests(unittest.TestCase):
+
+    def test_known_reference(self):
+        "A known reference is found, by string as well as by reference name."
+
+        self.assertIn('BaBar:2010A', eos.References())
+        self.assertIn(eos.ReferenceName('BaBar:2010A'), eos.References())
+
+    def test_unknown_reference(self):
+        "An unknown reference is not found."
+
+        self.assertNotIn('Nobody:2000A', eos.References())
+
+
 class ReprHTMLTests(unittest.TestCase):
 
     @classmethod
