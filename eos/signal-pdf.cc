@@ -275,6 +275,14 @@ namespace eos
         return SignalPDFEntryPtr(nullptr);
     }
 
+    bool
+    SignalPDFs::has(const QualifiedName & name) const
+    {
+        const auto & signal_pdf_entries = SignalPDFEntries::instance()->entries();
+
+        return signal_pdf_entries.cend() != signal_pdf_entries.find(name);
+    }
+
     SignalPDFs::SignalPDFIterator
     SignalPDFs::begin() const
     {

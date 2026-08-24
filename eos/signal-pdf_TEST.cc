@@ -46,6 +46,20 @@ class SignalPDFTest : public TestCase
 
                 TEST_CHECK(std::distance(signal_pdfs.begin(), signal_pdfs.end()) > 0);
             }
+
+            // SignalPDFs::has
+            {
+                const auto & signal_pdfs = SignalPDFs();
+
+                const auto & name = signal_pdfs.begin()->first;
+
+                TEST_CHECK_EQUAL(signal_pdfs.has(name), true);
+                TEST_CHECK_EQUAL(signal_pdfs.has("B->pi::NOSUCH"), false);
+
+                // has() and operator[] must agree
+                TEST_CHECK(nullptr != signal_pdfs[name].get());
+                TEST_CHECK(nullptr == signal_pdfs["B->pi::NOSUCH"].get());
+            }
         }
 
 } signal_pdf_test;
@@ -96,9 +110,11 @@ class SignalPDFRuntimeInsertionTest : public TestCase
 
                 // the new PDF must be visible through the container ...
                 TEST_CHECK(signal_pdfs["TestLegendre1D::RuntimeP(z)"] != nullptr);
+                TEST_CHECK_EQUAL(signal_pdfs.has("TestLegendre1D::RuntimeP(z)"), true);
 
                 // ... and through a freshly created container (the registry is shared)
                 TEST_CHECK(SignalPDFs()["TestLegendre1D::RuntimeP(z)"] != nullptr);
+                TEST_CHECK_EQUAL(SignalPDFs().has("TestLegendre1D::RuntimeP(z)"), true);
 
                 Parameters p = Parameters::Defaults();
                 Kinematics k{
