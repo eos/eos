@@ -1,0 +1,18 @@
+likelihoods:
+  - name: lattice
+    constraints:
+      - B->pi::f_++f_0@RBC+UKQCD:2015A
+
+priors:
+  - name: FF
+    descriptions:
+      - parameter: B->pi::f_+(0)@BCL2008
+        min: 0.15
+        type: uniform
+
+posteriors:
+  - name: FF
+    likelihood:
+      - lattice
+    prior:
+      - FF
