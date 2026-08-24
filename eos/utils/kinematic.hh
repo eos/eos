@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -145,6 +145,13 @@ namespace eos
              * @param name  The name of the KinematicVariable that shall be retrieved.
              */
             KinematicVariable operator[] (const std::string & variable) const;
+
+            /*!
+             * Verify if a kinematic variable or an alias thereof with a given name exists.
+             *
+             * @param variable  The name to be checked against the known kinematic variables.
+             */
+            bool has(const std::string & variable) const;
             ///@}
 
             ///@name Iteration over our kinematic variables
