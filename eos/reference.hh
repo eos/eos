@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -104,6 +104,13 @@ namespace eos
              * @param name  The name of the Reference that shall be retrieved.
              */
             ReferencePtr operator[] (const ReferenceName & name) const;
+
+            /*!
+             * Verify if a reference with a given name exists.
+             *
+             * @param name  The name to be checked against the known references.
+             */
+            bool has(const ReferenceName & name) const;
     };
 
     extern template class WrappedForwardIterator<References::ReferenceIteratorTag, const std::pair<const ReferenceName, ReferencePtr>>;

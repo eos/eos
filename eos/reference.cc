@@ -268,6 +268,12 @@ namespace eos
         return i->second;
     }
 
+    bool
+    References::has(const ReferenceName & name) const
+    {
+        return _imp->reference_map.cend() != _imp->reference_map.find(name);
+    }
+
     template <> struct WrappedForwardIteratorTraits<ReferenceUser::ReferenceIteratorTag>
     {
             using UnderlyingIterator = std::set<ReferenceName>::const_iterator;
