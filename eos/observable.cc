@@ -388,18 +388,12 @@ namespace eos
     }
 
     bool
-    Observables::has(const QualifiedName & name)
+    Observables::has(const QualifiedName & name) const
     {
-        auto i(_imp->observable_entries.find(name));
+        // consult the same entries as operator[], which includes those inserted at run time
+        const auto & observable_entries = ObservableEntries::instance()->entries();
 
-        if (_imp->observable_entries.end() == i)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return observable_entries.cend() != observable_entries.find(name);
     }
 
     std::pair<QualifiedName, ObservableEntryPtr>
