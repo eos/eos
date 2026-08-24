@@ -919,8 +919,9 @@ class UncertaintyBandItem(Item):
             _xvalues.append(kinematics[self._variable])
 
             valid_observable = (self._observable == eos.QualifiedName(vp["name"])) # Check that the observable names match
-            for k, v in self._observable.options_part(): # Check that thre specified options match
-                if k in vp["options"] and not vp["options"][k] == v:
+            # the data file records the options as strings, which the qnp objects never equal
+            for k, v in self._observable.options_part(): # Check that the specified options match
+                if str(k) in vp["options"] and not vp["options"][str(k)] == str(v):
                     valid_observable = False
 
             _observable_mask.append(valid_observable)
