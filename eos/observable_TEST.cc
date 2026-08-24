@@ -310,6 +310,12 @@ class ObservableTest : public TestCase
 
                 TEST_CHECK_EQUAL(o.has("B_c->lnu::BR"), true);
                 TEST_CHECK_EQUAL(o.has("B_c->lnu::TEST"), false);
+
+                // an observable inserted at run time must be found, just as operator[] finds it
+                o.insert("mass::ratio@has", "m_r", Unit::None(), Options(), "<<mass::mu>> / <<mass::tau>>");
+
+                TEST_CHECK_EQUAL(o.has("mass::ratio@has"), true);
+                TEST_CHECK_NO_THROW(o["mass::ratio@has"]);
             }
         }
 

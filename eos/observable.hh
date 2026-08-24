@@ -241,7 +241,7 @@ namespace eos
              *
              * @param name  The name to be checked against the known observables.
              */
-            bool has(const QualifiedName & name);
+            bool has(const QualifiedName & name) const;
     };
 
     extern template class WrappedForwardIterator<Observables::ObservableIteratorTag, const std::pair<const QualifiedName, ObservableEntryPtr>>;
