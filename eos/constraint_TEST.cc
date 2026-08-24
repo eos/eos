@@ -1748,6 +1748,18 @@ class ConstraintTest : public TestCase
         virtual void
         run() const
         {
+            /* Test Constraints::has */
+            {
+                auto constraints = Constraints();
+
+                TEST_CHECK_EQUAL(constraints.has("B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A"), true);
+                TEST_CHECK_EQUAL(constraints.has("B->pi::NOSUCH@Nobody:2000A"), false);
+
+                // has() and operator[] must agree
+                TEST_CHECK_NO_THROW(constraints["B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A"]);
+                TEST_CHECK_THROWS(UnknownConstraintError, constraints["B->pi::NOSUCH@Nobody:2000A"]);
+            }
+
             /* Test making constraints */
             {
                 std::cout << "# Constraints :" << std::endl;
@@ -1833,3 +1845,50 @@ class ConstraintTest : public TestCase
             }
         }
 } constraint_test;
+
+class ConstraintRuntimeInsertionTest : public TestCase
+{
+    public:
+        ConstraintRuntimeInsertionTest() :
+            TestCase("constraint_runtime_insertion_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            /* Test Constraints::has for a constraint inserted at run time */
+            {
+                static const std::string input("type: Gaussian\n"
+                                               "observable: B->pilnu::BR\n"
+                                               "kinematics: {q2_max: 4.0, q2_min: 0.0}\n"
+                                               "options: {q: d}\n"
+                                               "mean: 1.0e-04\n"
+                                               "sigma-stat: {hi: 1.0e-05, lo: -1.0e-05}\n"
+                                               "sigma-sys: {hi: 0.0, lo: -0.0}\n"
+                                               "references:\n"
+                                               "  []");
+
+                // the suffix must name a known reference, since the inserted constraint joins
+                // the shared registry that the other test cases iterate over
+                static const QualifiedName name("B->pi::TEST@BaBar:2010A");
+
+                auto constraints = Constraints();
+
+                TEST_CHECK_EQUAL(constraints.has(name), false);
+
+                constraints.insert(name, input);
+
+                // each container holds the entries as of its own construction, so the new
+                // constraint is invisible here, exactly as it is to operator[] ...
+                TEST_CHECK_EQUAL(constraints.has(name), false);
+                TEST_CHECK_THROWS(UnknownConstraintError, constraints[name]);
+
+                // ... and visible to a container constructed after the insertion
+                auto updated = Constraints();
+
+                TEST_CHECK_EQUAL(updated.has(name), true);
+                TEST_CHECK_NO_THROW(updated[name]);
+            }
+        }
+} constraint_runtime_insertion_test;
