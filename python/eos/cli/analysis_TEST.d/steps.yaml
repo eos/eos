@@ -1,0 +1,59 @@
+# Steps that exercise 'eos-analysis run' cheaply: a single-parameter posterior keeps both
+# the sampling and the optimization below a second.
+likelihoods:
+  - name: lattice
+    constraints:
+      - B->pi::f_++f_0@RBC+UKQCD:2015A
+
+priors:
+  - name: FF
+    descriptions:
+      - parameter: B->pi::f_+(0)@BCL2008
+        min: 0.15
+        max: 0.30
+        type: uniform
+
+posteriors:
+  - name: FF
+    global_options:
+      model: CKM
+      form-factors: BCL2008
+    likelihood:
+      - lattice
+    prior:
+      - FF
+
+predictions:
+  - name: dBRdq2
+    global_options:
+      model: CKM
+      form-factors: BCL2008
+    observables:
+      - name: B->pilnu::dBR/dq2
+        kinematics: [{ 'q2': 1.0 }, { 'q2': 2.0 }]
+
+steps:
+  - title: 'Sample from posterior FF'
+    id: FF.sample
+    default_arguments:
+      sample-nested: { 'nlive': 20, 'dlogz': 1.0, 'maxiter': 100, 'seed': 10 }
+    tasks:
+      - task: sample-nested
+        arguments:
+          posterior: FF
+
+  - title: 'Optimize posterior FF and predict observables'
+    id: FF.mode+predict
+    depends_on:
+      - FF.sample
+    default_arguments:
+      find-mode: { 'optimizations': 1, 'label': 'unused' }
+    tasks:
+      - task: find-mode
+        arguments:
+          posterior: FF
+          label: 'step'
+      - task: predict-observables
+        arguments:
+          posterior: FF
+          prediction: dBRdq2
