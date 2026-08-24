@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -65,6 +65,18 @@ class ReferencesTest : public TestCase
 
                     TEST_CHECK(r.get() != nullptr);
                 }
+            }
+
+            /* Test References::has */
+            {
+                auto references = References();
+
+                TEST_CHECK_EQUAL(references.has("ATLAS:2013A"), true);
+                TEST_CHECK_EQUAL(references.has("Nobody:2000A"), false);
+
+                // has() and operator[] must agree
+                TEST_CHECK(nullptr != references["ATLAS:2013A"].get());
+                TEST_CHECK(nullptr == references["Nobody:2000A"].get());
             }
         }
 } references_test;
