@@ -21,6 +21,7 @@ EXTRA_DIST = \
 	eos/cli/analysis.py \
 	eos/cli/analysis_TEST.d \
 	eos/cli/analysis_TEST.py \
+	eos/cli/analysis_pipeline_TEST.py \
 	eos/cli/data.py \
 	eos/cli/data_checks.py \
 	eos/cli/data_checks_dataset.py \
@@ -193,6 +194,7 @@ TESTS = \
 	eos/analysis_file_context_TEST.py \
 	eos/analysis_file_description_TEST.py \
 	eos/cli/analysis_TEST.py \
+	eos/cli/analysis_pipeline_TEST.py \
 	eos/cli/data_checks_TEST.py \
 	eos/cli/data_checks_dataset_TEST.py \
 	eos/cli/data_register_TEST.py \
