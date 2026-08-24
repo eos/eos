@@ -196,6 +196,13 @@ namespace eos
             ///@name Access of individual ObserableEntry instances
             ///@{
             SignalPDFEntryPtr operator[] (const QualifiedName &) const;
+
+            /*!
+             * Verify if a signal PDF with a given name exists.
+             *
+             * @param name  The name to be checked against the known signal PDFs.
+             */
+            bool has(const QualifiedName & name) const;
             ///@}
 
             ///@name Iteration over observables
