@@ -2150,9 +2150,10 @@ class ConstraintItem(Item):
         self._yerrors = []
 
         for constraint_name in self.constraints:
-            entry = constraints[constraint_name]
-            if not entry:
+            if constraint_name not in constraints:
                 raise ValueError(f'unknown constraint {constraint_name}')
+
+            entry = constraints[constraint_name]
 
             constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
 
@@ -2415,9 +2416,11 @@ class TwoDimensionalConstraintItem(Item):
 
         import yaml
 
-        entry = eos.Constraints()[self.constraint]
-        if not entry:
+        constraints = eos.Constraints()
+        if self.constraint not in constraints:
             raise ValueError(f'unknown constraint {self.constraint}')
+
+        entry = constraints[self.constraint]
 
         constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
         ctype = constraint['type']
@@ -2697,9 +2700,10 @@ class ConstraintResidueItem(Item):
         self._yerrors = []
 
         for constraint_name in self.constraints:
-            entry = constraints[constraint_name]
-            if not entry:
+            if constraint_name not in constraints:
                 raise ValueError(f'unknown constraint {constraint_name}')
+
+            entry = constraints[constraint_name]
 
             constraint = yaml.load(entry.serialize(), Loader=yaml.SafeLoader)
 
