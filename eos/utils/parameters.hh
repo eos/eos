@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2021 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -211,7 +211,7 @@ namespace eos
              *
              * @param name  The name to be checked against the known parameters.
              */
-            bool has(const QualifiedName & name);
+            bool has(const QualifiedName & name) const;
 
             /*!
              * Retrieve a parameter's Parameter object by name.

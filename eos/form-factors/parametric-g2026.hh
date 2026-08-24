@@ -131,7 +131,7 @@ namespace eos
                 std::vector<double> result;
                 for (const auto & name : it->second)
                 {
-                    if (const_cast<Parameters &>(p).has(name))
+                    if (p.has(name))
                     {
                         const auto parameter = p[name];
                         user.uses(parameter.id());
@@ -360,7 +360,7 @@ namespace eos
                 std::vector<double> result;
                 for (const auto & name : it->second)
                 {
-                    if (const_cast<Parameters &>(p).has(name))
+                    if (p.has(name))
                     {
                         const auto parameter = p[name];
                         user.uses(parameter.id());

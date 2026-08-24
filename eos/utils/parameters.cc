@@ -960,18 +960,9 @@ namespace eos
     }
 
     bool
-    Parameters::has(const QualifiedName & name)
+    Parameters::has(const QualifiedName & name) const
     {
-        auto i(_imp->parameters_map.find(name));
-
-        if (_imp->parameters_map.end() == i)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
+        return _imp->parameters_map.cend() != _imp->parameters_map.find(name);
     }
 
     Parameters::Iterator

@@ -144,8 +144,14 @@ class ParametersTest : public TestCase
 
                 TEST_CHECK_NEARLY_EQUAL(p_ell.evaluate(), +1.23, 1e-12);
 
+                TEST_CHECK_EQUAL(p.has("ubtaunutau::Re{cVL}"), true);
+
                 // redirect the tau parameter name to the lepton-flavor universal parameter
                 p.redirect_and_apply("ubtaunutau::Re{cVL}", id_ell);
+
+                // a redirection repoints a name to another id; it neither adds nor removes names
+                TEST_CHECK_EQUAL(p.has("ubtaunutau::Re{cVL}"), true);
+                TEST_CHECK_EQUAL(p.has("ublnul::Re{cVL}"), true);
 
                 // check that the old tau parameter still has the old parameter id
                 TEST_CHECK_EQUAL(p_tau.id(), id_tau);
