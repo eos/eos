@@ -16,15 +16,19 @@
 
 import unittest
 
+from unittest import mock
+
 import eos
 import eos.data
 import eos.figure
 import math
+import numpy as np
 import os
+import shutil
 import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
-from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler, ConstraintResidueItem
+from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler, ConstraintItem, ConstraintResidueItem, Item
 from eos.validation_context import ValidationContext
 from matplotlib import colors as mcolors
 from matplotlib import pyplot as plt
@@ -228,6 +232,110 @@ class ExpressionItemTests(unittest.TestCase):
         self.assertEqual(list(item.legend()), [])
 
 class UncertaintyBandItemTests(unittest.TestCase):
+
+    _DATAFILE = 'eos/data/prediction_TEST.d/predictions'
+
+    def prepared(self, item):
+        "Prepares an item against the checked-in prediction fixture."
+        item.prepare(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
+        return item
+
+    def datafile(self, *observables):
+        "Writes a prediction file holding the given observables into a temporary directory."
+        base = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, base, ignore_errors=True)
+        eos.data.Prediction.create(os.path.join(base, 'predictions'), observables,
+                                   np.random.RandomState(1).rand(6, len(observables)), np.ones(6))
+        return base
+
+    @staticmethod
+    def observable(name, **kinematics):
+        return eos.Observable.make(name, eos.Parameters.Defaults(), eos.Kinematics(**kinematics), eos.Options())
+
+    def test_no_predictions(self):
+
+        base = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, base, ignore_errors=True)
+        eos.data.Prediction.create(os.path.join(base, 'predictions'), [], np.zeros((6, 0)), np.ones(6))
+
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'predictions'\nvariable: 'q2'")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=AnalysisFileContext(base_directory=base))
+
+        self.assertIn('does not contain any predictions', str(cm.exception))
+
+    def test_variable_is_inferred(self):
+
+        # without 'variable', the sole kinematic variable of the first prediction is adopted
+        item = self.prepared(eos.figure.ItemFactory.from_yaml(f"type: uncertainty\ndatafile: '{self._DATAFILE}'"))
+
+        self.assertEqual(item._variable, 'q2')
+        self.assertEqual(str(item._observable), 'B->pilnu::dBR/dq2')
+
+    def test_ambiguous_kinematic_variable(self):
+
+        # a prediction over a bin has two kinematic variables, so 'variable' must be given
+        base = self.datafile(*[self.observable('B->pilnu::BR', q2_min=float(i), q2_max=float(i + 1)) for i in range(3)])
+
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'predictions'")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=AnalysisFileContext(base_directory=base))
+
+        self.assertIn('contains more than one kinematic variable', str(cm.exception))
+
+    def test_ambiguous_observable(self):
+
+        # with more than one predicted observable, 'observable' must be given
+        base = self.datafile(self.observable('B->pilnu::dBR/dq2', q2=1.0), self.observable('B->Dlnu::dBR/dq2', q2=1.0))
+
+        item = eos.figure.ItemFactory.from_yaml("type: uncertainty\ndatafile: 'predictions'\nvariable: 'q2'")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=AnalysisFileContext(base_directory=base))
+
+        self.assertIn('contains more than one predicted observable', str(cm.exception))
+
+    def test_variable_not_predicted(self):
+
+        item = eos.figure.ItemFactory.from_yaml(f"type: uncertainty\ndatafile: '{self._DATAFILE}'\nvariable: 'k2'")
+        with self.assertRaises(ValueError) as cm:
+            self.prepared(item)
+
+        self.assertIn("does not depend on the chosen kinematic variable 'k2'", str(cm.exception))
+
+    def test_observable_options_are_matched(self):
+
+        # the fixture was predicted with 'form-factors=BCL2008', which the item may state explicitly
+        item = self.prepared(eos.figure.ItemFactory.from_yaml(
+            f"type: uncertainty\ndatafile: '{self._DATAFILE}'\nvariable: 'q2'\n"
+            "observable: 'B->pilnu::dBR/dq2;form-factors=BCL2008'"))
+
+        self.assertEqual(len(item._xvalues), item.resolution)
+
+    def test_observable_options_mismatch(self):
+
+        # an option that no prediction of the data file was computed with leaves nothing to plot
+        item = eos.figure.ItemFactory.from_yaml(
+            f"type: uncertainty\ndatafile: '{self._DATAFILE}'\nvariable: 'q2'\n"
+            "observable: 'B->pilnu::dBR/dq2;form-factors=BSZ2015'")
+        with self.assertRaises(ValueError) as cm:
+            self.prepared(item)
+
+        self.assertIn('No observable of the data file matches', str(cm.exception))
+
+    def test_cubic_interpolation(self):
+
+        # both interpolations yield a band over the same abscissae, but not the same band
+        linear = self.prepared(eos.figure.ItemFactory.from_yaml(
+            f"type: uncertainty\ndatafile: '{self._DATAFILE}'\nvariable: 'q2'\ninterpolation: 'linear'"))
+        cubic = self.prepared(eos.figure.ItemFactory.from_yaml(
+            f"type: uncertainty\ndatafile: '{self._DATAFILE}'\nvariable: 'q2'\ninterpolation: 'cubic'"))
+
+        self.assertEqual(list(cubic._xvalues), list(linear._xvalues))
+        self.assertEqual(len(cubic._ovalues_central[0]), len(linear._ovalues_central[0]))
+        self.assertFalse(np.allclose(cubic._ovalues_central[0], linear._ovalues_central[0]))
+
+        _, ax = plt.subplots()
+        cubic.draw(ax)
 
     def test_full(self):
 
@@ -499,6 +607,221 @@ class ConstraintItemTests(unittest.TestCase):
         self.assertTrue(entry.has_xerr)
         self.assertTrue(entry.has_yerr)
 
+    def test_binned_gaussian(self):
+
+        # a univariate constraint binned in the variable is placed at the centre of its bin, with
+        # the half bin width as the x error
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+        observable: 'B->pilnu::BR'
+        variable: 'q2'
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0])
+        self.assertEqual(list(item._xerrors), [2.0])
+        self.assertAlmostEqual(item._yvalues[0], 3.13e-05)
+        # the statistical and systematic uncertainties are added in quadrature, per side
+        sigma = math.sqrt(3.0e-06**2 + 2.5e-06**2)
+        self.assertAlmostEqual(item._yerrors[0][0], sigma)
+        self.assertAlmostEqual(item._yerrors[0][1], sigma)
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_binned_gaussian_rescaled_by_width(self):
+
+        # 'rescale_by_width' divides the central value and its uncertainties by the bin width,
+        # while leaving the abscissa and its error untouched
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+        observable: 'B->pilnu::BR'
+        variable: 'q2'
+        rescale_by_width: true
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0])
+        self.assertEqual(list(item._xerrors), [2.0])
+        self.assertAlmostEqual(item._yvalues[0], 3.13e-05 / 4.0)
+        sigma = math.sqrt(3.0e-06**2 + 2.5e-06**2) / 4.0
+        self.assertAlmostEqual(item._yerrors[0][0], sigma)
+        self.assertAlmostEqual(item._yerrors[0][1], sigma)
+
+    def test_binned_multivariate_gaussian(self):
+
+        # a multivariate constraint contributes one point per bin, in the order of its entries
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR'
+        variable: 'q2'
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0, 6.0, 9.0, 11.0, 16.5])
+        self.assertEqual(list(item._xerrors), [2.0, 2.0, 1.0, 1.0, 4.5])
+        self.assertEqual(list(item._yvalues), [1.506e-05, 1.815e-05, 1.471e-05, 1.715e-05, 4.981e-05])
+        self.assertTrue(all(item._yerrors > 0.0))
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_binned_multivariate_gaussian_rescaled_by_width(self):
+
+        # each bin of a multivariate constraint is rescaled by its own width
+        def prepared(rescale):
+            item = eos.figure.ItemFactory.from_yaml(f"""
+            type: constraint
+            constraints: 'B^+->omegalnu::BR@BPR:2021A'
+            observable: 'B->omegalnu::BR'
+            variable: 'q2'
+            rescale_by_width: {rescale}
+            """)
+            item.prepare()
+            return item
+
+        plain, rescaled = prepared('false'), prepared('true')
+        widths = [4.0, 4.0, 2.0, 2.0, 9.0]
+
+        self.assertEqual(list(rescaled._xvalues), list(plain._xvalues))
+        self.assertEqual(list(rescaled._xerrors), list(plain._xerrors))
+        for i, width in enumerate(widths):
+            self.assertAlmostEqual(rescaled._yvalues[i], plain._yvalues[i] / width)
+            self.assertAlmostEqual(rescaled._yerrors[i], plain._yerrors[i] / width)
+
+    def test_binned_multivariate_gaussian_observable_with_options(self):
+
+        # the observable's options are matched against those recorded in the constraint
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR;l=e'
+        variable: 'q2'
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0, 6.0, 9.0, 11.0, 16.5])
+
+    def test_unknown_constraint(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B->pi::NOSUCH@Nobody:2000A'
+        observable: 'B->pilnu::BR'
+        variable: 'q2'
+        """)
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+
+        self.assertIn('unknown constraint B->pi::NOSUCH@Nobody:2000A', str(cm.exception))
+
+    def test_unsupported_constraint_type(self):
+
+        # only the Gaussian and the two multivariate Gaussian types can be drawn
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A'
+        observable: 'B_q->ll::BR@Untagged'
+        variable: 'q2'
+        """)
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+
+        self.assertIn('constraint type Amoroso presently not supported', str(cm.exception))
+
+    def test_range_limits_the_drawn_points(self):
+
+        # 'range' masks the points outside it, exclusive at both ends
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR'
+        variable: 'q2'
+        range: [5.0, 12.0]
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0, 6.0, 9.0, 11.0, 16.5])
+        self.assertEqual(list(item._mask), [False, True, True, True, False])
+
+        # only the three unmasked points are drawn, one error bar each
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertEqual(len(ax.containers), 3)
+
+    def test_multivariate_gaussian_covariance_requires_an_observable(self):
+
+        # a multivariate constraint bundles several observables, so one of them must be named
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+        variable: 'q2'
+        """)
+        with self.assertRaises(KeyError) as cm:
+            item.prepare()
+
+        self.assertIn('MultivariateGaussian(Covariance)', cm.exception.args[0])
+
+    def test_multivariate_gaussian_requires_an_observable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        variable: 'q2'
+        """)
+        with self.assertRaises(KeyError) as cm:
+            item.prepare()
+
+        self.assertIn('MultivariateGaussian', cm.exception.args[0])
+
+    def test_point_kinematics_multivariate_gaussian(self):
+
+        # a constraint given at points rather than in bins carries no x error, and only the
+        # entries naming the requested observable contribute
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'
+        observable: 'B->D::f_+(q2)'
+        variable: 'q2'
+        """)
+        with mock.patch.object(eos, 'warn') as warn:
+            item.prepare()
+
+        self.assertEqual(list(item._xvalues), [-15.0, -10.0, -5.0, 0.0])
+        self.assertTrue(all(xerr is None for xerr in item._xerrors))
+        self.assertEqual(list(item._yvalues), [0.414161569, 0.474556651, 0.550406251, 0.649944038])
+
+        # the constraint holds 33 entries, of which the 29 for other form factors are skipped
+        self.assertEqual(warn.call_count, 29)
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_binned_multivariate_gaussian_option_mismatch(self):
+
+        # an option that no entry of the constraint provides leaves nothing to draw, and each
+        # skipped entry is reported with its name and options
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: constraint
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR;l=tau'
+        variable: 'q2'
+        """)
+        with mock.patch.object(eos, 'warn') as warn:
+            item.prepare()
+
+        self.assertEqual(len(item._xvalues), 0)
+        self.assertEqual(warn.call_count, 5)
+        self.assertIn('B->omegalnu::BR', warn.call_args[0][0])
+        self.assertIn("'l': 'e'", warn.call_args[0][0])
+
+        # nothing is drawn, and no exception is raised
+        _, ax = plt.subplots()
+        item.draw(ax)
+
 class ConstraintResidueItemTests(unittest.TestCase):
 
     class _Parameter:
@@ -560,6 +883,291 @@ class ConstraintResidueItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'constraint-residue' with style 'delta': {e}")
+
+    def test_binned_gaussian(self):
+
+        # a univariate constraint binned in the variable is placed at the centre of its bin, and
+        # the observable is evaluated over that same bin
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+        observable: 'B->pilnu::BR'
+        variable: 'q2'
+        style: 'delta'
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0])
+        self.assertEqual(list(item._xerrors), [2.0])
+        self.assertEqual(len(item._yvalues), 1)
+        self.assertTrue(math.isfinite(item._yvalues[0]))
+        # the residue is the measurement minus the prediction, both integrated over the bin
+        self.assertLess(item._yvalues[0], 3.13e-05)
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_binned_gaussian_rescaled_by_width(self):
+
+        # 'rescale_by_width' divides the residue and its uncertainties by the bin width
+        def prepared(rescale):
+            item = eos.figure.ItemFactory.from_yaml(f"""
+            type: 'constraint-residue'
+            constraints: 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+            observable: 'B->pilnu::BR'
+            variable: 'q2'
+            rescale_by_width: {rescale}
+            """)
+            item.prepare()
+            return item
+
+        plain, rescaled = prepared('false'), prepared('true')
+
+        self.assertEqual(list(rescaled._xvalues), list(plain._xvalues))
+        self.assertEqual(list(rescaled._xerrors), list(plain._xerrors))
+        self.assertAlmostEqual(rescaled._yvalues[0], plain._yvalues[0] / 4.0)
+        self.assertAlmostEqual(rescaled._yerrors[0][0], plain._yerrors[0][0] / 4.0)
+        self.assertAlmostEqual(rescaled._yerrors[0][1], plain._yerrors[0][1] / 4.0)
+
+    def test_binned_multivariate_gaussian(self):
+
+        # a multivariate constraint contributes one residue per bin, in the order of its entries
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR'
+        variable: 'q2'
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0, 6.0, 9.0, 11.0, 16.5])
+        self.assertEqual(list(item._xerrors), [2.0, 2.0, 1.0, 1.0, 4.5])
+        self.assertEqual(len(item._yvalues), 5)
+        self.assertTrue(all(math.isfinite(y) for y in item._yvalues))
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertGreater(len(ax.patches), 0)
+
+    def test_unknown_constraint(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B->pi::NOSUCH@Nobody:2000A'
+        observable: 'B->pilnu::BR'
+        variable: 'q2'
+        """)
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+
+        self.assertIn('unknown constraint B->pi::NOSUCH@Nobody:2000A', str(cm.exception))
+
+    def test_unsupported_constraint_type(self):
+
+        # only the Gaussian and the two multivariate Gaussian types can be drawn
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^0_s->mu^+mu^-::BR@CMS+LHCb:2014A'
+        observable: 'B_q->ll::BR@Untagged'
+        variable: 'q2'
+        """)
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+
+        self.assertIn('constraint type Amoroso presently not supported', str(cm.exception))
+
+    def test_range_limits_the_drawn_residues(self):
+
+        # 'range' masks the residues outside it, exclusive at both ends
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR'
+        variable: 'q2'
+        range: [5.0, 12.0]
+        """)
+        item.prepare()
+
+        self.assertEqual(list(item._xvalues), [2.0, 6.0, 9.0, 11.0, 16.5])
+        self.assertEqual(list(item._mask), [False, True, True, True, False])
+
+        # only the three unmasked residues are drawn, one bar each
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertEqual(len(ax.patches), 3)
+
+    def test_nan_observable_gaussian(self):
+
+        # an observable that cannot be evaluated yields a NaN residue, which is reported but
+        # does not abort the preparation
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^0->pi^+lnu::BR[0.0,4.0]@BaBar:2010A'
+        observable: 'B->pilnu::BR'
+        variable: 'q2'
+        parameters: {'CKM::lambda': .nan}
+        """)
+        with mock.patch.object(eos, 'warn') as warn:
+            item.prepare()
+
+        self.assertEqual(len(item._yvalues), 1)
+        self.assertTrue(math.isnan(item._yvalues[0]))
+        self.assertEqual(warn.call_count, 1)
+        self.assertIn('B->pilnu::BR', warn.call_args[0][0])
+        self.assertIn('evaluated to NaN', warn.call_args[0][0])
+
+        # the residues are still drawn, as NaN-valued bars
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertEqual(len(ax.patches), 1)
+
+    def test_nan_observable_multivariate_gaussian_covariance(self):
+
+        # every entry of a multivariate constraint is reported separately
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'
+        observable: 'B->D::f_+(q2)'
+        variable: 'q2'
+        parameters: {'B->D::alpha^f+_0@BSZ2015': .nan}
+        """)
+        with mock.patch.object(eos, 'warn') as warn:
+            item.prepare()
+
+        self.assertEqual(len(item._yvalues), 4)
+        self.assertTrue(all(math.isnan(yvalue) for yvalue in item._yvalues))
+        self.assertEqual(len([call for call in warn.call_args_list if 'evaluated to NaN' in call[0][0]]), 4)
+
+    def test_nan_observable_multivariate_gaussian(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        observable: 'B->omegalnu::BR'
+        variable: 'q2'
+        parameters: {'CKM::lambda': .nan}
+        """)
+        with mock.patch.object(eos, 'warn') as warn:
+            item.prepare()
+
+        self.assertEqual(len(item._yvalues), 5)
+        self.assertTrue(all(math.isnan(yvalue) for yvalue in item._yvalues))
+        self.assertEqual(len([call for call in warn.call_args_list if 'evaluated to NaN' in call[0][0]]), 5)
+
+    def test_observable_not_contained_in_the_constraint(self):
+
+        # a constraint that holds none of the requested observable is reported and skipped
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'
+        observable: 'B->pi::f_+(q2)'
+        variable: 'q2'
+        """)
+        with mock.patch.object(eos, 'warn'), mock.patch.object(eos, 'info') as info:
+            item.prepare()
+
+        self.assertEqual(len(item._xvalues), 0)
+        self.assertIn('B->D^(*)::FormFactors', info.call_args[0][0])
+
+        # nothing is drawn, and no exception is raised
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertEqual(len(ax.patches), 0)
+
+    def test_multivariate_gaussian_covariance_requires_an_observable(self):
+
+        # a multivariate constraint bundles several observables, so one of them must be named
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^0->D^+e^-nu::BRs@Belle:2015A'
+        variable: 'q2'
+        """)
+        with self.assertRaises(KeyError) as cm:
+            item.prepare()
+
+        self.assertIn('MultivariateGaussian(Covariance)', cm.exception.args[0])
+
+    def test_multivariate_gaussian_requires_an_observable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B^+->omegalnu::BR@BPR:2021A'
+        variable: 'q2'
+        """)
+        with self.assertRaises(KeyError) as cm:
+            item.prepare()
+
+        self.assertIn('MultivariateGaussian', cm.exception.args[0])
+
+    def test_point_kinematics_multivariate_gaussian(self):
+
+        # a constraint given at points rather than in bins carries no x error, and the observable
+        # is evaluated at each of those points
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'
+        observable: 'B->D::f_+(q2)'
+        variable: 'q2'
+        """)
+        with mock.patch.object(eos, 'warn') as warn:
+            item.prepare()
+
+        self.assertEqual(list(item._xvalues), [-15.0, -10.0, -5.0, 0.0])
+        self.assertTrue(all(xerr is None for xerr in item._xerrors))
+
+        # the constraint holds 33 entries, of which the 29 for other form factors are skipped
+        self.assertEqual(warn.call_count, 29)
+
+        # each residue is the constraint's mean less the form factor at that very point
+        means = [0.414161569, 0.474556651, 0.550406251, 0.649944038]
+        parameters = eos.Parameters.Defaults()
+        options = eos.Options({'form-factors': 'BSZ2015'})
+        for i, (q2, mean) in enumerate(zip([-15.0, -10.0, -5.0, 0.0], means)):
+            prediction = eos.Observable.make('B->D::f_+(q2)', parameters, eos.Kinematics(q2=q2), options).evaluate()
+            self.assertAlmostEqual(item._yvalues[i], mean - prediction)
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_point_kinematics_delta_style(self):
+
+        # without an x error, the 'delta' style draws a plain vertical error bar
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint-residue'
+        constraints: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'
+        observable: 'B->D::f_+(q2)'
+        variable: 'q2'
+        style: 'delta'
+        """)
+        with mock.patch.object(eos, 'warn'):
+            item.prepare()
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+        self.assertEqual(len(ax.containers), 4)
+        self.assertTrue(all(not container.has_xerr for container in ax.containers))
+
+    def test_binned_multivariate_gaussian_rescaled_by_width(self):
+
+        # each bin of a multivariate constraint is rescaled by its own width
+        def prepared(rescale):
+            item = eos.figure.ItemFactory.from_yaml(f"""
+            type: 'constraint-residue'
+            constraints: 'B^+->omegalnu::BR@BPR:2021A'
+            observable: 'B->omegalnu::BR'
+            variable: 'q2'
+            rescale_by_width: {rescale}
+            """)
+            item.prepare()
+            return item
+
+        plain, rescaled = prepared('false'), prepared('true')
+        widths = [4.0, 4.0, 2.0, 2.0, 9.0]
+
+        self.assertEqual(list(rescaled._xvalues), list(plain._xvalues))
+        for i, width in enumerate(widths):
+            self.assertAlmostEqual(rescaled._yvalues[i], plain._yvalues[i] / width)
+            self.assertAlmostEqual(rescaled._yerrors[i], plain._yerrors[i] / width)
 
     def test_invalid_style(self):
 
@@ -684,6 +1292,19 @@ class ConstraintResidueItemTests(unittest.TestCase):
             self.assertEqual(item._parameters['mass::e'].evaluate(), 1.0)
 
 class TwoDimensionalConstraintItemTests(unittest.TestCase):
+
+    def test_unknown_constraint(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'constraint2D'
+        constraint: 'B->pi::NOSUCH@Nobody:2000A'
+        x: { observable: 'B->K^*gamma::S_K^*gamma' }
+        y: { observable: 'B->K^*gamma::C_K^*gamma' }
+        """)
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+
+        self.assertIn('unknown constraint B->pi::NOSUCH@Nobody:2000A', str(cm.exception))
 
     def test_multivariate(self):
 
@@ -1391,6 +2012,34 @@ def _source_context():
     "An analysis file context rooted at the test source directory, where the fixtures live."
     return AnalysisFileContext(base_directory=os.environ['SOURCE_DIR'])
 
+class ItemBaseClassTests(unittest.TestCase):
+
+    def test_prepare_and_draw_are_abstract(self):
+
+        item = Item(label='base')
+
+        with self.assertRaises(NotImplementedError):
+            item.prepare()
+
+        with self.assertRaises(NotImplementedError):
+            item.draw(None)
+
+    def test_legend_is_empty_by_default(self):
+
+        # an item type that draws nothing keyable contributes no entry, even when labelled
+        self.assertEqual(list(Item(label='base').legend()), [])
+
+    def test_legend_marker(self):
+
+        entries = Item(label='base', color='C0')._legend_marker('o')
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][0].get_marker(), 'o')
+        self.assertEqual(entries[0][1], 'base')
+
+        # an unlabelled item contributes no entry
+        self.assertEqual(list(Item()._legend_marker('o')), [])
+
 class ItemFactoryTests(unittest.TestCase):
 
     def test_invalid(self):
@@ -1527,6 +2176,27 @@ class ObservableItemValidationTests(unittest.TestCase):
             _, ax = plt.subplots()
             item.draw(ax)
 
+    def test_fixed_parameters_take_precedence_over_the_file(self):
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, 'params.yaml'), 'w') as f:
+                f.write("'mass::mu':\n  central: 0.5\n")
+
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: observable
+            observable: 'B->Dlnu::dBR/dq2'
+            variable: q2
+            range: [0.1, 1.0]
+            resolution: 3
+            fixed_parameters_from_file: 'params.yaml'
+            fixed_parameters: { 'mass::mu': 0.2 }
+            """)
+            with mock.patch.object(eos, 'warn') as warn:
+                item.prepare(context=AnalysisFileContext(base_directory=tmp))
+
+            self.assertEqual(item._parameters['mass::mu'].evaluate(), 0.2)
+            self.assertEqual(len([call for call in warn.call_args_list if 'with explicit values' in call[0][0]]), 1)
+
 class ExpressionItemValidationTests(unittest.TestCase):
 
     def test_invalid(self):
@@ -1612,6 +2282,16 @@ class BinnedUncertaintyItemValidationTests(unittest.TestCase):
             eos.figure.ItemFactory.from_yaml("type: uncertainty-binned\nvariable: 'nonexistent'\n"
                                                 "datafile: 'eos/data/prediction_TEST.d/predictions-binned'\nband: []")
 
+    def test_invalid_credibility_level(self):
+
+        base = "type: uncertainty-binned\nvariable: 'x'\ndatafile: 'x'\n"
+
+        with self.assertRaisesRegex(ValueError, "not in the interval"):
+            eos.figure.ItemFactory.from_yaml(base + "levels: [150]")
+
+        with self.assertRaisesRegex(ValueError, "not in the interval"):
+            eos.figure.ItemFactory.from_yaml(base + "levels: [0]")
+
     def test_missing_binned_kinematics(self):
 
         # the data file must expose '<variable>_min' and '<variable>_max' for each prediction
@@ -1651,6 +2331,15 @@ class OneDimensionalHistogramItemValidationTests(unittest.TestCase):
         item.prepare(context=_source_context())
         _, ax = plt.subplots()
         item.draw(ax)
+
+    def test_legend(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: histogram1D\nvariable: 'x'\ndatafile: 'x'\nlabel: 'hist'")
+        entries = item.legend()
+
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'hist')
 
 class TwoDimensionalHistogramItemValidationTests(unittest.TestCase):
 
@@ -1726,7 +2415,63 @@ class OneDimensionalKernelDensityItemValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             item.prepare(context=ctx)
 
+    def test_legend(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'x'\ndatafile: 'x'\nlabel: 'kde'")
+        entries = item.legend()
+
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'kde')
+
+    def test_samples_missing_variable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'not-a-variable'\n"
+                                                "datafile: 'eos/data/importance_samples_TEST.d/samples'")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain samples of variable 'not-a-variable'", str(cm.exception))
+
 class TwoDimensionalKernelDensityItemValidationTests(unittest.TestCase):
+
+    def test_samples_missing_x_variable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: 'eos/data/importance_samples_TEST.d/samples'\n"
+                                                "variables: ['not-an-x-variable', 'B->pi::f_+(0)@BCL2008']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain samples of variable 'not-an-x-variable'", str(cm.exception))
+
+    def test_samples_missing_y_variable(self):
+
+        # the x variable is present, so only the second guard can reject this
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: 'eos/data/importance_samples_TEST.d/samples'\n"
+                                                "variables: ['CKM::abs(V_ub)', 'not-a-y-variable']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain samples of variable 'not-a-y-variable'", str(cm.exception))
+
+    def test_prediction_ambiguous_y_variable(self):
+
+        # the x variable is given by its full name, the y variable by one 'pred-dup' holds twice
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: '" + _ITEM_TEST_D + "/pred-dup'\n"
+                                                "variables: ['" + _PRED_FP + "', 'B->D::f_+(q2)']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("contains multiple predictions for variable 'B->D::f_+(q2)'", str(cm.exception))
+
+    def test_prediction_missing_y_variable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: kde2D\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['" + _PRED_FP + "', 'not-a-y-variable']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain predictions for variable 'not-a-y-variable'", str(cm.exception))
 
     def test_invalid(self):
 
@@ -1771,7 +2516,62 @@ class TwoDimensionalKernelDensityItemValidationTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             item.prepare(context=ctx)
 
+    def test_legend(self):
+
+        base = "type: kde2D\nvariables: ['a', 'b']\ndatafile: 'x'\n"
+
+        # filled contours are keyed by a swatch, unfilled ones by a line
+        entries = eos.figure.ItemFactory.from_yaml(base + "label: 'kde'\ncontours: ['areas']").legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Rectangle)
+        self.assertEqual(entries[0][1], 'kde')
+
+        entries = eos.figure.ItemFactory.from_yaml(base + "label: 'kde'\ncontours: ['lines']").legend()
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+
+        # an unlabelled item contributes no entry
+        self.assertEqual(list(eos.figure.ItemFactory.from_yaml(base + "contours: ['areas']").legend()), [])
+
 class TwoDimensionalContoursItemPredictionTests(unittest.TestCase):
+
+    def test_samples_missing_x_variable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: 'eos/data/importance_samples_TEST.d/samples'\n"
+                                                "variables: ['not-an-x-variable', 'B->pi::f_+(0)@BCL2008']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain samples of variable 'not-an-x-variable'", str(cm.exception))
+
+    def test_samples_missing_y_variable(self):
+
+        # the x variable is present, so only the second guard can reject this
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: 'eos/data/importance_samples_TEST.d/samples'\n"
+                                                "variables: ['CKM::abs(V_ub)', 'not-a-y-variable']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain samples of variable 'not-a-y-variable'", str(cm.exception))
+
+    def test_prediction_ambiguous_y_variable(self):
+
+        # the x variable is given by its full name, the y variable by one 'pred-dup' holds twice
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: '" + _ITEM_TEST_D + "/pred-dup'\n"
+                                                "variables: ['" + _PRED_FP + "', 'B->D::f_+(q2)']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("contains multiple predictions for variable 'B->D::f_+(q2)'", str(cm.exception))
+
+    def test_prediction_missing_y_variable(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: contours2D\nbins: 20\ndatafile: '" + _ITEM_TEST_D + "/pred-uniq'\n"
+                                                "variables: ['" + _PRED_FP + "', 'not-a-y-variable']")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare(context=_source_context())
+
+        self.assertIn("does not contain predictions for variable 'not-a-y-variable'", str(cm.exception))
 
     def test_prepare_errors(self):
 
@@ -1830,6 +2630,27 @@ class ConstraintItemCoverageTests(unittest.TestCase):
         _, ax = plt.subplots()
         item.draw(ax)
 
+    def test_validate_semantics(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: constraint\nconstraints: 'B->D::f_+@FKKM:2008A'\n"
+                                                "variable: q2\nobservable: 'test::unknown-observable'")
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict()
+        diagnostics = list(item.validate_semantics(ValidationContext(description)))
+
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(('observable',), diagnostics[0].path)
+
+        # an item without an observable has nothing to check
+        item = eos.figure.ItemFactory.from_yaml("type: constraint\nconstraints: 'B->D::f_+@FKKM:2008A'\nvariable: q2")
+        self.assertEqual([], list(item.validate_semantics(ValidationContext(description))))
+
+    def test_constraints_as_a_qualified_name(self):
+
+        # a single QualifiedName, as passed by programmatic construction, is wrapped in a list
+        item = ConstraintItem(constraints=eos.QualifiedName('B->D::f_+@FKKM:2008A'), variable='q2')
+
+        self.assertEqual([str(constraint) for constraint in item.constraints], ['B->D::f_+@FKKM:2008A'])
+
     def test_invalid(self):
 
         # 'constraints' of an unsupported type is rejected at construction
@@ -1864,6 +2685,27 @@ class ConstraintResidueItemCoverageTests(unittest.TestCase):
             eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 123\n"
                                              "observable: 'B->D::f_+(q2)'\nvariable: q2")
 
+    def test_validate_semantics(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 'B->D::f_+@FKKM:2008A'\n"
+                                                "variable: q2\nobservable: 'test::unknown-observable'")
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict()
+        diagnostics = list(item.validate_semantics(ValidationContext(description)))
+
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(('observable',), diagnostics[0].path)
+
+        # an item without an observable has nothing to check
+        item = eos.figure.ItemFactory.from_yaml("type: constraint-residue\nconstraints: 'B->D::f_+@FKKM:2008A'\nvariable: q2")
+        self.assertEqual([], list(item.validate_semantics(ValidationContext(description))))
+
+    def test_constraints_as_a_qualified_name(self):
+
+        # a single QualifiedName, as passed by programmatic construction, is wrapped in a list
+        item = ConstraintResidueItem(constraints=eos.QualifiedName('B->D::f_+@FKKM:2008A'), variable='q2')
+
+        self.assertEqual([str(constraint) for constraint in item.constraints], ['B->D::f_+@FKKM:2008A'])
+
 class TwoDimensionalConstraintItemCoverageTests(unittest.TestCase):
 
     def test_invalid_type(self):
@@ -1880,6 +2722,55 @@ class TwoDimensionalConstraintItemCoverageTests(unittest.TestCase):
                                                 "x: { observable: 'B_q->ll::BR@Untagged' }")
         with self.assertRaises(ValueError):
             item.prepare()
+
+    def test_validate_semantics(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: constraint2D\nconstraint: 'B->D::f_+@FKKM:2008A'\n"
+                                                "x: { observable: 'test::unknown-observable' }")
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict()
+        diagnostics = list(item.validate_semantics(ValidationContext(description)))
+
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(('x', 'observable'), diagnostics[0].path)
+
+    def test_covariance_ellipse(self):
+
+        # a MultivariateGaussian(Covariance) constraint yields the ellipse's widths and correlation
+        item = eos.figure.ItemFactory.from_yaml("type: constraint2D\nconstraint: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'\n"
+                                                "x: { observable: 'B->D::f_+(q2)' }\ny: { observable: 'B->D::f_0(q2)' }")
+        item.prepare()
+
+        self.assertEqual(item._shape, 'ellipse')
+        self.assertGreater(item._xsigma, 0.0)
+        self.assertGreater(item._ysigma, 0.0)
+        self.assertGreater(abs(item._rho), 0.0)
+        self.assertLessEqual(abs(item._rho), 1.0)
+
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_observable_not_contained(self):
+
+        base = "type: constraint2D\nconstraint: 'B->D^(*)::FormFactors[f_+,f_0,A_0,A_1,A_2,V,T_1,T_2,T_23]@GKvD:2018A'\n"
+
+        item = eos.figure.ItemFactory.from_yaml(base + "x: { observable: 'B->pi::f_+(q2)' }\n"
+                                                       "y: { observable: 'B->D::f_0(q2)' }")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+        self.assertIn('x-axis observable B->pi::f_+(q2) not contained', str(cm.exception))
+
+        item = eos.figure.ItemFactory.from_yaml(base + "x: { observable: 'B->D::f_+(q2)' }\n"
+                                                       "y: { observable: 'B->pi::f_0(q2)' }")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+        self.assertIn('y-axis observable B->pi::f_0(q2) not contained', str(cm.exception))
+
+        # the univariate (Gaussian) branch matches its single observable in the same way
+        item = eos.figure.ItemFactory.from_yaml("type: constraint2D\nconstraint: 'B->D::f_+@FKKM:2008A'\n"
+                                                "x: { observable: 'B->pi::f_+(q2)' }")
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+        self.assertIn('x-axis observable B->pi::f_+(q2) not contained', str(cm.exception))
 
 class BandItemValidationTests(unittest.TestCase):
 
@@ -1929,6 +2820,73 @@ class SignalPDFItemCoverageTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             item.prepare()
 
+    def test_legend(self):
+
+        item = eos.figure.ItemFactory.from_yaml("type: signal-pdf\npdf: 'B->Dlnu::P(q2);l=mu'\n"
+                                                "variable: q2\nrange: [0.02, 11.6]\nlabel: 'pdf'")
+        entries = item.legend()
+
+        self.assertEqual(len(entries), 1)
+        self.assertIsInstance(entries[0][0], Line2D)
+        self.assertEqual(entries[0][1], 'pdf')
+
+    def test_unknown_pdf(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: signal-pdf
+        pdf: 'B->Dlnu::NOSUCH(q2)'
+        variable: q2
+        range: [0.02, 11.6]
+        resolution: 5
+        """)
+        with self.assertRaises(ValueError) as cm:
+            item.prepare()
+
+        self.assertIn('could not be created', str(cm.exception))
+
+    def test_parameters_from_file(self):
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, 'params.yaml'), 'w') as f:
+                f.write("'mass::mu':\n  central: 0.5\n")
+
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: signal-pdf
+            pdf: 'B->Dlnu::P(q2);l=mu'
+            variable: q2
+            range: [0.02, 11.6]
+            resolution: 5
+            kinematics: { q2_min: 0.02, q2_max: 11.6 }
+            parameters_from_file: 'params.yaml'
+            """)
+            with mock.patch.object(eos, 'warn') as warn:
+                item.prepare(context=AnalysisFileContext(base_directory=tmp))
+
+            self.assertEqual(item._parameters['mass::mu'].evaluate(), 0.5)
+            self.assertEqual(len([call for call in warn.call_args_list if 'from file' in call[0][0]]), 1)
+
+    def test_parameters_take_precedence_over_the_file(self):
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, 'params.yaml'), 'w') as f:
+                f.write("'mass::mu':\n  central: 0.5\n")
+
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: signal-pdf
+            pdf: 'B->Dlnu::P(q2);l=mu'
+            variable: q2
+            range: [0.02, 11.6]
+            resolution: 5
+            kinematics: { q2_min: 0.02, q2_max: 11.6 }
+            parameters_from_file: 'params.yaml'
+            parameters: { 'mass::mu': 0.2 }
+            """)
+            with mock.patch.object(eos, 'warn') as warn:
+                item.prepare(context=AnalysisFileContext(base_directory=tmp))
+
+            self.assertEqual(item._parameters['mass::mu'].evaluate(), 0.2)
+            self.assertEqual(len([call for call in warn.call_args_list if 'with explicit values' in call[0][0]]), 1)
+
     def test_options_and_parameters(self):
 
         # explicit options and parameters are applied during prepare()
@@ -1976,6 +2934,94 @@ class ComplexPlaneItemValidationTests(unittest.TestCase):
         # a non-positive resolution is rejected
         with self.assertRaises(ValueError):
             eos.figure.ItemFactory.from_yaml(base + "variables: ['Re{q2}', 'Im{q2}']\nranges: [[-1, 1], [-1, 1]]\nresolution: 0")
+
+    def test_validate_semantics(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: complex-plane
+        observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+        variables: ['Re{q2}', 'Im{q2}']
+        ranges: [[0.1, 1.0], [0.1, 1.0]]
+        fixed_parameters: { 'test::unknown-parameter': 1.0 }
+        """)
+        description = eos.analysis_file_description.AnalysisFileDescription.from_dict()
+        diagnostics = list(item.validate_semantics(ValidationContext(description)))
+
+        # the observable is known, the fixed parameter is not
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(('fixed_parameters', 'test::unknown-parameter'), diagnostics[0].path)
+
+    def test_fixed_kinematics(self):
+
+        # kinematic variables other than the two swept ones are held at the given values
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: complex-plane
+        observable: 'B->D^*lnu::BRbar'
+        variables: ['q2_e_min', 'q2_e_max']
+        ranges: [[0.1, 0.2], [1.0, 1.1]]
+        resolution: 2
+        fixed_kinematics: { q2_mu_min: 0.02, q2_mu_max: 10.0 }
+        """)
+
+        self.assertIn('q2_mu_min', item._kinematics)
+        self.assertIn('q2_mu_max', item._kinematics)
+        self.assertEqual(float(item._kinematics['q2_mu_min']), 0.02)
+        self.assertEqual(float(item._kinematics['q2_mu_max']), 10.0)
+
+        item.prepare()
+
+    def test_options(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: complex-plane
+        observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+        variables: ['Re{q2}', 'Im{q2}']
+        ranges: [[0.1, 1.0], [0.1, 1.0]]
+        resolution: 3
+        options: { contribution: 'Qc' }
+        """)
+
+        self.assertIn('contribution', item._options)
+        self.assertEqual(str(item._options['contribution']), 'Qc')
+
+        item.prepare()
+        _, ax = plt.subplots()
+        item.draw(ax)
+
+    def test_fixed_parameters(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: complex-plane
+        observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+        variables: ['Re{q2}', 'Im{q2}']
+        ranges: [[0.1, 1.0], [0.1, 1.0]]
+        resolution: 3
+        fixed_parameters: { 'mass::mu': 0.2 }
+        """)
+        item.prepare()
+
+        self.assertEqual(item._parameters['mass::mu'].evaluate(), 0.2)
+
+    def test_fixed_parameters_take_precedence_over_the_file(self):
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with open(os.path.join(tmp, 'params.yaml'), 'w') as f:
+                f.write("'mass::mu':\n  central: 0.10566\n")
+
+            item = eos.figure.ItemFactory.from_yaml("""
+            type: complex-plane
+            observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+            variables: ['Re{q2}', 'Im{q2}']
+            ranges: [[0.1, 1.0], [0.1, 1.0]]
+            resolution: 3
+            fixed_parameters_from_file: 'params.yaml'
+            fixed_parameters: { 'mass::mu': 0.2 }
+            """)
+            with mock.patch.object(eos, 'warn') as warn:
+                item.prepare(context=AnalysisFileContext(base_directory=tmp))
+
+            self.assertEqual(item._parameters['mass::mu'].evaluate(), 0.2)
+            self.assertEqual(len([call for call in warn.call_args_list if 'with explicit values' in call[0][0]]), 1)
 
     def test_missing_fixed_parameters_from_file(self):
 
@@ -2038,6 +3084,19 @@ class ErrorBarsItemValidationTests(unittest.TestCase):
         _, ax = plt.subplots()
         item.draw(ax)
         self.assertIsNone(item._yerr)
+
+    def test_asymmetric_x_errors(self):
+
+        # an x error given as a pair is stored as (minus, plus), a scalar one on both sides
+        item = eos.figure.ItemFactory.from_yaml("type: 'errorbars'\npositions: [[1, 2], [2, 3]]\n"
+                                                "xerrors: [[0.1, 0.2], 0.5]\nyerrors: [0.2, 0.3]")
+        item.prepare()
+
+        self.assertEqual(list(item._xerr[0]), [0.1, 0.5])
+        self.assertEqual(list(item._xerr[1]), [0.2, 0.5])
+
+        _, ax = plt.subplots()
+        item.draw(ax)
 
 class PointItemValidationTests(unittest.TestCase):
 
