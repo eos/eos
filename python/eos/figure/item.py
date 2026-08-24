@@ -2240,7 +2240,7 @@ class ConstraintItem(Item):
 
                     if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
                                _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
-                        eos.warn('    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
+                        eos.warn(f'    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -2755,7 +2755,7 @@ class ConstraintResidueItem(Item):
                     # Check that the observable match and that the provided options match with those of the constraint
                     if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
                                _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
-                        eos.warn('    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
+                        eos.warn(f'    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
@@ -2799,7 +2799,7 @@ class ConstraintResidueItem(Item):
 
                     if not (observables[i] == eos.QualifiedName(self.observable).full().split(';')[0] and
                                _np.all([eos.Options(options[i])[k] == v for k, v in eos.QualifiedName(self.observable).options_part()])):
-                        eos.warn('    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
+                        eos.warn(f'    skipping the observable {observables[i]}, with options {options[i]}, because of name or option mismatch')
                         continue
                     _kinematics = kinematics[i]
                     if self.variable in _kinematics:
