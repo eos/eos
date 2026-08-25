@@ -21,6 +21,8 @@
 
 #include <test/test.hh>
 
+#include <map>
+#include <string>
 #include <vector>
 
 using namespace test;
@@ -64,6 +66,46 @@ class ReferencesTest : public TestCase
                     TEST_CHECK_NO_THROW(r = references[n]);
 
                     TEST_CHECK(r.get() != nullptr);
+                }
+            }
+
+            /* Test that names, INSPIRE ids, and eprints map one-to-one */
+            {
+                auto references = References();
+
+                std::map<std::string, ReferenceName> name_of_inspire_id;
+                std::map<std::string, ReferenceName> name_of_eprint;
+                std::map<std::string, std::string>   eprint_of_inspire_id;
+                std::map<std::string, std::string>   inspire_id_of_eprint;
+
+                for (const auto & r : references)
+                {
+                    const ReferenceName & name       = r.first;
+                    const std::string &   inspire_id = r.second->inspire_id();
+                    const std::string &   eprint     = r.second->eprint_id();
+
+                    if (! inspire_id.empty())
+                    {
+                        auto [i, inserted] = name_of_inspire_id.try_emplace(inspire_id, name);
+                        TEST_CHECK_MSG(inserted, "references '" + name.str() + "' and '" + i->second.str() + "' share the INSPIRE id '" + inspire_id + "'");
+                    }
+
+                    if (! eprint.empty())
+                    {
+                        auto [i, inserted] = name_of_eprint.try_emplace(eprint, name);
+                        TEST_CHECK_MSG(inserted, "references '" + name.str() + "' and '" + i->second.str() + "' share the eprint '" + eprint + "'");
+                    }
+
+                    if (inspire_id.empty() || eprint.empty())
+                    {
+                        continue;
+                    }
+
+                    auto [i, i_inserted] = eprint_of_inspire_id.try_emplace(inspire_id, eprint);
+                    TEST_CHECK_MSG(i_inserted || (i->second == eprint), "INSPIRE id '" + inspire_id + "' maps to the eprints '" + i->second + "' and '" + eprint + "'");
+
+                    auto [j, j_inserted] = inspire_id_of_eprint.try_emplace(eprint, inspire_id);
+                    TEST_CHECK_MSG(j_inserted || (j->second == inspire_id), "eprint '" + eprint + "' maps to the INSPIRE ids '" + j->second + "' and '" + inspire_id + "'");
                 }
             }
 

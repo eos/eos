@@ -443,7 +443,7 @@ BGS:2010A:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1009.0947
-  inspire-id: Bigi:2017jbd
+  inspire-id: Brod:2010hi
   title: Two-Loop Electroweak Corrections for the $K \to \pi \nu \bar{\nu}$ Decays
 BGS:2017A:
   authors: Bigi, Dante and Gambino, Paolo and Schacht, Stefan
@@ -1828,15 +1828,6 @@ HPQCD:2015B:
     id: oai:arXiv.org:1503.05762
   inspire-id: Colquhoun:2015oha
   title: '$B$-meson decay constants: a more complete picture from full lattice QCD'
-HPQCDD:2013A:
-  authors: Bouchard, Chris and Lepage, G.Peter and Monahan, Christopher and Na, Heechang
-    and Shigemitsu, Junko
-  collaboration: HPQCD
-  eprint:
-    archive: arXiv
-    id: oai:arXiv.org:1306.2384
-  inspire-id: Bouchard:2013eph
-  title: Rare decay $B \to K \ell^+ \ell^-$ form factors from lattice QCD
 HPQCD:2017A:
   authors: Harrison, Judd and Davies, Christine and Wingate, Matthew
   collaboration: HPQCD
