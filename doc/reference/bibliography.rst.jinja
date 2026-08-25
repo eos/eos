@@ -24,13 +24,11 @@ or parameter values within EOS v{{ version }}.
    {% endfor %}
 
 
-{% for handle, reference in references %}
-{%- if reference.eprint %}
-.. |badge-{{ reference.eprint.id }}| image:: {{ reference.eprint.badge }}
-   :target: {{ reference.eprint.url }}
-   :alt: {{ reference.eprint.alt }}
+{% for eprint in eprints %}
+.. |badge-{{ eprint.id }}| image:: {{ eprint.badge }}
+   :target: {{ eprint.url }}
+   :alt: {{ eprint.alt }}
 
-{% endif %}
 {% endfor %}
 
 

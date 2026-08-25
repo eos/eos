@@ -7,7 +7,8 @@ from jinja_util import print_template
 
 replacements = [
     (re.compile(r'(\\GeV)'),      r'\\text{GeV}'),
-    (re.compile(r'\$([^\$]*)\$'), r':math:`\1`'),
+    # docutils rejects inline markup that is padded with whitespace, so strip the delimited text
+    (re.compile(r'\$\s*([^\$]*?)\s*\$'), r':math:`\1`'),
 ]
 
 def latex_to_rst(s):
@@ -57,10 +58,23 @@ def make_references():
     return result
 
 
+def make_eprints(references):
+    # several references may cite the same eprint, while each substitution may only be defined once
+    result = {}
+    for _, reference in references:
+        eprint = reference['eprint']
+        if eprint:
+            result.setdefault(eprint['id'], eprint)
+    return list(result.values())
+
+
 if __name__ == '__main__':
+
+    references = make_references()
 
     print_template(__file__,
         version = eos.__version__,
-        references = make_references(),
+        references = references,
+        eprints = make_eprints(references),
         len = len,
     )
