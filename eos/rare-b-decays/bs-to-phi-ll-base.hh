@@ -27,14 +27,13 @@
 
 namespace eos
 {
-    class BsToPhiDilepton::AmplitudeGenerator :
-        public ParameterUser
+    class BsToPhiDilepton::AmplitudeGenerator : public ParameterUser
     {
         public:
-            std::shared_ptr<Model> model;
+            std::shared_ptr<Model>             model;
             std::shared_ptr<FormFactors<PToV>> form_factors;
-            LeptonFlavorOption opt_l;
-            BooleanOption opt_cp_conjugate;
+            LeptonFlavorOption                 opt_l;
+            BooleanOption                      opt_cp_conjugate;
 
             UsedParameter mu;
             UsedParameter alpha_e;
@@ -46,7 +45,7 @@ namespace eos
             UsedParameter m_V;
             UsedParameter m_l;
 
-            bool cp_conjugate;
+            bool         cp_conjugate;
             LeptonFlavor lepton_flavor;
 
             static const std::vector<OptionSpecification> options;
@@ -69,16 +68,16 @@ namespace eos
 
     struct BsToPhiDilepton::DipoleFormFactors
     {
-        complex<double> calT_perp_left;
-        complex<double> calT_perp_right;
-        complex<double> calT_parallel;
+            complex<double> calT_perp_left;
+            complex<double> calT_perp_right;
+            complex<double> calT_parallel;
     };
 
     struct BsToPhiDilepton::FormFactorCorrections
     {
-        complex<double> t;
-        complex<double> t_T;
-        complex<double> t_wa;
+            complex<double> t;
+            complex<double> t_T;
+            complex<double> t_wa;
     };
 
     template <typename Tag_> class BsToPhiDileptonAmplitudes;
@@ -99,8 +98,8 @@ namespace eos
         /*
          * Approaches that work at large q^2, or low recoil.
          */
-        //struct GP2004;
-    }
-}
+        // struct GP2004;
+    } // namespace tag
+} // namespace eos
 
 #endif

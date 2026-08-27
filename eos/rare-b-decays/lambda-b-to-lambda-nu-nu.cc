@@ -19,12 +19,12 @@
  */
 
 #include <eos/form-factors/form-factors.hh>
-#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
-#include <eos/rare-b-decays/lambda-b-to-lambda-nu-nu.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda-nu-nu-impl.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda-nu-nu.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -36,108 +36,108 @@ using std::sqrt;
 namespace eos
 {
 
-    template <>
-    struct Implementation<LambdaBToLambdaDineutrino>
+    template <> struct Implementation<LambdaBToLambdaDineutrino>
     {
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
+            std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> form_factors;
 
-        UsedParameter m_Lambda_b;
-        UsedParameter tau_Lambda_b;
-        UsedParameter m_Lambda;
-        UsedParameter g_fermi;
-        UsedParameter alpha_e;
-        UsedParameter hbar;
-        UsedParameter mu;
+            UsedParameter m_Lambda_b;
+            UsedParameter tau_Lambda_b;
+            UsedParameter m_Lambda;
+            UsedParameter g_fermi;
+            UsedParameter alpha_e;
+            UsedParameter hbar;
+            UsedParameter mu;
 
-        using IntermediateResult = LambdaBToLambdaDineutrino::IntermediateResult;
-        IntermediateResult intermediate_result;
+            using IntermediateResult = LambdaBToLambdaDineutrino::IntermediateResult;
+            IntermediateResult intermediate_result;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        std::function<complex<double> ()> lambda_t;
-        std::function<WilsonCoefficients<wc::SBNuNu> ()> wc;
+            std::function<complex<double>()>                lambda_t;
+            std::function<WilsonCoefficients<wc::SBNuNu>()> wc;
 
-        BooleanOption opt_cp_conjugate;
+            BooleanOption opt_cp_conjugate;
 
-        bool cp_conjugate;
+            bool cp_conjugate;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-            m_Lambda_b(p["mass::Lambda_b"], u),
-            tau_Lambda_b(p["life_time::Lambda_b"], u),
-            m_Lambda(p["mass::Lambda"], u),
-            g_fermi(p["WET::G_Fermi"], u),
-            alpha_e(p["QED::alpha_e(m_b)"], u),
-            hbar(p["QM::hbar"], u),
-            mu(p["sbnunu::mu"], u),
-            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            cp_conjugate(opt_cp_conjugate.value())
-        {
-            Context ctx("When constructing Lb->Lnunu observables");
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+                m_Lambda_b(p["mass::Lambda_b"], u),
+                tau_Lambda_b(p["life_time::Lambda_b"], u),
+                m_Lambda(p["mass::Lambda"], u),
+                g_fermi(p["WET::G_Fermi"], u),
+                alpha_e(p["QED::alpha_e(m_b)"], u),
+                hbar(p["QM::hbar"], u),
+                mu(p["sbnunu::mu"], u),
+                opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+                cp_conjugate(opt_cp_conjugate.value())
+            {
+                Context ctx("When constructing Lb->Lnunu observables");
 
-            form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"_ov).str(), p, o);
+                form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"_ov).str(), p, o);
 
-            lambda_t  = [*this] () { return model->ckm_tb() * std::conj(model->ckm_ts()); };
-            wc        = [*this] () { return model->wet_sbnunu(cp_conjugate); };
+                lambda_t = [*this]() { return model->ckm_tb() * std::conj(model->ckm_ts()); };
+                wc       = [*this]() { return model->wet_sbnunu(cp_conjugate); };
 
-            u.uses(*form_factors);
-            u.uses(*model);
-        }
+                u.uses(*form_factors);
+                u.uses(*model);
+            }
 
-        inline std::array<double, 2> angular_coefficients_array(const double & q2) const
-        {
-            std::array<double, 2> result;
+            inline std::array<double, 2>
+            angular_coefficients_array(const double & q2) const
+            {
+                std::array<double, 2> result;
 
-            const auto wc = this->wc();
-            const double lambda = eos::lambda(power_of<2>(m_Lambda_b), power_of<2>(m_Lambda), q2),
-                         sqrt_lambda = std::sqrt(lambda),
-                         s_minus = power_of<2>(m_Lambda_b - m_Lambda) - q2,
-                         s_plus = power_of<2>(m_Lambda_b + m_Lambda) - q2;
+                const auto   wc     = this->wc();
+                const double lambda = eos::lambda(power_of<2>(m_Lambda_b), power_of<2>(m_Lambda), q2), sqrt_lambda = std::sqrt(lambda),
+                             s_minus = power_of<2>(m_Lambda_b - m_Lambda) - q2, s_plus = power_of<2>(m_Lambda_b + m_Lambda) - q2;
 
-            std::complex<double> N = g_fermi * alpha_e * lambda_t() * sqrt(q2 * sqrt_lambda /
-                3.0 / 2048.0 / power_of<3>(m_Lambda_b) / power_of<5>(M_PI));
+                std::complex<double> N = g_fermi * alpha_e * lambda_t() * sqrt(q2 * sqrt_lambda / 3.0 / 2048.0 / power_of<3>(m_Lambda_b) / power_of<5>(M_PI));
 
-            std::complex<double>
-                a_perp_plus =   2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * (- sqrt(2 * s_minus) * form_factors->f_perp_v(q2)),
-                a_para_plus = - 2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * (- sqrt(2 * s_plus) * form_factors->f_perp_a(q2)),
-                a_perp_long =   2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * ((m_Lambda_b + m_Lambda) * sqrt(s_minus / q2) * form_factors->f_long_v(q2)),
-                a_para_long = - 2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * ((m_Lambda_b - m_Lambda) * sqrt(s_plus / q2) * form_factors->f_long_a(q2));
+                std::complex<double> a_perp_plus = 2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * (-sqrt(2 * s_minus) * form_factors->f_perp_v(q2)),
+                                     a_para_plus = -2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * (-sqrt(2 * s_plus) * form_factors->f_perp_a(q2)),
+                                     a_perp_long = 2 * sqrt(2.0) * N * (wc.cVL() + wc.cVR()) * ((m_Lambda_b + m_Lambda) * sqrt(s_minus / q2) * form_factors->f_long_v(q2)),
+                                     a_para_long = -2 * sqrt(2.0) * N * (wc.cVL() - wc.cVR()) * ((m_Lambda_b - m_Lambda) * sqrt(s_plus / q2) * form_factors->f_long_a(q2));
 
-            // K1ss
-            result[0] = 0.25 * (norm(a_perp_plus) + norm(a_para_plus) + 2 * norm(a_perp_long) + 2 * norm(a_para_long));
-            // K1cc
-            result[1] = 0.5 * (norm(a_perp_plus) + norm(a_para_plus));
+                // K1ss
+                result[0] = 0.25 * (norm(a_perp_plus) + norm(a_para_plus) + 2 * norm(a_perp_long) + 2 * norm(a_para_long));
+                // K1cc
+                result[1] = 0.5 * (norm(a_perp_plus) + norm(a_para_plus));
 
-            return result;
-        }
+                return result;
+            }
 
-        inline LambdaBToLambdaDineutrino::AngularCoefficients differential_angular_coefficients(const double & q2) const
-        {
-            return LambdaBToLambdaDineutrino::AngularCoefficients(angular_coefficients_array(q2));
-        }
+            inline LambdaBToLambdaDineutrino::AngularCoefficients
+            differential_angular_coefficients(const double & q2) const
+            {
+                return LambdaBToLambdaDineutrino::AngularCoefficients(angular_coefficients_array(q2));
+            }
 
-        LambdaBToLambdaDineutrino::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
-        {
-            std::function<std::array<double, 2> (const double &)> integrand =
-                    std::bind(&Implementation<LambdaBToLambdaDineutrino>::angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 2> integrated_angular_coefficients_array = integrate<1, 2>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
+            LambdaBToLambdaDineutrino::AngularCoefficients
+            integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
+            {
+                std::function<std::array<double, 2>(const double &)> integrand =
+                        std::bind(&Implementation<LambdaBToLambdaDineutrino>::angular_coefficients_array, this, std::placeholders::_1);
+                std::array<double, 2> integrated_angular_coefficients_array = integrate<1, 2>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
-            return LambdaBToLambdaDineutrino::AngularCoefficients(integrated_angular_coefficients_array);
-        }
+                return LambdaBToLambdaDineutrino::AngularCoefficients(integrated_angular_coefficients_array);
+            }
 
-        const IntermediateResult * prepare(const double & q2_min, const double & q2_max)
-        {
-            intermediate_result.ac = integrated_angular_coefficients(q2_min, q2_max);
-            return &intermediate_result;
-        }
+            const IntermediateResult *
+            prepare(const double & q2_min, const double & q2_max)
+            {
+                intermediate_result.ac = integrated_angular_coefficients(q2_min, q2_max);
+                return &intermediate_result;
+            }
 
-        inline double decay_width(const LambdaBToLambdaDineutrino::AngularCoefficients & a_c)
-        {
-            // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
-            return 3.0 * (2.0 * a_c.K1ss + a_c.K1cc);
-        }
+            inline double
+            decay_width(const LambdaBToLambdaDineutrino::AngularCoefficients & a_c)
+            {
+                // assume the production of 3 diagonal neutrino flavors (nu_i nubar_i)
+                return 3.0 * (2.0 * a_c.K1ss + a_c.K1cc);
+            }
     };
 
     LambdaBToLambdaDineutrino::LambdaBToLambdaDineutrino(const Parameters & parameters, const Options & options) :
@@ -145,18 +145,13 @@ namespace eos
     {
     }
 
-    LambdaBToLambdaDineutrino::~LambdaBToLambdaDineutrino()
-    {
-    }
+    LambdaBToLambdaDineutrino::~LambdaBToLambdaDineutrino() {}
 
-    const std::vector<OptionSpecification>
-    Implementation<LambdaBToLambdaDineutrino>::options
-    {
+    const std::vector<OptionSpecification> Implementation<LambdaBToLambdaDineutrino>::options{
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToOneHalfPlus>::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov }
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov }
     };
-
 
     double
     LambdaBToLambdaDineutrino::differential_decay_width(const double & q2) const
@@ -204,19 +199,13 @@ namespace eos
         return 3.0 * (2.0 * a_c.K1ss + a_c.K1cc) / _imp->decay_width(a_c);
     }
 
-
-    const std::string
-    LambdaBToLambdaDineutrino::description = "\
+    const std::string LambdaBToLambdaDineutrino::description = "\
 The decay Lambda_b->Lambda nu nu, assuming left-handed neutrinos and left-handed sb current";
 
-    const std::string
-    LambdaBToLambdaDineutrino::kinematics_description_q2 = "\
+    const std::string LambdaBToLambdaDineutrino::kinematics_description_q2 = "\
 The invariant mass of the nu-nubar pair in GeV^2.";
 
-    const std::set<ReferenceName>
-    LambdaBToLambdaDineutrino::references
-    {
-    };
+    const std::set<ReferenceName> LambdaBToLambdaDineutrino::references{};
 
     std::vector<OptionSpecification>::const_iterator
     LambdaBToLambdaDineutrino::begin_options()
@@ -229,4 +218,4 @@ The invariant mass of the nu-nubar pair in GeV^2.";
     {
         return Implementation<LambdaBToLambdaDineutrino>::options.cend();
     }
-}
+} // namespace eos

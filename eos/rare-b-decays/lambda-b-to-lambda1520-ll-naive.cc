@@ -17,8 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/rare-b-decays/lambda-b-to-lambda1520-ll-naive.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
+#include <eos/rare-b-decays/lambda-b-to-lambda1520-ll-naive.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/memoise.hh>
 
@@ -28,16 +28,13 @@ namespace eos
 {
     using namespace std::placeholders;
 
-    LambdaBToLambda1520DileptonAmplitudes<tag::Naive>::LambdaBToLambda1520DileptonAmplitudes(const Parameters & p,
-            const Options & o) :
+    LambdaBToLambda1520DileptonAmplitudes<tag::Naive>::LambdaBToLambda1520DileptonAmplitudes(const Parameters & p, const Options & o) :
         AmplitudeGenerator(p, o),
         m_c(p["mass::c"], *this)
     {
     }
 
-    LambdaBToLambda1520DileptonAmplitudes<tag::Naive>::~LambdaBToLambda1520DileptonAmplitudes()
-    {
-    }
+    LambdaBToLambda1520DileptonAmplitudes<tag::Naive>::~LambdaBToLambda1520DileptonAmplitudes() {}
 
     double
     LambdaBToLambda1520DileptonAmplitudes<tag::Naive>::norm(const double & q2) const
@@ -45,10 +42,7 @@ namespace eos
         // cf. [DN:2019A], eqs. (3.18 - 3.20)
         double lambda_t2 = std::norm(model->ckm_tb() * conj(model->ckm_ts()));
 
-        return g_fermi() * alpha_e() * std::sqrt(
-                  1.0 / 3.0 / 2048.0 / power_of<5>(M_PI) / power_of<3>(m_Lb)
-                  * lambda_t2 * q2 * std::sqrt(lambda(q2)) * beta_l(q2)
-               );
+        return g_fermi() * alpha_e() * std::sqrt(1.0 / 3.0 / 2048.0 / power_of<5>(M_PI) / power_of<3>(m_Lb) * lambda_t2 * q2 * std::sqrt(lambda(q2)) * beta_l(q2));
     }
 
     double
@@ -73,74 +67,54 @@ namespace eos
 
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
-        const double
-            norm_s = norm(q2),
-            sqrt_s = std::sqrt(q2),
-            s_minus = power_of<2>(m_Lb - m_Lstar) - q2,
-            s_plus = power_of<2>(m_Lb + m_Lstar) - q2;
+        const double norm_s = norm(q2), sqrt_s = std::sqrt(q2), s_minus = power_of<2>(m_Lb - m_Lstar) - q2, s_plus = power_of<2>(m_Lb + m_Lstar) - q2;
 
         const double alpha_s_mu = model->alpha_s(mu()); // alpha_s at the hard scale
-        const double
-            m_b_msbar = model->m_b_msbar(mu()),
-            m_s_msbar = model->m_s_msbar(mu());
+        const double m_b_msbar = model->m_b_msbar(mu()), m_s_msbar = model->m_s_msbar(mu());
 
-        const complex<double>
-            c9eff = ShortDistanceLowRecoil::c9eff(q2, mu_f(), alpha_s_mu, m_b_PS(), m_c, false, false, 0.0, wc),
-            c7eff = ShortDistanceLowRecoil::c7eff(q2, mu_f(), alpha_s_mu, m_b_PS(), false, wc);
+        const complex<double> c9eff = ShortDistanceLowRecoil::c9eff(q2, mu_f(), alpha_s_mu, m_b_PS(), m_c, false, false, 0.0, wc),
+                              c7eff = ShortDistanceLowRecoil::c7eff(q2, mu_f(), alpha_s_mu, m_b_PS(), false, wc);
 
-        const complex<double>
-            wilson910_minus_right = (c9eff - wc.c9prime()) + (wc.c10() - wc.c10prime()),
-            wilson910_minus_left  = (c9eff - wc.c9prime()) - (wc.c10() - wc.c10prime()),
-            wilson910_plus_right  = (c9eff + wc.c9prime()) + (wc.c10() + wc.c10prime()),
-            wilson910_plus_left   = (c9eff + wc.c9prime()) - (wc.c10() + wc.c10prime()),
-            wilsonSP_minus_right  = (wc.cS() - wc.cSprime()) + (wc.cP() - wc.cPprime()),
-            wilsonSP_minus_left   = (wc.cS() - wc.cSprime()) - (wc.cP() - wc.cPprime()),
-            wilsonSP_plus_right   = (wc.cS() + wc.cSprime()) + (wc.cP() + wc.cPprime()),
-            wilsonSP_plus_left    = (wc.cS() + wc.cSprime()) - (wc.cP() + wc.cPprime()),
-            wilson7_plus          = (c7eff + wc.c7prime()),
-            wilson7_minus         = (c7eff - wc.c7prime()),
-            wilson10_plus         = (wc.c10() + wc.c10prime()),
-            wilson10_minus        = (wc.c10() - wc.c10prime());
+        const complex<double> wilson910_minus_right = (c9eff - wc.c9prime()) + (wc.c10() - wc.c10prime()),
+                              wilson910_minus_left  = (c9eff - wc.c9prime()) - (wc.c10() - wc.c10prime()),
+                              wilson910_plus_right = (c9eff + wc.c9prime()) + (wc.c10() + wc.c10prime()), wilson910_plus_left = (c9eff + wc.c9prime()) - (wc.c10() + wc.c10prime()),
+                              wilsonSP_minus_right = (wc.cS() - wc.cSprime()) + (wc.cP() - wc.cPprime()), wilsonSP_minus_left = (wc.cS() - wc.cSprime()) - (wc.cP() - wc.cPprime()),
+                              wilsonSP_plus_right = (wc.cS() + wc.cSprime()) + (wc.cP() + wc.cPprime()), wilsonSP_plus_left = (wc.cS() + wc.cSprime()) - (wc.cP() + wc.cPprime()),
+                              wilson7_plus = (c7eff + wc.c7prime()), wilson7_minus = (c7eff - wc.c7prime()), wilson10_plus = (wc.c10() + wc.c10prime()),
+                              wilson10_minus = (wc.c10() - wc.c10prime());
 
-        const double
-            H0Vp12 = - (m_Lb + m_Lstar) / sqrt_s * sqrt(s_plus / 6.0) * form_factors->f_long12_v(q2),
-            HplusVm12 = - sqrt(s_plus / 3.0) * form_factors->f_perp12_v(q2),
-            HplusVm32 = sqrt(s_plus) * form_factors->f_perp32_v(q2),
-            H0Ap12 = - (m_Lb - m_Lstar) / sqrt_s * sqrt(s_minus / 6.0) * form_factors->f_long12_a(q2),
-            HplusAm12 = sqrt(s_minus / 3.0) * form_factors->f_perp12_a(q2),
-            HplusAm32 = sqrt(s_minus) * form_factors->f_perp32_a(q2),
-            HtVp12 = (m_Lb - m_Lstar) / sqrt_s * sqrt(s_minus / 6.0) * form_factors->f_time12_v(q2),
-            HtAp12 = (m_Lb + m_Lstar) / sqrt_s * sqrt(s_plus / 6.0) * form_factors->f_time12_a(q2);
+        const double H0Vp12 = -(m_Lb + m_Lstar) / sqrt_s * sqrt(s_plus / 6.0) * form_factors->f_long12_v(q2), HplusVm12 = -sqrt(s_plus / 3.0) * form_factors->f_perp12_v(q2),
+                     HplusVm32 = sqrt(s_plus) * form_factors->f_perp32_v(q2), H0Ap12 = -(m_Lb - m_Lstar) / sqrt_s * sqrt(s_minus / 6.0) * form_factors->f_long12_a(q2),
+                     HplusAm12 = sqrt(s_minus / 3.0) * form_factors->f_perp12_a(q2), HplusAm32 = sqrt(s_minus) * form_factors->f_perp32_a(q2),
+                     HtVp12 = (m_Lb - m_Lstar) / sqrt_s * sqrt(s_minus / 6.0) * form_factors->f_time12_v(q2),
+                     HtAp12 = (m_Lb + m_Lstar) / sqrt_s * sqrt(s_plus / 6.0) * form_factors->f_time12_a(q2);
 
-        const double
-            H0Tp12 = sqrt_s * sqrt(s_plus / 6.0) * form_factors->f_long12_t(q2),
-            HplusTm12 = (m_Lb + m_Lstar) * sqrt(s_plus / 3.0) * form_factors->f_perp12_t(q2),
-            HplusTm32 = - (m_Lb + m_Lstar) * sqrt(s_plus) * form_factors->f_perp32_t(q2),
-            H0T5p12 = - sqrt_s * sqrt(s_minus / 6.0) * form_factors->f_long12_t5(q2),
-            HplusT5m12 = (m_Lb - m_Lstar) * sqrt(s_minus / 3.0) * form_factors->f_perp12_t5(q2),
-            HplusT5m32 = (m_Lb - m_Lstar) * sqrt(s_minus) * form_factors->f_perp32_t5(q2);
+        const double H0Tp12 = sqrt_s * sqrt(s_plus / 6.0) * form_factors->f_long12_t(q2), HplusTm12 = (m_Lb + m_Lstar) * sqrt(s_plus / 3.0) * form_factors->f_perp12_t(q2),
+                     HplusTm32 = -(m_Lb + m_Lstar) * sqrt(s_plus) * form_factors->f_perp32_t(q2), H0T5p12 = -sqrt_s * sqrt(s_minus / 6.0) * form_factors->f_long12_t5(q2),
+                     HplusT5m12 = (m_Lb - m_Lstar) * sqrt(s_minus / 3.0) * form_factors->f_perp12_t5(q2),
+                     HplusT5m32 = (m_Lb - m_Lstar) * sqrt(s_minus) * form_factors->f_perp32_t5(q2);
 
-        result.b_perp1_right =   sqrt(2.0) * norm_s * (wilson910_plus_right  * HplusVm32 - 2.0 * m_b_msbar / q2 * wilson7_plus  * HplusTm32);
-        result.b_perp1_left  =   sqrt(2.0) * norm_s * (wilson910_plus_left   * HplusVm32 - 2.0 * m_b_msbar / q2 * wilson7_plus  * HplusTm32);
-        result.b_para1_right = - sqrt(2.0) * norm_s * (wilson910_minus_right * HplusAm32 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m32);
-        result.b_para1_left  = - sqrt(2.0) * norm_s * (wilson910_minus_left  * HplusAm32 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m32);
-        result.a_perp1_right =   sqrt(2.0) * norm_s * (wilson910_plus_right  * HplusVm12 - 2.0 * m_b_msbar / q2 * wilson7_plus  * HplusTm12);
-        result.a_perp1_left  =   sqrt(2.0) * norm_s * (wilson910_plus_left   * HplusVm12 - 2.0 * m_b_msbar / q2 * wilson7_plus  * HplusTm12);
-        result.a_para1_right = - sqrt(2.0) * norm_s * (wilson910_minus_right * HplusAm12 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m12);
-        result.a_para1_left  = - sqrt(2.0) * norm_s * (wilson910_minus_left  * HplusAm12 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m12);
-        result.a_perp0_right =   sqrt(2.0) * norm_s * (wilson910_plus_right  * H0Vp12    - 2.0 * m_b_msbar / q2 * wilson7_plus  * H0Tp12);
-        result.a_perp0_left  =   sqrt(2.0) * norm_s * (wilson910_plus_left   * H0Vp12    - 2.0 * m_b_msbar / q2 * wilson7_plus  * H0Tp12);
-        result.a_para0_right = - sqrt(2.0) * norm_s * (wilson910_minus_right * H0Ap12    + 2.0 * m_b_msbar / q2 * wilson7_minus * H0T5p12);
-        result.a_para0_left  = - sqrt(2.0) * norm_s * (wilson910_minus_left  * H0Ap12    + 2.0 * m_b_msbar / q2 * wilson7_minus * H0T5p12);
-        result.a_perpt_right =   sqrt(2.0) * norm_s * wilson10_plus * HtVp12;
-        result.a_perpt_left  = - sqrt(2.0) * norm_s * wilson10_plus * HtVp12;
-        result.a_parat_right = - sqrt(2.0) * norm_s * wilson10_minus * HtAp12;
-        result.a_parat_left  =   sqrt(2.0) * norm_s * wilson10_minus * HtAp12;
-        result.a_perpS_right =   sqrt(2.0) * norm_s / (m_b_msbar - m_s_msbar) * wilsonSP_plus_right * HtVp12;
-        result.a_perpS_left  =   sqrt(2.0) * norm_s / (m_b_msbar - m_s_msbar) * wilsonSP_plus_left * HtVp12;
-        result.a_paraS_right = - sqrt(2.0) * norm_s / (m_b_msbar + m_s_msbar) * wilsonSP_minus_right * HtVp12;
-        result.a_paraS_left  = - sqrt(2.0) * norm_s / (m_b_msbar + m_s_msbar) * wilsonSP_minus_left * HtVp12;
+        result.b_perp1_right = sqrt(2.0) * norm_s * (wilson910_plus_right * HplusVm32 - 2.0 * m_b_msbar / q2 * wilson7_plus * HplusTm32);
+        result.b_perp1_left  = sqrt(2.0) * norm_s * (wilson910_plus_left * HplusVm32 - 2.0 * m_b_msbar / q2 * wilson7_plus * HplusTm32);
+        result.b_para1_right = -sqrt(2.0) * norm_s * (wilson910_minus_right * HplusAm32 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m32);
+        result.b_para1_left  = -sqrt(2.0) * norm_s * (wilson910_minus_left * HplusAm32 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m32);
+        result.a_perp1_right = sqrt(2.0) * norm_s * (wilson910_plus_right * HplusVm12 - 2.0 * m_b_msbar / q2 * wilson7_plus * HplusTm12);
+        result.a_perp1_left  = sqrt(2.0) * norm_s * (wilson910_plus_left * HplusVm12 - 2.0 * m_b_msbar / q2 * wilson7_plus * HplusTm12);
+        result.a_para1_right = -sqrt(2.0) * norm_s * (wilson910_minus_right * HplusAm12 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m12);
+        result.a_para1_left  = -sqrt(2.0) * norm_s * (wilson910_minus_left * HplusAm12 + 2.0 * m_b_msbar / q2 * wilson7_minus * HplusT5m12);
+        result.a_perp0_right = sqrt(2.0) * norm_s * (wilson910_plus_right * H0Vp12 - 2.0 * m_b_msbar / q2 * wilson7_plus * H0Tp12);
+        result.a_perp0_left  = sqrt(2.0) * norm_s * (wilson910_plus_left * H0Vp12 - 2.0 * m_b_msbar / q2 * wilson7_plus * H0Tp12);
+        result.a_para0_right = -sqrt(2.0) * norm_s * (wilson910_minus_right * H0Ap12 + 2.0 * m_b_msbar / q2 * wilson7_minus * H0T5p12);
+        result.a_para0_left  = -sqrt(2.0) * norm_s * (wilson910_minus_left * H0Ap12 + 2.0 * m_b_msbar / q2 * wilson7_minus * H0T5p12);
+        result.a_perpt_right = sqrt(2.0) * norm_s * wilson10_plus * HtVp12;
+        result.a_perpt_left  = -sqrt(2.0) * norm_s * wilson10_plus * HtVp12;
+        result.a_parat_right = -sqrt(2.0) * norm_s * wilson10_minus * HtAp12;
+        result.a_parat_left  = sqrt(2.0) * norm_s * wilson10_minus * HtAp12;
+        result.a_perpS_right = sqrt(2.0) * norm_s / (m_b_msbar - m_s_msbar) * wilsonSP_plus_right * HtVp12;
+        result.a_perpS_left  = sqrt(2.0) * norm_s / (m_b_msbar - m_s_msbar) * wilsonSP_plus_left * HtVp12;
+        result.a_paraS_right = -sqrt(2.0) * norm_s / (m_b_msbar + m_s_msbar) * wilsonSP_minus_right * HtVp12;
+        result.a_paraS_left  = -sqrt(2.0) * norm_s / (m_b_msbar + m_s_msbar) * wilsonSP_minus_left * HtVp12;
 
         return result;
     }
-}
+} // namespace eos

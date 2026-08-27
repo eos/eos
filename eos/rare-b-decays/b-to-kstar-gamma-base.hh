@@ -4,17 +4,16 @@
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_GAMMA_BASE_HH 1
 
 #include <eos/form-factors/mesonic.hh>
-#include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/models/model.hh>
+#include <eos/rare-b-decays/b-to-kstar-gamma.hh>
 #include <eos/utils/options-impl.hh>
 
 namespace eos
 {
-    class BToKstarGamma::AmplitudeGenerator :
-        public ParameterUser
+    class BToKstarGamma::AmplitudeGenerator : public ParameterUser
     {
         public:
-            std::shared_ptr<Model> model;
+            std::shared_ptr<Model>             model;
             std::shared_ptr<FormFactors<PToV>> form_factors;
 
             UsedParameter hbar;
@@ -24,16 +23,16 @@ namespace eos
             UsedParameter g_fermi;
 
             QuarkFlavorOption q;
-            UsedParameter tau;
-            UsedParameter m_B;
-            UsedParameter m_Kstar;
+            UsedParameter     tau;
+            UsedParameter     m_B;
+            UsedParameter     m_Kstar;
 
             LeptonFlavorOption l;
-            UsedParameter m_l;
+            UsedParameter      m_l;
 
             BooleanOption opt_cp_conjugate;
-            bool cp_conjugate;
-            double e_q;
+            bool          cp_conjugate;
+            double        e_q;
 
             static const std::vector<OptionSpecification> options;
 
@@ -49,6 +48,6 @@ namespace eos
     {
         struct BFS2004;
     }
-}
+} // namespace eos
 
 #endif

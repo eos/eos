@@ -28,9 +28,7 @@
 
 namespace eos
 {
-    template <>
-    class BToKDileptonAmplitudes<tag::GP2004> :
-        public BToKDilepton::AmplitudeGenerator
+    template <> class BToKDileptonAmplitudes<tag::GP2004> : public BToKDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter hbar;
@@ -61,6 +59,6 @@ namespace eos
             inline double m_b_PS() const;
             inline double kappa() const;
     };
-}
+} // namespace eos
 
 #endif

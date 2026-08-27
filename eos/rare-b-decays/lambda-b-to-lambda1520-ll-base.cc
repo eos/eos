@@ -46,17 +46,13 @@ namespace eos
         this->uses(*model);
     }
 
-    LambdaBToLambda1520Dilepton::AmplitudeGenerator::~AmplitudeGenerator()
-    {
-    }
+    LambdaBToLambda1520Dilepton::AmplitudeGenerator::~AmplitudeGenerator() {}
 
-    const std::vector<OptionSpecification>
-    LambdaBToLambda1520Dilepton::AmplitudeGenerator::options
-    {
+    const std::vector<OptionSpecification> LambdaBToLambda1520Dilepton::AmplitudeGenerator::options{
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
-        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "cp-conjugate"_ok,     { "true"_ov, "false"_ov }, "false"_ov },
+        {            "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov },    "mu"_ov },
     };
 
     double
@@ -70,4 +66,4 @@ namespace eos
     {
         return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
     }
-}
+} // namespace eos

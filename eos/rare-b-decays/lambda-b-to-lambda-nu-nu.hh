@@ -21,7 +21,6 @@
 #define EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA_NU_NU_HH 1
 
 #include <eos/observable.hh>
-
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -32,9 +31,7 @@ namespace eos
     /*
      * Decay: L_b -> L nu nu
      */
-    class LambdaBToLambdaDineutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaBToLambdaDineutrino>
+    class LambdaBToLambdaDineutrino : public ParameterUser, public PrivateImplementationPattern<LambdaBToLambdaDineutrino>
     {
         public:
             LambdaBToLambdaDineutrino(const Parameters & parameters, const Options & options);
@@ -50,9 +47,9 @@ namespace eos
             // Integrated Observables
             class IntermediateResult;
             const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
-            double integrated_decay_width(const IntermediateResult * ir) const;
-            double integrated_branching_ratio(const IntermediateResult * ir) const;
-            double integrated_longitudinal_polarisation(const IntermediateResult * ir) const;
+            double                     integrated_decay_width(const IntermediateResult * ir) const;
+            double                     integrated_branching_ratio(const IntermediateResult * ir) const;
+            double                     integrated_longitudinal_polarisation(const IntermediateResult * ir) const;
 
             /*!
              * Descriptions of the process and its kinematics.
@@ -71,6 +68,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

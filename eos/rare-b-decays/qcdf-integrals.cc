@@ -26,5 +26,5 @@ namespace eos
         const std::string Analytical::name = "analytical";
         const std::string Mixed::name      = "mixed";
         const std::string Numerical::name  = "numerical";
-    }
-}
+    } // namespace tag
+} // namespace eos

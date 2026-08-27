@@ -23,10 +23,9 @@
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_LL_HH
 #define EOS_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_LL_HH 1
 
-#include <eos/observable.hh>
-
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/observable.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -39,9 +38,7 @@ namespace eos
     /*
      * Decay: B -> K^* l lbar.
      */
-    class BToKstarDilepton :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToKstarDilepton>
+    class BToKstarDilepton : public ParameterUser, public PrivateImplementationPattern<BToKstarDilepton>
     {
         public:
             BToKstarDilepton(const Parameters & parameters, const Options & options);
@@ -143,12 +140,12 @@ namespace eos
             // @{
             class IntermediateResult;
             const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
-            double integrated_decay_width(const IntermediateResult * ir) const;
-            double integrated_branching_ratio(const IntermediateResult * ir) const;
-            double integrated_unnormalized_forward_backward_asymmetry(const IntermediateResult * ir) const;
-            double integrated_forward_backward_asymmetry(const IntermediateResult * ir) const;
-            double integrated_longitudinal_polarisation(const IntermediateResult * ir) const;
-            double integrated_transversal_polarisation(const IntermediateResult * ir) const;
+            double                     integrated_decay_width(const IntermediateResult * ir) const;
+            double                     integrated_branching_ratio(const IntermediateResult * ir) const;
+            double                     integrated_unnormalized_forward_backward_asymmetry(const IntermediateResult * ir) const;
+            double                     integrated_forward_backward_asymmetry(const IntermediateResult * ir) const;
+            double                     integrated_longitudinal_polarisation(const IntermediateResult * ir) const;
+            double                     integrated_transversal_polarisation(const IntermediateResult * ir) const;
             // @}
 
             /*!
@@ -232,8 +229,8 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
 
-	         /*!
-	          * Test functions, [BFS:2001A] eqs. (40-41)
+            /*!
+             * Test functions, [BFS:2001A] eqs. (40-41)
              */
             double real_C9_perp(const double & q2) const;
             double real_C9_para(const double & q2) const;
@@ -247,6 +244,6 @@ namespace eos
             double H_para_corrections(const double & q2) const;
             double H_long_corrections(const double & q2) const;
     };
-}
+} // namespace eos
 
 #endif

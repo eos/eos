@@ -20,16 +20,15 @@
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/hard-scattering.hh>
-#include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/rare-b-decays/qcdf-integrals-impl.hh>
+#include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/stringify.hh>
 
 #include <cmath>
 #include <functional>
-#include <limits>
-
 #include <iostream>
+#include <limits>
 
 namespace eos
 {
@@ -40,10 +39,8 @@ namespace eos
     // massless case
     template <>
     QCDFIntegrals<BToKstarDilepton>
-    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_massless_case(const double & m_B,
-            const double & m_V, const double & mu,
-            const double & a_1_perp, const double & a_2_perp,
-            const double & a_1_para, const double & a_2_para)
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_massless_case(const double & m_B, const double & m_V, const double & mu, const double & a_1_perp,
+                                                                               const double & a_2_perp, const double & a_1_para, const double & a_2_para)
     {
         return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_massless_case(m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
@@ -51,10 +48,8 @@ namespace eos
     // charm case
     template <>
     QCDFIntegrals<BToKstarDilepton>
-    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_charm_case(const double & m_c,
-            const double & m_B, const double & m_V, const double & mu,
-            const double & a_1_perp, const double & a_2_perp,
-            const double & a_1_para, const double & a_2_para)
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_charm_case(const double & m_c, const double & m_B, const double & m_V, const double & mu, const double & a_1_perp,
+                                                                            const double & a_2_perp, const double & a_1_para, const double & a_2_para)
     {
         return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_charm_case(m_c, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
@@ -62,24 +57,19 @@ namespace eos
     // bottom case
     template <>
     QCDFIntegrals<BToKstarDilepton>
-    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_bottom_case(const double & m_b,
-            const double & m_B, const double & m_V, const double & mu,
-            const double & a_1_perp, const double & a_2_perp,
-            const double & a_1_para, const double & a_2_para)
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::photon_bottom_case(const double & m_b, const double & m_B, const double & m_V, const double & mu, const double & a_1_perp,
+                                                                             const double & a_2_perp, const double & a_1_para, const double & a_2_para)
     {
         return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::photon_bottom_case(m_b, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
-
 
     /* dilepton final states */
 
     // massless case
     template <>
     QCDFIntegrals<BToKstarDilepton>
-    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case(const double & s,
-            const double & m_B, const double & m_V, const double & mu,
-            const double & a_1_perp, const double & a_2_perp,
-            const double & a_1_para, const double & a_2_para)
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case(const double & s, const double & m_B, const double & m_V, const double & mu,
+                                                                                 const double & a_1_perp, const double & a_2_perp, const double & a_1_para, const double & a_2_para)
     {
         return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_massless_case(s, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
@@ -87,10 +77,8 @@ namespace eos
     // charm case
     template <>
     QCDFIntegrals<BToKstarDilepton>
-    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_charm_case(const double & s,
-            const double & m_c, const double & m_B, const double & m_V, const double & mu,
-            const double & a_1_perp, const double & a_2_perp,
-            const double & a_1_para, const double & a_2_para)
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_charm_case(const double & s, const double & m_c, const double & m_B, const double & m_V, const double & mu,
+                                                                              const double & a_1_perp, const double & a_2_perp, const double & a_1_para, const double & a_2_para)
     {
         QCDFIntegrals<BToKstarDilepton> results;
         results = QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case(s, m_c, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
@@ -100,16 +88,16 @@ namespace eos
         static const double u_max = 1.0 - 1e-5;
 
         // we only need to correct integral J_1
-        std::function<complex<double> (const double &)> j_1_perp = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_perp, a_2_perp);
-        std::function<complex<double> (const double &)> j_1_para = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_para, a_2_para);
-        cubature::Config cub_conf = cubature::Config().epsrel(1e-3);
-        results.j1_perp     = integrate<1, 1, complex<double>>(j_1_perp, u_min, u_max, cub_conf);
-        results.j1_parallel = integrate<1, 1, complex<double>>(j_1_para, u_min, u_max, cub_conf);
+        std::function<complex<double>(const double &)> j_1_perp = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_perp, a_2_perp);
+        std::function<complex<double>(const double &)> j_1_para = std::bind(&HardScattering::j1, s, _1, m_c, m_B, a_1_para, a_2_para);
+        cubature::Config                               cub_conf = cubature::Config().epsrel(1e-3);
+        results.j1_perp                                         = integrate<1, 1, complex<double>>(j_1_perp, u_min, u_max, cub_conf);
+        results.j1_parallel                                     = integrate<1, 1, complex<double>>(j_1_para, u_min, u_max, cub_conf);
 
         // composite results
-        const double sh = s / m_B / m_B;
-        const double eh = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
-        results.jtilde1_perp = 2.0 / eh * results.j1_perp + sh * results.j2_perp / (eh * eh);
+        const double sh          = s / m_B / m_B;
+        const double eh          = (1.0 + power_of<2>(m_V / m_B) - sh) / 2.0;
+        results.jtilde1_perp     = 2.0 / eh * results.j1_perp + sh * results.j2_perp / (eh * eh);
         results.jtilde2_parallel = 2.0 / eh * results.j1_parallel + results.j3_parallel / (eh * eh);
 
         return results;
@@ -118,11 +106,9 @@ namespace eos
     // bottom case
     template <>
     QCDFIntegrals<BToKstarDilepton>
-    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_bottom_case(const double & s,
-            const double & m_b, const double & m_B, const double & m_V, const double & mu,
-            const double & a_1_perp, const double & a_2_perp,
-            const double & a_1_para, const double & a_2_para)
+    QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_bottom_case(const double & s, const double & m_b, const double & m_B, const double & m_V, const double & mu,
+                                                                               const double & a_1_perp, const double & a_2_perp, const double & a_1_para, const double & a_2_para)
     {
         return QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_bottom_case(s, m_b, m_B, m_V, mu, a_1_perp, a_2_perp, a_1_para, a_2_para);
     }
-}
+} // namespace eos

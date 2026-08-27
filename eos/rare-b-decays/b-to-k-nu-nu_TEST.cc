@@ -17,16 +17,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
+#include <eos/maths/complex.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/b-to-psd-nu-nu.hh>
-#include <eos/maths/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -35,8 +36,7 @@
 using namespace test;
 using namespace eos;
 
-class BToKDineutrinoTest :
-    public TestCase
+class BToKDineutrinoTest : public TestCase
 {
     public:
         BToKDineutrinoTest() :
@@ -44,35 +44,35 @@ class BToKDineutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
-                Parameters p = Parameters::Defaults();
-                p["CKM::abs(V_tb)"]           =  1.00;
-                p["CKM::abs(V_ts)"]           =  4.00e-2;
+                Parameters p                  = Parameters::Defaults();
+                p["CKM::abs(V_tb)"]           = 1.00;
+                p["CKM::abs(V_ts)"]           = 4.00e-2;
                 p["B->K::alpha^f+_0@BSZ2015"] = +3.2909e-01;
                 p["B->K::alpha^f+_1@BSZ2015"] = -8.6695e-01;
                 p["B->K::alpha^f+_2@BSZ2015"] = +6.0957e-03;
-                p["mass::B_u"]                =  5.2796;
-                p["mass::K_u"]                =  4.9368e-01;
+                p["mass::B_u"]                = 5.2796;
+                p["mass::K_u"]                = 4.9368e-01;
 
-                Options oo
-                {
-                    { "model"_ok,        "CKM"_ov     },
+                Options oo{
+                    {        "model"_ok,     "CKM"_ov },
                     { "form-factors"_ok, "BSZ2015"_ov },
-                    { "P"_ok,            "K"_ov       },
-                    { "q"_ok,            "u"_ov       }
+                    {            "P"_ok,       "K"_ov },
+                    {            "q"_ok,       "u"_ov }
                 };
 
                 BToPseudoscalarDineutrino d(p, oo);
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.00,  8.00), 2.05845e-06, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 8.00, 16.00), 1.68211e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.00, 8.00), 2.05845e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(8.00, 16.00), 1.68211e-06, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(16.00, 22.90), 0.59978e-06, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.00, 22.90), 4.34034e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.00, 22.90), 4.34034e-06, eps);
             }
         }
 } b_to_k_nu_nu_test;

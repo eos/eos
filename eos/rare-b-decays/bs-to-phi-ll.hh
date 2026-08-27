@@ -34,9 +34,7 @@ namespace eos
     /*
      * Decay: B_s -> phi l lbar.
      */
-    class BsToPhiDilepton :
-        public ParameterUser,
-        public PrivateImplementationPattern<BsToPhiDilepton>
+    class BsToPhiDilepton : public ParameterUser, public PrivateImplementationPattern<BsToPhiDilepton>
     {
         public:
             BsToPhiDilepton(const Parameters & parameters, const Options & options);
@@ -214,8 +212,8 @@ namespace eos
              * Auxiliary methods for unit tests and diagnostic purposes.
              */
             Amplitudes amplitudes(const double & q2) const;
-            double m_l() const;
-            double phiBs() const;
+            double     m_l() const;
+            double     phiBs() const;
 
             /*!
              * References used in the computation of our observables.
@@ -228,7 +226,7 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
 
-	    /*!
+            /*!
              * Test functions, [BFS:2001A] eqs. (40-41)
              */
             double real_C9_perp(const double & q2) const;
@@ -242,18 +240,16 @@ namespace eos
      */
     struct BsToPhiDilepton::Amplitudes
     {
-        complex<double> a_long_right, a_long_left;
-        complex<double> a_perp_right, a_perp_left;
-        complex<double> a_para_right, a_para_left;
-        complex<double> a_time, a_scal;
-        complex<double> a_para_perp, a_time_long;
-        complex<double> a_time_perp, a_long_perp;
-        complex<double> a_time_para, a_long_para;
+            complex<double> a_long_right, a_long_left;
+            complex<double> a_perp_right, a_perp_left;
+            complex<double> a_para_right, a_para_left;
+            complex<double> a_time, a_scal;
+            complex<double> a_para_perp, a_time_long;
+            complex<double> a_time_perp, a_long_perp;
+            complex<double> a_time_para, a_long_para;
     };
 
-
-    class BsToPhiDileptonAndConjugate:
-        public ParameterUser
+    class BsToPhiDileptonAndConjugate : public ParameterUser
     {
         public:
             BsToPhiDileptonAndConjugate(const Parameters & parameters, const Options & options);
@@ -281,12 +277,12 @@ namespace eos
             /*!
              * Options used in the computation of our observables.
              */
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
 
-}
+} // namespace eos
 
 #endif

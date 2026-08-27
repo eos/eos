@@ -33,9 +33,7 @@ namespace eos
     /*
      * Decay: B -> K l lbar.
      */
-    class BToKDilepton :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToKDilepton>
+    class BToKDilepton : public ParameterUser, public PrivateImplementationPattern<BToKDilepton>
     {
         public:
             BToKDilepton(const Parameters & parameters, const Options & options);
@@ -72,7 +70,7 @@ namespace eos
             /*!
              * Auxiliary methods for unit tests and diagnostic purposes.
              */
-            Amplitudes amplitudes(const double & q2) const;
+            Amplitudes            amplitudes(const double & q2) const;
             std::array<double, 3> angular_coefficients(const double & q2) const;
 
             /*!
@@ -92,13 +90,13 @@ namespace eos
      */
     struct BToKDilepton::Amplitudes
     {
-        complex<double> F_A;
-        complex<double> F_V;
-        complex<double> F_S;
-        complex<double> F_P;
-        complex<double> F_T;
-        complex<double> F_T5;
+            complex<double> F_A;
+            complex<double> F_V;
+            complex<double> F_S;
+            complex<double> F_P;
+            complex<double> F_T;
+            complex<double> F_T5;
     };
-}
+} // namespace eos
 
 #endif

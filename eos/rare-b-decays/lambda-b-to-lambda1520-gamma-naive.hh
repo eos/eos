@@ -25,9 +25,7 @@
 
 namespace eos
 {
-    template <>
-    class LambdaBToLambda1520GammaAmplitudes<tag::Naive> :
-        public LambdaBToLambda1520Gamma::AmplitudeGenerator
+    template <> class LambdaBToLambda1520GammaAmplitudes<tag::Naive> : public LambdaBToLambda1520Gamma::AmplitudeGenerator
     {
         public:
             LambdaBToLambda1520GammaAmplitudes(const Parameters & p, const Options & o);
@@ -38,6 +36,6 @@ namespace eos
             double mu_f() const;
             double m_b_PS() const;
     };
-}
+} // namespace eos
 
 #endif

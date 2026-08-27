@@ -37,13 +37,9 @@ namespace eos
 
     // As given in [HLMW:2005A]
     struct HLMW2005
-    {
-    };
+    {};
 
-    template <>
-    class BToXsDilepton<HLMW2005> :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToXsDilepton<HLMW2005>>
+    template <> class BToXsDilepton<HLMW2005> : public ParameterUser, public PrivateImplementationPattern<BToXsDilepton<HLMW2005>>
     {
         public:
             BToXsDilepton(const Parameters & parameters, const Options & options);
@@ -69,6 +65,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

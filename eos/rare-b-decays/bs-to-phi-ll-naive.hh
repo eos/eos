@@ -20,15 +20,13 @@
 #ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_Naive_HH
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_Naive_HH 1
 
-#include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
+#include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/utils/options-impl.hh>
 
 namespace eos
 {
-    template <>
-    class BsToPhiDileptonAmplitudes<tag::Naive> :
-        public BsToPhiDilepton::AmplitudeGenerator
+    template <> class BsToPhiDileptonAmplitudes<tag::Naive> : public BsToPhiDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter m_b_MSbar;
@@ -46,8 +44,8 @@ namespace eos
             ~BsToPhiDileptonAmplitudes() = default;
 
             BsToPhiDilepton::FormFactorCorrections sb_contributions(const double & q2, const WilsonCoefficients<BToS> & wc) const;
-            double m_b_PS() const;
-            double mu_f() const;
+            double                                 m_b_PS() const;
+            double                                 mu_f() const;
 
             virtual double real_C9_perp(const double & q2) const;
             virtual double real_C9_para(const double & q2) const;
@@ -56,6 +54,6 @@ namespace eos
 
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const;
     };
-}
+} // namespace eos
 
 #endif

@@ -21,13 +21,13 @@
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-base.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-bfs2004.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
-#include <cmath>
-
 #include <gsl/gsl_sf.h>
+
+#include <cmath>
 
 namespace eos
 {
@@ -37,69 +37,74 @@ namespace eos
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K}^* \gamma@f$.
      */
-    template <>
-    struct Implementation<BToKstarGamma>
+    template <> struct Implementation<BToKstarGamma>
     {
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        UsedParameter hbar;
+            UsedParameter hbar;
 
-        QuarkFlavorOption q;
+            QuarkFlavorOption q;
 
-        UsedParameter tau;
+            UsedParameter tau;
 
-        SwitchOption tag;
+            SwitchOption tag;
 
-        std::shared_ptr<BToKstarGamma::AmplitudeGenerator> amplitude_generator;
+            std::shared_ptr<BToKstarGamma::AmplitudeGenerator> amplitude_generator;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-            hbar(p["QM::hbar"], u),
-            q(o, options, "q"_ok),
-            tau(p["life_time::B_" + q.str()], u),
-            tag(o, "tag"_ok, { "BFS2004"_ov })
-        {
-            Context ctx("When constructing B->K^*gamma observables");
-
-            if ("BFS2004" == tag.value())
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+                hbar(p["QM::hbar"], u),
+                q(o, options, "q"_ok),
+                tau(p["life_time::B_" + q.str()], u),
+                tag(o, "tag"_ok, { "BFS2004"_ov })
             {
-                amplitude_generator.reset(new BToKstarGammaAmplitudes<tag::BFS2004>(p, o));
+                Context ctx("When constructing B->K^*gamma observables");
+
+                if ("BFS2004" == tag.value())
+                {
+                    amplitude_generator.reset(new BToKstarGammaAmplitudes<tag::BFS2004>(p, o));
+                }
+                else
+                {
+                    throw InternalError("BToKstarGamma: Unknown tag or no valid tag specified (tag = '" + tag.value() + "')!");
+                }
+
+                u.uses(*model);
+                u.uses(*amplitude_generator);
             }
-            else
+
+            double
+            decay_rate()
             {
-                throw InternalError("BToKstarGamma: Unknown tag or no valid tag specified (tag = '" + tag.value() + "')!");
+                auto amps = amplitude_generator->amplitudes();
+
+                return std::norm(amps.a_perp) + std::norm(amps.a_para);
             }
 
-            u.uses(*model);
-            u.uses(*amplitude_generator);
-        }
+            complex<double>
+            q_over_p()
+            {
+                double phi_d = arg(power_of<2>(conj(model->ckm_td()) * model->ckm_tb()));
+                return std::polar(1.0, -phi_d);
+            }
 
-        double decay_rate()
-        {
-            auto amps = amplitude_generator->amplitudes();
+            complex<double>
+            a_left()
+            {
+                BToKstarGamma::Amplitudes a = amplitude_generator->amplitudes();
+                return (a.a_para + a.a_perp) / sqrt(2.0);
+                ;
+            }
 
-            return std::norm(amps.a_perp) + std::norm(amps.a_para);
-        }
-
-        complex<double> q_over_p()
-        {
-            double phi_d = arg(power_of<2>(conj(model->ckm_td()) * model->ckm_tb()));
-            return std::polar(1.0, -phi_d);
-        }
-
-        complex<double> a_left()
-        {
-            BToKstarGamma::Amplitudes a = amplitude_generator->amplitudes();
-            return (a.a_para + a.a_perp) / sqrt(2.0);;
-        }
-
-        complex<double> a_right()
-        {
-            BToKstarGamma::Amplitudes a = amplitude_generator->amplitudes();
-            return (a.a_para - a.a_perp) / sqrt(2.0);;
-        }
+            complex<double>
+            a_right()
+            {
+                BToKstarGamma::Amplitudes a = amplitude_generator->amplitudes();
+                return (a.a_para - a.a_perp) / sqrt(2.0);
+                ;
+            }
     };
 
     BToKstarGamma::BToKstarGamma(const Parameters & parameters, const Options & options) :
@@ -109,11 +114,9 @@ namespace eos
 
     BToKstarGamma::~BToKstarGamma() = default;
 
-    const std::vector<OptionSpecification>
-    Implementation<BToKstarGamma>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BToKstarGamma>::options{
         Model::option_specification(),
-        {"q"_ok, { "d"_ov, "u"_ov }, "d"_ov}
+        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov }
     };
 
     double
@@ -168,10 +171,7 @@ namespace eos
         return imag(_imp->a_right());
     }
 
-    const std::set<ReferenceName>
-    BToKstarGamma::references
-    {
-    };
+    const std::set<ReferenceName> BToKstarGamma::references{};
 
     std::vector<OptionSpecification>::const_iterator
     BToKstarGamma::begin_options()
@@ -184,4 +184,4 @@ namespace eos
     {
         return Implementation<BToKstarGamma>::options.cend();
     }
-}
+} // namespace eos

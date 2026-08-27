@@ -25,9 +25,7 @@
 
 namespace eos
 {
-    template <>
-    class LambdaBToLambda1520DileptonAmplitudes<tag::Naive> :
-        public LambdaBToLambda1520Dilepton::AmplitudeGenerator
+    template <> class LambdaBToLambda1520DileptonAmplitudes<tag::Naive> : public LambdaBToLambda1520Dilepton::AmplitudeGenerator
     {
         public:
             UsedParameter m_c;
@@ -41,6 +39,6 @@ namespace eos
             double mu_f() const;
             double norm(const double & q2) const;
     };
-}
+} // namespace eos
 
 #endif

@@ -20,16 +20,14 @@
 #ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_NAIVE_HH
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_NAIVE_HH 1
 
-#include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
+#include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/options-impl.hh>
 
 namespace eos
 {
-    template <>
-    class BToKDileptonAmplitudes<tag::Naive> :
-        public BToKDilepton::AmplitudeGenerator
+    template <> class BToKDileptonAmplitudes<tag::Naive> : public BToKDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter m_b_MSbar;
@@ -50,11 +48,11 @@ namespace eos
 
             virtual BToKDilepton::Amplitudes amplitudes(const double & q2) const;
 
-            double m_b_PS() const;
-            double mu_f() const;
+            double                          m_b_PS() const;
+            double                          mu_f() const;
             BToKDilepton::DipoleFormFactors dipole_form_factors(const double & q2, const WilsonCoefficients<BToS> & wc) const;
-            double xi_pseudo(const double & q2) const;
+            double                          xi_pseudo(const double & q2) const;
     };
-}
+} // namespace eos
 
 #endif

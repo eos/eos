@@ -30,9 +30,7 @@ namespace eos
     /*
      * Decay: B -> P(seudoscalar) nu nu
      */
-    class BToPseudoscalarDineutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToPseudoscalarDineutrino>
+    class BToPseudoscalarDineutrino : public ParameterUser, public PrivateImplementationPattern<BToPseudoscalarDineutrino>
     {
         public:
             BToPseudoscalarDineutrino(const Parameters & parameters, const Options & options);
@@ -61,6 +59,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

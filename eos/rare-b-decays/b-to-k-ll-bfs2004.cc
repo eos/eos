@@ -21,8 +21,8 @@
  */
 
 #include <eos/maths/power-of.hh>
-#include <eos/rare-b-decays/b-to-k-ll-bfs2004.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
+#include <eos/rare-b-decays/b-to-k-ll-bfs2004.hh>
 #include <eos/rare-b-decays/qcdf-integrals.hh>
 #include <eos/utils/memoise.hh>
 
@@ -32,8 +32,7 @@ namespace eos
 {
     using namespace std::placeholders;
 
-    BToKDileptonAmplitudes<tag::BFS2004>::BToKDileptonAmplitudes(const Parameters & p,
-            const Options & o) :
+    BToKDileptonAmplitudes<tag::BFS2004>::BToKDileptonAmplitudes(const Parameters & p, const Options & o) :
         AmplitudeGenerator(p, o),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
         m_c(p["mass::c"], *this),
@@ -51,46 +50,32 @@ namespace eos
 
         switch (q.value())
         {
-            case QuarkFlavor::down:
-                e_q = -1.0 / 3.0;
-                break;
+            case QuarkFlavor::down: e_q = -1.0 / 3.0; break;
 
-            case QuarkFlavor::up:
-                e_q = 2.0 / 3.0;
-                break;
+            case QuarkFlavor::up: e_q = 2.0 / 3.0; break;
 
-            default:
-                throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
+            default: throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
         }
 
         // Select the appropriate calculator for the QCDF integrals
         std::string qcdf_integrals(o.get("qcdf-integrals"_ok, "mixed"_ov).str());
         if ("mixed" == qcdf_integrals)
         {
-            qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8);
-            qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_charm_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8, _9);
-            qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_bottom_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_massless_case, _1, _2, _3, _4, _5, _6, _7, _8);
+            qcdf_dilepton_charm_case    = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_charm_case, _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            qcdf_dilepton_bottom_case   = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Mixed>::dilepton_bottom_case, _1, _2, _3, _4, _5, _6, _7, _8, _9);
         }
         else if ("numerical" == qcdf_integrals)
         {
-            qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>::dilepton_massless_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8);
-            qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>::dilepton_charm_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8, _9);
-            qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>::dilepton_bottom_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>::dilepton_massless_case, _1, _2, _3, _4, _5, _6, _7, _8);
+            qcdf_dilepton_charm_case    = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>::dilepton_charm_case, _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            qcdf_dilepton_bottom_case   = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Numerical>::dilepton_bottom_case, _1, _2, _3, _4, _5, _6, _7, _8, _9);
         }
         else if ("analytical" == qcdf_integrals)
         {
-            qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_massless_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8);
-            qcdf_dilepton_charm_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8, _9);
-            qcdf_dilepton_bottom_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_bottom_case,
-                        _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            qcdf_dilepton_massless_case = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_massless_case, _1, _2, _3, _4, _5, _6, _7, _8);
+            qcdf_dilepton_charm_case    = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_charm_case, _1, _2, _3, _4, _5, _6, _7, _8, _9);
+            qcdf_dilepton_bottom_case   = std::bind(&QCDFIntegralCalculator<BToKstarDilepton, tag::Analytical>::dilepton_bottom_case, _1, _2, _3, _4, _5, _6, _7, _8, _9);
         }
         else
         {
@@ -98,13 +83,9 @@ namespace eos
         }
     }
 
-    BToKDileptonAmplitudes<tag::BFS2004>::~BToKDileptonAmplitudes()
-    {
-    }
+    BToKDileptonAmplitudes<tag::BFS2004>::~BToKDileptonAmplitudes() {}
 
-    const std::vector<OptionSpecification>
-    BToKDileptonAmplitudes<tag::BFS2004>::options
-    {
+    const std::vector<OptionSpecification> BToKDileptonAmplitudes<tag::BFS2004>::options{
         { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov },
     };
 
@@ -122,26 +103,28 @@ namespace eos
         double m_c_pole = model->m_c_pole();
         double m_b_PS = this->m_b_PS(), m_b_PS2 = m_b_PS * m_b_PS;
         double energy = this->energy(q2);
-        double L = -1.0 * (m_b_PS2 - q2) / q2 * std::log(1.0 - q2 / m_b_PS2);
+        double L      = -1.0 * (m_b_PS2 - q2) / q2 * std::log(1.0 - q2 / m_b_PS2);
 
         // couplings
-        double alpha_s_mu = model->alpha_s(mu()); // alpha_s at the hard scale
-        double a_mu = alpha_s_mu * QCD::casimir_f / 4.0 / M_PI;
-        double alpha_s_mu_f = model->alpha_s(std::sqrt(mu() * 0.5)); // alpha_s at the factorization scale
-        double a_mu_f = alpha_s_mu_f * QCD::casimir_f / 4.0 / M_PI;
+        double          alpha_s_mu   = model->alpha_s(mu()); // alpha_s at the hard scale
+        double          a_mu         = alpha_s_mu * QCD::casimir_f / 4.0 / M_PI;
+        double          alpha_s_mu_f = model->alpha_s(std::sqrt(mu() * 0.5)); // alpha_s at the factorization scale
+        double          a_mu_f       = alpha_s_mu_f * QCD::casimir_f / 4.0 / M_PI;
         complex<double> lambda_hat_u = (model->ckm_ub() * conj(model->ckm_us())) / (model->ckm_tb() * conj(model->ckm_ts()));
         if (cp_conjugate)
+        {
             lambda_hat_u = std::conj(lambda_hat_u);
+        }
 
         // Compute the QCDF Integrals
-        double invm1_psd = 3.0 * (1.0 + a_1 + a_2); // <ubar^-1>
-        QCDFIntegrals<BToKstarDilepton> qcdf_0 = this->qcdf_dilepton_massless_case(q2, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
-        QCDFIntegrals<BToKstarDilepton> qcdf_c = this->qcdf_dilepton_charm_case(q2, m_c_pole, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
-        QCDFIntegrals<BToKstarDilepton> qcdf_b = this->qcdf_dilepton_bottom_case(q2, m_b_PS, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+        double                          invm1_psd = 3.0 * (1.0 + a_1 + a_2); // <ubar^-1>
+        QCDFIntegrals<BToKstarDilepton> qcdf_0    = this->qcdf_dilepton_massless_case(q2, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+        QCDFIntegrals<BToKstarDilepton> qcdf_c    = this->qcdf_dilepton_charm_case(q2, m_c_pole, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
+        QCDFIntegrals<BToKstarDilepton> qcdf_b    = this->qcdf_dilepton_bottom_case(q2, m_b_PS, m_B, m_K, mu, 0.0, 0.0, a_1, a_2);
 
         // inverse of the "negative" moment of the B meson LCDA
         // cf. [BFS:2001A], Eq. (54), p. 15
-        double lambda_B_p_inv = this->lambda_B_p_inv, omega_0 = 1.0 / this->lambda_B_p_inv;
+        double          lambda_B_p_inv = this->lambda_B_p_inv, omega_0 = 1.0 / this->lambda_B_p_inv;
         complex<double> lambda_B_m_inv = complex<double>(-gsl_sf_expint_Ei(q2 / m_B / omega_0), M_PI) * (std::exp(-q2 / m_B / omega_0) / omega_0);
 
         /* Y(s) for the up and the top sector */
@@ -149,81 +132,82 @@ namespace eos
         complex<double> Y_top_c = 4.0 / 3.0 * wc.c1() + wc.c2() + 6.0 * wc.c3() + 60.0 * wc.c5();
         complex<double> Y_top_b = -0.5 * (7.0 * wc.c3() + 4.0 / 3.0 * wc.c4() + 76.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
         complex<double> Y_top_0 = -0.5 * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64.0 / 3.0 * wc.c6());
-        complex<double> Y_top_ = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
+        complex<double> Y_top_  = 2.0 / 9.0 * (6.0 * wc.c3() + 32.0 * wc.c5() + 32.0 / 3.0 * wc.c6());
 
         // Use b pole mass according to [BFS:2001A], Sec. 3.1, paragraph Quark Masses,
         // then replace b pole mass by the PS mass.
-        complex<double> Y_top = Y_top_c * CharmLoops::h(mu, q2, m_c_pole);
-        Y_top += Y_top_b * CharmLoops::h(mu, q2, m_b_PS);
-        Y_top += Y_top_0 * CharmLoops::h(mu, q2);
-        Y_top += Y_top_;
+        complex<double> Y_top  = Y_top_c * CharmLoops::h(mu, q2, m_c_pole);
+        Y_top                 += Y_top_b * CharmLoops::h(mu, q2, m_b_PS);
+        Y_top                 += Y_top_0 * CharmLoops::h(mu, q2);
+        Y_top                 += Y_top_;
         // cf. [BFS:2004A], Eq. (43), p. 24
-        complex<double> Y_up = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, q2, m_c_pole) - CharmLoops::h(mu, q2));
+        complex<double> Y_up   = (4.0 / 3.0 * wc.c1() + wc.c2()) * (CharmLoops::h(mu, q2, m_c_pole) - CharmLoops::h(mu, q2));
 
         /* Effective wilson coefficients */
         // cf. [BFS:2001A], below Eq. (9), p. 4
-        complex<double> c7eff = wc.c7() - 1.0/3.0 * wc.c3() - 4.0/9.0 * wc.c4() - 20.0/3.0 * wc.c5() - 80.0/9.0 * wc.c6();
+        complex<double> c7eff = wc.c7() - 1.0 / 3.0 * wc.c3() - 4.0 / 9.0 * wc.c4() - 20.0 / 3.0 * wc.c5() - 80.0 / 9.0 * wc.c6();
         // cf. [BFS:2001A], below Eq. (26), p. 8
-        complex<double> c8eff = wc.c8() + wc.c3() - 1.0/6.0 * wc.c4() + 20.0 * wc.c5() - 10.0/3.0 * wc.c6();
+        complex<double> c8eff = wc.c8() + wc.c3() - 1.0 / 6.0 * wc.c4() + 20.0 * wc.c5() - 10.0 / 3.0 * wc.c6();
 
         /* top sector */
         // cf. [BHP:2007A], Eq. (B.2) and [BFS:2001A], Eqs. (14), (15), p. 5, in comparison with \delta_{2,3} = 1
-        complex<double> C0_top_psd = 1.0 * (c7eff + wc.c7prime() + m_B / (2.0 * m_b_PS) * Y_top);
+        complex<double> C0_top_psd  = 1.0 * (c7eff + wc.c7prime() + m_B / (2.0 * m_b_PS) * Y_top);
         // cf. [BHP:2007A], Eq. (B.2) and [BFS:2004A], Eq. (45), p. 24
         // the correct sign in front of C_7^eff is plus, as one can see by
         // comparison with [BF:2001A], Eq. (63)
         complex<double> C1f_top_psd = 1.0 * (c7eff + wc.c7prime()) * (8.0 * std::log(m_b_PS / mu) + 2.0 * L - 4.0 * (1.0 - mu_f() / m_b_PS));
         // cf. [BHP:2007A], Eq. (B.2) and [BFS:2001A], Eqs. (38), p. 9
-        complex<double> C1nf_top_psd = -(+1.0 / QCD::casimir_f) * (
-                (wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), q2, m_b_PS, m_c_pole)
-                + c8eff * CharmLoops::F87_massless(mu, q2, m_b_PS)
-                + (m_B / (2.0 * m_b_PS)) * (
-                    wc.c1() * memoise(CharmLoops::F19_massive, mu(), q2, m_b_PS, m_c_pole)
-                    + wc.c2() * memoise(CharmLoops::F29_massive, mu(), q2, m_b_PS, m_c_pole)
-                    + c8eff * CharmLoops::F89_massless(q2, m_b_PS)));
+        complex<double> C1nf_top_psd =
+                -(+1.0 / QCD::casimir_f)
+                * ((wc.c2() - wc.c1() / 6.0) * memoise(CharmLoops::F27_massive, mu(), q2, m_b_PS, m_c_pole) + c8eff * CharmLoops::F87_massless(mu, q2, m_b_PS)
+                   + (m_B / (2.0 * m_b_PS))
+                             * (wc.c1() * memoise(CharmLoops::F19_massive, mu(), q2, m_b_PS, m_c_pole) + wc.c2() * memoise(CharmLoops::F29_massive, mu(), q2, m_b_PS, m_c_pole)
+                                + c8eff * CharmLoops::F89_massless(q2, m_b_PS)));
 
         /* parallel, up sector */
         // cf. [BHP:2007A], Eq. (B.2) and [BFS:2004A], comment before Eq. (43), p. 24
-        complex<double> C0_up_psd = 1.0 * m_B / (2.0 * m_b_PS) * Y_up;
+        complex<double> C0_up_psd   = 1.0 * m_B / (2.0 * m_b_PS) * Y_up;
         // C1f_up_par = 0, cf. second-to-last paragraph in Sec A.1, p. 24
         // cf. [BFS:2004A], last paragraph in Sec A.1, p. 24
         // [BFS:2004A], [S:2004A] have a different sign convention for F{12}{79}_massless than we!
         // Use here FF_massive - FF_massless because FF_massless is defined with an extra '-'
         // compared to [S:2004A]
-        complex<double> C1nf_up_psd = -(+1.0 / QCD::casimir_f) * (
-                (wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), q2, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, q2, m_b_PS))
-                + (m_B / (2.0 * m_b_PS)) * (
-                    wc.c1() * (memoise(CharmLoops::F19_massive, mu(), q2, m_b_PS, m_c_pole) - CharmLoops::F19_massless(mu, q2, m_b_PS))
-                    + wc.c2() * (memoise(CharmLoops::F29_massive, mu(), q2, m_b_PS, m_c_pole) - CharmLoops::F29_massless(mu, q2, m_b_PS))));
+        complex<double> C1nf_up_psd = -(+1.0 / QCD::casimir_f)
+                                      * ((wc.c2() - wc.c1() / 6.0) * (memoise(CharmLoops::F27_massive, mu(), q2, m_b_PS, m_c_pole) - CharmLoops::F27_massless(mu, q2, m_b_PS))
+                                         + (m_B / (2.0 * m_b_PS))
+                                                   * (wc.c1() * (memoise(CharmLoops::F19_massive, mu(), q2, m_b_PS, m_c_pole) - CharmLoops::F19_massless(mu, q2, m_b_PS))
+                                                      + wc.c2() * (memoise(CharmLoops::F29_massive, mu(), q2, m_b_PS, m_c_pole) - CharmLoops::F29_massless(mu, q2, m_b_PS))));
 
         // compute the factorizing contributions
-        complex<double> C_psd = C0_top_psd + lambda_hat_u * C0_up_psd
-            + a_mu * (C1f_top_psd + C1nf_top_psd + lambda_hat_u * C1nf_up_psd);
+        complex<double> C_psd = C0_top_psd + lambda_hat_u * C0_up_psd + a_mu * (C1f_top_psd + C1nf_top_psd + lambda_hat_u * C1nf_up_psd);
 
         /* parallel, top sector */
         // T0_top_par_p = 0, cf. [BFS:2001A], Eq. (17), p. 6
         // cf. [BFS:2004A], Eqs. (46)-(47), p. 25 without the \omega term.
-        complex<double> T0_top_psd_m = +e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0/3.0 * wc.c4() + 16.0 * wc.c5() + 64.0/3.0 * wc.c6()) * lambda_B_m_inv;
+        complex<double> T0_top_psd_m   = +e_q * 4.0 * m_B / m_b_PS * (wc.c3() + 4.0 / 3.0 * wc.c4() + 16.0 * wc.c5() + 64.0 / 3.0 * wc.c6()) * lambda_B_m_inv;
         // cf. [BHP:2007A], Eq. (B.2)
         complex<double> T1f_top_psd_p  = -(c7eff + wc.c7prime()) * (4.0 * m_B / energy) * invm1_psd * lambda_B_p_inv;
         // T1f_top_par_m = 0, cf. [BFS:2001A], Eq. (22), p. 7
         // cf. [BFS:2001A], Eq. (25), p. 7
-        complex<double> T1nf_top_psd_p = -m_B / m_b_PS * (
-                e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
-                + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
-                + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() -  8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
+        complex<double> T1nf_top_psd_p = -m_B / m_b_PS
+                                         * (e_u * (-wc.c1() / 6.0 + wc.c2() + 6.0 * wc.c6()) * qcdf_c.jtilde2_parallel
+                                            + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() + 10.0 / 3.0 * wc.c6()) * qcdf_b.jtilde2_parallel
+                                            + e_d * (wc.c3() - wc.c4() / 6.0 + 16.0 * wc.c5() - 8.0 / 3.0 * wc.c6()) * qcdf_0.jtilde2_parallel)
+                                         * lambda_B_p_inv;
         // cf. [BFS:2001A], Eq. (26), pp. 7-8
-        complex<double> T1nf_top_psd_m = -e_q * (8.0 * c8eff * qcdf_0.j0_parallel
-                + 6.0 * m_B / m_b_PS * (
-                    (-wc.c1() / 6.0 + wc.c2() + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j4_parallel
-                    + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j4_parallel
-                    + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j4_parallel
-                    -8.0 / 27.0 * (-7.5 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6()))) * lambda_B_m_inv;
+        complex<double> T1nf_top_psd_m = -e_q
+                                         * (8.0 * c8eff * qcdf_0.j0_parallel
+                                            + 6.0 * m_B / m_b_PS
+                                                      * ((-wc.c1() / 6.0 + wc.c2() + wc.c4() + 10.0 * wc.c6()) * qcdf_c.j4_parallel
+                                                         + (wc.c3() + 5.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 22.0 / 3.0 * wc.c6()) * qcdf_b.j4_parallel
+                                                         + (wc.c3() + 17.0 / 6.0 * wc.c4() + 16.0 * wc.c5() + 82.0 / 3.0 * wc.c6()) * qcdf_0.j4_parallel
+                                                         - 8.0 / 27.0 * (-7.5 * wc.c4() + 12.0 * wc.c5() - 32.0 * wc.c6())))
+                                         * lambda_B_m_inv;
 
         /* parallel, up sector */
         // all T1f_up vanish, cf. [BFS:2004A], sentence below Eq. (49), p. 25
         // cf. [BFS:2004A], Eqs. (46),(48), p. 25 without the \omega term
-        complex<double> T0_up_psd_m = -e_q * 4.0 * m_B / m_b_PS * (3.0 * delta_qu * wc.c2()) * lambda_B_m_inv;
+        complex<double> T0_up_psd_m   = -e_q * 4.0 * m_B / m_b_PS * (3.0 * delta_qu * wc.c2()) * lambda_B_m_inv;
         // cf. [BFS:2004A], Eq. (50), p. 25
         complex<double> T1nf_up_psd_p = -e_u * m_B / m_b_PS * (-wc.c1() / 6.0 + wc.c2()) * (qcdf_c.jtilde2_parallel - qcdf_0.jtilde2_parallel) * lambda_B_p_inv;
         // cf. [BFS:2004A], Eq. (50), p. 25 without the \omega term
@@ -232,14 +216,14 @@ namespace eos
 
         // Compute the nonfactorizing contributions
         complex<double> T_psd = a_mu_f * (T1f_top_psd_p + T1nf_top_psd_p + lambda_hat_u * T1nf_up_psd_p)
-            + (T0_top_psd_m + lambda_hat_u * T0_up_psd_m + a_mu_f * (T1nf_top_psd_m + lambda_hat_u * T1nf_up_psd_m));
+                                + (T0_top_psd_m + lambda_hat_u * T0_up_psd_m + a_mu_f * (T1nf_top_psd_m + lambda_hat_u * T1nf_up_psd_m));
 
         // Subleading weak annihilation and hard spectator interaction contributions have only been
         // computed for calT_perp, not for calT_par ~ calT_psd.
 
         // cf. [BFS:2001A], Eq. (15), and [BHP:2008A], Eq. (C.4)
         BToKDilepton::DipoleFormFactors result;
-        result.calT = xi_pseudo(q2) * C_psd + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B  * T_psd;
+        result.calT = xi_pseudo(q2) * C_psd + power_of<2>(M_PI) / 3.0 * (f_B * f_K) / m_B * T_psd;
 
         return result;
     }
@@ -287,12 +271,10 @@ namespace eos
         result.F_T  = F_Tkin * wc.cT();
         result.F_T5 = F_Tkin * wc.cT5();
         result.F_S  = F_Skin * (wc.cS() + wc.cSprime());
-        result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
-                      ((m_B() * m_B() - m_K() * m_K()) / q2 * (f_0_over_f_p - 1.0) - 1.0);
-        result.F_V  = wc.c9() + wc.c9prime()
-                      + 2.0 * m_b_PS() / m_B() / xi_pseudo(q2) * (dff.calT + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()))
-                      + 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p * wc.cT();
+        result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) * ((m_B() * m_B() - m_K() * m_K()) / q2 * (f_0_over_f_p - 1.0) - 1.0);
+        result.F_V  = wc.c9() + wc.c9prime() + 2.0 * m_b_PS() / m_B() / xi_pseudo(q2) * (dff.calT + lambda_psd / m_B * std::polar(1.0, sl_phase_psd()))
+                     + 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p * wc.cT();
 
         return result;
     }
-}
+} // namespace eos

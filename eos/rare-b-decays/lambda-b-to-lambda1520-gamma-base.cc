@@ -44,11 +44,9 @@ namespace eos
 
     LambdaBToLambda1520Gamma::AmplitudeGenerator::~AmplitudeGenerator() = default;
 
-    const std::vector<OptionSpecification>
-    LambdaBToLambda1520Gamma::AmplitudeGenerator::options
-    {
+    const std::vector<OptionSpecification> LambdaBToLambda1520Gamma::AmplitudeGenerator::options{
         Model::option_specification(),
         FormFactorFactory<OneHalfPlusToThreeHalfMinus>::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
+        { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov },
     };
-}
+} // namespace eos

@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/b-to-k-ll-base.hh>
 #include <eos/rare-b-decays/b-to-k-ll-bfs2004.hh>
@@ -27,7 +27,6 @@
 #include <eos/rare-b-decays/b-to-k-ll-gvdv2020.hh>
 #include <eos/rare-b-decays/b-to-k-ll-naive.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-
 
 namespace eos
 {
@@ -37,162 +36,160 @@ namespace eos
 
     struct BToKDilepton::AngularCoefficients
     {
-        double a_l, b_l, c_l;
+            double a_l, b_l, c_l;
 
-        AngularCoefficients()
-        {
-        }
+            AngularCoefficients() {}
 
-        AngularCoefficients(const std::array<double, 3> & a) :
-            a_l(a[0]),
-            b_l(a[1]),
-            c_l(a[2])
-        {
-        }
+            AngularCoefficients(const std::array<double, 3> & a) :
+                a_l(a[0]),
+                b_l(a[1]),
+                c_l(a[2])
+            {
+            }
     };
 
     /*!
      * Implementation for the decay @f$\bar{B} \to \bar{K} \ell^+ \ell^-@f$.
      */
-    template <>
-    struct Implementation<BToKDilepton>
+    template <> struct Implementation<BToKDilepton>
     {
-        std::shared_ptr<BToKDilepton::AmplitudeGenerator> amplitude_generator;
+            std::shared_ptr<BToKDilepton::AmplitudeGenerator> amplitude_generator;
 
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        LeptonFlavorOption opt_l;
-        QuarkFlavorOption opt_q;
+            LeptonFlavorOption opt_l;
+            QuarkFlavorOption  opt_q;
 
-        UsedParameter hbar;
-        UsedParameter m_B;
-        UsedParameter m_K;
-        UsedParameter m_l;
-        UsedParameter tau;
-        UsedParameter mu;
+            UsedParameter hbar;
+            UsedParameter m_B;
+            UsedParameter m_K;
+            UsedParameter m_l;
+            UsedParameter tau;
+            UsedParameter mu;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
-            opt_l(o, options, "l"_ok),
-            opt_q(o, options, "q"_ok),
-            hbar(p["QM::hbar"], u),
-            m_B(p["mass::B_" + opt_q.str()], u),
-            m_K(p["mass::K_" + opt_q.str()], u),
-            m_l(p["mass::" + opt_l.str()], u),
-            tau(p["life_time::B_" + opt_q.str()], u),
-            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
-        {
-            Context ctx("When constructing B->Kll observables");
-
-            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
-
-            if ("BFS2004" == tag)
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
+                opt_l(o, options, "l"_ok),
+                opt_q(o, options, "q"_ok),
+                hbar(p["QM::hbar"], u),
+                m_B(p["mass::B_" + opt_q.str()], u),
+                m_K(p["mass::K_" + opt_q.str()], u),
+                m_l(p["mass::" + opt_l.str()], u),
+                tau(p["life_time::B_" + opt_q.str()], u),
+                mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
             {
-                amplitude_generator.reset(new BToKDileptonAmplitudes<tag::BFS2004>(p, o));
+                Context ctx("When constructing B->Kll observables");
+
+                std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
+
+                if ("BFS2004" == tag)
+                {
+                    amplitude_generator.reset(new BToKDileptonAmplitudes<tag::BFS2004>(p, o));
+                }
+                else if ("GP2004" == tag)
+                {
+                    amplitude_generator.reset(new BToKDileptonAmplitudes<tag::GP2004>(p, o));
+                }
+                else if ("GvDV2020" == tag)
+                {
+                    amplitude_generator.reset(new BToKDileptonAmplitudes<tag::GvDV2020>(p, o));
+                }
+                else if ("Naive" == tag)
+                {
+                    amplitude_generator.reset(new BToKDileptonAmplitudes<tag::Naive>(p, o));
+                }
+                else
+                {
+                    throw InternalError("BToKDilepton: Unknown tag or no valid tag specified (tag = '" + tag + "')!");
+                }
+
+                u.uses(*amplitude_generator);
             }
-            else if ("GP2004" == tag)
+
+            ~Implementation() {}
+
+            inline std::array<double, 3>
+            angular_coefficients_array(const BToKDilepton::Amplitudes & A, const double & q2) const
             {
-                amplitude_generator.reset(new BToKDileptonAmplitudes<tag::GP2004>(p, o));
+                // cf. [BHP:2007A], Eq. (4.2) - (4.4)
+                std::array<double, 3> result;
+
+                // a_l
+                result[0] = amplitude_generator->normalisation(q2)
+                            * (q2 * (power_of<2>(beta_l(q2)) * norm(A.F_S) + norm(A.F_P)) + 0.25 * amplitude_generator->lambda(q2) * (norm(A.F_A) + norm(A.F_V))
+                               + 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + q2) * std::real(A.F_P * std::conj(A.F_A)) + 4.0 * m_l * m_l * m_B() * m_B() * norm(A.F_A));
+
+                // b_l
+                result[1] = 2.0 * amplitude_generator->normalisation(q2)
+                            * (q2 * (power_of<2>(beta_l(q2)) * std::real(A.F_S * std::conj(A.F_T)) + std::real(A.F_P * std::conj(A.F_T5)))
+                               + m_l
+                                         * (sqrt(amplitude_generator->lambda(q2)) * beta_l(q2) * std::real(A.F_S * std::conj(A.F_V))
+                                            + (m_B() * m_B() - m_K() * m_K() + q2) * std::real(A.F_T5 * std::conj(A.F_A))));
+
+                // c_l
+                result[2] = amplitude_generator->normalisation(q2)
+                            * (q2 * (power_of<2>(beta_l(q2)) * norm(A.F_T) + norm(A.F_T5))
+                               - 0.25 * amplitude_generator->lambda(q2) * power_of<2>(beta_l(q2)) * (norm(A.F_A) + norm(A.F_V))
+                               + 2.0 * m_l * sqrt(amplitude_generator->lambda(q2)) * beta_l(q2) * std::real(A.F_T * std::conj(A.F_V)));
+
+                return result;
             }
-            else if ("GvDV2020" == tag)
+
+            inline std::array<double, 3>
+            differential_angular_coefficients_array(const double & q2) const
             {
-                amplitude_generator.reset(new BToKDileptonAmplitudes<tag::GvDV2020>(p, o));
+                return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
             }
-            else if ("Naive" == tag)
+
+            inline BToKDilepton::AngularCoefficients
+            differential_angular_coefficients(const double & q2) const
             {
-                amplitude_generator.reset(new BToKDileptonAmplitudes<tag::Naive>(p, o));
+                return BToKDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
             }
-            else
+
+            // cf. [BHP:2007A], Eq. (4.8)
+            inline double
+            unnormalized_decay_width(const BToKDilepton::AngularCoefficients & a) const
             {
-                throw InternalError("BToKDilepton: Unknown tag or no valid tag specified (tag = '" + tag + "')!");
+                return 2.0 * (a.a_l + a.c_l / 3.0);
             }
 
-            u.uses(*amplitude_generator);
-        }
+            inline double
+            differential_branching_ratio(const BToKDilepton::AngularCoefficients & a) const
+            {
+                return unnormalized_decay_width(a) * tau() / hbar();
+            }
 
-        ~Implementation()
-        {
-        }
+            // cf. [BHP:2007A], Eq. (4.9)
+            inline double
+            differential_flat_term_numerator(const BToKDilepton::AngularCoefficients & a) const
+            {
+                return 2.0 * (a.a_l + a.c_l);
+            }
 
-        inline std::array<double, 3> angular_coefficients_array(const BToKDilepton::Amplitudes & A, const double & q2) const
-        {
-            // cf. [BHP:2007A], Eq. (4.2) - (4.4)
-            std::array<double, 3> result;
+            inline double
+            differential_forward_backward_asymmetry_numerator(const BToKDilepton::AngularCoefficients & a) const
+            {
+                return a.b_l;
+            }
 
-            // a_l
-            result[0] = amplitude_generator->normalisation(q2) * (
-                q2 * (power_of<2>(beta_l(q2)) * norm(A.F_S) + norm(A.F_P))
-                + 0.25 * amplitude_generator->lambda(q2) * (norm(A.F_A) + norm(A.F_V))
-                + 2.0 * m_l * (m_B() * m_B() - m_K() * m_K() + q2) * std::real(A.F_P * std::conj(A.F_A))
-                + 4.0 * m_l * m_l * m_B() * m_B() * norm(A.F_A)
-                );
+            BToKDilepton::AngularCoefficients
+            integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
+            {
+                std::function<std::array<double, 3>(const double &)> integrand =
+                        std::bind(&Implementation<BToKDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
+                std::array<double, 3> integrated_angular_coefficients_array = integrate<1, 3>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
-            // b_l
-            result[1] = 2.0 * amplitude_generator->normalisation(q2) * (
-                q2 * (power_of<2>(beta_l(q2)) * std::real(A.F_S * std::conj(A.F_T))
-                + std::real(A.F_P * std::conj(A.F_T5)))
-                + m_l * (sqrt(amplitude_generator->lambda(q2)) * beta_l(q2) * std::real(A.F_S * std::conj(A.F_V))
-                + (m_B() * m_B() - m_K() * m_K() + q2) * std::real(A.F_T5 * std::conj(A.F_A)))
-                );
+                return BToKDilepton::AngularCoefficients(integrated_angular_coefficients_array);
+            }
 
-            // c_l
-            result[2] = amplitude_generator->normalisation(q2) * (
-                q2 * (power_of<2>(beta_l(q2)) * norm(A.F_T) + norm(A.F_T5))
-                - 0.25 * amplitude_generator->lambda(q2) * power_of<2>(beta_l(q2)) * (norm(A.F_A) + norm(A.F_V))
-                + 2.0 * m_l * sqrt(amplitude_generator->lambda(q2)) * beta_l(q2) * std::real(A.F_T * std::conj(A.F_V))
-                );
-
-            return result;
-        }
-
-        inline std::array<double, 3> differential_angular_coefficients_array(const double & q2) const
-        {
-            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
-        }
-
-        inline BToKDilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
-        {
-            return BToKDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
-        }
-
-        // cf. [BHP:2007A], Eq. (4.8)
-        inline double unnormalized_decay_width(const BToKDilepton::AngularCoefficients & a) const
-        {
-            return 2.0 * (a.a_l + a.c_l / 3.0);
-        }
-
-        inline double differential_branching_ratio(const BToKDilepton::AngularCoefficients & a) const
-        {
-            return unnormalized_decay_width(a) * tau() / hbar();
-        }
-
-        // cf. [BHP:2007A], Eq. (4.9)
-        inline double differential_flat_term_numerator(const BToKDilepton::AngularCoefficients & a) const
-        {
-            return 2.0 * (a.a_l + a.c_l);
-        }
-
-        inline double differential_forward_backward_asymmetry_numerator(const BToKDilepton::AngularCoefficients & a) const
-        {
-            return a.b_l;
-        }
-
-        BToKDilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
-        {
-            std::function<std::array<double, 3> (const double &)> integrand =
-                    std::bind(&Implementation<BToKDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 3> integrated_angular_coefficients_array = integrate<1, 3>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
-
-            return BToKDilepton::AngularCoefficients(integrated_angular_coefficients_array);
-        }
-
-        inline double beta_l(const double & q2) const
-        {
-            return sqrt(1.0 - 4.0 * m_l * m_l / q2);
-        }
-
+            inline double
+            beta_l(const double & q2) const
+            {
+                return sqrt(1.0 - 4.0 * m_l * m_l / q2);
+            }
     };
 
     BToKDilepton::BToKDilepton(const Parameters & parameters, const Options & options) :
@@ -200,16 +197,12 @@ namespace eos
     {
     }
 
-    BToKDilepton::~BToKDilepton()
-    {
-    }
+    BToKDilepton::~BToKDilepton() {}
 
-    const std::vector<OptionSpecification>
-    Implementation<BToKDilepton>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BToKDilepton>::options{
         Model::option_specification(),
-        {"l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov},
-        {"q"_ok, { "d"_ov, "u"_ov }, "d"_ov}
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "q"_ok,            { "d"_ov, "u"_ov },  "d"_ov }
     };
 
     double
@@ -277,20 +270,15 @@ namespace eos
         AngularCoefficients a = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return _imp->differential_forward_backward_asymmetry_numerator(a) / _imp->unnormalized_decay_width(a);
-
     }
 
-
-    const std::string
-    BToKDilepton::description = "\
+    const std::string BToKDilepton::description = "\
 The decay B->K l^+ l^-, with l=e,mu,tau a charged lepton.";
 
-    const std::string
-    BToKDilepton::kinematics_description_q2 = "\
+    const std::string BToKDilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
-    const std::string
-    BToKDilepton::kinematics_description_c_theta_l = "\
+    const std::string BToKDilepton::kinematics_description_c_theta_l = "\
 The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using the LHCb convention.";
 
     /*
@@ -308,10 +296,7 @@ The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using
         return _imp->angular_coefficients_array(_imp->amplitude_generator->amplitudes(q2), q2);
     }
 
-    const std::set<ReferenceName>
-    BToKDilepton::references
-    {
-    };
+    const std::set<ReferenceName> BToKDilepton::references{};
 
     std::vector<OptionSpecification>::const_iterator
     BToKDilepton::begin_options()
@@ -324,4 +309,4 @@ The cosine of the lepton's helicity angle theta_l in the l^+l^- rest frame using
     {
         return Implementation<BToKDilepton>::options.cend();
     }
-}
+} // namespace eos

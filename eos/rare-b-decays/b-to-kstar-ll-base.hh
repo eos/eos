@@ -21,21 +21,20 @@
 #ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_LL_BASE_HH
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_B_TO_KSTAR_LL_BASE_HH 1
 
-#include <eos/models/model.hh>
-#include <eos/utils/options-impl.hh>
 #include <eos/form-factors/mesonic.hh>
+#include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-ll.hh>
+#include <eos/utils/options-impl.hh>
 
 namespace eos
 {
-    class BToKstarDilepton::AmplitudeGenerator :
-        public ParameterUser
+    class BToKstarDilepton::AmplitudeGenerator : public ParameterUser
     {
         public:
-            std::shared_ptr<Model> model;
+            std::shared_ptr<Model>             model;
             std::shared_ptr<FormFactors<PToV>> form_factors;
-            LeptonFlavorOption opt_l;
-            BooleanOption opt_cp_conjugate;
+            LeptonFlavorOption                 opt_l;
+            BooleanOption                      opt_cp_conjugate;
 
             UsedParameter mu;
             UsedParameter alpha_e;
@@ -47,7 +46,7 @@ namespace eos
             UsedParameter m_Kstar;
             UsedParameter m_l;
 
-            bool cp_conjugate;
+            bool         cp_conjugate;
             LeptonFlavor lepton_flavor;
 
             static const std::vector<OptionSpecification> options;
@@ -59,10 +58,10 @@ namespace eos
             double energy(const double & q2) const;
             double lambda(const double & q2) const;
 
-            virtual double real_C9_perp(const double & q2) const = 0;
-            virtual double real_C9_para(const double & q2) const = 0;
-            virtual double imag_C9_perp(const double & q2) const = 0;
-            virtual double imag_C9_para(const double & q2) const = 0;
+            virtual double real_C9_perp(const double & q2) const       = 0;
+            virtual double real_C9_para(const double & q2) const       = 0;
+            virtual double imag_C9_perp(const double & q2) const       = 0;
+            virtual double imag_C9_para(const double & q2) const       = 0;
             virtual double H_perp_corrections(const double & q2) const = 0;
             virtual double H_para_corrections(const double & q2) const = 0;
             virtual double H_long_corrections(const double & q2) const = 0;
@@ -73,16 +72,16 @@ namespace eos
 
     struct BToKstarDilepton::DipoleFormFactors
     {
-        complex<double> calT_perp_left;
-        complex<double> calT_perp_right;
-        complex<double> calT_parallel;
+            complex<double> calT_perp_left;
+            complex<double> calT_perp_right;
+            complex<double> calT_parallel;
     };
 
     struct BToKstarDilepton::FormFactorCorrections
     {
-        complex<double> t;
-        complex<double> t_T;
-        complex<double> t_wa;
+            complex<double> t;
+            complex<double> t_T;
+            complex<double> t_wa;
     };
 
     template <typename Tag_> class BToKstarDileptonAmplitudes;
@@ -104,7 +103,7 @@ namespace eos
          * Approaches that work at large q^2, or low recoil.
          */
         struct GP2004;
-    }
-}
+    } // namespace tag
+} // namespace eos
 
 #endif

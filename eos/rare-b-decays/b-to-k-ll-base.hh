@@ -28,13 +28,12 @@
 
 namespace eos
 {
-    class BToKDilepton::AmplitudeGenerator :
-        public ParameterUser
+    class BToKDilepton::AmplitudeGenerator : public ParameterUser
     {
         public:
-            std::shared_ptr<Model> model;
+            std::shared_ptr<Model>             model;
             std::shared_ptr<FormFactors<PToP>> form_factors;
-            LeptonFlavorOption opt_l;
+            LeptonFlavorOption                 opt_l;
 
             UsedParameter mu;
             UsedParameter alpha_e;
@@ -47,8 +46,8 @@ namespace eos
             UsedParameter m_l;
 
             BooleanOption opt_cp_conjugate;
-            bool cp_conjugate;
-            LeptonFlavor lepton_flavor;
+            bool          cp_conjugate;
+            LeptonFlavor  lepton_flavor;
 
             static const std::vector<OptionSpecification> options;
 
@@ -66,7 +65,7 @@ namespace eos
 
     struct BToKDilepton::DipoleFormFactors
     {
-        complex<double> calT;
+            complex<double> calT;
     };
 
     template <typename Tag_> class BToKDileptonAmplitudes;
@@ -88,7 +87,7 @@ namespace eos
          * Approaches that work at large q^2, or low recoil.
          */
         struct GP2004;
-    }
-}
+    } // namespace tag
+} // namespace eos
 
 #endif

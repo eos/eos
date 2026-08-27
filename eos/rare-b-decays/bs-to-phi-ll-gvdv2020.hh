@@ -20,15 +20,13 @@
 #ifndef MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_GVDV2020_HH
 #define MASTER_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_GVDV2020_HH 1
 
-#include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
+#include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/utils/options-impl.hh>
 
 namespace eos
 {
-    template <>
-    class BsToPhiDileptonAmplitudes<tag::GvDV2020> :
-        public BsToPhiDilepton::AmplitudeGenerator
+    template <> class BsToPhiDileptonAmplitudes<tag::GvDV2020> : public BsToPhiDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter m_b_MSbar;
@@ -38,7 +36,7 @@ namespace eos
             UsedParameter f_phi_par;
             UsedParameter lambda_B_p_inv;
 
-            RestrictedOption opt_nonlocal_formfactor;
+            RestrictedOption            opt_nonlocal_formfactor;
             NonlocalFormFactorPtr<PToV> nonlocal_formfactor;
 
             static const std::vector<OptionSpecification> options;
@@ -47,8 +45,8 @@ namespace eos
             ~BsToPhiDileptonAmplitudes() = default;
 
             BsToPhiDilepton::FormFactorCorrections sb_contributions(const double & q2, const WilsonCoefficients<BToS> & wc) const;
-            double m_b_PS() const;
-            double mu_f() const;
+            double                                 m_b_PS() const;
+            double                                 mu_f() const;
 
             virtual double real_C9_perp(const double & q2) const;
             virtual double real_C9_para(const double & q2) const;
@@ -57,6 +55,6 @@ namespace eos
 
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const;
     };
-}
+} // namespace eos
 
 #endif
