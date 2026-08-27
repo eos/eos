@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2008-2026 Danny van Dyk
  *
  * This file is part of the EOS program. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
 #ifndef EOS_GUARD_EOS_UTILS_TICKET_HH
 #define EOS_GUARD_EOS_UTILS_TICKET_HH 1
 
+#include <eos/utils/instantiation_policy.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 
 namespace eos
