@@ -31,7 +31,7 @@ namespace eos
         // P -> V
         struct BToKstar;
         struct BsToPhi;
-    }
-}
+    } // namespace nff
+} // namespace eos
 
 #endif

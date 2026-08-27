@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -38,26 +36,27 @@
 
 namespace eos
 {
-	using std::complex;
-	using std::log;
-	using std::real;
-	using std::imag;
+    using std::complex;
+    using std::imag;
+    using std::log;
+    using std::real;
 
-	namespace agv_2019a
-	{
-		complex<double> f279b_helper(const CharmLoopsParameters & clp)
-		{
-			const complex<double> xb = clp.xb;
-			const complex<double> yb = clp.yb;
+    namespace agv_2019a
+    {
+        complex<double>
+        f279b_helper(const CharmLoopsParameters & clp)
+        {
+            const complex<double> xb = clp.xb;
+            const complex<double> yb = clp.yb;
 
-			const complex<double> xbinv = 1.0 / xb;
-            const complex<double> xb2 = power_of<2>(xb);
-            const complex<double> xb4 = power_of<4>(xb);
-            const complex<double> xb6 = power_of<6>(xb);
+            const complex<double> xbinv = 1.0 / xb;
+            const complex<double> xb2   = power_of<2>(xb);
+            const complex<double> xb4   = power_of<4>(xb);
+            const complex<double> xb6   = power_of<6>(xb);
 
             const complex<double> yb2 = power_of<2>(yb);
 
-			// weights appearing in the GPLs [AGV:2019A] p. 34
+            // weights appearing in the GPLs [AGV:2019A] p. 34
 
             const double wx3 = 2.0 + sqrt(3);
             const double wx4 = 2.0 - sqrt(3);
@@ -73,9 +72,20 @@ namespace eos
             const complex<double> w5inv = 1.0 / w5;
             const complex<double> w7inv = 1.0 / w7;
 
-            const complex<double> tb = (2.0 * (-2.0 * xb2 + 2.0 * xb2 * yb + sqrt(2) * xb2 * (1.0 + yb) * sqrt((2.0 * xb4 - xb2 * yb + 2.0 * xb4 * yb - xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 + yb))))) / (-1.0 + 6.0 * xb2 - xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
-            const complex<double> vb = (2.0 * (-2.0 * xb2 - 2.0 * xb2 * yb + sqrt(2) * xb2 * (1.0 - yb) * sqrt((2.0 * xb4 + xb2 * yb - 2.0 * xb4 * yb + xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 - yb))))) / (1.0 - 6.0 * xb2 + xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
+            const complex<double> tb =
+                    (2.0
+                     * (-2.0 * xb2 + 2.0 * xb2 * yb
+                        + sqrt(2) * xb2 * (1.0 + yb)
+                                  * sqrt((2.0 * xb4 - xb2 * yb + 2.0 * xb4 * yb - xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 + yb)))))
+                    / (-1.0 + 6.0 * xb2 - xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
+            const complex<double> vb =
+                    (2.0
+                     * (-2.0 * xb2 - 2.0 * xb2 * yb
+                        + sqrt(2) * xb2 * (1.0 - yb)
+                                  * sqrt((2.0 * xb4 + xb2 * yb - 2.0 * xb4 * yb + xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 - yb)))))
+                    / (1.0 - 6.0 * xb2 + xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
 
+            // clang-format off
             const complex<double> part1 = (-1.0 / 3.0) * (pisqu * ln2) + 8.0 * trilog(-1.0) - 28.0 * li3half - 2.0 * trilog(1.0 / (1.0 - tb)) - 4.0 * trilog((1.0 - tb) / 2.0) + 2.0 * trilog(-tb) - 2.0 * trilog(tb) - 2.0 * trilog(tb / (-1.0 + tb)) + trilog((2.0 * tb) / (-1.0 + tb)) + 2.0 * trilog(1.0 / (1.0 + tb)) - 2.0 * trilog((-1.0 + tb) / (1.0 + tb)) + 2.0 * trilog(tb / (1.0 + tb)) - trilog((2.0 * tb) / (1.0 + tb)) - 4.0 * trilog((1.0 + tb) / 2.0) - 2.0 * trilog((1.0 + tb) / (-1.0 + tb)) + 2.0 * trilog(1.0 / (1.0 - vb)) - 4.0 * trilog((1.0 - vb) / 2.0) - 2.0 * trilog(-vb) + 2.0 * trilog(vb) + 2.0 * trilog(vb / (-1.0 + vb)) - trilog((2.0 * vb) / (-1.0 + vb))
                 - 2.0 * trilog(1.0 / (1.0 + vb)) - 2.0 * trilog((-1.0 + vb) / (1.0 + vb)) - 2.0 * trilog(vb / (1.0 + vb)) + trilog((2.0 * vb) / (1.0 + vb)) - 4.0 * trilog((1.0 + vb) / 2.0) - 2.0 * trilog((1.0 + vb) / (-1.0 + vb)) - 2.0 * trilog(1.0 / (1.0 - w4)) + trilog((1.0 + vb) / (1.0 - w4)) + 4.0 * trilog(1.0 - w4) - 2.0 * trilog((1.0 - w4) / (1.0 + vb)) - trilog((tb - w4) / (-1.0 + tb)) + trilog((tb - w4) / (1.0 + tb)) + trilog((-1.0 + tb) / (-1.0 + w4)) - 2.0 * trilog((-1.0 + w4) / (-1.0 + tb)) + trilog((-0.5) * (((1.0 + tb) * (-1.0 + w4)) / (tb - w4))) - 2.0 * trilog(-w4inv) + 2.0 * trilog(w4inv)
                 + trilog((tb - w4) / ((-1.0 + tb) * w4)) - 2.0 * trilog((-1.0 + w4) / (2.0 * w4)) + 2.0 * trilog(w4 / (-1.0 + w4)) - 2.0 * trilog(1.0 / (1.0 + w4)) + trilog((1.0 + tb) / (1.0 + w4)) + trilog((1.0 - vb) / (1.0 + w4)) - 2.0 * trilog((1.0 - w4) / (1.0 + w4)) + trilog(((1.0 + tb) * (-1.0 + w4)) / ((-1.0 + tb) * (1.0 + w4))) + trilog(((-1.0 + vb) * (-1.0 + w4)) / ((1.0 + vb) * (1.0 + w4))) - 2.0 * trilog(w4 / (1.0 + w4)) - 2.0 * trilog((1.0 + w4) / (1.0 - w4)) + trilog(((-1.0 + tb) * (1.0 + w4)) / (2.0 * (tb - w4))) + trilog(((-1.0 + tb) * (1.0 + w4)) / ((1.0 + tb) * (-1.0 + w4))) + trilog(((1.0 + vb) * (1.0 + w4)) / ((-1.0 + vb) * (-1.0 + w4)))
@@ -346,8 +356,9 @@ namespace eos
                 - 4.0 * pisqu * log((-1.0 + w5) / w5) * T(1.0, (tb + w5) / w5, (-1.0 + w5) / w5) * T(p(w5inv, (tb + w5) / w5), (tb + w5) / w5, 1.0 + w5inv) + 4.0 * pisqu * log((-1.0 + w5) / w5) * T(1.0, (tb + w5) / w5, (-1.0 + w5) / w5) * T(p(w5inv, (tb + w5) / w5), (tb + w5) / w5, (w5 + w7) / w5) + 4.0 * pisqu * log(1.0 - w7 / w4) * T(1.0, 1.0 - tb / w4, 1.0 - w7 / w4) * T(p(w7 / w4, 1.0 - tb / w4), 1.0 - tb / w4, 1.0 + w4inv) - 4.0 * pisqu * log(1.0 - w7 / w4) * T(1.0, 1.0 - tb / w4, 1.0 - w7 / w4) * T(p(w7 / w4, 1.0 - tb / w4), 1.0 - tb / w4, (-1.0 + w4) / w4)
                 + 4.0 * pisqu * log(1.0 - w7 / w4) * T(1.0, (vb + w4) / w4, 1.0 - w7 / w4) * T(p(w7 / w4, (vb + w4) / w4), (vb + w4) / w4, 1.0 + w4inv) - 4.0 * pisqu * log(1.0 - w7 / w4) * T(1.0, (vb + w4) / w4, 1.0 - w7 / w4) * T(p(w7 / w4, (vb + w4) / w4), (vb + w4) / w4, (-1.0 + w4) / w4) - 4.0 * pisqu * log((w5 + w7) / w5) * T(1.0, 1.0 - vb / w5, (w5 + w7) / w5) * T(p(-(w7 / w5), 1.0 - vb / w5), 1.0 - vb / w5, 1.0 + w5inv) + 4.0 * pisqu * log((w5 + w7) / w5) * T(1.0, 1.0 - vb / w5, (w5 + w7) / w5) * T(p(-(w7 / w5), 1.0 - vb / w5), 1.0 - vb / w5, (-1.0 + w5) / w5)
                 - 4.0 * pisqu * log((w5 + w7) / w5) * T(1.0, (tb + w5) / w5, (w5 + w7) / w5) * T(p(-(w7 / w5), (tb + w5) / w5), (tb + w5) / w5, 1.0 + w5inv) + 4.0 * pisqu * log((w5 + w7) / w5) * T(1.0, (tb + w5) / w5, (w5 + w7) / w5) * T(p(-(w7 / w5), (tb + w5) / w5), (tb + w5) / w5, (-1.0 + w5) / w5) - (103.0 * zeta3) / 2.0;
+            // clang-format on
 
-			return - (part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9 + part10);
-		}
-	}
-}
+            return -(part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8 + part9 + part10);
+        }
+    } // namespace agv_2019a
+} // namespace eos

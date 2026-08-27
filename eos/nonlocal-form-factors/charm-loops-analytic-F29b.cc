@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -40,33 +38,35 @@ namespace eos
 {
     using std::complex;
     using std::log;
-    using std::sqrt;
     using std::real;
+    using std::sqrt;
 
     namespace agv_2019a
     {
-        complex<double> f19b(const CharmLoopsParameters & clp)
+        complex<double>
+        f19b(const CharmLoopsParameters & clp)
         {
             // f19b = - f29b / (2 * N_c)
-            return - f29b(clp) / 6.0;
+            return -f29b(clp) / 6.0;
         }
 
-        complex<double> f29b(const CharmLoopsParameters & clp)
+        complex<double>
+        f29b(const CharmLoopsParameters & clp)
         {
-            const double lnmuhat = log(clp.muhat);
-            const complex<double> xb = clp.xb;
-            const complex<double> yb = clp.yb;
+            const double          lnmuhat = log(clp.muhat);
+            const complex<double> xb      = clp.xb;
+            const complex<double> yb      = clp.yb;
 
             // Powers of xd and yd
 
-            const complex<double> xb2 = power_of<2>(xb);
-            const complex<double> xb3 = power_of<3>(xb);
-            const complex<double> xb4 = power_of<4>(xb);
-            const complex<double> xb5 = power_of<5>(xb);
-            const complex<double> xb6 = power_of<6>(xb);
-            const complex<double> xb7 = power_of<7>(xb);
-            const complex<double> xb8 = power_of<8>(xb);
-            const complex<double> xb9 = power_of<9>(xb);
+            const complex<double> xb2  = power_of<2>(xb);
+            const complex<double> xb3  = power_of<3>(xb);
+            const complex<double> xb4  = power_of<4>(xb);
+            const complex<double> xb5  = power_of<5>(xb);
+            const complex<double> xb6  = power_of<6>(xb);
+            const complex<double> xb7  = power_of<7>(xb);
+            const complex<double> xb8  = power_of<8>(xb);
+            const complex<double> xb9  = power_of<9>(xb);
             const complex<double> xb10 = power_of<10>(xb);
             const complex<double> xb11 = power_of<11>(xb);
             const complex<double> xb12 = power_of<12>(xb);
@@ -75,14 +75,14 @@ namespace eos
             const complex<double> xb15 = power_of<15>(xb);
             const complex<double> xb16 = power_of<16>(xb);
 
-            const complex<double> yb2 = power_of<2>(yb);
-            const complex<double> yb3 = power_of<3>(yb);
-            const complex<double> yb4 = power_of<4>(yb);
-            const complex<double> yb5 = power_of<5>(yb);
-            const complex<double> yb6 = power_of<6>(yb);
-            const complex<double> yb7 = power_of<7>(yb);
-            const complex<double> yb8 = power_of<8>(yb);
-            const complex<double> yb9 = power_of<9>(yb);
+            const complex<double> yb2  = power_of<2>(yb);
+            const complex<double> yb3  = power_of<3>(yb);
+            const complex<double> yb4  = power_of<4>(yb);
+            const complex<double> yb5  = power_of<5>(yb);
+            const complex<double> yb6  = power_of<6>(yb);
+            const complex<double> yb7  = power_of<7>(yb);
+            const complex<double> yb8  = power_of<8>(yb);
+            const complex<double> yb9  = power_of<9>(yb);
             const complex<double> yb10 = power_of<10>(yb);
             const complex<double> yb11 = power_of<11>(yb);
 
@@ -102,8 +102,18 @@ namespace eos
             const complex<double> w5inv = 1.0 / w5;
             const complex<double> w7inv = 1.0 / w7;
 
-            const complex<double> tb = (2.0 * (-2.0 * xb2 + 2.0 * xb2 * yb + sqrt(2) * xb2 * (1.0 + yb) * sqrt((2.0 * xb4 - xb2 * yb + 2.0 * xb4 * yb - xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 + yb))))) / (-1.0 + 6.0 * xb2 - xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
-            const complex<double> vb = (2.0 * (-2.0 * xb2 - 2.0 * xb2 * yb + sqrt(2) * xb2 * (1.0 - yb) * sqrt((2.0 * xb4 + xb2 * yb - 2.0 * xb4 * yb + xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 - yb))))) / (1.0 - 6.0 * xb2 + xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
+            const complex<double> tb =
+                    (2.0
+                     * (-2.0 * xb2 + 2.0 * xb2 * yb
+                        + sqrt(2) * xb2 * (1.0 + yb)
+                                  * sqrt((2.0 * xb4 - xb2 * yb + 2.0 * xb4 * yb - xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 + yb)))))
+                    / (-1.0 + 6.0 * xb2 - xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
+            const complex<double> vb =
+                    (2.0
+                     * (-2.0 * xb2 - 2.0 * xb2 * yb
+                        + sqrt(2) * xb2 * (1.0 - yb)
+                                  * sqrt((2.0 * xb4 + xb2 * yb - 2.0 * xb4 * yb + xb6 * yb + xb2 * yb2 + 4.0 * xb4 * yb2 + xb6 * yb2) / (xb4 * power_of<2>(1.0 - yb)))))
+                    / (1.0 - 6.0 * xb2 + xb4 + yb + 2.0 * xb2 * yb + xb4 * yb);
 
             const complex<double> tb2 = power_of<2>(tb);
             const complex<double> vb2 = power_of<2>(vb);
@@ -114,6 +124,7 @@ namespace eos
             const complex<double> ln1myb = log(1.0 - yb);
 
             const complex<double> num1 = 16.0 - 48.0 * yb2;
+            // clang-format off
             const complex<double> num2 = 4.0 * tb * xb2 * (16.0 * vb * xb2 * power_of<2>(1.0i + xb) * yb * (6.0 * 1.0i * xb * yb2 * (3.0 - 7.0 * yb2 + 27.0 * yb4 - 29.0 * yb6 + 6.0 * yb8) + 6.0 * 1.0i * xb9 * yb2 * (3.0 - 7.0 * yb2 + 27.0 * yb4 - 29.0 * yb6 + 6.0 * yb8)
                     + xb6 * (-68.0 - 222.0 * yb2 + 1242.0 * yb4 + 6334.0 * yb6 + 4578.0 * yb8 - 3672.0 * yb10) - 3.0 * (yb2 - 17.0 * yb4 + 21.0 * yb6 - 11.0 * yb8 + 6.0 * yb10) + 3.0 * xb10 * (yb2 - 17.0 * yb4 + 21.0 * yb6 - 11.0 * yb8 + 6.0 * yb10)
                     - 8.0 * 1.0i * xb3 * (-1.0 + 6.0 * yb2 + 309.0 * yb4 - 769.0 * yb6 + 128.0 * yb8 + 327.0 * yb10) - 8.0 * 1.0i * xb7 * (-1.0 + 6.0 * yb2 + 309.0 * yb4 - 769.0 * yb6 + 128.0 * yb8 + 327.0 * yb10)
@@ -386,8 +397,10 @@ namespace eos
                     + 4.0 * xb6 * (16.0 - 112.0 * yb + 147.0 * yb2 - 1564.0 * yb3 + 890.0 * yb4 - 15759.0 * yb5 + 232.0 * yb6 - 4387.0 * yb7 - 5850.0 * yb8 + 7907.0 * yb9 - 3627.0 * yb10 + 22107.0 * yb11)
                     + 4.0 * xb10 * (16.0 - 112.0 * yb + 147.0 * yb2 - 1564.0 * yb3 + 890.0 * yb4 - 15759.0 * yb5 + 232.0 * yb6 - 4387.0 * yb7 - 5850.0 * yb8 + 7907.0 * yb9 - 3627.0 * yb10 + 22107.0 * yb11)
                     - 2.0 * xb8 * (-64.0 + 464.0 * yb - 600.0 * yb2 - 478.0 * yb3 - 2928.0 * yb4 - 4461.0 * yb5 + 288.0 * yb6 - 65749.0 * yb7 + 21168.0 * yb8 - 15767.0 * yb9 + 14904.0 * yb10 + 53223.0 * yb11)));
+            // clang-format on
             const complex<double> num6 = 8.0 * (-1.0 + 3.0 * yb2);
             const complex<double> num7 = 8.0 - 24.0 * yb2;
+            // clang-format off
             const complex<double> num8 = 4.0 * xb2 * (-4.0 * xb2 * yb * (96.0 * xb3 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 288.0 * xb5 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 288.0 * xb7 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 96.0 * xb9 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 6.0 * xb2 * yb4 * (35.0 - 217.0 * yb2 + 89.0 * yb4 + 93.0 * yb6)
                     + 6.0 * xb10 * yb4 * (35.0 - 217.0 * yb2 + 89.0 * yb4 + 93.0 * yb6) + 3.0 * yb2 * (-2.0 - 3.0 * yb2 + 5.0 * yb4 - 9.0 * yb6 + 9.0 * yb8) + 3.0 * xb12 * yb2 * (-2.0 - 3.0 * yb2 + 5.0 * yb4 - 9.0 * yb6 + 9.0 * yb8)
                     + xb4 * (32.0 + 502.0 * yb2 + 14553.0 * yb4 - 11359.0 * yb6 + 235.0 * yb8 - 3963.0 * yb10) + xb8 * (32.0 + 502.0 * yb2 + 14553.0 * yb4 - 11359.0 * yb6 + 235.0 * yb8 - 3963.0 * yb10)
@@ -498,15 +511,31 @@ namespace eos
                     - 4.0 * xb12 * (-4.0 + 18.0 * yb - 51.0 * yb2 - 81.0 * yb3 + 186.0 * yb4 - 2496.0 * yb5 + 756.0 * yb6 + 1482.0 * yb7 - 54.0 * yb8 - 1418.0 * yb9 + 1215.0 * yb10 + 447.0 * yb11)
                     + 4.0 * xb6 * (-32.0 - 223.0 * yb - 294.0 * yb2 - 3379.0 * yb3 - 1818.0 * yb4 - 34122.0 * yb5 - 534.0 * yb6 - 22834.0 * yb7 + 11826.0 * yb8 - 11895.0 * yb9 + 7236.0 * yb10 + 23301.0 * yb11)
                     + 4.0 * xb10 * (-32.0 - 223.0 * yb - 294.0 * yb2 - 3379.0 * yb3 - 1818.0 * yb4 - 34122.0 * yb5 - 534.0 * yb6 - 22834.0 * yb7 + 11826.0 * yb8 - 11895.0 * yb9 + 7236.0 * yb10 + 23301.0 * yb11)));
-            const complex<double> num10 = (-4.0 * xb2 - 4.0 * tb2 * xb2 + tb * (1.0 - 6.0 * xb2 + xb4)) * (1.0 + yb) * (3.0 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2) + 3.0 * xb8 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2)
-                 - 4.0 * xb2 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8 + 177.0 * yb9) - 4.0 * xb6 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8
-                   + 177.0 * yb9) + xb4 * (16.0 + 88.0 * yb + 62.0 * yb2 + 572.0 * yb3 + 8.0 * yb4 + 2692.0 * yb5 - 3044.0 * yb6 - 284.0 * yb7 - 4504.0 * yb8 - 1020.0 * yb9 - 2778.0 * yb10));
-            const complex<double> num11 = (4.0 * xb2 + 4.0 * tb2 * xb2 - tb * (1.0 - 6.0 * xb2 + xb4)) * (1.0 + yb) * (3.0 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2) + 3.0 * xb8 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2)
-                 - 4.0 * xb2 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8 + 177.0 * yb9) - 4.0 * xb6 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8
-                   + 177.0 * yb9) + xb4 * (16.0 + 88.0 * yb + 62.0 * yb2 + 572.0 * yb3 + 8.0 * yb4 + 2692.0 * yb5 - 3044.0 * yb6 - 284.0 * yb7 - 4504.0 * yb8 - 1020.0 * yb9 - 2778.0 * yb10));
-            const complex<double> num12 = (4.0 * xb2 + 4.0 * vb2 * xb2 + vb * (1.0 - 6.0 * xb2 + xb4)) * (-1.0 + yb) * (3.0 * power_of<4>(-1.0 + yb) * yb2 * power_of<2>(1.0 + yb) * (-1.0 + 3.0 * yb2) + 3.0 * xb8 * power_of<4>(-1.0 + yb) * yb2 * power_of<2>(1.0 + yb) * (-1.0 + 3.0 * yb2)
-                 - 4.0 * xb2 * yb * (1.0 + yb + 6.0 * yb2 - 32.0 * yb3 + 436.0 * yb4 + 366.0 * yb5 + 130.0 * yb6 + 256.0 * yb7 + 195.0 * yb8 + 177.0 * yb9) - 4.0 * xb6 * yb * (1.0 + yb + 6.0 * yb2 - 32.0 * yb3 + 436.0 * yb4 + 366.0 * yb5 + 130.0 * yb6 + 256.0 * yb7 + 195.0 * yb8
-                   + 177.0 * yb9) - 2.0 * xb4 * (-8.0 + 44.0 * yb - 31.0 * yb2 + 286.0 * yb3 - 4.0 * yb4 + 1346.0 * yb5 + 1522.0 * yb6 - 142.0 * yb7 + 2252.0 * yb8 - 510.0 * yb9 + 1389.0 * yb10));
+            // clang-format on
+            const complex<double> num10 =
+                    (-4.0 * xb2 - 4.0 * tb2 * xb2 + tb * (1.0 - 6.0 * xb2 + xb4)) * (1.0 + yb)
+                    * (3.0 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2)
+                       + 3.0 * xb8 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2)
+                       - 4.0 * xb2 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8 + 177.0 * yb9)
+                       - 4.0 * xb6 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8 + 177.0 * yb9)
+                       + xb4 * (16.0 + 88.0 * yb + 62.0 * yb2 + 572.0 * yb3 + 8.0 * yb4 + 2692.0 * yb5 - 3044.0 * yb6 - 284.0 * yb7 - 4504.0 * yb8 - 1020.0 * yb9 - 2778.0 * yb10));
+            const complex<double> num11 =
+                    (4.0 * xb2 + 4.0 * tb2 * xb2 - tb * (1.0 - 6.0 * xb2 + xb4)) * (1.0 + yb)
+                    * (3.0 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2)
+                       + 3.0 * xb8 * power_of<2>(-1.0 + yb) * yb2 * power_of<4>(1.0 + yb) * (-1.0 + 3.0 * yb2)
+                       - 4.0 * xb2 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8 + 177.0 * yb9)
+                       - 4.0 * xb6 * yb * (-1.0 + yb - 6.0 * yb2 - 32.0 * yb3 - 436.0 * yb4 + 366.0 * yb5 - 130.0 * yb6 + 256.0 * yb7 - 195.0 * yb8 + 177.0 * yb9)
+                       + xb4 * (16.0 + 88.0 * yb + 62.0 * yb2 + 572.0 * yb3 + 8.0 * yb4 + 2692.0 * yb5 - 3044.0 * yb6 - 284.0 * yb7 - 4504.0 * yb8 - 1020.0 * yb9 - 2778.0 * yb10));
+            const complex<double> num12 =
+                    (4.0 * xb2 + 4.0 * vb2 * xb2 + vb * (1.0 - 6.0 * xb2 + xb4)) * (-1.0 + yb)
+                    * (3.0 * power_of<4>(-1.0 + yb) * yb2 * power_of<2>(1.0 + yb) * (-1.0 + 3.0 * yb2)
+                       + 3.0 * xb8 * power_of<4>(-1.0 + yb) * yb2 * power_of<2>(1.0 + yb) * (-1.0 + 3.0 * yb2)
+                       - 4.0 * xb2 * yb * (1.0 + yb + 6.0 * yb2 - 32.0 * yb3 + 436.0 * yb4 + 366.0 * yb5 + 130.0 * yb6 + 256.0 * yb7 + 195.0 * yb8 + 177.0 * yb9)
+                       - 4.0 * xb6 * yb * (1.0 + yb + 6.0 * yb2 - 32.0 * yb3 + 436.0 * yb4 + 366.0 * yb5 + 130.0 * yb6 + 256.0 * yb7 + 195.0 * yb8 + 177.0 * yb9)
+                       - 2.0 * xb4
+                                 * (-8.0 + 44.0 * yb - 31.0 * yb2 + 286.0 * yb3 - 4.0 * yb4 + 1346.0 * yb5 + 1522.0 * yb6 - 142.0 * yb7 + 2252.0 * yb8 - 510.0 * yb9
+                                    + 1389.0 * yb10));
+            // clang-format off
             const complex<double> num13 = -4.0 * xb2 * (-4.0 * xb2 * yb * (96.0 * xb3 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 288.0 * xb5 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 288.0 * xb7 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 96.0 * xb9 * yb2 * power_of<4>(1.0 + 3.0 * yb2) + 6.0 * xb2 * yb4 * (35.0 - 217.0 * yb2 + 89.0 * yb4 + 93.0 * yb6)
                     + 6.0 * xb10 * yb4 * (35.0 - 217.0 * yb2 + 89.0 * yb4 + 93.0 * yb6) + 3.0 * yb2 * (-2.0 - 3.0 * yb2 + 5.0 * yb4 - 9.0 * yb6 + 9.0 * yb8) + 3.0 * xb12 * yb2 * (-2.0 - 3.0 * yb2 + 5.0 * yb4 - 9.0 * yb6 + 9.0 * yb8)
                     + xb4 * (32.0 + 502.0 * yb2 + 14553.0 * yb4 - 11359.0 * yb6 + 235.0 * yb8 - 3963.0 * yb10) + xb8 * (32.0 + 502.0 * yb2 + 14553.0 * yb4 - 11359.0 * yb6 + 235.0 * yb8 - 3963.0 * yb10)
@@ -617,38 +646,63 @@ namespace eos
                     - 4.0 * xb12 * (-4.0 + 18.0 * yb - 51.0 * yb2 - 81.0 * yb3 + 186.0 * yb4 - 2496.0 * yb5 + 756.0 * yb6 + 1482.0 * yb7 - 54.0 * yb8 - 1418.0 * yb9 + 1215.0 * yb10 + 447.0 * yb11)
                     + 4.0 * xb6 * (-32.0 - 223.0 * yb - 294.0 * yb2 - 3379.0 * yb3 - 1818.0 * yb4 - 34122.0 * yb5 - 534.0 * yb6 - 22834.0 * yb7 + 11826.0 * yb8 - 11895.0 * yb9 + 7236.0 * yb10 + 23301.0 * yb11)
                     + 4.0 * xb10 * (-32.0 - 223.0 * yb - 294.0 * yb2 - 3379.0 * yb3 - 1818.0 * yb4 - 34122.0 * yb5 - 534.0 * yb6 - 22834.0 * yb7 + 11826.0 * yb8 - 11895.0 * yb9 + 7236.0 * yb10 + 23301.0 * yb11)));
-            const complex<double> num15 = power_of<4>(1.0 + xb2) * power_of<2>(-1.0 + yb2) * (1.0 - 4.0 * yb2 + 3.0 * yb4 + xb4 * (1.0 - 4.0 * yb2 + 3.0 * yb4) + 2.0 * xb2 * (-5.0 + 80.0 * yb2 + 21.0 * yb4));
+            // clang-format on
+            const complex<double> num15 = power_of<4>(1.0 + xb2) * power_of<2>(-1.0 + yb2)
+                                          * (1.0 - 4.0 * yb2 + 3.0 * yb4 + xb4 * (1.0 - 4.0 * yb2 + 3.0 * yb4) + 2.0 * xb2 * (-5.0 + 80.0 * yb2 + 21.0 * yb4));
 
             const complex<double> denom0 = 81.0 * yb3;
-            const complex<double> denom1 = 648.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb) * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
-            const complex<double> denom2 = 1296.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb) * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
-            const complex<double> denom3 = 324.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(xb + 3.0 * xb * yb2);
-            const complex<double> denom4 = 324.0 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(xb + 3.0 * xb * yb2);
-            const complex<double> denom5 = 432.0 * xb6 * power_of<4>(1.0 + 3.0 * yb2);
-            const complex<double> denom6 = 324.0 * xb6 * yb3 * power_of<4>(1.0 + 3.0 * yb2);
-            const complex<double> denom7 = 81.0 * xb4 * power_of<2>(1.0 + 3.0 * yb2);
-            const complex<double> denom8 = 81.0 * xb6 * power_of<4>(1.0 + 3.0 * yb2);
-            const complex<double> denom9 = 486.0 * xb4 * power_of<3>(yb + 3.0 * yb3);
+            const complex<double> denom1 = 648.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb)
+                                           * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
+            const complex<double> denom2 = 1296.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb)
+                                           * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
+            const complex<double> denom3  = 324.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(xb + 3.0 * xb * yb2);
+            const complex<double> denom4  = 324.0 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(xb + 3.0 * xb * yb2);
+            const complex<double> denom5  = 432.0 * xb6 * power_of<4>(1.0 + 3.0 * yb2);
+            const complex<double> denom6  = 324.0 * xb6 * yb3 * power_of<4>(1.0 + 3.0 * yb2);
+            const complex<double> denom7  = 81.0 * xb4 * power_of<2>(1.0 + 3.0 * yb2);
+            const complex<double> denom8  = 81.0 * xb6 * power_of<4>(1.0 + 3.0 * yb2);
+            const complex<double> denom9  = 486.0 * xb4 * power_of<3>(yb + 3.0 * yb3);
             const complex<double> denom10 = 324.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
             const complex<double> denom11 = 324.0 * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
-            const complex<double> denom12 = 324.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb) * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
+            const complex<double> denom12 = 324.0 * (tb * power_of<2>(-1.0 + xb) - 2.0 * xb) * xb6 * (vb * power_of<2>(-1.0 + xb) + 2.0 * xb)
+                                            * (2.0 * xb + tb * power_of<2>(1.0 + xb)) * (-2.0 * xb + vb * power_of<2>(1.0 + xb)) * yb3 * power_of<4>(1.0 + 3.0 * yb2);
             const complex<double> denom13 = (243.0 * yb3) / 16.0;
 
-            const complex<double> logs1 = 3.0 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2 + 3.0 * xb12 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2 + 18.0 * xb2 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
-                + 18.0 * xb10 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2 + 9.0 * xb4 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2 + 9.0 * xb8 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
-                + 4.0 * xb6 * (16.0 + 144.0 * yb2 + 288.0 * yb4 - 864.0 * yb6 - 3888.0 * yb8 - 3888.0 * yb10 - 39.0 * yb3 * ln2 + 774.0 * yb5 * ln2 - 1224.0 * yb7 * ln2 + 282.0 * yb9 * ln2 + 207.0 * yb11 * ln2);
-            const complex<double> logs2 = 3.0 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2 + 3.0 * xb12 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2 + 18.0 * xb2 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
-                + 18.0 * xb10 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2 + 9.0 * xb4 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2 + 9.0 * xb8 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
-                + 4.0 * xb6 * (-16.0 - 144.0 * yb2 - 288.0 * yb4 + 864.0 * yb6 + 3888.0 * yb8 + 3888.0 * yb10 - 39.0 * yb3 * ln2 + 774.0 * yb5 * ln2 - 1224.0 * yb7 * ln2 + 282.0 * yb9 * ln2 + 207.0 * yb11 * ln2);
-            const complex<double> logs3 = 3.0 * (-1.0 + yb2) + 3.0 * xb8 * (-1.0 + yb2) - 4.0 * xb2 * (4.0 - 7.0 * yb2 + 3.0 * yb4) - 4.0 * xb6 * (4.0 - 7.0 * yb2 + 3.0 * yb4) + 2.0 * xb4 * (-13.0 + 64.0 * ln2 + 12.0 * yb4 * (-1.0 + 48.0 * ln2) + yb2 * (25.0 + 384.0 * ln2));
-            const complex<double> logs4 = -18.0 * yb2 * ln2 + 36.0 * yb4 * ln2 - 30.0 * yb6 * ln2 + 9.0 * yb8 * ln2 + 18.0 * xb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2 + 18.0 * xb10 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
-                + 9.0 * xb4 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2 + 9.0 * xb8 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
-                + 4.0 * xb6 * (-16.0 - 39.0 * ln2 - 72.0 * yb4 * (12.0 + 17.0 * ln2) + 9.0 * yb8 * (-144.0 + 23.0 * ln2) + 6.0 * yb6 * (-288.0 + 47.0 * ln2) + 6.0 * yb2 * (-32.0 + 129.0 * ln2)) + log(8.0)
-                + xb12 * (-18.0 * yb2 * ln2 + 36.0 * yb4 * ln2 - 30.0 * yb6 * ln2 + 9.0 * yb8 * ln2 + log(8.0));
-            const complex<double> logs5 = 9.0 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) + 9.0 * xb8 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) - 12.0 * xb2 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6) - 12.0 * xb6 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6)
-                - 2.0 * xb4 * (-543.0 * yb4 - 3.0 * yb2 * (103.0 + 192.0 * ln2) + 9.0 * yb8 * (607.0 + 864.0 * ln2) + yb6 * (5181.0 + 5184.0 * ln2) - 32.0 * (2.0 + log(8.0)));
-            const complex<double> logs6 = -9.0 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) - 9.0 * xb8 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) + 12.0 * xb2 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6) + 12.0 * xb6 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6)
-                + 2.0 * xb4 * (-543.0 * yb4 - 3.0 * yb2 * (103.0 + 192.0 * ln2) + 9.0 * yb8 * (607.0 + 864.0 * ln2) + yb6 * (5181.0 + 5184.0 * ln2) - 32.0 * (2.0 + log(8.0)));
+            const complex<double> logs1 = 3.0 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2 + 3.0 * xb12 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2
+                                          + 18.0 * xb2 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
+                                          + 18.0 * xb10 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
+                                          + 9.0 * xb4 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
+                                          + 9.0 * xb8 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
+                                          + 4.0 * xb6
+                                                    * (16.0 + 144.0 * yb2 + 288.0 * yb4 - 864.0 * yb6 - 3888.0 * yb8 - 3888.0 * yb10 - 39.0 * yb3 * ln2 + 774.0 * yb5 * ln2
+                                                       - 1224.0 * yb7 * ln2 + 282.0 * yb9 * ln2 + 207.0 * yb11 * ln2);
+            const complex<double> logs2 = 3.0 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2 + 3.0 * xb12 * yb3 * power_of<3>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) * ln2
+                                          + 18.0 * xb2 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
+                                          + 18.0 * xb10 * yb3 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
+                                          + 9.0 * xb4 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
+                                          + 9.0 * xb8 * yb3 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
+                                          + 4.0 * xb6
+                                                    * (-16.0 - 144.0 * yb2 - 288.0 * yb4 + 864.0 * yb6 + 3888.0 * yb8 + 3888.0 * yb10 - 39.0 * yb3 * ln2 + 774.0 * yb5 * ln2
+                                                       - 1224.0 * yb7 * ln2 + 282.0 * yb9 * ln2 + 207.0 * yb11 * ln2);
+            const complex<double> logs3 = 3.0 * (-1.0 + yb2) + 3.0 * xb8 * (-1.0 + yb2) - 4.0 * xb2 * (4.0 - 7.0 * yb2 + 3.0 * yb4) - 4.0 * xb6 * (4.0 - 7.0 * yb2 + 3.0 * yb4)
+                                          + 2.0 * xb4 * (-13.0 + 64.0 * ln2 + 12.0 * yb4 * (-1.0 + 48.0 * ln2) + yb2 * (25.0 + 384.0 * ln2));
+            const complex<double> logs4 =
+                    -18.0 * yb2 * ln2 + 36.0 * yb4 * ln2 - 30.0 * yb6 * ln2 + 9.0 * yb8 * ln2 + 18.0 * xb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2
+                    + 18.0 * xb10 * power_of<2>(-1.0 + yb2) * (-1.0 + 24.0 * yb2 + 9.0 * yb4) * ln2 + 9.0 * xb4 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
+                    + 9.0 * xb8 * power_of<2>(-1.0 + yb2) * (-11.0 + 204.0 * yb2 + 63.0 * yb4) * ln2
+                    + 4.0 * xb6
+                              * (-16.0 - 39.0 * ln2 - 72.0 * yb4 * (12.0 + 17.0 * ln2) + 9.0 * yb8 * (-144.0 + 23.0 * ln2) + 6.0 * yb6 * (-288.0 + 47.0 * ln2)
+                                 + 6.0 * yb2 * (-32.0 + 129.0 * ln2))
+                    + log(8.0) + xb12 * (-18.0 * yb2 * ln2 + 36.0 * yb4 * ln2 - 30.0 * yb6 * ln2 + 9.0 * yb8 * ln2 + log(8.0));
+            const complex<double> logs5 =
+                    9.0 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) + 9.0 * xb8 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2)
+                    - 12.0 * xb2 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6) - 12.0 * xb6 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6)
+                    - 2.0 * xb4 * (-543.0 * yb4 - 3.0 * yb2 * (103.0 + 192.0 * ln2) + 9.0 * yb8 * (607.0 + 864.0 * ln2) + yb6 * (5181.0 + 5184.0 * ln2) - 32.0 * (2.0 + log(8.0)));
+            const complex<double> logs6 =
+                    -9.0 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2) - 9.0 * xb8 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 3.0 * yb2)
+                    + 12.0 * xb2 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6) + 12.0 * xb6 * yb2 * (-3.0 - 163.0 * yb2 + 151.0 * yb4 + 15.0 * yb6)
+                    + 2.0 * xb4 * (-543.0 * yb4 - 3.0 * yb2 * (103.0 + 192.0 * ln2) + 9.0 * yb8 * (607.0 + 864.0 * ln2) + yb6 * (5181.0 + 5184.0 * ln2) - 32.0 * (2.0 + log(8.0)));
+            // clang-format off
             const complex<double> logs7 = -4.0 * xb2 * (2.0 * xb6 * (8.0 + 52.0 * yb + 75.0 * yb2 + 290.0 * yb4 - 176.0 * yb6 - 2394.0 * yb8 - 1899.0 * yb10 + yb3 * (317.0 - 78.0 * ln2) + 18.0 * yb5 * (75.0 + 86.0 * ln2) + 3.0 * yb11 * (-463.0 + 138.0 * ln2) - 16.0 * yb7 * (104.0 + 153.0 * ln2)
                     + yb9 * (-2762.0 + 564.0 * ln2)) + xb4 * yb * (-1.0 + yb2) * (-4.0 - 152.0 * yb3 - 432.0 * yb5 + 72.0 * yb7 + 3.0 * yb2 * (-8.0 + 33.0 * ln2) + yb8 * (-708.0 + 567.0 * ln2) - 3.0 * yb4 * (632.0 + 645.0 * ln2) + yb6 * (-952.0 + 1269.0 * ln2))
                 + xb8 * yb * (-1.0 + yb2) * (-4.0 - 152.0 * yb3 - 432.0 * yb5 + 72.0 * yb7 + 3.0 * yb2 * (-8.0 + 33.0 * ln2) + yb8 * (-708.0 + 567.0 * ln2) - 3.0 * yb4 * (632.0 + 645.0 * ln2) + yb6 * (-952.0 + 1269.0 * ln2))
@@ -1273,10 +1327,19 @@ namespace eos
                 + yb3 * (-18.0 * yb2 * ln2 + 36.0 * yb4 * ln2 - 30.0 * yb6 * ln2 + 9.0 * yb8 * ln2 + log(8.0)) + xb12 * yb3 * (-18.0 * yb2 * ln2 + 36.0 * yb4 * ln2 - 30.0 * yb6 * ln2 + 9.0 * yb8 * ln2 + log(8.0))
                 + 6.0 * xb2 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 9.0 * yb4 - yb * (-3.0 + log(8.0)) + 8.0 * yb3 * (-1.0 + log(512.0)) + 3.0 * yb5 * (-1.0 + log(512.0))) + 6.0 * xb10 * yb2 * power_of<2>(-1.0 + yb2) * (-1.0 + 9.0 * yb4 - yb * (-3.0 + log(8.0)) + 8.0 * yb3 * (-1.0 + log(512.0))
                     + 3.0 * yb5 * (-1.0 + log(512.0))));
+            // clang-format on
 
-            const complex<double> term1 = -(64.0 * power_of<2>(lnmuhat)) / 81.0 + (1.0 / (1458.0 * xb4 * power_of<2>(yb + 3.0 * yb3))) * (27.0 * yb2 * (-1.0 + yb2) * (-1.0 + log(16.0)) + 27.0 * xb8 * yb2 * (-1.0 + yb2) * (-1.0 + log(16.0)) - 18.0 * xb2 * yb2 * (-1.0 + yb2) * (31.0 - 32.0 * ln2 + 3.0 * yb2 * (-7.0 + ln256))
-                - 18.0 * xb6 * yb2 * (-1.0 + yb2) * (31.0 - 32.0 * ln2 + 3.0 * yb2 * (-7.0 + ln256)) - 2.0 * xb4 * (-528.0 + yb4 * (4449.0 + 72.0 * pisqu - 900.0 * ln2 - 6912.0 * ln2squ) + yb2 * (-2029.0 + 12.0 * pisqu + 468.0 * ln2 - 1152.0 * ln2squ) + 36.0 * yb6 * (359.0 + 3.0 * pisqu - 288.0 * ln2squ + log(4096.0))));
+            const complex<double> term1 = -(64.0 * power_of<2>(lnmuhat)) / 81.0
+                                          + (1.0 / (1458.0 * xb4 * power_of<2>(yb + 3.0 * yb3)))
+                                                    * (27.0 * yb2 * (-1.0 + yb2) * (-1.0 + log(16.0)) + 27.0 * xb8 * yb2 * (-1.0 + yb2) * (-1.0 + log(16.0))
+                                                       - 18.0 * xb2 * yb2 * (-1.0 + yb2) * (31.0 - 32.0 * ln2 + 3.0 * yb2 * (-7.0 + ln256))
+                                                       - 18.0 * xb6 * yb2 * (-1.0 + yb2) * (31.0 - 32.0 * ln2 + 3.0 * yb2 * (-7.0 + ln256))
+                                                       - 2.0 * xb4
+                                                                 * (-528.0 + yb4 * (4449.0 + 72.0 * pisqu - 900.0 * ln2 - 6912.0 * ln2squ)
+                                                                    + yb2 * (-2029.0 + 12.0 * pisqu + 468.0 * ln2 - 1152.0 * ln2squ)
+                                                                    + 36.0 * yb6 * (359.0 + 3.0 * pisqu - 288.0 * ln2squ + log(4096.0))));
 
+            // clang-format off
             const complex<double> f29bpart1 = (32.0 * power_of<2>(log(xb))) / 81.0 + (num4 * dilog((-1.0i) * xb) + num2 * dilog(1.0i * xb) + (num3 * power_of<2>(log(1.0 - 1.0i * xb))) / 2.0 + (num5 * power_of<2>(log(1.0 + 1.0i * xb))) / 2.0 + num2 * log(1.0 - 1.0i * xb) * log(xb) + num4 * log(1.0 + 1.0i * xb) * log(xb)) / denom1
                 + ((num6 + num7) * li2half - num6 * dilog((1.0 - yb) / 2.0) - num7 * dilog((1.0 + yb) / 2.0) + (num6 * ln2 + num1 * log(xb)) * ln1myb + (num7 * power_of<2>(ln1myb)) / 2.0
                   + (num7 * ln2 + 2.0 * num6 * log(xb)) * ln1pyb + (num6 * power_of<2>(ln1pyb)) / 2.0) / denom0 + (-(num12 * dilog(-(vb / w4))) - num12 * dilog(w4 / (-1.0 + w4)) + num12 * dilog(w4 / (1.0 + w4))
@@ -1417,9 +1480,11 @@ namespace eos
                     + (4.0 * 1.0i) * M_PI * log(1.0 + 1.0i * wx4) * my_sign(real(wx4inv)) * T(1.0, 1.0 - 1.0i * xb, 1.0 + 1.0i * wx4) + (4.0 * 1.0i) * M_PI * log(1.0 - 1.0i * wx3) * my_sign(-real(wx3inv)) * T(1.0, 1.0 + 1.0i * xb, 1.0 - 1.0i * wx3)
                     + (4.0 * 1.0i) * M_PI * log(1.0 + 1.0i * wx3) * my_sign(real(wx3inv)) * T(1.0, 1.0 + 1.0i * xb, 1.0 + 1.0i * wx3) + (4.0 * 1.0i) * M_PI * log(1.0 - 1.0i * wx4) * my_sign(-real(wx4inv)) * T(1.0, 1.0 + 1.0i * xb, 1.0 - 1.0i * wx4)
                     + (4.0 * 1.0i) * M_PI * log(1.0 + 1.0i * wx4) * my_sign(real(wx4inv)) * T(1.0, 1.0 + 1.0i * xb, 1.0 + 1.0i * wx4))) / denom5);
+            // clang-format on
 
-            const complex<double> f29bpart3 = - (num15 / denom5) * f279b_helper(clp);
+            const complex<double> f29bpart3 = -(num15 / denom5) * f279b_helper(clp);
 
+            // clang-format off
             const complex<double> f29bpart4 = ln2 * num15 * ((-16.0 * dilog(wx3 / (-1.0i + wx3)) - 16.0 * dilog(wx3 / (1.0i + wx3)) - 16.0 * dilog(wx4 / (-1.0i + wx4)) - 16.0 * dilog(wx4 / (1.0i + wx4)) + 8.0 * dilog((wx3 - xb) / (-1.0i + wx3)) + 8.0 * dilog((wx3 - xb) / (1.0i + wx3))
                 + 8.0 * dilog((wx4 - xb) / (-1.0i + wx4)) + 8.0 * dilog((wx4 - xb) / (1.0i + wx4)) + 8.0 * dilog(-(xb / wx3)) + 8.0 * dilog(xb / wx3) + 8.0 * dilog(-(xb / wx4)) + 8.0 * dilog(xb / wx4) + 8.0 * dilog((wx3 + xb) / (-1.0i + wx3))
                 + 8.0 * dilog((wx3 + xb) / (1.0i + wx3)) + 8.0 * dilog((wx4 + xb) / (-1.0i + wx4)) + 8.0 * dilog((wx4 + xb) / (1.0i + wx4)) + (-4.0 * log(tb) - 4.0 * log(vb) + 4.0 * log(1.0 - tb / w7) + 4.0 * log((vb + w7) / w7)) * log(1.0 - 1.0i * xb)
@@ -1448,9 +1513,10 @@ namespace eos
                 + logs12 * dilog((1.0 + vb) / (1.0 - w7)) - logs13 * dilog(1.0 / (1.0 + w7)) + logs13 * dilog((1.0 - vb) / (1.0 + w7)) + logs12 * ln2 * log(1.0 - vb) + (logs13 * power_of<2>(log(1.0 - vb))) / 2.0 + logs14 * ln2 * log(1.0 + vb)
                 + (logs11 * power_of<2>(log(1.0 + vb))) / 2.0 + logs12 * log(1.0 + vb) * log((vb + w7) / (-1.0 + w7)) + logs13 * log(1.0 - vb) * log((vb + w7) / (1.0 + w7)) + (logs21 * log(1.0 - vb) + logs22 * log(1.0 + vb)) * log(1.0 - 1.0i * xb)
                 + (logs21 * log(1.0 - vb) + logs22 * log(1.0 + vb)) * log(1.0 + 1.0i * xb) + (2.0 * 1.0i) * logs13 * M_PI * log(1.0 + w7) * my_sign(-imag(w7inv)) * T(1.0, 1.0 - vb, 1.0 + w7) + (2.0 * 1.0i) * logs12 * M_PI * log(1.0 - w7) * my_sign(imag(w7inv)) * T(1.0, 1.0 + vb, 1.0 - w7)) / denom11;
+            // clang-format on
 
             return f29bpart1 + f29bpart2 + f29bpart3 + f29bpart4 + f29bpart5;
         }
 
-    }
-}
+    } // namespace agv_2019a
+} // namespace eos

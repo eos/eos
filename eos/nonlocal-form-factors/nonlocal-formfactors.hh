@@ -39,23 +39,18 @@ namespace eos
      * Provides the hadronic matrix element of the non-local operator T{ cbar gamma^mu c(x), C_1 O_1 + C_2 O_2 }.
      * We decompose this matrix element as in [BCvDV:2017A], eq. (4).
      */
-    template <typename Transition_>
-    class NonlocalFormFactor;
+    template <typename Transition_> class NonlocalFormFactor;
 
-    template <typename Transition_>
-    using NonlocalFormFactorPtr = std::shared_ptr<NonlocalFormFactor<Transition_>>;
+    template <typename Transition_> using NonlocalFormFactorPtr = std::shared_ptr<NonlocalFormFactor<Transition_>>;
 
     /**
      * Pseudoobservable in order to expose the nonlocal formfactor, see NonlocalFormFactor.
      */
-    template <typename Process_, typename Transition_>
-    class NonlocalFormFactorObservable;
+    template <typename Process_, typename Transition_> class NonlocalFormFactorObservable;
 
     // P -> P
 
-    template <>
-    class NonlocalFormFactor<PToP> :
-        public ParameterUser
+    template <> class NonlocalFormFactor<PToP> : public ParameterUser
     {
         protected:
             ///@name Stubs to throw InternalError whenever an implementation without residues is called.
@@ -78,40 +73,52 @@ namespace eos
             ///@name Evaluate the formfactor at arbitrary q2 values.
             ///@{
 
-            virtual complex<double> H_plus(const double & q2) const = 0;
+            virtual complex<double> H_plus(const double & q2) const          = 0;
             virtual complex<double> H_plus(const complex<double> & q2) const = 0;
-            virtual complex<double> Hhat_plus(const double & q2) const = 0;
+            virtual complex<double> Hhat_plus(const double & q2) const       = 0;
 
             ///@}
 
             ///@name Evaluate the first normalized moment of the formfactor.
             ///@{
 
-            virtual complex<double> normalized_moment_A(const double &) const { return moments_not_implemented(); };
+            virtual complex<double>
+            normalized_moment_A(const double &) const
+            {
+                return moments_not_implemented();
+            }
 
             ///@}
 
             ///@name Ratio between non local and local formfactors
             ///@{
 
-            virtual complex<double> ratio_plus(const double & q2) const = 0;
-            virtual complex<double> ratio_plus(const complex<double> & q2) const = 0;
+            virtual complex<double> ratio_plus(const double & q2) const            = 0;
+            virtual complex<double> ratio_plus(const complex<double> & q2) const   = 0;
             virtual complex<double> F_ratio_plus(const complex<double> & q2) const = 0;
-            virtual complex<double> P_ratio_plus(const double & q2) const = 0;
+            virtual complex<double> P_ratio_plus(const double & q2) const          = 0;
 
             ///@}
 
             ///@name Evaluate the residue of the formfactor on the J/psi pole.
             ///@{
 
-            virtual complex<double> H_plus_residue_jpsi() const { return jpsi_residues_not_implemented(); };
+            virtual complex<double>
+            H_plus_residue_jpsi() const
+            {
+                return jpsi_residues_not_implemented();
+            }
 
             ///@}
 
             ///@name Evaluate the residue of the formfactor on the psi(2S) pole.
             ///@{
 
-            virtual complex<double> H_plus_residue_psi2s() const { return psi2s_residues_not_implemented(); };
+            virtual complex<double>
+            H_plus_residue_psi2s() const
+            {
+                return psi2s_residues_not_implemented();
+            }
 
             ///@}
 
@@ -119,10 +126,10 @@ namespace eos
             ///@{
 
             virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const = 0;
-            virtual double weak_bound() const = 0;
-            virtual double strong_bound() const = 0;
-            virtual double weak_bound_log_likelihood() const = 0;
-            virtual double strong_bound_log_likelihood() const = 0;
+            virtual double          weak_bound() const                                     = 0;
+            virtual double          strong_bound() const                                   = 0;
+            virtual double          weak_bound_log_likelihood() const                      = 0;
+            virtual double          strong_bound_log_likelihood() const                    = 0;
 
             ///@}
 
@@ -136,9 +143,7 @@ namespace eos
     };
 
     template <typename Process_>
-    class NonlocalFormFactorObservable<Process_, PToP> :
-        public ParameterUser,
-        public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToP>>
+    class NonlocalFormFactorObservable<Process_, PToP> : public ParameterUser, public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToP>>
     {
         public:
             ///@name Basic operations
@@ -213,9 +218,7 @@ namespace eos
 
     // P -> V
 
-    template <>
-    class NonlocalFormFactor<PToV> :
-        public ParameterUser
+    template <> class NonlocalFormFactor<PToV> : public ParameterUser
     {
         protected:
             ///@name Stubs to throw InternalError whenever an implementation without residues is called.
@@ -238,26 +241,39 @@ namespace eos
             ///@name Evaluate the formfactor at arbitrary q2 values.
             ///@{
 
-            virtual complex<double> H_perp(const double & q2) const = 0;
+            virtual complex<double> H_perp(const double & q2) const    = 0;
             virtual complex<double> Hhat_perp(const double & q2) const = 0;
-            virtual complex<double> H_para(const double & q2) const = 0;
+            virtual complex<double> H_para(const double & q2) const    = 0;
             virtual complex<double> Hhat_para(const double & q2) const = 0;
-            virtual complex<double> H_long(const double & q2) const = 0;
+            virtual complex<double> H_long(const double & q2) const    = 0;
             virtual complex<double> Hhat_long(const double & q2) const = 0;
 
             virtual complex<double> H_perp(const complex<double> & q2) const = 0;
             virtual complex<double> H_para(const complex<double> & q2) const = 0;
             virtual complex<double> H_long(const complex<double> & q2) const = 0;
 
-
             ///@}
 
             ///@name Evaluate the first normalized moment of the formfactor.
             ///@{
 
-            virtual complex<double> normalized_moment_V1(const double & /*q2*/) const { return moments_not_implemented(); };
-            virtual complex<double> normalized_moment_V2(const double & /*q2*/) const { return moments_not_implemented(); };
-            virtual complex<double> normalized_moment_V23(const double & /*q2*/) const { return moments_not_implemented(); };
+            virtual complex<double>
+            normalized_moment_V1(const double & /*q2*/) const
+            {
+                return moments_not_implemented();
+            }
+
+            virtual complex<double>
+            normalized_moment_V2(const double & /*q2*/) const
+            {
+                return moments_not_implemented();
+            }
+
+            virtual complex<double>
+            normalized_moment_V23(const double & /*q2*/) const
+            {
+                return moments_not_implemented();
+            }
 
             ///@}
 
@@ -283,18 +299,46 @@ namespace eos
             ///@name Evaluate the residue of the formfactor on the J/psi pole.
             ///@{
 
-            virtual complex<double> H_perp_residue_jpsi() const { return jpsi_residues_not_implemented(); };
-            virtual complex<double> H_para_residue_jpsi() const { return jpsi_residues_not_implemented(); };
-            virtual complex<double> H_long_residue_jpsi() const { return jpsi_residues_not_implemented(); };
+            virtual complex<double>
+            H_perp_residue_jpsi() const
+            {
+                return jpsi_residues_not_implemented();
+            }
+
+            virtual complex<double>
+            H_para_residue_jpsi() const
+            {
+                return jpsi_residues_not_implemented();
+            }
+
+            virtual complex<double>
+            H_long_residue_jpsi() const
+            {
+                return jpsi_residues_not_implemented();
+            }
 
             ///@}
 
             ///@name Evaluate the residue of the formfactor on the psi(2S) pole.
             ///@{
 
-            virtual complex<double> H_perp_residue_psi2s() const { return psi2s_residues_not_implemented(); };
-            virtual complex<double> H_para_residue_psi2s() const { return psi2s_residues_not_implemented(); };
-            virtual complex<double> H_long_residue_psi2s() const { return psi2s_residues_not_implemented(); };
+            virtual complex<double>
+            H_perp_residue_psi2s() const
+            {
+                return psi2s_residues_not_implemented();
+            }
+
+            virtual complex<double>
+            H_para_residue_psi2s() const
+            {
+                return psi2s_residues_not_implemented();
+            }
+
+            virtual complex<double>
+            H_long_residue_psi2s() const
+            {
+                return psi2s_residues_not_implemented();
+            }
 
             ///@}
 
@@ -304,10 +348,10 @@ namespace eos
             virtual complex<double> get_orthonormal_perp_coefficients(const unsigned & i) const = 0;
             virtual complex<double> get_orthonormal_para_coefficients(const unsigned & i) const = 0;
             virtual complex<double> get_orthonormal_long_coefficients(const unsigned & i) const = 0;
-            virtual double weak_bound() const = 0;
-            virtual double strong_bound() const = 0;
-            virtual double weak_bound_log_likelihood() const = 0;
-            virtual double strong_bound_log_likelihood() const = 0;
+            virtual double          weak_bound() const                                          = 0;
+            virtual double          strong_bound() const                                        = 0;
+            virtual double          weak_bound_log_likelihood() const                           = 0;
+            virtual double          strong_bound_log_likelihood() const                         = 0;
 
             ///@}
 
@@ -321,9 +365,7 @@ namespace eos
     };
 
     template <typename Process_>
-    class NonlocalFormFactorObservable<Process_, PToV> :
-        public ParameterUser,
-        public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToV>>
+    class NonlocalFormFactorObservable<Process_, PToV> : public ParameterUser, public PrivateImplementationPattern<NonlocalFormFactorObservable<Process_, PToV>>
     {
         public:
             ///@name Basic operations
@@ -439,11 +481,11 @@ namespace eos
         complex<double> blaschke_cc(const complex<double> & z, const complex<double> & z_Jpsi, const complex<double> & z_psi2S);
 
         // Expansion in normalized z monomials (they form a basis on the unit circle)
-        template <unsigned order_>
-        complex<double> P(const complex<double> & z, const std::array<complex<double>, order_ + 1u> alpha);
+        template <unsigned order_> complex<double> P(const complex<double> & z, const std::array<complex<double>, order_ + 1u> alpha);
 
         template <unsigned order_>
-        complex<double> P(const complex<double> & z, const std::array<complex<double>, order_ + 1u> alpha)
+        complex<double>
+        P(const complex<double> & z, const std::array<complex<double>, order_ + 1u> alpha)
         {
             complex<double> result = alpha[order_];
 
@@ -452,14 +494,14 @@ namespace eos
                 result = alpha[i] + z * result;
             }
 
-            return 1.0 / sqrt(2*M_PI) * result;
+            return 1.0 / sqrt(2 * M_PI) * result;
         }
-    }
+    } // namespace nff_utils
 
     class PolynomialsFactory
     {
         public:
             static std::shared_ptr<SzegoPolynomial<5u>> create(const std::string & opt_q);
     };
-}
+} // namespace eos
 #endif

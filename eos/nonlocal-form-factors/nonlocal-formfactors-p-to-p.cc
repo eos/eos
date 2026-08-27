@@ -27,11 +27,11 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/stringify.hh>
 
+#include <gsl/gsl_blas.h>
+#include <gsl/gsl_matrix.h>
+
 #include <map>
 #include <numeric>
-
-#include <gsl/gsl_matrix.h>
-#include <gsl/gsl_blas.h>
 
 namespace eos
 {
@@ -41,94 +41,107 @@ namespace eos
     {
         struct BToK
         {
-            constexpr static const char * label = "B->K";
+                static const constexpr char * label = "B->K";
         };
-        constexpr const char * BToK::label;
-    }
+
+        const constexpr char * BToK::label;
+    } // namespace nff
 
     namespace nff_p_to_p
     {
-        class Naive :
-            public NonlocalFormFactor<PToP>
+        class Naive : public NonlocalFormFactor<PToP>
         {
             public:
-                Naive(const Parameters &, const Options &)
-                {
-                }
+                Naive(const Parameters &, const Options &) {}
 
                 ~Naive() = default;
 
-                virtual complex<double> H_plus(const double &) const
+                virtual complex<double>
+                H_plus(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> H_plus(const complex<double> &) const
+                virtual complex<double>
+                H_plus(const complex<double> &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> Hhat_plus(const double &) const
+                virtual complex<double>
+                Hhat_plus(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> ratio_plus(const double &) const
+                virtual complex<double>
+                ratio_plus(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> ratio_plus(const complex<double> &) const
+                virtual complex<double>
+                ratio_plus(const complex<double> &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> F_ratio_plus(const complex<double> &) const
+                virtual complex<double>
+                F_ratio_plus(const complex<double> &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> P_ratio_plus(const double &) const
+                virtual complex<double>
+                P_ratio_plus(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> get_orthonormal_coefficients(const unsigned &) const
+                virtual complex<double>
+                get_orthonormal_coefficients(const unsigned &) const
                 {
                     return 0.0;
                 }
 
-                virtual double weak_bound() const
+                virtual double
+                weak_bound() const
                 {
                     return 0.0;
                 }
 
-                virtual double strong_bound() const
+                virtual double
+                strong_bound() const
                 {
                     return 0.0;
                 }
 
-                virtual double weak_bound_log_likelihood() const
+                virtual double
+                weak_bound_log_likelihood() const
                 {
                     return 0.0;
                 }
 
-                virtual double strong_bound_log_likelihood() const
+                virtual double
+                strong_bound_log_likelihood() const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> normalized_moment_A(const double &) const
+                virtual complex<double>
+                normalized_moment_A(const double &) const
                 {
                     return 0.0;
                 }
 
-                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP>
+                make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<PToP>(new Naive(p, o));
                 }
 
-                virtual Diagnostics diagnostics() const
+                virtual Diagnostics
+                diagnostics() const
                 {
                     return {};
                 }
@@ -137,14 +150,12 @@ namespace eos
         /*
          * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020A].
          */
-        template <typename Process_>
-        class GvDV2020 :
-            public NonlocalFormFactor<PToP>
+        template <typename Process_> class GvDV2020 : public NonlocalFormFactor<PToP>
         {
             public:
                 std::shared_ptr<FormFactors<PToP>> form_factors;
 
-                //Polynomial expansion parameters
+                // Polynomial expansion parameters
                 UsedParameter re_alpha_0_plus;
                 UsedParameter im_alpha_0_plus;
                 UsedParameter re_alpha_1_plus;
@@ -221,7 +232,8 @@ namespace eos
 
                 ~GvDV2020() = default;
 
-                inline complex<double> phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
+                inline complex<double>
+                phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     // Values of a, b, c and d depends on the form factor:
                     // FF                        a    b    c    d
@@ -229,46 +241,50 @@ namespace eos
                     // perp(P->V) = par(P->V)    3    1    3    0
                     // 0(P->V) aka long          3    1    2    2
 
-                    const double m_P2  = power_of<2>(m_P);
-                    const double m_B2  = power_of<2>(m_B),  m_B4 =  power_of<4>(m_B);
+                    const double m_P2 = power_of<2>(m_P);
+                    const double m_B2 = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
                     const double m_D02 = power_of<2>(m_D0), m_D04 = power_of<4>(m_D0);
-                    const double s_0   = this->t_0();
-                    const auto   z     = eos::nff_utils::z(q2, 4.0 * power_of<2>(m_D0), s_0);
-                    const double Q2    = this->t_s();
-                    const double chi   = this->chiOPE();
+                    const double s_0 = this->t_0();
+                    const auto   z   = eos::nff_utils::z(q2, 4.0 * power_of<2>(m_D0), s_0);
+                    const double Q2  = this->t_s();
+                    const double chi = this->chiOPE();
 
                     const double a = phi_parameters[0], b = phi_parameters[1], c = phi_parameters[2], d = phi_parameters[3];
 
-                    const double Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
-                    const complex<double> phi1 = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5) /
-                                                (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
-                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2)) +
-                                                power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)), 0.5);//(C8)
-                    const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
-                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0*(z+1.)); //(C9)
-                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5); //(C10)
+                    const double          Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
+                    const complex<double> phi1    = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5)
+                                                 / (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
+                    const complex<double> phi2 =
+                            pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2))
+                                        + power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)),
+                                0.5); //(C8)
+                    const complex<double> phi3 =
+                            pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) / (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0 * (z + 1.)); //(C9)
+                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5);                                                               //(C10)
 
-                    return Nlambda * pow(1.+z, 0.5) * pow(1.-z, a-b+c+d-1.5) * pow(phi1, a) * pow(phi2, 0.5*b) * pow(phi3, c) * pow(phi4, d); //(C5)
+                    return Nlambda * pow(1. + z, 0.5) * pow(1. - z, a - b + c + d - 1.5) * pow(phi1, a) * pow(phi2, 0.5 * b) * pow(phi3, c) * pow(phi4, d); //(C5)
                 }
 
-                inline complex<double> phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
+                inline complex<double>
+                phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     return phi(complex<double>(q2, 0.0), phi_parameters);
                 }
 
                 // Residue of H at s = m_Jpsi2 computed as the residue wrt z -z_Jpsi divided by dz/ds evaluated at s = m_Jpsi2
-                inline complex<double> H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> & alpha) const
+                inline complex<double>
+                H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> & alpha) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(m_Jpsi2, s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
-                    const auto & polynomials_at_z = polynomials(z_Jpsi);
-                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
+                    const auto &          polynomials_at_z = polynomials(z_Jpsi);
+                    const complex<double> p_at_z           = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_Jpsi2, -0.5) * pow(pow(s_p - m_Jpsi2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
@@ -277,216 +293,208 @@ namespace eos
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
-                inline complex<double> H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> & alpha) const
+                inline complex<double>
+                H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, 7> & alpha) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(m_Jpsi2, s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
-                    const auto & polynomials_at_z = polynomials(z_psi2S);
-                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
+                    const auto &          polynomials_at_z = polynomials(z_psi2S);
+                    const complex<double> p_at_z           = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
                     const complex<double> dzds = -pow(s_p - s_0, 0.5) * pow(s_p - m_psi2S2, -0.5) * pow(pow(s_p - m_psi2S2, 0.5) + pow(s_p - s_0, 0.5), -2);
 
                     return p_at_z / phi(m_psi2S2, phi_parameters) * (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
-
-                virtual complex<double> H_plus(const complex<double> & q2) const
+                virtual complex<double>
+                H_plus(const complex<double> & q2) const
                 {
                     const std::array<complex<double>, 7> alpha{
-                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
-                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
-                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
-                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
-                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
-                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus), complex<double>(re_alpha_1_plus, im_alpha_1_plus), complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus), complex<double>(re_alpha_4_plus, im_alpha_4_plus), complex<double>(re_alpha_5_plus, im_alpha_5_plus),
                         complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2,                   s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi),  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi), s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
 
                     const complex<double> blaschke_factor = eos::nff_utils::blaschke_cc(z, z_Jpsi, z_psi2S);
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
-                    const auto & polynomials_at_z = polynomials(z);
-                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
+                    const auto &          polynomials_at_z = polynomials(z);
+                    const complex<double> p_at_z           = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
                     return p_at_z / phi(q2, phi_parameters) / blaschke_factor;
                 }
 
-                virtual complex<double> H_plus(const double & q2) const
+                virtual complex<double>
+                H_plus(const double & q2) const
                 {
                     return H_plus(complex<double>(q2, 0.0));
                 }
 
-                virtual complex<double> Hhat_plus(const double & q2) const
+                virtual complex<double>
+                Hhat_plus(const double & q2) const
                 {
                     const std::array<complex<double>, 7> alpha{
-                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
-                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
-                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
-                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
-                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
-                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus), complex<double>(re_alpha_1_plus, im_alpha_1_plus), complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus), complex<double>(re_alpha_4_plus, im_alpha_4_plus), complex<double>(re_alpha_5_plus, im_alpha_5_plus),
                         complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const double s_0 = this->t_0();
+                    const double s_p = 4.0 * power_of<2>(m_D0);
+                    const auto   z   = eos::nff_utils::z(q2, s_p, s_0);
 
                     const auto & polynomials_at_z = polynomials(z);
 
                     return std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
                 }
 
-
-                virtual complex<double> H_plus_residue_jpsi() const
+                virtual complex<double>
+                H_plus_residue_jpsi() const
                 {
                     const std::array<complex<double>, 7> alpha{
-                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
-                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
-                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
-                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
-                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
-                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus), complex<double>(re_alpha_1_plus, im_alpha_1_plus), complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus), complex<double>(re_alpha_4_plus, im_alpha_4_plus), complex<double>(re_alpha_5_plus, im_alpha_5_plus),
                         complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return H_residue_jpsi(phi_parameters, alpha);
                 }
 
-                virtual complex<double> H_plus_residue_psi2s() const
+                virtual complex<double>
+                H_plus_residue_psi2s() const
                 {
                     const std::array<complex<double>, 7> alpha{
-                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
-                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
-                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
-                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
-                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
-                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus), complex<double>(re_alpha_1_plus, im_alpha_1_plus), complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus), complex<double>(re_alpha_4_plus, im_alpha_4_plus), complex<double>(re_alpha_5_plus, im_alpha_5_plus),
                         complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return H_residue_psi2s(phi_parameters, alpha);
                 }
 
-                virtual complex<double> normalized_moment_A(const double &) const
+                virtual complex<double>
+                normalized_moment_A(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> ratio_plus(const complex<double> & q2) const
+                virtual complex<double>
+                ratio_plus(const complex<double> & q2) const
                 {
                     const complex<double> F_plus = form_factors->f_p(q2);
 
                     return H_plus(q2) / F_plus;
                 }
 
-                virtual complex<double> ratio_plus(const double & q2) const
+                virtual complex<double>
+                ratio_plus(const double & q2) const
                 {
                     return ratio_plus(complex<double>(q2, 0.0));
                 }
 
-                virtual complex<double> F_ratio_plus(const complex<double> & q2) const
+                virtual complex<double>
+                F_ratio_plus(const complex<double> & q2) const
                 {
                     return form_factors->f_t(q2) * q2 / m_B() / (m_B + m_P) / form_factors->f_p(q2);
                 }
 
-                virtual complex<double> P_ratio_plus(const double & q2) const
+                virtual complex<double>
+                P_ratio_plus(const double & q2) const
                 {
                     const std::array<complex<double>, 7> alpha{
-                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
-                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
-                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
-                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
-                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
-                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus), complex<double>(re_alpha_1_plus, im_alpha_1_plus), complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus), complex<double>(re_alpha_4_plus, im_alpha_4_plus), complex<double>(re_alpha_5_plus, im_alpha_5_plus),
                         complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     const complex<double> F_plus = form_factors->f_p(q2);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const double s_0 = this->t_0();
+                    const double s_p = 4.0 * power_of<2>(m_D0);
+                    const auto   z   = eos::nff_utils::z(q2, s_p, s_0);
 
-                    const auto & polynomials_at_z = polynomials(z);
-                    const complex<double> p_at_z = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
+                    const auto &          polynomials_at_z = polynomials(z);
+                    const complex<double> p_at_z           = std::inner_product(alpha.begin(), alpha.end(), polynomials_at_z.begin(), complex<double>(0, 0));
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
-                virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
+                virtual complex<double>
+                get_orthonormal_coefficients(const unsigned & i) const
                 {
                     const std::array<complex<double>, 7> alpha{
-                        complex<double>(re_alpha_0_plus, im_alpha_0_plus),
-                        complex<double>(re_alpha_1_plus, im_alpha_1_plus),
-                        complex<double>(re_alpha_2_plus, im_alpha_2_plus),
-                        complex<double>(re_alpha_3_plus, im_alpha_3_plus),
-                        complex<double>(re_alpha_4_plus, im_alpha_4_plus),
-                        complex<double>(re_alpha_5_plus, im_alpha_5_plus),
+                        complex<double>(re_alpha_0_plus, im_alpha_0_plus), complex<double>(re_alpha_1_plus, im_alpha_1_plus), complex<double>(re_alpha_2_plus, im_alpha_2_plus),
+                        complex<double>(re_alpha_3_plus, im_alpha_3_plus), complex<double>(re_alpha_4_plus, im_alpha_4_plus), complex<double>(re_alpha_5_plus, im_alpha_5_plus),
                         complex<double>(re_alpha_6_plus, im_alpha_6_plus),
                     };
 
                     return alpha[i];
                 }
 
-                virtual double weak_bound() const
+                virtual double
+                weak_bound() const
                 {
                     return 0.;
                 }
 
-                virtual double strong_bound() const
+                virtual double
+                strong_bound() const
                 {
                     return 0.;
                 }
 
-                virtual double weak_bound_log_likelihood() const
+                virtual double
+                weak_bound_log_likelihood() const
                 {
                     return 0.0;
                 }
 
-                virtual double strong_bound_log_likelihood() const
+                virtual double
+                strong_bound_log_likelihood() const
                 {
                     return 0.0;
                 }
 
-                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP>
+                make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<PToP>(new GvDV2020<Process_>(p, o));
                 }
 
-                virtual Diagnostics diagnostics() const
+                virtual Diagnostics
+                diagnostics() const
                 {
                     Diagnostics results;
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2}; //plus polarization
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 }; // plus polarization
 
-                    results.add({ real(1./this->phi(0.0, phi_parameters)), "Re{1/phi_+(q2 = 0.0)}" });
-                    results.add({ imag(1./this->phi(0.0, phi_parameters)), "Im{1/phi_+(q2 = 0.0)}" });
+                    results.add({ real(1. / this->phi(0.0, phi_parameters)), "Re{1/phi_+(q2 = 0.0)}" });
+                    results.add({ imag(1. / this->phi(0.0, phi_parameters)), "Im{1/phi_+(q2 = 0.0)}" });
                     results.add({ real(this->phi(16.0, phi_parameters)), "Re{phi_+(q2 = 16.0)}" });
                     results.add({ imag(this->phi(16.0, phi_parameters)), "Im{phi_+(q2 = 16.0)}" });
 
-                    const double s_0   = this->t_0();
-                    const auto z1 = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
-                    const std::array<complex<double>, 6> alpha = {2.0, 3.0, 4.0, 5.0, 0.0};
+                    const double                         s_0   = this->t_0();
+                    const auto                           z1    = eos::nff_utils::z(1.0, 4.0 * power_of<2>(m_D0), s_0);
+                    const std::array<complex<double>, 6> alpha = { 2.0, 3.0, 4.0, 5.0, 0.0 };
 
                     auto p(SzegoPolynomial<5u>::FlatMeasure(1.854590436));
 
@@ -501,14 +509,11 @@ namespace eos
                 }
         };
 
-
         /*
          * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020A],
          * but using an ad hoc Lagrange polynomial.
          */
-        template <typename Process_>
-        class GRvDV2022order5 :
-            public NonlocalFormFactor<PToP>
+        template <typename Process_> class GRvDV2022order5 : public NonlocalFormFactor<PToP>
         {
             public:
                 std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -548,7 +553,7 @@ namespace eos
                 UsedParameter bound_uncertainty;
 
                 // Lagrange interpolating polynomial
-                const static unsigned interpolation_order = 5;
+                static const unsigned                         interpolation_order = 5;
                 const LagrangePolynomial<interpolation_order> lagrange;
 
                 // Orthogonal polynomials on an arc of the unit circle used for the computation of dispersive bounds
@@ -585,12 +590,12 @@ namespace eos
                     bound(p["b->sccbar::bound@GvDV2020"], *this),
                     bound_uncertainty(p["b->sccbar::bound_uncertainty@GvDV2020"], *this),
 
-                    lagrange({eos::nff_utils::z(-7.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(-5.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(-3.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(-1.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(power_of<2>(m_Jpsi),  4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())}),
+                    lagrange({ eos::nff_utils::z(-7.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(-5.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(-3.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(-1.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(power_of<2>(m_Jpsi), 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0()) }),
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
@@ -601,7 +606,8 @@ namespace eos
 
                 ~GRvDV2022order5() = default;
 
-                inline complex<double> phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
+                inline complex<double>
+                phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     // Values of a, b, c and d depends on the form factor:
                     // FF                        a    b    c    d
@@ -609,43 +615,47 @@ namespace eos
                     // perp(P->V) = par(P->V)    3    1    3    0
                     // 0(P->V) aka long          3    1    2    2
 
-                    const double m_P2  = power_of<2>(m_P);
-                    const double m_B2  = power_of<2>(m_B),  m_B4 =  power_of<4>(m_B);
+                    const double m_P2 = power_of<2>(m_P);
+                    const double m_B2 = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
                     const double m_D02 = power_of<2>(m_D0), m_D04 = power_of<4>(m_D0);
-                    const double s_0   = this->t_0();
-                    const auto   z     = eos::nff_utils::z(q2, 4.0 * m_D02, s_0);
-                    const double Q2    = this->t_s();
-                    const double chi   = this->chiOPE();
+                    const double s_0 = this->t_0();
+                    const auto   z   = eos::nff_utils::z(q2, 4.0 * m_D02, s_0);
+                    const double Q2  = this->t_s();
+                    const double chi = this->chiOPE();
 
                     const double a = phi_parameters[0], b = phi_parameters[1], c = phi_parameters[2], d = phi_parameters[3];
 
-                    const double Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
-                    const complex<double> phi1 = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5) /
-                                                (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
-                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2)) +
-                                                power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)), 0.5);//(C8)
-                    const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
-                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0*(z+1.)); //(C9)
-                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5); //(C10)
+                    const double          Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
+                    const complex<double> phi1    = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5)
+                                                 / (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
+                    const complex<double> phi2 =
+                            pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2))
+                                        + power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)),
+                                0.5); //(C8)
+                    const complex<double> phi3 =
+                            pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) / (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0 * (z + 1.)); //(C9)
+                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5);                                                               //(C10)
 
                     return Nlambda * pow(1. + z, 0.5) * pow(1. - z, a - b + c + d - 1.5) * pow(phi1, a) * pow(phi2, 0.5 * b) * pow(phi3, c) * pow(phi4, d); //(C5)
                 }
 
-                inline complex<double> phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
+                inline complex<double>
+                phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     return phi(complex<double>(q2, 0.0), phi_parameters);
                 }
 
                 // Residue of H at s = m_Jpsi2 computed as the residue wrt z -z_Jpsi divided by dz/ds evaluated at s = m_Jpsi2
-                inline complex<double> H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
+                inline complex<double>
+                H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(m_Jpsi2, s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z_Jpsi);
 
@@ -656,15 +666,16 @@ namespace eos
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
-                inline complex<double> H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
+                inline complex<double>
+                H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(m_Jpsi2, s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z_psi2S);
 
@@ -673,141 +684,127 @@ namespace eos
                     return p_at_z / phi(m_psi2S2, phi_parameters) * (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
-
-                virtual complex<double> H_plus(const complex<double> & q2) const
+                virtual complex<double>
+                H_plus(const complex<double> & q2) const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
-                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                        complex<double>(re_at_m7_plus, im_at_m7_plus), complex<double>(re_at_m5_plus, im_at_m5_plus),     complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus), polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi),  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi), s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
 
                     const complex<double> blaschke_factor = eos::nff_utils::blaschke_cc(z, z_Jpsi, z_psi2S);
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z);
 
                     return p_at_z / phi(q2, phi_parameters) / blaschke_factor;
                 }
 
-                virtual complex<double> H_plus(const double & q2) const
+                virtual complex<double>
+                H_plus(const double & q2) const
                 {
                     return H_plus(complex<double>(q2, 0.0));
                 }
 
-                virtual complex<double> Hhat_plus(const double & q2) const
+                virtual complex<double>
+                Hhat_plus(const double & q2) const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
-                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                        complex<double>(re_at_m7_plus, im_at_m7_plus), complex<double>(re_at_m5_plus, im_at_m5_plus),     complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus), polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const double s_0 = this->t_0();
+                    const double s_p = 4.0 * power_of<2>(m_D0);
+                    const auto   z   = eos::nff_utils::z(q2, s_p, s_0);
 
                     return lagrange(interpolation_values, z);
                 }
 
-                virtual complex<double> H_plus_residue_jpsi() const
+                virtual complex<double>
+                H_plus_residue_jpsi() const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
-                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                        complex<double>(re_at_m7_plus, im_at_m7_plus), complex<double>(re_at_m5_plus, im_at_m5_plus),     complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus), polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return H_residue_jpsi(phi_parameters, interpolation_values);
                 }
 
-                virtual complex<double> H_plus_residue_psi2s() const
+                virtual complex<double>
+                H_plus_residue_psi2s() const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
-                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                        complex<double>(re_at_m7_plus, im_at_m7_plus), complex<double>(re_at_m5_plus, im_at_m5_plus),     complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus), polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return H_residue_psi2s(phi_parameters, interpolation_values);
                 }
 
-                virtual complex<double> normalized_moment_A(const double &) const
+                virtual complex<double>
+                normalized_moment_A(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> ratio_plus(const complex<double> & q2) const
+                virtual complex<double>
+                ratio_plus(const complex<double> & q2) const
                 {
                     const complex<double> F_plus = form_factors->f_p(q2);
 
                     return H_plus(q2) / F_plus;
                 }
 
-                virtual complex<double> ratio_plus(const double & q2) const
+                virtual complex<double>
+                ratio_plus(const double & q2) const
                 {
                     return ratio_plus(complex<double>(q2, 0.0));
                 }
 
-                virtual complex<double> F_ratio_plus(const complex<double> & q2) const
+                virtual complex<double>
+                F_ratio_plus(const complex<double> & q2) const
                 {
                     return form_factors->f_t(q2) * q2 / m_B() / (m_B + m_P) / form_factors->f_p(q2);
                 }
 
-                virtual complex<double> P_ratio_plus(const double & q2) const
+                virtual complex<double>
+                P_ratio_plus(const double & q2) const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
-                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                        complex<double>(re_at_m7_plus, im_at_m7_plus), complex<double>(re_at_m5_plus, im_at_m5_plus),     complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus), polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
-                    const complex<double> F_plus = form_factors->f_p(q2);
+                    const double                  s_0            = this->t_0();
+                    const double                  s_p            = 4.0 * power_of<2>(m_D0);
+                    const auto                    z              = eos::nff_utils::z(q2, s_p, s_0);
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
+                    const complex<double>         F_plus         = form_factors->f_p(q2);
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z);
 
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
-                inline std::pair<gsl_vector *, gsl_vector *> orthonormal_coefficients() const
+                inline std::pair<gsl_vector *, gsl_vector *>
+                orthonormal_coefficients() const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
-                        polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
+                        complex<double>(re_at_m7_plus, im_at_m7_plus), complex<double>(re_at_m5_plus, im_at_m5_plus),     complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus), polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
                     std::array<complex<double>, interpolation_order + 1> L_coeffs = lagrange.get_coefficients(interpolation_values);
@@ -831,15 +828,16 @@ namespace eos
                     return std::make_pair(L_coeffs_real_part, L_coeffs_imag_part);
                 }
 
-                virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
+                virtual complex<double>
+                get_orthonormal_coefficients(const unsigned & i) const
                 {
                     auto coefficients = orthonormal_coefficients();
 
-                    return complex<double>(gsl_vector_get(coefficients.first,  i),
-                                           gsl_vector_get(coefficients.second, i));
+                    return complex<double>(gsl_vector_get(coefficients.first, i), gsl_vector_get(coefficients.second, i));
                 }
 
-                virtual double weak_bound() const
+                virtual double
+                weak_bound() const
                 {
                     auto coefficients = orthonormal_coefficients();
 
@@ -847,8 +845,7 @@ namespace eos
 
                     for (unsigned i = 0; i <= interpolation_order; ++i)
                     {
-                        coeff =   power_of<2>(gsl_vector_get(coefficients.first,  i))
-                                + power_of<2>(gsl_vector_get(coefficients.second, i));
+                        coeff = power_of<2>(gsl_vector_get(coefficients.first, i)) + power_of<2>(gsl_vector_get(coefficients.second, i));
                         if (coeff > largest_absolute_coeff)
                         {
                             largest_absolute_coeff = coeff;
@@ -858,7 +855,8 @@ namespace eos
                     return largest_absolute_coeff;
                 }
 
-                virtual double strong_bound() const
+                virtual double
+                strong_bound() const
                 {
                     auto coefficients = orthonormal_coefficients();
 
@@ -866,14 +864,14 @@ namespace eos
 
                     for (unsigned i = 0; i <= interpolation_order; ++i)
                     {
-                        coefficient_sum +=   power_of<2>(gsl_vector_get(coefficients.first,  i))
-                                           + power_of<2>(gsl_vector_get(coefficients.second, i));
+                        coefficient_sum += power_of<2>(gsl_vector_get(coefficients.first, i)) + power_of<2>(gsl_vector_get(coefficients.second, i));
                     }
 
                     return coefficient_sum;
                 }
 
-                virtual double weak_bound_log_likelihood() const
+                virtual double
+                weak_bound_log_likelihood() const
                 {
                     const double saturation = weak_bound();
                     if (saturation < this->bound)
@@ -883,11 +881,12 @@ namespace eos
                     else
                     {
                         // Halfnormal constraint
-                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                        return -0.5 * power_of<2>((saturation - this->bound) / this->bound_uncertainty);
                     }
                 }
 
-                virtual double strong_bound_log_likelihood() const
+                virtual double
+                strong_bound_log_likelihood() const
                 {
                     const double saturation = strong_bound();
                     if (saturation < this->bound)
@@ -897,16 +896,18 @@ namespace eos
                     else
                     {
                         // Halfnormal constraint
-                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                        return -0.5 * power_of<2>((saturation - this->bound) / this->bound_uncertainty);
                     }
                 }
 
-                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP>
+                make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<PToP>(new GRvDV2022order5<Process_>(p, o));
                 }
 
-                virtual Diagnostics diagnostics() const
+                virtual Diagnostics
+                diagnostics() const
                 {
                     Diagnostics results;
 
@@ -918,9 +919,7 @@ namespace eos
          * Parametrize the entire formfactor, i.e., both leading and all sub-leading powers as described in [GvDV:2020A],
          * but using an ad hoc Lagrange polynomial.
          */
-        template <typename Process_>
-        class GRvDV2022order6 :
-            public NonlocalFormFactor<PToP>
+        template <typename Process_> class GRvDV2022order6 : public NonlocalFormFactor<PToP>
         {
             public:
                 std::shared_ptr<FormFactors<PToP>> form_factors;
@@ -962,7 +961,7 @@ namespace eos
                 UsedParameter bound_uncertainty;
 
                 // Lagrange interpolating polynomial
-                const static unsigned interpolation_order = 6;
+                static const unsigned                         interpolation_order = 6;
                 const LagrangePolynomial<interpolation_order> lagrange;
 
                 // Orthogonal polynomials on an arc of the unit circle used for the computation of dispersive bounds
@@ -1001,13 +1000,13 @@ namespace eos
                     bound(p["b->sccbar::bound@GvDV2020"], *this),
                     bound_uncertainty(p["b->sccbar::bound_uncertainty@GvDV2020"], *this),
 
-                    lagrange({eos::nff_utils::z(-7.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(-5.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(-3.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(-1.0, 4.0 * power_of<2>(m_D0), t_0()),
-                              0., // z(t_0) = 0. by construction
-                              eos::nff_utils::z(power_of<2>(m_Jpsi),  4.0 * power_of<2>(m_D0), t_0()),
-                              eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0())}),
+                    lagrange({ eos::nff_utils::z(-7.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(-5.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(-3.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(-1.0, 4.0 * power_of<2>(m_D0), t_0()),
+                               0., // z(t_0) = 0. by construction
+                               eos::nff_utils::z(power_of<2>(m_Jpsi), 4.0 * power_of<2>(m_D0), t_0()),
+                               eos::nff_utils::z(power_of<2>(m_psi2S), 4.0 * power_of<2>(m_D0), t_0()) }),
 
                     // The parameters of the polynomial expension are computed using t0 = 4.0 and
                     // the masses are set to mB = 5.279 and mK = 0.492 (same values as for local form-factors)
@@ -1018,7 +1017,8 @@ namespace eos
 
                 ~GRvDV2022order6() = default;
 
-                inline complex<double> phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
+                inline complex<double>
+                phi(const complex<double> & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     // Values of a, b, c and d depends on the form factor:
                     // FF                        a    b    c    d
@@ -1026,43 +1026,47 @@ namespace eos
                     // perp(P->V) = par(P->V)    3    1    3    0
                     // 0(P->V) aka long          3    1    2    2
 
-                    const double m_P2  = power_of<2>(m_P);
-                    const double m_B2  = power_of<2>(m_B),  m_B4 =  power_of<4>(m_B);
+                    const double m_P2 = power_of<2>(m_P);
+                    const double m_B2 = power_of<2>(m_B), m_B4 = power_of<4>(m_B);
                     const double m_D02 = power_of<2>(m_D0), m_D04 = power_of<4>(m_D0);
-                    const double s_0   = this->t_0();
-                    const auto   z     = eos::nff_utils::z(q2, 4.0 * m_D02, s_0);
-                    const double Q2    = this->t_s();
-                    const double chi   = this->chiOPE();
+                    const double s_0 = this->t_0();
+                    const auto   z   = eos::nff_utils::z(q2, 4.0 * m_D02, s_0);
+                    const double Q2  = this->t_s();
+                    const double chi = this->chiOPE();
 
                     const double a = phi_parameters[0], b = phi_parameters[1], c = phi_parameters[2], d = phi_parameters[3];
 
-                    const double Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
-                    const complex<double> phi1 = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5) /
-                                                (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
-                    const complex<double> phi2 = pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2)) +
-                                                power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)), 0.5);//(C8)
-                    const complex<double> phi3 = pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) /
-                                                (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0*(z+1.)); //(C9)
-                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5); //(C10)
+                    const double          Nlambda = 4 * M_PI * pow(m_B2, 0.5 * (a - b + c + d) - 1.) * pow(2 * (4 * m_D02 - s_0) / 3 / chi, 0.5); //(C6)
+                    const complex<double> phi1    = -pow(2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 - Q2 - s_0, 0.5)
+                                                 / (2 * pow((4 * m_D02 - Q2) * (4 * m_D02 - s_0), 0.5) + 8 * m_D02 + Q2 * (z - 1.) - s_0 * (z + 1.)); //(C7)
+                    const complex<double> phi2 =
+                            pow(m_B4 * power_of<4>(z - 1.) - 2 * m_B2 * power_of<2>(z - 1.) * (-16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) + s_0 * pow(z + 1., 2))
+                                        + power_of<2>(16 * m_D02 * z + m_P2 * power_of<2>(z - 1.) - s_0 * power_of<2>(z + 1.)),
+                                0.5); //(C8)
+                    const complex<double> phi3 =
+                            pow(8 * m_D02 + 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) - s_0, 0.5) / (-8 * m_D02 - 4 * pow(4 * m_D04 - s_0 * m_D02, 0.5) + s_0 * (z + 1.)); //(C9)
+                    const complex<double> phi4 = pow(s_0 * power_of<2>(z + 1.) - 16. * z * m_D02, -0.5);                                                               //(C10)
 
                     return Nlambda * pow(1. + z, 0.5) * pow(1. - z, a - b + c + d - 1.5) * pow(phi1, a) * pow(phi2, 0.5 * b) * pow(phi3, c) * pow(phi4, d); //(C5)
                 }
 
-                inline complex<double> phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
+                inline complex<double>
+                phi(const double & q2, const std::array<unsigned, 4> & phi_parameters) const
                 {
                     return phi(complex<double>(q2, 0.0), phi_parameters);
                 }
 
                 // Residue of H at s = m_Jpsi2 computed as the residue wrt z -z_Jpsi divided by dz/ds evaluated at s = m_Jpsi2
-                inline complex<double> H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
+                inline complex<double>
+                H_residue_jpsi(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(m_Jpsi2, s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z_Jpsi);
 
@@ -1073,15 +1077,16 @@ namespace eos
                 }
 
                 // Residue of H at s = m_psi2S2 computed as the residue wrt z -z_psi2S divided by dz/ds evaluated at s = m_psi2S2
-                inline complex<double> H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
+                inline complex<double>
+                H_residue_psi2s(const std::array<unsigned, 4> & phi_parameters, const std::array<complex<double>, interpolation_order + 1> & interpolation_values) const
                 {
                     const double m_Jpsi2  = power_of<2>(m_Jpsi);
                     const double m_psi2S2 = power_of<2>(m_psi2S);
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z_Jpsi  = eos::nff_utils::z(m_Jpsi2,  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(m_Jpsi2, s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(m_psi2S2, s_p, s_0);
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z_psi2S);
 
@@ -1090,146 +1095,132 @@ namespace eos
                     return p_at_z / phi(m_psi2S2, phi_parameters) * (1 - norm(z_psi2S)) * (1. - z_psi2S * std::conj(z_Jpsi)) / (z_psi2S - z_Jpsi) / dzds;
                 }
 
-
-                virtual complex<double> H_plus(const complex<double> & q2) const
+                virtual complex<double>
+                H_plus(const complex<double> & q2) const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        complex<double>(re_at_t0_plus, im_at_t0_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),      complex<double>(re_at_m5_plus, im_at_m5_plus), complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),      complex<double>(re_at_t0_plus, im_at_t0_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const auto z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi),  s_p, s_0);
-                    const auto z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
+                    const double s_0     = this->t_0();
+                    const double s_p     = 4.0 * power_of<2>(m_D0);
+                    const auto   z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const auto   z_Jpsi  = eos::nff_utils::z(power_of<2>(m_Jpsi), s_p, s_0);
+                    const auto   z_psi2S = eos::nff_utils::z(power_of<2>(m_psi2S), s_p, s_0);
 
                     const complex<double> blaschke_factor = eos::nff_utils::blaschke_cc(z, z_Jpsi, z_psi2S);
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z);
 
                     return p_at_z / phi(q2, phi_parameters) / blaschke_factor;
                 }
 
-                virtual complex<double> H_plus(const double & q2) const
+                virtual complex<double>
+                H_plus(const double & q2) const
                 {
                     return H_plus(complex<double>(q2, 0.0));
                 }
 
-                virtual complex<double> Hhat_plus(const double & q2) const
+                virtual complex<double>
+                Hhat_plus(const double & q2) const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        complex<double>(re_at_t0_plus, im_at_t0_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),      complex<double>(re_at_m5_plus, im_at_m5_plus), complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),      complex<double>(re_at_t0_plus, im_at_t0_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
+                    const double s_0 = this->t_0();
+                    const double s_p = 4.0 * power_of<2>(m_D0);
+                    const auto   z   = eos::nff_utils::z(q2, s_p, s_0);
 
                     return lagrange(interpolation_values, z);
                 }
 
-                virtual complex<double> H_plus_residue_jpsi() const
+                virtual complex<double>
+                H_plus_residue_jpsi() const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        complex<double>(re_at_t0_plus, im_at_t0_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),      complex<double>(re_at_m5_plus, im_at_m5_plus), complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),      complex<double>(re_at_t0_plus, im_at_t0_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return H_residue_jpsi(phi_parameters, interpolation_values);
                 }
 
-                virtual complex<double> H_plus_residue_psi2s() const
+                virtual complex<double>
+                H_plus_residue_psi2s() const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        complex<double>(re_at_t0_plus, im_at_t0_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),      complex<double>(re_at_m5_plus, im_at_m5_plus), complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),      complex<double>(re_at_t0_plus, im_at_t0_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
 
                     return H_residue_psi2s(phi_parameters, interpolation_values);
                 }
 
-                virtual complex<double> normalized_moment_A(const double &) const
+                virtual complex<double>
+                normalized_moment_A(const double &) const
                 {
                     return 0.0;
                 }
 
-                virtual complex<double> ratio_plus(const complex<double> & q2) const
+                virtual complex<double>
+                ratio_plus(const complex<double> & q2) const
                 {
                     const complex<double> F_plus = form_factors->f_p(q2);
 
                     return H_plus(q2) / F_plus;
                 }
 
-                virtual complex<double> ratio_plus(const double & q2) const
+                virtual complex<double>
+                ratio_plus(const double & q2) const
                 {
                     return ratio_plus(complex<double>(q2, 0.0));
                 }
 
-                virtual complex<double> F_ratio_plus(const complex<double> & q2) const
+                virtual complex<double>
+                F_ratio_plus(const complex<double> & q2) const
                 {
                     return form_factors->f_t(q2) * q2 / m_B() / (m_B + m_P) / form_factors->f_p(q2);
                 }
 
-                virtual complex<double> P_ratio_plus(const double & q2) const
+                virtual complex<double>
+                P_ratio_plus(const double & q2) const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        complex<double>(re_at_t0_plus, im_at_t0_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),      complex<double>(re_at_m5_plus, im_at_m5_plus), complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),      complex<double>(re_at_t0_plus, im_at_t0_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
-                    const double s_0   = this->t_0();
-                    const double s_p   = 4.0 * power_of<2>(m_D0);
-                    const auto z       = eos::nff_utils::z(q2, s_p, s_0);
-                    const std::array<unsigned, 4> phi_parameters = {3, 3, 2, 2};
-                    const complex<double> F_plus = form_factors->f_p(q2);
+                    const double                  s_0            = this->t_0();
+                    const double                  s_p            = 4.0 * power_of<2>(m_D0);
+                    const auto                    z              = eos::nff_utils::z(q2, s_p, s_0);
+                    const std::array<unsigned, 4> phi_parameters = { 3, 3, 2, 2 };
+                    const complex<double>         F_plus         = form_factors->f_p(q2);
 
                     const complex<double> p_at_z = lagrange(interpolation_values, z);
 
                     return p_at_z / phi(q2, phi_parameters) / F_plus;
                 }
 
-                inline std::pair<gsl_vector *, gsl_vector *> orthonormal_coefficients() const
+                inline std::pair<gsl_vector *, gsl_vector *>
+                orthonormal_coefficients() const
                 {
                     const std::array<complex<double>, interpolation_order + 1> interpolation_values{
-                        complex<double>(re_at_m7_plus, im_at_m7_plus),
-                        complex<double>(re_at_m5_plus, im_at_m5_plus),
-                        complex<double>(re_at_m3_plus, im_at_m3_plus),
-                        complex<double>(re_at_m1_plus, im_at_m1_plus),
-                        complex<double>(re_at_t0_plus, im_at_t0_plus),
-                        polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
+                        complex<double>(re_at_m7_plus, im_at_m7_plus),      complex<double>(re_at_m5_plus, im_at_m5_plus), complex<double>(re_at_m3_plus, im_at_m3_plus),
+                        complex<double>(re_at_m1_plus, im_at_m1_plus),      complex<double>(re_at_t0_plus, im_at_t0_plus), polar<double>(abs_at_Jpsi_plus, arg_at_Jpsi_plus),
                         polar<double>(abs_at_psi2S_plus, arg_at_psi2S_plus)
                     };
 
@@ -1254,15 +1245,16 @@ namespace eos
                     return std::make_pair(L_coeffs_real_part, L_coeffs_imag_part);
                 }
 
-                virtual complex<double> get_orthonormal_coefficients(const unsigned & i) const
+                virtual complex<double>
+                get_orthonormal_coefficients(const unsigned & i) const
                 {
                     auto coefficients = orthonormal_coefficients();
 
-                    return complex<double>(gsl_vector_get(coefficients.first,  i),
-                                           gsl_vector_get(coefficients.second, i));
+                    return complex<double>(gsl_vector_get(coefficients.first, i), gsl_vector_get(coefficients.second, i));
                 }
 
-                virtual double weak_bound() const
+                virtual double
+                weak_bound() const
                 {
                     auto coefficients = orthonormal_coefficients();
 
@@ -1270,8 +1262,7 @@ namespace eos
 
                     for (unsigned i = 0; i <= interpolation_order; ++i)
                     {
-                        coeff =  power_of<2>(gsl_vector_get(coefficients.first,  i))
-                               + power_of<2>(gsl_vector_get(coefficients.second, i));
+                        coeff = power_of<2>(gsl_vector_get(coefficients.first, i)) + power_of<2>(gsl_vector_get(coefficients.second, i));
                         if (coeff > largest_absolute_coeff)
                         {
                             largest_absolute_coeff = coeff;
@@ -1281,7 +1272,8 @@ namespace eos
                     return largest_absolute_coeff;
                 }
 
-                virtual double strong_bound() const
+                virtual double
+                strong_bound() const
                 {
                     auto coefficients = orthonormal_coefficients();
 
@@ -1289,14 +1281,14 @@ namespace eos
 
                     for (unsigned i = 0; i <= interpolation_order; ++i)
                     {
-                        coefficient_sum +=  power_of<2>(gsl_vector_get(coefficients.first,  i))
-                                          + power_of<2>(gsl_vector_get(coefficients.second, i));
+                        coefficient_sum += power_of<2>(gsl_vector_get(coefficients.first, i)) + power_of<2>(gsl_vector_get(coefficients.second, i));
                     }
 
                     return coefficient_sum;
                 }
 
-                virtual double weak_bound_log_likelihood() const
+                virtual double
+                weak_bound_log_likelihood() const
                 {
                     const double saturation = weak_bound();
                     if (saturation < this->bound)
@@ -1306,11 +1298,12 @@ namespace eos
                     else
                     {
                         // Halfnormal constraint
-                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                        return -0.5 * power_of<2>((saturation - this->bound) / this->bound_uncertainty);
                     }
                 }
 
-                virtual double strong_bound_log_likelihood() const
+                virtual double
+                strong_bound_log_likelihood() const
                 {
                     const double saturation = strong_bound();
                     if (saturation < this->bound)
@@ -1320,16 +1313,18 @@ namespace eos
                     else
                     {
                         // Halfnormal constraint
-                        return -0.5 * power_of<2>( (saturation - this->bound) / this->bound_uncertainty );
+                        return -0.5 * power_of<2>((saturation - this->bound) / this->bound_uncertainty);
                     }
                 }
 
-                static NonlocalFormFactorPtr<PToP> make(const Parameters & p, const Options & o)
+                static NonlocalFormFactorPtr<PToP>
+                make(const Parameters & p, const Options & o)
                 {
                     return NonlocalFormFactorPtr<PToP>(new GRvDV2022order6<Process_>(p, o));
                 }
 
-                virtual Diagnostics diagnostics() const
+                virtual Diagnostics
+                diagnostics() const
                 {
                     Diagnostics results;
 
@@ -1337,21 +1332,20 @@ namespace eos
                 }
         };
 
-    }
+    } // namespace nff_p_to_p
 
     NonlocalFormFactorPtr<PToP>
     NonlocalFormFactor<PToP>::make(const QualifiedName & name, const Parameters & p, const Options & o)
     {
-        typedef QualifiedName KeyType;
-        typedef std::function<NonlocalFormFactorPtr<PToP> (const Parameters &, const Options &)> ValueType;
-        std::map<KeyType, ValueType> entries
-        {
+        typedef QualifiedName                                                                   KeyType;
+        typedef std::function<NonlocalFormFactorPtr<PToP>(const Parameters &, const Options &)> ValueType;
+        std::map<KeyType, ValueType>                                                            entries{
             // trivial
-            std::make_pair("B->K::naive",                &nff_p_to_p::Naive::make),
+            std::make_pair("B->K::naive", &nff_p_to_p::Naive::make),
             // parametrizations
-            std::make_pair("B->K::GvDV2020",             &nff_p_to_p::GvDV2020<nff::BToK>::make),
-            std::make_pair("B->K::GRvDV2022order5",      &nff_p_to_p::GRvDV2022order5<nff::BToK>::make),
-            std::make_pair("B->K::GRvDV2022order6",      &nff_p_to_p::GRvDV2022order6<nff::BToK>::make),
+            std::make_pair("B->K::GvDV2020", &nff_p_to_p::GvDV2020<nff::BToK>::make),
+            std::make_pair("B->K::GRvDV2022order5", &nff_p_to_p::GRvDV2022order5<nff::BToK>::make),
+            std::make_pair("B->K::GRvDV2022order6", &nff_p_to_p::GRvDV2022order6<nff::BToK>::make),
         };
 
         auto i = entries.find(name);
@@ -1363,21 +1357,20 @@ namespace eos
         return i->second(p, o);
     }
 
-    template <typename Process_>
-    struct Implementation<NonlocalFormFactorObservable<Process_, PToP>>
+    template <typename Process_> struct Implementation<NonlocalFormFactorObservable<Process_, PToP>>
     {
-        NameOption opt_formfactor;
-        NonlocalFormFactorPtr<PToP> nff;
-        static const std::vector<OptionSpecification> options;
+            NameOption                                    opt_formfactor;
+            NonlocalFormFactorPtr<PToP>                   nff;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_formfactor(o, "nonlocal-formfactor"_ok, qnp::Name("GvDV2020")),
-            nff(NonlocalFormFactor<PToP>::make(QualifiedName(qnp::Prefix(Process_::label), opt_formfactor.value()), p, o))
-        {
-            u.uses(*nff);
-        }
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                opt_formfactor(o, "nonlocal-formfactor"_ok, qnp::Name("GvDV2020")),
+                nff(NonlocalFormFactor<PToP>::make(QualifiedName(qnp::Prefix(Process_::label), opt_formfactor.value()), p, o))
+            {
+                u.uses(*nff);
+            }
 
-        ~Implementation() = default;
+            ~Implementation() = default;
     };
 
     template <typename Process_>
@@ -1386,14 +1379,9 @@ namespace eos
     {
     }
 
-    template <typename Process_>
-    NonlocalFormFactorObservable<Process_, PToP>::~NonlocalFormFactorObservable() = default;
+    template <typename Process_> NonlocalFormFactorObservable<Process_, PToP>::~NonlocalFormFactorObservable() = default;
 
-    template <typename Process_>
-    const std::vector<OptionSpecification>
-    Implementation<NonlocalFormFactorObservable<Process_, PToP>>::options
-    {
-    };
+    template <typename Process_> const std::vector<OptionSpecification> Implementation<NonlocalFormFactorObservable<Process_, PToP>>::options{};
 
     template <typename Process_>
     double
@@ -1493,7 +1481,6 @@ namespace eos
         return imag(this->_imp->nff->F_ratio_plus(complex<double>(re_q2, im_q2)));
     }
 
-
     template <typename Process_>
     double
     NonlocalFormFactorObservable<Process_, PToP>::get_real_alpha(const unsigned & i) const
@@ -1551,9 +1538,7 @@ namespace eos
     }
 
     template <typename Process_>
-    const std::set<ReferenceName>
-    NonlocalFormFactorObservable<Process_, PToP>::references
-    {
+    const std::set<ReferenceName> NonlocalFormFactorObservable<Process_, PToP>::references{
         "GvDV:2020A"_rn,
         "GRvDV:2022A"_rn,
     };
@@ -1573,4 +1558,4 @@ namespace eos
     }
 
     template class NonlocalFormFactorObservable<nff::BToK, PToP>;
-}
+} // namespace eos

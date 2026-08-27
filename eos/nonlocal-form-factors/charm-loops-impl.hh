@@ -33,68 +33,69 @@ namespace eos
     {
         // Often used constants
 
-        static const double lnhalf  = - 0.693147180559945309;
-        static const complex<double> lnmhalf = - 0.693147180559945309 + M_PI * 1.0i;
-        static const complex<double> lnm1 = M_PI * 1.0i;
-        static const complex<double> lnm2 = 0.693147180559945309 + M_PI * 1.0i;
-        static const double ln2     = 0.693147180559945309;
-        static const double ln4     = 2.0 * ln2;
-        static const double ln64    = 6.0 * ln2;
-        static const double ln256   = 8.0 * ln2;
-        static const double ln2squ  = power_of<2>(ln2);
-        static const double ln2cube = power_of<3>(ln2);
+        static const double           lnhalf  = -0.693147180559945309;
+        static const complex<double>  lnmhalf = -0.693147180559945309 + M_PI * 1.0i;
+        static const complex<double>  lnm1    = M_PI * 1.0i;
+        static const complex<double>  lnm2    = 0.693147180559945309 + M_PI * 1.0i;
+        static const double           ln2     = 0.693147180559945309;
+        static const double           ln4     = 2.0 * ln2;
+        static const double           ln64    = 6.0 * ln2;
+        static const double           ln256   = 8.0 * ln2;
+        static const double           ln2squ  = power_of<2>(ln2);
+        static const double           ln2cube = power_of<3>(ln2);
         static const constexpr double pisqu   = power_of<2>(M_PI);
         static const constexpr double li2half = 0.5822405264650124; // dilog(0.5)
         static const constexpr double li3half = 0.5372131936080402; // trilog(0.5)
         static const constexpr double zeta3   = 1.2020569031595943;
-        static const double wx3 = 2.0 + std::sqrt(3.0);
-        static const double wx4 = 2.0 - std::sqrt(3.0);
-        static const double wx4squ = wx4 * wx4;
-        static const double wx3inv = wx4;
-        static const double wx4inv = wx3;
+        static const double           wx3     = 2.0 + std::sqrt(3.0);
+        static const double           wx4     = 2.0 - std::sqrt(3.0);
+        static const double           wx4squ  = wx4 * wx4;
+        static const double           wx3inv  = wx4;
+        static const double           wx4inv  = wx3;
 
         struct CharmLoopsParameters
         {
-            double muhat;
+                double muhat;
 
-            complex<double> s_eps; // dilepton invariant mass divided by bottom quark mass m_b^2 including the epsilon prescription: q^2 / (m_b^2 - i * eps)
-            complex<double> z_eps; // charm quark mass divided by bottom quark mass, squared, including the epsilon prescription: (m_c^2 - i * epsilon) / (m_b^2 - i * eps)
+                complex<double> s_eps; // dilepton invariant mass divided by bottom quark mass m_b^2 including the epsilon prescription: q^2 / (m_b^2 - i * eps)
+                complex<double> z_eps; // charm quark mass divided by bottom quark mass, squared, including the epsilon prescription: (m_c^2 - i * epsilon) / (m_b^2 - i * eps)
 
-            // only quark mass dependend variables, cf. [AGV:2019A] p. 15 eq. (3.20)
-            complex<double> xa;
-            complex<double> xb;
-            complex<double> xc;
-            complex<double> xd;
-            complex<double> xe;
+                // only quark mass dependend variables, cf. [AGV:2019A] p. 15 eq. (3.20)
+                complex<double> xa;
+                complex<double> xb;
+                complex<double> xc;
+                complex<double> xd;
+                complex<double> xe;
 
-            // q^2 and quark mass dependend variables, cf. [AGV:2019A] p. 15 eq. (3.20)
-            complex<double> ya;
-            complex<double> yb;
-            complex<double> yc;
-            complex<double> yd;
-            complex<double> ye;
+                // q^2 and quark mass dependend variables, cf. [AGV:2019A] p. 15 eq. (3.20)
+                complex<double> ya;
+                complex<double> yb;
+                complex<double> yc;
+                complex<double> yd;
+                complex<double> ye;
 
-            /*!
-            * Input parameters
-            *
-            * @param muhat              renormalization scale divided by bottom quark mass m_b
-            * @param s                  dilepton invariant mass divided by squared bottom quark mass m_b
-            * @param z                  squared charm quark mass divided by squared bottom quark mass
-            * @param feynepsilonhat     epsilon prescription divided by bottom quark mass m_b squared
-            *
-            */
+                /*!
+                 * Input parameters
+                 *
+                 * @param muhat              renormalization scale divided by bottom quark mass m_b
+                 * @param s                  dilepton invariant mass divided by squared bottom quark mass m_b
+                 * @param z                  squared charm quark mass divided by squared bottom quark mass
+                 * @param feynepsilonhat     epsilon prescription divided by bottom quark mass m_b squared
+                 *
+                 */
 
-            CharmLoopsParameters(const double & muhat, const complex<double> & s, const double & z, const double & feynepsilonhat);
+                CharmLoopsParameters(const double & muhat, const complex<double> & s, const double & z, const double & feynepsilonhat);
         };
 
         // Helper functions
 
         // Signum
-        inline double my_sign(const double & x)
+        inline double
+        my_sign(const double & x)
         {
             if (x < 0.0)
             {
-                return - 1.0;
+                return -1.0;
             }
             if (x > 0.0)
             {
@@ -107,7 +108,8 @@ namespace eos
         }
 
         // Heaviside Theta
-        inline double my_HT(const double & x)
+        inline double
+        my_HT(const double & x)
         {
             if (x == 0.0)
             {
@@ -126,12 +128,13 @@ namespace eos
         // Functions depending on the Heaviside step function
 
         // Triangle function T(a,b;x) from [FTW:2016A] p. 7 eq. (3.3)
-        inline double T(const complex<double> & a, const complex<double> & b, const complex<double> & x)
+        inline double
+        T(const complex<double> & a, const complex<double> & b, const complex<double> & x)
         {
-            const complex<double> amb = a - b;
+            const complex<double> amb   = a - b;
             const complex<double> xconj = std::conj(x);
             const complex<double> aconj = std::conj(a);
-            const double denom = (xconj * amb).imag();
+            const double          denom = (xconj * amb).imag();
 
             if (denom == 0.0)
             {
@@ -141,9 +144,10 @@ namespace eos
             {
                 const double arg1 = (xconj * a).imag() / denom;
                 const double arg2 = 1.0 - (xconj * a).imag() / denom;
-                const double arg3 = - 1.0 - (aconj * b).imag() / denom; // note the minus sign in front of (aconj * b).imag() / denom: in [FTW:2016A] it is missing which seems to be a typo
+                const double arg3 =
+                        -1.0 - (aconj * b).imag() / denom; // note the minus sign in front of (aconj * b).imag() / denom: in [FTW:2016A] it is missing which seems to be a typo
 
-                if ( arg1 < 0.0 || arg2 < 0.0 || arg3 < 0.0)
+                if (arg1 < 0.0 || arg2 < 0.0 || arg3 < 0.0)
                 {
                     return 0.0;
                 }
@@ -158,10 +162,11 @@ namespace eos
             }
         }
 
-        inline complex<double> p(const complex<double> & x1, const complex<double> & x2)
+        inline complex<double>
+        p(const complex<double> & x1, const complex<double> & x2)
         {
             const complex<double> x1conj = std::conj(x1);
-            const double denom = (x1 - x2 + x2 * x1conj).imag();
+            const double          denom  = (x1 - x2 + x2 * x1conj).imag();
 
             if (denom == 0.0)
             {
@@ -174,11 +179,12 @@ namespace eos
         }
 
         // r function from [FTW:2016A] p. 11 eq. (4.5)
-        inline double r(const complex<double> & a, const complex<double> & b)
+        inline double
+        r(const complex<double> & a, const complex<double> & b)
         {
             const complex<double> aconjb = std::conj(a) * b;
-            const double denom = aconjb.imag();
-            const double num = power_of<2>(std::abs(a)) * b.imag() - power_of<2>(std::abs(b)) * a.imag();
+            const double          denom  = aconjb.imag();
+            const double          num    = power_of<2>(std::abs(a)) * b.imag() - power_of<2>(std::abs(b)) * a.imag();
 
             if (denom == 0.0)
             {
@@ -192,7 +198,8 @@ namespace eos
 
         // H1 and H2 function from [FTW:2016A] p. 11 eq. (4.5) and p. 12 eq. (4.9), respectively
 
-        inline double H1(const complex<double> & a, const complex<double> & b)
+        inline double
+        H1(const complex<double> & a, const complex<double> & b)
         {
             const complex<double> aconjb = std::conj(a) * b;
 
@@ -210,11 +217,11 @@ namespace eos
                 }
                 else
                 {
-                   min = power_of<2>(std::abs(a)) * b.imag() / aconjb.imag();
+                    min = power_of<2>(std::abs(a)) * b.imag() / aconjb.imag();
                 }
 
-                const double r_val = agv_2019a::r(a,b);
-                const double arg = min - r_val;
+                const double r_val = agv_2019a::r(a, b);
+                const double arg   = min - r_val;
 
                 if (r_val < 0.0 || arg < 0.0)
                 {
@@ -231,7 +238,8 @@ namespace eos
             }
         }
 
-        inline double H2(const complex<double> & a, const complex<double> & b)
+        inline double
+        H2(const complex<double> & a, const complex<double> & b)
         {
             const complex<double> aconjb = std::conj(a) * b;
 
@@ -241,7 +249,7 @@ namespace eos
             }
             else
             {
-                const double r_val = agv_2019a::r(a,b);
+                const double r_val  = agv_2019a::r(a, b);
                 const double imaimb = a.imag() * b.imag();
 
                 if (r_val < 0.0 || r_val > 1.0 || imaimb > 0.0)
@@ -264,14 +272,14 @@ namespace eos
         complex<double> f290(const CharmLoopsParameters & clp);
 
         // Counterterms
-        complex<double> f17ctQs(const CharmLoopsParameters & );
-        complex<double> f17ctQc(const CharmLoopsParameters & );
+        complex<double> f17ctQs(const CharmLoopsParameters &);
+        complex<double> f17ctQc(const CharmLoopsParameters &);
         complex<double> f17ctQb(const CharmLoopsParameters & clp);
         complex<double> f19ctQs(const CharmLoopsParameters & clp);
         complex<double> f19ctQc(const CharmLoopsParameters & clp);
         complex<double> f19ctQb(const CharmLoopsParameters & clp);
-        complex<double> f27ctQs(const CharmLoopsParameters & );
-        complex<double> f27ctQc(const CharmLoopsParameters & );
+        complex<double> f27ctQs(const CharmLoopsParameters &);
+        complex<double> f27ctQc(const CharmLoopsParameters &);
         complex<double> f27ctQb(const CharmLoopsParameters & clp);
         complex<double> f29ctQs(const CharmLoopsParameters & clp);
         complex<double> f29ctQc(const CharmLoopsParameters & clp);
@@ -307,9 +315,9 @@ namespace eos
         complex<double> f27d(const CharmLoopsParameters & clp);
         complex<double> f29d(const CharmLoopsParameters & clp);
 
-        complex<double> f17e(const CharmLoopsParameters & );
+        complex<double> f17e(const CharmLoopsParameters &);
         complex<double> f19e(const CharmLoopsParameters & clp);
-        complex<double> f27e(const CharmLoopsParameters & );
+        complex<double> f27e(const CharmLoopsParameters &);
         complex<double> f29e(const CharmLoopsParameters & clp);
 
         complex<double> F17_Qc(const CharmLoopsParameters & clp);
@@ -352,11 +360,15 @@ namespace eos
         complex<double> f29d(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
         complex<double> f29e(const complex<double> & s, const double & mu, const double & m_c, const double & m_b);
 
-        complex<double> delta_c7_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
-        complex<double> delta_c7(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
-        complex<double> delta_c9_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
-        complex<double> delta_c9(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
-    }
-}
+        complex<double> delta_c7_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b,
+                                    const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
+        complex<double> delta_c7(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc,
+                                 bool use_nlo = true);
+        complex<double> delta_c9_Qc(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b,
+                                    const WilsonCoefficients<BToS> & wc, bool use_nlo = true);
+        complex<double> delta_c9(const complex<double> & s, const double & mu, const double & alpha_s, const double & m_c, const double & m_b, const WilsonCoefficients<BToS> & wc,
+                                 bool use_nlo = true);
+    } // namespace agv_2019a
+} // namespace eos
 
 #endif

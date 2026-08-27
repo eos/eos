@@ -33,114 +33,116 @@ namespace eos
     class CharmLoopsInterpolation
     {
         private:
-        const CSplineInterpolation real_part;
-        const CSplineInterpolation imag_part;
+            const CSplineInterpolation real_part;
+            const CSplineInterpolation imag_part;
 
         public:
-        CharmLoopsInterpolation(std::vector<double> x, std::vector<double> y_real, std::vector<double> y_imag):
-            real_part(x, y_real),
-            imag_part(x, y_imag)
-        {}
-        ~CharmLoopsInterpolation() = default;
+            CharmLoopsInterpolation(std::vector<double> x, std::vector<double> y_real, std::vector<double> y_imag) :
+                real_part(x, y_real),
+                imag_part(x, y_imag)
+            {
+            }
 
-        complex<double> operator()(const double & s) const { return complex<double>(real_part(s), imag_part(s)); };
+            ~CharmLoopsInterpolation() = default;
+
+            complex<double>
+            operator() (const double & s) const
+            {
+                return complex<double>(real_part(s), imag_part(s));
+            }
     };
 
     struct CharmLoops
     {
-        /* One-loop functions */
-        // cf. [BFS:2001A], Eq. (11), p. 4 with m_q -> 0
-        static complex<double> h(const double & mu, const double & s);
-        // cf. [BFS:2001A], Eq. (11), p. 4 with m_q -> 0
-        static complex<double> h(const double & mu, const double & s, const double & m_q);
+            /* One-loop functions */
+            // cf. [BFS:2001A], Eq. (11), p. 4 with m_q -> 0
+            static complex<double> h(const double & mu, const double & s);
+            // cf. [BFS:2001A], Eq. (11), p. 4 with m_q -> 0
+            static complex<double> h(const double & mu, const double & s, const double & m_q);
 
-        /* Two-loop functions */
-        // cf. [S:2004A], Eq. (29), p. 8
-        static complex<double> A(const double & mu, const double & s, const double & m_b);
-        // cf. [S:2004A], Eq. (30), pp. 8-9
-        static complex<double> B(const double & mu, const double & s, const double & m_b);
-        // cf. [S:2004A], Eq. (31), p. 9
-        static complex<double> C(const double & mu, const double & s);
+            /* Two-loop functions */
+            // cf. [S:2004A], Eq. (29), p. 8
+            static complex<double> A(const double & mu, const double & s, const double & m_b);
+            // cf. [S:2004A], Eq. (30), pp. 8-9
+            static complex<double> B(const double & mu, const double & s, const double & m_b);
+            // cf. [S:2004A], Eq. (31), p. 9
+            static complex<double> C(const double & mu, const double & s);
 
-        /* Non-factorizing two loop contributions */
-        // massless case, cf. [S:2004A], Eq. (16), p. 6
-        static complex<double> F17_massless(const double & mu, const double & s, const double & m_b);
-        static complex<double> F19_massless(const double & mu, const double & s, const double & m_b);
-        static complex<double> F27_massless(const double & mu, const double & s, const double & m_b);
-        static complex<double> F29_massless(const double & mu, const double & s, const double & m_b);
-        // massless case, cf. [BFS:2001A], Eqs. (82)-(83), p. 30
-        static complex<double> F87_massless(const double & mu, const double & s, const double & m_b);
-        static complex<double> F89_massless(                   const double & s, const double & m_b);
+            /* Non-factorizing two loop contributions */
+            // massless case, cf. [S:2004A], Eq. (16), p. 6
+            static complex<double> F17_massless(const double & mu, const double & s, const double & m_b);
+            static complex<double> F19_massless(const double & mu, const double & s, const double & m_b);
+            static complex<double> F27_massless(const double & mu, const double & s, const double & m_b);
+            static complex<double> F29_massless(const double & mu, const double & s, const double & m_b);
+            // massless case, cf. [BFS:2001A], Eqs. (82)-(83), p. 30
+            static complex<double> F87_massless(const double & mu, const double & s, const double & m_b);
+            static complex<double> F89_massless(const double & s, const double & m_b);
 
-        // massive case, cf. [ABGW:2003A], Eq. (7), p. 8
-        static complex<double> F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
-        static complex<double> F19_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
-        static complex<double> F27_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
-        static complex<double> F29_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
-        static complex<double> delta_F29_massive(const double & mu, const double & s, const double & m_c);
+            // massive case, cf. [ABGW:2003A], Eq. (7), p. 8
+            static complex<double> F17_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
+            static complex<double> F19_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
+            static complex<double> F27_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
+            static complex<double> F29_massive(const double & mu, const double & s, const double & m_b, const double & m_c);
+            static complex<double> delta_F29_massive(const double & mu, const double & s, const double & m_c);
 
-        // helper functions for F8j, cf. [BFS:2001A], Eqs. (29) and (84), pp. 8 and 30
-        static complex<double> B0(const double & s, const double & m_q);
-        static complex<double> C0(const double & s, const double & m_q);
+            // helper functions for F8j, cf. [BFS:2001A], Eqs. (29) and (84), pp. 8 and 30
+            static complex<double> B0(const double & s, const double & m_q);
+            static complex<double> C0(const double & s, const double & m_q);
 
-        // Contributions proportional to Q_s = Q_b arising from intermediate ccbar pairs at NLO in alpha_s.
-        // These contributions are interpolated from reference values from [AGV:2019A]
-        // In particular mu = m_b = 4.18 and alpha_s(M_Z) = 0.1185
-        static complex<double> F17_massive_Qsb(const double & s);
-        static complex<double> F19_massive_Qsb(const double & s);
-        static complex<double> F27_massive_Qsb(const double & s);
-        static complex<double> F29_massive_Qsb(const double & s);
+            // Contributions proportional to Q_s = Q_b arising from intermediate ccbar pairs at NLO in alpha_s.
+            // These contributions are interpolated from reference values from [AGV:2019A]
+            // In particular mu = m_b = 4.18 and alpha_s(M_Z) = 0.1185
+            static complex<double> F17_massive_Qsb(const double & s);
+            static complex<double> F19_massive_Qsb(const double & s);
+            static complex<double> F27_massive_Qsb(const double & s);
+            static complex<double> F29_massive_Qsb(const double & s);
     };
 
     struct ShortDistanceLowRecoil
     {
-        /*!
-         * Effective Wilson coefficient c7 in the region of low hadronic recoil.
-         *
-         * @param s             dilepton invariant mass
-         * @param mu            renormalization scale
-         * @param alpha_s       strong coupling evaluated at the scale mu
-         * @param m_b_PS        PS mass of the bottom quark
-         * @param use_nlo       true, if NLO contributions shall be used
-         * @param wc            the Wilson coefficients
-         *
-         * For the calculation, cf. [GP:2004A], Eq. (56)
-         */
-        static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo,
-                const WilsonCoefficients<BToS> & wc);
+            /*!
+             * Effective Wilson coefficient c7 in the region of low hadronic recoil.
+             *
+             * @param s             dilepton invariant mass
+             * @param mu            renormalization scale
+             * @param alpha_s       strong coupling evaluated at the scale mu
+             * @param m_b_PS        PS mass of the bottom quark
+             * @param use_nlo       true, if NLO contributions shall be used
+             * @param wc            the Wilson coefficients
+             *
+             * For the calculation, cf. [GP:2004A], Eq. (56)
+             */
+            static complex<double> c7eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, bool use_nlo, const WilsonCoefficients<BToS> & wc);
 
-        /*!
-         * Effective Wilson coefficient c8 at leading order.
-         *
-         * @param wc            the Wilson coefficients
-         *
-         * For the calculation, cf. [BFS:2001A], below eq. (26)
-         */
-        static complex<double> c8eff(const WilsonCoefficients<BToS> & wc);
+            /*!
+             * Effective Wilson coefficient c8 at leading order.
+             *
+             * @param wc            the Wilson coefficients
+             *
+             * For the calculation, cf. [BFS:2001A], below eq. (26)
+             */
+            static complex<double> c8eff(const WilsonCoefficients<BToS> & wc);
 
-        /*!
-         * Effective Wilson coefficient c9 in the region of low hadronic recoil.
-         *
-         * @param s                     dilepton invariant mass
-         * @param mu                    renormalization scale
-         * @param alpha_s               strong coupling evaluated at the scale mu
-         * @param m_b_PS                PS mass of the bottom quark
-         * @param m_c                   MSbar mass of the charm quark
-         * @param use_nlo               true, if NLO contributions shall be used
-         * @param ccbar_resonance       true, if phenomenological data from e^+e^- -> ccbar resonance -> hadrons shall be used
-         * @param lambda_hat_u          certain combination of CKM matrix elements: V_ub V_us^* / (V_tb V_ts^*)
-         * @param wc                    the Wilson coefficients
-         *
-         * For the calculation, cf. [GP:2004A], Eq. (55), p. 10
-         */
-        static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar,
-                bool use_nlo, bool ccbar_resonance, const complex<double> & lambda_hat_u,
-                const WilsonCoefficients<BToS> & wc);
+            /*!
+             * Effective Wilson coefficient c9 in the region of low hadronic recoil.
+             *
+             * @param s                     dilepton invariant mass
+             * @param mu                    renormalization scale
+             * @param alpha_s               strong coupling evaluated at the scale mu
+             * @param m_b_PS                PS mass of the bottom quark
+             * @param m_c                   MSbar mass of the charm quark
+             * @param use_nlo               true, if NLO contributions shall be used
+             * @param ccbar_resonance       true, if phenomenological data from e^+e^- -> ccbar resonance -> hadrons shall be used
+             * @param lambda_hat_u          certain combination of CKM matrix elements: V_ub V_us^* / (V_tb V_ts^*)
+             * @param wc                    the Wilson coefficients
+             *
+             * For the calculation, cf. [GP:2004A], Eq. (55), p. 10
+             */
+            static complex<double> c9eff(const double & s, const double & mu, const double & alpha_s, const double & m_b_PS, const double & m_c_MSbar, bool use_nlo,
+                                         bool ccbar_resonance, const complex<double> & lambda_hat_u, const WilsonCoefficients<BToS> & wc);
     };
 
-    class CharmLoopsAdapter :
-        public ParameterUser,
-        public PrivateImplementationPattern<CharmLoopsAdapter>
+    class CharmLoopsAdapter : public ParameterUser, public PrivateImplementationPattern<CharmLoopsAdapter>
     {
         public:
             CharmLoopsAdapter(const Parameters & parameters, const Options & options);
@@ -167,6 +169,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

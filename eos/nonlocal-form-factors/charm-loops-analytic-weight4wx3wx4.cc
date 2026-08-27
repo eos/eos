@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -46,22 +44,27 @@ namespace eos
     {
         // this functions contains the GPLs of weight 4 in F27(9)d where exactly one weight is + wx3(4)
         // the sum that contains the GPLs of weight 4 with one weight being - wx3(4) can be derived from this one
-        complex<double> weight4_wx3_wx4(const CharmLoopsParameters & clp, const complex<double> & wx)
+        complex<double>
+        weight4_wx3_wx4(const CharmLoopsParameters & clp, const complex<double> & wx)
         {
-            const complex<double> xd = clp.xd;
+            const complex<double> xd    = clp.xd;
             const complex<double> wxinv = 1.0 / wx;
 
             // this term multiplies an ill-defined sign(0.0)
             // the terms multiply a function form T(1, x, 1 + y) * T(p(-y, x), 1 + y, 2.0) which is conjectured to be zero for any values of x and y
-            const complex<double> sign0term = (-6.0 * pisqu * power_of<2>(log(1.0 + 1.0i * wx)) * my_sign(-real(wx)) * T(1.0, 1.0 + 1.0i * xd, 1.0 + 1.0i * wx) * T(p((-1.0i) * wx, 1.0 + 1.0i * xd), 1.0 + 1.0i * xd, 2.0) - 6.0 * pisqu * power_of<2>(log(1.0 - 1.0i * wx)) * my_sign(real(wx)) * T(1.0, 1.0 - 1.0i * xd, 1.0 - 1.0i * wx) * T(p(1.0i * wx, 1.0 - 1.0i * xd), 1.0 - 1.0i * xd, 2.0));
+            const complex<double> sign0term = (-6.0 * pisqu * power_of<2>(log(1.0 + 1.0i * wx)) * my_sign(-real(wx)) * T(1.0, 1.0 + 1.0i * xd, 1.0 + 1.0i * wx)
+                                                       * T(p((-1.0i) * wx, 1.0 + 1.0i * xd), 1.0 + 1.0i * xd, 2.0)
+                                               - 6.0 * pisqu * power_of<2>(log(1.0 - 1.0i * wx)) * my_sign(real(wx)) * T(1.0, 1.0 - 1.0i * xd, 1.0 - 1.0i * wx)
+                                                         * T(p(1.0i * wx, 1.0 - 1.0i * xd), 1.0 - 1.0i * xd, 2.0));
 
-            if(sign0term != 0.0)
+            if (sign0term != 0.0)
             {
                 throw InternalError("Ill-defined Sign(0.0)");
             }
 
             const complex<double> xdinv = 1.0 / xd;
 
+            // clang-format off
             const complex<double> part1 = power_of<4>(M_PI) / 5.0 - (3.0 * power_of<2>(dilog(1.0 - 1.0i * wx))) / 4.0 - (3.0 * power_of<2>(dilog(1.0 + 1.0i * wx))) / 4.0 + (3.0 * power_of<2>(dilog(-1.0i / (-1.0i + wx)))) / 4.0 + (3.0 * power_of<2>(dilog(1.0i / (1.0i + wx)))) / 4.0 + (9.0 * quadlog(1.0 - 1.0i * wx)) / 2.0 + (9.0 * quadlog(1.0 + 1.0i * wx)) / 2.0 + quadlog(-1.0i / wx) + quadlog(1.0i / wx) + 2.0 * quadlog((-1.0i) * wx) + 2.0 * quadlog(1.0i * wx) + (3.0 * quadlog(-1.0i / (-1.0i + wx))) / 2.0 + quadlog(wx / (-1.0i + wx)) + quadlog((-1.0i + wx) / wx) + (3.0 * quadlog(1.0i / (1.0i + wx))) / 2.0 + quadlog(wx / (1.0i + wx)) + quadlog((1.0i + wx) / wx) - 2.0 * quadlog(1.0 - wx * xdinv) + quadlog((wx - xd) / (-1.0i + wx)) + quadlog((wx - xd) / (1.0i + wx)) - 8.0 * quadlog(1.0 - 1.0i * xd)
                 - 8.0 * quadlog(1.0 + 1.0i * xd) - 6.0 * quadlog((-1.0i) * xd) - 6.0 * quadlog(1.0i * xd) + 9.0 * quadlog(xd / wx) + 2.0 * quadlog(-(xd / (wx - xd))) + 2.0 * quadlog((1.0i * (1.0i + wx) * xd) / (wx - xd)) - 2.0 * quadlog(xd / (-1.0i + xd)) - 3.0 * quadlog(((-1.0i + wx) * xd) / (wx * (-1.0i + xd))) - 6.0 * quadlog((-1.0i + xd) / (-1.0i + wx)) + quadlog((-1.0i + xd) * xdinv) - 2.0 * quadlog(xd / (1.0i + xd)) - 3.0 * quadlog(((1.0i + wx) * xd) / (wx * (1.0i + xd))) - 6.0 * quadlog((1.0i + xd) / (1.0i + wx)) + quadlog((1.0i + xd) * xdinv) + 8.0 * quadlog(1.0 - xd / wx) + 2.0 * quadlog(-((xd + 1.0i * wx * xd) / (wx - xd))) - li22(-1.0, (-1.0i) * xd) / 2.0 - li22(-1.0, 1.0i * xd) / 2.0 + li22(0.5, 1.0 - 1.0i * wx) / 4.0
                 + li22(0.5, 1.0 + 1.0i * wx) / 4.0 - (5.0 * li22(0.5, (-2.0 * 1.0i) / (-1.0i + wx))) / 2.0 - li22(0.5, (-1.0i + wx) / wx) / 4.0 - (5.0 * li22(0.5, (2.0 * 1.0i) / (1.0i + wx))) / 2.0 - li22(0.5, (1.0i + wx) / wx) / 4.0 + li22(0.5, (2.0 * wx) / (wx - xd)) - li22(0.5, (-2.0 * xd) / (wx - xd)) + li22(0.5, (2.0 * xd) / (-1.0i + xd)) / 2.0 + li22(0.5, (2.0 * xd) / (1.0i + xd)) / 2.0 - li22(0.5 - (1.0i / 2.0) * wx, 1.0i / (1.0i + wx)) / 4.0 + li22(0.5 - (1.0i / 2.0) * wx, (-2.0 * xd) / (wx - xd)) / 2.0 + li22(0.5 - (1.0i / 2.0) * wx, (1.0i + xd) / (1.0i + wx)) / 4.0 + li22(0.5 + (1.0i / 2.0) * wx, (-2.0 * xd) / (wx - xd)) / 2.0 + li22(1.0 - 1.0i * wx, (1.0i + xd) / (1.0i + wx))
@@ -423,8 +426,9 @@ namespace eos
                 + log(((-1.0i) * (wx - xd)) / (wx * (-1.0i + xd))) * ((-1.0 / 12.0) * (pisqu * lnm2) - power_of<3>(lnm2) / 12.0 - (pisqu * log(-1.0 + 1.0i * wx)) / 12.0 - power_of<3>(log(-1.0 + 1.0i * wx)) / 12.0 + (pisqu * log(1.0 + 1.0i * wx)) / 3.0 + (power_of<2>(lnm2) * log(1.0 + 1.0i * wx)) / 4.0 + (power_of<2>(log(-1.0 + 1.0i * wx)) * log(1.0 + 1.0i * wx)) / 4.0 + (log(1.0 - 1.0i * wx) * power_of<2>(log(1.0 + 1.0i * wx))) / 4.0 + power_of<3>(log(1.0 + 1.0i * wx)) / 6.0 + (pisqu * log((-1.0i + wx) / wx)) / 3.0 + (lnhalf * power_of<2>(log((-1.0i + wx) / wx))) / 2.0 + (ln2 * power_of<2>(log((-1.0i + wx) / wx))) / 2.0 + power_of<3>(log((-1.0i + wx) / wx)) / 3.0 + (power_of<2>(log((-1.0i + wx) / wx)) * log(1.0i / (1.0i + wx))) / 2.0 - (power_of<2>(log(1.0 + 1.0i * wx)) * log((1.0i + wx) / wx)) / 4.0
                 + 3.0 * zeta3) + log((1.0i * (wx - xd)) / (wx * (1.0i + xd))) * ((-1.0 / 12.0) * (pisqu * lnm2) - power_of<3>(lnm2) / 12.0 - (pisqu * log(-1.0 - 1.0i * wx)) / 12.0 - power_of<3>(log(-1.0 - 1.0i * wx)) / 12.0 + (pisqu * log(1.0 - 1.0i * wx)) / 3.0 + (power_of<2>(lnm2) * log(1.0 - 1.0i * wx)) / 4.0 + (power_of<2>(log(-1.0 - 1.0i * wx)) * log(1.0 - 1.0i * wx)) / 4.0 + power_of<3>(log(1.0 - 1.0i * wx)) / 6.0 + (power_of<2>(log(1.0 - 1.0i * wx)) * log(1.0 + 1.0i * wx)) / 4.0 - (power_of<2>(log(1.0 - 1.0i * wx)) * log((-1.0i + wx) / wx)) / 4.0 + (pisqu * log((1.0i + wx) / wx)) / 3.0 + (lnhalf * power_of<2>(log((1.0i + wx) / wx))) / 2.0 + (ln2 * power_of<2>(log((1.0i + wx) / wx))) / 2.0 + (log(-1.0i / (-1.0i + wx)) * power_of<2>(log((1.0i + wx) / wx))) / 2.0
                 + power_of<3>(log((1.0i + wx) / wx)) / 3.0 + 3.0 * zeta3);
+            // clang-format on
 
             return 4.0 * (part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8);
         }
-    }
-}
+    } // namespace agv_2019a
+} // namespace eos

@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -38,14 +36,15 @@
 
 namespace eos
 {
-	using std::complex;
-	using std::log;
-	using std::real;
-	using std::imag;
+    using std::complex;
+    using std::imag;
+    using std::log;
+    using std::real;
 
-	namespace agv_2019a
-	{
-        complex<double> f27d_part22(const CharmLoopsParameters & clp)
+    namespace agv_2019a
+    {
+        complex<double>
+        f27d_part22(const CharmLoopsParameters & clp)
         {
             const complex<double> xd = clp.xd;
             const complex<double> yd = clp.yd;
@@ -81,22 +80,30 @@ namespace eos
             const complex<double> ln1pyd = log(1.0 + yd);
             const complex<double> ln1myd = log(1.0 - yd);
 
-            const complex<double> num14 = 2.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * power_of<2>(1.0 + yd) * ((-1.0 + yd) * yd2 + xd8 * (-1.0 + yd) * yd2
-                    + 4.0 * xd2 * (-1.0 + yd + 4.0 * yd2 + 12.0 * yd3) + 4.0 * xd6 * (-1.0 + yd + 4.0 * yd2 + 12.0 * yd3)
-                    + 2.0 * xd4 * (28.0 - 28.0 * yd - 15.0 * yd2 + 79.0 * yd3));
-            const complex<double> num15 = 2.0 * power_of<2>(1.0 + xd2) * power_of<2>(-1.0 + yd) * (1.0 + yd) * (yd2 * (1.0 + yd) + xd8 * yd2 * (1.0 + yd) + 4.0 * xd2 * (1.0 + yd - 4.0 * yd2 + 12.0 * yd3)
-                    + 4.0 * xd6 * (1.0 + yd - 4.0 * yd2 + 12.0 * yd3) + 2.0 * xd4 * (-28.0 - 28.0 * yd + 15.0 * yd2 + 79.0 * yd3));
-            const complex<double> num16 = 4.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (yd2 + 3.0 * yd4 + xd8 * (yd2 + 3.0 * yd4) - 4.0 * xd2 * (-1.0 + 5.0 * yd2 + 8.0 * yd4)
-                    - 4.0 * xd6 * (-1.0 + 5.0 * yd2 + 8.0 * yd4) - 2.0 * xd4 * (60.0 - 107.0 * yd2 + 99.0 * yd4));
-            const complex<double> num17 = 16.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (-2.0 * 1.0i * xd * (-1.0 + yd) + yd + xd2 * yd) * (2.0 * 1.0i * xd * (-1.0 + yd) + yd + xd2 * yd) * (yd + xd2 * yd - 2.0 * xd * (1.0 + yd)) * (yd + xd2 * yd + 2.0 * xd * (1.0 + yd));
-            const complex<double> num18 = 16.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (-2.0 * xd * (-1.0 + yd) + yd + xd2 * yd) * (2.0 * xd * (-1.0 + yd) + yd + xd2 * yd) * (yd + xd2 * yd - 2.0 * 1.0i * xd * (1.0 + yd)) * (yd + xd2 * yd + 2.0 * 1.0i * xd * (1.0 + yd));
-            const complex<double> num19 = power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (yd2 + 7.0 * yd4 - 4.0 * xd2 * (-1.0 + 5.0 * yd2 - 16.0 * yd3 + 4.0 * yd4)
-                    - 4.0 * xd6 * (-1.0 + 5.0 * yd2 - 16.0 * yd3 + 4.0 * yd4) + xd8 * (yd2 + 7.0 * yd4) - 2.0 * xd4 * (92.0 - 171.0 * yd2 - 64.0 * yd3 + 119.0 * yd4));
-            const complex<double> num20 = power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (yd2 + 7.0 * yd4 - 4.0 * xd2 * (-1.0 + 5.0 * yd2 + 16.0 * yd3 + 4.0 * yd4)
-                    - 4.0 * xd6 * (-1.0 + 5.0 * yd2 + 16.0 * yd3 + 4.0 * yd4) + xd8 * (yd2 + 7.0 * yd4) - 2.0 * xd4 * (92.0 - 171.0 * yd2 + 64.0 * yd3 + 119.0 * yd4));
+            const complex<double> num14 = 2.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * power_of<2>(1.0 + yd)
+                                          * ((-1.0 + yd) * yd2 + xd8 * (-1.0 + yd) * yd2 + 4.0 * xd2 * (-1.0 + yd + 4.0 * yd2 + 12.0 * yd3)
+                                             + 4.0 * xd6 * (-1.0 + yd + 4.0 * yd2 + 12.0 * yd3) + 2.0 * xd4 * (28.0 - 28.0 * yd - 15.0 * yd2 + 79.0 * yd3));
+            const complex<double> num15 = 2.0 * power_of<2>(1.0 + xd2) * power_of<2>(-1.0 + yd) * (1.0 + yd)
+                                          * (yd2 * (1.0 + yd) + xd8 * yd2 * (1.0 + yd) + 4.0 * xd2 * (1.0 + yd - 4.0 * yd2 + 12.0 * yd3)
+                                             + 4.0 * xd6 * (1.0 + yd - 4.0 * yd2 + 12.0 * yd3) + 2.0 * xd4 * (-28.0 - 28.0 * yd + 15.0 * yd2 + 79.0 * yd3));
+            const complex<double> num16 = 4.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd)
+                                          * (yd2 + 3.0 * yd4 + xd8 * (yd2 + 3.0 * yd4) - 4.0 * xd2 * (-1.0 + 5.0 * yd2 + 8.0 * yd4) - 4.0 * xd6 * (-1.0 + 5.0 * yd2 + 8.0 * yd4)
+                                             - 2.0 * xd4 * (60.0 - 107.0 * yd2 + 99.0 * yd4));
+            const complex<double> num17 = 16.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (-2.0 * 1.0i * xd * (-1.0 + yd) + yd + xd2 * yd)
+                                          * (2.0 * 1.0i * xd * (-1.0 + yd) + yd + xd2 * yd) * (yd + xd2 * yd - 2.0 * xd * (1.0 + yd)) * (yd + xd2 * yd + 2.0 * xd * (1.0 + yd));
+            const complex<double> num18 = 16.0 * power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd) * (-2.0 * xd * (-1.0 + yd) + yd + xd2 * yd)
+                                          * (2.0 * xd * (-1.0 + yd) + yd + xd2 * yd) * (yd + xd2 * yd - 2.0 * 1.0i * xd * (1.0 + yd))
+                                          * (yd + xd2 * yd + 2.0 * 1.0i * xd * (1.0 + yd));
+            const complex<double> num19 = power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd)
+                                          * (yd2 + 7.0 * yd4 - 4.0 * xd2 * (-1.0 + 5.0 * yd2 - 16.0 * yd3 + 4.0 * yd4) - 4.0 * xd6 * (-1.0 + 5.0 * yd2 - 16.0 * yd3 + 4.0 * yd4)
+                                             + xd8 * (yd2 + 7.0 * yd4) - 2.0 * xd4 * (92.0 - 171.0 * yd2 - 64.0 * yd3 + 119.0 * yd4));
+            const complex<double> num20 = power_of<2>(1.0 + xd2) * (-1.0 + yd) * (1.0 + yd)
+                                          * (yd2 + 7.0 * yd4 - 4.0 * xd2 * (-1.0 + 5.0 * yd2 + 16.0 * yd3 + 4.0 * yd4) - 4.0 * xd6 * (-1.0 + 5.0 * yd2 + 16.0 * yd3 + 4.0 * yd4)
+                                             + xd8 * (yd2 + 7.0 * yd4) - 2.0 * xd4 * (92.0 - 171.0 * yd2 + 64.0 * yd3 + 119.0 * yd4));
 
             const complex<double> denom3 = 9.0 * power_of<3>(yd2 + xd4 * yd2 - 2.0 * xd2 * (-2.0 + yd2));
 
+            // clang-format off
             const complex<double> part1 = (-16.0 * num16 + 2.0 * num17 + 2.0 * num18 - num19 - num20) * li3half + (-num17 - num18) * trilog(1.0 / (1.0 - w4)) + (-num17 - num18) * trilog(-w4inv) + (num17 + num18) * trilog((-1.0 + w4) / (2.0 * w4))
                 + (-num17 - num18) * trilog((-1.0 + w4) / w4) + (num17 + num18) * trilog(-w4) + (-num17 - num18) * trilog(w4) + (num17 + num18) * trilog((1.0 - w4) / (1.0 + w4)) + (-num17 - num18) * trilog(1.0 + w5inv)
                 + (-num17 - num18) * trilog(w5inv) + (-num17 - num18) * trilog(-w5) + (num17 + num18) * trilog(w5) + (-num17 - num18) * trilog(1.0 / (1.0 + w5)) + (num17 + num18) * trilog((1.0 + w5) / (1.0 - w5))
@@ -560,8 +567,9 @@ namespace eos
                 + power_of<2>(log(1.0 - yd / w4)) * ((-1.0i) * num17 * M_PI * my_sign(imag(yd / w4)) * T(1.0, 1.0 - yd, 1.0 - yd / w4) + 1.0i * num17 * M_PI * my_sign(imag(yd / w4)) * T(1.0, 1.0 + yd, 1.0 - yd / w4))
                 + power_of<2>(log(1.0 - yd / w5)) * (1.0i * num18 * M_PI * my_sign(imag(yd / w5)) * T(1.0, 1.0 - yd, 1.0 - yd / w5) - 1.0i * num18 * M_PI * my_sign(imag(yd / w5)) * T(1.0, 1.0 + yd, 1.0 - yd / w5))
                 + power_of<2>(log(1.0 - yd / w7)) * (1.0i * num20 * M_PI * my_sign(imag(yd / w7)) * T(1.0, 1.0 - yd, 1.0 - yd / w7) - 1.0i * num20 * M_PI * my_sign(imag(yd / w7)) * T(1.0, 1.0 + yd, 1.0 - yd / w7));
+            // clang-format on
 
             return (part1 + part2 + part3 + part4 + part5 + part6) / denom3;
         }
-    }
-}
+    } // namespace agv_2019a
+} // namespace eos
