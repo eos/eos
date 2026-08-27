@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,6 +29,7 @@
 #include <iostream>
 #include <list>
 #include <sstream>
+#include <utility>
 
 namespace test
 {
@@ -38,9 +39,9 @@ namespace test
     {
             std::list<const TestCase *> test_cases;
 
-            TestCasesHolder() {}
+            TestCasesHolder() = default;
 
-            ~TestCasesHolder() {}
+            ~TestCasesHolder() = default;
 
             static TestCasesHolder *
             instance()
@@ -51,13 +52,13 @@ namespace test
             }
     };
 
-    TestCase::TestCase(const std::string & name) :
-        _name(name)
+    TestCase::TestCase(std::string name) :
+        _name(std::move(name))
     {
         TestCasesHolder::instance()->test_cases.push_back(this);
     }
 
-    TestCase::~TestCase() {}
+    TestCase::~TestCase() = default;
 
     std::string
     TestCase::name() const
@@ -65,10 +66,10 @@ namespace test
         return _name;
     }
 
-    TestCaseFailedException::TestCaseFailedException(int line, const std::string & file, const std::string & reason) :
+    TestCaseFailedException::TestCaseFailedException(int line, std::string file, std::string reason) :
         _line(line),
-        _file(file),
-        _reason(reason)
+        _file(std::move(file)),
+        _reason(std::move(reason))
     {
     }
 
@@ -116,40 +117,38 @@ main(int, char ** argv)
     eos::ObservableEntries::instance()->insert_or_assign("test::obs1", obs_entry);
 
 
-    for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()), i_end(test::TestCasesHolder::instance()->test_cases.end());
-         i != i_end;
-         ++i)
+    for (auto test_case : test::TestCasesHolder::instance()->test_cases)
     {
-        std::cout << "Running test case '" << (*i)->name() << "'" << std::endl;
+        std::cout << "Running test case '" << test_case->name() << "'" << '\n' << std::flush;
 
         try
         {
-            (*i)->run();
+            test_case->run();
         }
         catch (test::TestCaseFailedException & e)
         {
-            std::cout << "Test case failed: " << std::endl << e.where() << ":" << e.reason() << std::endl;
+            std::cout << "Test case failed: " << '\n' << e.where() << ":" << e.reason() << '\n' << std::flush;
             result = EXIT_FAILURE;
 
             continue;
         }
         catch (eos::Exception & e)
         {
-            std::cout << "Test case threw exception: " << std::endl << e.backtrace("\n") << e.what() << std::endl;
+            std::cout << "Test case threw exception: " << '\n' << e.backtrace("\n") << e.what() << '\n' << std::flush;
             result = EXIT_FAILURE;
 
             continue;
         }
         catch (std::string & e)
         {
-            std::cout << "Test case threw std::string: " << e << std::endl;
+            std::cout << "Test case threw std::string: " << e << '\n' << std::flush;
             result = EXIT_FAILURE;
 
             continue;
         }
         catch (...)
         {
-            std::cout << "Test case threw unrecognized exception: " << abi::__cxa_current_exception_type()->name() << std::endl;
+            std::cout << "Test case threw unrecognized exception: " << abi::__cxa_current_exception_type()->name() << '\n' << std::flush;
             result = EXIT_FAILURE;
 
             continue;

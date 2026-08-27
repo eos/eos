@@ -38,11 +38,11 @@ namespace test
             std::string _name;
 
         public:
-            TestCase(const std::string & name);
+            TestCase(std::string name);
 
             virtual ~TestCase();
 
-            std::string name() const;
+            [[nodiscard]] std::string name() const;
 
             virtual void run() const = 0;
     };
@@ -57,11 +57,11 @@ namespace test
             std::string _reason;
 
         public:
-            TestCaseFailedException(int line, const std::string & file, const std::string & reason);
+            TestCaseFailedException(int line, std::string file, std::string reason);
 
-            const std::string & reason() const;
+            [[nodiscard]] const std::string & reason() const;
 
-            std::string where() const;
+            [[nodiscard]] std::string where() const;
     };
 
 #ifdef EOS_GENERATE_TESTS
@@ -229,7 +229,7 @@ namespace test
         }                                                                                                                                         \
         catch (eos::Exception & e)                                                                                                                \
         {                                                                                                                                         \
-            std::cerr << e.backtrace("\n") << std::endl;                                                                                          \
+            std::cerr << e.backtrace("\n") << '\n';                                                                                               \
             throw TestCaseFailedException(__LINE__, __FILE__, "Caught unexpected eos::Exception in '" #expression "': " + std::string(e.what())); \
         }                                                                                                                                         \
         catch (...)                                                                                                                               \

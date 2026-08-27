@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,8 +34,8 @@ class NoThrowTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             try
             {
@@ -60,8 +60,8 @@ class EqualTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(TEST_CHECK_EQUAL(0, 0));
             TEST_CHECK_NO_THROW(TEST_CHECK_EQUAL(std::string("foo"), std::string("foo")));
@@ -81,8 +81,8 @@ class RelativeErrorTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(TEST_CHECK_RELATIVE_ERROR(1.0, 1.09, 0.1));
             TEST_CHECK_THROWS(TestCaseFailedException, TEST_CHECK_RELATIVE_ERROR(+1.0, +2.0, 0.1));
@@ -102,8 +102,8 @@ class RelativeErrorComplexTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             complex<double> x(1.0, 2.0);
             TEST_CHECK_NO_THROW(TEST_CHECK_RELATIVE_ERROR_C(x, complex<double>(1.03, 2.1), 0.1));
