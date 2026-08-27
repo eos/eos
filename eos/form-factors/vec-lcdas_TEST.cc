@@ -15,17 +15,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/vec-lcdas.hh>
-
-#include <eos/models/model.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/model.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class VectorLCDAsTest :
-    public TestCase
+class VectorLCDAsTest : public TestCase
 {
     public:
         VectorLCDAsTest() :
@@ -33,7 +32,8 @@ class VectorLCDAsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {

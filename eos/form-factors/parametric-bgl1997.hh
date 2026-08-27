@@ -24,15 +24,15 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BGL1997_HH 1
 
 #include <eos/form-factors/form-factors-fwd.hh>
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
-#include <eos/models/model.hh>
-#include <eos/utils/reference-name.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/maths/szego-polynomial.hh>
-#include <eos/utils/kinematic.hh>
+#include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
+#include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/reference-name.hh>
 
 #include <array>
 
@@ -42,21 +42,18 @@ namespace eos
 
     template <typename Process_, typename Transition_> class BGL1997FormFactors;
 
-
-    template <typename Process_>
-    class BGL1997FormFactorTraits<Process_, PToV> :
-        public virtual ParameterUser
+    template <typename Process_> class BGL1997FormFactorTraits<Process_, PToV> : public virtual ParameterUser
     {
         public:
-            UsedParameter m_B, m_V;
+            UsedParameter                m_B, m_V;
             std::array<UsedParameter, 4> masses_1m;
             std::array<UsedParameter, 4> masses_1p;
             std::array<UsedParameter, 3> masses_0m;
             std::array<UsedParameter, 2> masses_0p;
-            UsedParameter chi_1m, chi_0p;
-            UsedParameter chi_1p, chi_0m;
-            UsedParameter chi_T_1m, chi_T_1p;
-            UsedParameter t_0;
+            UsedParameter                chi_1m, chi_0p;
+            UsedParameter                chi_1p, chi_0m;
+            UsedParameter                chi_T_1m, chi_T_1p;
+            UsedParameter                t_0;
 
             IntegerOption n_bound_states_1m;
             IntegerOption n_bound_states_1p;
@@ -66,61 +63,57 @@ namespace eos
             BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
                 m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
                 m_V(UsedParameter(p[std::string(Process_::name_V) + "@HME"], *this)),
-                masses_1m{{ UsedParameter(p["mass::B_c^*@HME"], *this),
-                            UsedParameter(p["mass::B_c^*[1]@HME"], *this),
-                            UsedParameter(p["mass::B_c^*[2]@HME"], *this),
-                            UsedParameter(p["mass::B_c^*[3]@HME"], *this)
-                }},
-                masses_1p{{ UsedParameter(p["mass::B_c,1@HME"], *this),
-                            UsedParameter(p["mass::B_c,1[1]@HME"], *this),
-                            UsedParameter(p["mass::B_c,1[2]@HME"], *this),
-                            UsedParameter(p["mass::B_c,1[3]@HME"], *this)
-                }},
-                masses_0m{{ UsedParameter(p["mass::B_c@HME"], *this),
-                            UsedParameter(p["mass::B_c[1]@HME"], *this),
-                            UsedParameter(p["mass::B_c[2]@HME"], *this)
-                }},
-                masses_0p{{ UsedParameter(p["mass::B_c,0@HME"], *this),
-                            UsedParameter(p["mass::B_c,0[1]@HME"], *this)
-                }},
-                chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
-                chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
-                chi_1p(UsedParameter(p["b->c::chiOPE[1^+_A]"], *this)),
-                chi_0m(UsedParameter(p["b->c::chiOPE[0^-_A]"], *this)),
-                chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
-                chi_T_1p(UsedParameter(p["b->c::chiOPE[1^+_T5]"], *this)),
-                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
-                n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
-                n_bound_states_1p(o, options, "n-bound-states-1p"_ok),
-                n_bound_states_0m(o, options, "n-bound-states-0m"_ok),
+                masses_1m{
+                    { UsedParameter(p["mass::B_c^*@HME"], *this),
+                     UsedParameter(p["mass::B_c^*[1]@HME"], *this),
+                     UsedParameter(p["mass::B_c^*[2]@HME"], *this),
+                     UsedParameter(p["mass::B_c^*[3]@HME"], *this) }
+            },
+                masses_1p{ { UsedParameter(p["mass::B_c,1@HME"], *this),
+                             UsedParameter(p["mass::B_c,1[1]@HME"], *this),
+                             UsedParameter(p["mass::B_c,1[2]@HME"], *this),
+                             UsedParameter(p["mass::B_c,1[3]@HME"], *this) } },
+                masses_0m{ { UsedParameter(p["mass::B_c@HME"], *this), UsedParameter(p["mass::B_c[1]@HME"], *this), UsedParameter(p["mass::B_c[2]@HME"], *this) } },
+                masses_0p{ { UsedParameter(p["mass::B_c,0@HME"], *this), UsedParameter(p["mass::B_c,0[1]@HME"], *this) } }, chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
+                chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)), chi_1p(UsedParameter(p["b->c::chiOPE[1^+_A]"], *this)),
+                chi_0m(UsedParameter(p["b->c::chiOPE[0^-_A]"], *this)), chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
+                chi_T_1p(UsedParameter(p["b->c::chiOPE[1^+_T5]"], *this)), t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
+                n_bound_states_1m(o, options, "n-bound-states-1m"_ok), n_bound_states_1p(o, options, "n-bound-states-1p"_ok), n_bound_states_0m(o, options, "n-bound-states-0m"_ok),
                 n_bound_states_0p(o, options, "n-bound-states-0p"_ok)
             {
             }
 
-            double tp() const
+            double
+            tp() const
             {
                 return power_of<2>(m_B + m_V);
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_V);
             }
 
-            complex<double> _z(const complex<double> & s, const complex<double> & s_0, const complex<double> & s_p) const
+            complex<double>
+            _z(const complex<double> & s, const complex<double> & s_0, const complex<double> & s_p) const
             {
                 return (std::sqrt(s_p - s) - std::sqrt(s_p - s_0)) / (std::sqrt(s_p - s) + std::sqrt(s_p - s_0));
             }
 
-            double _z(const double & s, const double & s_0, const double & s_p) const
+            double
+            _z(const double & s, const double & s_0, const double & s_p) const
             {
                 if (s > s_p)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(s_p));
+                }
 
                 return real(_z(complex<double>(s, 0.0), complex<double>(s_0, 0.0), complex<double>(s_p, 0.0)));
             }
 
-            double blaschke_1m(const double & s) const
+            double
+            blaschke_1m(const double & s) const
             {
                 // bound states for 1^-
                 double blaschke = 1.0;
@@ -134,7 +127,8 @@ namespace eos
                 return blaschke;
             }
 
-            double blaschke_1p(const double & s) const
+            double
+            blaschke_1p(const double & s) const
             {
                 // bound states for 1^+
                 double blaschke = 1.0;
@@ -148,7 +142,8 @@ namespace eos
                 return blaschke;
             }
 
-            double blaschke_0m(const double & s) const
+            double
+            blaschke_0m(const double & s) const
             {
                 // bound states for 0^-
                 double blaschke = 1.0;
@@ -162,7 +157,8 @@ namespace eos
                 return blaschke;
             }
 
-            double blaschke_0p(const double & s) const
+            double
+            blaschke_0p(const double & s) const
             {
                 // bound states for 0^+
                 double blaschke = 1.0;
@@ -177,17 +173,15 @@ namespace eos
             }
     };
 
-    template <typename Process_>
-    class BGL1997FormFactorTraits<Process_, PToP> :
-        public virtual ParameterUser
+    template <typename Process_> class BGL1997FormFactorTraits<Process_, PToP> : public virtual ParameterUser
     {
         public:
-            UsedParameter m_B, m_P;
+            UsedParameter                m_B, m_P;
             std::array<UsedParameter, 4> masses_1m;
             std::array<UsedParameter, 2> masses_0p;
-            UsedParameter chi_1m, chi_0p;
-            UsedParameter chi_T_1m;
-            UsedParameter t_0;
+            UsedParameter                chi_1m, chi_0p;
+            UsedParameter                chi_T_1m;
+            UsedParameter                t_0;
 
             IntegerOption n_bound_states_1m;
             IntegerOption n_bound_states_0p;
@@ -195,47 +189,50 @@ namespace eos
             BGL1997FormFactorTraits(const Parameters & p, const Options & o, const std::vector<OptionSpecification> & options) :
                 m_B(UsedParameter(p[std::string(Process_::name_B) + "@HME"], *this)),
                 m_P(UsedParameter(p[std::string(Process_::name_P) + "@HME"], *this)),
-                masses_1m{{ UsedParameter(p["mass::B_c^*@HME"], *this),
-                            UsedParameter(p["mass::B_c^*[1]@HME"], *this),
-                            UsedParameter(p["mass::B_c^*[2]@HME"], *this),
-                            UsedParameter(p["mass::B_c^*[3]@HME"], *this)
-                }},
-                masses_0p{{ UsedParameter(p["mass::B_c,0@HME"], *this),
-                            UsedParameter(p["mass::B_c,0[1]@HME"], *this)
-                }},
-                chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
-                chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)),
-                chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
-                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)),
-                n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
+                masses_1m{
+                    { UsedParameter(p["mass::B_c^*@HME"], *this),
+                     UsedParameter(p["mass::B_c^*[1]@HME"], *this),
+                     UsedParameter(p["mass::B_c^*[2]@HME"], *this),
+                     UsedParameter(p["mass::B_c^*[3]@HME"], *this) }
+            },
+                masses_0p{ { UsedParameter(p["mass::B_c,0@HME"], *this), UsedParameter(p["mass::B_c,0[1]@HME"], *this) } }, chi_1m(UsedParameter(p["b->c::chiOPE[1^-_V]"], *this)),
+                chi_0p(UsedParameter(p["b->c::chiOPE[0^+_V]"], *this)), chi_T_1m(UsedParameter(p["b->c::chiOPE[1^-_T]"], *this)),
+                t_0(UsedParameter(p[std::string(Process_::label) + "::t_0@BGL1997"], *this)), n_bound_states_1m(o, options, "n-bound-states-1m"_ok),
                 n_bound_states_0p(o, options, "n-bound-states-0p"_ok)
             {
             }
 
-            double tp() const
+            double
+            tp() const
             {
                 return power_of<2>(m_B + m_P);
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_P);
             }
 
-            complex<double> _z(const complex<double> & s, const complex<double> & s_0, const complex<double> & s_p) const
+            complex<double>
+            _z(const complex<double> & s, const complex<double> & s_0, const complex<double> & s_p) const
             {
                 return (std::sqrt(s_p - s) - std::sqrt(s_p - s_0)) / (std::sqrt(s_p - s) + std::sqrt(s_p - s_0));
             }
 
-            double _z(const double & s, const double & s_0, const double & s_p) const
+            double
+            _z(const double & s, const double & s_0, const double & s_p) const
             {
                 if (s > s_p)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(s_p));
+                }
 
                 return real(_z(complex<double>(s, 0.0), complex<double>(s_0, 0.0), complex<double>(s_p, 0.0)));
             }
 
-            double blaschke_1m(const double & s) const
+            double
+            blaschke_1m(const double & s) const
             {
                 // bound states for 1^-
                 double blaschke = 1.0;
@@ -249,7 +246,8 @@ namespace eos
                 return blaschke;
             }
 
-            double blaschke_0p(const double & s) const
+            double
+            blaschke_0p(const double & s) const
             {
                 // bound states for 0^+
                 double blaschke = 1.0;
@@ -264,8 +262,7 @@ namespace eos
             }
     };
 
-    template <typename Process_> class BGL1997FormFactors<Process_, PToV> :
-        public FormFactors<PToV>
+    template <typename Process_> class BGL1997FormFactors<Process_, PToV> : public FormFactors<PToV>
     {
         private:
             std::array<UsedParameter, 4> _a_g, _a_f;
@@ -287,7 +284,7 @@ namespace eos
 
             static FormFactors<PToV> * make(const Parameters & parameters, const Options & options);
 
-            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const                      double & chi) const;
+            double _phi(const double & s, const double & s_0, const double & K, const unsigned & a, const unsigned & b, const unsigned & c, const double & chi) const;
 
             double g(const double & s) const;
             double f(const double & s) const;
@@ -337,12 +334,11 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> _options;
+            static const std::vector<OptionSpecification>           _options;
     };
     extern template class BGL1997FormFactors<BToDstar, PToV>;
 
-    template <typename Process_> class BGL1997FormFactors<Process_, PToP> :
-        public FormFactors<PToP>
+    template <typename Process_> class BGL1997FormFactors<Process_, PToP> : public FormFactors<PToP>
     {
         private:
             std::array<UsedParameter, 4> _a_f_p;
@@ -394,9 +390,9 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> _options;
+            static const std::vector<OptionSpecification>           _options;
     };
     extern template class BGL1997FormFactors<BToD, PToP>;
-}
+} // namespace eos
 
 #endif

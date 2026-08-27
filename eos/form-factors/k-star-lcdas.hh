@@ -23,14 +23,12 @@
 #include <eos/form-factors/vec-lcdas.hh>
 #include <eos/maths/gegenbauer-polynomial.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class AntiKStarLCDAs :
-        public VectorLCDAs,
-        public PrivateImplementationPattern<AntiKStarLCDAs>
+    class AntiKStarLCDAs : public VectorLCDAs, public PrivateImplementationPattern<AntiKStarLCDAs>
     {
         public:
             AntiKStarLCDAs(const Parameters &, const Options &);
@@ -111,20 +109,36 @@ namespace eos
             double phi4para(const double & u, const double & mu) const override;
 
             /* Twist 4 chiral odd two particle LCDAs */
-            double psi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double
+            psi4perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            phi4perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 5 chiral odd two particle LCDAs */
-            double psi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double
+            psi5perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            phi5perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
 
-    class KStarLCDAs :
-        public VectorLCDAs,
-        public PrivateImplementationPattern<KStarLCDAs>
+    class KStarLCDAs : public VectorLCDAs, public PrivateImplementationPattern<KStarLCDAs>
     {
         public:
             KStarLCDAs(const Parameters &, const Options &);
@@ -205,16 +219,34 @@ namespace eos
             double phi4para(const double & u, const double & mu) const override;
 
             /* Twist 4 chiral odd two particle LCDAs */
-            double psi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double
+            psi4perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            phi4perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 5 chiral odd two particle LCDAs */
-            double psi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double
+            psi5perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            phi5perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
-}
+} // namespace eos
 
 #endif

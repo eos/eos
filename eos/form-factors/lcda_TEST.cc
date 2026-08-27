@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/lcda.hh>
+
+#include <test/test.hh>
 
 #include <cmath>
 
 using namespace test;
 using namespace eos;
 
-class LCDATest :
-    public TestCase
+class LCDATest : public TestCase
 {
     public:
         LCDATest() :
@@ -34,7 +34,8 @@ class LCDATest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // Gegenbauer evolution
             {

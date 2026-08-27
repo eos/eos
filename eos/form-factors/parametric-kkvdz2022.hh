@@ -21,12 +21,12 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_KKVDZ2022_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_KKVDZ2022_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 #include <eos/utils/reference-name.hh>
@@ -35,25 +35,22 @@
 
 namespace eos
 {
-    class KKvDZ2022FormFactors :
-        public FormFactors<PToGammaOffShell>
+    class KKvDZ2022FormFactors : public FormFactors<PToGammaOffShell>
     {
         private:
-            BooleanOption opt_subtracted;
-            double switch_subtracted;
-            UsedParameter _s_0;
+            BooleanOption      opt_subtracted;
+            double             switch_subtracted;
+            UsedParameter      _s_0;
             static std::string _par_name(const std::string & ff_name);
-            double _width_omega(const double & q2) const;
-            double _width_rho(const double & q2) const;
-            double _z_omega(const double & k2) const;
-            double _z_rho(const double & k2) const;
-            double _subtraction_polynomial(const double & k2, const std::array<UsedParameter, 3> & c) const;
-            complex<double> _calc_ff_contribution_omega(const double & q2, const double & k2,
-                const double & m_r_sq, const std::array<UsedParameter, 3> & a,
-                const UsedParameter & s_0) const;
-            complex<double> _calc_ff_contribution_rho(const double & q2, const double & k2,
-                const double & m_r_sq, const std::array<UsedParameter, 3> & a,
-                const UsedParameter & s_0) const;
+            double             _width_omega(const double & q2) const;
+            double             _width_rho(const double & q2) const;
+            double             _z_omega(const double & k2) const;
+            double             _z_rho(const double & k2) const;
+            double             _subtraction_polynomial(const double & k2, const std::array<UsedParameter, 3> & c) const;
+            complex<double>    _calc_ff_contribution_omega(const double & q2, const double & k2, const double & m_r_sq, const std::array<UsedParameter, 3> & a,
+                                                           const UsedParameter & s_0) const;
+            complex<double>    _calc_ff_contribution_rho(const double & q2, const double & k2, const double & m_r_sq, const std::array<UsedParameter, 3> & a,
+                                                         const UsedParameter & s_0) const;
             std::array<std::array<UsedParameter, 3>, 4> _a_omega;
             std::array<std::array<UsedParameter, 3>, 4> _a_rho;
             std::array<std::array<UsedParameter, 3>, 4> _c_subtraction;
@@ -75,8 +72,8 @@ namespace eos
 
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
-}
+} // namespace eos
 
 #endif

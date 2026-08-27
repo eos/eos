@@ -20,9 +20,9 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_DKMR2017_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_DKMR2017_HH 1
 
-#include <eos/form-factors/form-factors-fwd.hh>
-#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/baryonic-processes.hh>
+#include <eos/form-factors/baryonic.hh>
+#include <eos/form-factors/form-factors-fwd.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/reference-name.hh>
 
@@ -31,12 +31,9 @@
 
 namespace eos
 {
-    template <typename Process_>
-    class DKMR2017FormFactorTraits;
+    template <typename Process_> class DKMR2017FormFactorTraits;
 
-    template <typename Process_>
-    class DKMR2017FormFactors :
-        public FormFactors<OneHalfPlusToOneHalfPlus>
+    template <typename Process_> class DKMR2017FormFactors : public FormFactors<OneHalfPlusToOneHalfPlus>
     {
         private:
             UsedParameter _alpha_0_time_v, _alpha_1_time_v, _alpha_2_time_v;
@@ -45,12 +42,12 @@ namespace eos
             UsedParameter _alpha_0_long_v, _alpha_1_long_v, _alpha_2_long_v;
             UsedParameter _alpha_0_long_a, _alpha_1_long_a, _alpha_2_long_a;
             UsedParameter _alpha_0_perp_v, _alpha_1_perp_v, _alpha_2_perp_v;
-            UsedParameter                  _alpha_1_perp_a, _alpha_2_perp_a;
+            UsedParameter _alpha_1_perp_a, _alpha_2_perp_a;
 
-            UsedParameter _alpha_0_long_t,  _alpha_1_long_t,  _alpha_2_long_t;
+            UsedParameter _alpha_0_long_t, _alpha_1_long_t, _alpha_2_long_t;
             UsedParameter _alpha_0_long_t5, _alpha_1_long_t5, _alpha_2_long_t5;
-            UsedParameter _alpha_0_perp_t,  _alpha_1_perp_t,  _alpha_2_perp_t;
-            UsedParameter                   _alpha_1_perp_t5, _alpha_2_perp_t5;
+            UsedParameter _alpha_0_perp_t, _alpha_1_perp_t, _alpha_2_perp_t;
+            UsedParameter _alpha_1_perp_t5, _alpha_2_perp_t5;
 
             std::unique_ptr<const DKMR2017FormFactorTraits<Process_>> _traits;
 
@@ -88,10 +85,10 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
 
     extern template class DKMR2017FormFactors<LambdaBToLambdaC>;
-}
+} // namespace eos
 
 #endif

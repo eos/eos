@@ -25,4 +25,4 @@ namespace eos
         Exception("No form factor found for process '" + process + "' and tag '" + tag + "'!")
     {
     }
-}
+} // namespace eos

@@ -22,17 +22,16 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_FVDV2018_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_FVDV2018_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
-#include <eos/utils/options.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/reference-name.hh>
 
 namespace eos
 {
-    template <typename Process_> class FvDV2018FormFactors :
-        public FormFactors<PToPP>
+    template <typename Process_> class FvDV2018FormFactors : public FormFactors<PToPP>
     {
         private:
             UsedParameter _a_Fperp_0_0, _a_Fperp_0_1, _a_Fperp_0_2, _a_Fperp_0_3, _a_Fperp_1_0, _a_Fperp_1_1, _a_Fperp_1_2;
@@ -52,8 +51,8 @@ namespace eos
             UsedParameter _c_Ftime_0_0, _c_Ftime_0_1, _c_Ftime_0_2, _c_Ftime_0_3, _c_Ftime_1_0, _c_Ftime_1_1, _c_Ftime_1_2;
 
             PartialWaveOption opt_L;
-            double _S_switch, _P_switch, _D_switch, _F_switch;
-            cubature::Config cub_conf;
+            double            _S_switch, _P_switch, _D_switch, _F_switch;
+            cubature::Config  cub_conf;
 
             static double _calc_z(const double & t, const double & t_p, const double & t_0);
             inline double _z(const double & t) const;
@@ -61,7 +60,7 @@ namespace eos
             inline double _blaschke(const double & z, const double & zh) const;
             inline double _blaschke_res_qhat2(const double & z) const;
 
-          public:
+        public:
             FvDV2018FormFactors(const Parameters & p, const Options & o);
             ~FvDV2018FormFactors();
 
@@ -92,10 +91,10 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
 
     extern template class FvDV2018FormFactors<BToPiPi>;
-}
+} // namespace eos
 
 #endif

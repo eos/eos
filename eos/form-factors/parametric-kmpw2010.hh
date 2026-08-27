@@ -21,23 +21,19 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_KMPW2010_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_KMPW2010_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 
 namespace eos
 {
     /* Form Factors according to [KMPW:2010A] */
     template <typename Transition_> class KMPW2010FormFactors;
 
-    template <> class KMPW2010FormFactors<PToV> :
-        public FormFactors<PToV>
+    template <> class KMPW2010FormFactors<PToV> : public FormFactors<PToV>
     {
         private:
             // fit parametrisation for P -> V according to [KMPW:2010A]
-            UsedParameter
-               _f0_V, _b1_V,
-               _f0_A0, _b1_A0, _f0_A1, _b1_A1, _f0_A2, _b1_A2,
-               _f0_T1, _b1_T1, _f0_T2, _b1_T2, _f0_T3, _b1_T3;
+            UsedParameter _f0_V, _b1_V, _f0_A0, _b1_A0, _f0_A1, _b1_A1, _f0_A2, _b1_A2, _f0_T1, _b1_T1, _f0_T2, _b1_T2, _f0_T3, _b1_T3;
 
             static const double _tau_p, _tau_m, _tau_0;
             static const double _m_B, _m_Kstar, _m_Bs2_0m, _m_Bs2_1m, _m_Bs2_1p;
@@ -84,13 +80,12 @@ namespace eos
 
     extern template class KMPW2010FormFactors<PToV>;
 
-    template <> class KMPW2010FormFactors<PToP> :
-        public FormFactors<PToP>
+    template <> class KMPW2010FormFactors<PToP> : public FormFactors<PToP>
     {
         private:
             // fit parametrisation for P -> P according to [KMPW:2010A]
-            UsedParameter _b1_p, _b1_0, _b1_t;
-            UsedParameter _f0_p, _f0_t;
+            UsedParameter       _b1_p, _b1_0, _b1_t;
+            UsedParameter       _f0_p, _f0_t;
             static const double _tau_p, _tau_m, _tau_0;
             static const double _m_B, _m_K, _m_Bs2;
 
@@ -111,6 +106,6 @@ namespace eos
     };
 
     extern template class KMPW2010FormFactors<PToP>;
-}
+} // namespace eos
 
 #endif

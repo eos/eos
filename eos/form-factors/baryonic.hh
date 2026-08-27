@@ -33,9 +33,7 @@
 
 namespace eos
 {
-    template <>
-    class FormFactors<OneHalfPlusToOneHalfPlus> :
-        public ParameterUser
+    template <> class FormFactors<OneHalfPlusToOneHalfPlus> : public ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -55,23 +53,20 @@ namespace eos
             virtual double f_perp_t5(const double & s) const = 0;
     };
 
-    template <>
-    class FormFactorFactory<OneHalfPlusToOneHalfPlus>
+    template <> class FormFactorFactory<OneHalfPlusToOneHalfPlus>
     {
         public:
-            using KeyType = QualifiedName;
-            using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfPlus> * (const Parameters &, const Options &)>;
+            using KeyType   = QualifiedName;
+            using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfPlus> *(const Parameters &, const Options &)>;
 
             static const std::map<KeyType, ValueType> form_factors;
 
-            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static OptionSpecification option_specification(const qnp::Prefix & process);
-            static OptionSpecification option_specification();
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{});
+            static OptionSpecification                                    option_specification(const qnp::Prefix & process);
+            static OptionSpecification                                    option_specification();
     };
 
-    template <>
-    class FormFactors<OneHalfPlusToOneHalfMinus> :
-        public ParameterUser
+    template <> class FormFactors<OneHalfPlusToOneHalfMinus> : public ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -87,23 +82,20 @@ namespace eos
             virtual Diagnostics diagnostics() const;
     };
 
-    template <>
-    class FormFactorFactory<OneHalfPlusToOneHalfMinus>
+    template <> class FormFactorFactory<OneHalfPlusToOneHalfMinus>
     {
         public:
-            using KeyType = QualifiedName;
-            using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfMinus> * (const Parameters &, const Options &)>;
+            using KeyType   = QualifiedName;
+            using ValueType = std::function<FormFactors<OneHalfPlusToOneHalfMinus> *(const Parameters &, const Options &)>;
 
             static const std::map<KeyType, ValueType> form_factors;
 
-            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static OptionSpecification option_specification(const qnp::Prefix & process);
-            static OptionSpecification option_specification();
+            static std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{});
+            static OptionSpecification                                     option_specification(const qnp::Prefix & process);
+            static OptionSpecification                                     option_specification();
     };
 
-    template <>
-    class FormFactors<OneHalfPlusToThreeHalfMinus> :
-        public ParameterUser
+    template <> class FormFactors<OneHalfPlusToThreeHalfMinus> : public ParameterUser
     {
         public:
             virtual ~FormFactors();
@@ -129,19 +121,18 @@ namespace eos
             virtual Diagnostics diagnostics() const;
     };
 
-    template <>
-    class FormFactorFactory<OneHalfPlusToThreeHalfMinus>
+    template <> class FormFactorFactory<OneHalfPlusToThreeHalfMinus>
     {
         public:
-            using KeyType = QualifiedName;
-            using ValueType = std::function<FormFactors<OneHalfPlusToThreeHalfMinus> * (const Parameters &, const Options &)>;
+            using KeyType   = QualifiedName;
+            using ValueType = std::function<FormFactors<OneHalfPlusToThreeHalfMinus> *(const Parameters &, const Options &)>;
 
             static const std::map<KeyType, ValueType> form_factors;
 
-            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{ });
-            static OptionSpecification option_specification(const qnp::Prefix & process);
-            static OptionSpecification option_specification();
+            static std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> create(const QualifiedName & name, const Parameters & parameters, const Options & options = Options{});
+            static OptionSpecification                                       option_specification(const qnp::Prefix & process);
+            static OptionSpecification                                       option_specification();
     };
-}
+} // namespace eos
 
 #endif

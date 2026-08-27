@@ -28,27 +28,23 @@ namespace eos
 {
     // P -> P
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    SSEFormFactorTraits<Process_, PToP>::resonance_0p_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,0@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> SSEFormFactorTraits<Process_, PToP>::resonance_0p_names{
+        { std::make_tuple(QuarkFlavor::bottom,      QuarkFlavor::up), "mass::B_u,0@HME" },
+        { std::make_tuple(QuarkFlavor::bottom,    QuarkFlavor::down), "mass::B_d,0@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,0@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,0@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,0@HME" }
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::charm), "mass::B_c,0@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,    QuarkFlavor::down), "mass::D_d,0@HME" },
+        {  std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange), "mass::D_s,0@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    SSEFormFactorTraits<Process_, PToP>::resonance_1m_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> SSEFormFactorTraits<Process_, PToP>::resonance_1m_names{
+        { std::make_tuple(QuarkFlavor::bottom,      QuarkFlavor::up), "mass::B_u^*@HME" },
+        { std::make_tuple(QuarkFlavor::bottom,    QuarkFlavor::down), "mass::B_d^*@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d^*@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s^*@HME" }
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::charm), "mass::B_c^*@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,    QuarkFlavor::down), "mass::D_d^*@HME" },
+        {  std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange), "mass::D_s^*@HME" }
     };
 
     template <typename Process_>
@@ -59,8 +55,7 @@ namespace eos
         const complex<double> a_0(a[0]), a_1(a[1]), a_2(a[2]);
 
         const complex<double> z = _traits.calc_z(s, tp);
-        return 1.0 / (1.0 - s / power_of<2>(m_R)) *
-                (a_0 + a_1 * z + a_2 * power_of<2>(z));
+        return 1.0 / (1.0 - s / power_of<2>(m_R)) * (a_0 + a_1 * z + a_2 * power_of<2>(z));
     }
 
     template <typename Process_>
@@ -72,24 +67,15 @@ namespace eos
 
     template <typename Process_>
     SSEFormFactors<Process_, PToP>::SSEFormFactors(const Parameters & p, const Options &) :
-        _a_fp{{ UsedParameter(p[_par_name("f+_0")], *this),
-                UsedParameter(p[_par_name("f+_1")], *this),
-                UsedParameter(p[_par_name("f+_2")], *this) }},
-        _a_ft{{ UsedParameter(p[_par_name("fT_0")], *this),
-                UsedParameter(p[_par_name("fT_1")], *this),
-                UsedParameter(p[_par_name("fT_2")], *this) }},
-        _a_fz{{ UsedParameter(p[_par_name("f0_1")], *this),
-                UsedParameter(p[_par_name("f0_2")], *this) }},
-        _traits(p),
-        _mB(_traits.m_B),
-        _mP(_traits.m_P)
+        _a_fp{
+            { UsedParameter(p[_par_name("f+_0")], *this), UsedParameter(p[_par_name("f+_1")], *this), UsedParameter(p[_par_name("f+_2")], *this) }
+    },
+        _a_ft{ { UsedParameter(p[_par_name("fT_0")], *this), UsedParameter(p[_par_name("fT_1")], *this), UsedParameter(p[_par_name("fT_2")], *this) } },
+        _a_fz{ { UsedParameter(p[_par_name("f0_1")], *this), UsedParameter(p[_par_name("f0_2")], *this) } }, _traits(p), _mB(_traits.m_B), _mP(_traits.m_P)
     {
     }
 
-    template <typename Process_>
-    SSEFormFactors<Process_, PToP>::~SSEFormFactors()
-    {
-    }
+    template <typename Process_> SSEFormFactors<Process_, PToP>::~SSEFormFactors() {}
 
     template <typename Process_>
     FormFactors<PToP> *
@@ -123,16 +109,14 @@ namespace eos
         // z(0)-dependent difference of the sub-leading coefficients:
         //   c_0 = a^f+_0 + (a^f+_1 - a^f0_1) z0 + (a^f+_2 - a^f0_2) z0^2 .
         const double z0  = _traits.calc_z(0.0, _traits.tp);
-        const double c_0 = _a_fp[0]
-            + (_a_fp[1] - _a_fz[0]) * z0
-            + (_a_fp[2] - _a_fz[1]) * power_of<2>(z0);
+        const double c_0 = _a_fp[0] + (_a_fp[1] - _a_fz[0]) * z0 + (_a_fp[2] - _a_fz[1]) * power_of<2>(z0);
 
-        std::array<double, 3> values
-        {{
-            c_0,
-            _a_fz[1 - 1],
-            _a_fz[2 - 1],
-        }};
+        std::array<double, 3> values{
+            {
+             c_0, _a_fz[1 - 1],
+             _a_fz[2 - 1],
+             }
+        };
 
         return _calc_ff(s, _traits.m_R_0p, _traits.tp, values);
     }
@@ -171,6 +155,6 @@ namespace eos
     {
         return real(f_plus_T(complex<double>(s)));
     }
-}
+} // namespace eos
 
 #endif

@@ -19,14 +19,14 @@
  */
 
 #include <eos/form-factors/parametric-ksvd2025.hh>
-#include <eos/maths/power-of.hh>
-#include <eos/utils/parameters.hh>
-#include <eos/utils/options.hh>
-#include <eos/utils/options-impl.hh>
-#include <eos/utils/qualified-name.hh>
-#include <eos/utils/stringify.hh>
 #include <eos/maths/derivative.hh>
 #include <eos/maths/integrate.hh>
+#include <eos/maths/power-of.hh>
+#include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
+#include <eos/utils/qualified-name.hh>
+#include <eos/utils/stringify.hh>
 
 #include <functional>
 #include <numeric>
@@ -38,53 +38,34 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::KSvD2025FormFactors(const Parameters & p, const Options & o) :
         n_resonances_1m(o, option_specifications, "n-resonances-1m"_ok),
         n_resonances_0p(o, option_specifications, "n-resonances-0p"_ok),
-        _b_fp{{
-            UsedParameter(p[_coeff_name("+", "1")], *this),
-            UsedParameter(p[_coeff_name("+", "2")], *this),
-            UsedParameter(p[_coeff_name("+", "3")], *this),
-            UsedParameter(p[_coeff_name("+", "4")], *this),
-            UsedParameter(p[_coeff_name("+", "5")], *this),
-            UsedParameter(p[_coeff_name("+", "6")], *this),
-            UsedParameter(p[_coeff_name("+", "7")], *this),
-            UsedParameter(p[_coeff_name("+", "8")], *this),
-            UsedParameter(p[_coeff_name("+", "9")], *this)
-        }},
-        _M_fp{{
-            UsedParameter(p["0->Kpi::M_(+,0)@KSvD2025"], *this),
-            UsedParameter(p["0->Kpi::M_(+,1)@KSvD2025"], *this),
-            UsedParameter(p["0->Kpi::M_(+,2)@KSvD2025"], *this)
-        }},
-        _G_fp{{
-            UsedParameter(p["0->Kpi::Gamma_(+,0)@KSvD2025"], *this),
-            UsedParameter(p["0->Kpi::Gamma_(+,1)@KSvD2025"], *this),
-            UsedParameter(p["0->Kpi::Gamma_(+,2)@KSvD2025"], *this)
-        }},
-        _b_fz{{
-            UsedParameter(p[_coeff_name("0", "1")], *this),
-            UsedParameter(p[_coeff_name("0", "2")], *this),
-            UsedParameter(p[_coeff_name("0", "3")], *this),
-            UsedParameter(p[_coeff_name("0", "4")], *this),
-            UsedParameter(p[_coeff_name("0", "5")], *this),
-            UsedParameter(p[_coeff_name("0", "6")], *this),
-            UsedParameter(p[_coeff_name("0", "7")], *this),
-            UsedParameter(p[_coeff_name("0", "8")], *this),
-            UsedParameter(p[_coeff_name("0", "9")], *this)
-        }},
-        _M_fz{{
-            UsedParameter(p["0->Kpi::M_(0,0)@KSvD2025"], *this),
-            UsedParameter(p["0->Kpi::M_(0,1)@KSvD2025"], *this)
-        }},
-        _G_fz{{
-            UsedParameter(p["0->Kpi::Gamma_(0,0)@KSvD2025"], *this),
-            UsedParameter(p["0->Kpi::Gamma_(0,1)@KSvD2025"], *this)
-        }},
-        _m_K(p["mass::K_d"], *this),
-        _m_pi(p["mass::pi^-"], *this),
-        _t_0(p["0->Kpi::t_0@KSvD2025"], *this),
-        _f_K(p["decay-constant::K"], *this),
-        _f_pi(p["decay-constant::pi"], *this),
-        _chi_1m(p["0->Kpi::chi_1m"], *this),
-        _chi_0p(p["0->Kpi::chi_0p"], *this)
+        _b_fp{
+            { UsedParameter(p[_coeff_name("+", "1")], *this),
+             UsedParameter(p[_coeff_name("+", "2")], *this),
+             UsedParameter(p[_coeff_name("+", "3")], *this),
+             UsedParameter(p[_coeff_name("+", "4")], *this),
+             UsedParameter(p[_coeff_name("+", "5")], *this),
+             UsedParameter(p[_coeff_name("+", "6")], *this),
+             UsedParameter(p[_coeff_name("+", "7")], *this),
+             UsedParameter(p[_coeff_name("+", "8")], *this),
+             UsedParameter(p[_coeff_name("+", "9")], *this) }
+    },
+        _M_fp{ { UsedParameter(p["0->Kpi::M_(+,0)@KSvD2025"], *this), UsedParameter(p["0->Kpi::M_(+,1)@KSvD2025"], *this), UsedParameter(p["0->Kpi::M_(+,2)@KSvD2025"], *this) } },
+        _G_fp{ { UsedParameter(p["0->Kpi::Gamma_(+,0)@KSvD2025"], *this),
+                 UsedParameter(p["0->Kpi::Gamma_(+,1)@KSvD2025"], *this),
+                 UsedParameter(p["0->Kpi::Gamma_(+,2)@KSvD2025"], *this) } },
+        _b_fz{ { UsedParameter(p[_coeff_name("0", "1")], *this),
+                 UsedParameter(p[_coeff_name("0", "2")], *this),
+                 UsedParameter(p[_coeff_name("0", "3")], *this),
+                 UsedParameter(p[_coeff_name("0", "4")], *this),
+                 UsedParameter(p[_coeff_name("0", "5")], *this),
+                 UsedParameter(p[_coeff_name("0", "6")], *this),
+                 UsedParameter(p[_coeff_name("0", "7")], *this),
+                 UsedParameter(p[_coeff_name("0", "8")], *this),
+                 UsedParameter(p[_coeff_name("0", "9")], *this) } },
+        _M_fz{ { UsedParameter(p["0->Kpi::M_(0,0)@KSvD2025"], *this), UsedParameter(p["0->Kpi::M_(0,1)@KSvD2025"], *this) } },
+        _G_fz{ { UsedParameter(p["0->Kpi::Gamma_(0,0)@KSvD2025"], *this), UsedParameter(p["0->Kpi::Gamma_(0,1)@KSvD2025"], *this) } }, _m_K(p["mass::K_d"], *this),
+        _m_pi(p["mass::pi^-"], *this), _t_0(p["0->Kpi::t_0@KSvD2025"], *this), _f_K(p["decay-constant::K"], *this), _f_pi(p["decay-constant::pi"], *this),
+        _chi_1m(p["0->Kpi::chi_1m"], *this), _chi_0p(p["0->Kpi::chi_0p"], *this)
 
     {
     }
@@ -97,6 +78,7 @@ namespace eos
         return new KSvD2025FormFactors<VacuumToKPi>(p, o);
     }
 
+    // clang-format off
     complex<double>
     KSvD2025FormFactors<VacuumToKPi>::z(const complex<double> & q2) const
     {
@@ -531,12 +513,11 @@ namespace eos
     KSvD2025FormFactors<VacuumToKPi>::references
     {
     };
+    // clang-format on
 
-    const std::vector<OptionSpecification>
-    KSvD2025FormFactors<VacuumToKPi>::option_specifications
-    {
+    const std::vector<OptionSpecification> KSvD2025FormFactors<VacuumToKPi>::option_specifications{
         { "n-resonances-1m"_ok, { "1"_ov, "2"_ov, "3"_ov }, "2"_ov },
-        { "n-resonances-0p"_ok, { "1"_ov, "2"_ov       }, "2"_ov }
+        { "n-resonances-0p"_ok,         { "1"_ov, "2"_ov }, "2"_ov }
     };
 
     std::vector<OptionSpecification>::const_iterator
@@ -552,4 +533,4 @@ namespace eos
     }
 
     template class KSvD2025FormFactors<VacuumToKPi>;
-}
+} // namespace eos

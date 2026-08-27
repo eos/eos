@@ -21,14 +21,12 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_KSTAR_LCDAS_HH 1
 
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class KstarLCDAs :
-        public ParameterUser,
-        public PrivateImplementationPattern<KstarLCDAs>
+    class KstarLCDAs : public ParameterUser, public PrivateImplementationPattern<KstarLCDAs>
     {
         public:
             KstarLCDAs(const Parameters &, const Options &);
@@ -58,6 +56,6 @@ namespace eos
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
-}
+} // namespace eos
 
 #endif

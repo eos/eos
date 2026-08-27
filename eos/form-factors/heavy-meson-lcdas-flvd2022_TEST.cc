@@ -18,9 +18,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/heavy-meson-lcdas-flvd2022.hh>
 #include <eos/observable.hh>
+
+#include <test/test.hh>
 
 #include <numeric>
 
@@ -28,8 +29,7 @@ using namespace test;
 using namespace eos;
 using namespace heavy_meson_lcdas;
 
-class FLvD2022Test :
-    public TestCase
+class FLvD2022Test : public TestCase
 {
     public:
         FLvD2022Test() :
@@ -37,17 +37,17 @@ class FLvD2022Test :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // basic test
             {
                 Parameters p = Parameters::Defaults();
-                Options o
-                {
-                    { "alpha-s"_ok, "naive"_ov }
+                Options    o{
+                       { "alpha-s"_ok, "naive"_ov }
                 };
 
-                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::mu_0@FLvD2022"]    = 1.0;
                 p["B_u::omega_0@FLvD2022"] = 1.0;
 
                 std::array<double, 9> ref = { 1.0, -2.0, 3.0, -4.0, 5.0, -6.0, 7.0, -8.0, 9.0 };
@@ -59,7 +59,7 @@ class FLvD2022Test :
                 FLvD2022 blcdas(p, o);
 
                 auto [c, c_end] = blcdas.coefficient_range(1.0);
-                for (auto it = c ; it != c_end ; ++it)
+                for (auto it = c; it != c_end; ++it)
                 {
                     TEST_CHECK_NEARLY_EQUAL(*it, ref[std::distance(c, it)], 1e-15);
                 }
@@ -68,19 +68,19 @@ class FLvD2022Test :
             // RG evolution
             {
                 Parameters p = Parameters::Defaults();
-                Options o
-                {
-                    { "alpha-s"_ok, "naive"_ov }
+                Options    o{
+                       { "alpha-s"_ok, "naive"_ov }
                 };
 
-                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::mu_0@FLvD2022"]    = 1.0;
                 p["B_u::omega_0@FLvD2022"] = 0.55;
-                const double mu = 1.5;
+                const double mu            = 1.5;
 
                 // Evolved coefficients below are obtained using numerical evaluation of the exact 1-loop evolution
                 // The test checks the implemented fast *approximation*
-                std::array<double, 9> ref = { 1.6, 0.8, 0.3, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0 };
-                std::array<double, 9> res_evolved = { 1.4134123399029324, 0.5565559530817631, 0.2504760836874369, 0.12325426840513773, 0.09162847424850495, -0.019314494689795878, 0.015306298689121587, -0.013140355927689062, 0.011614395045637823 };
+                std::array<double, 9> ref         = { 1.6, 0.8, 0.3, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0 };
+                std::array<double, 9> res_evolved = { 1.4134123399029324,    0.5565559530817631,   0.2504760836874369,    0.12325426840513773, 0.09162847424850495,
+                                                      -0.019314494689795878, 0.015306298689121587, -0.013140355927689062, 0.011614395045637823 };
                 for (size_t k = 0; k < ref.size(); k++)
                 {
                     p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = ref[k];
@@ -89,7 +89,7 @@ class FLvD2022Test :
                 FLvD2022 blcdas(p, o);
 
                 auto [c, c_end] = blcdas.coefficient_range(mu);
-                for (auto it = c ; it != c_end ; ++it)
+                for (auto it = c; it != c_end; ++it)
                 {
                     TEST_CHECK_NEARLY_EQUAL(*it, res_evolved[std::distance(c, it)], 1e-7);
                 }
@@ -97,20 +97,22 @@ class FLvD2022Test :
 
             // pseudo-observables tildephi and the derivative
             {
-                Parameters p = Parameters::Defaults();
+                Parameters            p          = Parameters::Defaults();
                 std::array<double, 9> parameters = { 1.0, -2.0, 3.0, -4.0, 5.0, -6.0, 7.0, -8.0, 9.0 };
 
-                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::mu_0@FLvD2022"]    = 1.0;
                 p["B_u::omega_0@FLvD2022"] = 0.3;
                 for (size_t k = 0; k < parameters.size(); k++)
                 {
                     p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = parameters[k];
                 }
 
-                Kinematics k = Kinematics({ { "tau", 0.4 }, {"mu", p["B_u::mu_0@FLvD2022"]} });
-                Options o
-                {
-                    { "alpha-s"_ok, "naive"_ov }
+                Kinematics k = Kinematics({
+                    { "tau",                     0.4 },
+                    {  "mu", p["B_u::mu_0@FLvD2022"] }
+                });
+                Options    o{
+                       { "alpha-s"_ok, "naive"_ov }
                 };
 
                 auto phitilde = Observable::make("B::phitilde_+(-i*tau,mu)@FLvD2022", p, k, o);
@@ -125,20 +127,21 @@ class FLvD2022Test :
 
             // inverse moment and first and second logarithmic moments
             {
-                Parameters p = Parameters::Defaults();
+                Parameters            p          = Parameters::Defaults();
                 std::array<double, 9> parameters = { 1.0, -2.0, 3.0, -4.0, 5.0, -6.0, 7.0, -8.0, 9.0 };
 
-                p["B_u::mu_0@FLvD2022"] = 1.0;
+                p["B_u::mu_0@FLvD2022"]    = 1.0;
                 p["B_u::omega_0@FLvD2022"] = 0.3;
                 for (size_t k = 0; k < parameters.size(); k++)
                 {
                     p["B_u::a^phi+_" + std::to_string(k) + "@FLvD2022"] = parameters[k];
                 }
 
-                Kinematics k = Kinematics({ {"mu", 1.0} });
-                Options o
-                {
-                    { "alpha-s"_ok, "naive"_ov }
+                Kinematics k = Kinematics({
+                    { "mu", 1.0 }
+                });
+                Options    o{
+                       { "alpha-s"_ok, "naive"_ov }
                 };
 
                 auto L0 = Observable::make("B::L0@FLvD2022", p, k, o);

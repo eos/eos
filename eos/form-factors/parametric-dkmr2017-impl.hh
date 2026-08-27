@@ -26,16 +26,14 @@
 
 namespace eos
 {
-    template <typename Process_>
-    class DKMR2017FormFactorTraits :
-        public virtual ParameterUser
+    template <typename Process_> class DKMR2017FormFactorTraits : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
             // the ones used for the extraction of the coefficients of the z-expension
             UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
-            const double m_R_0m, m_R_0p, m_R_1m, m_R_1p;
-            const double tp_0m, tp_0p, tp_1m, tp_1p; // pair production thresholds
+            const double  m_R_0m, m_R_0p, m_R_1m, m_R_1p;
+            const double  tp_0m, tp_0p, tp_1m, tp_1p; // pair production thresholds
 
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0m_masses;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0p_masses;
@@ -56,51 +54,48 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return (m_1 - m_2) * (m_1 - m_2);
             }
 
-            complex<double> calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
+            complex<double>
+            calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
             {
                 return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
             }
 
-            double calc_z(const double & t, const double & tp, const double & t0) const
+            double
+            calc_z(const double & t, const double & tp, const double & t0) const
             {
                 if (t > tp)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(t) + " > " + stringify(tp));
+                }
 
                 return real(calc_z(complex<double>(t, 0.0), complex<double>(tp, 0.0), complex<double>(t0, 0.0)));
             }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DKMR2017FormFactorTraits<Process_>::resonance_0m_masses
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm),   6.276 }
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DKMR2017FormFactorTraits<Process_>::resonance_0m_masses{
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), 6.276 }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DKMR2017FormFactorTraits<Process_>::resonance_0p_masses
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm),   6.725 }
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DKMR2017FormFactorTraits<Process_>::resonance_0p_masses{
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), 6.725 }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DKMR2017FormFactorTraits<Process_>::resonance_1m_masses
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm),   6.332 }
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DKMR2017FormFactorTraits<Process_>::resonance_1m_masses{
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), 6.332 }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DKMR2017FormFactorTraits<Process_>::resonance_1p_masses
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm),   6.768 }
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DKMR2017FormFactorTraits<Process_>::resonance_1p_masses{
+        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), 6.768 }
     };
 
     template <typename Process_>
@@ -275,16 +270,9 @@ namespace eos
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_perp_t5() * z + _alpha_2_perp_t5() * z2);
     }
 
-    template <typename Process_>
-    const std::set<ReferenceName> DKMR2017FormFactors<Process_>::references
-    {
-        "DKMR:2017A"_rn
-    };
+    template <typename Process_> const std::set<ReferenceName> DKMR2017FormFactors<Process_>::references{ "DKMR:2017A"_rn };
 
-    template <typename Process_>
-    const std::vector<OptionSpecification> DKMR2017FormFactors<Process_>::options
-    {
-    };
+    template <typename Process_> const std::vector<OptionSpecification> DKMR2017FormFactors<Process_>::options{};
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
@@ -299,6 +287,6 @@ namespace eos
     {
         return options.cend();
     }
-}
+} // namespace eos
 
 #endif

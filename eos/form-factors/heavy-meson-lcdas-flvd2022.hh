@@ -24,9 +24,9 @@
 #include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/reference-name.hh>
 
 #include <array>
@@ -40,25 +40,24 @@ namespace eos
         /*!
          * Parametrization of the B-meson LCDAs according to Ref. [FLvD:2022A]
          */
-        class FLvD2022:
-            public HeavyMesonLCDAs
+        class FLvD2022 : public HeavyMesonLCDAs
         {
             private:
-                const static unsigned int number_of_parameters = 9u;
-                using Weights = std::array<double, number_of_parameters>; // We implement the weights as fixed-size arrays
+                static const unsigned int number_of_parameters = 9u;
+                using Weights                                  = std::array<double, number_of_parameters>; // We implement the weights as fixed-size arrays
 
                 std::shared_ptr<Model> model;
 
                 QuarkFlavorOption opt_Q;
                 QuarkFlavorOption opt_q;
-                RestrictedOption opt_gminus;
-                double switch_gminus;
+                RestrictedOption  opt_gminus;
+                double            switch_gminus;
 
-                RestrictedOption opt_alpha_s;
+                RestrictedOption                      opt_alpha_s;
                 std::function<double(const double &)> alpha_s;
 
-                UsedParameter mu_0;
-                UsedParameter omega_0;
+                UsedParameter                                   mu_0;
+                UsedParameter                                   omega_0;
                 std::array<UsedParameter, number_of_parameters> a; // at the scale mu_0
 
                 std::string parameter(const char * _name) const;
@@ -140,14 +139,14 @@ namespace eos
                 virtual double chi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
 
                 /*!
-                * Pseudo observables for the two-particle LCDAs
-                *
-                * The logarithmic moments are defined in [FLvD:2022A], Eq. (14) with mu_m_hat = omega_0 * exp(euler_gamma)
-                */
+                 * Pseudo observables for the two-particle LCDAs
+                 *
+                 * The logarithmic moments are defined in [FLvD:2022A], Eq. (14) with mu_m_hat = omega_0 * exp(euler_gamma)
+                 */
                 virtual double inverse_lambda_plus() const final override;
-                double inverse_moment(const double & mu) const;
-                double logarithmic_moment_1(const double & mu) const;
-                double logarithmic_moment_2(const double & mu) const;
+                double         inverse_moment(const double & mu) const;
+                double         logarithmic_moment_1(const double & mu) const;
+                double         logarithmic_moment_2(const double & mu) const;
 
                 /*!
                  * Leading power three-particle LCDAs
@@ -161,10 +160,10 @@ namespace eos
                 virtual double Y_A(const double & omega, const double & xi) const final override;
 
                 /*!
-                * Auxiliary functions for the three-particle LCDAs
-                *
-                * See [KMO:2006A], below eq. (72), p. 28 for their definition.
-                */
+                 * Auxiliary functions for the three-particle LCDAs
+                 *
+                 * See [KMO:2006A], below eq. (72), p. 28 for their definition.
+                 */
                 virtual double Xbar_A(const double & omega, const double & xi) const final override;
                 virtual double Ybar_A(const double & omega, const double & xi) const final override;
 
@@ -172,17 +171,17 @@ namespace eos
                 virtual Diagnostics diagnostics() const final override;
 
                 /*!
-                * References used in the computation of our (pseudo)observables.
-                */
+                 * References used in the computation of our (pseudo)observables.
+                 */
                 static const std::set<ReferenceName> references;
 
                 /*!
-                * Options used in the computation of our (pseudo)observables.
-                */
+                 * Options used in the computation of our (pseudo)observables.
+                 */
                 static std::vector<OptionSpecification>::const_iterator begin_options();
                 static std::vector<OptionSpecification>::const_iterator end_options();
         };
-    }
-}
+    } // namespace heavy_meson_lcdas
+} // namespace eos
 
 #endif

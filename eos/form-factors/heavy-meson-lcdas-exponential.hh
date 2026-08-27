@@ -25,9 +25,9 @@
 
 #include <eos/form-factors/heavy-meson-lcdas.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 #include <string>
 #include <tuple>
@@ -46,13 +46,12 @@ namespace eos
          * For the three-particle decomposition, we use the parametrization
          * as defined in [KMO:2006A], eq. (28), p. 10.
          */
-        class Exponential :
-            public HeavyMesonLCDAs
+        class Exponential : public HeavyMesonLCDAs
         {
             private:
                 QuarkFlavorOption opt_Q;
                 QuarkFlavorOption opt_q;
-                RestrictedOption opt_gminus;
+                RestrictedOption  opt_gminus;
 
                 UsedParameter lambda_B_inv;
                 UsedParameter lambda_E2;
@@ -61,7 +60,7 @@ namespace eos
                 double switch_gminus;
 
                 inline double lambda_B() const;
-                std::string parameter(const char * _name) const;
+                std::string   parameter(const char * _name) const;
 
                 static const std::vector<OptionSpecification> options;
 
@@ -76,28 +75,28 @@ namespace eos
                  *
                  * omega: plus-component of the spectator momentum
                  */
-                virtual double phi_plus(const double &omega) const final override;
-                virtual double phi_minus(const double &omega) const final override;
-                virtual double phi_bar(const double &omega) const final override;
-                virtual double phi_bar_d1(const double &omega) const final override;
+                virtual double phi_plus(const double & omega) const final override;
+                virtual double phi_minus(const double & omega) const final override;
+                virtual double phi_bar(const double & omega) const final override;
+                virtual double phi_bar_d1(const double & omega) const final override;
 
                 /*!
                  * Next-to-leading twist two-particle LCDAs
                  *
                  * omega: plus-component of the spectator momentum
                  */
-                virtual double g_plus(const double &omega) const final override;
-                virtual double g_plus_d1(const double &omega) const final override;
-                virtual double g_plus_d2(const double &omega) const final override;
+                virtual double g_plus(const double & omega) const final override;
+                virtual double g_plus_d1(const double & omega) const final override;
+                virtual double g_plus_d2(const double & omega) const final override;
 
-                virtual double g_minusWW(const double &omega) const final override;
-                virtual double g_minusWW_d1(const double &omega) const final override;
-                virtual double g_minusWW_d2(const double &omega) const final override;
+                virtual double g_minusWW(const double & omega) const final override;
+                virtual double g_minusWW_d1(const double & omega) const final override;
+                virtual double g_minusWW_d2(const double & omega) const final override;
 
-                virtual double g_bar(const double &omega) const final override;
-                virtual double g_bar_d1(const double &omega) const final override;
-                virtual double g_bar_d2(const double &omega) const final override;
-                virtual double g_bar_d3(const double &omega) const final override;
+                virtual double g_bar(const double & omega) const final override;
+                virtual double g_bar_d1(const double & omega) const final override;
+                virtual double g_bar_d2(const double & omega) const final override;
+                virtual double g_bar_d3(const double & omega) const final override;
 
                 /*!
                  * Leading power three-particle LCDAs
@@ -105,23 +104,23 @@ namespace eos
                  * omega_1: plus-component of the spectator momentum
                  * omega_2: plus-component of the gluon momentum
                  */
-                virtual double phi_3(const double &omega_1, const double &omega_2) const final override;
-                virtual double phi_4(const double &omega_1, const double &omega_2) const final override;
+                virtual double phi_3(const double & omega_1, const double & omega_2) const final override;
+                virtual double phi_4(const double & omega_1, const double & omega_2) const final override;
 
-                virtual double phi_bar_3(const double &omega_1, const double &omega_2) const final override;
-                virtual double phi_bar_4(const double &omega_1, const double &omega_2) const final override;
+                virtual double phi_bar_3(const double & omega_1, const double & omega_2) const final override;
+                virtual double phi_bar_4(const double & omega_1, const double & omega_2) const final override;
 
-                virtual double phi_bar2_3(const double &omega_1, const double &omega_2) const final override;
-                virtual double phi_bar2_4(const double &omega_1, const double &omega_2) const final override;
+                virtual double phi_bar2_3(const double & omega_1, const double & omega_2) const final override;
+                virtual double phi_bar2_4(const double & omega_1, const double & omega_2) const final override;
 
-                virtual double phi_bar_bar_3(const double &omega_1, const double &omega_2) const final override;
-                virtual double phi_bar_bar_4(const double &omega_1, const double &omega_2) const final override;
+                virtual double phi_bar_bar_3(const double & omega_1, const double & omega_2) const final override;
+                virtual double phi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
 
-                virtual double psi_bar_4(const double &omega_1, const double &omega_2) const final override;
-                virtual double chi_bar_4(const double &omega_1, const double &omega_2) const final override;
+                virtual double psi_bar_4(const double & omega_1, const double & omega_2) const final override;
+                virtual double chi_bar_4(const double & omega_1, const double & omega_2) const final override;
 
-                virtual double psi_bar_bar_4(const double &omega_1, const double &omega_2) const final override;
-                virtual double chi_bar_bar_4(const double &omega_1, const double &omega_2) const final override;
+                virtual double psi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
+                virtual double chi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
                 /*!
                  * Pseudo observables for the two-particle LCDAs
                  */
@@ -133,18 +132,18 @@ namespace eos
                  * omega: plus-component of the spectator momentum
                  * xi:    plus-component of the gluon momentum
                  */
-                virtual double psi_A(const double &omega, const double &xi) const final override;
-                virtual double psi_V(const double &omega, const double &xi) const final override;
-                virtual double X_A(const double &omega, const double &xi) const final override;
-                virtual double Y_A(const double &omega, const double &xi) const final override;
+                virtual double psi_A(const double & omega, const double & xi) const final override;
+                virtual double psi_V(const double & omega, const double & xi) const final override;
+                virtual double X_A(const double & omega, const double & xi) const final override;
+                virtual double Y_A(const double & omega, const double & xi) const final override;
 
                 /*!
                  * Auxiliary functions for the three-particle LCDAs
                  *
                  * See [KMO:2006A], below eq. (72), p. 28 for their definition.
                  */
-                virtual double Xbar_A(const double &omega, const double &xi) const final override;
-                virtual double Ybar_A(const double &omega, const double &xi) const final override;
+                virtual double Xbar_A(const double & omega, const double & xi) const final override;
+                virtual double Ybar_A(const double & omega, const double & xi) const final override;
 
                 /*!
                  * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
@@ -156,7 +155,7 @@ namespace eos
                 /* Internal diagnostics */
                 virtual Diagnostics diagnostics() const final override;
         };
-    }
-}
+    } // namespace heavy_meson_lcdas
+} // namespace eos
 
 #endif

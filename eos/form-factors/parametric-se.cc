@@ -25,8 +25,8 @@
 namespace eos
 {
     // 1/2+ -> 1/2+
-    template class SEFormFactors<LambdaBToLambda,  OneHalfPlusToOneHalfPlus>;
-    template class SEFormFactors<LambdaCToLambda,  OneHalfPlusToOneHalfPlus>;
+    template class SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>;
+    template class SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>;
     template class SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>;
 
     // 1/2+ -> 3/2-
@@ -48,4 +48,4 @@ namespace eos
     template class SEFormFactors<DToK, PToP>;
     template class SEFormFactors<DsToEta, PToP>;
     template class SEFormFactors<DsToEtaPrime, PToP>;
-}
+} // namespace eos

@@ -25,16 +25,14 @@
 
 namespace eos
 {
-    template <typename Process_>
-    class DM2016FormFactorTraits :
-        public virtual ParameterUser
+    template <typename Process_> class DM2016FormFactorTraits : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and must match the
             // the ones used for the extraction of the coefficients of the z-expension
             UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
-            const double m_R_0m, m_R_0p, m_R_1m, m_R_1p;
-            const double tp; // pair production threshold
+            const double  m_R_0m, m_R_0p, m_R_1m, m_R_1p;
+            const double  tp; // pair production threshold
 
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0m_masses;
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> resonance_0p_masses;
@@ -55,68 +53,65 @@ namespace eos
             }
 
             // kinematic endpoint
-            double tm() const
+            double
+            tm() const
             {
                 return (m_1 - m_2) * (m_1 - m_2);
             }
 
             // z(t_0) = 0, t_m is the endpoint of the semileptonic process
-            double t0() const
+            double
+            t0() const
             {
                 return tm();
             }
 
-            complex<double> calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
+            complex<double>
+            calc_z(const complex<double> & t, const complex<double> & tp, const complex<double> & t0) const
             {
                 return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
             }
 
-            double calc_z(const double & t, const double & tp, const double & t0) const
+            double
+            calc_z(const double & t, const double & tp, const double & t0) const
             {
                 if (t > tp)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(t) + " > " + stringify(tp));
+                }
 
                 return real(calc_z(complex<double>(t, 0.0), complex<double>(tp, 0.0), complex<double>(t0, 0.0)));
             }
 
-            double calc_z(const double & t) const
+            double
+            calc_z(const double & t) const
             {
                 return calc_z(t, this->tp, this->tm());
             }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DM2016FormFactorTraits<Process_>::resonance_0m_masses
-    {
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DM2016FormFactorTraits<Process_>::resonance_0m_masses{
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.367 },
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DM2016FormFactorTraits<Process_>::resonance_0p_masses
-    {
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DM2016FormFactorTraits<Process_>::resonance_0p_masses{
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.711 },
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DM2016FormFactorTraits<Process_>::resonance_1m_masses
-    {
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DM2016FormFactorTraits<Process_>::resonance_1m_masses{
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.416 },
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DM2016FormFactorTraits<Process_>::resonance_1p_masses
-    {
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DM2016FormFactorTraits<Process_>::resonance_1p_masses{
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), 5.750 },
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double>
-    DM2016FormFactorTraits<Process_>::threshold_tp_values
-    {
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, double> DM2016FormFactorTraits<Process_>::threshold_tp_values{
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), (5.279 + 0.494) * (5.279 + 0.494) },
     };
 
@@ -292,16 +287,9 @@ namespace eos
         return 1.0 / (1.0 - s / mR2) * (_alpha_0_long_t5() + _alpha_1_perp_t5() * z + _alpha_2_perp_t5() * z2);
     }
 
-    template <typename Process_>
-    const std::set<ReferenceName> DM2016FormFactors<Process_>::references
-    {
-        "DM:2016A"_rn
-    };
+    template <typename Process_> const std::set<ReferenceName> DM2016FormFactors<Process_>::references{ "DM:2016A"_rn };
 
-    template <typename Process_>
-    const std::vector<OptionSpecification> DM2016FormFactors<Process_>::options
-    {
-    };
+    template <typename Process_> const std::vector<OptionSpecification> DM2016FormFactors<Process_>::options{};
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
@@ -316,6 +304,6 @@ namespace eos
     {
         return options.cend();
     }
-}
+} // namespace eos
 
 #endif

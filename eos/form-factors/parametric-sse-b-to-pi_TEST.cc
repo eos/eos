@@ -17,14 +17,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/parametric-sse-impl-p-to-p.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class BToPiSSEFormFactorsTest :
-    public TestCase
+class BToPiSSEFormFactorsTest : public TestCase
 {
     public:
         BToPiSSEFormFactorsTest() :
@@ -32,22 +32,23 @@ class BToPiSSEFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             /* B -> pi */
             {
-                Parameters p = Parameters::Defaults();
-                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::SSE", p, Options{ });
+                Parameters                         p  = Parameters::Defaults();
+                std::shared_ptr<FormFactors<PToP>> ff = FormFactorFactory<PToP>::create("B->pi::SSE", p, Options{});
                 TEST_CHECK(ff.get() != nullptr);
 
                 // arbitrary, non-zero coefficients: the equation of motion f_0(0) = f_+(0)
                 // must hold identically, regardless of their values.
-                p["B->pi::alpha^f+_0@SSE"] =  0.4;
+                p["B->pi::alpha^f+_0@SSE"] = 0.4;
                 p["B->pi::alpha^f+_1@SSE"] = -1.1;
-                p["B->pi::alpha^f+_2@SSE"] =  0.9;
-                p["B->pi::alpha^f0_1@SSE"] =  0.05;
+                p["B->pi::alpha^f+_2@SSE"] = 0.9;
+                p["B->pi::alpha^f0_1@SSE"] = 0.05;
                 p["B->pi::alpha^f0_2@SSE"] = -0.37;
-                p["B->pi::alpha^fT_0@SSE"] =  0.27;
+                p["B->pi::alpha^fT_0@SSE"] = 0.27;
                 p["B->pi::alpha^fT_1@SSE"] = -1.4;
                 p["B->pi::alpha^fT_2@SSE"] = -1.3;
 
@@ -59,10 +60,10 @@ class BToPiSSEFormFactorsTest :
                 // pin the whole parametrisation to reference values computed with the
                 // corrected f_0 (the z expansion is not shifted, so z(0) != 0).
                 static const double eps = 1.0e-6;
-                TEST_CHECK_RELATIVE_ERROR(ff->f_p( 0.0),  0.16058302054963150, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_0( 0.0),  0.16058302054963147, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_p(10.0),  0.35133196523016341, eps);
-                TEST_CHECK_RELATIVE_ERROR(ff->f_0(10.0),  0.25619406664625294, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(0.0), 0.16058302054963150, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(0.0), 0.16058302054963147, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_p(10.0), 0.35133196523016341, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_0(10.0), 0.25619406664625294, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff->f_t(10.0), -0.05125633612234586, eps);
             }
         }

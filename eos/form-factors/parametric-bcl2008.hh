@@ -20,8 +20,8 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BCL2008_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BCL2008_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 
@@ -36,8 +36,7 @@ namespace eos
      */
     template <typename Process_, unsigned K_, bool with_tensor_> class BCL2008FormFactorBase;
 
-    template <typename Process_> class BCL2008FormFactorBase<Process_, 3u, false> :
-        public FormFactors<typename Process_::Transition>
+    template <typename Process_> class BCL2008FormFactorBase<Process_, 3u, false> : public FormFactors<typename Process_::Transition>
     {
         private:
             /*
@@ -47,7 +46,7 @@ namespace eos
              * coefficient b_K is fixed by eq. (14).
              */
             UsedParameter _f_plus_0, _b_plus_1, _b_plus_2;
-            UsedParameter            _b_zero_1, _b_zero_2, _b_zero_3;
+            UsedParameter _b_zero_1, _b_zero_2, _b_zero_3;
 
         protected:
             double _z(const double & s) const;
@@ -64,8 +63,7 @@ namespace eos
             virtual double f_plus_T(const double &) const;
     };
 
-    template <typename Process_> class BCL2008FormFactorBase<Process_, 4u, false> :
-        public FormFactors<typename Process_::Transition>
+    template <typename Process_> class BCL2008FormFactorBase<Process_, 4u, false> : public FormFactors<typename Process_::Transition>
     {
         private:
             /*
@@ -75,7 +73,7 @@ namespace eos
              * coefficient b_K is fixed by eq. (14).
              */
             UsedParameter _f_plus_0, _b_plus_1, _b_plus_2, _b_plus_3;
-            UsedParameter            _b_zero_1, _b_zero_2, _b_zero_3, _b_zero_4;
+            UsedParameter _b_zero_1, _b_zero_2, _b_zero_3, _b_zero_4;
 
         protected:
             double _z(const double & s) const;
@@ -92,8 +90,7 @@ namespace eos
             virtual double f_plus_T(const double &) const;
     };
 
-    template <typename Process_> class BCL2008FormFactorBase<Process_, 5u, false> :
-        public FormFactors<typename Process_::Transition>
+    template <typename Process_> class BCL2008FormFactorBase<Process_, 5u, false> : public FormFactors<typename Process_::Transition>
     {
         private:
             /*
@@ -103,7 +100,7 @@ namespace eos
              * coefficient b_K is fixed by eq. (14).
              */
             UsedParameter _f_plus_0, _b_plus_1, _b_plus_2, _b_plus_3, _b_plus_4;
-            UsedParameter            _b_zero_1, _b_zero_2, _b_zero_3, _b_zero_4, _b_zero_5;
+            UsedParameter _b_zero_1, _b_zero_2, _b_zero_3, _b_zero_4, _b_zero_5;
 
         protected:
             double _z(const double & s) const;
@@ -120,8 +117,7 @@ namespace eos
             virtual double f_plus_T(const double &) const;
     };
 
-    template <typename Process_> class BCL2008FormFactorBase<Process_, 3u, true> :
-        public BCL2008FormFactorBase<Process_, 3u, false>
+    template <typename Process_> class BCL2008FormFactorBase<Process_, 3u, true> : public BCL2008FormFactorBase<Process_, 3u, false>
     {
         private:
             /*
@@ -132,7 +128,7 @@ namespace eos
              *
              * Tensor form factors only. Vector and scalar form factor in BCL2008FormFactorBase<>.
              */
-            UsedParameter _f_t_0,    _b_t_1,    _b_t_2;
+            UsedParameter _f_t_0, _b_t_1, _b_t_2;
 
         public:
             BCL2008FormFactorBase(const Parameters & p, const Options & o);
@@ -140,8 +136,7 @@ namespace eos
             virtual double f_t(const double & s) const;
     };
 
-    template <typename Process_> class BCL2008FormFactorBase<Process_, 4u, true> :
-        public BCL2008FormFactorBase<Process_, 4u, false>
+    template <typename Process_> class BCL2008FormFactorBase<Process_, 4u, true> : public BCL2008FormFactorBase<Process_, 4u, false>
     {
         private:
             /*
@@ -152,7 +147,7 @@ namespace eos
              *
              * Tensor form factors only. Vector and scalar form factor in BCL2008FormFactorBase<>.
              */
-            UsedParameter _f_t_0,    _b_t_1,    _b_t_2,    _b_t_3;
+            UsedParameter _f_t_0, _b_t_1, _b_t_2, _b_t_3;
 
         public:
             BCL2008FormFactorBase(const Parameters & p, const Options & o);
@@ -160,8 +155,7 @@ namespace eos
             virtual double f_t(const double & s) const;
     };
 
-    template <typename Process_> class BCL2008FormFactorBase<Process_, 5u, true> :
-        public BCL2008FormFactorBase<Process_, 5u, false>
+    template <typename Process_> class BCL2008FormFactorBase<Process_, 5u, true> : public BCL2008FormFactorBase<Process_, 5u, false>
     {
         private:
             /*
@@ -172,7 +166,7 @@ namespace eos
              *
              * Tensor form factors only. Vector and scalar form factor in BCL2008FormFactorBase<>.
              */
-            UsedParameter _f_t_0,    _b_t_1,    _b_t_2,    _b_t_3,    _b_t_4;
+            UsedParameter _f_t_0, _b_t_1, _b_t_2, _b_t_3, _b_t_4;
 
         public:
             BCL2008FormFactorBase(const Parameters & p, const Options & o);
@@ -180,9 +174,7 @@ namespace eos
             virtual double f_t(const double & s) const;
     };
 
-
-    template <typename Process_, unsigned K_> class BCL2008FormFactors :
-        public BCL2008FormFactorBase<Process_, K_, Process_::uses_tensor_form_factors>
+    template <typename Process_, unsigned K_> class BCL2008FormFactors : public BCL2008FormFactorBase<Process_, K_, Process_::uses_tensor_form_factors>
     {
         public:
             BCL2008FormFactors(const Parameters & p, const Options & o);
@@ -197,6 +189,6 @@ namespace eos
     extern template class BCL2008FormFactors<BToK, 3u>;
 
     extern template class BCL2008FormFactors<BToD, 3u>;
-}
+} // namespace eos
 
 #endif

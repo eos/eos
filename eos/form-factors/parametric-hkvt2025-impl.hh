@@ -30,46 +30,40 @@
 
 #include <boost/math/special_functions/legendre.hpp>
 
-#include <numeric>
 #include <iostream>
+#include <numeric>
+
 namespace eos
 {
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    HKVT2025FormFactorTraits<Process_, PToPP>::resonance_0m_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> HKVT2025FormFactorTraits<Process_, PToPP>::resonance_0m_names{
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::up), "mass::B_u@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    HKVT2025FormFactorTraits<Process_, PToPP>::resonance_1m_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u^*@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> HKVT2025FormFactorTraits<Process_, PToPP>::resonance_1m_names{
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::up), "mass::B_u^*@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    HKVT2025FormFactorTraits<Process_, PToPP>::resonance_1p_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::up), "mass::B_u,1@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> HKVT2025FormFactorTraits<Process_, PToPP>::resonance_1p_names{
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::up), "mass::B_u,1@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::string, unsigned>
-    HKVT2025FormFactorTraits<Process_, PToPP>::charge_map
-    {
+    const std::map<std::string, unsigned> HKVT2025FormFactorTraits<Process_, PToPP>::charge_map{
         { "+-", 0 },
         { "00", 1 },
         { "+0", 2 }
     };
 
-    template<typename Process_>
+    template <typename Process_>
     HKVT2025FormFactors<Process_, PToPP>::HKVT2025FormFactors(const Parameters & p, const Options & o) :
+        // clang-format off
         _a_g{{{{{ std::array{ UsedParameter(p[_exp_par_name("g", 0, 0, 0, 0)], *this), UsedParameter(p[_exp_par_name("g", 0, 0, 1, 0)], *this), UsedParameter(p[_exp_par_name("g", 0, 0, 2, 0)], *this) } ,
                   std::array{ UsedParameter(p[_exp_par_name("g", 0, 0, 0, 1)], *this), UsedParameter(p[_exp_par_name("g", 0, 0, 1, 1)], *this), UsedParameter(p[_exp_par_name("g", 0, 0, 2, 1)], *this) } ,
                   std::array{ UsedParameter(p[_exp_par_name("g", 0, 0, 0, 2)], *this), UsedParameter(p[_exp_par_name("g", 0, 0, 1, 2)], *this), UsedParameter(p[_exp_par_name("g", 0, 0, 2, 2)], *this) }} ,
@@ -179,25 +173,27 @@ namespace eos
 
     template<typename Process_>
     HKVT2025FormFactors<Process_, PToPP>::~HKVT2025FormFactors() = default;
+    // clang-format on
 
-    template<typename Process_>
+    template <typename Process_>
     FormFactors<PToPP> *
     HKVT2025FormFactors<Process_, PToPP>::make(const Parameters & parameters, const Options & options)
     {
         return new HKVT2025FormFactors(parameters, options);
     }
 
-    template<typename Process_>
+    template <typename Process_>
     QualifiedName
     HKVT2025FormFactors<Process_, PToPP>::_exp_par_name(const std::string & ff_name, unsigned iso, unsigned wave, unsigned z_order, unsigned y_order) const
     {
-        return QualifiedName(stringify(Process_::label) + "::a^" + ff_name + "_" + stringify(iso) + "_" + stringify(wave) + "_" + stringify(z_order) + "_" + stringify(y_order) + "@HKvT2025");
+        return QualifiedName(stringify(Process_::label) + "::a^" + ff_name + "_" + stringify(iso) + "_" + stringify(wave) + "_" + stringify(z_order) + "_" + stringify(y_order)
+                             + "@HKvT2025");
     }
 
-    template<typename Process_>
+    template <typename Process_>
     double
-    HKVT2025FormFactors<Process_, PToPP>::_phi(const int & l, const double & k2, const double & q2, const double & q2p, const double & chi,
-                        const unsigned a, const unsigned b, const double N) const
+    HKVT2025FormFactors<Process_, PToPP>::_phi(const int & l, const double & k2, const double & q2, const double & q2p, const double & chi, const unsigned a, const unsigned b,
+                                               const double N) const
     {
         // Note: The factor 1 / 2 / M_PI at the end originates from the change of q^2 -> z and the 1 / M_PI in front of the dispersive integral
         const double norm = std::sqrt(N / 256 / M_PI / M_PI / M_PI / chi / (2 * l + 1) / 2 / M_PI);
@@ -209,14 +205,14 @@ namespace eos
         const double kinematic_q2m = power_of<2>(mB - std::sqrt(k2));
 
         // set Q^2 to 0
-        const double q2_term = 1 / (2 * (q2p + std::sqrt(q2p) * std::sqrt(q2p - q2)) - q2);
+        const double q2_term        = 1 / (2 * (q2p + std::sqrt(q2p) * std::sqrt(q2p - q2)) - q2);
         const double lambda_q2_term = (kinematic_q2p - q2) * power_of<2>(std::sqrt(q2p - q2) + std::sqrt(q2p - kinematic_q2m));
-        const double sqrtjac_q2 = std::sqrt(4 * (1 + z) * (traits.q20 - q2p) / power_of<3>(z - 1));
+        const double sqrtjac_q2     = std::sqrt(4 * (1 + z) * (traits.q20 - q2p) / power_of<3>(z - 1));
 
         return norm * sqrtjac_q2 * pow(lambda_q2_term, (2 * l + 1 - 2 * a) * 0.25) * pow(q2_term, b * 0.5);
     }
 
-    template<typename Process_>
+    template <typename Process_>
     inline double
     HKVT2025FormFactors<Process_, PToPP>::_phi_g(const double & q2, const double & k2, const unsigned & l) const
     {
@@ -224,7 +220,7 @@ namespace eos
         return _phi(l, k2, q2, traits.q2p_v, traits.chi_1m_v, 0, 4, l * (l + 1) / 48.0);
     }
 
-    template<typename Process_>
+    template <typename Process_>
     inline double
     HKVT2025FormFactors<Process_, PToPP>::_phi_f(const double & q2, const double & k2, const unsigned & l) const
     {
@@ -232,14 +228,14 @@ namespace eos
         return _phi(l, k2, q2, traits.q2p_a, traits.chi_1p_a, 1, 4, l * (l + 1) / 3.0);
     }
 
-    template<typename Process_>
+    template <typename Process_>
     inline double
     HKVT2025FormFactors<Process_, PToPP>::_phi_F1(const double & q2, const double & k2, const unsigned & l) const
     {
         return (l > 0) ? _phi(l, k2, q2, traits.q2p_a, traits.chi_1p_a, 1, 5, 1.0 / 12.0) : _phi(0, k2, q2, traits.q2p_a, traits.chi_1p_a, -1, 5, 1.0 / 12.0);
     }
 
-    template<typename Process_>
+    template <typename Process_>
     inline double
     HKVT2025FormFactors<Process_, PToPP>::_phi_F2(const double & q2, const double & k2, const unsigned & l) const
     {
@@ -250,39 +246,44 @@ namespace eos
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::g_tilde(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
+        if (Process_::eta[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         // Partial-wave independent pieces
-        const double blaschke      = (power_of<2>(traits.m_R_1m) < traits.q2p_v ? traits.calc_z(q2, traits.q2p_v, power_of<2>(traits.m_R_1m)) : 1.0);
-        const complex<double> y    = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const double z             = traits.calc_z(q2, traits.q2p_v, traits.q20);
-        const auto   polynomials_z = traits.orthonormal_polynomials_v(z, k2);
-        const auto   polynomials_y = traits.threshold_improved_polynomials(y, l);
+        const double          blaschke      = (power_of<2>(traits.m_R_1m) < traits.q2p_v ? traits.calc_z(q2, traits.q2p_v, power_of<2>(traits.m_R_1m)) : 1.0);
+        const complex<double> y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const double          z             = traits.calc_z(q2, traits.q2p_v, traits.q20);
+        const auto            polynomials_z = traits.orthonormal_polynomials_v(z, k2);
+        const auto            polynomials_y = traits.threshold_improved_polynomials(y, l);
 
         complex<double> res = 0.0;
 
         const double phi = _phi_g(q2, k2, l);
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
             complex<double> tmpres = 0.0;
-            for (unsigned j = 0 ; j < 3 ; j++)
+            for (unsigned j = 0; j < 3; j++)
             {
                 tmpres += double(_a_g[iso][l][i][j]) * polynomials_z[j];
             }
             res += tmpres * polynomials_y[i];
         }
 
-        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi / std::sqrt(Process_::eta[iso][l]);
+        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi
+               / std::sqrt(Process_::eta[iso][l]);
     }
 
     template <typename Process_>
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::v_perp(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::lambda[iso][l] == 0.0 )
+        if (Process_::lambda[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         const double kinpref = std::pow(traits.kappa(k2, q2), l - 1); // Taken into account in matching to helicity FFs: / std::sqrt(k2);
 
@@ -293,39 +294,44 @@ namespace eos
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::f_tilde(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
-                return 0.0;
+        if (Process_::eta[iso][l] == 0.0)
+        {
+            return 0.0;
+        }
 
         // Partial-wave independent pieces
-        const double blaschke      = (power_of<2>(traits.m_R_1p) < traits.q2p_a ? traits.calc_z(q2, traits.q2p_a, power_of<2>(traits.m_R_1p)) : 1.0);
-        const complex<double> y    = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const double z             = traits.calc_z(q2, traits.q2p_a, traits.q20);
-        const auto   polynomials_z = traits.orthonormal_polynomials_a(z, k2);
-        const auto   polynomials_y = traits.threshold_improved_polynomials(y, l);
+        const double          blaschke      = (power_of<2>(traits.m_R_1p) < traits.q2p_a ? traits.calc_z(q2, traits.q2p_a, power_of<2>(traits.m_R_1p)) : 1.0);
+        const complex<double> y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const double          z             = traits.calc_z(q2, traits.q2p_a, traits.q20);
+        const auto            polynomials_z = traits.orthonormal_polynomials_a(z, k2);
+        const auto            polynomials_y = traits.threshold_improved_polynomials(y, l);
 
         complex<double> res = 0.0;
 
         const double phi = _phi_f(q2, k2, l);
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
             complex<double> tmpres = 0.0;
-            for (unsigned j = 0 ; j < 3 ; j++)
+            for (unsigned j = 0; j < 3; j++)
             {
                 tmpres += double(_a_f[iso][l][i][j]) * polynomials_z[j];
             }
             res += tmpres * polynomials_y[i];
         }
 
-        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi / std::sqrt(Process_::eta[iso][l]);
+        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi
+               / std::sqrt(Process_::eta[iso][l]);
     }
 
     template <typename Process_>
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::a_par(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::lambda[iso][l] == 0.0 )
+        if (Process_::lambda[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         // Note, the factor sqrt(k2) is removed when matching the helicity amplitudes
         const double kinpref = std::pow(traits.kappa(k2, q2), l - 1); // / std::sqrt(k2);
@@ -337,39 +343,44 @@ namespace eos
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::F1_tilde(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
+        if (Process_::eta[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         // Partial-wave independent pieces
-        const double blaschke      = (power_of<2>(traits.m_R_1p) < traits.q2p_a ? traits.calc_z(q2, traits.q2p_a, power_of<2>(traits.m_R_1p)) : 1.0);
-        const complex<double> y    = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const double z             = traits.calc_z(q2, traits.q2p_a, traits.q20);
-        const auto   polynomials_z = traits.orthonormal_polynomials_a(z, k2);
-        const auto   polynomials_y = traits.threshold_improved_polynomials(y, l);
+        const double          blaschke      = (power_of<2>(traits.m_R_1p) < traits.q2p_a ? traits.calc_z(q2, traits.q2p_a, power_of<2>(traits.m_R_1p)) : 1.0);
+        const complex<double> y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const double          z             = traits.calc_z(q2, traits.q2p_a, traits.q20);
+        const auto            polynomials_z = traits.orthonormal_polynomials_a(z, k2);
+        const auto            polynomials_y = traits.threshold_improved_polynomials(y, l);
 
         complex<double> res = 0.0;
 
         const double phi = _phi_F1(q2, k2, l);
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
             complex<double> tmpres = 0.0;
-            for (unsigned j = 0 ; j < 3 ; j++)
+            for (unsigned j = 0; j < 3; j++)
             {
                 tmpres += double(_a_F1[iso][l][i][j]) * polynomials_z[j];
             }
             res += tmpres * polynomials_y[i];
         }
 
-        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi / std::sqrt(Process_::eta[iso][l]);
+        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi
+               / std::sqrt(Process_::eta[iso][l]);
     }
 
     template <typename Process_>
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::a_0(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::lambda[iso][l] == 0.0 )
+        if (Process_::lambda[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         // Note, we absorb one power of sqrt(lambda_q3) by reducing the power of kappa and one when matching the helicity amplitudes
         const double kinpref = (l == 0) ? 1.0 : std::pow(traits.kappa(k2, q2), l - 1) * std::sqrt((k2 - power_of<2>(mP1 + mP2)) * (k2 - power_of<2>(mP1 - mP2))) / k2;
@@ -380,39 +391,44 @@ namespace eos
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::F2_tilde(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
+        if (Process_::eta[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         // Partial-wave independent pieces
-        const double blaschke      = (power_of<2>(traits.m_R_0m) < traits.q2p_a ? traits.calc_z(q2, traits.q2p_a, power_of<2>(traits.m_R_0m)) : 1.0);
-        const complex<double> y    = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const double z             = traits.calc_z(q2, traits.q2p_a, traits.q20);
-        const auto   polynomials_z = traits.orthonormal_polynomials_a(z, k2);
-        const auto   polynomials_y = traits.threshold_improved_polynomials(y, l);
+        const double          blaschke      = (power_of<2>(traits.m_R_0m) < traits.q2p_a ? traits.calc_z(q2, traits.q2p_a, power_of<2>(traits.m_R_0m)) : 1.0);
+        const complex<double> y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const double          z             = traits.calc_z(q2, traits.q2p_a, traits.q20);
+        const auto            polynomials_z = traits.orthonormal_polynomials_a(z, k2);
+        const auto            polynomials_y = traits.threshold_improved_polynomials(y, l);
 
         complex<double> res = 0.0;
 
         const double phi = _phi_F2(q2, k2, l);
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
             complex<double> tmpres = 0.0;
-            for (unsigned j = 0 ; j < 3 ; j++)
+            for (unsigned j = 0; j < 3; j++)
             {
                 tmpres += double(_a_F2[iso][l][i][j]) * polynomials_z[j];
             }
             res += tmpres * polynomials_y[i];
         }
 
-        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi / std::sqrt(Process_::eta[iso][l]);
+        return scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]) * res / blaschke / phi
+               / std::sqrt(Process_::eta[iso][l]);
     }
 
     template <typename Process_>
     complex<double>
     HKVT2025FormFactors<Process_, PToPP>::a_t(const double & q2, const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::lambda[iso][l] == 0.0 )
+        if (Process_::lambda[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
         const double kinpref = (l == 0) ? 1.0 : std::pow(traits.kappa(k2, q2), l);
 
@@ -423,16 +439,18 @@ namespace eos
     double
     HKVT2025FormFactors<Process_, PToPP>::_unitarity_integrand_0m(const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
+        if (Process_::eta[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
-        const double kinpref                                = std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2))*(k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
-        const complex<double> y                             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const std::array<complex<double>, 3> polynomials_y  = traits.threshold_improved_polynomials(y, l);
+        const double                         kinpref       = std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2)) * (k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
+        const complex<double>                y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const std::array<complex<double>, 3> polynomials_y = traits.threshold_improved_polynomials(y, l);
 
         double res = 0.0;
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
             res += std::norm(double(_a_F2[iso][l][0][i]) * polynomials_y[0] + double(_a_F2[iso][l][1][i]) * polynomials_y[1] + double(_a_F2[iso][l][2][i]) * polynomials_y[2]);
         }
@@ -444,12 +462,12 @@ namespace eos
     double
     HKVT2025FormFactors<Process_, PToPP>::saturation_0m_a() const
     {
-        std::function<double(const double &)> integrand = [&] (const double & t)
+        std::function<double(const double &)> integrand = [&](const double & t)
         {
             double contrib = 0.0;
-            for (unsigned l = 0 ; l < 3 ; l++)
+            for (unsigned l = 0; l < 3; l++)
             {
-                contrib +=  switch_L[l] * (switch_I[0] * _unitarity_integrand_0m(1.0 / t, l, 0) + switch_I[1] * _unitarity_integrand_0m(1.0 / t, l, 1));
+                contrib += switch_L[l] * (switch_I[0] * _unitarity_integrand_0m(1.0 / t, l, 0) + switch_I[1] * _unitarity_integrand_0m(1.0 / t, l, 1));
             }
             return contrib / power_of<2>(t);
         };
@@ -463,34 +481,37 @@ namespace eos
     double
     HKVT2025FormFactors<Process_, PToPP>::_unitarity_integrand_1p(const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
+        if (Process_::eta[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
-        const double kinpref_f                              = k2 * std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2))*(k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
-        const double kinpref_F1                             = std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2))*(k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
-        const complex<double> y                             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const std::array<complex<double>, 3> polynomials_y  = traits.threshold_improved_polynomials(y, l);
+        const double                         kinpref_f     = k2 * std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2)) * (k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
+        const double                         kinpref_F1    = std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2)) * (k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
+        const complex<double>                y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const std::array<complex<double>, 3> polynomials_y = traits.threshold_improved_polynomials(y, l);
 
-        double res_f = 0.0;
+        double res_f  = 0.0;
         double res_F1 = 0.0;
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
-            res_f += std::norm(double(_a_f[iso][l][0][i]) * polynomials_y[0] + double(_a_f[iso][l][1][i]) * polynomials_y[1] + double(_a_f[iso][l][2][i]) * polynomials_y[2]);
+            res_f  += std::norm(double(_a_f[iso][l][0][i]) * polynomials_y[0] + double(_a_f[iso][l][1][i]) * polynomials_y[1] + double(_a_f[iso][l][2][i]) * polynomials_y[2]);
             res_F1 += std::norm(double(_a_F1[iso][l][0][i]) * polynomials_y[0] + double(_a_F1[iso][l][1][i]) * polynomials_y[1] + double(_a_F1[iso][l][2][i]) * polynomials_y[2]);
         }
 
-        return (res_f * kinpref_f + res_F1 * kinpref_F1) * std::norm(scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]));
+        return (res_f * kinpref_f + res_F1 * kinpref_F1)
+               * std::norm(scattering_amplitudes->isospin_breaking(k2, l, Process_::rep[iso]) * scattering_amplitudes->omnes_factor(k2, l, Process_::rep[iso]));
     }
 
     template <typename Process_>
     double
     HKVT2025FormFactors<Process_, PToPP>::saturation_1p_a() const
     {
-        std::function<double(const double &)> integrand = [&] (const double & t)
+        std::function<double(const double &)> integrand = [&](const double & t)
         {
             double contrib = 0.0;
-            for (unsigned l = 0 ; l < 3 ; l++)
+            for (unsigned l = 0; l < 3; l++)
             {
                 contrib += switch_L[1] * (switch_I[0] * _unitarity_integrand_1p(1.0 / t, l, 0) + switch_I[1] * _unitarity_integrand_1p(1.0 / t, l, 1));
             }
@@ -506,16 +527,18 @@ namespace eos
     double
     HKVT2025FormFactors<Process_, PToPP>::_unitarity_integrand_1m(const double & k2, const unsigned & l, const unsigned & iso) const
     {
-        if ( Process_::eta[iso][l] == 0.0 )
+        if (Process_::eta[iso][l] == 0.0)
+        {
             return 0.0;
+        }
 
-        const double kinpref                                = k2 * std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2))*(k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
-        const complex<double> y                             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
-        const std::array<complex<double>, 3> polynomials_y  = traits.threshold_improved_polynomials(y, l);
+        const double                         kinpref       = k2 * std::pow(std::sqrt((k2 - power_of<2>(mP1 + mP2)) * (k2 - power_of<2>(mP1 - mP2))) / k2, 2 * l + 1);
+        const complex<double>                y             = traits.calc_y(complex<double>(k2), complex<double>(traits.k2in[iso]), complex<double>(traits.k20));
+        const std::array<complex<double>, 3> polynomials_y = traits.threshold_improved_polynomials(y, l);
 
         double res = 0.0;
 
-        for (unsigned i = 0 ; i < 3 ; i++)
+        for (unsigned i = 0; i < 3; i++)
         {
             res += std::norm(double(_a_g[iso][l][0][i]) * polynomials_y[0] + double(_a_g[iso][l][1][i]) * polynomials_y[1] + double(_a_g[iso][l][2][i]) * polynomials_y[2]);
         }
@@ -527,10 +550,10 @@ namespace eos
     double
     HKVT2025FormFactors<Process_, PToPP>::saturation_1m_v() const
     {
-        std::function<double(const double &)> integrand = [&] (const double & t)
+        std::function<double(const double &)> integrand = [&](const double & t)
         {
             double contrib = 0.0;
-            for (unsigned l = 0 ; l < 3 ; l++)
+            for (unsigned l = 0; l < 3; l++)
             {
                 contrib += switch_L[l] * (switch_I[0] * _unitarity_integrand_1m(1.0 / t, l, 0) + switch_I[1] * _unitarity_integrand_1m(1.0 / t, l, 1));
             }
@@ -584,12 +607,15 @@ namespace eos
     {
         // Factor std::sqrt(k2) already taken into account
         const double lam = traits.lam_b(k2, q2);
-        if (lam <= 0.0) return {0.0, 0.0, 0.0, 0.0};
+        if (lam <= 0.0)
+        {
+            return { 0.0, 0.0, 0.0, 0.0 };
+        }
 
-        const double pref = -std::sqrt(lam) / 4.0;
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        const double                   pref = -std::sqrt(lam) / 4.0;
+        std::array<complex<double>, 4> res  = { 0.0, 0.0, 0.0, 0.0 };
 
-        for ( unsigned l = 1 ; l < 3 ; l++ )
+        for (unsigned l = 1; l < 3; l++)
         {
             res[l] += switch_I[0] * Process_::IsoToPhys[charge][0] * v_perp(q2, k2, l, 0);
             res[l] += switch_I[1] * Process_::IsoToPhys[charge][1] * v_perp(q2, k2, l, 1);
@@ -603,10 +629,10 @@ namespace eos
     std::array<complex<double>, 4>
     HKVT2025FormFactors<Process_, PToPP>::f_para(const double & q2, const double & k2) const
     {
-        const double pref = 1.0; // Already taken into account: std::sqrt(k2)
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        const double                   pref = 1.0; // Already taken into account: std::sqrt(k2)
+        std::array<complex<double>, 4> res  = { 0.0, 0.0, 0.0, 0.0 };
 
-        for ( unsigned l = 1 ; l < 3 ; l++ )
+        for (unsigned l = 1; l < 3; l++)
         {
             res[l] += switch_I[0] * Process_::IsoToPhys[charge][0] * a_par(q2, k2, l, 0);
             res[l] += switch_I[1] * Process_::IsoToPhys[charge][1] * a_par(q2, k2, l, 1);
@@ -620,16 +646,16 @@ namespace eos
     std::array<complex<double>, 4>
     HKVT2025FormFactors<Process_, PToPP>::f_long(const double & q2, const double & k2) const
     {
-        const double lam = traits.lam_b(k2, q2);
-        const double prefS = (lam > 0.0) ? std::sqrt(lam / q2) / 2.0 : 0.0;
-        const double pref = 1.0 / 2.0 / std::sqrt(q2);
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        const double                   lam   = traits.lam_b(k2, q2);
+        const double                   prefS = (lam > 0.0) ? std::sqrt(lam / q2) / 2.0 : 0.0;
+        const double                   pref  = 1.0 / 2.0 / std::sqrt(q2);
+        std::array<complex<double>, 4> res   = { 0.0, 0.0, 0.0, 0.0 };
 
         res[0] += switch_I[0] * Process_::IsoToPhys[charge][0] * a_0(q2, k2, 0, 0);
         res[0] += switch_I[1] * Process_::IsoToPhys[charge][1] * a_0(q2, k2, 0, 1);
         res[0] *= switch_L[0] * prefS;
 
-        for ( unsigned l = 1 ; l < 3 ; l++ )
+        for (unsigned l = 1; l < 3; l++)
         {
             res[l] += switch_I[0] * Process_::IsoToPhys[charge][0] * a_0(q2, k2, l, 0);
             res[l] += switch_I[1] * Process_::IsoToPhys[charge][1] * a_0(q2, k2, l, 1);
@@ -643,10 +669,10 @@ namespace eos
     std::array<complex<double>, 4>
     HKVT2025FormFactors<Process_, PToPP>::f_time(const double & q2, const double & k2) const
     {
-        const double pref = -std::sqrt(1.0 / q2);
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        const double                   pref = -std::sqrt(1.0 / q2);
+        std::array<complex<double>, 4> res  = { 0.0, 0.0, 0.0, 0.0 };
 
-        for ( unsigned l = 0 ; l < 3 ; l++ )
+        for (unsigned l = 0; l < 3; l++)
         {
             res[l] += switch_I[0] * Process_::IsoToPhys[charge][0] * a_t(q2, k2, l, 0);
             res[l] += switch_I[1] * Process_::IsoToPhys[charge][1] * a_t(q2, k2, l, 1);
@@ -662,80 +688,76 @@ namespace eos
     {
         Diagnostics results;
 
-        results.add({ traits.calc_y(4 * 0.135 * 0.135,  traits.k2in[1], traits.k20), "y(k2 = 4*0.135^2)" });
-        results.add({ traits.calc_y(0.1,                traits.k2in[1], traits.k20), "y(k2 = 0.1)"       });
+        results.add({ traits.calc_y(4 * 0.135 * 0.135, traits.k2in[1], traits.k20), "y(k2 = 4*0.135^2)" });
+        results.add({ traits.calc_y(0.1, traits.k2in[1], traits.k20), "y(k2 = 0.1)" });
 
-        results.add({ traits.calc_z(0.0,  traits.q2p_a, traits.q20), "z_a(q2 =  0)" });
-        results.add({ traits.calc_z(0.0,  traits.q2p_v, traits.q20), "z_v(q2 =  0)" });
+        results.add({ traits.calc_z(0.0, traits.q2p_a, traits.q20), "z_a(q2 =  0)" });
+        results.add({ traits.calc_z(0.0, traits.q2p_v, traits.q20), "z_v(q2 =  0)" });
         results.add({ traits.calc_z(10.0, traits.q2p_a, traits.q20), "z_a(q2 = 10)" });
         results.add({ traits.calc_z(10.0, traits.q2p_v, traits.q20), "z_v(q2 = 10)" });
 
         {
             const auto & [p0, p1, p2] = traits.orthonormal_polynomials_v(0.0, 0.1);
-            results.add({ p0,              "p_0(z = 0.0, k2 = 0.1)" });
-            results.add({ p1,              "p_1(z = 0.0, k2 = 0.1)" });
-            results.add({ p2,              "p_2(z = 0.0, k2 = 0.1)" });
+            results.add({ p0, "p_0(z = 0.0, k2 = 0.1)" });
+            results.add({ p1, "p_1(z = 0.0, k2 = 0.1)" });
+            results.add({ p2, "p_2(z = 0.0, k2 = 0.1)" });
         }
 
         {
             const auto & [p0, p1, p2] = traits.orthonormal_polynomials_v(traits.calc_z(10.0, traits.q2p_v, traits.q20), 0.1);
-            results.add({ p0,              "p_0(z = z(q2 = 10, k2 = 0.1))" });
-            results.add({ p1,              "p_1(z = z(q2 = 10, k2 = 0.1))" });
-            results.add({ p2,              "p_2(z = z(q2 = 10, k2 = 0.1))" });
+            results.add({ p0, "p_0(z = z(q2 = 10, k2 = 0.1))" });
+            results.add({ p1, "p_1(z = z(q2 = 10, k2 = 0.1))" });
+            results.add({ p2, "p_2(z = z(q2 = 10, k2 = 0.1))" });
         }
 
         {
             const auto & [p0, p1, p2] = traits.threshold_improved_polynomials(traits.calc_y(0.5, traits.k2in[1], traits.k20), 0);
-            results.add({ p0,              "p_0(y = y(k2 = 0.5), 0)" });
-            results.add({ p1,              "p_1(y = y(k2 = 0.5), 0)" });
-            results.add({ p2,              "p_2(y = y(k2 = 0.5), 0)" });
+            results.add({ p0, "p_0(y = y(k2 = 0.5), 0)" });
+            results.add({ p1, "p_1(y = y(k2 = 0.5), 0)" });
+            results.add({ p2, "p_2(y = y(k2 = 0.5), 0)" });
         }
 
         {
             const auto & [p0, p1, p2] = traits.threshold_improved_polynomials(traits.calc_y(0.5, traits.k2in[1], traits.k20), 1);
-            results.add({ p0,              "p_0(y = y(k2 = 0.5), 1)" });
-            results.add({ p1,              "p_1(y = y(k2 = 0.5), 1)" });
-            results.add({ p2,              "p_2(y = y(k2 = 0.5), 1)" });
+            results.add({ p0, "p_0(y = y(k2 = 0.5), 1)" });
+            results.add({ p1, "p_1(y = y(k2 = 0.5), 1)" });
+            results.add({ p2, "p_2(y = y(k2 = 0.5), 1)" });
         }
 
         {
             const auto & [p0, p1, p2] = traits.threshold_improved_polynomials(traits.calc_y(0.5, traits.k2in[1], traits.k20), 2);
-            results.add({ p0,              "p_0(y = y(k2 = 0.5), 2)" });
-            results.add({ p1,              "p_1(y = y(k2 = 0.5), 2)" });
-            results.add({ p2,              "p_2(y = y(k2 = 0.5), 2)" });
+            results.add({ p0, "p_0(y = y(k2 = 0.5), 2)" });
+            results.add({ p1, "p_1(y = y(k2 = 0.5), 2)" });
+            results.add({ p2, "p_2(y = y(k2 = 0.5), 2)" });
         }
 
         {
-            results.add({ _phi_g(-2.0, 0.1, 1),     "phi_g(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
-            results.add({ _phi_g( 1.0, 0.2, 1),     "phi_g(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
-            results.add({ _phi_g( 4.0, 0.1, 2),     "phi_g(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
+            results.add({ _phi_g(-2.0, 0.1, 1), "phi_g(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
+            results.add({ _phi_g(1.0, 0.2, 1), "phi_g(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
+            results.add({ _phi_g(4.0, 0.1, 2), "phi_g(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
 
-            results.add({ _phi_f(-2.0, 0.1, 1),     "phi_f(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
-            results.add({ _phi_f( 1.0, 0.2, 1),     "phi_f(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
-            results.add({ _phi_f( 4.0, 0.1, 2),     "phi_f(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
+            results.add({ _phi_f(-2.0, 0.1, 1), "phi_f(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
+            results.add({ _phi_f(1.0, 0.2, 1), "phi_f(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
+            results.add({ _phi_f(4.0, 0.1, 2), "phi_f(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
 
-            results.add({ _phi_F1(-2.0, 0.1, 1),    "phi_F1(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
-            results.add({ _phi_F1( 1.0, 0.2, 1),    "phi_F1(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
-            results.add({ _phi_F1( 4.0, 0.1, 2),    "phi_F1(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
-            results.add({ _phi_F1( 4.0, 0.1, 0),    "phi_F1(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 0)" });
+            results.add({ _phi_F1(-2.0, 0.1, 1), "phi_F1(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
+            results.add({ _phi_F1(1.0, 0.2, 1), "phi_F1(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
+            results.add({ _phi_F1(4.0, 0.1, 2), "phi_F1(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
+            results.add({ _phi_F1(4.0, 0.1, 0), "phi_F1(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 0)" });
 
-            results.add({ _phi_F2(-2.0, 0.1, 1),    "phi_F2(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
-            results.add({ _phi_F2( 1.0, 0.2, 1),    "phi_F2(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
-            results.add({ _phi_F2( 4.0, 0.1, 2),    "phi_F2(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
-            results.add({ _phi_F2( 4.0, 0.1, 0),    "phi_F2(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 0)" });
+            results.add({ _phi_F2(-2.0, 0.1, 1), "phi_F2(z = z(q2 = -2.0), y = y(k2 = 0.1), l = 1)" });
+            results.add({ _phi_F2(1.0, 0.2, 1), "phi_F2(z = z(q2 =  1.0), y = y(k2 = 0.2), l = 1)" });
+            results.add({ _phi_F2(4.0, 0.1, 2), "phi_F2(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 2)" });
+            results.add({ _phi_F2(4.0, 0.1, 0), "phi_F2(z = z(q2 =  4.0), y = y(k2 = 0.1), l = 0)" });
         }
 
         return results;
     }
 
+    template <typename Process_> const std::set<ReferenceName> HKVT2025FormFactors<Process_, PToPP>::references{ "HKvT:2025A"_rn };
 
-    template<typename Process_>
-    const std::set<ReferenceName> HKVT2025FormFactors<Process_, PToPP>::references
-    {
-        "HKvT:2025A"_rn
-    };
-
-    template<typename Process_>
+    template <typename Process_>
+    // clang-format off
     const std::vector<OptionSpecification> HKVT2025FormFactors<Process_, PToPP>::options
     {
         { "I"_ok, "0|1"_ov, "0|1"_ov }, // We only handle integer isospin at the moment
@@ -743,19 +765,20 @@ namespace eos
         { "L"_ok, "S|P|D"_ov, "S|P|D"_ov }, // We currently do not support F waves here, as the corresponding y-polynomials are unknown
         { "integration-points"_ok, {"256"_ov, "512"_ov, "1024"_ov, "2048"_ov, "4096"_ov, "8192"_ov, "16384"_ov}, "4096"_ov }
     };
+    // clang-format on
 
-    template<typename Process_>
+    template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
     HKVT2025FormFactors<Process_, PToPP>::begin_options()
     {
         return options.cbegin();
     }
 
-    template<typename Process_>
+    template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
     HKVT2025FormFactors<Process_, PToPP>::end_options()
     {
         return options.cend();
     }
-}
+} // namespace eos
 #endif

@@ -27,10 +27,14 @@ namespace eos
     HQETFormFactorBase::_sslp_prefix(const std::string & prefix)
     {
         if ("B(*)->D(*)" == prefix)
+        {
             return prefix;
+        }
 
         if (_opt_sslp_limit.value())
+        {
             return "B(*)->D(*)";
+        }
 
         return prefix;
     }
@@ -84,38 +88,23 @@ namespace eos
     {
         if (_opt_lp_model.value() == "exponential")
         {
-            _xi = [=, this](const double & q2) -> double
-            {
-                return _xi_exponential(q2);
-            };
+            _xi = [=, this](const double & q2) -> double { return _xi_exponential(q2); };
         }
         else
         {
-            _xi = [=, this](const double & q2) -> double
-            {
-                return _xi_power_series(q2);
-            };
+            _xi = [=, this](const double & q2) -> double { return _xi_power_series(q2); };
         }
     }
 
     HQETFormFactorBase::~HQETFormFactorBase() = default;
 
-    const std::set<ReferenceName>
-    HQETFormFactorBase::references
-    {
-        "BLPR:2017A"_rn,
-        "JS:2018A"_rn,
-        "BJvD:2019A"_rn,
-        "BGJvD:2019A"_rn
-    };
+    const std::set<ReferenceName> HQETFormFactorBase::references{ "BLPR:2017A"_rn, "JS:2018A"_rn, "BJvD:2019A"_rn, "BGJvD:2019A"_rn };
 
-    const std::vector<OptionSpecification>
-    HQETFormFactorBase::option_specifications
-    {
-        { "z-order-lp"_ok,      { "2"_ov, "3"_ov, "4"_ov, "5"_ov }, "3"_ov     },
-        { "z-order-slp"_ok,     { "1"_ov, "2"_ov },             "2"_ov     },
-        { "z-order-sslp"_ok,    { "0"_ov, "1"_ov, "2"_ov },       "1"_ov     },
-        { "SU3F-limit-sslp"_ok, { "true"_ov, "false"_ov },      "false"_ov }
+    const std::vector<OptionSpecification> HQETFormFactorBase::option_specifications{
+        {      "z-order-lp"_ok, { "2"_ov, "3"_ov, "4"_ov, "5"_ov },     "3"_ov },
+        {     "z-order-slp"_ok,                 { "1"_ov, "2"_ov },     "2"_ov },
+        {    "z-order-sslp"_ok,         { "0"_ov, "1"_ov, "2"_ov },     "1"_ov },
+        { "SU3F-limit-sslp"_ok,          { "true"_ov, "false"_ov }, "false"_ov }
     };
 
     // uses a power series ansatz
@@ -125,39 +114,27 @@ namespace eos
         const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2, a5 = a3 * a2;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_z(q2) - z_0);
-        const double z2   =  z *  z;
-        const double z3   = z2 *  z * _enable_lp_z3;
-        const double z4   = z2 * z2 * _enable_lp_z4;
-        const double z5   = z3 * z2 * _enable_lp_z5;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_z(q2) - z_0);
+        const double z2  = z * z;
+        const double z3  = z2 * z * _enable_lp_z3;
+        const double z4  = z2 * z2 * _enable_lp_z4;
+        const double z5  = z3 * z2 * _enable_lp_z5;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                          + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2
-                          + (2.0 +       a) * power_of<4>(1.0 + a) / (2.0 * a3) * z3
-                          + (5.0 + 3.0 * a) * power_of<5>(1.0 + a) / (8.0 * a4) * z4
-                          + (3.0 + 2.0 * a) * power_of<6>(1.0 + a) / (8.0 * a5) * z5;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2 + (2.0 + a) * power_of<4>(1.0 + a) / (2.0 * a3) * z3
+                            + (5.0 + 3.0 * a) * power_of<5>(1.0 + a) / (8.0 * a4) * z4 + (3.0 + 2.0 * a) * power_of<6>(1.0 + a) / (8.0 * a5) * z5;
 
-        const double wm12 =   4.0                  * power_of<4>(1.0 + a) / a2         * z2
-                          + ( 6.0 +  2.0 * a     ) * power_of<5>(1.0 + a) / a3         * z3
-                          + (25.0 + 14.0 * a + a2) * power_of<6>(1.0 + a) / (4.0 * a4) * z4
-                          + (11.0 +  8.0 * a + a2) * power_of<7>(1.0 + a) / (2.0 * a5) * z5;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2 + (6.0 + 2.0 * a) * power_of<5>(1.0 + a) / a3 * z3
+                            + (25.0 + 14.0 * a + a2) * power_of<6>(1.0 + a) / (4.0 * a4) * z4 + (11.0 + 8.0 * a + a2) * power_of<7>(1.0 + a) / (2.0 * a5) * z5;
 
-        const double wm13 =   8.0                  * power_of<6>(1.0 + a) / a3         * z3
-                          + (18.0 +  6.0 * a     ) * power_of<7>(1.0 + a) / a4         * z4
-                          + (51.0 + 30.0 * a + a2) * power_of<8>(1.0 + a) / (2.0 * a5) * z5;
+        const double wm13 =
+                8.0 * power_of<6>(1.0 + a) / a3 * z3 + (18.0 + 6.0 * a) * power_of<7>(1.0 + a) / a4 * z4 + (51.0 + 30.0 * a + a2) * power_of<8>(1.0 + a) / (2.0 * a5) * z5;
 
-        const double wm14 =  16.0             * power_of<8>(1.0 + a) / a4 * z4
-                          + (48.0 + 16.0 * a) * power_of<9>(1.0 + a) / a5 * z5;
+        const double wm14 = 16.0 * power_of<8>(1.0 + a) / a4 * z4 + (48.0 + 16.0 * a) * power_of<9>(1.0 + a) / a5 * z5;
 
         const double wm15 = 32.0 * power_of<5>(1.0 + a) / a5 * z5;
 
-        return 1.0
-            + _xipone             * wm11
-            + _xippone    / 2.0   * wm12
-            + _xipppone   / 6.0   * wm13
-            + _xippppone  / 24.0  * wm14
-            + _xipppppone / 120.0 * wm15;
+        return 1.0 + _xipone * wm11 + _xippone / 2.0 * wm12 + _xipppone / 6.0 * wm13 + _xippppone / 24.0 * wm14 + _xipppppone / 120.0 * wm15;
     }
 
     // uses an exponential ansatz and expands in (w-1) first, then in z*
@@ -167,40 +144,27 @@ namespace eos
         const double a = _a(), a2 = a * a, a3 = a * a2, a4 = a2 * a2, a5 = a3 * a2;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_z(q2) - z_0);
-        const double z2   =  z *  z;
-        const double z3   = z2 *  z * _enable_lp_z3;
-        const double z4   = z2 * z2 * _enable_lp_z4;
-        const double z5   = z3 * z2 * _enable_lp_z5;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_z(q2) - z_0);
+        const double z2  = z * z;
+        const double z3  = z2 * z * _enable_lp_z3;
+        const double z4  = z2 * z2 * _enable_lp_z4;
+        const double z5  = z3 * z2 * _enable_lp_z5;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                          + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2
-                          + (2.0 +       a) * power_of<4>(1.0 + a) / (2.0 * a3) * z3
-                          + (5.0 + 3.0 * a) * power_of<5>(1.0 + a) / (8.0 * a4) * z4
-                          + (3.0 + 2.0 * a) * power_of<6>(1.0 + a) / (8.0 * a5) * z5;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2 + (2.0 + a) * power_of<4>(1.0 + a) / (2.0 * a3) * z3
+                            + (5.0 + 3.0 * a) * power_of<5>(1.0 + a) / (8.0 * a4) * z4 + (3.0 + 2.0 * a) * power_of<6>(1.0 + a) / (8.0 * a5) * z5;
 
-        const double wm12 =   4.0                  * power_of<4>(1.0 + a) / a2         * z2
-                          + ( 6.0 +  2.0 * a     ) * power_of<5>(1.0 + a) / a3         * z3
-                          + (25.0 + 14.0 * a + a2) * power_of<6>(1.0 + a) / (4.0 * a4) * z4
-                          + (11.0 +  8.0 * a + a2) * power_of<7>(1.0 + a) / (2.0 * a5) * z5;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2 + (6.0 + 2.0 * a) * power_of<5>(1.0 + a) / a3 * z3
+                            + (25.0 + 14.0 * a + a2) * power_of<6>(1.0 + a) / (4.0 * a4) * z4 + (11.0 + 8.0 * a + a2) * power_of<7>(1.0 + a) / (2.0 * a5) * z5;
 
-        const double wm13 =   8.0                  * power_of<6>(1.0 + a) / a3         * z3
-                          + (18.0 +  6.0 * a     ) * power_of<7>(1.0 + a) / a4         * z4
-                          + (51.0 + 30.0 * a + a2) * power_of<8>(1.0 + a) / (2.0 * a5) * z5;
+        const double wm13 =
+                8.0 * power_of<6>(1.0 + a) / a3 * z3 + (18.0 + 6.0 * a) * power_of<7>(1.0 + a) / a4 * z4 + (51.0 + 30.0 * a + a2) * power_of<8>(1.0 + a) / (2.0 * a5) * z5;
 
-        const double wm14 =  16.0             * power_of<8>(1.0 + a) / a4 * z4
-                          + (48.0 + 16.0 * a) * power_of<9>(1.0 + a) / a5 * z5;
+        const double wm14 = 16.0 * power_of<8>(1.0 + a) / a4 * z4 + (48.0 + 16.0 * a) * power_of<9>(1.0 + a) / a5 * z5;
 
         const double wm15 = 32.0 * power_of<5>(1.0 + a) / a5 * z5;
 
-        return (1.0
-            + _xipone              * wm11
-            - _xipone              * wm12
-            + _xipone * 2.0 /  3.0 * wm13
-            - _xipone       /  3.0 * wm14
-            + _xipone * 2.0 / 15.0 * wm15)
-            * (1.0 + _xippone      * wm11);
+        return (1.0 + _xipone * wm11 - _xipone * wm12 + _xipone * 2.0 / 3.0 * wm13 - _xipone / 3.0 * wm14 + _xipone * 2.0 / 15.0 * wm15) * (1.0 + _xippone * wm11);
     }
 
     double
@@ -209,14 +173,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_z(q2) - z_0);
-        const double z2   =  z * z * _enable_slp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_z(q2) - z_0);
+        const double z2  = z * z * _enable_slp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _chi2one + _chi2pone * wm11 + _chi2ppone / 2.0 * wm12;
     }
@@ -227,14 +190,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_z(q2) - z_0);
-        const double z2   =  z * z * _enable_slp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_z(q2) - z_0);
+        const double z2  = z * z * _enable_slp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return 0.0 + _chi3pone * wm11 + _chi3ppone / 2.0 * wm12;
     }
@@ -245,14 +207,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_z(q2) - z_0);
-        const double z2   =  z * z * _enable_slp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_z(q2) - z_0);
+        const double z2  = z * z * _enable_slp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _etaone + _etapone * wm11 + _etappone / 2.0 * wm12;
     }
@@ -264,14 +225,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
-        const double z2   =  z * z * _enable_sslp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_zw(w) - z_0) * _enable_sslp_z1;
+        const double z2  = z * z * _enable_sslp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _l1one + _l1pone * wm11 + _l1ppone / 2.0 * wm12;
     }
@@ -282,14 +242,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
-        const double z2   =  z * z * _enable_sslp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_zw(w) - z_0) * _enable_sslp_z1;
+        const double z2  = z * z * _enable_sslp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _l2one + _l2pone * wm11 + _l2ppone / 2.0 * wm12;
     }
@@ -300,14 +259,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
-        const double z2   =  z * z * _enable_sslp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_zw(w) - z_0) * _enable_sslp_z1;
+        const double z2  = z * z * _enable_sslp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _l3one + _l3pone * wm11 + _l3ppone / 2.0 * wm12;
     }
@@ -318,14 +276,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
-        const double z2   =  z * z * _enable_sslp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_zw(w) - z_0) * _enable_sslp_z1;
+        const double z2  = z * z * _enable_sslp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _l4one + _l4pone * wm11 + _l4ppone / 2.0 * wm12;
     }
@@ -336,14 +293,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
-        const double z2   =  z * z * _enable_sslp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_zw(w) - z_0) * _enable_sslp_z1;
+        const double z2  = z * z * _enable_sslp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _l5one + _l5pone * wm11 + _l5ppone / 2.0 * wm12;
     }
@@ -354,14 +310,13 @@ namespace eos
         const double a = _a(), a2 = a * a;
 
         // expansion in z around z_0
-        const double  z_0 = (1.0 - a) / (1.0 + a);
-        const double  z   = (_zw(w) - z_0) * _enable_sslp_z1;
-        const double z2   =  z * z * _enable_sslp_z2;
+        const double z_0 = (1.0 - a) / (1.0 + a);
+        const double z   = (_zw(w) - z_0) * _enable_sslp_z1;
+        const double z2  = z * z * _enable_sslp_z2;
 
-        const double wm11 =  2.0            * power_of<2>(1.0 + a) / a          * z
-                            + (3.0 +       a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
+        const double wm11 = 2.0 * power_of<2>(1.0 + a) / a * z + (3.0 + a) * power_of<3>(1.0 + a) / (2.0 * a2) * z2;
 
-        const double wm12 =   4.0           * power_of<4>(1.0 + a) / a2         * z2;
+        const double wm12 = 4.0 * power_of<4>(1.0 + a) / a2 * z2;
 
         return _l6one + _l6pone * wm11 + _l6ppone / 2.0 * wm12;
     }
@@ -375,9 +330,9 @@ namespace eos
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = 2.0 * z * (w - wz) * _Omega(w, z);
-        result -= (w - 1.0) * (z + 1.0) * (z + 1.0) * _r(w);
-        result += (z2 - 1.0) * lnz;
+        double result  = 2.0 * z * (w - wz) * _Omega(w, z);
+        result        -= (w - 1.0) * (z + 1.0) * (z + 1.0) * _r(w);
+        result        += (z2 - 1.0) * lnz;
 
         return result / (3.0 * z * (w - wz));
     }
@@ -389,9 +344,9 @@ namespace eos
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = 2.0 * z * (w - wz) * _Omega(w, z);
-        result -= (w + 1.0) * (z - 1.0) * (z - 1.0) * _r(w);
-        result += (z2 - 1.0) * lnz;
+        double result  = 2.0 * z * (w - wz) * _Omega(w, z);
+        result        -= (w + 1.0) * (z - 1.0) * (z - 1.0) * _r(w);
+        result        += (z2 - 1.0) * lnz;
 
         return result / (3.0 * z * (w - wz));
     }
@@ -403,9 +358,9 @@ namespace eos
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = 2.0 * (w + 1.0) * ((3.0 * w - 1.0) * z - z2 - 1.0) * _r(w);
-        result += (12.0 * z * (wz - w) - (z2 - 1.0) * lnz);
-        result += 4.0 * z * (w - wz) * _Omega(w, z);
+        double result  = 2.0 * (w + 1.0) * ((3.0 * w - 1.0) * z - z2 - 1.0) * _r(w);
+        result        += (12.0 * z * (wz - w) - (z2 - 1.0) * lnz);
+        result        += 4.0 * z * (w - wz) * _Omega(w, z);
 
         return result / (6.0 * z * (w - wz));
     }
@@ -413,13 +368,13 @@ namespace eos
     double
     HQETFormFactorBase::_CV2(const double & w, const double & z) const
     {
-        const double z2  = z * z, z3 = z2 * z;
+        const double z2 = z * z, z3 = z2 * z;
         const double w2  = w * w;
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = ((4.0 * w2 + 2.0 * w) * z2 - (2.0 * w2 + 5.0 * w - 1.0) * z - (1.0 + w) * z3 + 2.0) * _r(w);
-        result += z * (2.0 * (z - 1.0) * (wz - w) + (z2 - (4.0 * w - 2.0) * z + (-2.0 * w + 3)) * lnz);
+        double result  = ((4.0 * w2 + 2.0 * w) * z2 - (2.0 * w2 + 5.0 * w - 1.0) * z - (1.0 + w) * z3 + 2.0) * _r(w);
+        result        += z * (2.0 * (z - 1.0) * (wz - w) + (z2 - (4.0 * w - 2.0) * z + (-2.0 * w + 3)) * lnz);
 
         return -1.0 * result / (6.0 * z2 * power_of<2>(w - wz));
     }
@@ -427,13 +382,13 @@ namespace eos
     double
     HQETFormFactorBase::_CV3(const double & w, const double & z) const
     {
-        const double z2  = z * z, z3 = z2 * z;
+        const double z2 = z * z, z3 = z2 * z;
         const double w2  = w * w;
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = (-2.0 * z3 + (2.0 * w2 + 5.0 * w - 1.0) * z2 - (4.0 * w2 + 2.0 * w) * z + w + 1.0) * _r(w);
-        result += 2.0 * z * (z - 1.0) * (wz - w) + ((-2.0 * w + 3.0) * z2 + (-4.0 * w + 2.0) * z + 1.0) * lnz;
+        double result  = (-2.0 * z3 + (2.0 * w2 + 5.0 * w - 1.0) * z2 - (4.0 * w2 + 2.0 * w) * z + w + 1.0) * _r(w);
+        result        += 2.0 * z * (z - 1.0) * (wz - w) + ((-2.0 * w + 3.0) * z2 + (-4.0 * w + 2.0) * z + 1.0) * lnz;
 
         return +1.0 * result / (6.0 * z * power_of<2>(w - wz));
     }
@@ -445,9 +400,9 @@ namespace eos
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = 2.0 * (w - 1.0) * ((3.0 * w + 1.0) * z - z2 - 1.0) * _r(w);
-        result += (12.0 * z * (wz - w) - (z2 - 1.0) * lnz);
-        result += 4.0 * z * (w - wz) * _Omega(w, z);
+        double result  = 2.0 * (w - 1.0) * ((3.0 * w + 1.0) * z - z2 - 1.0) * _r(w);
+        result        += (12.0 * z * (wz - w) - (z2 - 1.0) * lnz);
+        result        += 4.0 * z * (w - wz) * _Omega(w, z);
 
         return result / (6.0 * z * (w - wz));
     }
@@ -455,13 +410,13 @@ namespace eos
     double
     HQETFormFactorBase::_CA2(const double & w, const double & z) const
     {
-        const double z2  = z * z, z3 = z2 * z;
+        const double z2 = z * z, z3 = z2 * z;
         const double w2  = w * w;
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = ((4.0 * w2 - 2.0 * w) * z2 + (2.0 * w2 - 5.0 * w - 1.0) * z + (1.0 - w) * z3 + 2.0) * _r(w);
-        result += z * (2.0 * (z + 1.0) * (wz - w) + (z2 - (4.0 * w + 2.0) * z + (2.0 * w + 3)) * lnz);
+        double result  = ((4.0 * w2 - 2.0 * w) * z2 + (2.0 * w2 - 5.0 * w - 1.0) * z + (1.0 - w) * z3 + 2.0) * _r(w);
+        result        += z * (2.0 * (z + 1.0) * (wz - w) + (z2 - (4.0 * w + 2.0) * z + (2.0 * w + 3)) * lnz);
 
         return -1.0 * result / (6.0 * z2 * power_of<2>(w - wz));
     }
@@ -469,13 +424,13 @@ namespace eos
     double
     HQETFormFactorBase::_CA3(const double & w, const double & z) const
     {
-        const double z2  = z * z, z3 = z2 * z;
+        const double z2 = z * z, z3 = z2 * z;
         const double w2  = w * w;
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = (2.0 * z3 + (2.0 * w2 - 5.0 * w - 1.0) * z2 + (4.0 * w2 - 2.0 * w) * z - w + 1.0) * _r(w);
-        result += 2.0 * z * (z + 1.0) * (wz - w) - ((2.0 * w + 3.0) * z2 - (4.0 * w + 2.0) * z + 1.0) * lnz;
+        double result  = (2.0 * z3 + (2.0 * w2 - 5.0 * w - 1.0) * z2 + (4.0 * w2 - 2.0 * w) * z - w + 1.0) * _r(w);
+        result        += 2.0 * z * (z + 1.0) * (wz - w) - ((2.0 * w + 3.0) * z2 - (4.0 * w + 2.0) * z + 1.0) * lnz;
 
         return +1.0 * result / (6.0 * z * power_of<2>(w - wz));
     }
@@ -487,9 +442,9 @@ namespace eos
         const double wz  = _wz(z);
         const double lnz = std::log(z);
 
-        double result = (w - 1.0) * ((4.0 * w + 2.0) * z - z2 - 1.0) * _r(w);
-        result += 6.0 * z * (wz - w) - (z2 - 1.0) * lnz;
-        result += 2.0 * z * (w - wz) * _Omega(w, z);
+        double result  = (w - 1.0) * ((4.0 * w + 2.0) * z - z2 - 1.0) * _r(w);
+        result        += 6.0 * z * (wz - w) - (z2 - 1.0) * lnz;
+        result        += 2.0 * z * (w - wz) * _Omega(w, z);
 
         return +1.0 / (3.0 * z * (w - wz)) * result;
     }
@@ -517,16 +472,16 @@ namespace eos
     }
 
     // P->P
-    template class HQETFormFactors<BToD,   PToP>;
+    template class HQETFormFactors<BToD, PToP>;
     template class HQETFormFactors<BsToDs, PToP>;
 
     // P->V
-    template class HQETFormFactors<BToDstar,   PToV>;
+    template class HQETFormFactors<BToDstar, PToV>;
     template class HQETFormFactors<BsToDsstar, PToV>;
 
     // P->V
-    template class HQETFormFactors<BstarToD,  VToP>;
+    template class HQETFormFactors<BstarToD, VToP>;
 
     // V->V
-    template class HQETFormFactors<BstarToDstar,  VToV>;
-}
+    template class HQETFormFactors<BstarToDstar, VToV>;
+} // namespace eos

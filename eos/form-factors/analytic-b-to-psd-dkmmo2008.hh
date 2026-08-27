@@ -31,9 +31,7 @@
 namespace eos
 {
     template <QuarkFlavor q1_, QuarkFlavor q2_, QuarkFlavor qs_>
-    class AnalyticFormFactorBToPseudoscalarDKMMO2008 :
-        public FormFactors<PToP>,
-        PrivateImplementationPattern<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>
+    class AnalyticFormFactorBToPseudoscalarDKMMO2008 : public FormFactors<PToP>, PrivateImplementationPattern<AnalyticFormFactorBToPseudoscalarDKMMO2008<q1_, q2_, qs_>>
     {
         public:
             AnalyticFormFactorBToPseudoscalarDKMMO2008(const Parameters &, const Options &);
@@ -93,6 +91,6 @@ namespace eos
 
     extern template class AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>;
     extern template class AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>;
-}
+} // namespace eos
 
 #endif

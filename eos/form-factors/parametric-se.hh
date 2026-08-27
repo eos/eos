@@ -22,14 +22,14 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SE_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SE_HH 1
 
-#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/baryonic-processes.hh>
-#include <eos/form-factors/mesonic.hh>
+#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/maths/szego-polynomial.hh>
-#include <eos/utils/kinematic.hh>
 #include <eos/utils/diagnostics.hh>
+#include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/reference-name.hh>
 
@@ -43,11 +43,8 @@ namespace eos
 
     template <typename Process_, typename Transition_> class SEFormFactorTraits;
 
-
     // P -> V
-    template <typename Process_>
-    class SEFormFactorTraits<Process_, PToV> :
-        public virtual ParameterUser
+    template <typename Process_> class SEFormFactorTraits<Process_, PToV> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
@@ -72,43 +69,49 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_V);
             }
 
-            complex<double> calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
+            complex<double>
+            calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
             {
                 return (std::sqrt(sp - s) - std::sqrt(sp - s0)) / (std::sqrt(sp - s) + std::sqrt(sp - s0));
             }
 
-            double calc_z(const double & s, const double & sp, const double & s0) const
+            double
+            calc_z(const double & s, const double & sp, const double & s0) const
             {
                 if (s > sp)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
+                }
 
                 return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
             }
 
-            std::array<double, 6> orthonormal_polynomials_v(const double & z) const
+            std::array<double, 6>
+            orthonormal_polynomials_v(const double & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_V)), complex<double>(tp_v), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_V)), complex<double>(tp_v), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
 
-            std::array<double, 6> orthonormal_polynomials_a(const double & z) const
+            std::array<double, 6>
+            orthonormal_polynomials_a(const double & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_V)), complex<double>(tp_a), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_V)), complex<double>(tp_a), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
     };
 
-    template <typename Process_> class SEFormFactors<Process_, PToV> :
-        public FormFactors<PToV>
+    template <typename Process_> class SEFormFactors<Process_, PToV> : public FormFactors<PToV>
     {
         private:
             // fit parametrization for P -> V according to [BFW:2010A]
@@ -118,12 +121,11 @@ namespace eos
 
             const SEFormFactorTraits<Process_, PToV> _traits;
 
-            const UsedParameter & _mB, _mV;
+            const UsedParameter &_mB, _mV;
 
             QualifiedName _par_name(const std::string & ff_name, unsigned idx) const;
-            double _phi(const double & t, const double & t_p, const double & chi,
-                        const int & A, const unsigned B, const unsigned C, const unsigned k,
-                        const unsigned p, const unsigned n, const unsigned m) const;
+            double        _phi(const double & t, const double & t_p, const double & chi, const int & A, const unsigned B, const unsigned C, const unsigned k, const unsigned p,
+                               const unsigned n, const unsigned m) const;
 
             inline double _phi_v(const double & q2) const;
             inline double _phi_a_0(const double & q2) const;
@@ -203,17 +205,14 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
 
     extern template class SEFormFactors<BToKstar, PToV>;
     extern template class SEFormFactors<BsToPhi, PToV>;
 
-
     // P -> P
-    template <typename Process_>
-    class SEFormFactorTraits<Process_, PToP> :
-        public virtual ParameterUser
+    template <typename Process_> class SEFormFactorTraits<Process_, PToP> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
@@ -235,51 +234,58 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_P);
             }
 
-            complex<double> calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
+            complex<double>
+            calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
             {
                 return (std::sqrt(sp - s) - std::sqrt(sp - s0)) / (std::sqrt(sp - s) + std::sqrt(sp - s0));
             }
 
-            double calc_z(const double & s, const double & sp, const double & s0) const
+            double
+            calc_z(const double & s, const double & sp, const double & s0) const
             {
                 if (s > sp)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
+                }
 
                 return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
             }
 
-            std::array<double, 6> orthonormal_polynomials(const double & z) const
+            std::array<double, 6>
+            orthonormal_polynomials(const double & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
 
-            std::array<complex<double>, 6> orthonormal_polynomials(const complex<double> & z) const
+            std::array<complex<double>, 6>
+            orthonormal_polynomials(const complex<double> & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
 
-            std::array<complex<double>, 6> orthonormal_polynomials_derivatives(const complex<double> & z) const
+            std::array<complex<double>, 6>
+            orthonormal_polynomials_derivatives(const complex<double> & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_B + m_P)), complex<double>(tp), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set.derivatives(z);
             }
     };
 
-    template <typename Process_> class SEFormFactors<Process_, PToP> :
-        public FormFactors<PToP>
+    template <typename Process_> class SEFormFactors<Process_, PToP> : public FormFactors<PToP>
     {
         private:
             // fit parametrization for P -> P inspired by [BFW:2010A]
@@ -289,13 +295,12 @@ namespace eos
 
             const SEFormFactorTraits<Process_, PToP> _traits;
 
-            const UsedParameter & _mB, _mP;
+            const UsedParameter &_mB, _mP;
 
             QualifiedName _par_name(const std::string & ff_name, unsigned idx) const;
 
-            double _phi(const double & s, const double & t_p, const double & chi,
-                        const int & A, const unsigned B, const unsigned C, const unsigned k,
-                        const unsigned p, const unsigned n, const unsigned m) const;
+            double _phi(const double & s, const double & t_p, const double & chi, const int & A, const unsigned B, const unsigned C, const unsigned k, const unsigned p,
+                        const unsigned n, const unsigned m) const;
 
             inline double _phi_f_p(const double & q2) const;
             inline double _phi_f_0(const double & q2) const;
@@ -348,11 +353,11 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
 
-    extern template class SEFormFactors<DToK,  PToP>;
-    extern template class SEFormFactors<BToK,  PToP>;
+    extern template class SEFormFactors<DToK, PToP>;
+    extern template class SEFormFactors<BToK, PToP>;
     extern template class SEFormFactors<BsToK, PToP>;
     extern template class SEFormFactors<BToEta, PToP>;
     extern template class SEFormFactors<BToEtaPrime, PToP>;
@@ -361,18 +366,15 @@ namespace eos
     extern template class SEFormFactors<DsToEta, PToP>;
     extern template class SEFormFactors<DsToEtaPrime, PToP>;
 
-
     // 1/2+ -> 1/2+
-    template <typename Process_>
-    class SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus> :
-        public virtual ParameterUser
+    template <typename Process_> class SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
             // the ones used for the extraction of the coefficients of the z-expension
             UsedParameter m_1, m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
             UsedParameter m_R_0m, m_R_0p, m_R_1m, m_R_1p;
-            UsedParameter t0; // z(t_0) = 0, t_m is the endpoint of the semileptonic process
+            UsedParameter t0;         // z(t_0) = 0, t_m is the endpoint of the semileptonic process
             UsedParameter tp_a, tp_v; // pair production thresholds
 
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> resonance_0m_names;
@@ -393,65 +395,70 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_1 - m_2);
             }
 
-            complex<double> calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
+            complex<double>
+            calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
             {
                 return (std::sqrt(sp - s) - std::sqrt(sp - s0)) / (std::sqrt(sp - s) + std::sqrt(sp - s0));
             }
 
-            double calc_z(const double & s, const double & sp, const double & s0) const
+            double
+            calc_z(const double & s, const double & sp, const double & s0) const
             {
                 if (s > sp)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
+                }
 
                 return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
             }
 
-            std::array<double, 6> orthonormal_polynomials_v(const double & z) const
+            std::array<double, 6>
+            orthonormal_polynomials_v(const double & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_1 + m_2)), complex<double>(tp_v), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_1 + m_2)), complex<double>(tp_v), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
 
-            std::array<double, 6> orthonormal_polynomials_a(const double & z) const
+            std::array<double, 6>
+            orthonormal_polynomials_a(const double & z) const
             {
-                const double measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_1 + m_2)), complex<double>(tp_a), complex<double>(t0)));
+                const double             measure = 2 * std::arg(calc_z(complex<double>(power_of<2>(m_1 + m_2)), complex<double>(tp_a), complex<double>(t0)));
                 const SzegoPolynomial<5> polynomials_set(SzegoPolynomial<5>::FlatMeasure(measure));
 
                 return polynomials_set(z);
             }
     };
 
-    template <typename Process_>
-    class SEFormFactors<Process_, OneHalfPlusToOneHalfPlus> :
-        public FormFactors<OneHalfPlusToOneHalfPlus>
+    template <typename Process_> class SEFormFactors<Process_, OneHalfPlusToOneHalfPlus> : public FormFactors<OneHalfPlusToOneHalfPlus>
     {
         private:
-            const std::array<UsedParameter, 4> _a_time_v;  // a_0^(time,V)  is obtained from the EoM f_t^V(q2 = 0) = f_0^V(q2 = 0)
+            const std::array<UsedParameter, 4> _a_time_v; // a_0^(time,V)  is obtained from the EoM f_t^V(q2 = 0) = f_0^V(q2 = 0)
             const std::array<UsedParameter, 5> _a_long_v;
             const std::array<UsedParameter, 5> _a_perp_v;
-            const std::array<UsedParameter, 4> _a_time_a;  // a_0^(time,A)  is obtained from the EoM f_t^A(q2 = 0) = f_0^A(q2 = 0)
+            const std::array<UsedParameter, 4> _a_time_a; // a_0^(time,A)  is obtained from the EoM f_t^A(q2 = 0) = f_0^A(q2 = 0)
             const std::array<UsedParameter, 5> _a_long_a;
-            const std::array<UsedParameter, 4> _a_perp_a;  // a_0^(perp,A)  is obtained from the EoM f_perp^A(q2 = t_-) = f_0^A(q2 = t_-)
+            const std::array<UsedParameter, 4> _a_perp_a; // a_0^(perp,A)  is obtained from the EoM f_perp^A(q2 = t_-) = f_0^A(q2 = t_-)
             const std::array<UsedParameter, 5> _a_long_t;
-            const std::array<UsedParameter, 4> _a_perp_t;  // a_0^(perp,T)  is obtained from the EoM f_perp^T(q2 = 0) = f_perp^T5(q2 = 0)
+            const std::array<UsedParameter, 4> _a_perp_t; // a_0^(perp,T)  is obtained from the EoM f_perp^T(q2 = 0) = f_perp^T5(q2 = 0)
 
             const std::array<UsedParameter, 4> _a_long_t5; // a_0^(long,T5) is obtained from the EoM f_long^T5(q2 = t_-) = f_perp^T5(q2 = t_-)
             const std::array<UsedParameter, 5> _a_perp_t5;
 
             const SEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus> _traits;
 
-            const UsedParameter & _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            const UsedParameter &_m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
 
             QualifiedName _par_name(const std::string & pol, const std::string & current, unsigned idx) const;
-            double _phi(const double & s, const double & chi, const double & s_p, const double & a, const double & b, const double & c,
-                    const double & d, const double & e, const double & f, const double & g) const;
+            double        _phi(const double & s, const double & chi, const double & s_p, const double & a, const double & b, const double & c, const double & d, const double & e,
+                               const double & f, const double & g) const;
 
             inline double _phi_time_v(const double & q2) const;
             inline double _phi_long_v(const double & q2) const;
@@ -524,18 +531,15 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
 
-    extern template class SEFormFactors<LambdaBToLambda,  OneHalfPlusToOneHalfPlus>;
-    extern template class SEFormFactors<LambdaCToLambda,  OneHalfPlusToOneHalfPlus>;
+    extern template class SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>;
+    extern template class SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>;
     extern template class SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>;
 
-
     // 1/2+ -> 3/2-
-    template <typename Process_>
-    class SEFormFactorTraits<Process_, OneHalfPlusToThreeHalfMinus> :
-        public virtual ParameterUser
+    template <typename Process_> class SEFormFactorTraits<Process_, OneHalfPlusToThreeHalfMinus> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match
@@ -554,53 +558,56 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_1 - m_2);
             }
 
-            complex<double> calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
+            complex<double>
+            calc_z(const complex<double> & s, const complex<double> & sp, const complex<double> & s0) const
             {
                 return (std::sqrt(sp - s) - std::sqrt(sp - s0)) / (std::sqrt(sp - s) + std::sqrt(sp - s0));
             }
 
-            double calc_z(const double & s, const double & sp, const double & s0) const
+            double
+            calc_z(const double & s, const double & sp, const double & s0) const
             {
                 if (s > sp)
+                {
                     throw InternalError("The real conformal mapping is used above threshold: " + stringify(s) + " > " + stringify(sp));
+                }
 
                 return real(calc_z(complex<double>(s, 0.0), complex<double>(sp, 0.0), complex<double>(s0, 0.0)));
             }
     };
 
-    template <typename Process_>
-    class SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus> :
-        public FormFactors<OneHalfPlusToThreeHalfMinus>
+    template <typename Process_> class SEFormFactors<Process_, OneHalfPlusToThreeHalfMinus> : public FormFactors<OneHalfPlusToThreeHalfMinus>
     {
         private:
             const SEFormFactorTraits<Process_, OneHalfPlusToThreeHalfMinus> _traits;
 
-            const UsedParameter & _m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
+            const UsedParameter &_m_1, _m_2; // m_1 is the mass of the heavier particle, m_2 the mass of the lighter particle
 
-            const std::array<UsedParameter, 4> _a_time12_v;  // a_0^(time12,V) is obtained from the EoM f_time12^V(q2 = 0) \propto f_long12^V(q2 = 0)
-            const std::array<UsedParameter, 4> _a_long12_v;  // a_0^(long12,V) is obtained from f_long12^V(q2 = q2max) \propto f_perp32^V(q2 = q2max)
-            const std::array<UsedParameter, 4> _a_perp12_v;  // a_0^(perp12,V) is obtained from f_perp12^V(q2 = q2max) = - f_perp32^V(q2 = q2max)
+            const std::array<UsedParameter, 4> _a_time12_v; // a_0^(time12,V) is obtained from the EoM f_time12^V(q2 = 0) \propto f_long12^V(q2 = 0)
+            const std::array<UsedParameter, 4> _a_long12_v; // a_0^(long12,V) is obtained from f_long12^V(q2 = q2max) \propto f_perp32^V(q2 = q2max)
+            const std::array<UsedParameter, 4> _a_perp12_v; // a_0^(perp12,V) is obtained from f_perp12^V(q2 = q2max) = - f_perp32^V(q2 = q2max)
             const std::array<UsedParameter, 5> _a_perp32_v;
-            const std::array<UsedParameter, 4> _a_time12_a;  // a_0^(time12,A) is obtained from f_time12^A(q2 = q2max) = 0
-            const std::array<UsedParameter, 4> _a_long12_a;  // a_0^(long12,A) is obtained from the EoM f_time12^A(q2 = 0) \propto f_long12^A(q2 = 0)
-            const std::array<UsedParameter, 4> _a_perp12_a;  // a_0^(perp12,A) is obtained from f_perp12^A(q2 = q2max) = f_long12^A(q2 = q2max) + f_perp32^A(q2 = q2max)
+            const std::array<UsedParameter, 4> _a_time12_a; // a_0^(time12,A) is obtained from f_time12^A(q2 = q2max) = 0
+            const std::array<UsedParameter, 4> _a_long12_a; // a_0^(long12,A) is obtained from the EoM f_time12^A(q2 = 0) \propto f_long12^A(q2 = 0)
+            const std::array<UsedParameter, 4> _a_perp12_a; // a_0^(perp12,A) is obtained from f_perp12^A(q2 = q2max) = f_long12^A(q2 = q2max) + f_perp32^A(q2 = q2max)
             const std::array<UsedParameter, 5> _a_perp32_a;
-            const std::array<UsedParameter, 4> _a_long12_t;  // a_0^(long12,T) is obtained from f_long12^T(q2 = q2max) \propto f_perp32^T(q2 = q2max)
-            const std::array<UsedParameter, 4> _a_perp12_t;  // a_0^(perp12,T) is obtained from f_perp12^T(q2 = q2max) = - f_perp32^T(q2 = q2max)
+            const std::array<UsedParameter, 4> _a_long12_t; // a_0^(long12,T) is obtained from f_long12^T(q2 = q2max) \propto f_perp32^T(q2 = q2max)
+            const std::array<UsedParameter, 4> _a_perp12_t; // a_0^(perp12,T) is obtained from f_perp12^T(q2 = q2max) = - f_perp32^T(q2 = q2max)
             const std::array<UsedParameter, 5> _a_perp32_t;
             const std::array<UsedParameter, 4> _a_long12_t5; // a_0^(long12,T5) is obtained from f_long12^T5(q2 = q2max) = f_perp12^T5(q2 = q2max) + f_perp32^T5(q2 = q2max)
             const std::array<UsedParameter, 4> _a_perp12_t5; // a_0^(perp12,T5) is obtained from the EoM f_perp12^T5(q2 = 0) \propto f_perp12^T(q2 = 0)
             const std::array<UsedParameter, 4> _a_perp32_t5; // a_0^(perp32,T5) is obtained from the EoM f_perp32^T5(q2 = 0) \propto f_perp32^T(q2 = 0)
 
             QualifiedName _par_name(const std::string & pol, const std::string & current, unsigned idx) const;
-            double _z(const double & t, const double & t_p, const double & t_0) const;
-            double _phi(const double & s, const double & t_p, const double & chi, const double & A, const double & B, const double & d, const double & e,
-                        const double & f, const double & g, const double & n) const;
+            double        _z(const double & t, const double & t_p, const double & t_0) const;
+            double        _phi(const double & s, const double & t_p, const double & chi, const double & A, const double & B, const double & d, const double & e, const double & f,
+                               const double & g, const double & n) const;
 
             inline double _phi_time12_v(const double & q2) const;
             inline double _phi_long12_v(const double & q2) const;
@@ -673,10 +680,10 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
 
     extern template class SEFormFactors<LambdaBToLambda1520, OneHalfPlusToThreeHalfMinus>;
-}
+} // namespace eos
 
 #endif

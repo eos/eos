@@ -23,15 +23,13 @@
 
 #include <eos/form-factors/mesonic.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/reference-name.hh>
 
 namespace eos
 {
-    class AnalyticFormFactorBToPiPiBFvD2016 :
-        public FormFactors<PToPP>,
-        PrivateImplementationPattern<AnalyticFormFactorBToPiPiBFvD2016>
+    class AnalyticFormFactorBToPiPiBFvD2016 : public FormFactors<PToPP>, PrivateImplementationPattern<AnalyticFormFactorBToPiPiBFvD2016>
     {
         public:
             AnalyticFormFactorBToPiPiBFvD2016(const Parameters &, const Options &);
@@ -75,9 +73,7 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
-    class AnalyticFormFactorBToPiPiFvDV2018 :
-        public FormFactors<PToPP>,
-        PrivateImplementationPattern<AnalyticFormFactorBToPiPiFvDV2018>
+    class AnalyticFormFactorBToPiPiFvDV2018 : public FormFactors<PToPP>, PrivateImplementationPattern<AnalyticFormFactorBToPiPiFvDV2018>
     {
         public:
             AnalyticFormFactorBToPiPiFvDV2018(const Parameters &, const Options &);
@@ -117,8 +113,8 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
-}
+} // namespace eos
 
 #endif

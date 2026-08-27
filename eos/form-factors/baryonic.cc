@@ -20,12 +20,12 @@
 
 #include <eos/form-factors/baryonic-processes.hh>
 #include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-bbgorvd2018.hh>
-#include <eos/form-factors/parametric-se.hh>
-#include <eos/form-factors/parametric-sse.hh>
+#include <eos/form-factors/parametric-bfvd2014.hh>
 #include <eos/form-factors/parametric-dkmr2017.hh>
 #include <eos/form-factors/parametric-dm2016.hh>
+#include <eos/form-factors/parametric-se.hh>
+#include <eos/form-factors/parametric-sse.hh>
 #include <eos/utils/destringify.hh>
 
 #include <map>
@@ -34,23 +34,20 @@ namespace eos
 {
     /* J=1/2^+ -> J=1/2^+ Processes */
 
-    FormFactors<OneHalfPlusToOneHalfPlus>::~FormFactors()
-    {
-    }
+    FormFactors<OneHalfPlusToOneHalfPlus>::~FormFactors() {}
 
     const std::map<FormFactorFactory<OneHalfPlusToOneHalfPlus>::KeyType, FormFactorFactory<OneHalfPlusToOneHalfPlus>::ValueType>
-    FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors
-    {
-        { "Lambda_b->Lambda::BFvD2014",   &BFvD2014FormFactors::make                      },
-        { "Lambda_b->Lambda::DM2016",     &DM2016FormFactors<LambdaBToLambda>::make       },
-        { "Lambda_b->Lambda::SE",  &SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make    },
-        { "Lambda_b->Lambda::SSE", &SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make   },
-        { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make    },
-        { "Lambda_c->Lambda::SE",  &SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make    },
-        { "Lambda_c->Lambda::SSE", &SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make   },
-        { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make   },
-        { "Lambda_c->neutron::SSE", &SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make },
-        { "Lambda_c->proton::SSE", &SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>::make   }
+            FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors{
+                { "Lambda_b->Lambda::BFvD2014", &BFvD2014FormFactors::make },
+                { "Lambda_b->Lambda::DM2016", &DM2016FormFactors<LambdaBToLambda>::make },
+                { "Lambda_b->Lambda::SE", &SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make },
+                { "Lambda_b->Lambda::SSE", &SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make },
+                { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make },
+                { "Lambda_c->Lambda::SE", &SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make },
+                { "Lambda_c->Lambda::SSE", &SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make },
+                { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make },
+                { "Lambda_c->neutron::SSE", &SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make },
+                { "Lambda_c->proton::SSE", &SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>::make }
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>>
@@ -79,7 +76,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfPlus>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -94,7 +93,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
@@ -102,20 +101,17 @@ namespace eos
 
     /* Lambda_b -> Lambda_c(2595) */
 
-    FormFactors<OneHalfPlusToOneHalfMinus>::~FormFactors()
-    {
-    }
+    FormFactors<OneHalfPlusToOneHalfMinus>::~FormFactors() {}
 
     Diagnostics
     FormFactors<OneHalfPlusToOneHalfMinus>::diagnostics() const
     {
-        return { };
+        return {};
     }
 
     const std::map<FormFactorFactory<OneHalfPlusToOneHalfMinus>::KeyType, FormFactorFactory<OneHalfPlusToOneHalfMinus>::ValueType>
-    FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors
-    {
-        { "Lambda_b->Lambda_c(2595)::HQET",        &HQETFormFactors<OneHalfPlusToOneHalfMinus, LambdaBToLambdaC2595>::make },
+            FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors{
+                { "Lambda_b->Lambda_c(2595)::HQET", &HQETFormFactors<OneHalfPlusToOneHalfMinus, LambdaBToLambdaC2595>::make },
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>>
@@ -144,7 +140,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<OneHalfPlusToOneHalfMinus>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -159,7 +157,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
@@ -171,22 +169,18 @@ namespace eos
 
     const SzegoPolynomial<5> LambdaBToLambda1520::orthonormal_polynomials(SzegoPolynomial<5>::FlatMeasure(3.42519));
 
-
-    FormFactors<OneHalfPlusToThreeHalfMinus>::~FormFactors()
-    {
-    }
+    FormFactors<OneHalfPlusToThreeHalfMinus>::~FormFactors() {}
 
     Diagnostics
     FormFactors<OneHalfPlusToThreeHalfMinus>::diagnostics() const
     {
-        return { };
+        return {};
     }
 
     const std::map<FormFactorFactory<OneHalfPlusToThreeHalfMinus>::KeyType, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::ValueType>
-    FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors
-    {
-        { "Lambda_b->Lambda_c(2625)::HQET",          &HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>::make },
-        { "Lambda_b->Lambda(1520)::SE",               &SEFormFactors<LambdaBToLambda1520, OneHalfPlusToThreeHalfMinus>::make },
+            FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors{
+                { "Lambda_b->Lambda_c(2625)::HQET", &HQETFormFactors<OneHalfPlusToThreeHalfMinus,        LambdaBToLambdaC2625>::make },
+                {     "Lambda_b->Lambda(1520)::SE",           &SEFormFactors<LambdaBToLambda1520, OneHalfPlusToThreeHalfMinus>::make },
     };
 
     std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>>
@@ -215,7 +209,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<OneHalfPlusToThreeHalfMinus>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -230,7 +226,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
-}
+} // namespace eos

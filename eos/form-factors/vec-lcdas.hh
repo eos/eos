@@ -20,13 +20,12 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_VEC_LCDAS_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_VEC_LCDAS_HH 1
 
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class VectorLCDAs :
-        public ParameterUser
+    class VectorLCDAs : public ParameterUser
     {
         public:
             virtual ~VectorLCDAs() = 0;
@@ -36,29 +35,29 @@ namespace eos
             virtual double a2para(const double & mu) const = 0;
             virtual double a3para(const double & mu) const = 0;
             virtual double a4para(const double & mu) const = 0;
-            virtual double fpara() const = 0;
+            virtual double fpara() const                   = 0;
 
             /* Twist 2 LCDA parameters: perp Gegenbauer coefficients */
             virtual double a1perp(const double & mu) const = 0;
             virtual double a2perp(const double & mu) const = 0;
             virtual double a3perp(const double & mu) const = 0;
             virtual double a4perp(const double & mu) const = 0;
-            virtual double fperp(const double & mu) const = 0;
+            virtual double fperp(const double & mu) const  = 0;
 
             /* Twist 2 LCDAs */
             virtual double phi2para(const double & u, const double & mu) const = 0;
             virtual double phi2perp(const double & u, const double & mu) const = 0;
 
             /* Twist 3 parameters */
-            virtual double kappa3para(const double & mu) const = 0;
-            virtual double omega3para(const double & mu) const = 0;
-            virtual double lambda3para(const double & mu) const = 0;
-            virtual double zeta3para(const double & mu) const = 0;
+            virtual double kappa3para(const double & mu) const       = 0;
+            virtual double omega3para(const double & mu) const       = 0;
+            virtual double lambda3para(const double & mu) const      = 0;
+            virtual double zeta3para(const double & mu) const        = 0;
             virtual double lambda3paratilde(const double & mu) const = 0;
-            virtual double omega3paratilde(const double & mu) const = 0;
-            virtual double kappa3perp(const double & mu) const = 0;
-            virtual double omega3perp(const double & mu) const = 0;
-            virtual double lambda3perp(const double & mu) const = 0;
+            virtual double omega3paratilde(const double & mu) const  = 0;
+            virtual double kappa3perp(const double & mu) const       = 0;
+            virtual double omega3perp(const double & mu) const       = 0;
+            virtual double lambda3perp(const double & mu) const      = 0;
 
             /* Twist 3 two particle LCDAs */
             virtual double phi3para(const double & u, const double & mu) const = 0;
@@ -67,37 +66,37 @@ namespace eos
             virtual double psi3perp(const double & u, const double & mu) const = 0;
 
             /* Twist 3 three particle LCDAs */
-            virtual double Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi3para(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
             virtual double Phi3paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi3perp(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
 
             /* Twist 4 parameters */
-            virtual double zeta4para(const double & mu) const = 0;
+            virtual double zeta4para(const double & mu) const       = 0;
             virtual double omega4paratilde(const double & mu) const = 0;
-            virtual double zeta4perp(const double & mu) const = 0;
-            virtual double zeta4perptilde(const double & mu) const = 0;
-            virtual double kappa4para(const double & mu) const = 0;
-            virtual double kappa4perp(const double & mu) const = 0;
+            virtual double zeta4perp(const double & mu) const       = 0;
+            virtual double zeta4perptilde(const double & mu) const  = 0;
+            virtual double kappa4para(const double & mu) const      = 0;
+            virtual double kappa4perp(const double & mu) const      = 0;
 
             /* Twist 4 three particle chiral even LCDAs */
-            virtual double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Psi4para(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
             virtual double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
             virtual double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Xi4para(const double & u1, const double & u2, const double & u3, const double & mu) const       = 0;
 
             /* Twist 4 three particle chiral odd LCDAs */
-            virtual double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const       = 0;
+            virtual double Psi4perptilde(const double & u1, const double & u2, const double & u3, const double & mu) const  = 0;
+            virtual double Phi4perp1(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
+            virtual double Phi4perp2(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
+            virtual double Phi4perp3(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
+            virtual double Phi4perp4(const double & u1, const double & u2, const double & u3, const double & mu) const      = 0;
             virtual double Phi4perptilde1(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
             virtual double Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
             virtual double Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
             virtual double Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
-            virtual double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const = 0;
+            virtual double Xi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const        = 0;
 
             /* Twist 4 chiral even two particle LCDAs */
             virtual double psi4para(const double & u, const double & mu) const = 0;
@@ -113,6 +112,6 @@ namespace eos
 
             static std::shared_ptr<VectorLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
-}
+} // namespace eos
 
 #endif

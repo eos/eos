@@ -22,8 +22,8 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_HEAVY_MESON_LCDAS_HH 1
 
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
 #include <memory>
@@ -39,8 +39,7 @@ namespace eos
      * The abtract base class defines the interface used in sum rules.
      *
      */
-    class HeavyMesonLCDAs:
-        public ParameterUser
+    class HeavyMesonLCDAs : public ParameterUser
     {
         public:
             virtual ~HeavyMesonLCDAs() = default;
@@ -64,9 +63,9 @@ namespace eos
              *
              * omega: plus-component of the spectator momentum
              */
-            virtual double phi_plus(const double & omega) const = 0;
-            virtual double phi_minus(const double & omega) const = 0;
-            virtual double phi_bar(const double & omega) const = 0;
+            virtual double phi_plus(const double & omega) const   = 0;
+            virtual double phi_minus(const double & omega) const  = 0;
+            virtual double phi_bar(const double & omega) const    = 0;
             virtual double phi_bar_d1(const double & omega) const = 0;
 
             /*!
@@ -74,15 +73,15 @@ namespace eos
              *
              * omega: plus-component of the spectator momentum
              */
-            virtual double g_plus(const double & omega) const = 0;
+            virtual double g_plus(const double & omega) const    = 0;
             virtual double g_plus_d1(const double & omega) const = 0;
             virtual double g_plus_d2(const double & omega) const = 0;
 
-            virtual double g_minusWW(const double & omega) const = 0;
+            virtual double g_minusWW(const double & omega) const    = 0;
             virtual double g_minusWW_d1(const double & omega) const = 0;
             virtual double g_minusWW_d2(const double & omega) const = 0;
 
-            virtual double g_bar(const double & omega) const = 0;
+            virtual double g_bar(const double & omega) const    = 0;
             virtual double g_bar_d1(const double & omega) const = 0;
             virtual double g_bar_d2(const double & omega) const = 0;
             virtual double g_bar_d3(const double & omega) const = 0;
@@ -113,7 +112,7 @@ namespace eos
             /*!
              * Pseudo observables for the two-particle LCDAs
              */
-            virtual double inverse_lambda_plus() const = 0;
+            virtual double inverse_lambda_plus() const                                         = 0;
 
             /*!
              * Leading power three-particle LCDAs
@@ -123,8 +122,8 @@ namespace eos
              */
             virtual double psi_A(const double & omega, const double & xi) const = 0;
             virtual double psi_V(const double & omega, const double & xi) const = 0;
-            virtual double X_A(const double & omega, const double & xi) const = 0;
-            virtual double Y_A(const double & omega, const double & xi) const = 0;
+            virtual double X_A(const double & omega, const double & xi) const   = 0;
+            virtual double Y_A(const double & omega, const double & xi) const   = 0;
 
             /*!
              * Auxiliary functions for the three-particle LCDAs
@@ -139,6 +138,6 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<HeavyMesonLCDAs::CoefficientIteratorTag, const double &>;
-}
+} // namespace eos
 
 #endif

@@ -25,4 +25,4 @@ namespace eos
     // B^- -> gamma form factors
     template struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>;
     template class AnalyticFormFactorPToGammaQCDF<BToGamma>;
-}
+} // namespace eos

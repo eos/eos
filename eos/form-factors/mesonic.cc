@@ -22,18 +22,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/form-factors/analytic-b-to-psd-dkmmo2008.hh>
-#include <eos/form-factors/analytic-b-to-pi-pi.hh>
 #include <eos/form-factors/analytic-b-to-p-lcsr.hh>
+#include <eos/form-factors/analytic-b-to-pi-pi.hh>
+#include <eos/form-factors/analytic-b-to-psd-dkmmo2008.hh>
 #include <eos/form-factors/analytic-b-to-v-lcsr.hh>
 #include <eos/form-factors/analytic-p-to-gamma-qcdf.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/parametric-bcl2008.hh>
-#include <eos/form-factors/parametric-se.hh>
-#include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
+#include <eos/form-factors/parametric-bgl1997.hh>
 #include <eos/form-factors/parametric-bsz2015.hh>
-#include <eos/form-factors/parametric-sse.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
 #include <eos/form-factors/parametric-g2026.hh>
 #include <eos/form-factors/parametric-hkvt2025.hh>
@@ -41,6 +39,8 @@
 #include <eos/form-factors/parametric-kkvdz2022.hh>
 #include <eos/form-factors/parametric-kmpw2010.hh>
 #include <eos/form-factors/parametric-ksvd2025.hh>
+#include <eos/form-factors/parametric-se.hh>
+#include <eos/form-factors/parametric-sse.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/qualified-name.hh>
 
@@ -54,49 +54,45 @@ namespace eos
 
     /* P -> V Processes */
 
-    FormFactors<PToV>::~FormFactors()
-    {
-    }
+    FormFactors<PToV>::~FormFactors() {}
 
-    const std::map<FormFactorFactory<PToV>::KeyType, FormFactorFactory<PToV>::ValueType>
-    FormFactorFactory<PToV>::form_factors
-    {
-        { "B->omega::BSZ2015",    &BSZ2015FormFactors<BToOmega,   PToV>::make         },
-        { "B->omega::SSE",            &SSEFormFactors<BToOmega,   PToV>::make         },
-        { "B->rho::BSZ2015",      &BSZ2015FormFactors<BToRho,     PToV>::make         },
-        { "B->rho::SSE",              &SSEFormFactors<BToRho,     PToV>::make         },
-        { "B->K^*::KMPW2010",     &KMPW2010FormFactors<PToV>::make                    },
-        { "B->K^*::BSZ2015",      &BSZ2015FormFactors<BToKstar,   PToV>::make         },
-        { "B->K^*::SSE",              &SSEFormFactors<BToKstar,   PToV>::make         },
-        { "B->K^*::SE",                &SEFormFactors<BToKstar,   PToV>::make         },
-        { "B->K^*::G2026",        &G2026FormFactors<BToKstar,     PToV>::make         },
-        { "B->D^*::BSZ2015",      &BSZ2015FormFactors<BToDstar,   PToV>::make         },
-        { "B->D^*::SSE",              &SSEFormFactors<BToDstar,   PToV>::make         },
-        { "B->D^*::BGJvD2019",    &HQETFormFactors<BToDstar,      PToV>::make         },
-        { "B->D^*::BGL1997",      &BGL1997FormFactors<BToDstar,   PToV>::make         },
-        { "B_c->J/psi::BGL1997",  &BGL1997FormFactors<BcToJpsi,   PToV>::make         },
-        { "B_c->J/psi::BSZ2015",  &BSZ2015FormFactors<BcToJpsi,   PToV>::make         },
-        { "B_c->J/psi::SSE",          &SSEFormFactors<BcToJpsi,   PToV>::make         },
-        { "B->D^*::G2026",        &G2026FormFactors<BToDstar,     PToV>::make         },
-        { "B_s->K^*::BSZ2015",    &BSZ2015FormFactors<BsToKstar,  PToV>::make         },
-        { "B_s->K^*::SSE",            &SSEFormFactors<BsToKstar,  PToV>::make         },
-        { "B_s->K^*::G2026",      &G2026FormFactors<BsToKstar,    PToV>::make         },
-        { "B_s->D_s^*::BSZ2015",  &BSZ2015FormFactors<BsToDsstar, PToV>::make         },
-        { "B_s->D_s^*::SSE",          &SSEFormFactors<BsToDsstar, PToV>::make         },
-        { "B_s->D_s^*::BGJvD2019",&HQETFormFactors<BsToDsstar,    PToV>::make         },
-        { "B_s->D_s^*::BGL1997",  &BGL1997FormFactors<BsToDsstar, PToV>::make         },
-        { "B_s->D_s^*::G2026",    &G2026FormFactors<BsToDsstar,   PToV>::make         },
-        { "B_s->phi::BSZ2015",    &BSZ2015FormFactors<BsToPhi,    PToV>::make         },
-        { "B_s->phi::SSE",            &SSEFormFactors<BsToPhi,    PToV>::make         },
-        { "B_s->phi::SE",              &SEFormFactors<BsToPhi,    PToV>::make         },
-        { "B_s->phi::G2026",      &G2026FormFactors<BsToPhi,      PToV>::make         },
+    const std::map<FormFactorFactory<PToV>::KeyType, FormFactorFactory<PToV>::ValueType> FormFactorFactory<PToV>::form_factors{
+        { "B->omega::BSZ2015", &BSZ2015FormFactors<BToOmega, PToV>::make },
+        { "B->omega::SSE", &SSEFormFactors<BToOmega, PToV>::make },
+        { "B->rho::BSZ2015", &BSZ2015FormFactors<BToRho, PToV>::make },
+        { "B->rho::SSE", &SSEFormFactors<BToRho, PToV>::make },
+        { "B->K^*::KMPW2010", &KMPW2010FormFactors<PToV>::make },
+        { "B->K^*::BSZ2015", &BSZ2015FormFactors<BToKstar, PToV>::make },
+        { "B->K^*::SSE", &SSEFormFactors<BToKstar, PToV>::make },
+        { "B->K^*::SE", &SEFormFactors<BToKstar, PToV>::make },
+        { "B->K^*::G2026", &G2026FormFactors<BToKstar, PToV>::make },
+        { "B->D^*::BSZ2015", &BSZ2015FormFactors<BToDstar, PToV>::make },
+        { "B->D^*::SSE", &SSEFormFactors<BToDstar, PToV>::make },
+        { "B->D^*::BGJvD2019", &HQETFormFactors<BToDstar, PToV>::make },
+        { "B->D^*::BGL1997", &BGL1997FormFactors<BToDstar, PToV>::make },
+        { "B_c->J/psi::BGL1997", &BGL1997FormFactors<BcToJpsi, PToV>::make },
+        { "B_c->J/psi::BSZ2015", &BSZ2015FormFactors<BcToJpsi, PToV>::make },
+        { "B_c->J/psi::SSE", &SSEFormFactors<BcToJpsi, PToV>::make },
+        { "B->D^*::G2026", &G2026FormFactors<BToDstar, PToV>::make },
+        { "B_s->K^*::BSZ2015", &BSZ2015FormFactors<BsToKstar, PToV>::make },
+        { "B_s->K^*::SSE", &SSEFormFactors<BsToKstar, PToV>::make },
+        { "B_s->K^*::G2026", &G2026FormFactors<BsToKstar, PToV>::make },
+        { "B_s->D_s^*::BSZ2015", &BSZ2015FormFactors<BsToDsstar, PToV>::make },
+        { "B_s->D_s^*::SSE", &SSEFormFactors<BsToDsstar, PToV>::make },
+        { "B_s->D_s^*::BGJvD2019", &HQETFormFactors<BsToDsstar, PToV>::make },
+        { "B_s->D_s^*::BGL1997", &BGL1997FormFactors<BsToDsstar, PToV>::make },
+        { "B_s->D_s^*::G2026", &G2026FormFactors<BsToDsstar, PToV>::make },
+        { "B_s->phi::BSZ2015", &BSZ2015FormFactors<BsToPhi, PToV>::make },
+        { "B_s->phi::SSE", &SSEFormFactors<BsToPhi, PToV>::make },
+        { "B_s->phi::SE", &SEFormFactors<BsToPhi, PToV>::make },
+        { "B_s->phi::G2026", &G2026FormFactors<BsToPhi, PToV>::make },
         // analytic computations
-        { "B->K^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToKstar>::make         },
-        { "B->D^*::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToDstar>::make         },
-        { "B->rho::B-LCSR",       &AnalyticFormFactorBToVLCSR<BToRho>::make           },
-        { "B_s->K^*::B-LCSR",     &AnalyticFormFactorBToVLCSR<BsToKstar>::make        },
-        { "B_s->phi::B-LCSR",     &AnalyticFormFactorBToVLCSR<BsToPhi>::make          },
-        { "B_s->D_s^*::B-LCSR",   &AnalyticFormFactorBToVLCSR<BsToDsstar>::make       }
+        { "B->K^*::B-LCSR", &AnalyticFormFactorBToVLCSR<BToKstar>::make },
+        { "B->D^*::B-LCSR", &AnalyticFormFactorBToVLCSR<BToDstar>::make },
+        { "B->rho::B-LCSR", &AnalyticFormFactorBToVLCSR<BToRho>::make },
+        { "B_s->K^*::B-LCSR", &AnalyticFormFactorBToVLCSR<BsToKstar>::make },
+        { "B_s->phi::B-LCSR", &AnalyticFormFactorBToVLCSR<BsToPhi>::make },
+        { "B_s->D_s^*::B-LCSR", &AnalyticFormFactorBToVLCSR<BsToDsstar>::make }
     };
 
     complex<double>
@@ -181,7 +177,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<PToV>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -196,7 +194,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
@@ -208,13 +206,9 @@ namespace eos
 
     /* P -> gamma Processes */
 
-    FormFactors<PToGamma>::~FormFactors()
-    {
-    }
+    FormFactors<PToGamma>::~FormFactors() {}
 
-    const std::map<FormFactorFactory<PToGamma>::KeyType, FormFactorFactory<PToGamma>::ValueType>
-    FormFactorFactory<PToGamma>::form_factors
-    {
+    const std::map<FormFactorFactory<PToGamma>::KeyType, FormFactorFactory<PToGamma>::ValueType> FormFactorFactory<PToGamma>::form_factors{
         { KeyType("B->gamma::FLvD2022QCDF"), &AnalyticFormFactorPToGammaQCDF<BToGamma>::make }
     };
 
@@ -226,7 +220,7 @@ namespace eos
         std::shared_ptr<FormFactors<PToGamma>> result;
 
         auto & form_factors = FormFactorFactory<PToGamma>::form_factors;
-        auto i = form_factors.find(name);
+        auto   i            = form_factors.find(name);
         if (form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
@@ -245,7 +239,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<PToGamma>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -260,7 +256,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
@@ -268,9 +264,7 @@ namespace eos
 
     FormFactors<PToGammaOffShell>::~FormFactors() = default;
 
-    const std::map<FormFactorFactory<PToGammaOffShell>::KeyType, FormFactorFactory<PToGammaOffShell>::ValueType>
-    FormFactorFactory<PToGammaOffShell>::form_factors
-    {
+    const std::map<FormFactorFactory<PToGammaOffShell>::KeyType, FormFactorFactory<PToGammaOffShell>::ValueType> FormFactorFactory<PToGammaOffShell>::form_factors{
         { KeyType("B->gamma^*::KKvDZ2022"), &KKvDZ2022FormFactors::make }
     };
 
@@ -282,7 +276,7 @@ namespace eos
         std::shared_ptr<FormFactors<PToGammaOffShell>> result;
 
         auto & form_factors = FormFactorFactory<PToGammaOffShell>::form_factors;
-        auto i = form_factors.find(name);
+        auto   i            = form_factors.find(name);
         if (form_factors.end() != i)
         {
             result.reset(i->second(parameters, name.options() + options));
@@ -301,7 +295,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<PToGammaOffShell>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -316,7 +312,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
@@ -328,102 +324,103 @@ namespace eos
 
     FormFactors<PToP>::~FormFactors() = default;
 
-    double FormFactors<PToP>::f_m(const double & /*s*/) const
+    double
+    FormFactors<PToP>::f_m(const double & /*s*/) const
     {
         return std::numeric_limits<double>::quiet_NaN();
     }
 
-    double FormFactors<PToP>::f_p_d1(const double & s) const
+    double
+    FormFactors<PToP>::f_p_d1(const double & s) const
     {
         using namespace std::placeholders;
 
-        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return this->f_p(q2); };
+        std::function<double(const double &)> f = [&, this](const double & q2) -> double { return this->f_p(q2); };
 
         return derivative<1u, deriv::TwoSided>(f, s);
     }
 
-    double FormFactors<PToP>::f_p_d2(const double & s) const
+    double
+    FormFactors<PToP>::f_p_d2(const double & s) const
     {
         using namespace std::placeholders;
 
-        std::function<double (const double &)> f = [&, this](const double & q2) -> double { return this->f_p(q2); };
+        std::function<double(const double &)> f = [&, this](const double & q2) -> double { return this->f_p(q2); };
 
         return derivative<2u, deriv::TwoSided>(f, s);
     }
 
-    const std::map<FormFactorFactory<PToP>::KeyType, FormFactorFactory<PToP>::ValueType>
-    FormFactorFactory<PToP>::form_factors
-    {
+    const std::map<FormFactorFactory<PToP>::KeyType, FormFactorFactory<PToP>::ValueType> FormFactorFactory<PToP>::form_factors{
         // parametrizations
         // b -> s
-        { "B->K::BCL2008",           &BCL2008FormFactors<BToK, 3u>::make                                                                                          },
-        { "B->K::KMPW2010",          &KMPW2010FormFactors<PToP>::make                                                                                             },
-        { "B->K::BSZ2015",           &BSZ2015FormFactors<BToK,    PToP>::make                                                                                     },
-        { "B->K::SSE",                   &SSEFormFactors<BToK,    PToP>::make                                                                                     },
-        { "B->K::SE",                     &SEFormFactors<BToK,    PToP>::make                                                                                     },
-        { "B->K::G2026",             &G2026FormFactors<BToK, PToP>::make                                                                                          },
-        { "B_s->eta::BSZ2015",       &BSZ2015FormFactors<BsToEta, PToP>::make                                                                                     },
-        { "B_s->eta::SSE",               &SSEFormFactors<BsToEta, PToP>::make                                                                                     },
-        { "B_s->eta::SE",                 &SEFormFactors<BsToEta, PToP>::make                                                                                     },
-        { "B_s->eta_prime::BSZ2015", &BSZ2015FormFactors<BsToEtaPrime, PToP>::make                                                                                },
-        { "B_s->eta_prime::SSE",         &SSEFormFactors<BsToEtaPrime, PToP>::make                                                                                },
-        { "B_s->eta_prime::SE",           &SEFormFactors<BsToEtaPrime, PToP>::make                                                                                },
+        { "B->K::BCL2008", &BCL2008FormFactors<BToK, 3u>::make },
+        { "B->K::KMPW2010", &KMPW2010FormFactors<PToP>::make },
+        { "B->K::BSZ2015", &BSZ2015FormFactors<BToK, PToP>::make },
+        { "B->K::SSE", &SSEFormFactors<BToK, PToP>::make },
+        { "B->K::SE", &SEFormFactors<BToK, PToP>::make },
+        { "B->K::G2026", &G2026FormFactors<BToK, PToP>::make },
+        { "B_s->eta::BSZ2015", &BSZ2015FormFactors<BsToEta, PToP>::make },
+        { "B_s->eta::SSE", &SSEFormFactors<BsToEta, PToP>::make },
+        { "B_s->eta::SE", &SEFormFactors<BsToEta, PToP>::make },
+        { "B_s->eta_prime::BSZ2015", &BSZ2015FormFactors<BsToEtaPrime, PToP>::make },
+        { "B_s->eta_prime::SSE", &SSEFormFactors<BsToEtaPrime, PToP>::make },
+        { "B_s->eta_prime::SE", &SEFormFactors<BsToEtaPrime, PToP>::make },
         // b -> u
-        { "B->pi::BCL2008",          &BCL2008FormFactors<BToPi, 3u>::make                                                                                         },
-        { "B->pi::BCL2008-4",        &BCL2008FormFactors<BToPi, 4u>::make                                                                                         },
-        { "B->pi::BCL2008-5",        &BCL2008FormFactors<BToPi, 5u>::make                                                                                         },
-        { "B->pi::BSZ2015",          &BSZ2015FormFactors<BToPi,  PToP>::make                                                                                      },
-        { "B->pi::SSE",                  &SSEFormFactors<BToPi,  PToP>::make                                                                                      },
-        { "B->pi::G2026",            &G2026FormFactors<BToPi,     PToP>::make                                                                                      },
-        { "B->eta::BSZ2015",         &BSZ2015FormFactors<BToEta, PToP>::make                                                                                      },
-        { "B->eta::SSE",                 &SSEFormFactors<BToEta, PToP>::make                                                                                      },
-        { "B->eta::SE",                   &SEFormFactors<BToEta, PToP>::make                                                                                      },
-        { "B->eta_prime::BSZ2015",   &BSZ2015FormFactors<BToEtaPrime, PToP>::make                                                                                 },
-        { "B->eta_prime::SSE",           &SSEFormFactors<BToEtaPrime, PToP>::make                                                                                 },
-        { "B->eta_prime::SE",             &SEFormFactors<BToEtaPrime, PToP>::make                                                                                 },
-        { "B_s->K::SE",                   &SEFormFactors<BsToK,  PToP>::make                                                                                      },
-        { "B_s->K::BSZ2015",         &BSZ2015FormFactors<BsToK,  PToP>::make                                                                                      },
-        { "B_s->K::SSE",                 &SSEFormFactors<BsToK,  PToP>::make                                                                                      },
-        { "B_s->K::G2026",           &G2026FormFactors<BsToK,     PToP>::make                                                                                      },
+        { "B->pi::BCL2008", &BCL2008FormFactors<BToPi, 3u>::make },
+        { "B->pi::BCL2008-4", &BCL2008FormFactors<BToPi, 4u>::make },
+        { "B->pi::BCL2008-5", &BCL2008FormFactors<BToPi, 5u>::make },
+        { "B->pi::BSZ2015", &BSZ2015FormFactors<BToPi, PToP>::make },
+        { "B->pi::SSE", &SSEFormFactors<BToPi, PToP>::make },
+        { "B->pi::G2026", &G2026FormFactors<BToPi, PToP>::make },
+        { "B->eta::BSZ2015", &BSZ2015FormFactors<BToEta, PToP>::make },
+        { "B->eta::SSE", &SSEFormFactors<BToEta, PToP>::make },
+        { "B->eta::SE", &SEFormFactors<BToEta, PToP>::make },
+        { "B->eta_prime::BSZ2015", &BSZ2015FormFactors<BToEtaPrime, PToP>::make },
+        { "B->eta_prime::SSE", &SSEFormFactors<BToEtaPrime, PToP>::make },
+        { "B->eta_prime::SE", &SEFormFactors<BToEtaPrime, PToP>::make },
+        { "B_s->K::SE", &SEFormFactors<BsToK, PToP>::make },
+        { "B_s->K::BSZ2015", &BSZ2015FormFactors<BsToK, PToP>::make },
+        { "B_s->K::SSE", &SSEFormFactors<BsToK, PToP>::make },
+        { "B_s->K::G2026", &G2026FormFactors<BsToK, PToP>::make },
         // b -> c
-        { "B->D::BCL2008",           &BCL2008FormFactors<BToD, 3u>::make                                                                                          },
-        { "B->D::BSZ2015",           &BSZ2015FormFactors<BToD,   PToP>::make                                                                                      },
-        { "B->D::SSE",                   &SSEFormFactors<BToD,   PToP>::make                                                                                      },
-        { "B->D::BGJvD2019",         &HQETFormFactors<BToD,      PToP>::make                                                                                      },
-        { "B->D::BGL1997",           &BGL1997FormFactors<BToD,   PToP>::make                                                                                      },
-        { "B->D::G2026",             &G2026FormFactors<BToD,     PToP>::make                                                                                      },
-        { "B_s->D_s::BSZ2015",       &BSZ2015FormFactors<BsToDs, PToP>::make                                                                                      },
-        { "B_s->D_s::SSE",               &SSEFormFactors<BsToDs, PToP>::make                                                                                      },
-        { "B_s->D_s::BGJvD2019",     &HQETFormFactors<BsToDs,    PToP>::make                                                                                      },
-        { "B_s->D_s::BGL1997",       &BGL1997FormFactors<BsToDs, PToP>::make                                                                                      },
-        { "B_s->D_s::G2026",         &G2026FormFactors<BsToDs,   PToP>::make                                                                                      },
+        { "B->D::BCL2008", &BCL2008FormFactors<BToD, 3u>::make },
+        { "B->D::BSZ2015", &BSZ2015FormFactors<BToD, PToP>::make },
+        { "B->D::SSE", &SSEFormFactors<BToD, PToP>::make },
+        { "B->D::BGJvD2019", &HQETFormFactors<BToD, PToP>::make },
+        { "B->D::BGL1997", &BGL1997FormFactors<BToD, PToP>::make },
+        { "B->D::G2026", &G2026FormFactors<BToD, PToP>::make },
+        { "B_s->D_s::BSZ2015", &BSZ2015FormFactors<BsToDs, PToP>::make },
+        { "B_s->D_s::SSE", &SSEFormFactors<BsToDs, PToP>::make },
+        { "B_s->D_s::BGJvD2019", &HQETFormFactors<BsToDs, PToP>::make },
+        { "B_s->D_s::BGL1997", &BGL1997FormFactors<BsToDs, PToP>::make },
+        { "B_s->D_s::G2026", &G2026FormFactors<BsToDs, PToP>::make },
         // c -> d
-        { "D->eta::BSZ2015",         &BSZ2015FormFactors<DToEta,      PToP>::make                                                                                 },
-        { "D->eta::SSE",                 &SSEFormFactors<DToEta,      PToP>::make                                                                                 },
-        { "D->eta_prime::BSZ2015",   &BSZ2015FormFactors<DToEtaPrime, PToP>::make                                                                                 },
-        { "D->eta_prime::SSE",           &SSEFormFactors<DToEtaPrime, PToP>::make                                                                                 },
-        { "D->pi::BSZ2015",          &BSZ2015FormFactors<DToPi,       PToP>::make                                                                                 },
-        { "D->pi::SSE",                  &SSEFormFactors<DToPi,       PToP>::make                                                                                 },
-        { "D_s->K::BSZ2015",         &BSZ2015FormFactors<DsToK,       PToP>::make                                                                                 },
-        { "D_s->K::SSE",                 &SSEFormFactors<DsToK,       PToP>::make                                                                                 },
+        { "D->eta::BSZ2015", &BSZ2015FormFactors<DToEta, PToP>::make },
+        { "D->eta::SSE", &SSEFormFactors<DToEta, PToP>::make },
+        { "D->eta_prime::BSZ2015", &BSZ2015FormFactors<DToEtaPrime, PToP>::make },
+        { "D->eta_prime::SSE", &SSEFormFactors<DToEtaPrime, PToP>::make },
+        { "D->pi::BSZ2015", &BSZ2015FormFactors<DToPi, PToP>::make },
+        { "D->pi::SSE", &SSEFormFactors<DToPi, PToP>::make },
+        { "D_s->K::BSZ2015", &BSZ2015FormFactors<DsToK, PToP>::make },
+        { "D_s->K::SSE", &SSEFormFactors<DsToK, PToP>::make },
         // c -> s
-        { "D_s->eta::BSZ2015",       &BSZ2015FormFactors<DsToEta,      PToP>::make                                                                                },
-        { "D_s->eta::SSE",               &SSEFormFactors<DsToEta,      PToP>::make                                                                                },
-        { "D_s->eta::SE",                 &SEFormFactors<DsToEta,      PToP>::make                                                                                },
-        { "D_s->eta_prime::BSZ2015", &BSZ2015FormFactors<DsToEtaPrime, PToP>::make                                                                                },
-        { "D_s->eta_prime::SSE",         &SSEFormFactors<DsToEtaPrime, PToP>::make                                                                                },
-        { "D_s->eta_prime::SE",           &SEFormFactors<DsToEtaPrime, PToP>::make                                                                                },
-        { "D->K::BSZ2015",           &BSZ2015FormFactors<DToK,         PToP>::make                                                                                },
-        { "D->K::SSE",                   &SSEFormFactors<DToK,         PToP>::make                                                                                },
-        { "D->K::SE",                     &SEFormFactors<DToK,         PToP>::make                                                                                },
+        { "D_s->eta::BSZ2015", &BSZ2015FormFactors<DsToEta, PToP>::make },
+        { "D_s->eta::SSE", &SSEFormFactors<DsToEta, PToP>::make },
+        { "D_s->eta::SE", &SEFormFactors<DsToEta, PToP>::make },
+        { "D_s->eta_prime::BSZ2015", &BSZ2015FormFactors<DsToEtaPrime, PToP>::make },
+        { "D_s->eta_prime::SSE", &SSEFormFactors<DsToEtaPrime, PToP>::make },
+        { "D_s->eta_prime::SE", &SEFormFactors<DsToEtaPrime, PToP>::make },
+        { "D->K::BSZ2015", &BSZ2015FormFactors<DToK, PToP>::make },
+        { "D->K::SSE", &SSEFormFactors<DToK, PToP>::make },
+        { "D->K::SE", &SEFormFactors<DToK, PToP>::make },
         // analytic computations
-        { "B->pi::DKMMO2008",        &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make                   },
-        { "B_s->K::DKMMO2008",       &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make                },
-        { "B->pi::B-LCSR",           &AnalyticFormFactorBToPLCSR<BToPi>::make                                                                                     },
-        { "B->K::B-LCSR",            &AnalyticFormFactorBToPLCSR<BToK>::make                                                                                      },
-        { "B->D::B-LCSR",            &AnalyticFormFactorBToPLCSR<BToD>::make                                                                                      },
-        { "B_s->K::B-LCSR",          &AnalyticFormFactorBToPLCSR<BsToK>::make                                                                                     },
-        { "B_s->D_s::B-LCSR",        &AnalyticFormFactorBToPLCSR<BsToDs>::make                                                                                    }
+        { "B->pi::DKMMO2008", &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::down>::make },
+        { "B_s->K::DKMMO2008", &AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>::make },
+        { "B->pi::B-LCSR", &AnalyticFormFactorBToPLCSR<BToPi>::make },
+        { "B->K::B-LCSR", &AnalyticFormFactorBToPLCSR<BToK>::make },
+        { "B->D::B-LCSR", &AnalyticFormFactorBToPLCSR<BToD>::make },
+        { "B_s->K::B-LCSR", &AnalyticFormFactorBToPLCSR<BsToK>::make },
+        { "B_s->D_s::B-LCSR", &AnalyticFormFactorBToPLCSR<BsToDs>::make }
     };
 
     complex<double>
@@ -473,7 +470,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<PToP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -488,7 +487,7 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
@@ -496,18 +495,14 @@ namespace eos
 
     /* P -> PP Processes */
 
-    FormFactors<PToPP>::~FormFactors()
-    {
-    }
+    FormFactors<PToPP>::~FormFactors() {}
 
-    const std::map<FormFactorFactory<PToPP>::KeyType, FormFactorFactory<PToPP>::ValueType>
-    FormFactorFactory<PToPP>::form_factors
-    {
+    const std::map<FormFactorFactory<PToPP>::KeyType, FormFactorFactory<PToPP>::ValueType> FormFactorFactory<PToPP>::form_factors{
         // analytic computations
-        { "B->pipi::BFvD2016",            &AnalyticFormFactorBToPiPiBFvD2016::make   },
-        { "B->pipi::FvDV2018-Dispersive", &AnalyticFormFactorBToPiPiFvDV2018::make   },
-        { "B->pipi::FvDV2018",            &FvDV2018FormFactors<BToPiPi>::make        },
-        { "B->pipi::HKvT2025",            &HKVT2025FormFactors<BToPiPi, PToPP>::make },
+        { "B->pipi::BFvD2016", &AnalyticFormFactorBToPiPiBFvD2016::make },
+        { "B->pipi::FvDV2018-Dispersive", &AnalyticFormFactorBToPiPiFvDV2018::make },
+        { "B->pipi::FvDV2018", &FvDV2018FormFactors<BToPiPi>::make },
+        { "B->pipi::HKvT2025", &HKVT2025FormFactors<BToPiPi, PToPP>::make },
     };
 
     std::shared_ptr<FormFactors<PToPP>>
@@ -536,7 +531,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<PToPP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -551,22 +548,18 @@ namespace eos
             allowed_values.insert(std::get<0>(ff).name_part().str());
         }
 
-        OptionSpecification result { "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
+        OptionSpecification result{ "form-factors"_ok, std::vector<qnp::OptionValue>(allowed_values.cbegin(), allowed_values.cend()) };
         return result;
     }
 
     /* V -> P Processes */
 
-    FormFactors<VToP>::~FormFactors()
-    {
-    }
+    FormFactors<VToP>::~FormFactors() {}
 
-    const std::map<FormFactorFactory<VToP>::KeyType, FormFactorFactory<VToP>::ValueType>
-    FormFactorFactory<VToP>::form_factors
-    {
+    const std::map<FormFactorFactory<VToP>::KeyType, FormFactorFactory<VToP>::ValueType> FormFactorFactory<VToP>::form_factors{
         // parametrizations
         // b -> c
-        { "B^*->D::BGJvD2019",        &HQETFormFactors<BstarToD, VToP>::make          },
+        { "B^*->D::BGJvD2019", &HQETFormFactors<BstarToD, VToP>::make },
     };
 
     std::shared_ptr<FormFactors<VToP>>
@@ -595,7 +588,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<VToP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -603,17 +598,13 @@ namespace eos
 
     /* V -> V Processes */
 
-    FormFactors<VToV>::~FormFactors()
-    {
-    }
+    FormFactors<VToV>::~FormFactors() {}
 
-    const std::map<FormFactorFactory<VToV>::KeyType, FormFactorFactory<VToV>::ValueType>
-    FormFactorFactory<VToV>::form_factors
-    {
+    const std::map<FormFactorFactory<VToV>::KeyType, FormFactorFactory<VToV>::ValueType> FormFactorFactory<VToV>::form_factors{
         // parametrizations
         // b -> c
         // not yet supported
-        { "B^*->D^*::BGJvD2019",      &HQETFormFactors<BstarToDstar, VToV>::make      },
+        { "B^*->D^*::BGJvD2019", &HQETFormFactors<BstarToDstar, VToV>::make },
     };
 
     std::shared_ptr<FormFactors<VToV>>
@@ -642,7 +633,9 @@ namespace eos
         for (const auto & ff : FormFactorFactory<VToV>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
@@ -650,9 +643,7 @@ namespace eos
 
     /* Vacuum -> P P Processes */
 
-    FormFactors<VacuumToPP>::~FormFactors()
-    {
-    }
+    FormFactors<VacuumToPP>::~FormFactors() {}
 
     double
     FormFactors<VacuumToPP>::abs2_f_p(const double & q2) const
@@ -664,7 +655,8 @@ namespace eos
     FormFactors<VacuumToPP>::arg_f_p(const double & q2) const
     {
         const double arg = std::arg(this->f_p(q2));
-        if (arg < 0.0) {
+        if (arg < 0.0)
+        {
             return arg + 2.0 * M_PI;
         }
         return arg;
@@ -692,7 +684,8 @@ namespace eos
     FormFactors<VacuumToPP>::arg_f_0(const double & q2) const
     {
         const double arg = std::arg(this->f_0(q2));
-        if (arg < 0.0) {
+        if (arg < 0.0)
+        {
             return arg + 2.0 * M_PI;
         }
         return arg;
@@ -720,7 +713,8 @@ namespace eos
     FormFactors<VacuumToPP>::arg_f_t(const double & q2) const
     {
         const double arg = std::arg(this->f_t(q2));
-        if (arg < 0.0) {
+        if (arg < 0.0)
+        {
             return arg + 2.0 * M_PI;
         }
         return arg;
@@ -738,11 +732,9 @@ namespace eos
         return std::imag(this->f_t(complex<double>(re_q2, im_q2)));
     }
 
-    const std::map<FormFactorFactory<VacuumToPP>::KeyType, FormFactorFactory<VacuumToPP>::ValueType>
-    FormFactorFactory<VacuumToPP>::form_factors
-    {
-        { "0->pipi::KKRvD2024",     &KKRvD2024FormFactors<VacuumToPiPi>::make },
-        { "0->Kpi::KSvD2025",       &KSvD2025FormFactors<VacuumToKPi>::make   },
+    const std::map<FormFactorFactory<VacuumToPP>::KeyType, FormFactorFactory<VacuumToPP>::ValueType> FormFactorFactory<VacuumToPP>::form_factors{
+        { "0->pipi::KKRvD2024", &KKRvD2024FormFactors<VacuumToPiPi>::make },
+        {   "0->Kpi::KSvD2025",   &KSvD2025FormFactors<VacuumToKPi>::make },
     };
 
     std::shared_ptr<FormFactors<VacuumToPP>>
@@ -767,9 +759,11 @@ namespace eos
         for (const auto & ff : FormFactorFactory<VacuumToPP>::form_factors)
         {
             if (process == std::get<0>(ff).prefix_part())
+            {
                 allowed_values.push_back(std::get<0>(ff).name_part().str());
+            }
         }
 
         return { "form-factors"_ok, allowed_values };
     }
-}
+} // namespace eos

@@ -22,11 +22,9 @@
 
 namespace eos
 {
-    template <typename Transition_>
-    class FormFactors;
+    template <typename Transition_> class FormFactors;
 
-    template <typename Transition_>
-    class FormFactorFactory;
-}
+    template <typename Transition_> class FormFactorFactory;
+} // namespace eos
 
 #endif

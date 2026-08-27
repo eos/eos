@@ -35,13 +35,10 @@ namespace eos
         _m_lambda_b(p["mass::Lambda_b"], *this),
         _m_lambda(p["mass::Lambda"], *this)
     {
-        static const Log::OneTimeMessage message_BFvD2014_FFs
-        (
-            "BFvD2014FormFactors",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_BFvD2014_FFs("BFvD2014FormFactors",
+                                                              ll_warning,
+                                                              "This form factor parametrization is not a general one and requires careful attention. "
+                                                              "By default, it returns zeros for all form factors.");
     }
 
     FormFactors<OneHalfPlusToOneHalfPlus> *
@@ -86,14 +83,9 @@ namespace eos
         return _f_perp_a() / (1.0 - s / ma2) * (1.0 + _b_1_perp_a() * (zt - z0));
     }
 
-    const std::set<ReferenceName> BFvD2014FormFactors::references
-    {
-        "DKMR:2017A"_rn
-    };
+    const std::set<ReferenceName> BFvD2014FormFactors::references{ "DKMR:2017A"_rn };
 
-    const std::vector<OptionSpecification> BFvD2014FormFactors::options
-    {
-    };
+    const std::vector<OptionSpecification> BFvD2014FormFactors::options{};
 
     std::vector<OptionSpecification>::const_iterator
     BFvD2014FormFactors::begin_options()
@@ -106,4 +98,4 @@ namespace eos
     {
         return options.cend();
     }
-}
+} // namespace eos

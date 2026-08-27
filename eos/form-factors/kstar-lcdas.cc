@@ -25,96 +25,107 @@
 
 namespace eos
 {
-    template <>
-    struct Implementation<KstarLCDAs>
+    template <> struct Implementation<KstarLCDAs>
     {
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        // twist 2 (vector) Gegenbauer coefficients at mu = 1 GeV
-        UsedParameter a_1_para_0;
-        UsedParameter a_2_para_0;
-        UsedParameter f_para;
+            // twist 2 (vector) Gegenbauer coefficients at mu = 1 GeV
+            UsedParameter a_1_para_0;
+            UsedParameter a_2_para_0;
+            UsedParameter f_para;
 
-        // twist 2 (tensor) Gegenbauer coefficients and normalization at mu = 1 GeV
-        UsedParameter a_1_perp_0;
-        UsedParameter a_2_perp_0;
-        UsedParameter f_perp_0;
+            // twist 2 (tensor) Gegenbauer coefficients and normalization at mu = 1 GeV
+            UsedParameter a_1_perp_0;
+            UsedParameter a_2_perp_0;
+            UsedParameter f_perp_0;
 
-        // matching scales for the individual n-flavor effective QCDs
-        UsedParameter _mu_c;
-        UsedParameter _mu_b;
-        UsedParameter _mu_t;
+            // matching scales for the individual n-flavor effective QCDs
+            UsedParameter _mu_c;
+            UsedParameter _mu_b;
+            UsedParameter _mu_t;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make("SM"_ov, p, o)),
-            a_1_para_0(p["K^*::a_1_para@1GeV"], u),
-            a_2_para_0(p["K^*::a_2_para@1GeV"], u),
-            f_para(p["K^*::f_para"], u),
-            a_1_perp_0(p["K^*::a_1_perp@1GeV"], u),
-            a_2_perp_0(p["K^*::a_2_perp@1GeV"], u),
-            f_perp_0(p["K^*::f_perp@1GeV"], u),
-            _mu_c(p["QCD::mu_c"], u),
-            _mu_b(p["QCD::mu_b"], u),
-            _mu_t(p["QCD::mu_t"], u)
-        {
-        }
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make("SM"_ov, p, o)),
+                a_1_para_0(p["K^*::a_1_para@1GeV"], u),
+                a_2_para_0(p["K^*::a_2_para@1GeV"], u),
+                f_para(p["K^*::f_para"], u),
+                a_1_perp_0(p["K^*::a_1_perp@1GeV"], u),
+                a_2_perp_0(p["K^*::a_2_perp@1GeV"], u),
+                f_perp_0(p["K^*::f_perp@1GeV"], u),
+                _mu_c(p["QCD::mu_c"], u),
+                _mu_b(p["QCD::mu_b"], u),
+                _mu_t(p["QCD::mu_t"], u)
+            {
+            }
 
-        inline double c_rge(const double & _mu) const
-        {
-            /*
-             * RGE coefficient, basically
-             *
-             *     (alpha_s/alpha_s_0)^(1/beta_0),
-             *
-             * with matching between the individual n-flavor QCDs.
-             */
+            inline double
+            c_rge(const double & _mu) const
+            {
+                /*
+                 * RGE coefficient, basically
+                 *
+                 *     (alpha_s/alpha_s_0)^(1/beta_0),
+                 *
+                 * with matching between the individual n-flavor QCDs.
+                 */
 
-            double mu = _mu, alpha_s_mu = model->alpha_s(mu);
-            double mu_0 = 1.0, alpha_s_0 = model->alpha_s(mu_0);
+                double mu = _mu, alpha_s_mu = model->alpha_s(mu);
+                double mu_0 = 1.0, alpha_s_0 = model->alpha_s(mu_0);
 
-            if (mu < _mu_c)
-                return std::pow(alpha_s_mu / alpha_s_0, 1.0 / QCD::beta_function_nf_3[0]);
+                if (mu < _mu_c)
+                {
+                    return std::pow(alpha_s_mu / alpha_s_0, 1.0 / QCD::beta_function_nf_3[0]);
+                }
 
-            double alpha_s_c = model->alpha_s(_mu_c);
-            double result = std::pow(alpha_s_c / alpha_s_0, 1.0 / QCD::beta_function_nf_3[0]);
+                double alpha_s_c = model->alpha_s(_mu_c);
+                double result    = std::pow(alpha_s_c / alpha_s_0, 1.0 / QCD::beta_function_nf_3[0]);
 
-            if (mu < _mu_b)
-                return result * std::pow(alpha_s_mu / alpha_s_c, 1.0 / QCD::beta_function_nf_4[0]);
+                if (mu < _mu_b)
+                {
+                    return result * std::pow(alpha_s_mu / alpha_s_c, 1.0 / QCD::beta_function_nf_4[0]);
+                }
 
-            double alpha_s_b = model->alpha_s(_mu_b);
-            result *= std::pow(alpha_s_b / alpha_s_c, 1.0 / QCD::beta_function_nf_4[0]);
+                double alpha_s_b  = model->alpha_s(_mu_b);
+                result           *= std::pow(alpha_s_b / alpha_s_c, 1.0 / QCD::beta_function_nf_4[0]);
 
-            if (mu < _mu_t)
-                return result * std::pow(alpha_s_mu / alpha_s_b, 1.0 / QCD::beta_function_nf_5[0]);
+                if (mu < _mu_t)
+                {
+                    return result * std::pow(alpha_s_mu / alpha_s_b, 1.0 / QCD::beta_function_nf_5[0]);
+                }
 
-            throw InternalError("Implementation<KstarLCDAs>: RGE coefficient must not be evolved above mu_t = " + stringify(_mu_t()));
-        }
+                throw InternalError("Implementation<KstarLCDAs>: RGE coefficient must not be evolved above mu_t = " + stringify(_mu_t()));
+            }
 
-        inline double a_1_para(const double & mu) const
-        {
-            return a_1_para_0 * std::pow(c_rge(mu), 32.0 / 9.0);
-        }
+            inline double
+            a_1_para(const double & mu) const
+            {
+                return a_1_para_0 * std::pow(c_rge(mu), 32.0 / 9.0);
+            }
 
-        inline double a_2_para(const double & mu) const
-        {
-            return a_2_para_0 * std::pow(c_rge(mu), 50.0 / 9.0);
-        }
+            inline double
+            a_2_para(const double & mu) const
+            {
+                return a_2_para_0 * std::pow(c_rge(mu), 50.0 / 9.0);
+            }
 
-        inline double a_1_perp(const double & mu) const
-        {
-            return a_1_perp_0 * std::pow(c_rge(mu), 36.0 / 9.0);
-        }
+            inline double
+            a_1_perp(const double & mu) const
+            {
+                return a_1_perp_0 * std::pow(c_rge(mu), 36.0 / 9.0);
+            }
 
-        inline double a_2_perp(const double & mu) const
-        {
-            return a_2_perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
-        }
+            inline double
+            a_2_perp(const double & mu) const
+            {
+                return a_2_perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
+            }
 
-        inline double f_perp(const double & mu) const
-        {
-            // gamma_0 / (beta_0^Nf=3) = 4 / 23, see [BFS:2001A], p. 14, below eq. (48)
-            return f_perp_0 * std::pow(c_rge(mu), +4.0 / 23.0 * QCD::beta_function_nf_3[0]);
-        }
+            inline double
+            f_perp(const double & mu) const
+            {
+                // gamma_0 / (beta_0^Nf=3) = 4 / 23, see [BFS:2001A], p. 14, below eq. (48)
+                return f_perp_0 * std::pow(c_rge(mu), +4.0 / 23.0 * QCD::beta_function_nf_3[0]);
+            }
     };
 
     KstarLCDAs::KstarLCDAs(const Parameters & p, const Options & o) :
@@ -122,9 +133,7 @@ namespace eos
     {
     }
 
-    KstarLCDAs::~KstarLCDAs()
-    {
-    }
+    KstarLCDAs::~KstarLCDAs() {}
 
     double
     KstarLCDAs::a_1_para(const double & mu) const
@@ -209,4 +218,4 @@ namespace eos
 
         return results;
     }
-}
+} // namespace eos

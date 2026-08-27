@@ -18,34 +18,31 @@
  */
 
 #include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/vec-lcdas.hh>
-#include <eos/form-factors/rho-lcdas.hh>
 #include <eos/form-factors/k-star-lcdas.hh>
+#include <eos/form-factors/rho-lcdas.hh>
+#include <eos/form-factors/vec-lcdas.hh>
 
 #include <map>
 
 namespace eos
 {
-    VectorLCDAs::~VectorLCDAs()
-    {
-    }
+    VectorLCDAs::~VectorLCDAs() {}
 
     std::shared_ptr<VectorLCDAs>
     VectorLCDAs::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
         Context ctx("When making an object for vector LCDAs");
 
-        using KeyType = std::string;
-        using ValueType = std::function<VectorLCDAs * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> lcdas
-        {
-            { "rho",      &RhoLCDAs::make       },
-            { "Kstar",    &KStarLCDAs::make     },
+        using KeyType   = std::string;
+        using ValueType = std::function<VectorLCDAs *(const Parameters &, const Options &)>;
+        static const std::map<KeyType, ValueType> lcdas{
+            {      "rho",       &RhoLCDAs::make },
+            {    "Kstar",     &KStarLCDAs::make },
             { "Kstarbar", &AntiKStarLCDAs::make }
         };
 
         std::shared_ptr<VectorLCDAs> result;
-        auto i = lcdas.find(name);
+        auto                         i = lcdas.find(name);
         if (lcdas.cend() != i)
         {
             result.reset(i->second(parameters, options));
@@ -55,4 +52,4 @@ namespace eos
         throw InternalError("Unknown vector LCDAs for state: " + name);
         return result;
     }
-}
+} // namespace eos

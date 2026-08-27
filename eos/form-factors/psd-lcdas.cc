@@ -18,34 +18,31 @@
  */
 
 #include <eos/form-factors/form-factors.hh>
-#include <eos/form-factors/psd-lcdas.hh>
-#include <eos/form-factors/pi-lcdas.hh>
 #include <eos/form-factors/k-lcdas.hh>
+#include <eos/form-factors/pi-lcdas.hh>
+#include <eos/form-factors/psd-lcdas.hh>
 
 #include <map>
 
 namespace eos
 {
-    PseudoscalarLCDAs::~PseudoscalarLCDAs()
-    {
-    }
+    PseudoscalarLCDAs::~PseudoscalarLCDAs() {}
 
     std::shared_ptr<PseudoscalarLCDAs>
     PseudoscalarLCDAs::make(const std::string & name, const Parameters & parameters, const Options & options)
     {
         Context ctx("When making an object for pseudoscalar LCDAs");
 
-        using KeyType = std::string;
-        using ValueType = std::function<PseudoscalarLCDAs * (const Parameters &, const Options &)>;
-        static const std::map<KeyType, ValueType> lcdas
-        {
-            { "pi",   &PionLCDAs::make     },
-            { "K",    &KaonLCDAs::make     },
+        using KeyType   = std::string;
+        using ValueType = std::function<PseudoscalarLCDAs *(const Parameters &, const Options &)>;
+        static const std::map<KeyType, ValueType> lcdas{
+            {   "pi",     &PionLCDAs::make },
+            {    "K",     &KaonLCDAs::make },
             { "Kbar", &AntiKaonLCDAs::make }
         };
 
         std::shared_ptr<PseudoscalarLCDAs> result;
-        auto i = lcdas.find(name);
+        auto                               i = lcdas.find(name);
         if (lcdas.cend() != i)
         {
             result.reset(i->second(parameters, options));
@@ -55,4 +52,4 @@ namespace eos
         throw InternalError("Unknown pseudoscalar LCDAs for state: " + name);
         return result;
     }
-}
+} // namespace eos

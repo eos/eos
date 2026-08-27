@@ -24,4 +24,4 @@ namespace eos
     template class HQETFormFactors<OneHalfPlusToOneHalfMinus, LambdaBToLambdaC2595>;
 
     template class HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>;
-}
+} // namespace eos

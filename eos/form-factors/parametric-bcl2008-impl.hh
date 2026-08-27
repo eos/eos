@@ -29,23 +29,22 @@ namespace eos
     double
     BCL2008FormFactorBase<Process_, 3u, false>::_z(const double & s) const
     {
-        static const double m_B = Process_::m_B;
-        static const double m_P = Process_::m_P;
+        static const double m_B   = Process_::m_B;
+        static const double m_P   = Process_::m_P;
         static const double tau_p = (m_B + m_P) * (m_B + m_P);
         static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
 
-        return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
-            / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
+        return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0)) / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
     }
 
     template <typename Process_>
     BCL2008FormFactorBase<Process_, 3u, false>::BCL2008FormFactorBase(const Parameters & p, const Options &) :
         _f_plus_0(p[std::string(Process_::label) + "::f_+(0)@BCL2008"], *this),
-        _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"],  *this),
-        _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"],  *this),
-        _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"],  *this),
-        _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"],  *this),
-        _b_zero_3(p[std::string(Process_::label) + "::b_0^3@BCL2008"],  *this)
+        _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"], *this),
+        _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"], *this),
+        _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"], *this),
+        _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"], *this),
+        _b_zero_3(p[std::string(Process_::label) + "::b_0^3@BCL2008"], *this)
     {
     }
 
@@ -96,25 +95,24 @@ namespace eos
     double
     BCL2008FormFactorBase<Process_, 4u, false>::_z(const double & s) const
     {
-        static const double m_B = Process_::m_B;
-        static const double m_P = Process_::m_P;
+        static const double m_B   = Process_::m_B;
+        static const double m_P   = Process_::m_P;
         static const double tau_p = (m_B + m_P) * (m_B + m_P);
         static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
 
-        return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
-            / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
+        return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0)) / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
     }
 
     template <typename Process_>
     BCL2008FormFactorBase<Process_, 4u, false>::BCL2008FormFactorBase(const Parameters & p, const Options &) :
         _f_plus_0(p[std::string(Process_::label) + "::f_+(0)@BCL2008"], *this),
-        _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"],  *this),
-        _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"],  *this),
-        _b_plus_3(p[std::string(Process_::label) + "::b_+^3@BCL2008"],  *this),
-        _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"],  *this),
-        _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"],  *this),
-        _b_zero_3(p[std::string(Process_::label) + "::b_0^3@BCL2008"],  *this),
-        _b_zero_4(p[std::string(Process_::label) + "::b_0^4@BCL2008"],  *this)
+        _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"], *this),
+        _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"], *this),
+        _b_plus_3(p[std::string(Process_::label) + "::b_+^3@BCL2008"], *this),
+        _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"], *this),
+        _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"], *this),
+        _b_zero_3(p[std::string(Process_::label) + "::b_0^3@BCL2008"], *this),
+        _b_zero_4(p[std::string(Process_::label) + "::b_0^4@BCL2008"], *this)
     {
     }
 
@@ -165,27 +163,26 @@ namespace eos
     double
     BCL2008FormFactorBase<Process_, 5u, false>::_z(const double & s) const
     {
-        static const double m_B = Process_::m_B;
-        static const double m_P = Process_::m_P;
+        static const double m_B   = Process_::m_B;
+        static const double m_P   = Process_::m_P;
         static const double tau_p = (m_B + m_P) * (m_B + m_P);
         static const double tau_0 = (m_B + m_P) * (std::sqrt(m_B) - std::sqrt(m_P)) * (std::sqrt(m_B) - std::sqrt(m_P));
 
-        return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0))
-            / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
+        return (std::sqrt(tau_p - s) - std::sqrt(tau_p - tau_0)) / (std::sqrt(tau_p - s) + std::sqrt(tau_p - tau_0));
     }
 
     template <typename Process_>
     BCL2008FormFactorBase<Process_, 5u, false>::BCL2008FormFactorBase(const Parameters & p, const Options &) :
         _f_plus_0(p[std::string(Process_::label) + "::f_+(0)@BCL2008"], *this),
-        _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"],  *this),
-        _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"],  *this),
-        _b_plus_3(p[std::string(Process_::label) + "::b_+^3@BCL2008"],  *this),
-        _b_plus_4(p[std::string(Process_::label) + "::b_+^4@BCL2008"],  *this),
-        _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"],  *this),
-        _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"],  *this),
-        _b_zero_3(p[std::string(Process_::label) + "::b_0^3@BCL2008"],  *this),
-        _b_zero_4(p[std::string(Process_::label) + "::b_0^4@BCL2008"],  *this),
-        _b_zero_5(p[std::string(Process_::label) + "::b_0^5@BCL2008"],  *this)
+        _b_plus_1(p[std::string(Process_::label) + "::b_+^1@BCL2008"], *this),
+        _b_plus_2(p[std::string(Process_::label) + "::b_+^2@BCL2008"], *this),
+        _b_plus_3(p[std::string(Process_::label) + "::b_+^3@BCL2008"], *this),
+        _b_plus_4(p[std::string(Process_::label) + "::b_+^4@BCL2008"], *this),
+        _b_zero_1(p[std::string(Process_::label) + "::b_0^1@BCL2008"], *this),
+        _b_zero_2(p[std::string(Process_::label) + "::b_0^2@BCL2008"], *this),
+        _b_zero_3(p[std::string(Process_::label) + "::b_0^3@BCL2008"], *this),
+        _b_zero_4(p[std::string(Process_::label) + "::b_0^4@BCL2008"], *this),
+        _b_zero_5(p[std::string(Process_::label) + "::b_0^5@BCL2008"], *this)
 
     {
     }
@@ -198,7 +195,9 @@ namespace eos
         const double z0 = _z(0), z02 = z0 * z0, z03 = z0 * z02, z04 = z0 * z03, z05 = z0 * z04;
         const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03, z4bar = z4 - z04, z5bar = z5 - z05;
 
-        return _f_plus_0 / (1.0 - s / Process_::mR2_1m) * (1.0 + _b_plus_1 * (zbar - z5bar / 5.0) + _b_plus_2 * (z2bar + 2.0 * z5bar / 5.0) + _b_plus_3 * (z3bar - 3.0 * z5bar / 5.0) + _b_plus_4 * (z4bar + 4.0 * z5bar / 5.0));
+        return _f_plus_0 / (1.0 - s / Process_::mR2_1m)
+               * (1.0 + _b_plus_1 * (zbar - z5bar / 5.0) + _b_plus_2 * (z2bar + 2.0 * z5bar / 5.0) + _b_plus_3 * (z3bar - 3.0 * z5bar / 5.0)
+                  + _b_plus_4 * (z4bar + 4.0 * z5bar / 5.0));
     }
 
     template <typename Process_>
@@ -236,9 +235,9 @@ namespace eos
     template <typename Process_>
     BCL2008FormFactorBase<Process_, 3u, true>::BCL2008FormFactorBase(const Parameters & p, const Options & o) :
         BCL2008FormFactorBase<Process_, 3u, false>(p, o),
-        _f_t_0(p[std::string(Process_::label)    + "::f_T(0)@BCL2008"], *this),
-        _b_t_1(p[std::string(Process_::label)    + "::b_T^1@BCL2008"],  *this),
-        _b_t_2(p[std::string(Process_::label)    + "::b_T^2@BCL2008"],  *this)
+        _f_t_0(p[std::string(Process_::label) + "::f_T(0)@BCL2008"], *this),
+        _b_t_1(p[std::string(Process_::label) + "::b_T^1@BCL2008"], *this),
+        _b_t_2(p[std::string(Process_::label) + "::b_T^2@BCL2008"], *this)
     {
     }
 
@@ -256,10 +255,10 @@ namespace eos
     template <typename Process_>
     BCL2008FormFactorBase<Process_, 4u, true>::BCL2008FormFactorBase(const Parameters & p, const Options & o) :
         BCL2008FormFactorBase<Process_, 4u, false>(p, o),
-        _f_t_0(p[std::string(Process_::label)    + "::f_T(0)@BCL2008"], *this),
-        _b_t_1(p[std::string(Process_::label)    + "::b_T^1@BCL2008"],  *this),
-        _b_t_2(p[std::string(Process_::label)    + "::b_T^2@BCL2008"],  *this),
-        _b_t_3(p[std::string(Process_::label)    + "::b_T^3@BCL2008"],  *this)
+        _f_t_0(p[std::string(Process_::label) + "::f_T(0)@BCL2008"], *this),
+        _b_t_1(p[std::string(Process_::label) + "::b_T^1@BCL2008"], *this),
+        _b_t_2(p[std::string(Process_::label) + "::b_T^2@BCL2008"], *this),
+        _b_t_3(p[std::string(Process_::label) + "::b_T^3@BCL2008"], *this)
 
     {
     }
@@ -278,11 +277,11 @@ namespace eos
     template <typename Process_>
     BCL2008FormFactorBase<Process_, 5u, true>::BCL2008FormFactorBase(const Parameters & p, const Options & o) :
         BCL2008FormFactorBase<Process_, 5u, false>(p, o),
-        _f_t_0(p[std::string(Process_::label)    + "::f_T(0)@BCL2008"], *this),
-        _b_t_1(p[std::string(Process_::label)    + "::b_T^1@BCL2008"],  *this),
-        _b_t_2(p[std::string(Process_::label)    + "::b_T^2@BCL2008"],  *this),
-        _b_t_3(p[std::string(Process_::label)    + "::b_T^3@BCL2008"],  *this),
-        _b_t_4(p[std::string(Process_::label)    + "::b_T^4@BCL2008"],  *this)
+        _f_t_0(p[std::string(Process_::label) + "::f_T(0)@BCL2008"], *this),
+        _b_t_1(p[std::string(Process_::label) + "::b_T^1@BCL2008"], *this),
+        _b_t_2(p[std::string(Process_::label) + "::b_T^2@BCL2008"], *this),
+        _b_t_3(p[std::string(Process_::label) + "::b_T^3@BCL2008"], *this),
+        _b_t_4(p[std::string(Process_::label) + "::b_T^4@BCL2008"], *this)
 
     {
     }
@@ -295,7 +294,8 @@ namespace eos
         const double z0 = this->_z(0), z02 = z0 * z0, z03 = z0 * z02, z04 = z0 * z03, z05 = z0 * z04;
         const double zbar = z - z0, z2bar = z2 - z02, z3bar = z3 - z03, z4bar = z4 - z04, z5bar = z5 - z05;
 
-        return _f_t_0 / (1.0 - s / Process_::mR2_1m) * (1.0 + _b_t_1 * (zbar - z5bar / 5.0) + _b_t_2 * (z2bar + 2.0 * z5bar / 5.0) + _b_t_3 * (z3bar - 3.0 * z5bar / 5.0) + _b_t_4 * (z4bar + 4.0 * z5bar / 5.0));
+        return _f_t_0 / (1.0 - s / Process_::mR2_1m)
+               * (1.0 + _b_t_1 * (zbar - z5bar / 5.0) + _b_t_2 * (z2bar + 2.0 * z5bar / 5.0) + _b_t_3 * (z3bar - 3.0 * z5bar / 5.0) + _b_t_4 * (z4bar + 4.0 * z5bar / 5.0));
     }
 
     template <typename Process_, unsigned K_>
@@ -310,6 +310,6 @@ namespace eos
     {
         return new BCL2008FormFactors<Process_, K_>(parameters, options);
     }
-}
+} // namespace eos
 
 #endif

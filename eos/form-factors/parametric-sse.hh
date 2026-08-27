@@ -20,10 +20,10 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SSE_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_SSE_HH 1
 
-#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/baryonic-processes.hh>
-#include <eos/form-factors/mesonic.hh>
+#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -42,11 +42,8 @@ namespace eos
 
     template <typename Process_, typename Transition_> class SSEFormFactorTraits;
 
-
     // P -> V
-    template <typename Process_>
-    class SSEFormFactorTraits<Process_, PToV> :
-        public virtual ParameterUser
+    template <typename Process_> class SSEFormFactorTraits<Process_, PToV> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
@@ -72,31 +69,34 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_V);
             }
 
             // Optimized expansion point t_0 for the given pair-production threshold t_+.
-            double t0(const double & tp) const
+            double
+            t0(const double & tp) const
             {
                 return tp * (1.0 - std::sqrt(1.0 - tm() / tp));
             }
 
-            complex<double> calc_z(const complex<double> & s, const double & tp) const
+            complex<double>
+            calc_z(const complex<double> & s, const double & tp) const
             {
                 const double t_0 = t0(tp);
                 return (std::sqrt(tp - s) - std::sqrt(tp - t_0)) / (std::sqrt(tp - s) + std::sqrt(tp - t_0));
             }
 
-            double calc_z(const double & s, const double & tp) const
+            double
+            calc_z(const double & s, const double & tp) const
             {
                 return real(calc_z(complex<double>(s, 0.0), tp));
             }
     };
 
-    template <typename Process_> class SSEFormFactors<Process_, PToV> :
-        public FormFactors<PToV>
+    template <typename Process_> class SSEFormFactors<Process_, PToV> : public FormFactors<PToV>
     {
         private:
             // Form factors with a free leading coefficient (a_0, a_1, a_2).
@@ -111,10 +111,9 @@ namespace eos
 
             const SSEFormFactorTraits<Process_, PToV> _traits;
 
-            const UsedParameter & _mB, _mV;
+            const UsedParameter &_mB, _mV;
 
-            template <typename Parameter_>
-            complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const double & tp, const std::array<Parameter_, 3> & a) const;
+            template <typename Parameter_> complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const double & tp, const std::array<Parameter_, 3> & a) const;
 
             static std::string _par_name(const std::string & ff_name);
 
@@ -191,11 +190,8 @@ namespace eos
     extern template class SSEFormFactors<BsToKstar, PToV>;
     extern template class SSEFormFactors<BsToPhi, PToV>;
 
-
     // P -> P
-    template <typename Process_>
-    class SSEFormFactorTraits<Process_, PToP> :
-        public virtual ParameterUser
+    template <typename Process_> class SSEFormFactorTraits<Process_, PToP> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
@@ -218,31 +214,34 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_P);
             }
 
             // Optimized expansion point t_0 for the given pair-production threshold t_+.
-            double t0(const double & tp) const
+            double
+            t0(const double & tp) const
             {
                 return tp * (1.0 - std::sqrt(1.0 - tm() / tp));
             }
 
-            complex<double> calc_z(const complex<double> & s, const double & tp) const
+            complex<double>
+            calc_z(const complex<double> & s, const double & tp) const
             {
                 const double t_0 = t0(tp);
                 return (std::sqrt(tp - s) - std::sqrt(tp - t_0)) / (std::sqrt(tp - s) + std::sqrt(tp - t_0));
             }
 
-            double calc_z(const double & s, const double & tp) const
+            double
+            calc_z(const double & s, const double & tp) const
             {
                 return real(calc_z(complex<double>(s, 0.0), tp));
             }
     };
 
-    template <typename Process_> class SSEFormFactors<Process_, PToP> :
-        public FormFactors<PToP>
+    template <typename Process_> class SSEFormFactors<Process_, PToP> : public FormFactors<PToP>
     {
         private:
             // fit parametrization for P -> P inspired by [BSZ:2015A]
@@ -252,10 +251,9 @@ namespace eos
 
             const SSEFormFactorTraits<Process_, PToP> _traits;
 
-            const UsedParameter & _mB, _mP;
+            const UsedParameter &_mB, _mP;
 
-            template <typename Parameter_>
-            complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const double & tp, const std::array<Parameter_, 3> & a) const;
+            template <typename Parameter_> complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const double & tp, const std::array<Parameter_, 3> & a) const;
 
             static std::string _par_name(const std::string & ff_name);
 
@@ -294,11 +292,8 @@ namespace eos
     extern template class SSEFormFactors<DsToEta, PToP>;
     extern template class SSEFormFactors<DsToEtaPrime, PToP>;
 
-
     // 1/2^+ -> 1/2^+
-    template <typename Process_>
-    class SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus> :
-        public virtual ParameterUser
+    template <typename Process_> class SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus> : public virtual ParameterUser
     {
         public:
             // m_1 is the mass of the heavier baryon, m_2 the mass of the lighter one.
@@ -327,31 +322,34 @@ namespace eos
             {
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_1 - m_2);
             }
 
             // Optimized expansion point t_0 for the given pair-production threshold t_+.
-            double t0(const double & tp) const
+            double
+            t0(const double & tp) const
             {
                 return tp * (1.0 - std::sqrt(1.0 - tm() / tp));
             }
 
-            complex<double> calc_z(const complex<double> & s, const double & tp) const
+            complex<double>
+            calc_z(const complex<double> & s, const double & tp) const
             {
                 const double t_0 = t0(tp);
                 return (std::sqrt(tp - s) - std::sqrt(tp - t_0)) / (std::sqrt(tp - s) + std::sqrt(tp - t_0));
             }
 
-            double calc_z(const double & s, const double & tp) const
+            double
+            calc_z(const double & s, const double & tp) const
             {
                 return real(calc_z(complex<double>(s, 0.0), tp));
             }
     };
 
-    template <typename Process_> class SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus> :
-        public FormFactors<OneHalfPlusToOneHalfPlus>
+    template <typename Process_> class SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus> : public FormFactors<OneHalfPlusToOneHalfPlus>
     {
         private:
             // Form factors with a free leading coefficient (a_0, a_1, a_2).
@@ -362,10 +360,9 @@ namespace eos
 
             const SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus> _traits;
 
-            const UsedParameter & _m_1, _m_2;
+            const UsedParameter &_m_1, _m_2;
 
-            template <typename Parameter_>
-            double _calc_ff(const double & s, const double & m_R, const double & tp, const std::array<Parameter_, 3> & a) const;
+            template <typename Parameter_> double _calc_ff(const double & s, const double & m_R, const double & tp, const std::array<Parameter_, 3> & a) const;
 
             static std::string _par_name(const std::string & pol, const std::string & current, unsigned idx);
 
@@ -398,10 +395,10 @@ namespace eos
             virtual double f_perp_t5(const double & s) const;
     };
 
-    extern template class SSEFormFactors<LambdaBToLambda,  OneHalfPlusToOneHalfPlus>;
-    extern template class SSEFormFactors<LambdaCToLambda,  OneHalfPlusToOneHalfPlus>;
+    extern template class SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>;
+    extern template class SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>;
     extern template class SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>;
-    extern template class SSEFormFactors<LambdaCToProton,  OneHalfPlusToOneHalfPlus>;
-}
+    extern template class SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>;
+} // namespace eos
 
 #endif

@@ -19,9 +19,9 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BFvD2014_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BFvD2014_HH 1
 
-#include <eos/form-factors/form-factors-fwd.hh>
-#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/baryonic-processes.hh>
+#include <eos/form-factors/baryonic.hh>
+#include <eos/form-factors/form-factors-fwd.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/reference-name.hh>
 
@@ -30,8 +30,7 @@
 
 namespace eos
 {
-    class BFvD2014FormFactors :
-        public FormFactors<OneHalfPlusToOneHalfPlus>
+    class BFvD2014FormFactors : public FormFactors<OneHalfPlusToOneHalfPlus>
     {
         private:
             UsedParameter _f_long_v, _b_1_long_v;
@@ -45,7 +44,8 @@ namespace eos
             static constexpr double mv2 = 5.415 * 5.415;
             static constexpr double ma2 = 5.829 * 5.829;
 
-            static double _z(const double & t, const double & tp, const double & t0)
+            static double
+            _z(const double & t, const double & tp, const double & t0)
             {
                 return (std::sqrt(tp - t) - std::sqrt(tp - t0)) / (std::sqrt(tp - t) + std::sqrt(tp - t0));
             }
@@ -62,12 +62,41 @@ namespace eos
             virtual double f_perp_a(const double & s) const;
 
             // Not yet implemented:
-            virtual double f_time_v(const double &) const { throw InternalError("BFvD2014FormFactors::f_time_v(): not implemented"); }
-            virtual double f_time_a(const double &) const { throw InternalError("BFvD2014FormFactors::f_time_a(): not implemented"); }
-            virtual double f_perp_t(const double &) const { throw InternalError("BFvD2014FormFactors::f_perp_t(): not implemented"); }
-            virtual double f_perp_t5(const double &) const { throw InternalError("BFvD2014FormFactors::f_perp_t5(): not implemented"); }
-            virtual double f_long_t(const double &) const { throw InternalError("BFvD2014FormFactors::f_long_t(): not implemented"); }
-            virtual double f_long_t5(const double &) const { throw InternalError("BFvD2014FormFactors::f_long_t5(): not implemented"); }
+            virtual double
+            f_time_v(const double &) const
+            {
+                throw InternalError("BFvD2014FormFactors::f_time_v(): not implemented");
+            }
+
+            virtual double
+            f_time_a(const double &) const
+            {
+                throw InternalError("BFvD2014FormFactors::f_time_a(): not implemented");
+            }
+
+            virtual double
+            f_perp_t(const double &) const
+            {
+                throw InternalError("BFvD2014FormFactors::f_perp_t(): not implemented");
+            }
+
+            virtual double
+            f_perp_t5(const double &) const
+            {
+                throw InternalError("BFvD2014FormFactors::f_perp_t5(): not implemented");
+            }
+
+            virtual double
+            f_long_t(const double &) const
+            {
+                throw InternalError("BFvD2014FormFactors::f_long_t(): not implemented");
+            }
+
+            virtual double
+            f_long_t5(const double &) const
+            {
+                throw InternalError("BFvD2014FormFactors::f_long_t5(): not implemented");
+            }
 
             /*!
              * References used in the computation of our observables.
@@ -79,8 +108,8 @@ namespace eos
              */
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
-            static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification>           options;
     };
-}
+} // namespace eos
 
 #endif

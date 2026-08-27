@@ -23,14 +23,14 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BBGORVD2018_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BBGORVD2018_HH 1
 
-#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/baryonic-processes.hh>
+#include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/hqet-b-to-c.hh>
 #include <eos/maths/complex.hh>
-#include <eos/utils/kinematic.hh>
-#include <eos/models/model.hh>
-#include <eos/utils/options.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/model.hh>
+#include <eos/utils/kinematic.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/stringify.hh>
 
 namespace eos
@@ -41,9 +41,7 @@ namespace eos
      * J=1/2^+ -> J=1/2^- transitions
      */
 
-    template <typename Process_>
-    class HQETFormFactors<OneHalfPlusToOneHalfMinus, Process_> :
-        public FormFactors<OneHalfPlusToOneHalfMinus>
+    template <typename Process_> class HQETFormFactors<OneHalfPlusToOneHalfMinus, Process_> : public FormFactors<OneHalfPlusToOneHalfMinus>
     {
         private:
             HQETBToC _b_to_c;
@@ -55,44 +53,72 @@ namespace eos
             static constexpr double m_b_pole = 4.8;
             static constexpr double m_c_pole = 1.4;
 
-            double mLb2() const { return mLb * mLb; }
-            double mLcs2() const { return mLcs * mLcs; }
+            double
+            mLb2() const
+            {
+                return mLb * mLb;
+            }
 
-            double lambdabar() const { return mLb - m_b_pole; }
-            double lambdabarprime() const { return mLcs - m_c_pole; }
+            double
+            mLcs2() const
+            {
+                return mLcs * mLcs;
+            }
 
-            double s_max() const { return power_of<2>(mLb - mLcs); }
+            double
+            lambdabar() const
+            {
+                return mLb - m_b_pole;
+            }
+
+            double
+            lambdabarprime() const
+            {
+                return mLcs - m_c_pole;
+            }
+
+            double
+            s_max() const
+            {
+                return power_of<2>(mLb - mLcs);
+            }
 
             // auxiliary kinematics functions
-            double _s_plus(const double & s) const
+            double
+            _s_plus(const double & s) const
             {
                 return power_of<2>(mLb + mLcs) - s;
             }
-            double _s_minus(const double & s) const
+
+            double
+            _s_minus(const double & s) const
             {
                 return power_of<2>(mLb - mLcs) - s;
             }
 
             // parametrization of the Isgur-Wise functions
-            double _z(const double & s) const
+            double
+            _z(const double & s) const
             {
                 return _zeta_max * (1.0 + _rho * (s / s_max() - 1.0));
             }
 
-            double _z3b(const double & s) const
+            double
+            _z3b(const double & s) const
             {
                 return _zeta_max * (_delta_3b + _rho_3b * (s / s_max() - 1.0));
             }
 
-            inline double omega(const double & s) const
+            inline double
+            omega(const double & s) const
             {
                 return (mLb2() + mLcs2() - s) / (2.0 * mLb * mLcs);
             }
 
-            inline double omegabar(const double & s) const
+            inline double
+            omegabar(const double & s) const
             {
-                return omega(s) * (1.0 + lambdabar() / m_b_pole + lambdabarprime() / m_c_pole)
-                    - (lambdabar() / m_c_pole + lambdabarprime() / m_b_pole);
+                return omega(s) * (1.0 + lambdabar() / m_b_pole + lambdabarprime() / m_c_pole) - (lambdabar() / m_c_pole + lambdabarprime() / m_b_pole);
             }
 
         public:
@@ -120,9 +146,7 @@ namespace eos
      * J=1/2^+ -> J=3/2^- transitions
      */
 
-    template <typename Process_>
-    class HQETFormFactors<OneHalfPlusToThreeHalfMinus, Process_> :
-        public FormFactors<OneHalfPlusToThreeHalfMinus>
+    template <typename Process_> class HQETFormFactors<OneHalfPlusToThreeHalfMinus, Process_> : public FormFactors<OneHalfPlusToThreeHalfMinus>
     {
         private:
             HQETBToC _b_to_c;
@@ -134,44 +158,72 @@ namespace eos
             static constexpr double m_b_pole = 4.8;
             static constexpr double m_c_pole = 1.4;
 
-            double mLb2() const { return mLb * mLb; }
-            double mLcs2() const { return mLcs * mLcs; }
+            double
+            mLb2() const
+            {
+                return mLb * mLb;
+            }
 
-            double lambdabar() const { return mLb - m_b_pole; }
-            double lambdabarprime() const { return mLcs - m_c_pole; }
+            double
+            mLcs2() const
+            {
+                return mLcs * mLcs;
+            }
 
-            double s_max() const { return power_of<2>(mLb - mLcs); }
+            double
+            lambdabar() const
+            {
+                return mLb - m_b_pole;
+            }
+
+            double
+            lambdabarprime() const
+            {
+                return mLcs - m_c_pole;
+            }
+
+            double
+            s_max() const
+            {
+                return power_of<2>(mLb - mLcs);
+            }
 
             // auxiliary kinematics functions
-            double _s_plus(const double & s) const
+            double
+            _s_plus(const double & s) const
             {
                 return power_of<2>((mLb + mLcs)) - s;
             }
-            double _s_minus(const double & s) const
+
+            double
+            _s_minus(const double & s) const
             {
                 return power_of<2>((mLb - mLcs)) - s;
             }
 
             // parametrization of the Isgur-Wise functions
-            double _z(const double & s) const
+            double
+            _z(const double & s) const
             {
                 return _zeta_max * (1.0 + _rho * (s / s_max() - 1.0));
             }
 
-            double _z3b(const double & s) const
+            double
+            _z3b(const double & s) const
             {
                 return _zeta_max * (_delta_3b + _rho_3b * (s / s_max() - 1.0));
             }
 
-            inline double omega(const double & s) const
+            inline double
+            omega(const double & s) const
             {
                 return (mLb2() + mLcs2() - s) / (2.0 * mLb * mLcs);
             }
 
-            inline double omegabar(const double & s) const
+            inline double
+            omegabar(const double & s) const
             {
-                return omega(s) * (1.0 + lambdabar() / m_b_pole + lambdabarprime() / m_c_pole)
-                    - (lambdabar() / m_c_pole + lambdabarprime() / m_b_pole);
+                return omega(s) * (1.0 + lambdabar() / m_b_pole + lambdabarprime() / m_c_pole) - (lambdabar() / m_c_pole + lambdabarprime() / m_b_pole);
             }
 
         public:
@@ -193,17 +245,46 @@ namespace eos
             virtual double f_perp32_a(const double & s) const;
 
             // tensor current
-            virtual double f_long12_t(const double &) const { throw InternalError("HQETFormFactors::f_long12_t(): not implemented"); }
-            virtual double f_perp12_t(const double &) const { throw InternalError("HQETFormFactors::f_perp12_t(): not implemented"); }
-            virtual double f_perp32_t(const double &) const { throw InternalError("HQETFormFactors::f_perp32_t(): not implemented"); }
-            virtual double f_long12_t5(const double &) const { throw InternalError("HQETFormFactors::f_long12_t5(): not implemented"); }
-            virtual double f_perp12_t5(const double &) const { throw InternalError("HQETFormFactors::f_perp12_t5(): not implemented"); }
-            virtual double f_perp32_t5(const double &) const { throw InternalError("HQETFormFactors::f_perp32_t5(): not implemented"); }
+            virtual double
+            f_long12_t(const double &) const
+            {
+                throw InternalError("HQETFormFactors::f_long12_t(): not implemented");
+            }
+
+            virtual double
+            f_perp12_t(const double &) const
+            {
+                throw InternalError("HQETFormFactors::f_perp12_t(): not implemented");
+            }
+
+            virtual double
+            f_perp32_t(const double &) const
+            {
+                throw InternalError("HQETFormFactors::f_perp32_t(): not implemented");
+            }
+
+            virtual double
+            f_long12_t5(const double &) const
+            {
+                throw InternalError("HQETFormFactors::f_long12_t5(): not implemented");
+            }
+
+            virtual double
+            f_perp12_t5(const double &) const
+            {
+                throw InternalError("HQETFormFactors::f_perp12_t5(): not implemented");
+            }
+
+            virtual double
+            f_perp32_t5(const double &) const
+            {
+                throw InternalError("HQETFormFactors::f_perp32_t5(): not implemented");
+            }
 
             virtual Diagnostics diagnostics() const;
     };
 
     extern template class HQETFormFactors<OneHalfPlusToThreeHalfMinus, LambdaBToLambdaC2625>;
-}
+} // namespace eos
 
 #endif

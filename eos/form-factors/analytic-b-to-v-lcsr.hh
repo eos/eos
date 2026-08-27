@@ -22,22 +22,18 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_V_LCSR_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_ANALYTIC_B_TO_V_LCSR_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/reference-name.hh>
 
 namespace eos
 {
-    template <typename Transition_>
-    struct AnalyticFormFactorBToVLCSRTraits;
+    template <typename Transition_> struct AnalyticFormFactorBToVLCSRTraits;
 
-    template <typename Transition_>
-    class AnalyticFormFactorBToVLCSR :
-        public FormFactors<PToV>,
-        PrivateImplementationPattern<AnalyticFormFactorBToVLCSR<Transition_>>
+    template <typename Transition_> class AnalyticFormFactorBToVLCSR : public FormFactors<PToV>, PrivateImplementationPattern<AnalyticFormFactorBToVLCSR<Transition_>>
     {
         public:
             AnalyticFormFactorBToVLCSR(const Parameters &, const Options &);
@@ -96,5 +92,5 @@ namespace eos
     extern template class AnalyticFormFactorBToVLCSR<BsToKstar>;
     extern template class AnalyticFormFactorBToVLCSR<BsToPhi>;
     extern template class AnalyticFormFactorBToVLCSR<BsToDsstar>;
-}
+} // namespace eos
 #endif

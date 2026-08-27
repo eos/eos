@@ -26,12 +26,11 @@
 
 namespace eos
 {
-    class NoSuchFormFactorError :
-        public Exception
+    class NoSuchFormFactorError : public Exception
     {
         public:
             NoSuchFormFactorError(const std::string & process, const std::string & tag);
     };
-}
+} // namespace eos
 
 #endif
