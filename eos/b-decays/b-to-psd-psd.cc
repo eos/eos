@@ -19,42 +19,41 @@
  */
 
 #include <eos/b-decays/b-to-psd-psd.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
-#include <eos/maths/power-of.hh>
 
 using namespace std::literals::complex_literals;
 
 namespace eos
 {
 
-    template <>
-    struct Implementation<BToPseudoscalarPseudoscalar>
+    template <> struct Implementation<BToPseudoscalarPseudoscalar>
     {
-        std::shared_ptr<Model> model;
-        QuarkFlavorOption opt_q;
-        LightMesonOption opt_p1;
-        LightMesonOption opt_p2;
-        UsedParameter hbar;
-        UsedParameter tau;
-        UsedParameter mB;
-        UsedParameter mP1;
-        UsedParameter mP2;
-        RestrictedOption opt_rep;
-        std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
-        std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
-        std::shared_ptr<NonleptonicAmplitudes<PToPP>> Bbar_nl_amplitudes;
+            std::shared_ptr<Model>                        model;
+            QuarkFlavorOption                             opt_q;
+            LightMesonOption                              opt_p1;
+            LightMesonOption                              opt_p2;
+            UsedParameter                                 hbar;
+            UsedParameter                                 tau;
+            UsedParameter                                 mB;
+            UsedParameter                                 mP1;
+            UsedParameter                                 mP2;
+            RestrictedOption                              opt_rep;
+            std::shared_ptr<NonleptonicAmplitudes<PToPP>> nl_amplitudes;
+            std::shared_ptr<NonleptonicAmplitudes<PToPP>> cp_nl_amplitudes;
+            std::shared_ptr<NonleptonicAmplitudes<PToPP>> Bbar_nl_amplitudes;
 
-        // B mixing
-        std::shared_ptr<UsedParameter> life_time_difference;
-        std::function<double ()> yq;
-        std::function<double ()> phiB;
-        static const std::vector<OptionSpecification> options;
+            // B mixing
+            std::shared_ptr<UsedParameter>                life_time_difference;
+            std::function<double()>                       yq;
+            std::function<double()>                       phiB;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
             model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
             opt_q(o, options, "q"_ok),
             opt_p1(o, options, "P1"_ok),
@@ -68,118 +67,116 @@ namespace eos
             nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"_ov}})),
             cp_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "true"_ov}})),
             Bbar_nl_amplitudes(NonleptonicAmplitudeFactory<PToPP>::create("B->PP::" + opt_rep.value(), p, o + Options{{"cp-conjugate"_ok, "false"_ov}} + Options{{"B-bar"_ok, "true"_ov}}))
-        {
-            Context ctx("When constructing B->PP observable");
-
-            switch (opt_q.value())
             {
-                case QuarkFlavor::up:
-                    life_time_difference = nullptr;
-                    yq = []() { return 0.0; };
-                    phiB = []() { return 0.0; };
-                    break;
+                Context ctx("When constructing B->PP observable");
 
-                case QuarkFlavor::down:
-                    life_time_difference = std::make_shared<UsedParameter>(p["life_time::Delta_B_d"], u);
-                    yq = [this]() { return this->life_time_difference->evaluate() / (2.0 / tau); };
-                    phiB = [this]() { return 2.0 * arg(model->ckm_tb() * conj(model->ckm_td())); };
-                    break;
+                switch (opt_q.value())
+                {
+                    case QuarkFlavor::up:
+                        life_time_difference = nullptr;
+                        yq                   = []() { return 0.0; };
+                        phiB                 = []() { return 0.0; };
+                        break;
 
-                case QuarkFlavor::strange:
-                    life_time_difference = std::make_shared<UsedParameter>(p["life_time::Delta_B_s"], u);
-                    yq = [this]() { return this->life_time_difference->evaluate() / (2.0 / tau); };
-                    phiB = [this]() { return 2.0 * arg(model->ckm_tb() * conj(model->ckm_ts())); };
-                    break;
+                    case QuarkFlavor::down:
+                        life_time_difference = std::make_shared<UsedParameter>(p["life_time::Delta_B_d"], u);
+                        yq                   = [this]() { return this->life_time_difference->evaluate() / (2.0 / tau); };
+                        phiB                 = [this]() { return 2.0 * arg(model->ckm_tb() * conj(model->ckm_td())); };
+                        break;
 
-                default:
-                    throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
+                    case QuarkFlavor::strange:
+                        life_time_difference = std::make_shared<UsedParameter>(p["life_time::Delta_B_s"], u);
+                        yq                   = [this]() { return this->life_time_difference->evaluate() / (2.0 / tau); };
+                        phiB                 = [this]() { return 2.0 * arg(model->ckm_tb() * conj(model->ckm_ts())); };
+                        break;
+
+                    default: throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
+                }
+
+                u.uses(*model);
+                u.uses(*nl_amplitudes);
+                u.uses(*cp_nl_amplitudes);
+                u.uses(*Bbar_nl_amplitudes);
             }
 
-            u.uses(*model);
-            u.uses(*nl_amplitudes);
-            u.uses(*cp_nl_amplitudes);
-            u.uses(*Bbar_nl_amplitudes);
-        }
-
-        double decay_width() const
-        {
-            const double mB = this->mB();
-            const double mP1 = this->mP1();
-            const double mP2 = this->mP2();
-            double prefactor = 1.0 / 16.0 / M_PI / power_of<3>(mB) * std::sqrt(lambda(mB * mB, mP1 * mP1, mP2 * mP2));
-
-            // The decay width is a physical observable, the inputs are symmetrized
-            // BR(B -> P1 P2) = prefactor * S * |A(B -> P1 P2) + A(B -> P2 P1)|^2
-            if (opt_p1.value() == opt_p2.value())
+            double
+            decay_width() const
             {
-                prefactor *= 0.5;
+                const double mB        = this->mB();
+                const double mP1       = this->mP1();
+                const double mP2       = this->mP2();
+                double       prefactor = 1.0 / 16.0 / M_PI / power_of<3>(mB) * std::sqrt(lambda(mB * mB, mP1 * mP1, mP2 * mP2));
+
+                // The decay width is a physical observable, the inputs are symmetrized
+                // BR(B -> P1 P2) = prefactor * S * |A(B -> P1 P2) + A(B -> P2 P1)|^2
+                if (opt_p1.value() == opt_p2.value())
+                {
+                    prefactor *= 0.5;
+                }
+
+                return prefactor * std::norm(nl_amplitudes->amplitude());
             }
 
-            return  prefactor * std::norm(nl_amplitudes->amplitude());
-        }
-
-        double cp_decay_width() const
-        {
-            const double mB = this->mB();
-            const double mP1 = this->mP1();
-            const double mP2 = this->mP2();
-            double prefactor = 1.0 / 16.0 / M_PI / power_of<3>(mB) * std::sqrt(lambda(mB * mB, mP1 * mP1, mP2 * mP2));
-
-            // The decay width is a physical observable, the inputs are symmetrized
-            // BR(B -> P1 P2) = prefactor * S * |A(B -> P1 P2) + A(B -> P2 P1)|^2
-            if (opt_p1.value() == opt_p2.value())
+            double
+            cp_decay_width() const
             {
-                prefactor *= 0.5;
+                const double mB        = this->mB();
+                const double mP1       = this->mP1();
+                const double mP2       = this->mP2();
+                double       prefactor = 1.0 / 16.0 / M_PI / power_of<3>(mB) * std::sqrt(lambda(mB * mB, mP1 * mP1, mP2 * mP2));
+
+                // The decay width is a physical observable, the inputs are symmetrized
+                // BR(B -> P1 P2) = prefactor * S * |A(B -> P1 P2) + A(B -> P2 P1)|^2
+                if (opt_p1.value() == opt_p2.value())
+                {
+                    prefactor *= 0.5;
+                }
+
+                return prefactor * std::norm(cp_nl_amplitudes->amplitude());
             }
 
-            return  prefactor * std::norm(cp_nl_amplitudes->amplitude());
-        }
+            double
+            mixing_induced_cp_asymmetry() const
+            {
+                const complex<double> amp      = nl_amplitudes->amplitude();
+                const complex<double> Bbar_amp = Bbar_nl_amplitudes->amplitude();
 
-        double mixing_induced_cp_asymmetry() const
-        {
-            const complex<double> amp = nl_amplitudes->amplitude();
-            const complex<double> Bbar_amp = Bbar_nl_amplitudes->amplitude();
-
-            // Assumes the mixing parameter ratio q / p to be a pure phase
-            const complex<double> xif = - std::exp(-1.0i * phiB()) * Bbar_amp / amp;
+                // Assumes the mixing parameter ratio q / p to be a pure phase
+                const complex<double> xif = -std::exp(-1.0i * phiB()) * Bbar_amp / amp;
 
 
-            return 2 * std::imag(xif) / (1 + std::norm(xif)) ;
-        }
+                return 2 * std::imag(xif) / (1 + std::norm(xif));
+            }
 
-        double a_Delta_Gamma() const
-        {
-            const complex<double> amp = nl_amplitudes->amplitude();
-            const complex<double> Bbar_amp = Bbar_nl_amplitudes->amplitude();
+            double
+            a_Delta_Gamma() const
+            {
+                const complex<double> amp      = nl_amplitudes->amplitude();
+                const complex<double> Bbar_amp = Bbar_nl_amplitudes->amplitude();
 
-            // Assumes the mixing parameter ratio q / p to be a pure phase
-            const complex<double> xif = - std::exp(-1.0i * phiB()) * Bbar_amp / amp;
+                // Assumes the mixing parameter ratio q / p to be a pure phase
+                const complex<double> xif = -std::exp(-1.0i * phiB()) * Bbar_amp / amp;
 
 
-            return 2 * std::real(xif) / (1 + std::norm(xif)) ;
-        }
+                return 2 * std::real(xif) / (1 + std::norm(xif));
+            }
     };
 
-    const std::vector<OptionSpecification>
-    Implementation<BToPseudoscalarPseudoscalar>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BToPseudoscalarPseudoscalar>::options{
         Model::option_specification(),
         NonleptonicAmplitudeFactory<PToPP>::option_specification(),
-        { "q"_ok,              { "u"_ov, "d"_ov, "s"_ov } },
-        { "P1"_ok,             { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
-        { "P2"_ok,             { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
-        { "representation"_ok, { "topological"_ov, "SU3F"_ov, "QCDF"_ov } }
+        {              "q"_ok,                                                                                            { "u"_ov, "d"_ov, "s"_ov } },
+        {             "P1"_ok, { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
+        {             "P2"_ok, { "pi^0"_ov, "pi^+"_ov, "pi^-"_ov, "K_d"_ov, "Kbar_d"_ov, "K_S"_ov, "K_u"_ov, "Kbar_u"_ov, "eta"_ov, "eta_prime"_ov } },
+        { "representation"_ok,                                                                            { "topological"_ov, "SU3F"_ov, "QCDF"_ov } }
     };
 
     BToPseudoscalarPseudoscalar::BToPseudoscalarPseudoscalar(const Parameters & parameters, const Options & options) :
         PrivateImplementationPattern<BToPseudoscalarPseudoscalar>(new Implementation<BToPseudoscalarPseudoscalar>(parameters, options, *this))
     {
-
     }
 
-    BToPseudoscalarPseudoscalar::~BToPseudoscalarPseudoscalar()
-    {
-    }
+    BToPseudoscalarPseudoscalar::~BToPseudoscalarPseudoscalar() {}
 
     double
     BToPseudoscalarPseudoscalar::decay_width() const
@@ -230,14 +227,10 @@ namespace eos
         return _imp->a_Delta_Gamma();
     }
 
-
-    const std::string
-    BToPseudoscalarPseudoscalar::description = "\
+    const std::string BToPseudoscalarPseudoscalar::description = "\
     The decay B->PP, where all states are pseudoscalars.";
 
-    const std::set<ReferenceName>
-    BToPseudoscalarPseudoscalar::references
-    {
+    const std::set<ReferenceName> BToPseudoscalarPseudoscalar::references{
         "HTX:2021A"_rn,
     };
 
@@ -252,4 +245,4 @@ namespace eos
     {
         return Implementation<BToPseudoscalarPseudoscalar>::options.cend();
     }
-}
+} // namespace eos

@@ -31,9 +31,7 @@ namespace eos
     /*
      * Decay: B -> D^* l nu
      */
-    class BToVectorLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToVectorLeptonNeutrino>
+    class BToVectorLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<BToVectorLeptonNeutrino>
     {
         public:
             BToVectorLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -47,14 +45,14 @@ namespace eos
             double differential_J1s(const double & q2) const;
             double differential_J2c(const double & q2) const;
             double differential_J2s(const double & q2) const;
-            double differential_J3 (const double & q2) const;
-            double differential_J4 (const double & q2) const;
-            double differential_J5 (const double & q2) const;
+            double differential_J3(const double & q2) const;
+            double differential_J4(const double & q2) const;
+            double differential_J5(const double & q2) const;
             double differential_J6c(const double & q2) const;
             double differential_J6s(const double & q2) const;
-            double differential_J7 (const double & q2) const;
-            double differential_J8 (const double & q2) const;
-            double differential_J9 (const double & q2) const;
+            double differential_J7(const double & q2) const;
+            double differential_J8(const double & q2) const;
+            double differential_J9(const double & q2) const;
 
             // Differential Observables - normalized(|Vcb|=1)
             double normalized_differential_decay_width(const double & q2) const;
@@ -66,9 +64,9 @@ namespace eos
             // Integrated Observables
             class IntermediateResult;
             const IntermediateResult * prepare(const double & q2_min, const double & q2_max) const;
-            double integrated_decay_width(const double & q2_min, const double & q2_max) const;
-            double integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
-            double integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const;
+            double                     integrated_decay_width(const double & q2_min, const double & q2_max) const;
+            double                     integrated_branching_ratio(const double & q2_min, const double & q2_max) const;
+            double                     integrated_branching_ratio_perp(const double & kperp_min, const double & kperp_max) const;
 
 
             // integrate ratio of numerator and denominator
@@ -88,14 +86,14 @@ namespace eos
             double integrated_J1s(const IntermediateResult *) const;
             double integrated_J2c(const IntermediateResult *) const;
             double integrated_J2s(const IntermediateResult *) const;
-            double integrated_J3 (const IntermediateResult *) const;
-            double integrated_J4 (const IntermediateResult *) const;
-            double integrated_J5 (const IntermediateResult *) const;
+            double integrated_J3(const IntermediateResult *) const;
+            double integrated_J4(const IntermediateResult *) const;
+            double integrated_J5(const IntermediateResult *) const;
             double integrated_J6c(const IntermediateResult *) const;
             double integrated_J6s(const IntermediateResult *) const;
-            double integrated_J7 (const IntermediateResult *) const;
-            double integrated_J8 (const IntermediateResult *) const;
-            double integrated_J9 (const IntermediateResult *) const;
+            double integrated_J7(const IntermediateResult *) const;
+            double integrated_J8(const IntermediateResult *) const;
+            double integrated_J9(const IntermediateResult *) const;
 
             // Integrated Observables - normalized(|Vcb|=1)
             double normalized_decay_width(const double & q2_min, const double & q2_max) const;
@@ -135,6 +133,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

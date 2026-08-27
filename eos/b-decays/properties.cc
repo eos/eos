@@ -18,9 +18,9 @@
  */
 
 #include <eos/b-decays/properties.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/options.hh>
-#include <eos/maths/power-of.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <algorithm>
@@ -28,51 +28,49 @@
 
 namespace eos
 {
-    template <>
-    struct Implementation<BMesonProperties>
+    template <> struct Implementation<BMesonProperties>
     {
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        QuarkFlavorOption opt_q;
+            QuarkFlavorOption opt_q;
 
-        // HQE non-perturbative matrix elements
-        UsedParameter mu2_g;
+            // HQE non-perturbative matrix elements
+            UsedParameter mu2_g;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-            opt_q(o, options, "q"_ok),
-            mu2_g(p["B->B::mu_G^2@1GeV"], u)
-        {
-            Context ctx("When constructing the B meson properties");
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+                opt_q(o, options, "q"_ok),
+                mu2_g(p["B->B::mu_G^2@1GeV"], u)
+            {
+                Context ctx("When constructing the B meson properties");
 
-            u.uses(*model);
-        }
+                u.uses(*model);
+            }
 
-        double mass_splitting_j1_j0() const
-        {
-            // We use a kinetic scale of 1 GeV
-            static const double mu_kin = 1.0;
+            double
+            mass_splitting_j1_j0() const
+            {
+                // We use a kinetic scale of 1 GeV
+                static const double mu_kin = 1.0;
 
-            // The NLO contribution is given by [U:2001A], eq. (9), p. 5
-            double c = (1.0 + 3.0 * model->alpha_s(4.6) / (2.0 * M_PI) * (2.0 + std::log(mu_kin / 4.6))) / model->m_b_kin(mu_kin);
+                // The NLO contribution is given by [U:2001A], eq. (9), p. 5
+                double c = (1.0 + 3.0 * model->alpha_s(4.6) / (2.0 * M_PI) * (2.0 + std::log(mu_kin / 4.6))) / model->m_b_kin(mu_kin);
 
-            // Corrections of order 1/mb^2 can be estimates, cf. [U:2001A], eqs. (12) and (18)
-            double sum_rho3 = -0.5; // Assumption for the sum of 1/mb^2 operators from eq. (18)
-            double delta = sum_rho3 / (3.0 * power_of<2>(model->m_b_kin(mu_kin)));
+                // Corrections of order 1/mb^2 can be estimates, cf. [U:2001A], eqs. (12) and (18)
+                double sum_rho3 = -0.5; // Assumption for the sum of 1/mb^2 operators from eq. (18)
+                double delta    = sum_rho3 / (3.0 * power_of<2>(model->m_b_kin(mu_kin)));
 
-            // cf. [N:1997A], p. 15, eq. (32), we also consider alpha_s corrections
-            // to the rate, cf. [U:2001A], eq. (11), p. 5.
-            return 2.0 / 3.0 * c * mu2_g + delta;
-        }
+                // cf. [N:1997A], p. 15, eq. (32), we also consider alpha_s corrections
+                // to the rate, cf. [U:2001A], eq. (11), p. 5.
+                return 2.0 / 3.0 * c * mu2_g + delta;
+            }
     };
 
-    const std::vector<OptionSpecification>
-    Implementation<BMesonProperties>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BMesonProperties>::options{
         Model::option_specification(),
-        { "q"_ok, { "u"_ov, "d"_ov, "s"_ov, "c"_ov}, "d"_ov }
+        { "q"_ok, { "u"_ov, "d"_ov, "s"_ov, "c"_ov }, "d"_ov }
     };
 
     BMesonProperties::BMesonProperties(const Parameters & parameters, const Options & options) :
@@ -80,9 +78,7 @@ namespace eos
     {
     }
 
-    BMesonProperties::~BMesonProperties()
-    {
-    }
+    BMesonProperties::~BMesonProperties() {}
 
     double
     BMesonProperties::mass_splitting_j1_j0() const
@@ -90,10 +86,7 @@ namespace eos
         return _imp->mass_splitting_j1_j0();
     }
 
-    const std::set<ReferenceName>
-    BMesonProperties::references
-    {
-    };
+    const std::set<ReferenceName> BMesonProperties::references{};
 
     std::vector<OptionSpecification>::const_iterator
     BMesonProperties::begin_options()
@@ -106,4 +99,4 @@ namespace eos
     {
         return Implementation<BMesonProperties>::options.cend();
     }
-}
+} // namespace eos

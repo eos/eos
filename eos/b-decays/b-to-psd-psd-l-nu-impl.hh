@@ -20,11 +20,11 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_PSD_PSD_L_NU_IMPL_HH
 #define EOS_GUARD_EOS_B_DECAYS_B_TO_PSD_PSD_L_NU_IMPL_HH 1
 
-#include <eos/observable.hh>
 #include <eos/b-decays/b-to-psd-psd-l-nu.hh>
 #include <eos/maths/angular-integrals.hh>
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/observable.hh>
 
 #include <array>
 #include <iostream>
@@ -35,61 +35,63 @@ namespace eos
     {
         struct Amplitudes
         {
-            std::array<complex<double>, 4> f_perp;
-            std::array<complex<double>, 4> f_para;
-            std::array<complex<double>, 4> f_long;
-            std::array<complex<double>, 4> f_time;
-            double q2;
-            double beta_l;
-            double beta_pi;
-            double pref;
+                std::array<complex<double>, 4> f_perp;
+                std::array<complex<double>, 4> f_para;
+                std::array<complex<double>, 4> f_long;
+                std::array<complex<double>, 4> f_time;
+                double                         q2;
+                double                         beta_l;
+                double                         beta_pi;
+                double                         pref;
         };
 
         struct AngularIntegrals
         {
-            // Arrays to hold integrals over 3 Legendre polynomials of the form P_l1^m1 * P_l2^m2 * P_l3^0
-            // The labels 00, 01 and 11 refer to the values of m1 and m2
-            std::array<std::array<std::array<double, 5>, 4>, 4> _int_00, _int_11, _int_01;
+                // Arrays to hold integrals over 3 Legendre polynomials of the form P_l1^m1 * P_l2^m2 * P_l3^0
+                // The labels 00, 01 and 11 refer to the values of m1 and m2
+                std::array<std::array<std::array<double, 5>, 4>, 4> _int_00, _int_11, _int_01;
 
-            AngularIntegrals ()
-            {
-                for (unsigned l = 0; l < 4; l++)
+                AngularIntegrals()
                 {
-                    for (unsigned m = 0; m < 4; m++)
+                    for (unsigned l = 0; l < 4; l++)
                     {
-                        double pref = std::sqrt((2 * l + 1) * (2 * m + 1));
-                        for (unsigned i = 0; i < 5; i++)
+                        for (unsigned m = 0; m < 4; m++)
                         {
-                            _int_00[l][m][i] = pref * three_legendre_integral(l, 0, m, 0, i, 0);
-                            _int_11[l][m][i] = pref * three_legendre_integral(l, 1, m, 1, i, 0);
-                            _int_01[l][m][i] = pref * three_legendre_integral(l, 0, m, 1, i, 0);
+                            double pref = std::sqrt((2 * l + 1) * (2 * m + 1));
+                            for (unsigned i = 0; i < 5; i++)
+                            {
+                                _int_00[l][m][i] = pref * three_legendre_integral(l, 0, m, 0, i, 0);
+                                _int_11[l][m][i] = pref * three_legendre_integral(l, 1, m, 1, i, 0);
+                                _int_01[l][m][i] = pref * three_legendre_integral(l, 0, m, 1, i, 0);
+                            }
                         }
                     }
                 }
-            }
         };
 
         class AngularObservables
         {
             private:
                 std::array<std::array<double, 5>, 9> _M;
-                AngularIntegrals _ints;
+                AngularIntegrals                     _ints;
 
             public:
                 friend class BToPPLeptonNeutrino;
                 friend class Implementation<BToPPLeptonNeutrino>;
 
                 AngularObservables(const Amplitudes & a, const AngularIntegrals & ints) :
-                  _ints(ints)
+                    _ints(ints)
                 {
-                    _M.fill({0.0, 0.0, 0.0, 0.0, 0.0});
+                    _M.fill({ 0.0, 0.0, 0.0, 0.0, 0.0 });
 
                     for (unsigned l = 0; l < 4; l++)
                     {
                         for (unsigned m = 0; m < 4; m++)
                         {
-                            double amppm = (1.0 - a.beta_l / 4.0) * power_of<2>(a.beta_pi) * (std::real(a.f_perp[l] * std::conj(a.f_perp[m])) + std::real(a.f_para[l] * std::conj(a.f_para[m])));
-                            double amp00 = ((1.0 - a.beta_l) * std::real(a.q2 * a.f_time[l] * std::conj(a.q2 * a.f_time[m])) + (1.0 - a.beta_l / 2.0) * std::real(a.f_long[l] * std::conj(a.f_long[m])));
+                            double amppm = (1.0 - a.beta_l / 4.0) * power_of<2>(a.beta_pi)
+                                           * (std::real(a.f_perp[l] * std::conj(a.f_perp[m])) + std::real(a.f_para[l] * std::conj(a.f_para[m])));
+                            double amp00 = ((1.0 - a.beta_l) * std::real(a.q2 * a.f_time[l] * std::conj(a.q2 * a.f_time[m]))
+                                            + (1.0 - a.beta_l / 2.0) * std::real(a.f_long[l] * std::conj(a.f_long[m])));
 
                             for (unsigned i = 0; i < 5; i++)
                             {
@@ -103,8 +105,9 @@ namespace eos
                     {
                         for (unsigned m = 0; m < 4; m++)
                         {
-                            double amppm = a.beta_l / 4.0 * power_of<2>(a.beta_pi) * (std::real(a.f_perp[l] * std::conj(a.f_perp[m])) + std::real(a.f_para[l] * std::conj(a.f_para[m])));
-                            double amp00 = -(a.beta_l / 2.0 *  std::real(a.f_long[l] * std::conj(a.f_long[m])));
+                            double amppm =
+                                    a.beta_l / 4.0 * power_of<2>(a.beta_pi) * (std::real(a.f_perp[l] * std::conj(a.f_perp[m])) + std::real(a.f_para[l] * std::conj(a.f_para[m])));
+                            double amp00 = -(a.beta_l / 2.0 * std::real(a.f_long[l] * std::conj(a.f_long[m])));
 
                             for (unsigned i = 0; i < 5; i++)
                             {
@@ -118,7 +121,8 @@ namespace eos
                     {
                         for (unsigned m = 1; m < 4; m++)
                         {
-                            double amppm = a.beta_l / 2.0 * power_of<2>(a.beta_pi) * (std::real(a.f_perp[l] * std::conj(a.f_perp[m])) - std::real(a.f_para[l] * std::conj(a.f_para[m])));
+                            double amppm =
+                                    a.beta_l / 2.0 * power_of<2>(a.beta_pi) * (std::real(a.f_perp[l] * std::conj(a.f_perp[m])) - std::real(a.f_para[l] * std::conj(a.f_para[m])));
 
                             for (unsigned i = 0; i < 5; i++)
                             {
@@ -145,7 +149,8 @@ namespace eos
                     {
                         for (unsigned m = 1; m < 4; m++)
                         {
-                            double ampmix = 2.0 * a.beta_pi * (std::real(a.f_long[l] * std::conj(a.f_perp[m])) + (1.0 - a.beta_l) * std::real(a.q2 * a.f_time[l] * std::conj(a.f_para[m])));
+                            double ampmix =
+                                    2.0 * a.beta_pi * (std::real(a.f_long[l] * std::conj(a.f_perp[m])) + (1.0 - a.beta_l) * std::real(a.q2 * a.f_time[l] * std::conj(a.f_para[m])));
 
                             for (unsigned i = 0; i < 5; i++)
                             {
@@ -159,7 +164,7 @@ namespace eos
                         for (unsigned m = 0; m < 4; m++)
                         {
                             double amppm = 2.0 * power_of<2>(a.beta_pi) * std::real(a.f_perp[l] * std::conj(a.f_para[m]));
-                            double amp00 = -2.0 * (1.0 - a.beta_l) *  std::real(a.q2 * a.f_time[l] * std::conj(a.f_long[m]));
+                            double amp00 = -2.0 * (1.0 - a.beta_l) * std::real(a.q2 * a.f_time[l] * std::conj(a.f_long[m]));
 
                             for (unsigned i = 0; i < 5; i++)
                             {
@@ -173,7 +178,8 @@ namespace eos
                     {
                         for (unsigned m = 1; m < 4; m++)
                         {
-                            double ampmix = -2.0 * a.beta_pi * (std::imag(a.f_long[l] * std::conj(a.f_para[m])) - (1.0 - a.beta_l) * std::imag(a.q2 * a.f_time[l] * std::conj(a.f_perp[m])));
+                            double ampmix = -2.0 * a.beta_pi
+                                            * (std::imag(a.f_long[l] * std::conj(a.f_para[m])) - (1.0 - a.beta_l) * std::imag(a.q2 * a.f_time[l] * std::conj(a.f_perp[m])));
 
                             for (unsigned i = 0; i < 5; i++)
                             {
@@ -211,36 +217,86 @@ namespace eos
                     // Multiply by prefactor
                     for (unsigned m = 0; m < 9; m++)
                     {
-                        for (unsigned i = 0; i < 5; i++) _M[m][i] *= a.pref;
+                        for (unsigned i = 0; i < 5; i++)
+                        {
+                            _M[m][i] *= a.pref;
+                        }
                     }
                 }
 
                 AngularObservables(const std::array<std::array<double, 5>, 9> & m, const AngularIntegrals & ints) :
-                    _M(m), _ints(ints)
+                    _M(m),
+                    _ints(ints)
                 {
                 }
 
-                inline double M1(unsigned i) const  { return _M[0][i]; }
-                inline double M2(unsigned i) const  { return _M[1][i]; }
-                inline double M3(unsigned i) const  { return _M[2][i]; }
-                inline double M4(unsigned i) const  { return _M[3][i]; }
-                inline double M5(unsigned i) const  { return _M[4][i]; }
-                inline double M6(unsigned i) const  { return _M[5][i]; }
-                inline double M7(unsigned i) const  { return _M[6][i]; }
-                inline double M8(unsigned i) const  { return _M[7][i]; }
-                inline double M9(unsigned i) const  { return _M[8][i]; }
+                inline double
+                M1(unsigned i) const
+                {
+                    return _M[0][i];
+                }
 
-                inline double double_differential_decay_width() const
+                inline double
+                M2(unsigned i) const
+                {
+                    return _M[1][i];
+                }
+
+                inline double
+                M3(unsigned i) const
+                {
+                    return _M[2][i];
+                }
+
+                inline double
+                M4(unsigned i) const
+                {
+                    return _M[3][i];
+                }
+
+                inline double
+                M5(unsigned i) const
+                {
+                    return _M[4][i];
+                }
+
+                inline double
+                M6(unsigned i) const
+                {
+                    return _M[5][i];
+                }
+
+                inline double
+                M7(unsigned i) const
+                {
+                    return _M[6][i];
+                }
+
+                inline double
+                M8(unsigned i) const
+                {
+                    return _M[7][i];
+                }
+
+                inline double
+                M9(unsigned i) const
+                {
+                    return _M[8][i];
+                }
+
+                inline double
+                double_differential_decay_width() const
                 {
                     return M1(0) - M2(0) / 3.0;
                 }
 
-                inline double double_differential_mesonic_afb() const
+                inline double
+                double_differential_mesonic_afb() const
                 {
                     return M1(1) - M2(1) / 3.0;
                 }
         };
-    }
-}
+    } // namespace b_to_psd_psd_l_nu
+} // namespace eos
 
 #endif

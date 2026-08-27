@@ -33,9 +33,7 @@ namespace eos
     /*
      * Decay: B -> P(seudoscalar) l nu
      */
-    class BToPseudoscalarLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToPseudoscalarLeptonNeutrino>
+    class BToPseudoscalarLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<BToPseudoscalarLeptonNeutrino>
     {
         public:
             BToPseudoscalarLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -99,6 +97,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

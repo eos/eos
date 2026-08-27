@@ -28,9 +28,7 @@
 
 namespace eos
 {
-    class BToGammaLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToGammaLeptonNeutrino>
+    class BToGammaLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<BToGammaLeptonNeutrino>
     {
         public:
             BToGammaLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -64,6 +62,6 @@ namespace eos
             /* Diagnostics for unit tests */
             Diagnostics diagnostics() const;
     };
-}
+} // namespace eos
 
 #endif

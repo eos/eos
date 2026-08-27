@@ -29,9 +29,7 @@
 
 namespace eos
 {
-    class BqToDqPseudoscalar :
-        public ParameterUser,
-        public PrivateImplementationPattern<BqToDqPseudoscalar>
+    class BqToDqPseudoscalar : public ParameterUser, public PrivateImplementationPattern<BqToDqPseudoscalar>
     {
         public:
             BqToDqPseudoscalar(const Parameters & parameters, const Options & options);
@@ -56,6 +54,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

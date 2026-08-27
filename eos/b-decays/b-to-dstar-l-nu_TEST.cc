@@ -19,16 +19,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/b-to-vec-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -37,8 +38,7 @@
 using namespace test;
 using namespace eos;
 
-class BToVectorLeptonNeutrinoTest :
-    public TestCase
+class BToVectorLeptonNeutrinoTest : public TestCase
 {
     public:
         BToVectorLeptonNeutrinoTest() :
@@ -46,7 +46,8 @@ class BToVectorLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // comparison with Martin Jung in 3/2/1 model
             // l = electron
@@ -85,44 +86,43 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
-                Options o
-                {
-                    { "V"_ok,                  "D^*"_ov       },
-                    { "q"_ok,                  "d"_ov         },
-                    { "l"_ok,                  "e"_ov         },
-                    { "model"_ok,              "CKM"_ov       },
-                    { "z-order-lp"_ok,         "3"_ov         },
-                    { "z-order-slp"_ok,        "2"_ov         },
-                    { "z-order-sslp"_ok,       "1"_ov         },
-                    { "form-factors"_ok,       "BGJvD2019"_ov },
-                    { "integration-points"_ok, "4096"_ov      }
+                Options o{
+                    {                  "V"_ok,       "D^*"_ov },
+                    {                  "q"_ok,         "d"_ov },
+                    {                  "l"_ok,         "e"_ov },
+                    {              "model"_ok,       "CKM"_ov },
+                    {         "z-order-lp"_ok,         "3"_ov },
+                    {        "z-order-slp"_ok,         "2"_ov },
+                    {       "z-order-sslp"_ok,         "1"_ov },
+                    {       "form-factors"_ok, "BGJvD2019"_ov },
+                    { "integration-points"_ok,      "4096"_ov }
                 };
 
-                Kinematics k
-                {
-                    { "q2_min", 0.001 }, { "q2_max", 10.689 },
+                Kinematics k{
+                    { "q2_min",  0.001 },
+                    { "q2_max", 10.689 },
                 };
 
-                const double eps = 1e-3;
+                const double            eps = 1e-3;
                 // Christoph Bobeth: Adjusted test case because increased number of integration points
                 //                   in numerical integration from 256 -> 4096
                 BToVectorLeptonNeutrino d(p, o);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689),   33.3260288,  eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689), 33.3260288, eps);
                 auto ir = d.prepare(0.001, 10.689);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir),                           0.546,      eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir), 0.546, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(),  0.409302220, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(),  0.255523335, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(), 0.409302220, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(), 0.255523335, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), -0.409302220, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(),  0.085174445, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_3",  p, k, o)->evaluate(), -0.134468151, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_4",  p, k, o)->evaluate(),  0.231808464, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_5",  p, k, o)->evaluate(),  0.165381861, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(),  0.0,         eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(),  0.200153929, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_7",  p, k, o)->evaluate(),  0.0,         eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_8",  p, k, o)->evaluate(),  0.0,         eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_9",  p, k, o)->evaluate(),  0.0,         eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(), 0.085174445, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_3", p, k, o)->evaluate(), -0.134468151, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_4", p, k, o)->evaluate(), 0.231808464, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_5", p, k, o)->evaluate(), 0.165381861, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(), 0.200153929, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_7", p, k, o)->evaluate(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_8", p, k, o)->evaluate(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_9", p, k, o)->evaluate(), 0.0, eps);
             }
 
             // comparison with Martin Jung in 3/2/1 model
@@ -161,22 +161,21 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
-                Options o
-                {
-                    { "V"_ok,                  "D^*"_ov       },
-                    { "q"_ok,                  "d"_ov         },
-                    { "l"_ok,                  "tau"_ov       },
-                    { "model"_ok,              "CKM"_ov       },
-                    { "z-order-lp"_ok,         "3"_ov         },
-                    { "z-order-slp"_ok,        "2"_ov         },
-                    { "z-order-sslp"_ok,       "1"_ov         },
-                    { "form-factors"_ok,       "BGJvD2019"_ov },
-                    { "integration-points"_ok, "4096"_ov      }
+                Options o{
+                    {                  "V"_ok,       "D^*"_ov },
+                    {                  "q"_ok,         "d"_ov },
+                    {                  "l"_ok,       "tau"_ov },
+                    {              "model"_ok,       "CKM"_ov },
+                    {         "z-order-lp"_ok,         "3"_ov },
+                    {        "z-order-slp"_ok,         "2"_ov },
+                    {       "z-order-sslp"_ok,         "1"_ov },
+                    {       "form-factors"_ok, "BGJvD2019"_ov },
+                    { "integration-points"_ok,      "4096"_ov }
                 };
 
-                Kinematics k
-                {
-                    { "q2_min", 3.157 }, { "q2_max", 10.689 },
+                Kinematics k{
+                    { "q2_min",  3.157 },
+                    { "q2_max", 10.689 },
                 };
 
                 const double eps = 1e-3;
@@ -186,18 +185,18 @@ class BToVectorLeptonNeutrinoTest :
                 auto ir = d.prepare(3.157, 10.689);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir), 0.475, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(),  0.4325856250, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(),  0.2779590234, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(), 0.4325856250, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(), 0.2779590234, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), -0.1287773345, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(),  0.0471441750, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_3",  p, k, o)->evaluate(), -0.0819412032, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_4",  p, k, o)->evaluate(),  0.1057578408, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_5",  p, k, o)->evaluate(),  0.2056068494, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(), 0.0471441750, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_3", p, k, o)->evaluate(), -0.0819412032, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_4", p, k, o)->evaluate(), 0.1057578408, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_5", p, k, o)->evaluate(), 0.2056068494, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(), -0.2766922602, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(),  0.1598442669, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_7",  p, k, o)->evaluate(),  0.0,          eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_8",  p, k, o)->evaluate(),  0.0,          eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_9",  p, k, o)->evaluate(),  0.0,          eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(), 0.1598442669, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_7", p, k, o)->evaluate(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_8", p, k, o)->evaluate(), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_9", p, k, o)->evaluate(), 0.0, eps);
             }
 
             // New physics comparison with Martin Jung:
@@ -205,8 +204,8 @@ class BToVectorLeptonNeutrinoTest :
                 Parameters p = Parameters::Defaults();
 
                 p["B(*)->D(*)::xi'(1)@HQET"].set(-1.10422);
-                p["B(*)->D(*)::xi''(1)@HQET"].set(2* 0.912531);
-                p["B(*)->D(*)::xi'''(1)@HQET"].set(6* (-0.565251));
+                p["B(*)->D(*)::xi''(1)@HQET"].set(2 * 0.912531);
+                p["B(*)->D(*)::xi'''(1)@HQET"].set(6 * (-0.565251));
                 p["B(*)->D(*)::chi_2(1)@HQET"].set(-0.0648414);
                 p["B(*)->D(*)::chi_2'(1)@HQET"].set(-0.0138642);
                 p["B(*)->D(*)::chi_2''(1)@HQET"].set(-0.0850267);
@@ -228,7 +227,7 @@ class BToVectorLeptonNeutrinoTest :
                 p["B(*)->D(*)::l_6(1)@HQET"].set(1.95851);
                 p["B(*)->D(*)::l_6'(1)@HQET"].set(1.22043);
 
-                p["CKM::abs(V_cb)"]            =  0.041996951916414726;
+                p["CKM::abs(V_cb)"] = 0.041996951916414726;
                 p["mass::e"].set(0.00000000000001);
                 p["B(*)->D(*)::a@HQET"].set(1.000);
                 p["mass::B_d"].set(5.27942);
@@ -238,90 +237,89 @@ class BToVectorLeptonNeutrinoTest :
 
                 p["cbmunumu::Re{cVL}"].set(+1.2);
                 p["cbmunumu::Im{cVL}"].set(+0.0);
-                p["cbmunumu::Re{cVR}"].set(-0.4*1.2);
-                p["cbmunumu::Im{cVR}"].set(+0.2*1.2);
-                p["cbmunumu::Re{cSL}"].set(+0.2*1.2);
-                p["cbmunumu::Im{cSL}"].set(+0.6*1.2);
-                p["cbmunumu::Re{cSR}"].set(+0.8*1.2);
-                p["cbmunumu::Im{cSR}"].set(+0.3*1.2);
-                p["cbmunumu::Re{cT}"].set(-0.1*1.2);
-                p["cbmunumu::Im{cT}"].set(+0.2*1.2);
+                p["cbmunumu::Re{cVR}"].set(-0.4 * 1.2);
+                p["cbmunumu::Im{cVR}"].set(+0.2 * 1.2);
+                p["cbmunumu::Re{cSL}"].set(+0.2 * 1.2);
+                p["cbmunumu::Im{cSL}"].set(+0.6 * 1.2);
+                p["cbmunumu::Re{cSR}"].set(+0.8 * 1.2);
+                p["cbmunumu::Im{cSR}"].set(+0.3 * 1.2);
+                p["cbmunumu::Re{cT}"].set(-0.1 * 1.2);
+                p["cbmunumu::Im{cT}"].set(+0.2 * 1.2);
 
-                p["cbmunumu::mu"].set(2.295);  // to get m_b,c in amp_P comparable to Martin
+                p["cbmunumu::mu"].set(2.295); // to get m_b,c in amp_P comparable to Martin
 
-                Options o
-                {
-                    { "V"_ok,                  "D^*"_ov       },
-                    { "q"_ok,                  "d"_ov         },
-                    { "l"_ok,                  "mu"_ov        },
-                    { "model"_ok,              "WET"_ov       },
-                    { "z-order-lp"_ok,         "3"_ov         },
-                    { "z-order-slp"_ok,        "2"_ov         },
-                    { "z-order-sslp"_ok,       "1"_ov         },
-                    { "form-factors"_ok,       "BGJvD2019"_ov },
-                    { "integration-points"_ok, "4096"_ov      }
+                Options o{
+                    {                  "V"_ok,       "D^*"_ov },
+                    {                  "q"_ok,         "d"_ov },
+                    {                  "l"_ok,        "mu"_ov },
+                    {              "model"_ok,       "WET"_ov },
+                    {         "z-order-lp"_ok,         "3"_ov },
+                    {        "z-order-slp"_ok,         "2"_ov },
+                    {       "z-order-sslp"_ok,         "1"_ov },
+                    {       "form-factors"_ok, "BGJvD2019"_ov },
+                    { "integration-points"_ok,      "4096"_ov }
                 };
 
-                Kinematics k
-                {
-                    { "q2_min", p["mass::mu"]* p["mass::mu"] }, { "q2_max", 10.689 },
+                Kinematics k{
+                    { "q2_min", p["mass::mu"] * p["mass::mu"] },
+                    { "q2_max",                        10.689 },
                 };
 
                 const double eps = 1e-3;
 
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(),  0.362439,  eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(),  0.268109,  eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), -0.228862,  eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1c", p, k, o)->evaluate(), 0.362439, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_1s", p, k, o)->evaluate(), 0.268109, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2c", p, k, o)->evaluate(), -0.228862, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_2s", p, k, o)->evaluate(), -0.0375834, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_3",  p, k, o)->evaluate(), -0.0600368, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_4",  p, k, o)->evaluate(),  0.0897816, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_5",  p, k, o)->evaluate(),  0.0837827, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_3", p, k, o)->evaluate(), -0.0600368, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_4", p, k, o)->evaluate(), 0.0897816, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_5", p, k, o)->evaluate(), 0.0837827, eps);
                 TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6c", p, k, o)->evaluate(), -0.0716409, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(),  0.0433597, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_7",  p, k, o)->evaluate(),  0.0205058, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_8",  p, k, o)->evaluate(), -0.0113015, eps);
-                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_9",  p, k, o)->evaluate(),  0.013735,  eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::S_6s", p, k, o)->evaluate(), 0.0433597, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_7", p, k, o)->evaluate(), 0.0205058, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_8", p, k, o)->evaluate(), -0.0113015, eps);
+                TEST_CHECK_NEARLY_EQUAL(Observable::make("B->D^*lnu::A_9", p, k, o)->evaluate(), 0.013735, eps);
             }
 
             // SM tests cf. [DDS:2014A]
             {
-                Parameters p1 = Parameters::Defaults();
+                Parameters p1                     = Parameters::Defaults();
                 /*
-                 * for the TEST case below the B->D^* SSE parameters are randomly chosen. However, the correlations together with the EOM conditions among the FFs are respected in this choice. Namely, alpha^A0_0 is correlated with alpha^A12_0, and also alpha^T1_0 should be the same as alpha^T2_0.
+                 * for the TEST case below the B->D^* SSE parameters are randomly chosen. However, the correlations together with the EOM conditions among the FFs are respected in
+                 * this choice. Namely, alpha^A0_0 is correlated with alpha^A12_0, and also alpha^T1_0 should be the same as alpha^T2_0.
                  */
-                p1["B->D^*::alpha^A0_0@BSZ2015" ] = +1.0;
-                p1["B->D^*::alpha^A0_1@BSZ2015" ] = +0.24;
-                p1["B->D^*::alpha^A0_2@BSZ2015" ] = +0.21;
-                p1["B->D^*::alpha^A1_0@BSZ2015" ] = +0.5;
-                p1["B->D^*::alpha^A1_1@BSZ2015" ] = +0.4;
-                p1["B->D^*::alpha^A1_2@BSZ2015" ] = +0.3;
+                p1["B->D^*::alpha^A0_0@BSZ2015"]  = +1.0;
+                p1["B->D^*::alpha^A0_1@BSZ2015"]  = +0.24;
+                p1["B->D^*::alpha^A0_2@BSZ2015"]  = +0.21;
+                p1["B->D^*::alpha^A1_0@BSZ2015"]  = +0.5;
+                p1["B->D^*::alpha^A1_1@BSZ2015"]  = +0.4;
+                p1["B->D^*::alpha^A1_2@BSZ2015"]  = +0.3;
                 p1["B->D^*::alpha^A12_1@BSZ2015"] = +0.72;
                 p1["B->D^*::alpha^A12_2@BSZ2015"] = +1.33;
-                p1["B->D^*::alpha^V_0@BSZ2015"  ] = +0.01;
-                p1["B->D^*::alpha^V_1@BSZ2015"  ] = +0.02;
-                p1["B->D^*::alpha^V_2@BSZ2015"  ] = +0.03;
-                p1["B->D^*::alpha^T1_0@BSZ2015" ] = +0.27;
-                p1["B->D^*::alpha^T1_1@BSZ2015" ] = -0.74;
-                p1["B->D^*::alpha^T1_2@BSZ2015" ] = +1.45;
-                p1["B->D^*::alpha^T2_1@BSZ2015" ] = +0.47;
-                p1["B->D^*::alpha^T2_2@BSZ2015" ] = +0.58;
+                p1["B->D^*::alpha^V_0@BSZ2015"]   = +0.01;
+                p1["B->D^*::alpha^V_1@BSZ2015"]   = +0.02;
+                p1["B->D^*::alpha^V_2@BSZ2015"]   = +0.03;
+                p1["B->D^*::alpha^T1_0@BSZ2015"]  = +0.27;
+                p1["B->D^*::alpha^T1_1@BSZ2015"]  = -0.74;
+                p1["B->D^*::alpha^T1_2@BSZ2015"]  = +1.45;
+                p1["B->D^*::alpha^T2_1@BSZ2015"]  = +0.47;
+                p1["B->D^*::alpha^T2_2@BSZ2015"]  = +0.58;
                 p1["B->D^*::alpha^T23_0@BSZ2015"] = +0.75;
                 p1["B->D^*::alpha^T23_1@BSZ2015"] = +1.90;
                 p1["B->D^*::alpha^T23_2@BSZ2015"] = +2.93;
                 p1["mass::B_d"]                   = +5.279;
                 p1["mass::D_d^*"]                 = +2.0103;
                 // by default, all other couplings are zero in eos
-                p1["CKM::abs(V_cb)"]            =  0.041996951916414726;
-                p1["cbmunumu::Re{cVL}"]         = +1.0066;  // include Sirlin correction
-                p1["cbtaunutau::Re{cVL}"]       = +1.0066;  // include Sirlin correction
+                p1["CKM::abs(V_cb)"]              = 0.041996951916414726;
+                p1["cbmunumu::Re{cVL}"]           = +1.0066; // include Sirlin correction
+                p1["cbtaunutau::Re{cVL}"]         = +1.0066; // include Sirlin correction
 
-                Options oo
-                {
-                    { "V"_ok,                  "D^*"_ov     },
-                    { "q"_ok,                  "d"_ov       },
-                    { "model"_ok,              "WET"_ov     },
-                    { "form-factors"_ok,       "BSZ2015"_ov },
-                    { "integration-points"_ok, "4096"_ov    }
+                Options oo{
+                    {                  "V"_ok,     "D^*"_ov },
+                    {                  "q"_ok,       "d"_ov },
+                    {              "model"_ok,     "WET"_ov },
+                    {       "form-factors"_ok, "BSZ2015"_ov },
+                    { "integration-points"_ok,    "4096"_ov }
                 };
 
                 BToVectorLeptonNeutrino d(p1, oo);
@@ -333,18 +331,19 @@ class BToVectorLeptonNeutrinoTest :
                 // the default lepton is muon
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 10.68), 25.4230, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(ir), 0.000494949, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(ir),     0.737489, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(ir),  -0.130926, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(ir),   0.00266046, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(ir),   0.230111, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(ir), 0.0, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(ir), 0.0, eps);
-                //TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(ir), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(ir), 0.737489, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(ir), -0.130926, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(ir), 0.00266046, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(ir), 0.230111, eps);
+                // TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(ir), 0.0, eps);
+                // TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(ir), 0.0, eps);
+                // TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(ir), 0.0, eps);
 
-                Kinematics k
-                {
-                    { "q2_mu_min",   4.00 }, { "q2_mu_max",  10.68 },
-                    { "q2_tau_min",  4.00 }, { "q2_tau_max", 10.68 },
+                Kinematics k{
+                    {  "q2_mu_min",  4.00 },
+                    {  "q2_mu_max", 10.68 },
+                    { "q2_tau_min",  4.00 },
+                    { "q2_tau_max", 10.68 },
                 };
                 auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p1, k, oo);
                 TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(), 0.379092, eps);
@@ -354,29 +353,29 @@ class BToVectorLeptonNeutrinoTest :
             {
                 const double etaEW = 1.0066;
 
-                Parameters p3 = Parameters::Defaults();
+                Parameters p3                     = Parameters::Defaults();
                 /*
                  * for the TEST case below the B->D^* SSE parameters are randomly chosen.
                  * However, the correlations together with the EOM conditions among the FFs
                  * are respected in this choice. Namely, alpha^A0_0 is correlated with alpha^A12_0,
                  * and also alpha^T1_0 should be the same as alpha^T2_0.
                  */
-                p3["B->D^*::alpha^A0_0@BSZ2015" ] = +1.0;
-                p3["B->D^*::alpha^A0_1@BSZ2015" ] = +0.24;
-                p3["B->D^*::alpha^A0_2@BSZ2015" ] = +0.21;
-                p3["B->D^*::alpha^A1_0@BSZ2015" ] = +0.5;
-                p3["B->D^*::alpha^A1_1@BSZ2015" ] = +0.4;
-                p3["B->D^*::alpha^A1_2@BSZ2015" ] = +0.3;
+                p3["B->D^*::alpha^A0_0@BSZ2015"]  = +1.0;
+                p3["B->D^*::alpha^A0_1@BSZ2015"]  = +0.24;
+                p3["B->D^*::alpha^A0_2@BSZ2015"]  = +0.21;
+                p3["B->D^*::alpha^A1_0@BSZ2015"]  = +0.5;
+                p3["B->D^*::alpha^A1_1@BSZ2015"]  = +0.4;
+                p3["B->D^*::alpha^A1_2@BSZ2015"]  = +0.3;
                 p3["B->D^*::alpha^A12_1@BSZ2015"] = +0.72;
                 p3["B->D^*::alpha^A12_2@BSZ2015"] = +1.33;
-                p3["B->D^*::alpha^V_0@BSZ2015"  ] = +0.01;
-                p3["B->D^*::alpha^V_1@BSZ2015"  ] = +0.02;
-                p3["B->D^*::alpha^V_2@BSZ2015"  ] = +0.03;
-                p3["B->D^*::alpha^T1_0@BSZ2015" ] = +0.27;
-                p3["B->D^*::alpha^T1_1@BSZ2015" ] = -0.74;
-                p3["B->D^*::alpha^T1_2@BSZ2015" ] = +1.45;
-                p3["B->D^*::alpha^T2_1@BSZ2015" ] = +0.47;
-                p3["B->D^*::alpha^T2_2@BSZ2015" ] = +0.58;
+                p3["B->D^*::alpha^V_0@BSZ2015"]   = +0.01;
+                p3["B->D^*::alpha^V_1@BSZ2015"]   = +0.02;
+                p3["B->D^*::alpha^V_2@BSZ2015"]   = +0.03;
+                p3["B->D^*::alpha^T1_0@BSZ2015"]  = +0.27;
+                p3["B->D^*::alpha^T1_1@BSZ2015"]  = -0.74;
+                p3["B->D^*::alpha^T1_2@BSZ2015"]  = +1.45;
+                p3["B->D^*::alpha^T2_1@BSZ2015"]  = +0.47;
+                p3["B->D^*::alpha^T2_2@BSZ2015"]  = +0.58;
                 p3["B->D^*::alpha^T23_0@BSZ2015"] = +0.75;
                 p3["B->D^*::alpha^T23_1@BSZ2015"] = +1.90;
                 p3["B->D^*::alpha^T23_2@BSZ2015"] = +2.93;
@@ -390,37 +389,36 @@ class BToVectorLeptonNeutrinoTest :
                 // mc(mc)
                 p3["mass::c"]                     = +1.275;
                 // CKM
-                p3["CKM::abs(V_cb)"]              =  0.041996951916414726;
+                p3["CKM::abs(V_cb)"]              = 0.041996951916414726;
                 // mu mode
-                p3["cbmunumu::Re{cVL}"]         = +1.0 * etaEW;
-                p3["cbmunumu::Im{cVL}"]         = -2.0 * etaEW;
-                p3["cbmunumu::Re{cVR}"]         = +2.0 * etaEW;
-                p3["cbmunumu::Im{cVR}"]         = -2.0 * etaEW;
-                p3["cbmunumu::Re{cSL}"]         = +3.0 * etaEW;
-                p3["cbmunumu::Im{cSL}"]         = -3.0 * etaEW;
-                p3["cbmunumu::Re{cSR}"]         = +4.0 * etaEW;
-                p3["cbmunumu::Im{cSR}"]         = -4.0 * etaEW;
-                p3["cbmunumu::Re{cT}"]          = +5.0 * etaEW;
-                p3["cbmunumu::Im{cT}"]          = -5.0 * etaEW;
+                p3["cbmunumu::Re{cVL}"]           = +1.0 * etaEW;
+                p3["cbmunumu::Im{cVL}"]           = -2.0 * etaEW;
+                p3["cbmunumu::Re{cVR}"]           = +2.0 * etaEW;
+                p3["cbmunumu::Im{cVR}"]           = -2.0 * etaEW;
+                p3["cbmunumu::Re{cSL}"]           = +3.0 * etaEW;
+                p3["cbmunumu::Im{cSL}"]           = -3.0 * etaEW;
+                p3["cbmunumu::Re{cSR}"]           = +4.0 * etaEW;
+                p3["cbmunumu::Im{cSR}"]           = -4.0 * etaEW;
+                p3["cbmunumu::Re{cT}"]            = +5.0 * etaEW;
+                p3["cbmunumu::Im{cT}"]            = -5.0 * etaEW;
                 // tau mode
-                p3["cbtaunutau::Re{cVL}"]       = +1.0 * etaEW;
-                p3["cbtaunutau::Im{cVL}"]       = -5.0 * etaEW;
-                p3["cbtaunutau::Re{cVR}"]       = +2.1 * etaEW;
-                p3["cbtaunutau::Im{cVR}"]       = -6.0 * etaEW;
-                p3["cbtaunutau::Re{cSL}"]       = +3.1 * etaEW;
-                p3["cbtaunutau::Im{cSL}"]       = -7.0 * etaEW;
-                p3["cbtaunutau::Re{cSR}"]       = +4.1 * etaEW;
-                p3["cbtaunutau::Im{cSR}"]       = -8.0 * etaEW;
-                p3["cbtaunutau::Re{cT}"]        = +5.1 * etaEW;
-                p3["cbtaunutau::Im{cT}"]        = -9.0 * etaEW;
+                p3["cbtaunutau::Re{cVL}"]         = +1.0 * etaEW;
+                p3["cbtaunutau::Im{cVL}"]         = -5.0 * etaEW;
+                p3["cbtaunutau::Re{cVR}"]         = +2.1 * etaEW;
+                p3["cbtaunutau::Im{cVR}"]         = -6.0 * etaEW;
+                p3["cbtaunutau::Re{cSL}"]         = +3.1 * etaEW;
+                p3["cbtaunutau::Im{cSL}"]         = -7.0 * etaEW;
+                p3["cbtaunutau::Re{cSR}"]         = +4.1 * etaEW;
+                p3["cbtaunutau::Im{cSR}"]         = -8.0 * etaEW;
+                p3["cbtaunutau::Re{cT}"]          = +5.1 * etaEW;
+                p3["cbtaunutau::Im{cT}"]          = -9.0 * etaEW;
 
-                Options oo
-                {
-                    { "V"_ok,                  "D^*"_ov     },
-                    { "q"_ok,                  "d"_ov       },
-                    { "model"_ok,              "WET"_ov     },
-                    { "form-factors"_ok,       "BSZ2015"_ov },
-                    { "integration-points"_ok, "4096"_ov    }
+                Options oo{
+                    {                  "V"_ok,     "D^*"_ov },
+                    {                  "q"_ok,       "d"_ov },
+                    {              "model"_ok,     "WET"_ov },
+                    {       "form-factors"_ok, "BSZ2015"_ov },
+                    { "integration-points"_ok,    "4096"_ov }
                 };
 
                 BToVectorLeptonNeutrino d(p3, oo);
@@ -431,18 +429,19 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(4.0, 10.68), 3431.13, eps);
                 auto ir = d.prepare(4.0, 10.68);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(ir), 0.0409932, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(ir),    0.50729, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(ir),  0.184031, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_f_L(ir), 0.50729, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_1(ir), 0.184031, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_2(ir), -0.0282197, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_c_3(ir), -0.42545, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(ir),  0.0000348895, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(ir),  0.000268975, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_1(ir), 0.0000348895, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_2(ir), 0.000268975, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_t_3(ir), -0.0000320251, eps);
 
-                Kinematics k
-                {
-                    { "q2_mu_min",   4.00 }, { "q2_mu_max",  10.68 },
-                    { "q2_tau_min",  4.00 }, { "q2_tau_max", 10.68 },
+                Kinematics k{
+                    {  "q2_mu_min",  4.00 },
+                    {  "q2_mu_max", 10.68 },
+                    { "q2_tau_min",  4.00 },
+                    { "q2_tau_max", 10.68 },
                 };
                 auto obs_RDst = Observable::make("B->D^*lnu::R_D^*", p3, k, oo);
                 TEST_CHECK_RELATIVE_ERROR(obs_RDst->evaluate(), 1.20331, eps);
@@ -458,72 +457,64 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
                 p["life_time::B_d"].set(1.520e-12);
 
-                Options o
-                {
-                    { "V"_ok,             "D^*"_ov       },
-                    { "q"_ok,             "d"_ov         },
-                    { "model"_ok,         "CKM"_ov       },
-                    { "z-order-lp"_ok,    "3"_ov         },
-                    { "z-order-slp"_ok,   "2"_ov         },
-                    { "z-order-sslp"_ok,  "1"_ov         },
-                    { "form-factors"_ok,  "BGJvD2019"_ov },
+                Options o{
+                    {            "V"_ok,       "D^*"_ov },
+                    {            "q"_ok,         "d"_ov },
+                    {        "model"_ok,       "CKM"_ov },
+                    {   "z-order-lp"_ok,         "3"_ov },
+                    {  "z-order-slp"_ok,         "2"_ov },
+                    { "z-order-sslp"_ok,         "1"_ov },
+                    { "form-factors"_ok, "BGJvD2019"_ov },
                 };
-                Kinematics k
-                {
-                    { "q2_mu_min", 1.00 }, { "q2_mu_max", 10.68 },
-                    { "q2_e_min",  1.00 }, { "q2_e_max",  10.68 },
+                Kinematics k{
+                    { "q2_mu_min",  1.00 },
+                    { "q2_mu_max", 10.68 },
+                    {  "q2_e_min",  1.00 },
+                    {  "q2_e_max", 10.68 },
                 };
 
-                auto obs_BRbar    = Observable::make("B->D^*lnu::BRbar",        p, k, o);
-                auto obs_deltaBR  = Observable::make("B->D^*lnu::DeltaBR",      p, k, o);
+                auto obs_BRbar   = Observable::make("B->D^*lnu::BRbar", p, k, o);
+                auto obs_deltaBR = Observable::make("B->D^*lnu::DeltaBR", p, k, o);
 
-                k =
-                {
-                    { "q2_min",  1.00 }, { "q2_max",  10.68 },
+                k = {
+                    { "q2_min",  1.00 },
+                    { "q2_max", 10.68 },
                 };
-                auto obs_e_BR  = Observable::make("B->D^*lnu::BR;l=e",    p, k, o);
-                auto obs_mu_BR = Observable::make("B->D^*lnu::BR;l=mu",   p, k, o);
+                auto obs_e_BR  = Observable::make("B->D^*lnu::BR;l=e", p, k, o);
+                auto obs_mu_BR = Observable::make("B->D^*lnu::BR;l=mu", p, k, o);
 
                 const double eps = 1e-5;
-                TEST_CHECK_RELATIVE_ERROR(
-                    0.5 * (obs_e_BR->evaluate() + obs_mu_BR->evaluate()),
-                    obs_BRbar->evaluate(),
-                    eps
-                );
-                TEST_CHECK_RELATIVE_ERROR(
-                    obs_mu_BR->evaluate() - obs_e_BR->evaluate(),
-                    obs_deltaBR->evaluate(),
-                    eps
-                );
+                TEST_CHECK_RELATIVE_ERROR(0.5 * (obs_e_BR->evaluate() + obs_mu_BR->evaluate()), obs_BRbar->evaluate(), eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_mu_BR->evaluate() - obs_e_BR->evaluate(), obs_deltaBR->evaluate(), eps);
             }
 
             // check 1D PDFs
             {
                 Parameters p = Parameters::Defaults();
 
-                p[     "B(*)->D(*)::xi'(1)@HQET"] = -1.3060e+00;
-                p[    "B(*)->D(*)::xi''(1)@HQET"] = 2.0 * +1.2200e+00;
-                p[   "B(*)->D(*)::xi'''(1)@HQET"] = +0.0000e+00;
-                p[   "B(*)->D(*)::chi_2(1)@HQET"] = -5.8000e-02;
-                p[  "B(*)->D(*)::chi_2'(1)@HQET"] = -1.0000e-03;
-                p[ "B(*)->D(*)::chi_2''(1)@HQET"] = +0.0000e+00;
-                p[  "B(*)->D(*)::chi_3'(1)@HQET"] = +3.5000e-02;
-                p[ "B(*)->D(*)::chi_3''(1)@HQET"] = +0.0000e+00;
-                p[     "B(*)->D(*)::eta(1)@HQET"] = +3.5800e-01;
-                p[    "B(*)->D(*)::eta'(1)@HQET"] = +4.4000e-02;
-                p[   "B(*)->D(*)::eta''(1)@HQET"] = +0.0000e+00;
-                p[     "B(*)->D(*)::l_1(1)@HQET"] = +4.8500e-01;
-                p[     "B(*)->D(*)::l_2(1)@HQET"] = -2.2990e+00;
-                p[     "B(*)->D(*)::l_3(1)@HQET"] = +0.0000e+00;
-                p[     "B(*)->D(*)::l_4(1)@HQET"] = +0.0000e+00;
-                p[     "B(*)->D(*)::l_5(1)@HQET"] = +0.0000e+00;
-                p[     "B(*)->D(*)::l_6(1)@HQET"] = +0.0000e+00;
-                p[    "B(*)->D(*)::l_1'(1)@HQET"] = +0.0000e+00;
-                p[    "B(*)->D(*)::l_2'(1)@HQET"] = +0.0000e+00;
-                p[    "B(*)->D(*)::l_3'(1)@HQET"] = +0.0000e+00;
-                p[    "B(*)->D(*)::l_4'(1)@HQET"] = +0.0000e+00;
-                p[    "B(*)->D(*)::l_5'(1)@HQET"] = +0.0000e+00;
-                p[    "B(*)->D(*)::l_6'(1)@HQET"] = +0.0000e+00;
+                p["B(*)->D(*)::xi'(1)@HQET"]     = -1.3060e+00;
+                p["B(*)->D(*)::xi''(1)@HQET"]    = 2.0 * +1.2200e+00;
+                p["B(*)->D(*)::xi'''(1)@HQET"]   = +0.0000e+00;
+                p["B(*)->D(*)::chi_2(1)@HQET"]   = -5.8000e-02;
+                p["B(*)->D(*)::chi_2'(1)@HQET"]  = -1.0000e-03;
+                p["B(*)->D(*)::chi_2''(1)@HQET"] = +0.0000e+00;
+                p["B(*)->D(*)::chi_3'(1)@HQET"]  = +3.5000e-02;
+                p["B(*)->D(*)::chi_3''(1)@HQET"] = +0.0000e+00;
+                p["B(*)->D(*)::eta(1)@HQET"]     = +3.5800e-01;
+                p["B(*)->D(*)::eta'(1)@HQET"]    = +4.4000e-02;
+                p["B(*)->D(*)::eta''(1)@HQET"]   = +0.0000e+00;
+                p["B(*)->D(*)::l_1(1)@HQET"]     = +4.8500e-01;
+                p["B(*)->D(*)::l_2(1)@HQET"]     = -2.2990e+00;
+                p["B(*)->D(*)::l_3(1)@HQET"]     = +0.0000e+00;
+                p["B(*)->D(*)::l_4(1)@HQET"]     = +0.0000e+00;
+                p["B(*)->D(*)::l_5(1)@HQET"]     = +0.0000e+00;
+                p["B(*)->D(*)::l_6(1)@HQET"]     = +0.0000e+00;
+                p["B(*)->D(*)::l_1'(1)@HQET"]    = +0.0000e+00;
+                p["B(*)->D(*)::l_2'(1)@HQET"]    = +0.0000e+00;
+                p["B(*)->D(*)::l_3'(1)@HQET"]    = +0.0000e+00;
+                p["B(*)->D(*)::l_4'(1)@HQET"]    = +0.0000e+00;
+                p["B(*)->D(*)::l_5'(1)@HQET"]    = +0.0000e+00;
+                p["B(*)->D(*)::l_6'(1)@HQET"]    = +0.0000e+00;
 
                 p["B(*)->D(*)::a@HQET"].set(1.000);
                 p["mass::B_d"].set(5.27942);
@@ -533,15 +524,15 @@ class BToVectorLeptonNeutrinoTest :
                 p["mass::D_d^*"].set(2.01000);
 
                 Options o{
-                    { "V"_ok,             "D^*"_ov       },
-                    { "U"_ok,             "c"_ov         },
-                    { "I"_ok,             "1/2"_ov       },
-                    { "q"_ok,             "d"_ov         },
-                    { "l"_ok,             "mu"_ov        },
-                    { "z-order-lp"_ok,    "2"_ov         },
-                    { "z-order-slp"_ok,   "1"_ov         },
-                    { "z-order-sslp"_ok,  "0"_ov         },
-                    { "form-factors"_ok,  "BGJvD2019"_ov }
+                    {            "V"_ok,       "D^*"_ov },
+                    {            "U"_ok,         "c"_ov },
+                    {            "I"_ok,       "1/2"_ov },
+                    {            "q"_ok,         "d"_ov },
+                    {            "l"_ok,        "mu"_ov },
+                    {   "z-order-lp"_ok,         "2"_ov },
+                    {  "z-order-slp"_ok,         "1"_ov },
+                    { "z-order-sslp"_ok,         "0"_ov },
+                    { "form-factors"_ok, "BGJvD2019"_ov }
                 };
 
                 BToVectorLeptonNeutrino d(p, o);
@@ -554,7 +545,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.60), 0.511885411, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.40), 0.422744827, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.20), 0.369260477, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v( 0.00), 0.351432360, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(0.00), 0.351432360, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.20), 0.369260477, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.40), 0.422744827, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.60), 0.511885411, eps);
@@ -567,7 +558,7 @@ class BToVectorLeptonNeutrinoTest :
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.60), 0.360743770, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.40), 0.448250120, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.20), 0.518557007, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l( 0.00), 0.571664430, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(0.00), 0.571664430, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.20), 0.607572390, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.40), 0.626280887, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.60), 0.627789921, eps);
@@ -577,19 +568,19 @@ class BToVectorLeptonNeutrinoTest :
                 // distribution in phi; cf. [DDS:2014A]: only the cos(2 phi) [J_3] and
                 // sin(2 phi) [J_9] terms survive integration over theta_l and theta_D.
                 // For this form-factor point J_3 ~= 0 and J_9 = 0, so the distribution is flat (= 1 / (2 pi)).
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 1.5708),  0.159154943, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 2.35619), 0.159154943, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 3.14159), 0.159154943, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 3.45575), 0.159154943, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi( 5.49779), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi(1.5708), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi(2.35619), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi(3.14159), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi(3.45575), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_phi(5.49779), 0.159154943, eps);
 
                 // normalization of the integrated distributions; these are bin-averaged
                 // PDFs (densities), so a full-range bin returns the average density, not 1
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0,  0.0),     0.500000000, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, +1.0),     0.500000000, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0,  0.0),     0.388730770, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, +1.0),     0.500000000, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi( 0.0,  +M_PI), 0.159154943, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, 0.0), 0.500000000, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, +1.0), 0.500000000, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, 0.0), 0.388730770, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, +1.0), 0.500000000, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi(0.0, +M_PI), 0.159154943, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi(-M_PI, +M_PI), 0.159154943, eps);
             }
         }

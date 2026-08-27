@@ -18,16 +18,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/lambdab-to-lambdac-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -35,8 +36,7 @@
 using namespace test;
 using namespace eos;
 
-class LambdaBToLambdaCLeptonNeutrinoTest :
-    public TestCase
+class LambdaBToLambdaCLeptonNeutrinoTest : public TestCase
 {
     public:
         LambdaBToLambdaCLeptonNeutrinoTest() :
@@ -44,23 +44,23 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // tests for SM observables, Re{cVL}=1.0 in the SM and all other couplings are zero, l = mu
             {
-                Parameters p = Parameters::Defaults();
-                p["Lambda_c::alpha"]       = -0.78;
-                p["mass::Lambda_b"]        = 5.6194;
-                p["mass::Lambda_c"]        = 2.2865;
-                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
+                Parameters p         = Parameters::Defaults();
+                p["Lambda_c::alpha"] = -0.78;
+                p["mass::Lambda_b"]  = 5.6194;
+                p["mass::Lambda_c"]  = 2.2865;
+                p["CKM::abs(V_cb)"]  = 0.041996951916414726;
 
                 // the parameters are fixed as EOS default values
 
-                Options oo
-                {
-                    { "model"_ok,        "WET"_ov },
-                    { "form-factors"_ok, "DKMR2017"_ov   },
-                    { "l"_ok,            "mu"_ov         }
+                Options oo{
+                    {        "model"_ok,      "WET"_ov },
+                    { "form-factors"_ok, "DKMR2017"_ov },
+                    {            "l"_ok,       "mu"_ov }
                 };
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
@@ -69,26 +69,25 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 // the full phase-space region for muon
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), -0.20052, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  0.32750, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1), 0.32750, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.11678, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),          0.58731, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1), 0.58731, eps);
             }
 
             // tests for SM observables, Re{cVL}=1.0 in the SM and all other couplings are zero, l = mu
             {
-                Parameters p = Parameters::Defaults();
-                p["Lambda_c::alpha"]       = -0.78;
-                p["mass::Lambda_b"]        = 5.6194;
-                p["mass::Lambda_c"]        = 2.2865;
-                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
+                Parameters p         = Parameters::Defaults();
+                p["Lambda_c::alpha"] = -0.78;
+                p["mass::Lambda_b"]  = 5.6194;
+                p["mass::Lambda_c"]  = 2.2865;
+                p["CKM::abs(V_cb)"]  = 0.041996951916414726;
 
                 // the parameters are fixed as EOS default values
 
-                Options oo
-                {
-                    { "model"_ok,        "WET"_ov },
-                    { "form-factors"_ok, "DKMR2017"_ov   },
-                    { "l"_ok,            "tau"_ov        }
+                Options oo{
+                    {        "model"_ok,      "WET"_ov },
+                    { "form-factors"_ok, "DKMR2017"_ov },
+                    {            "l"_ok,      "tau"_ov }
                 };
 
                 LambdaBToLambdaCLeptonNeutrino d(p, oo);
@@ -97,72 +96,66 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
 
                 // the full phase-space region for muon
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(3.154, 11.1), +0.024465, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(3.154, 11.1),  0.295939, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(3.154, 11.1), 0.295939, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(3.154, 11.1), -0.022105, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(3.154, 11.1),          0.380371, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(3.154, 11.1), 0.380371, eps);
             }
 
             // Consistency check for R_lambda
             {
-                Parameters p = Parameters::Defaults();
-                p["Lambda_c::alpha"]       = -0.78;
-                p["mass::Lambda_b"]        = 5.6194;
-                p["mass::Lambda_c"]        = 2.2865;
-                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
+                Parameters p         = Parameters::Defaults();
+                p["Lambda_c::alpha"] = -0.78;
+                p["mass::Lambda_b"]  = 5.6194;
+                p["mass::Lambda_c"]  = 2.2865;
+                p["CKM::abs(V_cb)"]  = 0.041996951916414726;
 
-                Options oo
-                {
-                    { "model"_ok,        "WET"_ov },
-                    { "form-factors"_ok, "DKMR2017"_ov   },
-                    { "l"_ok,            "mu"_ov        }
+                Options oo{
+                    {        "model"_ok,      "WET"_ov },
+                    { "form-factors"_ok, "DKMR2017"_ov },
+                    {            "l"_ok,       "mu"_ov }
                 };
                 LambdaBToLambdaCLeptonNeutrino dmu(p, oo);
 
                 oo.declare("l"_ok, "tau"_ov);
                 LambdaBToLambdaCLeptonNeutrino dtau(p, oo);
 
-                oo =
-                {
-                    { "model"_ok,        "WET"_ov },
-                    { "form-factors"_ok, "DKMR2017"_ov   },
+                oo = {
+                    {        "model"_ok,      "WET"_ov },
+                    { "form-factors"_ok, "DKMR2017"_ov },
                 };
-                Kinematics k
-                {
-                    { "q2_mu_min",   0.011 }, { "q2_mu_max",  11.1 },
-                    { "q2_tau_min",  3.154 }, { "q2_tau_max", 11.1 },
+                Kinematics k{
+                    {  "q2_mu_min", 0.011 },
+                    {  "q2_mu_max",  11.1 },
+                    { "q2_tau_min", 3.154 },
+                    { "q2_tau_max",  11.1 },
                 };
 
                 auto obs_Rlambda = Observable::make("Lambda_b->Lambda_clnu::R(Lambda_c)", p, k, oo);
-                TEST_CHECK_RELATIVE_ERROR(
-                    dtau.integrated_branching_ratio(3.154, 11.1) / dmu.integrated_branching_ratio(0.011, 11.1),
-                    obs_Rlambda->evaluate(),
-                    1e-5
-                );
-
+                TEST_CHECK_RELATIVE_ERROR(dtau.integrated_branching_ratio(3.154, 11.1) / dmu.integrated_branching_ratio(0.011, 11.1), obs_Rlambda->evaluate(), 1e-5);
             }
 
             // tests for NP observables (no tensors)
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p           = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
-                p["CKM::abs(V_cb)"]      =  0.041996951916414726;
-                p["cbmunumu::Re{cVL}"]   =  1.0;
-                p["cbmunumu::Im{cVL}"]   = -1.0;
-                p["cbmunumu::Re{cVR}"]   =  2.0;
-                p["cbmunumu::Im{cVR}"]   = -2.0;
-                p["cbmunumu::Re{cSL}"]   =  3.0;
-                p["cbmunumu::Im{cSL}"]   = -3.0;
-                p["cbmunumu::Re{cSR}"]   =  4.0;
-                p["cbmunumu::Im{cSR}"]   = -4.0;
-                p["cbmunumu::Re{cT}"]    =  0.0;
-                p["cbmunumu::Im{cT}"]    =  0.0;
+                p["CKM::abs(V_cb)"]    = 0.041996951916414726;
+                p["cbmunumu::Re{cVL}"] = 1.0;
+                p["cbmunumu::Im{cVL}"] = -1.0;
+                p["cbmunumu::Re{cVR}"] = 2.0;
+                p["cbmunumu::Im{cVR}"] = -2.0;
+                p["cbmunumu::Re{cSL}"] = 3.0;
+                p["cbmunumu::Im{cSL}"] = -3.0;
+                p["cbmunumu::Re{cSR}"] = 4.0;
+                p["cbmunumu::Im{cSR}"] = -4.0;
+                p["cbmunumu::Re{cT}"]  = 0.0;
+                p["cbmunumu::Im{cT}"]  = 0.0;
                 // fix the scale
-                p["cbmunumu::mu"]          =  4.18;
-                p["mass::b(MSbar)"]        =  4.18;
-                p["mass::c"]               =  1.275;
-                p["Lambda_c::alpha"]       = -0.78;
-                p["mass::Lambda_b"]        = 5.6194;
-                p["mass::Lambda_c"]        = 2.2865;
+                p["cbmunumu::mu"]      = 4.18;
+                p["mass::b(MSbar)"]    = 4.18;
+                p["mass::c"]           = 1.275;
+                p["Lambda_c::alpha"]   = -0.78;
+                p["mass::Lambda_b"]    = 5.6194;
+                p["mass::Lambda_c"]    = 2.2865;
 
                 Options oo;
                 oo.declare("model"_ok, "WET"_ov);
@@ -174,34 +167,34 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 const double eps = 1e-4;
 
                 // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1),   0.046821, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  -0.018187, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1),  -0.015075, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),           0.401914, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), 0.046821, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1), -0.018187, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.015075, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1), 0.401914, eps);
             }
 
             // tests for NP observables (no tensors)
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p           = Parameters::Defaults();
                 // the rest of input is fixed to default EOS values
-                p["CKM::abs(V_cb)"]      =  0.041996951916414726;
-                p["cbmunumu::Re{cVL}"]   =  1.0;
-                p["cbmunumu::Im{cVL}"]   = -1.0;
-                p["cbmunumu::Re{cVR}"]   =  2.0;
-                p["cbmunumu::Im{cVR}"]   = -2.0;
-                p["cbmunumu::Re{cSL}"]   =  3.0;
-                p["cbmunumu::Im{cSL}"]   = -3.0;
-                p["cbmunumu::Re{cSR}"]   =  4.0;
-                p["cbmunumu::Im{cSR}"]   = -4.0;
-                p["cbmunumu::Re{cT}"]    =  1.0;
-                p["cbmunumu::Im{cT}"]    = -2.0;
+                p["CKM::abs(V_cb)"]    = 0.041996951916414726;
+                p["cbmunumu::Re{cVL}"] = 1.0;
+                p["cbmunumu::Im{cVL}"] = -1.0;
+                p["cbmunumu::Re{cVR}"] = 2.0;
+                p["cbmunumu::Im{cVR}"] = -2.0;
+                p["cbmunumu::Re{cSL}"] = 3.0;
+                p["cbmunumu::Im{cSL}"] = -3.0;
+                p["cbmunumu::Re{cSR}"] = 4.0;
+                p["cbmunumu::Im{cSR}"] = -4.0;
+                p["cbmunumu::Re{cT}"]  = 1.0;
+                p["cbmunumu::Im{cT}"]  = -2.0;
                 // fix the scale
-                p["cbmunumu::mu"]          =  4.18;
-                p["mass::b(MSbar)"]        =  4.18;
-                p["mass::c"]               =  1.275;
-                p["Lambda_c::alpha"]       = -0.78;
-                p["mass::Lambda_b"]        = 5.6194;
-                p["mass::Lambda_c"]        = 2.2865;
+                p["cbmunumu::mu"]      = 4.18;
+                p["mass::b(MSbar)"]    = 4.18;
+                p["mass::c"]           = 1.275;
+                p["Lambda_c::alpha"]   = -0.78;
+                p["mass::Lambda_b"]    = 5.6194;
+                p["mass::Lambda_c"]    = 2.2865;
 
                 Options oo;
                 oo.declare("model"_ok, "WET"_ov);
@@ -213,10 +206,10 @@ class LambdaBToLambdaCLeptonNeutrinoTest :
                 const double eps = 1e-2;
 
                 // the full phase-space region for muon
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1),   0.1336, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1),  -0.0147, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1),  -0.1180, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1),           0.3742, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011, 11.1), 0.1336, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_hadronic(0.011, 11.1), -0.0147, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_combined(0.011, 11.1), -0.1180, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_fzero(0.011, 11.1), 0.3742, eps);
             }
         }
 } lambdab_to_lambdac_l_nu_test;

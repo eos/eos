@@ -18,16 +18,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -36,8 +37,7 @@
 using namespace test;
 using namespace eos;
 
-class BToEtaLeptonNeutrinoTest :
-    public TestCase
+class BToEtaLeptonNeutrinoTest : public TestCase
 {
     public:
         BToEtaLeptonNeutrinoTest() :
@@ -45,32 +45,32 @@ class BToEtaLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // Using IKMvD2014 inputs for V_ub and form factors,
             // from the combined fit to B->pilnu data and LCSR.
             {
-                Parameters p = Parameters::Defaults();
-                p["CKM::abs(V_ub)"]        =  3.32e-3;
-                p["mass::B_u"]             =  5.27934;
-                p["mass::eta"]             =  0.54786;
+                Parameters p        = Parameters::Defaults();
+                p["CKM::abs(V_ub)"] = 3.32e-3;
+                p["mass::B_u"]      = 5.27934;
+                p["mass::eta"]      = 0.54786;
 
                 p["B->eta::alpha^f+_0@BSZ2015"] = 1.0;
 
-                Options oo
-                {
-                    { "model"_ok,        "CKM"_ov     },
+                Options oo{
+                    {        "model"_ok,     "CKM"_ov },
                     { "form-factors"_ok, "BSZ2015"_ov },
-                    { "P"_ok,            "eta"_ov     },
-                    { "q"_ok,            "u"_ov       },
-                    { "l"_ok,            "e"_ov       },
+                    {            "P"_ok,     "eta"_ov },
+                    {            "q"_ok,       "u"_ov },
+                    {            "l"_ok,       "e"_ov },
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, oo);
 
                 const double eps = 1e-8;
 
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio( 0.01,  2.00), 1.72975e-04, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.01, 2.00), 1.72975e-04, eps);
             }
         }
 } b_to_eta_l_nu_test;

@@ -18,16 +18,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/lifetime.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -36,8 +37,7 @@
 using namespace test;
 using namespace eos;
 
-class LifetimeTest :
-    public TestCase
+class LifetimeTest : public TestCase
 {
     public:
         LifetimeTest() :
@@ -45,11 +45,12 @@ class LifetimeTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // SM tests
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p             = Parameters::Defaults();
                 p["WET::G_Fermi"]        = 1.1664e-05;
                 p["CKM::abs(V_ud)"]      = 1.000;
                 p["CKM::abs(V_us)"]      = 0.2254;
@@ -65,15 +66,14 @@ class LifetimeTest :
                 {
                     static const double eps = 1.0e-5;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "CKM"_ov },
-                        { "q"_ok,     "s"_ov   }
+                        {     "q"_ok,   "s"_ov }
                     };
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim3_lo(), 0.181764,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim3_lo(), 0.181764, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim3_lo(), 0.00923456, eps);
                 }
 
@@ -81,17 +81,16 @@ class LifetimeTest :
                 {
                     static const double eps = 1.0e-6;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "CKM"_ov },
-                        { "q"_ok,     "u"_ov   }
+                        {     "q"_ok,   "u"_ov }
                     };
 
                     Lifetime d(p, oo);
 
                     // compare to known decay width of
                     // (1.638 +/- 0.004 ps)^-1 = (0.6105 +/- 0.0015) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0153181,   eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0153181, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.000778238, eps);
                 }
 
@@ -99,10 +98,9 @@ class LifetimeTest :
                 {
                     static const double eps = 1.0e-7;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "CKM"_ov },
-                        { "q"_ok,     "d"_ov   }
+                        {     "q"_ok,   "d"_ov }
                     };
 
                     Lifetime d(p, oo);
@@ -110,31 +108,30 @@ class LifetimeTest :
                     // compare to known decay width of
                     // (1.519 +/- 0.004 ps)^-1 = (0.6583 +/- 0.0017) ps^-1
                     TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0006235, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.0,       eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.0, eps);
                 }
 
                 // SM test for the B_s
                 {
                     static const double eps = 1.0e-7;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "CKM"_ov },
-                        { "q"_ok,     "s"_ov   }
+                        {     "q"_ok,   "s"_ov }
                     };
 
                     Lifetime d(p, oo);
 
                     // compare to known decay width of
                     // (1.521 +/- 0.005 ps)^-1 = (0.6575 +/- 0.0022) ps^-1
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0,          eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0, eps);
                     TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.0000477726, eps);
                 }
             }
 
             // BSM tests
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p             = Parameters::Defaults();
                 p["WET::G_Fermi"]        = 1.1664e-05;
                 p["CKM::abs(V_ud)"]      = 1.000;
                 p["CKM::abs(V_us)"]      = 0.2254;
@@ -146,101 +143,100 @@ class LifetimeTest :
                 p["decay-constant::B_d"] = 0.18940;
                 p["decay-constant::B_s"] = 0.2307;
                 // dbcu WC
-                p["dbcu::Re{c1}"  ] = -1.72424;
-                p["dbcu::Im{c1}"  ] = -1.56379;
-                p["dbcu::Re{c1'}" ] = -1.05356;
-                p["dbcu::Im{c1'}" ] = -0.791464;
-                p["dbcu::Re{c2}"  ] = -2.84324;
-                p["dbcu::Im{c2}"  ] = -1.10401;
-                p["dbcu::Re{c2'}" ] = +1.10235;
-                p["dbcu::Im{c2'}" ] = +2.0774;
-                p["dbcu::Re{c3}"  ] = +1.61473;
-                p["dbcu::Im{c3}"  ] = +1.23153;
-                p["dbcu::Re{c3'}" ] = -2.95587;
-                p["dbcu::Im{c3'}" ] = -2.28859;
-                p["dbcu::Re{c4}"  ] = +2.72844;
-                p["dbcu::Im{c4}"  ] = +2.4199;
-                p["dbcu::Re{c4'}" ] = +1.42602;
-                p["dbcu::Im{c4'}" ] = +2.15745;
-                p["dbcu::Re{c5}"  ] = +2.1994;
-                p["dbcu::Im{c5}"  ] = -1.4183;
-                p["dbcu::Re{c5'}" ] = +1.28771;
-                p["dbcu::Im{c5'}" ] = -2.51855;
-                p["dbcu::Re{c6}"  ] = -1.148;
-                p["dbcu::Im{c6}"  ] = +2.69186;
-                p["dbcu::Re{c6'}" ] = -0.857562;
-                p["dbcu::Im{c6'}" ] = -1.25387;
-                p["dbcu::Re{c7}"  ] = -0.0232947;
-                p["dbcu::Im{c7}"  ] = +0.746233;
-                p["dbcu::Re{c7'}" ] = +0.925099;
-                p["dbcu::Im{c7'}" ] = +2.16794;
-                p["dbcu::Re{c8}"  ] = -0.787739;
-                p["dbcu::Im{c8}"  ] = +2.30108;
-                p["dbcu::Re{c8'}" ] = -2.67008;
-                p["dbcu::Im{c8'}" ] = -0.331634;
-                p["dbcu::Re{c9}"  ] = -1.60631;
-                p["dbcu::Im{c9}"  ] = -1.09823;
-                p["dbcu::Re{c9'}" ] = +0.601768;
-                p["dbcu::Im{c9'}" ] = -0.224144;
-                p["dbcu::Re{c10}" ] = +0.25629;
-                p["dbcu::Im{c10}" ] = -2.96255;
-                p["dbcu::Re{c10'}"] = +2.03425;
-                p["dbcu::Im{c10'}"] = +1.24073;
+                p["dbcu::Re{c1}"]        = -1.72424;
+                p["dbcu::Im{c1}"]        = -1.56379;
+                p["dbcu::Re{c1'}"]       = -1.05356;
+                p["dbcu::Im{c1'}"]       = -0.791464;
+                p["dbcu::Re{c2}"]        = -2.84324;
+                p["dbcu::Im{c2}"]        = -1.10401;
+                p["dbcu::Re{c2'}"]       = +1.10235;
+                p["dbcu::Im{c2'}"]       = +2.0774;
+                p["dbcu::Re{c3}"]        = +1.61473;
+                p["dbcu::Im{c3}"]        = +1.23153;
+                p["dbcu::Re{c3'}"]       = -2.95587;
+                p["dbcu::Im{c3'}"]       = -2.28859;
+                p["dbcu::Re{c4}"]        = +2.72844;
+                p["dbcu::Im{c4}"]        = +2.4199;
+                p["dbcu::Re{c4'}"]       = +1.42602;
+                p["dbcu::Im{c4'}"]       = +2.15745;
+                p["dbcu::Re{c5}"]        = +2.1994;
+                p["dbcu::Im{c5}"]        = -1.4183;
+                p["dbcu::Re{c5'}"]       = +1.28771;
+                p["dbcu::Im{c5'}"]       = -2.51855;
+                p["dbcu::Re{c6}"]        = -1.148;
+                p["dbcu::Im{c6}"]        = +2.69186;
+                p["dbcu::Re{c6'}"]       = -0.857562;
+                p["dbcu::Im{c6'}"]       = -1.25387;
+                p["dbcu::Re{c7}"]        = -0.0232947;
+                p["dbcu::Im{c7}"]        = +0.746233;
+                p["dbcu::Re{c7'}"]       = +0.925099;
+                p["dbcu::Im{c7'}"]       = +2.16794;
+                p["dbcu::Re{c8}"]        = -0.787739;
+                p["dbcu::Im{c8}"]        = +2.30108;
+                p["dbcu::Re{c8'}"]       = -2.67008;
+                p["dbcu::Im{c8'}"]       = -0.331634;
+                p["dbcu::Re{c9}"]        = -1.60631;
+                p["dbcu::Im{c9}"]        = -1.09823;
+                p["dbcu::Re{c9'}"]       = +0.601768;
+                p["dbcu::Im{c9'}"]       = -0.224144;
+                p["dbcu::Re{c10}"]       = +0.25629;
+                p["dbcu::Im{c10}"]       = -2.96255;
+                p["dbcu::Re{c10'}"]      = +2.03425;
+                p["dbcu::Im{c10'}"]      = +1.24073;
                 // sbcu WC
-                p["sbcu::Re{c1}"  ] = -1.72424;
-                p["sbcu::Im{c1}"  ] = -1.56379;
-                p["sbcu::Re{c1'}" ] = -1.05356;
-                p["sbcu::Im{c1'}" ] = -0.791464;
-                p["sbcu::Re{c2}"  ] = -2.84324;
-                p["sbcu::Im{c2}"  ] = -1.10401;
-                p["sbcu::Re{c2'}" ] = +1.10235;
-                p["sbcu::Im{c2'}" ] = +2.0774;
-                p["sbcu::Re{c3}"  ] = +1.61473;
-                p["sbcu::Im{c3}"  ] = +1.23153;
-                p["sbcu::Re{c3'}" ] = -2.95587;
-                p["sbcu::Im{c3'}" ] = -2.28859;
-                p["sbcu::Re{c4}"  ] = +2.72844;
-                p["sbcu::Im{c4}"  ] = +2.4199;
-                p["sbcu::Re{c4'}" ] = +1.42602;
-                p["sbcu::Im{c4'}" ] = +2.15745;
-                p["sbcu::Re{c5}"  ] = +2.1994;
-                p["sbcu::Im{c5}"  ] = -1.4183;
-                p["sbcu::Re{c5'}" ] = +1.28771;
-                p["sbcu::Im{c5'}" ] = -2.51855;
-                p["sbcu::Re{c6}"  ] = -1.148;
-                p["sbcu::Im{c6}"  ] = +2.69186;
-                p["sbcu::Re{c6'}" ] = -0.857562;
-                p["sbcu::Im{c6'}" ] = -1.25387;
-                p["sbcu::Re{c7}"  ] = -0.0232947;
-                p["sbcu::Im{c7}"  ] = +0.746233;
-                p["sbcu::Re{c7'}" ] = +0.925099;
-                p["sbcu::Im{c7'}" ] = +2.16794;
-                p["sbcu::Re{c8}"  ] = -0.787739;
-                p["sbcu::Im{c8}"  ] = +2.30108;
-                p["sbcu::Re{c8'}" ] = -2.67008;
-                p["sbcu::Im{c8'}" ] = -0.331634;
-                p["sbcu::Re{c9}"  ] = -1.60631;
-                p["sbcu::Im{c9}"  ] = -1.09823;
-                p["sbcu::Re{c9'}" ] = +0.601768;
-                p["sbcu::Im{c9'}" ] = -0.224144;
-                p["sbcu::Re{c10}" ] = +0.25629;
-                p["sbcu::Im{c10}" ] = -2.96255;
-                p["sbcu::Re{c10'}"] = +2.03425;
-                p["sbcu::Im{c10'}"] = +1.24073;
+                p["sbcu::Re{c1}"]        = -1.72424;
+                p["sbcu::Im{c1}"]        = -1.56379;
+                p["sbcu::Re{c1'}"]       = -1.05356;
+                p["sbcu::Im{c1'}"]       = -0.791464;
+                p["sbcu::Re{c2}"]        = -2.84324;
+                p["sbcu::Im{c2}"]        = -1.10401;
+                p["sbcu::Re{c2'}"]       = +1.10235;
+                p["sbcu::Im{c2'}"]       = +2.0774;
+                p["sbcu::Re{c3}"]        = +1.61473;
+                p["sbcu::Im{c3}"]        = +1.23153;
+                p["sbcu::Re{c3'}"]       = -2.95587;
+                p["sbcu::Im{c3'}"]       = -2.28859;
+                p["sbcu::Re{c4}"]        = +2.72844;
+                p["sbcu::Im{c4}"]        = +2.4199;
+                p["sbcu::Re{c4'}"]       = +1.42602;
+                p["sbcu::Im{c4'}"]       = +2.15745;
+                p["sbcu::Re{c5}"]        = +2.1994;
+                p["sbcu::Im{c5}"]        = -1.4183;
+                p["sbcu::Re{c5'}"]       = +1.28771;
+                p["sbcu::Im{c5'}"]       = -2.51855;
+                p["sbcu::Re{c6}"]        = -1.148;
+                p["sbcu::Im{c6}"]        = +2.69186;
+                p["sbcu::Re{c6'}"]       = -0.857562;
+                p["sbcu::Im{c6'}"]       = -1.25387;
+                p["sbcu::Re{c7}"]        = -0.0232947;
+                p["sbcu::Im{c7}"]        = +0.746233;
+                p["sbcu::Re{c7'}"]       = +0.925099;
+                p["sbcu::Im{c7'}"]       = +2.16794;
+                p["sbcu::Re{c8}"]        = -0.787739;
+                p["sbcu::Im{c8}"]        = +2.30108;
+                p["sbcu::Re{c8'}"]       = -2.67008;
+                p["sbcu::Im{c8'}"]       = -0.331634;
+                p["sbcu::Re{c9}"]        = -1.60631;
+                p["sbcu::Im{c9}"]        = -1.09823;
+                p["sbcu::Re{c9'}"]       = +0.601768;
+                p["sbcu::Im{c9'}"]       = -0.224144;
+                p["sbcu::Re{c10}"]       = +0.25629;
+                p["sbcu::Im{c10}"]       = -2.96255;
+                p["sbcu::Re{c10'}"]      = +2.03425;
+                p["sbcu::Im{c10'}"]      = +1.24073;
 
                 // BSM test for the spectator-independent lifetime at dim3 & LO
                 {
                     static const double eps = 1.0e-5;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "WET"_ov },
-                        { "q"_ok,     "s"_ov   }
+                        {     "q"_ok,   "s"_ov }
                     };
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim3_lo(), 6272.1,  eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim3_lo(), 6272.1, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim3_lo(), 318.655, eps);
                 }
 
@@ -248,15 +244,14 @@ class LifetimeTest :
                 {
                     static const double eps = 1.0e-5;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "WET"_ov },
-                        { "q"_ok,     "u"_ov   }
+                        {     "q"_ok,   "u"_ov }
                     };
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim6_lo(), 3683.4330826090,   eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim6_lo(), 3683.4330826090, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim6_lo(), 187.1374071112458, eps);
                 }
 
@@ -264,32 +259,30 @@ class LifetimeTest :
                 {
                     static const double eps = 1.0e-4;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "WET"_ov },
-                        { "q"_ok,     "d"_ov   }
+                        {     "q"_ok,   "d"_ov }
                     };
 
                     Lifetime d(p, oo);
 
                     TEST_CHECK_RELATIVE_ERROR(d.decay_width_dbcu_dim6_lo(), 2224.8775735372574, eps);
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(),   0.0,                eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_sbcu_dim6_lo(), 0.0, eps);
                 }
 
                 // BSM test for the B_s
                 {
                     static const double eps = 1.0e-6;
 
-                    Options oo
-                    {
+                    Options oo{
                         { "model"_ok, "WET"_ov },
-                        { "q"_ok,     "s"_ov   }
+                        {     "q"_ok,   "s"_ov }
                     };
 
                     Lifetime d(p, oo);
 
-                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(),   0.0,                eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim6_lo(), 170.4603546103313,  eps);
+                    TEST_CHECK_NEARLY_EQUAL(d.decay_width_dbcu_dim6_lo(), 0.0, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.decay_width_sbcu_dim6_lo(), 170.4603546103313, eps);
                 }
             }
         }
