@@ -30,9 +30,7 @@ namespace eos
     /*
      * Decay: B -> pi l X_nu
      */
-    class BToPiLeptonInclusiveNeutrinos :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToPiLeptonInclusiveNeutrinos>
+    class BToPiLeptonInclusiveNeutrinos : public ParameterUser, public PrivateImplementationPattern<BToPiLeptonInclusiveNeutrinos>
     {
         public:
             BToPiLeptonInclusiveNeutrinos(const Parameters & parameters, const Options & options);
@@ -40,8 +38,7 @@ namespace eos
 
             double differential_decay_width_1nu(const double & s, const double & c_theta_tau) const;
 
-            double differential_decay_width_3nu(const double & s, const double & snunubar,
-                    const double & c_theta_tau, const double & phi, const double & c_theta_mu_star) const;
+            double differential_decay_width_3nu(const double & s, const double & snunubar, const double & c_theta_tau, const double & phi, const double & c_theta_mu_star) const;
 
             double integrated_decay_width_1nu(const double & s_min, const double & s_max) const;
 
@@ -69,6 +66,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

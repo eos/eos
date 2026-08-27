@@ -21,29 +21,28 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_3L_NU_HH
 #define EOS_GUARD_EOS_B_DECAYS_B_TO_3L_NU_HH 1
 
-#include <cmath>
 #include <eos/form-factors/mesonic.hh>
 #include <eos/maths/complex.hh>
-#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/destringify.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>
+
+#include <cmath>
 #include <string>
 
 namespace eos
 {
-    class BToThreeLeptonsNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToThreeLeptonsNeutrino>
+    class BToThreeLeptonsNeutrino : public ParameterUser, public PrivateImplementationPattern<BToThreeLeptonsNeutrino>
     {
         private:
-            double _asymmetry_numerator(const double & q2,const double & k2) const;
+            double _asymmetry_numerator(const double & q2, const double & k2) const;
 
         public:
             BToThreeLeptonsNeutrino(const Parameters & parameters, const Options & options);
@@ -63,7 +62,7 @@ namespace eos
             double quintuple_differential_decay_width(const double & q2, const double & k2, const double & z_gamma, const double & z_w, const double & phi) const;
             double integrated_branching_ratio(const double & q2_min, const double & q2_max, const double & k2_min, const double & k2_max) const;
             double double_differential_forward_backward_asymmetry(const double & q2, const double & k2) const;
-            double integrated_forward_backward_asymmetry(const double & q2_min,const double & q2_max, const double & k2_min, const double & k2_max) const;
+            double integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max, const double & k2_min, const double & k2_max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
@@ -86,6 +85,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

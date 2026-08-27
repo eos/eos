@@ -30,9 +30,7 @@ namespace eos
     /*
      * Decay: B -> pi pi l nu
      */
-    class BToPiPiLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToPiPiLeptonNeutrino>
+    class BToPiPiLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<BToPiPiLeptonNeutrino>
     {
         public:
             BToPiPiLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -45,11 +43,9 @@ namespace eos
             double partial_waves(const double & q2, const double & k2, const double & z) const;
 
             // Integrated observables
-            double integrated_branching_ratio(const double & q2min, const double & q2max,
-                    const double & k2min, const double & k2max,
-                    const double & zmin, const double & zmax) const;
-            double integrated_forward_backward_asymmetry(const double & q2min, const double & q2max,
-                    const double & k2min, const double & k2max) const;
+            double integrated_branching_ratio(const double & q2min, const double & q2max, const double & k2min, const double & k2max, const double & zmin,
+                                              const double & zmax) const;
+            double integrated_forward_backward_asymmetry(const double & q2min, const double & q2max, const double & k2min, const double & k2max) const;
 
             /*!
              * Descriptions of the process and its kinematics.
@@ -70,6 +66,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

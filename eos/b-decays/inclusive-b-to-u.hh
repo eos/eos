@@ -30,12 +30,10 @@ namespace eos
 {
     template <typename Tag_> class BToXuLeptonNeutrino;
 
-    class Naive { };
+    class Naive
+    {};
 
-    template <>
-    class BToXuLeptonNeutrino<Naive> :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToXuLeptonNeutrino<Naive>>
+    template <> class BToXuLeptonNeutrino<Naive> : public ParameterUser, public PrivateImplementationPattern<BToXuLeptonNeutrino<Naive>>
     {
         public:
             BToXuLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -55,6 +53,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

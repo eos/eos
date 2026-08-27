@@ -30,9 +30,7 @@ namespace eos
     /*
      * Properties of B_q mesons
      */
-    class BMesonProperties :
-        public ParameterUser,
-        public PrivateImplementationPattern<BMesonProperties>
+    class BMesonProperties : public ParameterUser, public PrivateImplementationPattern<BMesonProperties>
     {
         public:
             BMesonProperties(const Parameters & parameters, const Options & options);
@@ -52,6 +50,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

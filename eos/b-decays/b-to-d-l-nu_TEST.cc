@@ -19,16 +19,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -37,8 +38,7 @@
 using namespace test;
 using namespace eos;
 
-class BToDLeptonNeutrinoTest :
-    public TestCase
+class BToDLeptonNeutrinoTest : public TestCase
 {
     public:
         BToDLeptonNeutrinoTest() :
@@ -46,7 +46,8 @@ class BToDLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // comparison with Martin Jung in 3/2/1 model
             {
@@ -85,14 +86,14 @@ class BToDLeptonNeutrinoTest :
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
-                    { "l"_ok,             "e"_ov         },
-                    { "model"_ok,         "CKM"_ov       },
-                    { "P"_ok,             "D"_ov         },
-                    { "q"_ok,             "d"_ov         },
-                    { "z-order-lp"_ok,    "3"_ov         },
-                    { "z-order-slp"_ok,   "2"_ov         },
-                    { "z-order-sslp"_ok,  "1"_ov         },
-                    { "form-factors"_ok,  "BGJvD2019"_ov }
+                    {            "l"_ok,         "e"_ov },
+                    {        "model"_ok,       "CKM"_ov },
+                    {            "P"_ok,         "D"_ov },
+                    {            "q"_ok,         "d"_ov },
+                    {   "z-order-lp"_ok,         "3"_ov },
+                    {  "z-order-slp"_ok,         "2"_ov },
+                    { "z-order-sslp"_ok,         "1"_ov },
+                    { "form-factors"_ok, "BGJvD2019"_ov }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, o);
@@ -138,14 +139,14 @@ class BToDLeptonNeutrinoTest :
                 p["life_time::B_d"].set(1.520e-12);
 
                 Options o{
-                    { "l"_ok,             "tau"_ov       },
-                    { "model"_ok,         "CKM"_ov       },
-                    { "P"_ok,             "D"_ov         },
-                    { "q"_ok,             "d"_ov         },
-                    { "z-order-lp"_ok,    "3"_ov         },
-                    { "z-order-slp"_ok,   "2"_ov         },
-                    { "z-order-sslp"_ok,  "1"_ov         },
-                    { "form-factors"_ok,  "BGJvD2019"_ov }
+                    {            "l"_ok,       "tau"_ov },
+                    {        "model"_ok,       "CKM"_ov },
+                    {            "P"_ok,         "D"_ov },
+                    {            "q"_ok,         "d"_ov },
+                    {   "z-order-lp"_ok,         "3"_ov },
+                    {  "z-order-slp"_ok,         "2"_ov },
+                    { "z-order-sslp"_ok,         "1"_ov },
+                    { "form-factors"_ok, "BGJvD2019"_ov }
                 };
 
                 BToPseudoscalarLeptonNeutrino d(p, o);
@@ -156,29 +157,28 @@ class BToDLeptonNeutrinoTest :
 
             // SM tests
             {
-                Parameters p = Parameters::Defaults();
-                p["B->D::f_+(0)@BCL2008"]  = +0.660;
-                p["B->D::f_T(0)@BCL2008"]  = +0.00;
-                p["B->D::b_+^1@BCL2008"]   = -4.00;
-                p["B->D::b_+^2@BCL2008"]   = -0.80;
-                p["B->D::b_0^1@BCL2008"]   = +0.40;
-                p["B->D::b_0^2@BCL2008"]   = -1.20;
-                p["B->D::b_T^1@BCL2008"]   = +0.00;
-                p["B->D::b_T^2@BCL2008"]   = +0.00;
-                p["mass::B_d"]             =  5.279;
-                p["mass::D_d"]             =  1.870;
+                Parameters p              = Parameters::Defaults();
+                p["B->D::f_+(0)@BCL2008"] = +0.660;
+                p["B->D::f_T(0)@BCL2008"] = +0.00;
+                p["B->D::b_+^1@BCL2008"]  = -4.00;
+                p["B->D::b_+^2@BCL2008"]  = -0.80;
+                p["B->D::b_0^1@BCL2008"]  = +0.40;
+                p["B->D::b_0^2@BCL2008"]  = -1.20;
+                p["B->D::b_T^1@BCL2008"]  = +0.00;
+                p["B->D::b_T^2@BCL2008"]  = +0.00;
+                p["mass::B_d"]            = 5.279;
+                p["mass::D_d"]            = 1.870;
                 // by default, all other couplings are zero in eos
-                p["CKM::abs(V_cb)"]      =  0.041996951916414726;
-                p["cbmunumu::Re{cVL}"]   =  1.0066;  // include Sirlin correction
-                p["cbtaunutau::Re{cVL}"] =  1.0066;  // include Sirlin correction
+                p["CKM::abs(V_cb)"]       = 0.041996951916414726;
+                p["cbmunumu::Re{cVL}"]    = 1.0066; // include Sirlin correction
+                p["cbtaunutau::Re{cVL}"]  = 1.0066; // include Sirlin correction
 
-                Options oo
-                {
-                    { "model"_ok,        "WET"_ov        },
-                    { "form-factors"_ok, "BCL2008"_ov    },
-                    { "P"_ok,            "D"_ov          },
-                    { "q"_ok,            "d"_ov          },
-                    { "l"_ok,            "mu"_ov         }
+                Options oo{
+                    {        "model"_ok,     "WET"_ov },
+                    { "form-factors"_ok, "BCL2008"_ov },
+                    {            "P"_ok,       "D"_ov },
+                    {            "q"_ok,       "d"_ov },
+                    {            "l"_ok,      "mu"_ov }
                 };
 
 
@@ -186,13 +186,13 @@ class BToDLeptonNeutrinoTest :
                 {
                     BToPseudoscalarLeptonNeutrino d(p, oo);
 
-                    TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62),    13.1988,      eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62),                 -0.014345031, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.014345031, eps);
 
                     oo.declare("l"_ok, "tau"_ov);
                     auto k_tau = Kinematics{
-                        { "q2_min",  3.15702  },
-                        { "q2_max", 11.62     }
+                        { "q2_min", 3.15702 },
+                        { "q2_max",   11.62 }
                     };
                     auto obs_BRtau = Observable::make("B->Dlnu::BR", p, k_tau, oo);
                     TEST_CHECK(obs_BRtau.get() != nullptr);
@@ -200,25 +200,24 @@ class BToDLeptonNeutrinoTest :
 
                     oo.declare("l"_ok, "mu"_ov);
                     auto k_mu = Kinematics{
-                        { "q2_min",   0.011164 },
-                        { "q2_max",  11.62     },
+                        { "q2_min", 0.011164 },
+                        { "q2_max",    11.62 },
                     };
                     auto obs_BRmu = Observable::make("B->Dlnu::BR", p, k_mu, oo);
                     TEST_CHECK(obs_BRmu.get() != nullptr);
                     TEST_CHECK_RELATIVE_ERROR(obs_BRmu->evaluate(), 0.0232794, eps);
 
-                    oo =
-                    {
-                        { "model"_ok,        "WET"_ov        },
-                        { "form-factors"_ok, "BCL2008"_ov    },
-                        { "P"_ok,            "D"_ov          },
-                        { "q"_ok,            "d"_ov          }
+                    oo = {
+                        {        "model"_ok,     "WET"_ov },
+                        { "form-factors"_ok, "BCL2008"_ov },
+                        {            "P"_ok,       "D"_ov },
+                        {            "q"_ok,       "d"_ov }
                     };
                     auto k = Kinematics{
-                        { "q2_mu_min",   0.011164 },
-                        { "q2_mu_max",  11.62     },
-                        { "q2_tau_min",  3.15702  },
-                        { "q2_tau_max", 11.62     }
+                        {  "q2_mu_min", 0.011164 },
+                        {  "q2_mu_max",    11.62 },
+                        { "q2_tau_min",  3.15702 },
+                        { "q2_tau_max",    11.62 }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
                     TEST_CHECK(obs_RD.get() != nullptr);
@@ -230,54 +229,53 @@ class BToDLeptonNeutrinoTest :
             {
                 const double etaEW = 1.0066;
 
-                Parameters p = Parameters::Defaults();
-                p["B->D::f_+(0)@BCL2008"]  = +0.660;
-                p["B->D::f_T(0)@BCL2008"]  = +1.00;
-                p["B->D::b_+^1@BCL2008"]   = -4.00;
-                p["B->D::b_+^2@BCL2008"]   = -0.800;
-                p["B->D::b_0^1@BCL2008"]   = +0.400;
-                p["B->D::b_0^2@BCL2008"]   = -1.20;
-                p["B->D::b_T^1@BCL2008"]   = +3.00;
-                p["B->D::b_T^2@BCL2008"]   = -0.60;
-                p["mass::B_d"]             =  5.279;
-                p["mass::D_d"]             =  1.870;
+                Parameters p              = Parameters::Defaults();
+                p["B->D::f_+(0)@BCL2008"] = +0.660;
+                p["B->D::f_T(0)@BCL2008"] = +1.00;
+                p["B->D::b_+^1@BCL2008"]  = -4.00;
+                p["B->D::b_+^2@BCL2008"]  = -0.800;
+                p["B->D::b_0^1@BCL2008"]  = +0.400;
+                p["B->D::b_0^2@BCL2008"]  = -1.20;
+                p["B->D::b_T^1@BCL2008"]  = +3.00;
+                p["B->D::b_T^2@BCL2008"]  = -0.60;
+                p["mass::B_d"]            = 5.279;
+                p["mass::D_d"]            = 1.870;
                 // fix the scale
-                p["cbmunumu::mu"]          =  4.18;
-                p["cbtaunutau::mu"]        =  4.18;
-                p["mass::b(MSbar)"]        =  4.18;
-                p["mass::c"]               =  1.275;
+                p["cbmunumu::mu"]         = 4.18;
+                p["cbtaunutau::mu"]       = 4.18;
+                p["mass::b(MSbar)"]       = 4.18;
+                p["mass::c"]              = 1.275;
                 // CKM
-                p["CKM::abs(V_cb)"]        =  0.041996951916414726;
+                p["CKM::abs(V_cb)"]       = 0.041996951916414726;
                 // mu mode
-                p["cbmunumu::Re{cVL}"]         = +1.0 * etaEW;
-                p["cbmunumu::Im{cVL}"]         = -2.0 * etaEW;
-                p["cbmunumu::Re{cVR}"]         = +2.0 * etaEW;
-                p["cbmunumu::Im{cVR}"]         = -2.0 * etaEW;
-                p["cbmunumu::Re{cSL}"]         = +3.0 * etaEW;
-                p["cbmunumu::Im{cSL}"]         = -3.0 * etaEW;
-                p["cbmunumu::Re{cSR}"]         = +4.0 * etaEW;
-                p["cbmunumu::Im{cSR}"]         = -4.0 * etaEW;
-                p["cbmunumu::Re{cT}"]          = +5.0 * etaEW;
-                p["cbmunumu::Im{cT}"]          = -5.0 * etaEW;
+                p["cbmunumu::Re{cVL}"]    = +1.0 * etaEW;
+                p["cbmunumu::Im{cVL}"]    = -2.0 * etaEW;
+                p["cbmunumu::Re{cVR}"]    = +2.0 * etaEW;
+                p["cbmunumu::Im{cVR}"]    = -2.0 * etaEW;
+                p["cbmunumu::Re{cSL}"]    = +3.0 * etaEW;
+                p["cbmunumu::Im{cSL}"]    = -3.0 * etaEW;
+                p["cbmunumu::Re{cSR}"]    = +4.0 * etaEW;
+                p["cbmunumu::Im{cSR}"]    = -4.0 * etaEW;
+                p["cbmunumu::Re{cT}"]     = +5.0 * etaEW;
+                p["cbmunumu::Im{cT}"]     = -5.0 * etaEW;
                 // tau mode
-                p["cbtaunutau::Re{cVL}"]       = +1.0 * etaEW;
-                p["cbtaunutau::Im{cVL}"]       = -5.0 * etaEW;
-                p["cbtaunutau::Re{cVR}"]       = +2.1 * etaEW;
-                p["cbtaunutau::Im{cVR}"]       = -6.0 * etaEW;
-                p["cbtaunutau::Re{cSL}"]       = +3.1 * etaEW;
-                p["cbtaunutau::Im{cSL}"]       = -7.0 * etaEW;
-                p["cbtaunutau::Re{cSR}"]       = +4.1 * etaEW;
-                p["cbtaunutau::Im{cSR}"]       = -8.0 * etaEW;
-                p["cbtaunutau::Re{cT}"]        = +5.1 * etaEW;
-                p["cbtaunutau::Im{cT}"]        = -9.0 * etaEW;
+                p["cbtaunutau::Re{cVL}"]  = +1.0 * etaEW;
+                p["cbtaunutau::Im{cVL}"]  = -5.0 * etaEW;
+                p["cbtaunutau::Re{cVR}"]  = +2.1 * etaEW;
+                p["cbtaunutau::Im{cVR}"]  = -6.0 * etaEW;
+                p["cbtaunutau::Re{cSL}"]  = +3.1 * etaEW;
+                p["cbtaunutau::Im{cSL}"]  = -7.0 * etaEW;
+                p["cbtaunutau::Re{cSR}"]  = +4.1 * etaEW;
+                p["cbtaunutau::Im{cSR}"]  = -8.0 * etaEW;
+                p["cbtaunutau::Re{cT}"]   = +5.1 * etaEW;
+                p["cbtaunutau::Im{cT}"]   = -9.0 * etaEW;
 
-                Options oo
-                {
-                    { "model"_ok,        "WET"_ov        },
-                    { "form-factors"_ok, "BCL2008"_ov    },
-                    { "P"_ok,            "D"_ov          },
-                    { "q"_ok,            "d"_ov          },
-                    { "l"_ok,            "mu"_ov         }
+                Options oo{
+                    {        "model"_ok,     "WET"_ov },
+                    { "form-factors"_ok, "BCL2008"_ov },
+                    {            "P"_ok,       "D"_ov },
+                    {            "q"_ok,       "d"_ov },
+                    {            "l"_ok,      "mu"_ov }
                 };
 
                 const double eps = 1e-3;
@@ -287,18 +285,17 @@ class BToDLeptonNeutrinoTest :
                     TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 2615.77, eps);
                     TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.621944, eps);
 
-                    auto k      = Kinematics{
-                        { "q2_mu_min",   0.011164 },
-                        { "q2_mu_max",  11.62     },
-                        { "q2_tau_min",  3.15702  },
-                        { "q2_tau_max", 11.62     }
+                    auto k = Kinematics{
+                        {  "q2_mu_min", 0.011164 },
+                        {  "q2_mu_max",    11.62 },
+                        { "q2_tau_min",  3.15702 },
+                        { "q2_tau_max",    11.62 }
                     };
-                    oo =
-                    {
-                        { "model"_ok,        "WET"_ov        },
-                        { "form-factors"_ok, "BCL2008"_ov    },
-                        { "P"_ok,            "D"_ov          },
-                        { "q"_ok,            "d"_ov          }
+                    oo = {
+                        {        "model"_ok,     "WET"_ov },
+                        { "form-factors"_ok, "BCL2008"_ov },
+                        {            "P"_ok,       "D"_ov },
+                        {            "q"_ok,       "d"_ov }
                     };
                     auto obs_RD = Observable::make("B->Dlnu::R_D", p, k, oo);
 

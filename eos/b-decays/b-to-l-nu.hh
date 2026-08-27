@@ -20,8 +20,8 @@
 #ifndef EOS_GUARD_EOS_B_DECAYS_B_TO_L_NU_HH
 #define EOS_GUARD_EOS_B_DECAYS_B_TO_L_NU_HH 1
 
-#include <eos/rare-b-decays/decays.hh>
 #include <eos/maths/complex.hh>
+#include <eos/rare-b-decays/decays.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -29,9 +29,7 @@
 
 namespace eos
 {
-    class BToLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToLeptonNeutrino>
+    class BToLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<BToLeptonNeutrino>
     {
         public:
             BToLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -52,6 +50,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

@@ -17,18 +17,19 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/b-to-psd-psd-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
+
+#include <test/test.hh>
+
 #include <iostream>
 
 using namespace test;
 using namespace eos;
 using namespace std;
 
-class BToPiPiPWLeptonNeutrinoTest :
-    public TestCase
+class BToPiPiPWLeptonNeutrinoTest : public TestCase
 {
     public:
         BToPiPiPWLeptonNeutrinoTest() :
@@ -36,48 +37,48 @@ class BToPiPiPWLeptonNeutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
-                Parameters p = Parameters::Defaults();
-                p["B->pipi::chi_1p_a@HKvT2025"]  = 5.742e-4;
-                p["B->pipi::chi_1m_v@HKvT2025"]  = 5.742e-4;
-                p["pipi->pipi::Gamman0_K@HKvT2025"] =  5.78022130e-01;
-                p["B->pipi::a^F1_1_1_0_0@HKvT2025"]   = -1.66817478e-02;
-                p["B->pipi::a^F1_1_1_1_0@HKvT2025"]   = -4.85913680e-02;
-                p["B->pipi::a^F1_1_1_0_1@HKvT2025"]   =  1.12230134e-04;
-                p["B->pipi::a^f_1_1_0_0@HKvT2025"]    = -3.99693932e-02;
-                p["B->pipi::a^f_1_1_1_0@HKvT2025"]    = -1.46214509e-02;
-                p["B->pipi::a^f_1_1_0_1@HKvT2025"]    = -1.28391535e-02;
-                p["B->pipi::a^g_1_1_0_0@HKvT2025"]    =  2.39237676e-02;
-                p["B->pipi::a^g_1_1_1_0@HKvT2025"]    =  2.71707816e-02;
-                p["B->pipi::a^g_1_1_0_1@HKvT2025"]    =  2.31612080e-04;
-                p["B->pipi::a^F1_0_2_0_0@HKvT2025"]   =  6.59969573e-03;
-                p["B->pipi::a^F1_0_2_1_0@HKvT2025"]   =  1.63960580e-02;
-                p["B->pipi::a^F1_0_2_0_1@HKvT2025"]   = -1.15792204e-03;
-                p["B->pipi::a^f_0_2_0_0@HKvT2025"]    =  8.43339186e-03;
-                p["B->pipi::a^f_0_2_1_0@HKvT2025"]    =  8.56825464e-03;
-                p["B->pipi::a^f_0_2_0_1@HKvT2025"]    = -3.41325494e-03;
-                p["B->pipi::a^g_0_2_0_0@HKvT2025"]    =  3.33162140e-02;
-                p["B->pipi::a^g_0_2_1_0@HKvT2025"]    =  4.38104301e-02;
-                p["B->pipi::a^g_0_2_0_1@HKvT2025"]    = -3.15353047e-03;
-                p["B->pipi::a^F1_0_0_0_0@HKvT2025"]   = -6.13947145e-03;
-                p["B->pipi::a^F1_0_0_1_0@HKvT2025"]   = -1.69777024e-02;
-                p["B->pipi::a^F1_0_0_0_1@HKvT2025"]   = -1.63231083e-02;
+                Parameters p                        = Parameters::Defaults();
+                p["B->pipi::chi_1p_a@HKvT2025"]     = 5.742e-4;
+                p["B->pipi::chi_1m_v@HKvT2025"]     = 5.742e-4;
+                p["pipi->pipi::Gamman0_K@HKvT2025"] = 5.78022130e-01;
+                p["B->pipi::a^F1_1_1_0_0@HKvT2025"] = -1.66817478e-02;
+                p["B->pipi::a^F1_1_1_1_0@HKvT2025"] = -4.85913680e-02;
+                p["B->pipi::a^F1_1_1_0_1@HKvT2025"] = 1.12230134e-04;
+                p["B->pipi::a^f_1_1_0_0@HKvT2025"]  = -3.99693932e-02;
+                p["B->pipi::a^f_1_1_1_0@HKvT2025"]  = -1.46214509e-02;
+                p["B->pipi::a^f_1_1_0_1@HKvT2025"]  = -1.28391535e-02;
+                p["B->pipi::a^g_1_1_0_0@HKvT2025"]  = 2.39237676e-02;
+                p["B->pipi::a^g_1_1_1_0@HKvT2025"]  = 2.71707816e-02;
+                p["B->pipi::a^g_1_1_0_1@HKvT2025"]  = 2.31612080e-04;
+                p["B->pipi::a^F1_0_2_0_0@HKvT2025"] = 6.59969573e-03;
+                p["B->pipi::a^F1_0_2_1_0@HKvT2025"] = 1.63960580e-02;
+                p["B->pipi::a^F1_0_2_0_1@HKvT2025"] = -1.15792204e-03;
+                p["B->pipi::a^f_0_2_0_0@HKvT2025"]  = 8.43339186e-03;
+                p["B->pipi::a^f_0_2_1_0@HKvT2025"]  = 8.56825464e-03;
+                p["B->pipi::a^f_0_2_0_1@HKvT2025"]  = -3.41325494e-03;
+                p["B->pipi::a^g_0_2_0_0@HKvT2025"]  = 3.33162140e-02;
+                p["B->pipi::a^g_0_2_1_0@HKvT2025"]  = 4.38104301e-02;
+                p["B->pipi::a^g_0_2_0_1@HKvT2025"]  = -3.15353047e-03;
+                p["B->pipi::a^F1_0_0_0_0@HKvT2025"] = -6.13947145e-03;
+                p["B->pipi::a^F1_0_0_1_0@HKvT2025"] = -1.69777024e-02;
+                p["B->pipi::a^F1_0_0_0_1@HKvT2025"] = -1.63231083e-02;
 
-                Options oo
-                {
-                    { "model"_ok,        "CKM"_ov },
-                    { "form-factors"_ok, "HKvT2025"_ov },
+                Options oo{
+                    {                 "model"_ok,      "CKM"_ov },
+                    {          "form-factors"_ok, "HKvT2025"_ov },
                     { "scattering-amplitudes"_ok, "HKvT2025"_ov },
-                    { "integration-points"_ok, "4096"_ov },
-                    { "U"_ok,            "u"_ov       },
-                    { "q"_ok,            "u"_ov       },
-                    { "l"_ok,            "e"_ov       },
-                    { "I1"_ok,           "1"_ov       },
-                    { "I2"_ok,           "1"_ov       },
-                    { "C"_ok,           "+-"_ov       },
-                    { "I"_ok,           "0|1"_ov      }
+                    {    "integration-points"_ok,     "4096"_ov },
+                    {                     "U"_ok,        "u"_ov },
+                    {                     "q"_ok,        "u"_ov },
+                    {                     "l"_ok,        "e"_ov },
+                    {                    "I1"_ok,        "1"_ov },
+                    {                    "I2"_ok,        "1"_ov },
+                    {                     "C"_ok,       "+-"_ov },
+                    {                     "I"_ok,      "0|1"_ov }
                 };
 
                 oo.declare("L"_ok, "S"_ov);
@@ -87,13 +88,12 @@ class BToPiPiPWLeptonNeutrinoTest :
                 oo.declare("L"_ok, "D"_ov);
                 BToPPLeptonNeutrino testD(p, oo);
 
-                TEST_CHECK_NEARLY_EQUAL(testS.fully_integrated_branching_ratio(),    1.59995e-05, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(testS.fully_integrated_branching_ratio(), 1.59995e-05, 1e-8);
                 TEST_CHECK_NEARLY_EQUAL(testS.q2_integrated_branching_ratio(0.27914, 1.02), 3.97362e-06, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(testP.fully_integrated_branching_ratio(),    2.18146e-04, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(testP.fully_integrated_branching_ratio(), 2.18146e-04, 1e-8);
                 TEST_CHECK_NEARLY_EQUAL(testP.q2_integrated_branching_ratio(0.27914, 1.02), 1.84595e-04, 1e-8);
-                TEST_CHECK_NEARLY_EQUAL(testD.fully_integrated_branching_ratio(),    2.53129e-05, 1e-8);
+                TEST_CHECK_NEARLY_EQUAL(testD.fully_integrated_branching_ratio(), 2.53129e-05, 1e-8);
                 TEST_CHECK_NEARLY_EQUAL(testD.q2_integrated_branching_ratio(0.27914, 1.02), 1.49765e-06, 1e-8);
-
             }
         }
 } b_to_pi_pi_pw_l_nu_test;

@@ -35,111 +35,108 @@ namespace eos
     /*
      * Decay: B_q -> l nubar, cf. [DBG:2013A]
      */
-    template <>
-    struct Implementation<BToLeptonNeutrino>
+    template <> struct Implementation<BToLeptonNeutrino>
     {
-        SpecifiedOption opt_model;
+            SpecifiedOption opt_model;
 
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        QuarkFlavorOption opt_q;
+            QuarkFlavorOption opt_q;
 
-        UsedParameter hbar;
+            UsedParameter hbar;
 
-        UsedParameter g_fermi;
+            UsedParameter g_fermi;
 
-        UsedParameter m_B;
+            UsedParameter m_B;
 
-        UsedParameter f_B;
+            UsedParameter f_B;
 
-        UsedParameter tau_B;
+            UsedParameter tau_B;
 
-        LeptonFlavorOption opt_l;
+            LeptonFlavorOption opt_l;
 
-        UsedParameter m_l;
+            UsedParameter m_l;
 
-        BooleanOption opt_cp_conjugate;
+            BooleanOption opt_cp_conjugate;
 
-        UsedParameter mu;
+            UsedParameter mu;
 
-        std::function<double (const double &)> m_U_msbar;
-        std::function<complex<double> ()> v_Ub;
-        std::function<WilsonCoefficients<ChargedCurrent> (LeptonFlavor)> wc;
+            std::function<double(const double &)>                           m_U_msbar;
+            std::function<complex<double>()>                                v_Ub;
+            std::function<WilsonCoefficients<ChargedCurrent>(LeptonFlavor)> wc;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            opt_model(o, options, "model"_ok),
-            model(Model::make(opt_model.value(), p, o)),
-            opt_q(o, options, "q"_ok),
-            hbar(p["QM::hbar"], u),
-            g_fermi(p["WET::G_Fermi"], u),
-            m_B(p["mass::B_" + opt_q.str()], u),
-            f_B(p["decay-constant::B_" + opt_q.str()], u),
-            tau_B(p["life_time::B_" + opt_q.str()], u),
-            opt_l(o, options, "l"_ok),
-            m_l(p["mass::" + opt_l.str()], u),
-            opt_cp_conjugate(o, options, "cp-conjugate"_ok),
-            mu(p[opt_q.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
-        {
-            Context ctx("When constructing B_q->lnu observable");
-
-            using std::placeholders::_1;
-            switch (opt_q.value())
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                opt_model(o, options, "model"_ok),
+                model(Model::make(opt_model.value(), p, o)),
+                opt_q(o, options, "q"_ok),
+                hbar(p["QM::hbar"], u),
+                g_fermi(p["WET::G_Fermi"], u),
+                m_B(p["mass::B_" + opt_q.str()], u),
+                f_B(p["decay-constant::B_" + opt_q.str()], u),
+                tau_B(p["life_time::B_" + opt_q.str()], u),
+                opt_l(o, options, "l"_ok),
+                m_l(p["mass::" + opt_l.str()], u),
+                opt_cp_conjugate(o, options, "cp-conjugate"_ok),
+                mu(p[opt_q.str() + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u)
             {
-                case QuarkFlavor::up:
-                    m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
-                    v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
-                    wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, opt_cp_conjugate.value());
-                    break;
-                case QuarkFlavor::charm:
-                    m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
-                    v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
-                    wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, opt_cp_conjugate.value());
-                    break;
-                default:
-                    throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
+                Context ctx("When constructing B_q->lnu observable");
+
+                using std::placeholders::_1;
+                switch (opt_q.value())
+                {
+                    case QuarkFlavor::up:
+                        m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_u_msbar, model.get(), _1);
+                        v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_ub, model.get());
+                        wc        = std::bind(&ModelComponent<components::WET::UBLNu>::wet_ublnu, model.get(), _1, opt_cp_conjugate.value());
+                        break;
+                    case QuarkFlavor::charm:
+                        m_U_msbar = std::bind(&ModelComponent<components::QCD>::m_c_msbar, model.get(), _1);
+                        v_Ub      = std::bind(&ModelComponent<components::CKM>::ckm_cb, model.get());
+                        wc        = std::bind(&ModelComponent<components::WET::CBLNu>::wet_cblnu, model.get(), _1, opt_cp_conjugate.value());
+                        break;
+                    default: throw InternalError("Invalid quark flavor: " + stringify(opt_q.value()));
+                }
+                u.uses(*model);
             }
-            u.uses(*model);
-        }
 
-        inline double beta_l() const
-        {
-            return (1.0 - power_of<2>(m_l() / m_B()));
-        }
+            inline double
+            beta_l() const
+            {
+                return (1.0 - power_of<2>(m_l() / m_B()));
+            }
 
-        double decay_width() const
-        {
-            const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value());
+            double
+            decay_width() const
+            {
+                const WilsonCoefficients<ChargedCurrent> wc = this->wc(opt_l.value());
 
-            // cf. [DBG:2013A], eq. (5), p. 5
-            const complex<double> ga = wc.cvl() - wc.cvr();
-            const complex<double> gp = wc.csl() - wc.csr();
+                // cf. [DBG:2013A], eq. (5), p. 5
+                const complex<double> ga = wc.cvl() - wc.cvr();
+                const complex<double> gp = wc.csl() - wc.csr();
 
-            // masses
-            const double m_B = this-> m_B(), m_B2 = m_B * m_B;
-            const double m_l = this->m_l();
-            const double mbatmu = model->m_b_msbar(mu);
-            const double mUatmu = this->m_U_msbar(mu);
+                // masses
+                const double m_B = this->m_B(), m_B2 = m_B * m_B;
+                const double m_l    = this->m_l();
+                const double mbatmu = model->m_b_msbar(mu);
+                const double mUatmu = this->m_U_msbar(mu);
 
-            return power_of<2>(g_fermi * std::abs(this->v_Ub()) * f_B * beta_l())
-                * m_B / (8.0 * M_PI)
-                * norm(ga * m_l - gp * m_B2 / (mbatmu + mUatmu));
-        }
+                return power_of<2>(g_fermi * std::abs(this->v_Ub()) * f_B * beta_l()) * m_B / (8.0 * M_PI) * norm(ga * m_l - gp * m_B2 / (mbatmu + mUatmu));
+            }
 
-        double branching_ratio() const
-        {
-            return decay_width() * tau_B / hbar;
-        }
+            double
+            branching_ratio() const
+            {
+                return decay_width() * tau_B / hbar;
+            }
     };
 
-    const std::vector<OptionSpecification>
-    Implementation<BToLeptonNeutrino>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BToLeptonNeutrino>::options{
         Model::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },   "false"_ov },
-        { "l"_ok,            { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov    },
-        { "q"_ok,            { "c"_ov, "u"_ov },          "c"_ov     }
+        { "cp-conjugate"_ok,     { "true"_ov, "false"_ov }, "false"_ov },
+        {            "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov },    "mu"_ov },
+        {            "q"_ok,            { "c"_ov, "u"_ov },     "c"_ov }
     };
 
     BToLeptonNeutrino::BToLeptonNeutrino(const Parameters & parameters, const Options & options) :
@@ -147,9 +144,7 @@ namespace eos
     {
     }
 
-    BToLeptonNeutrino::~BToLeptonNeutrino()
-    {
-    }
+    BToLeptonNeutrino::~BToLeptonNeutrino() {}
 
     double
     BToLeptonNeutrino::branching_ratio() const
@@ -163,11 +158,7 @@ namespace eos
         return _imp->decay_width();
     }
 
-    const std::set<ReferenceName>
-    BToLeptonNeutrino::references
-    {
-        "DBG:2013A"_rn
-    };
+    const std::set<ReferenceName> BToLeptonNeutrino::references{ "DBG:2013A"_rn };
 
     std::vector<OptionSpecification>::const_iterator
     BToLeptonNeutrino::begin_options()
@@ -180,4 +171,4 @@ namespace eos
     {
         return Implementation<BToLeptonNeutrino>::options.cend();
     }
-}
+} // namespace eos

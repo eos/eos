@@ -31,9 +31,7 @@ namespace eos
     /*
      * Decay: Lambda_b -> Lambda_c(2625) l nu
      */
-    class LambdaBToLambdaC2625LeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaBToLambdaC2625LeptonNeutrino>
+    class LambdaBToLambdaC2625LeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<LambdaBToLambdaC2625LeptonNeutrino>
     {
         public:
             LambdaBToLambdaC2625LeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -75,6 +73,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

@@ -17,15 +17,15 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/b-decays/properties.hh>
+#include <eos/observable.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class BMesonPropertiesTest :
-    public TestCase
+class BMesonPropertiesTest : public TestCase
 {
     public:
         BMesonPropertiesTest() :
@@ -33,10 +33,11 @@ class BMesonPropertiesTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
-            Parameters p = Parameters::Defaults();
-            p["mass::b(MSbar)"] = 4.19;
+            Parameters p           = Parameters::Defaults();
+            p["mass::b(MSbar)"]    = 4.19;
             p["B->B::mu_G^2@1GeV"] = 0.35;
 
             Options oo;

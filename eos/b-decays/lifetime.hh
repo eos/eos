@@ -29,9 +29,7 @@
 
 namespace eos
 {
-    class Lifetime :
-        public ParameterUser,
-        public PrivateImplementationPattern<Lifetime>
+    class Lifetime : public ParameterUser, public PrivateImplementationPattern<Lifetime>
     {
         public:
             Lifetime(const Parameters & parameters, const Options & options);
@@ -58,6 +56,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

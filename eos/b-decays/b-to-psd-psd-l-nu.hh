@@ -30,9 +30,7 @@ namespace eos
     /*
      * Decay: B -> P P' l nu
      */
-    class BToPPLeptonNeutrino :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToPPLeptonNeutrino>
+    class BToPPLeptonNeutrino : public ParameterUser, public PrivateImplementationPattern<BToPPLeptonNeutrino>
     {
         public:
             BToPPLeptonNeutrino(const Parameters & parameters, const Options & options);
@@ -87,6 +85,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

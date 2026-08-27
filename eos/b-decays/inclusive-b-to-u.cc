@@ -27,42 +27,38 @@
 
 namespace eos
 {
-    template <>
-    struct Implementation<BToXuLeptonNeutrino<Naive>>
+    template <> struct Implementation<BToXuLeptonNeutrino<Naive>>
     {
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        LeptonFlavorOption opt_l;
+            LeptonFlavorOption opt_l;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-            opt_l(o, options, "l"_ok)
-        {
-            Context ctx("When constructing B->X_ulnu observable");
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
+                opt_l(o, options, "l"_ok)
+            {
+                Context ctx("When constructing B->X_ulnu observable");
 
-            u.uses(*model);
-        }
+                u.uses(*model);
+            }
 
-        ~Implementation()
-        {
-        }
+            ~Implementation() {}
 
-        double v_ub() const
-        {
-            // inclusive |V_ub|^2 = |V_ub^eff|^2 (|C_V,LL|^2 + |C_V,RL|^2)
+            double
+            v_ub() const
+            {
+                // inclusive |V_ub|^2 = |V_ub^eff|^2 (|C_V,LL|^2 + |C_V,RL|^2)
 
-            double v_ub_eff_squared = std::norm(model->ckm_ub());
-            auto wc = model->wet_ublnu(opt_l.value(), false);
+                double v_ub_eff_squared = std::norm(model->ckm_ub());
+                auto   wc               = model->wet_ublnu(opt_l.value(), false);
 
-            return std::sqrt(v_ub_eff_squared * (std::norm(wc.cvl()) + std::norm(wc.cvr())));
-        }
+                return std::sqrt(v_ub_eff_squared * (std::norm(wc.cvl()) + std::norm(wc.cvr())));
+            }
     };
 
-    const std::vector<OptionSpecification>
-    Implementation<BToXuLeptonNeutrino<Naive>>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BToXuLeptonNeutrino<Naive>>::options{
         Model::option_specification(),
         { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov }
     };
@@ -72,9 +68,7 @@ namespace eos
     {
     }
 
-    BToXuLeptonNeutrino<Naive>::~BToXuLeptonNeutrino()
-    {
-    }
+    BToXuLeptonNeutrino<Naive>::~BToXuLeptonNeutrino() {}
 
     double
     BToXuLeptonNeutrino<Naive>::v_ub() const
@@ -82,10 +76,7 @@ namespace eos
         return _imp->v_ub();
     }
 
-    const std::set<ReferenceName>
-    BToXuLeptonNeutrino<Naive>::references
-    {
-    };
+    const std::set<ReferenceName> BToXuLeptonNeutrino<Naive>::references{};
 
     std::vector<OptionSpecification>::const_iterator
     BToXuLeptonNeutrino<Naive>::begin_options()
@@ -98,4 +89,4 @@ namespace eos
     {
         return Implementation<BToXuLeptonNeutrino<Naive>>::options.cend();
     }
-}
+} // namespace eos
