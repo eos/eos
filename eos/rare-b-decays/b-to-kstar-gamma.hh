@@ -32,9 +32,7 @@ namespace eos
     /*!
      * Calculates observables in B->K^*gamma decays
      */
-    class BToKstarGamma :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToKstarGamma>
+    class BToKstarGamma : public ParameterUser, public PrivateImplementationPattern<BToKstarGamma>
     {
         public:
             BToKstarGamma(const Parameters & parameters, const Options & options);
@@ -80,9 +78,9 @@ namespace eos
      */
     struct BToKstarGamma::Amplitudes
     {
-        complex<double> a_perp;
-        complex<double> a_para;
+            complex<double> a_perp;
+            complex<double> a_para;
     };
-}
+} // namespace eos
 
 #endif

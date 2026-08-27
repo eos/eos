@@ -27,13 +27,12 @@
 
 namespace eos
 {
-    class LambdaBToLambda1520Dilepton::AmplitudeGenerator :
-        public ParameterUser
+    class LambdaBToLambda1520Dilepton::AmplitudeGenerator : public ParameterUser
     {
         public:
-            std::shared_ptr<Model> model;
+            std::shared_ptr<Model>                                    model;
             std::shared_ptr<FormFactors<OneHalfPlusToThreeHalfMinus>> form_factors;
-            LeptonFlavorOption opt_l;
+            LeptonFlavorOption                                        opt_l;
 
             UsedParameter mu;
             UsedParameter alpha_e;
@@ -45,8 +44,8 @@ namespace eos
             UsedParameter m_Lstar;
 
             BooleanOption opt_cp_conjugate;
-            bool cp_conjugate;
-            LeptonFlavor lepton_flavor;
+            bool          cp_conjugate;
+            LeptonFlavor  lepton_flavor;
 
             static const std::vector<OptionSpecification> options;
 
@@ -67,7 +66,7 @@ namespace eos
          * Naive approache with neglected lepton masses and only LO factorizable corrections.
          */
         struct Naive;
-    }
-}
+    } // namespace tag
+} // namespace eos
 
 #endif

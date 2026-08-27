@@ -25,9 +25,7 @@
 
 namespace eos
 {
-    template <>
-    class BsToPhiDileptonAmplitudes<tag::BFS2004> :
-        public BsToPhiDilepton::AmplitudeGenerator
+    template <> class BsToPhiDileptonAmplitudes<tag::BFS2004> : public BsToPhiDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter m_b_MSbar;
@@ -58,15 +56,15 @@ namespace eos
 
             static const std::vector<OptionSpecification> options;
 
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &)> qcdf_dilepton_massless_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &, const double &)> qcdf_dilepton_charm_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &, const double &)> qcdf_dilepton_bottom_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &)>
+                    qcdf_dilepton_massless_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &, const double &)>
+                    qcdf_dilepton_charm_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &, const double &)>
+                    qcdf_dilepton_bottom_case;
 
             std::string ff_relation;
 
@@ -75,30 +73,36 @@ namespace eos
 
             virtual BsToPhiDilepton::Amplitudes amplitudes(const double & q2) const;
 
-            double m_b_PS() const;
-            double mu_f() const;
+            double                             m_b_PS() const;
+            double                             mu_f() const;
             BsToPhiDilepton::DipoleFormFactors dipole_form_factors(const double & q2, const WilsonCoefficients<BToS> & wc) const;
-            double norm(const double & q2) const;
-            double xi_perp(const double & q2) const;
-            double xi_par(const double & q2) const;
+            double                             norm(const double & q2) const;
+            double                             xi_perp(const double & q2) const;
+            double                             xi_par(const double & q2) const;
 
             virtual double real_C9_perp(const double & q2) const;
             virtual double real_C9_para(const double & q2) const;
             virtual double imag_C9_perp(const double & q2) const;
             virtual double imag_C9_para(const double & q2) const;
-            virtual double H_perp_corrections(const double &) const
+
+            virtual double
+            H_perp_corrections(const double &) const
             {
                 return 0.0;
-            };
-            virtual double H_para_corrections(const double &) const
+            }
+
+            virtual double
+            H_para_corrections(const double &) const
             {
                 return 0.0;
-            };
-            virtual double H_long_corrections(const double &) const
+            }
+
+            virtual double
+            H_long_corrections(const double &) const
             {
                 return 0.0;
-            };
+            }
     };
-}
+} // namespace eos
 
 #endif

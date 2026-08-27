@@ -25,31 +25,26 @@ namespace eos
 {
     struct LambdaBToLambdaDineutrino::AngularCoefficients
     {
-        double K1ss, K1cc;
+            double K1ss, K1cc;
 
-        AngularCoefficients()
-        {
-        }
+            AngularCoefficients() {}
 
-        AngularCoefficients(const std::array<double, 2> & a) :
-            K1ss(a[0]),
-            K1cc(a[1])
-        {
-        }
+            AngularCoefficients(const std::array<double, 2> & a) :
+                K1ss(a[0]),
+                K1cc(a[1])
+            {
+            }
     };
 
-    class LambdaBToLambdaDineutrino::IntermediateResult :
-        public CacheableObservable::IntermediateResult
+    class LambdaBToLambdaDineutrino::IntermediateResult : public CacheableObservable::IntermediateResult
     {
         public:
             LambdaBToLambdaDineutrino::AngularCoefficients ac;
 
-            IntermediateResult()
-            {
-            }
+            IntermediateResult() {}
 
             ~IntermediateResult() = default;
     };
-}
+} // namespace eos
 
 #endif

@@ -52,17 +52,13 @@ namespace eos
         this->uses(*model);
     }
 
-    BToKstarDilepton::AmplitudeGenerator::~AmplitudeGenerator()
-    {
-    }
+    BToKstarDilepton::AmplitudeGenerator::~AmplitudeGenerator() {}
 
-    const std::vector<OptionSpecification>
-    BToKstarDilepton::AmplitudeGenerator::options
-    {
+    const std::vector<OptionSpecification> BToKstarDilepton::AmplitudeGenerator::options{
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
-        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "cp-conjugate"_ok,     { "true"_ov, "false"_ov }, "false"_ov },
+        {            "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov },    "mu"_ov },
     };
 
     double
@@ -89,4 +85,4 @@ namespace eos
         return q2 / m_B() / m_B();
     }
 
-}
+} // namespace eos

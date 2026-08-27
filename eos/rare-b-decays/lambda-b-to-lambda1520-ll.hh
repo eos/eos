@@ -20,10 +20,9 @@
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA1520_LL_HH
 #define EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA1520_LL_HH 1
 
-#include <eos/observable.hh>
-
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/observable.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -36,9 +35,7 @@ namespace eos
     /*
      * Decay: Lb -> L(1520) l lbar.
      */
-    class LambdaBToLambda1520Dilepton :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaBToLambda1520Dilepton>
+    class LambdaBToLambda1520Dilepton : public ParameterUser, public PrivateImplementationPattern<LambdaBToLambda1520Dilepton>
     {
         public:
             LambdaBToLambda1520Dilepton(const Parameters & parameters, const Options & options);
@@ -155,46 +152,40 @@ namespace eos
      */
     struct LambdaBToLambda1520Dilepton::Amplitudes
     {
-        complex<double> b_perp1_right, b_perp1_left;
-        complex<double> b_para1_right, b_para1_left;
-        complex<double> a_perp1_right, a_perp1_left;
-        complex<double> a_para1_right, a_para1_left;
-        complex<double> a_perp0_right, a_perp0_left;
-        complex<double> a_para0_right, a_para0_left;
-        complex<double> a_perpS_right, a_perpS_left;
-        complex<double> a_paraS_right, a_paraS_left;
-        complex<double> a_perpt_right, a_perpt_left;
-        complex<double> a_parat_right, a_parat_left;
+            complex<double> b_perp1_right, b_perp1_left;
+            complex<double> b_para1_right, b_para1_left;
+            complex<double> a_perp1_right, a_perp1_left;
+            complex<double> a_para1_right, a_para1_left;
+            complex<double> a_perp0_right, a_perp0_left;
+            complex<double> a_para0_right, a_para0_left;
+            complex<double> a_perpS_right, a_perpS_left;
+            complex<double> a_paraS_right, a_paraS_left;
+            complex<double> a_perpt_right, a_perpt_left;
+            complex<double> a_parat_right, a_parat_left;
     };
 
     struct LambdaBToLambda1520Dilepton::AngularCoefficients
     {
-        double L1c, L1cc, L1ss,
-            L2c, L2cc, L2ss,
-            L3ss, L4ss,
-            L5s, L5sc,
-            L6s, L6sc;
+            double L1c, L1cc, L1ss, L2c, L2cc, L2ss, L3ss, L4ss, L5s, L5sc, L6s, L6sc;
 
-        AngularCoefficients()
-        {
-        }
+            AngularCoefficients() {}
 
-        AngularCoefficients(const std::array<double, 12> & a) :
-            L1c(a[0]),
-            L1cc(a[1]),
-            L1ss(a[2]),
-            L2c(a[3]),
-            L2cc(a[4]),
-            L2ss(a[5]),
-            L3ss(a[6]),
-            L4ss(a[7]),
-            L5s(a[8]),
-            L5sc(a[9]),
-            L6s(a[10]),
-            L6sc(a[11])
-        {
-        }
+            AngularCoefficients(const std::array<double, 12> & a) :
+                L1c(a[0]),
+                L1cc(a[1]),
+                L1ss(a[2]),
+                L2c(a[3]),
+                L2cc(a[4]),
+                L2ss(a[5]),
+                L3ss(a[6]),
+                L4ss(a[7]),
+                L5s(a[8]),
+                L5sc(a[9]),
+                L6s(a[10]),
+                L6sc(a[11])
+            {
+            }
     };
-}
+} // namespace eos
 
 #endif

@@ -8,9 +8,7 @@
 
 namespace eos
 {
-    template <>
-    class BToKstarGammaAmplitudes<tag::BFS2004> :
-        public BToKstarGamma::AmplitudeGenerator
+    template <> class BToKstarGammaAmplitudes<tag::BFS2004> : public BToKstarGamma::AmplitudeGenerator
     {
         public:
             UsedParameter hbar;
@@ -35,15 +33,14 @@ namespace eos
 
             UsedParameter mu;
 
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &)> qcdf_photon_massless_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &)> qcdf_photon_charm_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &)> qcdf_photon_bottom_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &)>
+                    qcdf_photon_massless_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &)>
+                    qcdf_photon_charm_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &)>
+                    qcdf_photon_bottom_case;
 
             BToKstarGammaAmplitudes(const Parameters & p, const Options & o);
             ~BToKstarGammaAmplitudes() = default;
@@ -54,6 +51,6 @@ namespace eos
             double mu_f() const;
             double m_b_PS() const;
     };
-}
+} // namespace eos
 
 #endif

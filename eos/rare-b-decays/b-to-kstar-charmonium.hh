@@ -33,9 +33,7 @@ namespace eos
      * Decay: B -> K^* psi
      * with psi a narrow charmonium: psi = { J/psi, psi(2S) }
      */
-    class BToKstarCharmonium :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToKstarCharmonium>
+    class BToKstarCharmonium : public ParameterUser, public PrivateImplementationPattern<BToKstarCharmonium>
     {
         public:
             ///@name Basic operations.
@@ -82,6 +80,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

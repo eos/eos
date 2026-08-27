@@ -28,12 +28,14 @@ namespace eos
     namespace impl
     {
         /* simple inverse moments of the twist-2 LCDAs */
-        inline double moment_inverse_ubar(const double & a_1, const double & a_2)
+        inline double
+        moment_inverse_ubar(const double & a_1, const double & a_2)
         {
             return 3.0 * (1.0 + a_1 + a_2);
         }
 
-        inline double moment_inverse_ubar2(const double & a1, const double & a2, const double & x)
+        inline double
+        moment_inverse_ubar2(const double & a1, const double & a2, const double & x)
         {
             return -6.0 * ((1.0 + 3.0 * a1 + 6.0 * a2) * (x + std::log(1.0 - x)) + x * x * (3.0 * a1 + 4.0 * a2 * x));
         }
@@ -41,24 +43,26 @@ namespace eos
         /* s > 0, cases for B->V(P)l^+l^- */
 
         // cf. [vD:2011A], Eq. (26), p. 3
-        inline double j0(const double & sh, const double & a1, const double & a2)
+        inline double
+        j0(const double & sh, const double & a1, const double & a2)
         {
             double lnsh = std::log(sh), sh2 = sh * sh, sh3 = sh2 * sh, sh4 = sh2 * sh2;
 
             // asymptotic part
             double asymp = 3.0 * (1.0 + 2.0 * sh * lnsh - sh2) / power_of<3>(1.0 - sh);
-            double gb1 = 3.0 * (1.0 + 9.0 * sh - 9.0 * sh2 - sh3 + 6.0 * sh * (1.0 + sh) * lnsh) / power_of<4>(1.0 - sh);
-            double gb2 = 3.0 * (1.0 + 28.0 * sh - 28.0 * sh3 - sh4 + 12.0 * sh * (1.0 + 3.0 * sh + sh2) * lnsh) / power_of<5>(1.0 - sh);
+            double gb1   = 3.0 * (1.0 + 9.0 * sh - 9.0 * sh2 - sh3 + 6.0 * sh * (1.0 + sh) * lnsh) / power_of<4>(1.0 - sh);
+            double gb2   = 3.0 * (1.0 + 28.0 * sh - 28.0 * sh3 - sh4 + 12.0 * sh * (1.0 + 3.0 * sh + sh2) * lnsh) / power_of<5>(1.0 - sh);
 
             return asymp + a1 * gb1 + a2 * gb2;
         }
 
-        inline double j0bar(const double & sh, const double & a1, const double & a2)
+        inline double
+        j0bar(const double & sh, const double & a1, const double & a2)
         {
             return j0(sh, -a1, a2);
         }
-    }
+    } // namespace impl
 
-}
+} // namespace eos
 
 #endif

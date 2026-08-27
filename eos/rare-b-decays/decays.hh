@@ -25,8 +25,11 @@ namespace eos
     /*
      * Phase space tags
      */
-    struct LargeRecoil { };
-    struct LowRecoil { };
+    struct LargeRecoil
+    {};
+
+    struct LowRecoil
+    {};
 
     /*
      * B_s Decays
@@ -50,9 +53,9 @@ namespace eos
 
     enum Helicity
     {
-        left_handed = -1,
+        left_handed  = -1,
         right_handed = +1
     };
-}
+} // namespace eos
 
 #endif

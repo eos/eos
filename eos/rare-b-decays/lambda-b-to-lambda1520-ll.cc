@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-ll-base.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-ll-naive.hh>
@@ -30,276 +30,237 @@ namespace eos
     /*!
      * Implementation for the decay @f$\bar{\Lambda_b} \to \bar{\Lambda}(1520) \ell^+ \ell^-@f$.
      */
-    template <>
-    struct Implementation<LambdaBToLambda1520Dilepton>
+    template <> struct Implementation<LambdaBToLambda1520Dilepton>
     {
-        std::shared_ptr<LambdaBToLambda1520Dilepton::AmplitudeGenerator> amplitude_generator;
+            std::shared_ptr<LambdaBToLambda1520Dilepton::AmplitudeGenerator> amplitude_generator;
 
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        LeptonFlavorOption opt_l;
+            LeptonFlavorOption opt_l;
 
-        UsedParameter hbar;
-        UsedParameter m_l;
-        UsedParameter tau;
-        UsedParameter mu;
+            UsedParameter hbar;
+            UsedParameter m_l;
+            UsedParameter tau;
+            UsedParameter mu;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
-            opt_l(o, options, "l"_ok),
-            hbar(p["QM::hbar"], u),
-            m_l(p["mass::" + opt_l.str()], u),
-            tau(p["life_time::Lambda_b"], u),
-            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
-        {
-            Context ctx("When constructing Lb->L(1520)ll observables");
-
-            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
-
-            if ("Naive" == tag)
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
+                opt_l(o, options, "l"_ok),
+                hbar(p["QM::hbar"], u),
+                m_l(p["mass::" + opt_l.str()], u),
+                tau(p["life_time::Lambda_b"], u),
+                mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u)
             {
-                amplitude_generator.reset(new LambdaBToLambda1520DileptonAmplitudes<tag::Naive>(p, o));
+                Context ctx("When constructing Lb->L(1520)ll observables");
+
+                std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
+
+                if ("Naive" == tag)
+                {
+                    amplitude_generator.reset(new LambdaBToLambda1520DileptonAmplitudes<tag::Naive>(p, o));
+                }
+                else
+                {
+                    throw InternalError("LambdaBToLambda1520Dilepton: Unknown tag or no valid tag specified (tag = '" + tag + "')!");
+                }
+
+                u.uses(*amplitude_generator);
             }
-            else
+
+            ~Implementation() {}
+
+            inline std::array<double, 12>
+            angular_coefficients_array(const LambdaBToLambda1520Dilepton::Amplitudes & A, const double & q2) const
             {
-                throw InternalError("LambdaBToLambda1520Dilepton: Unknown tag or no valid tag specified (tag = '" + tag + "')!");
+                // cf. [DD:2020A], app. G, which agrees with [DN:2019A], eq. (4.2) for massless leptons
+                std::array<double, 12> result;
+
+                double z     = 4.0 * power_of<2>(m_l()) / q2;
+                double y     = m_l / std::sqrt(q2);
+                double beta2 = 1.0 - z;
+                double beta  = std::sqrt(beta2);
+
+                // L1c
+                result[0] = -2.0 * beta
+                            * real(A.a_perp1_left * conj(A.a_para1_left) - A.a_perp1_right * conj(A.a_para1_right)
+                                   + y
+                                             * (A.a_paraS_left * conj(A.a_para0_left) + A.a_paraS_right * conj(A.a_para0_left) + A.a_perpS_left * conj(A.a_perp0_left)
+                                                + A.a_perpS_right * conj(A.a_perp0_left) + A.a_paraS_right * conj(A.a_para0_right) + A.a_paraS_left * conj(A.a_para0_right)
+                                                + A.a_perpS_right * conj(A.a_perp0_right) + A.a_perpS_left * conj(A.a_perp0_right)));
+
+                // L1cc
+                result[1] = norm(A.a_para1_left) + norm(A.a_perp1_left) + norm(A.a_para1_right) + norm(A.a_perp1_right) + norm(A.a_paraS_left) + norm(A.a_perpS_left)
+                            + norm(A.a_paraS_right) + norm(A.a_perpS_right)
+                            + 2.0 * y
+                                      * real(-A.a_parat_right * conj(A.a_paraS_left) + A.a_paraS_left * conj(A.a_parat_left) - A.a_perpt_right * conj(A.a_perpS_left)
+                                             + A.a_perpS_left * conj(A.a_perpt_left) - A.a_parat_left * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                                             - A.a_perpt_left * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right))
+                            + 2.0 * y * y
+                                      * (norm(A.a_para0_left) - norm(A.a_para1_left) - norm(A.a_paraS_left) + norm(A.a_parat_left) + norm(A.a_perp0_left) - norm(A.a_perp1_left)
+                                         - norm(A.a_perpS_left) + norm(A.a_perpt_left) + norm(A.a_para0_right) - norm(A.a_para1_right) - norm(A.a_paraS_right)
+                                         + norm(A.a_parat_right) + norm(A.a_perp0_right) - norm(A.a_perp1_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right))
+                            + 2.0 * y * y
+                                      * real(A.a_para0_right * conj(A.a_para0_left) + A.a_para1_right * conj(A.a_para1_left) - A.a_paraS_right * conj(A.a_paraS_left)
+                                             - A.a_parat_right * conj(A.a_parat_left) + A.a_perp0_right * conj(A.a_perp0_left) + A.a_perp1_right * conj(A.a_perp1_left)
+                                             - A.a_perpS_right * conj(A.a_perpS_left) - A.a_perpt_right * conj(A.a_perpt_left) + A.a_para0_left * conj(A.a_para0_right)
+                                             + A.a_para1_left * conj(A.a_para1_right) - A.a_paraS_left * conj(A.a_paraS_right) - A.a_parat_left * conj(A.a_parat_right)
+                                             + A.a_perp0_left * conj(A.a_perp0_right) + A.a_perp1_left * conj(A.a_perp1_right) - A.a_perpS_left * conj(A.a_perpS_right)
+                                             - A.a_perpt_left * conj(A.a_perpt_right));
+
+                // L1ss
+                result[2] = 0.5
+                                    * (2.0 * norm(A.a_para0_left) + 2.0 * norm(A.a_perp0_left) + norm(A.a_para1_left) + norm(A.a_perp1_left) + 2.0 * norm(A.a_para0_right)
+                                       + 2.0 * norm(A.a_perp0_right) + norm(A.a_para1_right) + norm(A.a_perp1_right) + 2.0 * norm(A.a_paraS_left) + 2.0 * norm(A.a_perpS_left)
+                                       + 2.0 * norm(A.a_paraS_right) + 2.0 * norm(A.a_perpS_right))
+                            + 2.0 * y
+                                      * real(-A.a_parat_right * conj(A.a_paraS_left) + A.a_paraS_left * conj(A.a_parat_left) - A.a_perpt_right * conj(A.a_perpS_left)
+                                             + A.a_perpS_left * conj(A.a_perpt_left) - A.a_parat_left * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                                             - A.a_perpt_left * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right))
+                            + 2.0 * y * y
+                                      * (-norm(A.a_para0_left) - norm(A.a_paraS_left) + norm(A.a_parat_left) - norm(A.a_perp0_left) - norm(A.a_perpS_left) + norm(A.a_perpt_left)
+                                         - norm(A.a_para0_right) - norm(A.a_paraS_right) + norm(A.a_parat_right) - norm(A.a_perp0_right) - norm(A.a_perpS_right)
+                                         + norm(A.a_perpt_right))
+                            + 2.0 * y * y
+                                      * real(A.a_para0_right * conj(A.a_para0_left) + A.a_para1_right * conj(A.a_para1_left) - A.a_paraS_right * conj(A.a_paraS_left)
+                                             - A.a_parat_right * conj(A.a_parat_left) + A.a_perp0_right * conj(A.a_perp0_left) + A.a_perp1_right * conj(A.a_perp1_left)
+                                             - A.a_perpS_right * conj(A.a_perpS_left) - A.a_perpt_right * conj(A.a_perpt_left) + A.a_para0_left * conj(A.a_para0_right)
+                                             + A.a_para1_left * conj(A.a_para1_right) - A.a_paraS_left * conj(A.a_paraS_right) - A.a_parat_left * conj(A.a_parat_right)
+                                             + A.a_perp0_left * conj(A.a_perp0_right) + A.a_perp1_left * conj(A.a_perp1_right) - A.a_perpS_left * conj(A.a_perpS_right)
+                                             - A.a_perpt_left * conj(A.a_perpt_right));
+
+                // L2c
+                result[3] = -0.5 * beta
+                            * real(A.a_perp1_left * conj(A.a_para1_left) + 3.0 * A.b_perp1_left * conj(A.b_para1_left) - A.a_perp1_right * conj(A.a_para1_right)
+                                   - 3.0 * A.b_perp1_right * conj(A.b_para1_right)
+                                   + y
+                                             * (A.a_paraS_left * conj(A.a_para0_left) + A.a_paraS_right * conj(A.a_para0_left) + A.a_perpS_left * conj(A.a_perp0_left)
+                                                + A.a_perpS_right * conj(A.a_perp0_left) + A.a_paraS_right * conj(A.a_para0_right) + A.a_paraS_left * conj(A.a_para0_right)
+                                                + A.a_perpS_right * conj(A.a_perp0_right) + A.a_perpS_left * conj(A.a_perp0_right)));
+
+
+                // L2cc
+                result[4] = 0.25
+                                    * (norm(A.a_para1_left) + norm(A.a_perp1_left) + 3.0 * norm(A.b_para1_left) + 3.0 * norm(A.b_perp1_left) + norm(A.a_para1_right)
+                                       + norm(A.a_perp1_right) + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right) + norm(A.a_paraS_left) + norm(A.a_perpS_left)
+                                       + norm(A.a_paraS_right) + norm(A.a_perpS_right))
+                            + 0.5 * y
+                                      * real(-A.a_parat_right * conj(A.a_paraS_left) + A.a_paraS_left * conj(A.a_parat_left) - A.a_perpt_right * conj(A.a_perpS_left)
+                                             + A.a_perpS_left * conj(A.a_perpt_left) - A.a_parat_left * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                                             - A.a_perpt_left * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right))
+                            + 0.5 * y * y
+                                      * (norm(A.a_para0_left) - norm(A.a_para1_left) - norm(A.a_paraS_left) + norm(A.a_parat_left) + norm(A.a_perp0_left) - norm(A.a_perp1_left)
+                                         - norm(A.a_perpS_left) + norm(A.a_perpt_left) - 3.0 * norm(A.b_para1_left) - 3.0 * norm(A.b_perp1_left) + norm(A.a_para0_right)
+                                         - norm(A.a_para1_right) - norm(A.a_paraS_right) + norm(A.a_parat_right) + norm(A.a_perp0_right) - norm(A.a_perp1_right)
+                                         - norm(A.a_perpS_right) + norm(A.a_perpt_right) - 3.0 * norm(A.b_para1_right) - 3.0 * norm(A.b_perp1_right))
+                            + 0.5 * y * y
+                                      * real(A.a_para0_right * conj(A.a_para0_left) + A.a_para1_right * conj(A.a_para1_left) - A.a_paraS_right * conj(A.a_paraS_left)
+                                             - A.a_parat_right * conj(A.a_parat_left) + A.a_perp0_right * conj(A.a_perp0_left) + A.a_perp1_right * conj(A.a_perp1_left)
+                                             - A.a_perpS_right * conj(A.a_perpS_left) - A.a_perpt_right * conj(A.a_perpt_left) + 3.0 * A.b_para1_right * conj(A.b_para1_left)
+                                             + 3.0 * A.b_perp1_right * conj(A.b_perp1_left) + A.a_para0_left * conj(A.a_para0_right) + A.a_para1_left * conj(A.a_para1_right)
+                                             - A.a_paraS_left * conj(A.a_paraS_right) - A.a_parat_left * conj(A.a_parat_right) + A.a_perp0_left * conj(A.a_perp0_right)
+                                             + A.a_perp1_left * conj(A.a_perp1_right) - A.a_perpS_left * conj(A.a_perpS_right) - A.a_perpt_left * conj(A.a_perpt_right)
+                                             + 3.0 * A.b_para1_left * conj(A.b_para1_right) + 3.0 * A.b_perp1_left * conj(A.b_perp1_right));
+
+                // L2ss
+                result[5] = 0.125
+                                    * (2.0 * norm(A.a_para0_left) + norm(A.a_para1_left) + 2.0 * norm(A.a_perp0_left) + norm(A.a_perp1_left) + 2.0 * norm(A.a_paraS_left)
+                                       + 2.0 * norm(A.a_perpS_left) + 3.0 * norm(A.b_para1_left) + 3.0 * norm(A.b_perp1_left) + 2.0 * norm(A.a_para0_right) + norm(A.a_para1_right)
+                                       + 2.0 * norm(A.a_perp0_right) + norm(A.a_perp1_right) + 2.0 * norm(A.a_paraS_right) + 2.0 * norm(A.a_perpS_right)
+                                       + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right)
+                                       - 2.0 * sqrt(3.0)
+                                                 * real(A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left) + A.b_para1_right * conj(A.a_para1_right)
+                                                        - A.b_perp1_right * conj(A.a_perp1_right)))
+                            + 0.5 * y
+                                      * real(-A.a_parat_right * conj(A.a_paraS_left) + A.a_paraS_left * conj(A.a_parat_left) - A.a_perpt_right * conj(A.a_perpS_left)
+                                             + A.a_perpS_left * conj(A.a_perpt_left) - A.a_parat_left * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
+                                             - A.a_perpt_left * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right))
+                            + 0.5 * y * y
+                                      * (-norm(A.a_para0_left) - norm(A.a_paraS_left) + norm(A.a_parat_left) - norm(A.a_perp0_left) - norm(A.a_perpS_left) + norm(A.a_perpt_left)
+                                         - norm(A.a_para0_right) - norm(A.a_paraS_right) + norm(A.a_parat_right) - norm(A.a_perp0_right) - norm(A.a_perpS_right)
+                                         + norm(A.a_perpt_right))
+                            + 0.5 * y * y
+                                      * real(A.a_para0_right * conj(A.a_para0_left) + A.a_para1_right * conj(A.a_para1_left) - A.a_paraS_right * conj(A.a_paraS_left)
+                                             - A.a_parat_right * conj(A.a_parat_left) + A.a_perp0_right * conj(A.a_perp0_left) + A.a_perp1_right * conj(A.a_perp1_left)
+                                             - A.a_perpS_right * conj(A.a_perpS_left) - A.a_perpt_right * conj(A.a_perpt_left)
+                                             + 2.0 * sqrt(3.0) * (A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left))
+                                             + 3.0 * A.b_para1_right * conj(A.a_para1_left) + 3.0 * A.b_perp1_right * conj(A.a_perp1_left) + A.a_para0_left * conj(A.a_para0_right)
+                                             + A.a_para1_left * conj(A.a_para1_right) - A.a_paraS_left * conj(A.a_paraS_right) - A.a_parat_left * conj(A.a_parat_right)
+                                             + A.a_perp0_left * conj(A.a_perp0_right) + A.a_perp1_left * conj(A.a_perp1_right) - A.a_perpS_left * conj(A.a_perpS_right)
+                                             - A.a_perpt_left * conj(A.a_perpt_right)
+                                             + 2.0 * sqrt(3.0) * (A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right))
+                                             + 3.0 * A.b_para1_left * conj(A.a_para1_right) + 3.0 * A.b_perp1_left * conj(A.a_perp1_right));
+
+                // L3ss
+                result[6] = sqrt(3.0) / 2.0 * beta2
+                            * real(A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left) + A.b_para1_right * conj(A.a_para1_right)
+                                   - A.b_perp1_right * conj(A.a_perp1_right));
+
+                // L4ss
+                result[7] = sqrt(3.0) / 2.0 * beta2
+                            * imag(A.b_perp1_left * conj(A.a_para1_left) - A.b_para1_left * conj(A.a_perp1_left) + A.b_perp1_right * conj(A.a_para1_right)
+                                   - A.b_para1_right * conj(A.a_perp1_right));
+
+                // L5s
+                result[8] = sqrt(3.0 / 2.0) * beta
+                            * real(A.b_perp1_left * conj(A.a_para0_left) - A.b_para1_left * conj(A.a_perp0_left) - A.b_perp1_right * conj(A.a_para0_right)
+                                   - A.b_para1_right * conj(A.a_perp0_right)
+                                   - y
+                                             * (A.b_para1_right * conj(A.a_paraS_left) - A.b_perp1_right * conj(A.a_perpS_left) + A.a_paraS_left * conj(A.b_para1_left)
+                                                - A.a_perpS_left * conj(A.b_perp1_left) + A.b_para1_left * conj(A.a_paraS_right) - A.b_perp1_left * conj(A.a_perpS_right)
+                                                + A.a_paraS_right * conj(A.b_para1_right) - A.a_perpS_right * conj(A.b_perp1_right)));
+
+                // L5sc
+                result[9] = -sqrt(3.0 / 2.0) * beta2
+                            * real(A.b_para1_left * conj(A.a_para0_left) - A.b_perp1_left * conj(A.a_perp0_left) + A.b_para1_right * conj(A.a_para0_right)
+                                   - A.b_perp1_right * conj(A.a_perp0_right));
+
+                // L6s
+                result[10] = sqrt(3.0 / 2.0) * beta
+                             * imag(A.b_para1_left * conj(A.a_para0_left) - A.b_perp1_left * conj(A.a_perp0_left) - A.b_perp1_right * conj(A.a_para0_right)
+                                    + A.b_para1_right * conj(A.a_perp0_right)
+                                    - y
+                                              * (A.b_perp1_right * conj(A.a_paraS_left) - A.b_para1_right * conj(A.a_perpS_left) + A.a_perpS_left * conj(A.b_para1_left)
+                                                 - A.a_paraS_left * conj(A.b_perp1_left) + A.b_perp1_left * conj(A.a_paraS_right) - A.b_para1_left * conj(A.a_perpS_right)
+                                                 + A.a_perpS_right * conj(A.b_para1_right) - A.a_paraS_right * conj(A.b_perp1_right)));
+
+                // L6sc
+                result[11] = -sqrt(3.0 / 2.0) * beta2
+                             * imag(A.b_perp1_left * conj(A.a_para0_left) - A.b_para1_left * conj(A.a_perp0_left) + A.b_perp1_right * conj(A.a_para0_right)
+                                    - A.b_para1_right * conj(A.a_perp0_right));
+
+                return result;
             }
 
-            u.uses(*amplitude_generator);
-        }
+            inline std::array<double, 12>
+            differential_angular_coefficients_array(const double & q2) const
+            {
+                return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
+            }
 
-        ~Implementation()
-        {
-        }
+            inline LambdaBToLambda1520Dilepton::AngularCoefficients
+            differential_angular_coefficients(const double & q2) const
+            {
+                return LambdaBToLambda1520Dilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
+            }
 
-        inline std::array<double, 12> angular_coefficients_array(const LambdaBToLambda1520Dilepton::Amplitudes & A, const double & q2) const
-        {
-            // cf. [DD:2020A], app. G, which agrees with [DN:2019A], eq. (4.2) for massless leptons
-            std::array<double, 12> result;
+            LambdaBToLambda1520Dilepton::AngularCoefficients
+            integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
+            {
+                std::function<std::array<double, 12>(const double &)> integrand =
+                        std::bind(&Implementation<LambdaBToLambda1520Dilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
+                std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
-            double z = 4.0 * power_of<2>(m_l()) / q2;
-            double y = m_l / std::sqrt(q2);
-            double beta2 = 1.0 - z;
-            double beta = std::sqrt(beta2);
+                return LambdaBToLambda1520Dilepton::AngularCoefficients(integrated_angular_coefficients_array);
+            }
 
-            // L1c
-            result[0] = - 2.0 * beta * real(
-                A.a_perp1_left  * conj(A.a_para1_left) - A.a_perp1_right * conj(A.a_para1_right)
-                + y * (
-                      A.a_paraS_left  * conj(A.a_para0_left)  + A.a_paraS_right * conj(A.a_para0_left)
-                    + A.a_perpS_left  * conj(A.a_perp0_left)  + A.a_perpS_right * conj(A.a_perp0_left)
-                    + A.a_paraS_right * conj(A.a_para0_right) + A.a_paraS_left  * conj(A.a_para0_right)
-                    + A.a_perpS_right * conj(A.a_perp0_right) + A.a_perpS_left  * conj(A.a_perp0_right)
-                )
-            );
-
-            // L1cc
-            result[1] =
-                  norm(A.a_para1_left) + norm(A.a_perp1_left) + norm(A.a_para1_right) + norm(A.a_perp1_right)
-                + norm(A.a_paraS_left) + norm(A.a_perpS_left) + norm(A.a_paraS_right) + norm(A.a_perpS_right)
-                + 2.0 * y * real(
-                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
-                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
-                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
-                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
-                ) +  2.0 * y * y * (
-                      norm(A.a_para0_left) - norm(A.a_para1_left) - norm(A.a_paraS_left) + norm(A.a_parat_left)
-                    + norm(A.a_perp0_left) - norm(A.a_perp1_left) - norm(A.a_perpS_left) + norm(A.a_perpt_left)
-                    + norm(A.a_para0_right) - norm(A.a_para1_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
-                    + norm(A.a_perp0_right) - norm(A.a_perp1_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
-                ) + 2.0 * y * y * real(
-                    A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
-                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
-                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
-                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
-                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
-                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
-                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
-                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
-            );
-
-            // L1ss
-            result[2] = 0.5 * (
-                  2.0 * norm(A.a_para0_left)  + 2.0 * norm(A.a_perp0_left)  + norm(A.a_para1_left)  + norm(A.a_perp1_left)
-                + 2.0 * norm(A.a_para0_right) + 2.0 * norm(A.a_perp0_right) + norm(A.a_para1_right) + norm(A.a_perp1_right)
-                + 2.0 * norm(A.a_paraS_left)  + 2.0 * norm(A.a_perpS_left)
-                + 2.0 * norm(A.a_paraS_right) + 2.0 * norm(A.a_perpS_right)
-                ) + 2.0 * y * real(
-                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
-                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
-                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
-                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
-                ) + 2.0 * y * y * (
-                    - norm(A.a_para0_left)  - norm(A.a_paraS_left)  + norm(A.a_parat_left)
-                    - norm(A.a_perp0_left)  - norm(A.a_perpS_left)  + norm(A.a_perpt_left)
-                    - norm(A.a_para0_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
-                    - norm(A.a_perp0_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
-                ) + 2.0 * y * y * real(
-                      A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
-                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
-                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
-                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
-                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
-                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
-                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
-                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
-            );
-
-            // L2c
-            result[3] = - 0.5 * beta * real(
-                  A.a_perp1_left  * conj(A.a_para1_left)  + 3.0 * A.b_perp1_left  * conj(A.b_para1_left)
-                - A.a_perp1_right * conj(A.a_para1_right) - 3.0 * A.b_perp1_right * conj(A.b_para1_right)
-                + y * (
-                      A.a_paraS_left  * conj(A.a_para0_left)  + A.a_paraS_right * conj(A.a_para0_left)
-                    + A.a_perpS_left  * conj(A.a_perp0_left)  + A.a_perpS_right * conj(A.a_perp0_left)
-                    + A.a_paraS_right * conj(A.a_para0_right) + A.a_paraS_left  * conj(A.a_para0_right)
-                    + A.a_perpS_right * conj(A.a_perp0_right) + A.a_perpS_left  * conj(A.a_perp0_right)
-                )
-            );
-
-
-            // L2cc
-            result[4] = 0.25 * (
-                  norm(A.a_para1_left)  + norm(A.a_perp1_left)  + 3.0 * norm(A.b_para1_left)  + 3.0 * norm(A.b_perp1_left)
-                + norm(A.a_para1_right) + norm(A.a_perp1_right) + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right)
-                + norm(A.a_paraS_left)  + norm(A.a_perpS_left)  + norm(A.a_paraS_right)  + norm(A.a_perpS_right)
-                ) + 0.5 * y * real(
-                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
-                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
-                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
-                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
-                ) + 0.5 * y * y * (
-                      norm(A.a_para0_left)  - norm(A.a_para1_left)  - norm(A.a_paraS_left)  + norm(A.a_parat_left)
-                    + norm(A.a_perp0_left)  - norm(A.a_perp1_left)  - norm(A.a_perpS_left)  + norm(A.a_perpt_left)
-                    - 3.0 * norm(A.b_para1_left)  - 3.0 * norm(A.b_perp1_left)
-                    + norm(A.a_para0_right) - norm(A.a_para1_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
-                    + norm(A.a_perp0_right) - norm(A.a_perp1_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
-                    - 3.0 * norm(A.b_para1_right) - 3.0 * norm(A.b_perp1_right)
-                ) + 0.5 * y * y * real(
-                      A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
-                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
-                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
-                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
-                    + 3.0 * A.b_para1_right * conj(A.b_para1_left) + 3.0 * A.b_perp1_right * conj(A.b_perp1_left)
-                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
-                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
-                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
-                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
-                    + 3.0 * A.b_para1_left * conj(A.b_para1_right) + 3.0 * A.b_perp1_left * conj(A.b_perp1_right)
-            );
-
-            // L2ss
-            result[5] = 0.125 * (
-                  2.0 * norm(A.a_para0_left) + norm(A.a_para1_left) + 2.0 * norm(A.a_perp0_left) + norm(A.a_perp1_left)
-                + 2.0 * norm(A.a_paraS_left) + 2.0 * norm(A.a_perpS_left) + 3.0 * norm(A.b_para1_left) + 3.0 * norm(A.b_perp1_left)
-                + 2.0 * norm(A.a_para0_right) + norm(A.a_para1_right) + 2.0 * norm(A.a_perp0_right) + norm(A.a_perp1_right)
-                + 2.0 * norm(A.a_paraS_right) + 2.0 * norm(A.a_perpS_right) + 3.0 * norm(A.b_para1_right) + 3.0 * norm(A.b_perp1_right)
-                - 2.0 * sqrt(3.0) * real(
-                    A.b_para1_left  * conj(A.a_para1_left)  - A.b_perp1_left *  conj(A.a_perp1_left)
-                  + A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right)
-                )
-            ) + 0.5 * y * real(
-                    - A.a_parat_right * conj(A.a_paraS_left)  + A.a_paraS_left  * conj(A.a_parat_left)
-                    - A.a_perpt_right * conj(A.a_perpS_left)  + A.a_perpS_left  * conj(A.a_perpt_left)
-                    - A.a_parat_left  * conj(A.a_paraS_right) + A.a_paraS_right * conj(A.a_parat_right)
-                    - A.a_perpt_left  * conj(A.a_perpS_right) + A.a_perpS_right * conj(A.a_perpt_right)
-            ) + 0.5 * y * y * (
-                    - norm(A.a_para0_left)  - norm(A.a_paraS_left)  + norm(A.a_parat_left)
-                    - norm(A.a_perp0_left)  - norm(A.a_perpS_left)  + norm(A.a_perpt_left)
-                    - norm(A.a_para0_right) - norm(A.a_paraS_right) + norm(A.a_parat_right)
-                    - norm(A.a_perp0_right) - norm(A.a_perpS_right) + norm(A.a_perpt_right)
-            ) + 0.5 * y * y * real(
-                      A.a_para0_right * conj(A.a_para0_left)  + A.a_para1_right * conj(A.a_para1_left)
-                    - A.a_paraS_right * conj(A.a_paraS_left)  - A.a_parat_right * conj(A.a_parat_left)
-                    + A.a_perp0_right * conj(A.a_perp0_left)  + A.a_perp1_right * conj(A.a_perp1_left)
-                    - A.a_perpS_right * conj(A.a_perpS_left)  - A.a_perpt_right * conj(A.a_perpt_left)
-                    + 2.0 * sqrt(3.0) * (A.b_para1_left * conj(A.a_para1_left) - A.b_perp1_left * conj(A.a_perp1_left))
-                    + 3.0 * A.b_para1_right * conj(A.a_para1_left) + 3.0 * A.b_perp1_right * conj(A.a_perp1_left)
-                    + A.a_para0_left  * conj(A.a_para0_right) + A.a_para1_left  * conj(A.a_para1_right)
-                    - A.a_paraS_left  * conj(A.a_paraS_right) - A.a_parat_left  * conj(A.a_parat_right)
-                    + A.a_perp0_left  * conj(A.a_perp0_right) + A.a_perp1_left  * conj(A.a_perp1_right)
-                    - A.a_perpS_left  * conj(A.a_perpS_right) - A.a_perpt_left  * conj(A.a_perpt_right)
-                    + 2.0 * sqrt(3.0) * (A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right))
-                    + 3.0 * A.b_para1_left * conj(A.a_para1_right) + 3.0 * A.b_perp1_left * conj(A.a_perp1_right)
-            );
-
-            // L3ss
-            result[6] = sqrt(3.0) / 2.0 * beta2 * real(
-                  A.b_para1_left  * conj(A.a_para1_left)  - A.b_perp1_left  * conj(A.a_perp1_left)
-                + A.b_para1_right * conj(A.a_para1_right) - A.b_perp1_right * conj(A.a_perp1_right)
-            );
-
-            // L4ss
-            result[7] = sqrt(3.0) / 2.0 * beta2 * imag(
-                  A.b_perp1_left  * conj(A.a_para1_left)  - A.b_para1_left  * conj(A.a_perp1_left)
-                + A.b_perp1_right * conj(A.a_para1_right) - A.b_para1_right * conj(A.a_perp1_right)
-            );
-
-            // L5s
-            result[8] = sqrt(3.0 / 2.0) * beta * real(
-                  A.b_perp1_left  * conj(A.a_para0_left)  - A.b_para1_left  * conj(A.a_perp0_left)
-                - A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
-                - y * (
-                      A.b_para1_right * conj(A.a_paraS_left)  - A.b_perp1_right * conj(A.a_perpS_left)
-                    + A.a_paraS_left  * conj(A.b_para1_left)  - A.a_perpS_left  * conj(A.b_perp1_left)
-                    + A.b_para1_left  * conj(A.a_paraS_right) - A.b_perp1_left  * conj(A.a_perpS_right)
-                    + A.a_paraS_right * conj(A.b_para1_right) - A.a_perpS_right * conj(A.b_perp1_right)
-                )
-            );
-
-            // L5sc
-            result[9] = - sqrt(3.0 / 2.0) * beta2 * real(
-                  A.b_para1_left  * conj(A.a_para0_left)  - A.b_perp1_left  * conj(A.a_perp0_left)
-                + A.b_para1_right * conj(A.a_para0_right) - A.b_perp1_right * conj(A.a_perp0_right)
-            );
-
-            // L6s
-            result[10] = sqrt(3.0 / 2.0) * beta * imag(
-                  A.b_para1_left  * conj(A.a_para0_left)  - A.b_perp1_left  * conj(A.a_perp0_left)
-                - A.b_perp1_right * conj(A.a_para0_right) + A.b_para1_right * conj(A.a_perp0_right)
-                - y * (
-                      A.b_perp1_right * conj(A.a_paraS_left)  - A.b_para1_right * conj(A.a_perpS_left)
-                    + A.a_perpS_left  * conj(A.b_para1_left)  - A.a_paraS_left  * conj(A.b_perp1_left)
-                    + A.b_perp1_left  * conj(A.a_paraS_right) - A.b_para1_left  * conj(A.a_perpS_right)
-                    + A.a_perpS_right * conj(A.b_para1_right) - A.a_paraS_right * conj(A.b_perp1_right)
-                )
-            );
-
-            // L6sc
-            result[11] = - sqrt(3.0 / 2.0) * beta2 * imag(
-                  A.b_perp1_left  * conj(A.a_para0_left)  - A.b_para1_left * conj(A.a_perp0_left)
-                + A.b_perp1_right * conj(A.a_para0_right) - A.b_para1_right * conj(A.a_perp0_right)
-            );
-
-            return result;
-        }
-
-        inline std::array<double, 12> differential_angular_coefficients_array(const double & q2) const
-        {
-            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
-        }
-
-        inline LambdaBToLambda1520Dilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
-        {
-            return LambdaBToLambda1520Dilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
-        }
-
-        LambdaBToLambda1520Dilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
-        {
-            std::function<std::array<double, 12> (const double &)> integrand =
-                    std::bind(&Implementation<LambdaBToLambda1520Dilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
-
-            return LambdaBToLambda1520Dilepton::AngularCoefficients(integrated_angular_coefficients_array);
-        }
-
-        inline double decay_width(const LambdaBToLambda1520Dilepton::AngularCoefficients & a_c)
-        {
-            // cf. [DN:2019A], eq. (4.4)
-            return 1.0 / 3.0 * (a_c.L1cc + 2.0 * a_c.L1ss + 2.0 * a_c.L2cc + 4.0 * a_c.L2ss + 2.0 * a_c.L3ss);
-        }
+            inline double
+            decay_width(const LambdaBToLambda1520Dilepton::AngularCoefficients & a_c)
+            {
+                // cf. [DN:2019A], eq. (4.4)
+                return 1.0 / 3.0 * (a_c.L1cc + 2.0 * a_c.L1ss + 2.0 * a_c.L2cc + 4.0 * a_c.L2ss + 2.0 * a_c.L3ss);
+            }
     };
 
     LambdaBToLambda1520Dilepton::LambdaBToLambda1520Dilepton(const Parameters & parameters, const Options & options) :
@@ -307,15 +268,11 @@ namespace eos
     {
     }
 
-    LambdaBToLambda1520Dilepton::~LambdaBToLambda1520Dilepton()
-    {
-    }
+    LambdaBToLambda1520Dilepton::~LambdaBToLambda1520Dilepton() {}
 
-    const std::vector<OptionSpecification>
-    Implementation<LambdaBToLambda1520Dilepton>::options
-    {
+    const std::vector<OptionSpecification> Implementation<LambdaBToLambda1520Dilepton>::options{
         Model::option_specification(),
-        {"l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov}
+        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov }
     };
 
     double
@@ -324,34 +281,26 @@ namespace eos
         // compute d^4 Gamma, cf. [DN:2019A], eq. (4.1)
         // Cosine squared of the angles
         double c_theta_Lstar_2 = c_theta_Lstar * c_theta_Lstar;
-        double c_theta_l_2 = c_theta_l * c_theta_l;
-        double c_phi = cos(phi);
-        double c_phi_2 = c_phi * c_phi;
+        double c_theta_l_2     = c_theta_l * c_theta_l;
+        double c_phi           = cos(phi);
+        double c_phi_2         = c_phi * c_phi;
         // Sine squared of the angles
         double s_theta_Lstar_2 = 1.0 - c_theta_Lstar_2;
-        double s_theta_l_2 = 1.0 - c_theta_l_2;
+        double s_theta_l_2     = 1.0 - c_theta_l_2;
         // Sine of the angles
-        double s_theta_Lstar = sqrt(s_theta_Lstar_2);
-        double s_theta_l = sqrt(s_theta_l_2);
-        double s_phi = sin(phi);
+        double s_theta_Lstar   = sqrt(s_theta_Lstar_2);
+        double s_theta_l       = sqrt(s_theta_l_2);
+        double s_phi           = sin(phi);
 
         AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
 
-        double result = 3.0 / 8.0 / M_PI * (
-                c_theta_Lstar_2 * (
-                    a_c.L1c * c_theta_l + a_c.L1cc * c_theta_l_2 + a_c.L1ss * s_theta_l_2
-                  )
-                  + s_theta_Lstar_2 * (
-                      a_c.L2c * c_theta_l + a_c.L2cc * c_theta_l_2 + a_c.L2ss * s_theta_l_2
-                    + a_c.L3ss * s_theta_l_2 * c_phi_2 + a_c.L4ss * s_theta_l_2 * s_phi * c_phi
-                  )
-                  + s_theta_Lstar * c_theta_Lstar * c_phi * (
-                      a_c.L5s * s_theta_l + a_c.L5sc * s_theta_l * c_theta_l
-                  )
-                  + s_theta_Lstar * c_theta_Lstar * s_phi * (
-                      a_c.L6s * s_theta_l + a_c.L6sc * s_theta_l * c_theta_l
-                  )
-                );
+        double result =
+                3.0 / 8.0 / M_PI
+                * (c_theta_Lstar_2 * (a_c.L1c * c_theta_l + a_c.L1cc * c_theta_l_2 + a_c.L1ss * s_theta_l_2)
+                   + s_theta_Lstar_2
+                             * (a_c.L2c * c_theta_l + a_c.L2cc * c_theta_l_2 + a_c.L2ss * s_theta_l_2 + a_c.L3ss * s_theta_l_2 * c_phi_2 + a_c.L4ss * s_theta_l_2 * s_phi * c_phi)
+                   + s_theta_Lstar * c_theta_Lstar * c_phi * (a_c.L5s * s_theta_l + a_c.L5sc * s_theta_l * c_theta_l)
+                   + s_theta_Lstar * c_theta_Lstar * s_phi * (a_c.L6s * s_theta_l + a_c.L6sc * s_theta_l * c_theta_l));
 
         return result;
     }
@@ -477,7 +426,6 @@ namespace eos
         return a_c.L6sc;
     }
 
-
     double
     LambdaBToLambda1520Dilepton::integrated_decay_width(const double & q2_min, const double & q2_max) const
     {
@@ -599,28 +547,22 @@ namespace eos
         return a_c.L6sc;
     }
 
-
-    const std::string
-    LambdaBToLambda1520Dilepton::description = "\
+    const std::string LambdaBToLambda1520Dilepton::description = "\
 The decay \bar{Lambda_b}->\bar{Lambda}(1520) l^+ l^-, with l=e,mu,tau \
 a charged lepton and the \bar{Lambda}(1520) further \
 decaying to \bar{N} K. Various theory models can be selected using the \
 'tag' option";
 
-    const std::string
-    LambdaBToLambda1520Dilepton::kinematics_description_q2 = "\
+    const std::string LambdaBToLambda1520Dilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
-    const std::string
-    LambdaBToLambda1520Dilepton::kinematics_description_c_theta_l = "\
+    const std::string LambdaBToLambda1520Dilepton::kinematics_description_c_theta_l = "\
 The cosine of the negatively-charged lepton l^-'s helicity angle theta_l in the l^+l^- rest frame.";
 
-    const std::string
-    LambdaBToLambda1520Dilepton::kinematics_description_c_theta_Lstar = "\
+    const std::string LambdaBToLambda1520Dilepton::kinematics_description_c_theta_Lstar = "\
 The cosine of the nucleon's helicity angle theta_Lstar in the Nbar-K rest frame.";
 
-    const std::string
-    LambdaBToLambda1520Dilepton::kinematics_description_phi = "\
+    const std::string LambdaBToLambda1520Dilepton::kinematics_description_phi = "\
 The azimuthal angle between the Nbar-K plane and the l^+l^- plane.";
 
     /*
@@ -632,10 +574,7 @@ The azimuthal angle between the Nbar-K plane and the l^+l^- plane.";
         return _imp->amplitude_generator->amplitudes(q2);
     }
 
-    const std::set<ReferenceName>
-    LambdaBToLambda1520Dilepton::references
-    {
-    };
+    const std::set<ReferenceName> LambdaBToLambda1520Dilepton::references{};
 
     std::vector<OptionSpecification>::const_iterator
     LambdaBToLambda1520Dilepton::begin_options()
@@ -648,4 +587,4 @@ The azimuthal angle between the Nbar-K plane and the l^+l^- plane.";
     {
         return Implementation<LambdaBToLambda1520Dilepton>::options.cend();
     }
-}
+} // namespace eos

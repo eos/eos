@@ -17,8 +17,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/rare-b-decays/inclusive-b-to-s-gamma.hh>
+
+#include <test/test.hh>
 
 #include <cmath>
 #include <limits>
@@ -27,8 +28,7 @@
 using namespace test;
 using namespace eos;
 
-class BToXsGammaNLOTest :
-    public TestCase
+class BToXsGammaNLOTest : public TestCase
 {
     public:
         BToXsGammaNLOTest() :
@@ -36,56 +36,60 @@ class BToXsGammaNLOTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             /* NLO */
 
             // Standard Model
             {
-                Parameters p = Parameters::Defaults();
+                Parameters p            = Parameters::Defaults();
                 // Taken from [CMM:1996A], p. 6, Eq. (28)
-                p["b->s::c1"] = -0.480;
-                p["b->s::c2"] = +1.023;
-                p["b->s::c3"] = -0.0045;
-                p["b->s::c4"] = -0.0640;
-                p["b->s::c5"] = +0.0004;
-                p["b->s::c6"] = +0.0009;
-                p["sb::mu"] = 5.0;
-                p["b->s::Re{c7}"] = -0.32372;
-                p["b->s::c8"] = -0.159167;
+                p["b->s::c1"]           = -0.480;
+                p["b->s::c2"]           = +1.023;
+                p["b->s::c3"]           = -0.0045;
+                p["b->s::c4"]           = -0.0640;
+                p["b->s::c5"]           = +0.0004;
+                p["b->s::c6"]           = +0.0009;
+                p["sb::mu"]             = 5.0;
+                p["b->s::Re{c7}"]       = -0.32372;
+                p["b->s::c8"]           = -0.159167;
                 // PDG 2010 CKM parameters w/ typo in CKM::lambda (should be 0.22543)
                 p["CKM::A"]             = 0.812;
                 p["CKM::lambda"]        = 0.2243;
                 p["CKM::rhobar"]        = 0.144;
                 p["CKM::etabar"]        = 0.342;
-                p["CKM::abs(V_ub)"]     =  0.0034870776047445035;
+                p["CKM::abs(V_ub)"]     = 0.0034870776047445035;
                 p["CKM::arg(V_ub)"]     = -1.1728447805386266;
-                p["CKM::abs(V_cb)"]     =  0.040851869505042326;
-                p["CKM::arg(V_cb)"]     =  0.0;
-                p["CKM::abs(V_tb)"]     =  0.99915912422571;
-                p["CKM::arg(V_tb)"]     =  0.0;
-                p["CKM::abs(V_us)"]     =  0.22429863628849864;
-                p["CKM::arg(V_us)"]     =  0.0;
-                p["CKM::abs(V_cs)"]     =  0.9736942292982523;
+                p["CKM::abs(V_cb)"]     = 0.040851869505042326;
+                p["CKM::arg(V_cb)"]     = 0.0;
+                p["CKM::abs(V_tb)"]     = 0.99915912422571;
+                p["CKM::arg(V_tb)"]     = 0.0;
+                p["CKM::abs(V_us)"]     = 0.22429863628849864;
+                p["CKM::arg(V_us)"]     = 0.0;
+                p["CKM::abs(V_cs)"]     = 0.9736942292982523;
                 p["CKM::arg(V_cs)"]     = -3.0251458252370057e-05;
-                p["CKM::abs(V_ts)"]     =  0.04012054599802285;
+                p["CKM::abs(V_ts)"]     = 0.04012054599802285;
                 p["CKM::arg(V_ts)"]     = -3.123635053579304;
                 // QED coupling as used in [CMM:1996A], Sec 5.(iii), p. 11
-                p["QED::alpha_e(m_b)"] = 1/130.3;
+                p["QED::alpha_e(m_b)"]  = 1 / 130.3;
                 // b quark mass
-                p["mass::b(MSbar)"] = 4.19;
+                p["mass::b(MSbar)"]     = 4.19;
                 // HQE parameters
                 p["B->B::mu_pi^2@1GeV"] = 0.4;
-                p["B->B::mu_G^2@1GeV"] = 0.36;
+                p["B->B::mu_G^2@1GeV"]  = 0.36;
 
-                Options oo { {"model"_ok, "WET"_ov} };
+                Options oo{
+                    { "model"_ok, "WET"_ov }
+                };
 
-                const double eps = 1e-9;
+                const double    eps = 1e-9;
                 BToXsGamma<NLO> decay(p, oo);
 
                 /* Diagnostics */
                 {
                     Diagnostics diagnostics = decay.diagnostics();
+                    // clang-format off
                     static const std::vector<std::pair<double, double>> reference
                     {
                         /* f_ij */
@@ -140,6 +144,7 @@ class BToXsGammaNLOTest :
                         std::make_pair(2.88e-3,    1e-5), // R_quark(0.29^2, 0.29^2, 0.976)
                         std::make_pair(3.12e-3,    1e-5), // R_quark(0.29^2, 1/3,    0.976)
                     };
+                    // clang-format on
 
                     TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
                 }
@@ -148,13 +153,13 @@ class BToXsGammaNLOTest :
                 TEST_CHECK_NEARLY_EQUAL(decay.integrated_branching_ratio(1.8), 3.09211e-4, eps);
                 TEST_CHECK_NEARLY_EQUAL(decay.integrated_branching_ratio(2.0), 3.00017e-4, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(1.6),     2.21890,    1e-5);
-                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(1.8),     2.22731,    1e-5);
-                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(2.0),     2.24520,    1e-5);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(1.6), 2.21890, 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(1.8), 2.22731, 1e-5);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_1(2.0), 2.24520, 1e-5);
 
-                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(1.6),     0.0423421,  1e-7);
-                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(1.8),     0.0379255,  1e-7);
-                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(2.0),     0.0323984,  1e-7);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(1.6), 0.0423421, 1e-7);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(1.8), 0.0379255, 1e-7);
+                TEST_CHECK_NEARLY_EQUAL(decay.photon_energy_moment_2(2.0), 0.0323984, 1e-7);
             }
         }
 } b_to_x_s_gamma_nlo_test;

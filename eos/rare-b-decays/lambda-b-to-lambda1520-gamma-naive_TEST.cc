@@ -18,16 +18,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
-#include <eos/observable.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/rare-b-decays/lambda-b-to-lambda1520-gamma.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class LambdaBToLambda1520GammaNaiveTest :
-    public TestCase
+class LambdaBToLambda1520GammaNaiveTest : public TestCase
 {
     public:
         LambdaBToLambda1520GammaNaiveTest() :
@@ -35,27 +35,28 @@ class LambdaBToLambda1520GammaNaiveTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
-            Parameters p = Parameters::Defaults();
-            p["Lambda_b->Lambda(1520)::a^(012,T)_1@SE"]     =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@SE"]  =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@SE"]  =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@SE"]  =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(012,T5)_1@SE"]    =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@SE"] =  0.1;
-            p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@SE"] =  0.1;
+            Parameters p                                    = Parameters::Defaults();
+            p["Lambda_b->Lambda(1520)::a^(012,T)_1@SE"]     = 0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp12,T)_1@SE"]  = 0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp32,T)_0@SE"]  = 0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp32,T)_1@SE"]  = 0.1;
+            p["Lambda_b->Lambda(1520)::a^(012,T5)_1@SE"]    = 0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp12,T5)_1@SE"] = 0.1;
+            p["Lambda_b->Lambda(1520)::a^(perp32,T5)_1@SE"] = 0.1;
 
-            p["b->s::c3"] = 0.;
-            p["b->s::c4"] = 0.;
-            p["b->s::c5"] = 0.;
-            p["b->s::c6"] = 0.;
-            p["sb::mu"] = 4.2;
-            p["b->s::Re{c7}"] = -0.29;
-            p["b->s::Im{c7}"] = 0.;
+            p["b->s::c3"]      = 0.;
+            p["b->s::c4"]      = 0.;
+            p["b->s::c5"]      = 0.;
+            p["b->s::c6"]      = 0.;
+            p["sb::mu"]        = 4.2;
+            p["b->s::Re{c7}"]  = -0.29;
+            p["b->s::Im{c7}"]  = 0.;
             p["b->s::Re{c7'}"] = 0.;
             p["b->s::Im{c7'}"] = 0.;
-            p["b->s::c8"] = 0.;
+            p["b->s::c8"]      = 0.;
 
             p["CKM::abs(V_ub)"] = 0.;
             p["CKM::arg(V_ub)"] = 0.;
@@ -70,24 +71,23 @@ class LambdaBToLambda1520GammaNaiveTest :
             p["CKM::abs(V_ts)"] = 1.;
             p["CKM::arg(V_ts)"] = 0.;
 
-            p["QED::alpha_e(m_b)"] = 1.;
-            p["WET::G_Fermi"] = 1.;
-            p["mass::Lambda_b"] = 5.62;
+            p["QED::alpha_e(m_b)"]  = 1.;
+            p["WET::G_Fermi"]       = 1.;
+            p["mass::Lambda_b"]     = 5.62;
             p["mass::Lambda_b@HME"] = 5.62;
             p["mass::Lambda(1520)"] = 1.52;
 
-            Options oo
-            {
-                { "model"_ok, "WET"_ov },
-                { "tag"_ok, "Naive"_ov },
-                { "form-factors"_ok, "SE"_ov },
-                { "l"_ok, "mu"_ov },
+            Options oo{
+                {        "model"_ok,   "WET"_ov },
+                {          "tag"_ok, "Naive"_ov },
+                { "form-factors"_ok,    "SE"_ov },
+                {            "l"_ok,    "mu"_ov },
             };
 
             static const double eps = 1e-5;
 
             LambdaBToLambda1520Gamma d(p, oo);
 
-            TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(),  847315588516.,   eps);
+            TEST_CHECK_RELATIVE_ERROR(d.branching_ratio(), 847315588516., eps);
         }
 } lambdab_to_lambda1520_gamma_naive_test;

@@ -53,17 +53,13 @@ namespace eos
         this->uses(*model);
     }
 
-    BToKDilepton::AmplitudeGenerator::~AmplitudeGenerator()
-    {
-    }
+    BToKDilepton::AmplitudeGenerator::~AmplitudeGenerator() {}
 
-    const std::vector<OptionSpecification>
-    BToKDilepton::AmplitudeGenerator::options
-    {
+    const std::vector<OptionSpecification> BToKDilepton::AmplitudeGenerator::options{
         Model::option_specification(),
         FormFactorFactory<PToP>::option_specification(),
-        { "cp-conjugate"_ok, { "true"_ov, "false"_ov },  "false"_ov },
-        { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov },
+        { "cp-conjugate"_ok,     { "true"_ov, "false"_ov }, "false"_ov },
+        {            "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov },    "mu"_ov },
     };
 
     double
@@ -97,7 +93,6 @@ namespace eos
         // cf. [BHP:2007A], Eq. (4.2) - (4.4)
         double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-        return power_of<2>(g_fermi * alpha_e() * lambda_t) * sqrt(lambda(q2)) * beta_l(q2) * xi_pseudo(q2) * xi_pseudo(q2) /
-                       (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
+        return power_of<2>(g_fermi * alpha_e() * lambda_t) * sqrt(lambda(q2)) * beta_l(q2) * xi_pseudo(q2) * xi_pseudo(q2) / (512.0 * power_of<5>(M_PI) * power_of<3>(m_B()));
     }
-}
+} // namespace eos

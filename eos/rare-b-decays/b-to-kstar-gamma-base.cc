@@ -26,16 +26,11 @@ namespace eos
 
         switch (q.value())
         {
-            case QuarkFlavor::down:
-                e_q = -1.0 / 3.0;
-                break;
+            case QuarkFlavor::down: e_q = -1.0 / 3.0; break;
 
-            case QuarkFlavor::up:
-                e_q = 2.0 / 3.0;
-                break;
+            case QuarkFlavor::up: e_q = 2.0 / 3.0; break;
 
-            default:
-                throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
+            default: throw InternalError("Unexpected quark flavor: '" + q.str() + "'");
         }
 
         this->uses(*form_factors);
@@ -44,13 +39,11 @@ namespace eos
 
     BToKstarGamma::AmplitudeGenerator::~AmplitudeGenerator() = default;
 
-    const std::vector<OptionSpecification>
-    BToKstarGamma::AmplitudeGenerator::options
-    {
+    const std::vector<OptionSpecification> BToKstarGamma::AmplitudeGenerator::options{
         Model::option_specification(),
         FormFactorFactory<PToV>::option_specification(),
-        { "l"_ok, { "e"_ov, "mu"_ov }, "mu"_ov },
-        { "q"_ok, { "d"_ov, "u"_ov }, "d"_ov },
+        {            "l"_ok,       { "e"_ov, "mu"_ov },    "mu"_ov },
+        {            "q"_ok,        { "d"_ov, "u"_ov },     "d"_ov },
         { "cp-conjugate"_ok, { "true"_ov, "false"_ov }, "false"_ov }
     };
-}
+} // namespace eos

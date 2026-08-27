@@ -28,9 +28,7 @@
 
 namespace eos
 {
-    template <>
-    class BToKDileptonAmplitudes<tag::BFS2004> :
-        public BToKDilepton::AmplitudeGenerator
+    template <> class BToKDileptonAmplitudes<tag::BFS2004> : public BToKDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter m_b_MSbar;
@@ -52,26 +50,26 @@ namespace eos
 
             static const std::vector<OptionSpecification> options;
 
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &)> qcdf_dilepton_massless_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &, const double &)> qcdf_dilepton_charm_case;
-            std::function<QCDFIntegrals<BToKstarDilepton> (const double &, const double &,
-                    const double &, const double &, const double &, const double &,
-                    const double &, const double &, const double &)> qcdf_dilepton_bottom_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &)>
+                    qcdf_dilepton_massless_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &, const double &)>
+                    qcdf_dilepton_charm_case;
+            std::function<QCDFIntegrals<BToKstarDilepton>(const double &, const double &, const double &, const double &, const double &, const double &, const double &,
+                                                          const double &, const double &)>
+                    qcdf_dilepton_bottom_case;
 
             BToKDileptonAmplitudes(const Parameters & p, const Options & o);
             ~BToKDileptonAmplitudes();
 
             virtual BToKDilepton::Amplitudes amplitudes(const double & q2) const;
 
-            double m_b_PS() const;
-            double mu_f() const;
+            double                          m_b_PS() const;
+            double                          mu_f() const;
             BToKDilepton::DipoleFormFactors dipole_form_factors(const double & q2, const WilsonCoefficients<BToS> & wc) const;
-            double xi_pseudo(const double & q2) const;
+            double                          xi_pseudo(const double & q2) const;
     };
-}
+} // namespace eos
 
 #endif

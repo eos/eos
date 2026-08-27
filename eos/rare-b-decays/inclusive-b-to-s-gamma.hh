@@ -36,13 +36,9 @@ namespace eos
 
     // LO-NP Enhancement of [2006zs]
     struct Minimal
-    {
-    };
+    {};
 
-    template <>
-    class BToXsGamma<Minimal> :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToXsGamma<Minimal>>
+    template <> class BToXsGamma<Minimal> : public ParameterUser, public PrivateImplementationPattern<BToXsGamma<Minimal>>
     {
         public:
             BToXsGamma(const Parameters & parameters, const Options & options);
@@ -65,13 +61,9 @@ namespace eos
 
     // NLO Implementation
     struct NLO
-    {
-    };
+    {};
 
-    template <>
-    class BToXsGamma<NLO> :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToXsGamma<NLO>>
+    template <> class BToXsGamma<NLO> : public ParameterUser, public PrivateImplementationPattern<BToXsGamma<NLO>>
     {
         public:
             BToXsGamma(const Parameters & parameters, const Options & options);
@@ -98,5 +90,5 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 #endif

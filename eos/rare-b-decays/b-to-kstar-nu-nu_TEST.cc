@@ -17,16 +17,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
+#include <eos/maths/complex.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/b-to-vec-nu-nu.hh>
-#include <eos/maths/complex.hh>
 #include <eos/utils/wilson-polynomial.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -35,8 +36,7 @@
 using namespace test;
 using namespace eos;
 
-class BToKDineutrinoTest :
-    public TestCase
+class BToKDineutrinoTest : public TestCase
 {
     public:
         BToKDineutrinoTest() :
@@ -44,12 +44,13 @@ class BToKDineutrinoTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             {
-                Parameters p = Parameters::Defaults();
-                p["CKM::abs(V_tb)"]              =  1.00;
-                p["CKM::abs(V_ts)"]              =  4.00e-2;
+                Parameters p                     = Parameters::Defaults();
+                p["CKM::abs(V_tb)"]              = 1.00;
+                p["CKM::abs(V_ts)"]              = 4.00e-2;
                 p["B->K::alpha^f+_0@BSZ2015"]    = +3.2909e-01;
                 p["B->K::alpha^f+_1@BSZ2015"]    = -8.6695e-01;
                 p["B->K::alpha^f+_2@BSZ2015"]    = +6.0957e-03;
@@ -64,27 +65,26 @@ class BToKDineutrinoTest :
                 p["B->K^*::alpha^V_0@BSZ2015"]   = +3.6417e-01;
                 p["B->K^*::alpha^V_1@BSZ2015"]   = -1.0925e+00;
                 p["B->K^*::alpha^V_2@BSZ2015"]   = +2.5955e+00;
-                p["mass::B_d"]                   =  5.2793;
-                p["mass::K_d^*"]                 =  8.9555e-01;
+                p["mass::B_d"]                   = 5.2793;
+                p["mass::K_d^*"]                 = 8.9555e-01;
 
-                Options oo
-                {
-                    { "model"_ok,        "CKM"_ov     },
+                Options oo{
+                    {        "model"_ok,     "CKM"_ov },
                     { "form-factors"_ok, "BSZ2015"_ov },
-                    { "D"_ok,            "s"_ov       },
-                    { "q"_ok,            "d"_ov       },
-                    { "I"_ok,            "1/2"_ov     }
+                    {            "D"_ok,       "s"_ov },
+                    {            "q"_ok,       "d"_ov },
+                    {            "I"_ok,     "1/2"_ov }
                 };
 
                 BToVectorDineutrino d(p, oo);
 
                 const double eps = 1e-4;
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.00,  8.00), 2.84988e-06, eps);
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 8.00, 16.00), 4.07642e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.00, 8.00), 2.84988e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(8.00, 16.00), 4.07642e-06, eps);
                 TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(16.00, 19.21), 1.11148e-06, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio( 0.00, 19.21), 8.03757e-06, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio(0.00, 19.21), 8.03757e-06, eps);
             }
         }
 } b_to_kstar_nu_nu_test;

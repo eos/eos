@@ -22,8 +22,8 @@
 #ifndef EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_DILEPTON_HH
 #define EOS_GUARD_SRC_RARE_B_DECAYS_EXCLUSIVE_B_TO_DILEPTON_HH 1
 
-#include <eos/observable.hh>
 #include <eos/maths/complex.hh>
+#include <eos/observable.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>
@@ -33,9 +33,7 @@ namespace eos
     /*!
      * Calculation according to [BEKU:2002A] and [F:2012A].
      */
-    class BToDilepton :
-        public ParameterUser,
-        public PrivateImplementationPattern<BToDilepton>
+    class BToDilepton : public ParameterUser, public PrivateImplementationPattern<BToDilepton>
     {
         public:
             ///@name Basic Functions
@@ -76,6 +74,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

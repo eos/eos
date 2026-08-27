@@ -19,10 +19,11 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/maths/complex.hh>
 #include <eos/observable.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll.hh>
+
+#include <test/test.hh>
 
 #include <array>
 #include <cmath>
@@ -34,43 +35,42 @@
 using namespace test;
 using namespace eos;
 
-class BsToPhiDileptonBFS2004NaiveTest :
-    public TestCase
+class BsToPhiDileptonBFS2004NaiveTest : public TestCase
 {
     public:
-    BsToPhiDileptonBFS2004NaiveTest() :
-        TestCase("bs_to_phi_dilepton_BFS2004_naive_test")
-    {
-    }
-
-    virtual void run() const
-    {
+        BsToPhiDileptonBFS2004NaiveTest() :
+            TestCase("bs_to_phi_dilepton_BFS2004_naive_test")
         {
-            Parameters p = Parameters::Defaults();
+        }
 
-            Options oo
+        virtual void
+        run() const
+        {
             {
-                { "model"_ok, "WET"_ov },
-                { "scan-mode"_ok, "cartesian"_ov },
-                { "tag"_ok, "BFS2004"_ov },
-                { "qcdf-integrals"_ok, "mixed"_ov },
-                { "form-factors"_ok, "BSZ2015"_ov },
-                { "l"_ok, "mu"_ov },
-                { "q"_ok, "s"_ov }
-            };
+                Parameters p = Parameters::Defaults();
 
-            static const double eps = 1e-3;
-            static const double q2 = 6.0;
+                Options oo{
+                    {          "model"_ok,       "WET"_ov },
+                    {      "scan-mode"_ok, "cartesian"_ov },
+                    {            "tag"_ok,   "BFS2004"_ov },
+                    { "qcdf-integrals"_ok,     "mixed"_ov },
+                    {   "form-factors"_ok,   "BSZ2015"_ov },
+                    {              "l"_ok,        "mu"_ov },
+                    {              "q"_ok,         "s"_ov }
+                };
 
-            BsToPhiDilepton d(p, oo);
-            auto amps = d.amplitudes(q2);
+                static const double eps = 1e-3;
+                static const double q2  = 6.0;
 
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left,  complex<double>(-1.23979e-10,  5.87060e-15), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>( 7.05843e-12,  5.87060e-15), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left,  complex<double>(-5.56392e-11,  1.80190e-12), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>( 2.50889e-11,  1.80190e-12), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left,  complex<double>( 4.85643e-11, -1.66085e-12), eps);
-            TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>(-2.31595e-11, -1.66085e-12), eps);
-       }
-    }
+                BsToPhiDilepton d(p, oo);
+                auto            amps = d.amplitudes(q2);
+
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_left, complex<double>(-1.23979e-10, 5.87060e-15), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_long_right, complex<double>(7.05843e-12, 5.87060e-15), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_left, complex<double>(-5.56392e-11, 1.80190e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_para_right, complex<double>(2.50889e-11, 1.80190e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_left, complex<double>(4.85643e-11, -1.66085e-12), eps);
+                TEST_CHECK_RELATIVE_ERROR_C(amps.a_perp_right, complex<double>(-2.31595e-11, -1.66085e-12), eps);
+            }
+        }
 } bs_to_phi_dilepton_BFS2004_naive_test;

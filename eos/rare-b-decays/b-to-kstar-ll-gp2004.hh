@@ -28,9 +28,7 @@
 
 namespace eos
 {
-    template <>
-    class BToKstarDileptonAmplitudes<tag::GP2004> :
-        public BToKstarDilepton::AmplitudeGenerator
+    template <> class BToKstarDileptonAmplitudes<tag::GP2004> : public BToKstarDilepton::AmplitudeGenerator
     {
         public:
             UsedParameter hbar;
@@ -43,7 +41,7 @@ namespace eos
             // initializers below, so it (and its option) must be declared -- and
             // therefore initialized -- first.
             BooleanOption opt_use_simple_sl;
-            bool use_simple_sl;
+            bool          use_simple_sl;
 
             UsedParameter lambda_long;
             UsedParameter lambda_par;
@@ -68,39 +66,52 @@ namespace eos
 
             inline complex<double> c7eff(const WilsonCoefficients<BToS> & wc, const double & q2) const;
             inline complex<double> c9eff(const WilsonCoefficients<BToS> & wc, const double & q2) const;
-            inline double m_b_PS() const;
-            inline double kappa() const;
-            inline double norm(const double & q2) const;
+            inline double          m_b_PS() const;
+            inline double          kappa() const;
+            inline double          norm(const double & q2) const;
 
-            virtual double real_C9_perp(const double &) const
+            virtual double
+            real_C9_perp(const double &) const
             {
                 return 0.0;
             }
-            virtual double real_C9_para(const double &) const
+
+            virtual double
+            real_C9_para(const double &) const
             {
                 return 0.0;
             }
-            virtual double imag_C9_perp(const double &) const
+
+            virtual double
+            imag_C9_perp(const double &) const
             {
                 return 0.0;
             }
-            virtual double imag_C9_para(const double &) const
+
+            virtual double
+            imag_C9_para(const double &) const
             {
                 return 0.0;
             }
-            virtual double H_perp_corrections(const double &) const
+
+            virtual double
+            H_perp_corrections(const double &) const
             {
                 return 0.0;
-            };
-            virtual double H_para_corrections(const double &) const
+            }
+
+            virtual double
+            H_para_corrections(const double &) const
             {
                 return 0.0;
-            };
-            virtual double H_long_corrections(const double &) const
+            }
+
+            virtual double
+            H_long_corrections(const double &) const
             {
                 return 0.0;
-            };
+            }
     };
-}
+} // namespace eos
 
 #endif

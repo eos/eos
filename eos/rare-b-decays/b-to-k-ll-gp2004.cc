@@ -22,8 +22,8 @@
  */
 
 #include <eos/maths/power-of.hh>
-#include <eos/rare-b-decays/b-to-k-ll-gp2004.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
+#include <eos/rare-b-decays/b-to-k-ll-gp2004.hh>
 #include <eos/utils/destringify.hh>
 
 #include <gsl/gsl_sf.h>
@@ -31,8 +31,7 @@
 namespace eos
 {
 
-    BToKDileptonAmplitudes<tag::GP2004>::BToKDileptonAmplitudes(const Parameters & p,
-            const Options & o) :
+    BToKDileptonAmplitudes<tag::GP2004>::BToKDileptonAmplitudes(const Parameters & p, const Options & o) :
         AmplitudeGenerator(p, o),
         hbar(p["QM::hbar"], *this),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
@@ -48,15 +47,11 @@ namespace eos
         Context ctx("When constructing B->Kll GP2004 amplitudes");
     }
 
-    BToKDileptonAmplitudes<tag::GP2004>::~BToKDileptonAmplitudes()
-    {
-    }
+    BToKDileptonAmplitudes<tag::GP2004>::~BToKDileptonAmplitudes() {}
 
-    const std::vector<OptionSpecification>
-    BToKDileptonAmplitudes<tag::GP2004>::options
-    {
-        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov },  "false"_ov },
-        { "nlo"_ok, { "true"_ov, "false"_ov },  "true"_ov },
+    const std::vector<OptionSpecification> BToKDileptonAmplitudes<tag::GP2004>::options{
+        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        {             "nlo"_ok, { "true"_ov, "false"_ov },  "true"_ov },
     };
 
     // We use the PS mass except for kappa
@@ -129,13 +124,10 @@ namespace eos
         result.F_T  = F_Tkin * wc.cT();
         result.F_T5 = F_Tkin * wc.cT5();
         result.F_S  = F_Skin * (wc.cS() + wc.cSprime());
-        result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) *
-                      ((m_B() * m_B() - m_K() * m_K()) / q2 * (f_0_over_f_p - 1.0) - 1.0);
-        result.F_V  = c9eff(wc, q2) + wc.c9prime()
-                      + kappa() * (2.0 * (m_b_MSbar + lambda_psd()) * m_B() / q2) * (c7eff(wc, q2) + wc.c7prime())
-                      + 0.5 * model->alpha_s(mu) / m_B * std::polar(lambda_psd(), sl_phase_psd())
-                      + 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p * wc.cT();
+        result.F_P  = F_Skin * (wc.cP() + wc.cPprime()) + m_l() * (wc.c10() + wc.c10prime()) * ((m_B() * m_B() - m_K() * m_K()) / q2 * (f_0_over_f_p - 1.0) - 1.0);
+        result.F_V  = c9eff(wc, q2) + wc.c9prime() + kappa() * (2.0 * (m_b_MSbar + lambda_psd()) * m_B() / q2) * (c7eff(wc, q2) + wc.c7prime())
+                     + 0.5 * model->alpha_s(mu) / m_B * std::polar(lambda_psd(), sl_phase_psd()) + 8.0 * m_l / (m_B() + m_K()) * f_t_over_f_p * wc.cT();
 
         return result;
     }
-}
+} // namespace eos

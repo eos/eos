@@ -18,8 +18,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/integrate.hh>
 #include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-base.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-bfs2004.hh>
 #include <eos/rare-b-decays/bs-to-phi-ll-gvdv2020.hh>
@@ -30,267 +30,235 @@ namespace eos
 {
     struct BsToPhiDilepton::AngularCoefficients
     {
-        double j1s, j1c;
-        double j2s, j2c;
-        double j3;
-        double j4;
-        double j5;
-        double j6s, j6c;
-        double j7;
-        double j8;
-        double j9;
+            double j1s, j1c;
+            double j2s, j2c;
+            double j3;
+            double j4;
+            double j5;
+            double j6s, j6c;
+            double j7;
+            double j8;
+            double j9;
 
-        AngularCoefficients()
-        {
-        }
+            AngularCoefficients() {}
 
-        AngularCoefficients(const std::array<double, 12> & a) :
-            j1s(a[0]),
-            j1c(a[1]),
-            j2s(a[2]),
-            j2c(a[3]),
-            j3(a[4]),
-            j4(a[5]),
-            j5(a[6]),
-            j6s(a[7]),
-            j6c(a[8]),
-            j7(a[9]),
-            j8(a[10]),
-            j9(a[11])
-        {
-        }
+            AngularCoefficients(const std::array<double, 12> & a) :
+                j1s(a[0]),
+                j1c(a[1]),
+                j2s(a[2]),
+                j2c(a[3]),
+                j3(a[4]),
+                j4(a[5]),
+                j5(a[6]),
+                j6s(a[7]),
+                j6c(a[8]),
+                j7(a[9]),
+                j8(a[10]),
+                j9(a[11])
+            {
+            }
     };
 
     /*!
      * Implementation for the decay @f$\bar{B_s} \to \phi \ell^+ \ell^-@f$.
      */
-    template <>
-    struct Implementation<BsToPhiDilepton>
+    template <> struct Implementation<BsToPhiDilepton>
     {
-        std::shared_ptr<BsToPhiDilepton::AmplitudeGenerator> amplitude_generator;
+            std::shared_ptr<BsToPhiDilepton::AmplitudeGenerator> amplitude_generator;
 
-        std::shared_ptr<Model> model;
+            std::shared_ptr<Model> model;
 
-        LeptonFlavorOption opt_l;
+            LeptonFlavorOption opt_l;
 
-        UsedParameter hbar;
-        UsedParameter m_l;
-        UsedParameter tau;
-        UsedParameter mu;
-        UsedParameter phiBs;
+            UsedParameter hbar;
+            UsedParameter m_l;
+            UsedParameter tau;
+            UsedParameter mu;
+            UsedParameter phiBs;
 
-        static const std::vector<OptionSpecification> options;
+            static const std::vector<OptionSpecification> options;
 
-        Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-            model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
-            opt_l(o, options, "l"_ok),
-            hbar(p["QM::hbar"], u),
-            m_l(p["mass::" + opt_l.str()], u),
-            tau(p["life_time::B_s"], u),
-            mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
-            phiBs(p["B_s::q_over_p_phase"], u)
-        {
-            Context ctx("When constructing Bs->Phill observables");
-
-            std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
-
-            if ("BFS2004" == tag)
+            Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
+                model(Model::make(o.get("model"_ok, "WET"_ov), p, o)),
+                opt_l(o, options, "l"_ok),
+                hbar(p["QM::hbar"], u),
+                m_l(p["mass::" + opt_l.str()], u),
+                tau(p["life_time::B_s"], u),
+                mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
+                phiBs(p["B_s::q_over_p_phase"], u)
             {
-                amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::BFS2004>(p, o));
+                Context ctx("When constructing Bs->Phill observables");
+
+                std::string tag = o.has("tag"_ok) ? o["tag"_ok].str() : "";
+
+                if ("BFS2004" == tag)
+                {
+                    amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::BFS2004>(p, o));
+                }
+                else if ("GvDV2020" == tag)
+                {
+                    amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::GvDV2020>(p, o));
+                }
+                else if ("Naive" == tag)
+                {
+                    amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::Naive>(p, o));
+                }
+                else
+                {
+                    throw InternalError("BsToPhiDilepton: Unknown tag or no valid tag specified (tag = '" + tag + "')!");
+                }
+
+                u.uses(*amplitude_generator);
             }
-            else if ("GvDV2020" == tag)
+
+            ~Implementation() {}
+
+            inline std::array<double, 12>
+            angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & q2) const
             {
-                amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::GvDV2020>(p, o));
+                // cf. [BHvD:2010A], p. 26, eqs. (A1)-(A11)
+                // cf. [BHvD:2012A], app B, eqs. (B1)-(B12)
+                std::array<double, 12> result;
+
+                double z     = 4.0 * power_of<2>(m_l()) / q2;
+                double y     = m_l / std::sqrt(q2);
+                double beta2 = 1.0 - z;
+                double beta  = std::sqrt(beta2);
+
+                // j1s
+                result[0] = 3.0 / 4.0
+                            * ((2.0 + beta2) / 4.0 * (norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right))
+                               + z * real(A.a_perp_left * conj(A.a_perp_right) + A.a_para_left * conj(A.a_para_right)) + 4.0 * beta2 * (norm(A.a_long_perp) + norm(A.a_long_para))
+                               + 4.0 * (4.0 - 3.0 * beta2) * (norm(A.a_time_perp) + norm(A.a_time_para))
+                               + 8.0 * std::sqrt(2.0) * y * real((A.a_para_left + A.a_para_right) * conj(A.a_time_para) + (A.a_perp_left + A.a_perp_right) * conj(A.a_time_perp)));
+                // j1c
+                result[1] = 3.0 / 4.0
+                            * (norm(A.a_long_left) + norm(A.a_long_right) + z * (norm(A.a_time) + 2.0 * real(A.a_long_left * conj(A.a_long_right))) + beta2 * norm(A.a_scal)
+                               + 8.0 * (2.0 - beta2) * norm(A.a_time_long) + 8.0 * beta2 * norm(A.a_para_perp)
+                               + 16.0 * y * real((A.a_long_left + A.a_long_right) * conj(A.a_time_long)));
+                // j2s
+                result[2] = 3.0 * beta2 / 16.0
+                            * (norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right)
+                               - 16.0 * (norm(A.a_time_perp) + norm(A.a_time_para) + norm(A.a_long_perp) + norm(A.a_long_para)));
+                // j2c
+                result[3] = -3.0 * beta2 / 4.0 * (norm(A.a_long_left) + norm(A.a_long_right) - 8.0 * (norm(A.a_time_long) + norm(A.a_para_perp)));
+                // j3
+                result[4] = 3.0 / 8.0 * beta2
+                            * (norm(A.a_perp_left) + norm(A.a_perp_right) - norm(A.a_para_left) - norm(A.a_para_right)
+                               + 16.0 * (norm(A.a_time_para) - norm(A.a_time_perp) + norm(A.a_long_para) - norm(A.a_long_perp)));
+                // j4
+                result[5] = 3.0 / (4.0 * std::sqrt(2.0)) * beta2
+                            * real(A.a_long_left * conj(A.a_para_left) + A.a_long_right * conj(A.a_para_right)
+                                   - 8.0 * std::sqrt(2.0) * (A.a_time_long * conj(A.a_time_para) + A.a_para_perp * conj(A.a_long_para)));
+                // j5
+                result[6] = 3.0 * std::sqrt(2.0) / 4.0 * beta
+                            * real(A.a_long_left * conj(A.a_perp_left) - A.a_long_right * conj(A.a_perp_right) - 2.0 * std::sqrt(2.0) * A.a_time_para * conj(A.a_scal)
+                                   - y
+                                             * ((A.a_para_left + A.a_para_right) * conj(A.a_scal) + 4.0 * std::sqrt(2.0) * A.a_long_para * conj(A.a_time)
+                                                - 4.0 * std::sqrt(2.0) * (A.a_long_left - A.a_long_right) * conj(A.a_time_perp)
+                                                - 4.0 * (A.a_perp_left - A.a_perp_right) * conj(A.a_time_long)));
+                // j6s
+                result[7] = 3.0 / 2.0 * beta
+                            * real(A.a_para_left * conj(A.a_perp_left) - A.a_para_right * conj(A.a_perp_right)
+                                   + 4.0 * std::sqrt(2.0) * y * ((A.a_perp_left - A.a_perp_right) * conj(A.a_time_para) + (A.a_para_left - A.a_para_right) * conj(A.a_time_perp)));
+                // j6c
+                result[8] =
+                        3.0 * beta * real(2.0 * A.a_time_long * conj(A.a_scal) + y * ((A.a_long_left + A.a_long_right) * conj(A.a_scal) + 4.0 * A.a_para_perp * conj(A.a_time)));
+                // j7
+                result[9] = 3.0 * std::sqrt(2.0) / 4.0 * beta
+                            * imag(A.a_long_left * conj(A.a_para_left) - A.a_long_right * conj(A.a_para_right) + 2.0 * std::sqrt(2.0) * A.a_time_perp * conj(A.a_scal)
+                                   + y
+                                             * ((A.a_perp_left + A.a_perp_right) * conj(A.a_scal) + 4.0 * std::sqrt(2.0) * A.a_long_perp * conj(A.a_time)
+                                                + 4.0 * std::sqrt(2.0) * (A.a_long_left - A.a_long_right) * conj(A.a_time_para)
+                                                - 4.0 * (A.a_para_left - A.a_para_right) * conj(A.a_time_long)));
+                // j8
+                result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(A.a_long_left * conj(A.a_perp_left) + A.a_long_right * conj(A.a_perp_right));
+                // j9
+                result[11] = 3.0 / 4.0 * beta2 * imag(conj(A.a_para_left) * A.a_perp_left + conj(A.a_para_right) * A.a_perp_right);
+
+                return result;
             }
-            else if ("Naive" == tag)
+
+            inline std::array<double, 12>
+            differential_angular_coefficients_array(const double & q2) const
             {
-                amplitude_generator.reset(new BsToPhiDileptonAmplitudes<tag::Naive>(p, o));
-            }
-            else
-            {
-                throw InternalError("BsToPhiDilepton: Unknown tag or no valid tag specified (tag = '" + tag + "')!");
+                return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
             }
 
-            u.uses(*amplitude_generator);
-        }
-
-        ~Implementation()
-        {
-        }
-
-        inline std::array<double, 12> angular_coefficients_array(const BsToPhiDilepton::Amplitudes & A, const double & q2) const
-        {
-            // cf. [BHvD:2010A], p. 26, eqs. (A1)-(A11)
-            // cf. [BHvD:2012A], app B, eqs. (B1)-(B12)
-            std::array<double, 12> result;
-
-            double z = 4.0 * power_of<2>(m_l()) / q2;
-            double y = m_l / std::sqrt(q2);
-            double beta2 = 1.0 - z;
-            double beta = std::sqrt(beta2);
-
-            // j1s
-            result[0] = 3.0 / 4.0 * (
-                  (2.0 + beta2) / 4.0 * (norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right))
-                  + z * real(A.a_perp_left * conj(A.a_perp_right) + A.a_para_left * conj(A.a_para_right))
-                  + 4.0 * beta2 * (norm(A.a_long_perp) + norm(A.a_long_para))
-                  + 4.0 * (4.0 - 3.0 * beta2) * (norm(A.a_time_perp) + norm(A.a_time_para))
-                  + 8.0 * std::sqrt(2.0) * y * real(
-                       (A.a_para_left + A.a_para_right) * conj(A.a_time_para)
-                     + (A.a_perp_left + A.a_perp_right) * conj(A.a_time_perp)
-                  )
-               );
-            // j1c
-            result[1] = 3.0 / 4.0 * (
-                  norm(A.a_long_left) + norm(A.a_long_right)
-                  + z * (norm(A.a_time) + 2.0 * real(A.a_long_left * conj(A.a_long_right)))
-                  + beta2 * norm(A.a_scal)
-                  + 8.0 * (2.0 - beta2) * norm(A.a_time_long)
-                  + 8.0 * beta2 * norm(A.a_para_perp)
-                  + 16.0 * y * real((A.a_long_left + A.a_long_right) * conj(A.a_time_long))
-               );
-            // j2s
-            result[2] = 3.0 * beta2 / 16.0 * (
-                  norm(A.a_perp_left) + norm(A.a_perp_right) + norm(A.a_para_left) + norm(A.a_para_right)
-                  - 16.0 * (norm(A.a_time_perp) + norm(A.a_time_para) + norm(A.a_long_perp) + norm(A.a_long_para))
-               );
-            // j2c
-            result[3] = -3.0 * beta2 / 4.0 * (
-                  norm(A.a_long_left) + norm(A.a_long_right)
-                  - 8.0 * (norm(A.a_time_long) + norm(A.a_para_perp))
-               );
-            // j3
-            result[4] = 3.0 / 8.0 * beta2 * (
-                  norm(A.a_perp_left) + norm(A.a_perp_right) - norm(A.a_para_left) - norm(A.a_para_right)
-                  + 16.0 * (norm(A.a_time_para) - norm(A.a_time_perp) + norm(A.a_long_para) - norm(A.a_long_perp))
-               );
-            // j4
-            result[5] = 3.0 / (4.0 * std::sqrt(2.0)) * beta2 * real(
-                  A.a_long_left * conj(A.a_para_left) + A.a_long_right * conj(A.a_para_right)
-                  - 8.0 * std::sqrt(2.0) * (A.a_time_long * conj(A.a_time_para) + A.a_para_perp * conj(A.a_long_para))
-               );
-            // j5
-            result[6] = 3.0 * std::sqrt(2.0) / 4.0 * beta * real(
-                  A.a_long_left * conj(A.a_perp_left) - A.a_long_right * conj(A.a_perp_right)
-                  - 2.0 * std::sqrt(2.0) * A.a_time_para * conj(A.a_scal)
-                  - y * (
-                     (A.a_para_left + A.a_para_right) * conj(A.a_scal)
-                     + 4.0 * std::sqrt(2.0) * A.a_long_para * conj(A.a_time)
-                     - 4.0 * std::sqrt(2.0) * (A.a_long_left - A.a_long_right) * conj(A.a_time_perp)
-                     - 4.0 * (A.a_perp_left - A.a_perp_right) * conj(A.a_time_long)
-                  )
-               );
-            // j6s
-            result[7] = 3.0 / 2.0 * beta * real(
-                  A.a_para_left * conj(A.a_perp_left) - A.a_para_right * conj(A.a_perp_right)
-                  + 4.0 * std::sqrt(2.0) * y * (
-                       (A.a_perp_left - A.a_perp_right) * conj(A.a_time_para)
-                     + (A.a_para_left - A.a_para_right) * conj(A.a_time_perp)
-                  )
-               );
-            // j6c
-            result[8] = 3.0 * beta * real(
-                  2.0 * A.a_time_long * conj(A.a_scal)
-                  + y * (
-                     (A.a_long_left + A.a_long_right) * conj(A.a_scal)
-                     + 4.0 * A.a_para_perp * conj(A.a_time)
-                  )
-               );
-            // j7
-            result[9] = 3.0 * std::sqrt(2.0) / 4.0 * beta * imag(
-                  A.a_long_left * conj(A.a_para_left) - A.a_long_right * conj(A.a_para_right)
-                  + 2.0 * std::sqrt(2.0) * A.a_time_perp * conj(A.a_scal)
-                  + y * (
-                     (A.a_perp_left + A.a_perp_right) * conj(A.a_scal)
-                     + 4.0 * std::sqrt(2.0) * A.a_long_perp * conj(A.a_time)
-                     + 4.0 * std::sqrt(2.0) * (A.a_long_left - A.a_long_right) * conj(A.a_time_para)
-                     - 4.0 * (A.a_para_left - A.a_para_right) * conj(A.a_time_long)
-                  )
-               );
-            // j8
-            result[10] = 3.0 / 4.0 / std::sqrt(2.0) * beta2 * imag(
-                  A.a_long_left * conj(A.a_perp_left) + A.a_long_right * conj(A.a_perp_right)
-               );
-            // j9
-            result[11] = 3.0 / 4.0 * beta2 * imag(
-                  conj(A.a_para_left) * A.a_perp_left + conj(A.a_para_right) * A.a_perp_right
-               );
-
-            return result;
-        }
-
-        inline std::array<double, 12> differential_angular_coefficients_array(const double & q2) const
-        {
-            return angular_coefficients_array(amplitude_generator->amplitudes(q2), q2);
-        }
-
-        inline BsToPhiDilepton::AngularCoefficients differential_angular_coefficients(const double & q2) const
-        {
-            return BsToPhiDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
-        }
-
-        BsToPhiDilepton::AngularCoefficients integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
-        {
-            std::function<std::array<double, 12> (const double &)> integrand =
-                    std::bind(&Implementation<BsToPhiDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
-            std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
-
-            return BsToPhiDilepton::AngularCoefficients(integrated_angular_coefficients_array);
-        }
-
-        inline double decay_width(const BsToPhiDilepton::AngularCoefficients & a_c)
-        {
-            // cf. [BHvD:2010A], p. 6, eq. (2.7)
-            return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
-        }
-
-        inline double beta_l(const double & q2) const
-        {
-            return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
-        }
-
-        double a_fb_zero_crossing() const
-        {
-            // We trust QCDF results in a validity range from 0.5 GeV^2 < s < 6.0 GeV^2
-            static const double min_result = 0.5;
-            static const double max_result = 7.0;
-
-            // Use calT_perp / xi_perp = C_7 as start point.
-            // Use hard coded values for mu=4.2 GeV and M_B = 5.2795 GeV here.
-            WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), amplitude_generator->lepton_flavor, amplitude_generator->cp_conjugate);
-            const double start = -2.0 * model->m_b_msbar(4.2) * 5.2795 * real(wc.c7() / wc.c9());
-
-            double result = start;
-            // clamp result to QCDF validity region
-            result = std::max(min_result, result);
-            result = std::min(max_result, result);
-
-            // perform a couple of Newton-Raphson steps
-            for (unsigned i = 0 ; i < 100 ; ++i)
+            inline BsToPhiDilepton::AngularCoefficients
+            differential_angular_coefficients(const double & q2) const
             {
-                double xplus = result * 1.03;
-                double xminus = result * 0.97;
+                return BsToPhiDilepton::AngularCoefficients(differential_angular_coefficients_array(q2));
+            }
 
-                auto a_c_central = differential_angular_coefficients(result);
-                double f = a_c_central.j6s + 0.5 * a_c_central.j6c;
-                auto a_c_minus   = differential_angular_coefficients(xminus);
-                double f_xminus = a_c_minus.j6s + 0.5 * a_c_minus.j6c;
-                auto a_c_plus    = differential_angular_coefficients(xplus);
-                double f_xplus = a_c_plus.j6s + 0.5 * a_c_plus.j6c;
+            BsToPhiDilepton::AngularCoefficients
+            integrated_angular_coefficients(const double & q2_min, const double & q2_max) const
+            {
+                std::function<std::array<double, 12>(const double &)> integrand =
+                        std::bind(&Implementation<BsToPhiDilepton>::differential_angular_coefficients_array, this, std::placeholders::_1);
+                std::array<double, 12> integrated_angular_coefficients_array = integrate<1, 12>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
 
-                double fprime = (f_xplus - f_xminus) / (xplus - xminus);
+                return BsToPhiDilepton::AngularCoefficients(integrated_angular_coefficients_array);
+            }
 
-                if (std::abs(f / fprime) < 1e-8)
-                    break;
+            inline double
+            decay_width(const BsToPhiDilepton::AngularCoefficients & a_c)
+            {
+                // cf. [BHvD:2010A], p. 6, eq. (2.7)
+                return 2.0 * a_c.j1s + a_c.j1c - 1.0 / 3.0 * (2.0 * a_c.j2s + a_c.j2c);
+            }
 
-                result = result - f / fprime;
+            inline double
+            beta_l(const double & q2) const
+            {
+                return std::sqrt(1.0 - 4.0 * m_l * m_l / q2);
+            }
+
+            double
+            a_fb_zero_crossing() const
+            {
+                // We trust QCDF results in a validity range from 0.5 GeV^2 < s < 6.0 GeV^2
+                static const double min_result = 0.5;
+                static const double max_result = 7.0;
+
+                // Use calT_perp / xi_perp = C_7 as start point.
+                // Use hard coded values for mu=4.2 GeV and M_B = 5.2795 GeV here.
+                WilsonCoefficients<BToS> wc    = model->wilson_coefficients_b_to_s(mu(), amplitude_generator->lepton_flavor, amplitude_generator->cp_conjugate);
+                const double             start = -2.0 * model->m_b_msbar(4.2) * 5.2795 * real(wc.c7() / wc.c9());
+
+                double result = start;
                 // clamp result to QCDF validity region
-                result = std::max(min_result, result);
-                result = std::min(max_result, result);
-            }
+                result        = std::max(min_result, result);
+                result        = std::min(max_result, result);
 
-            return result;
-        }
+                // perform a couple of Newton-Raphson steps
+                for (unsigned i = 0; i < 100; ++i)
+                {
+                    double xplus  = result * 1.03;
+                    double xminus = result * 0.97;
+
+                    auto   a_c_central = differential_angular_coefficients(result);
+                    double f           = a_c_central.j6s + 0.5 * a_c_central.j6c;
+                    auto   a_c_minus   = differential_angular_coefficients(xminus);
+                    double f_xminus    = a_c_minus.j6s + 0.5 * a_c_minus.j6c;
+                    auto   a_c_plus    = differential_angular_coefficients(xplus);
+                    double f_xplus     = a_c_plus.j6s + 0.5 * a_c_plus.j6c;
+
+                    double fprime = (f_xplus - f_xminus) / (xplus - xminus);
+
+                    if (std::abs(f / fprime) < 1e-8)
+                    {
+                        break;
+                    }
+
+                    result = result - f / fprime;
+                    // clamp result to QCDF validity region
+                    result = std::max(min_result, result);
+                    result = std::min(max_result, result);
+                }
+
+                return result;
+            }
     };
 
     BsToPhiDilepton::BsToPhiDilepton(const Parameters & parameters, const Options & options) :
@@ -298,13 +266,9 @@ namespace eos
     {
     }
 
-    BsToPhiDilepton::~BsToPhiDilepton()
-    {
-    }
+    BsToPhiDilepton::~BsToPhiDilepton() {}
 
-    const std::vector<OptionSpecification>
-    Implementation<BsToPhiDilepton>::options
-    {
+    const std::vector<OptionSpecification> Implementation<BsToPhiDilepton>::options{
         Model::option_specification(),
         { "l"_ok, { "e"_ov, "mu"_ov, "tau"_ov }, "mu"_ov }
     };
@@ -322,37 +286,31 @@ namespace eos
         // Cosine squared of the angles
         double c_theta_k_2 = c_theta_k * c_theta_k;
         double c_theta_l_2 = c_theta_l * c_theta_l;
-        double c_phi = cos(phi);
+        double c_phi       = cos(phi);
         // Sine squared of the angles
         double s_theta_k_2 = 1.0 - c_theta_k_2;
         double s_theta_l_2 = 1.0 - c_theta_l_2;
         // Sine of the angles
-        double s_theta_k = sqrt(s_theta_k_2);
-        double s_theta_l = sqrt(s_theta_l_2);
-        double s_phi = sin(phi);
+        double s_theta_k   = sqrt(s_theta_k_2);
+        double s_theta_l   = sqrt(s_theta_l_2);
+        double s_phi       = sin(phi);
         // Cosine of twice the angle
-        //double c_2_theta_k = 2.0 * c_theta_k_2 - 1.0;
+        // double c_2_theta_k = 2.0 * c_theta_k_2 - 1.0;
         double c_2_theta_l = 2.0 * c_theta_l_2 - 1.0;
-        double c_2_phi = cos(2.0 * phi);
+        double c_2_phi     = cos(2.0 * phi);
         // Sine of twice the angle
         double s_2_theta_k = 2.0 * s_theta_k * c_theta_k;
         double s_2_theta_l = 2.0 * s_theta_l * c_theta_l;
-        double s_2_phi = sin(2.0 * phi);
+        double s_2_phi     = sin(2.0 * phi);
 
-        AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
-        double Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
+        AngularCoefficients a_c   = _imp->differential_angular_coefficients(q2);
+        double              Gamma = _imp->decay_width(_imp->integrated_angular_coefficients(1.00, 6.00));
 
-        double result = 3.0 / 8.0 / M_PI * (
-                 a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2
-                +  (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l
-                +  a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
-                +  a_c.j4 * s_2_theta_k * s_2_theta_l * c_phi
-                +  a_c.j5 * s_2_theta_k * s_theta_l * c_phi
-                +  (a_c.j6s * s_theta_k_2 + a_c.j6c * c_theta_k_2) * c_theta_l
-                +  a_c.j7 * s_2_theta_k * s_theta_l * s_phi
-                +  a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi
-                +  a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi
-                ) / Gamma;
+        double result = 3.0 / 8.0 / M_PI
+                        * (a_c.j1s + (a_c.j1c - a_c.j1s) * c_theta_k_2 + (a_c.j2s + (a_c.j2c - a_c.j2s) * c_theta_k_2) * c_2_theta_l + a_c.j3 * s_theta_k_2 * s_theta_l_2 * c_2_phi
+                           + a_c.j4 * s_2_theta_k * s_2_theta_l * c_phi + a_c.j5 * s_2_theta_k * s_theta_l * c_phi + (a_c.j6s * s_theta_k_2 + a_c.j6c * c_theta_k_2) * c_theta_l
+                           + a_c.j7 * s_2_theta_k * s_theta_l * s_phi + a_c.j8 * s_2_theta_k * s_2_theta_l * s_phi + a_c.j9 * s_theta_k_2 * s_theta_l_2 * s_2_phi)
+                        / Gamma;
 
         return result;
     }
@@ -365,7 +323,6 @@ namespace eos
 
         return BsToPhiDilepton::decay_width(q2, -c_theta_l_LHCb, +c_theta_k_LHCb, -phi_LHCb);
     }
-
 
     double
     BsToPhiDilepton::differential_decay_width(const double & q2) const
@@ -434,8 +391,7 @@ namespace eos
         AngularCoefficients a_c = _imp->differential_angular_coefficients(q2);
 
         // cf. [BS:2011A], eq. (34), p. 9 for the massless case
-        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
-            / 8.0 / a_c.j2s;
+        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9))) / 8.0 / a_c.j2s;
     }
 
     double
@@ -590,7 +546,6 @@ namespace eos
         return integrated_decay_width(q2_min, q2_max) * _imp->tau() / _imp->hbar();
     }
 
-
     double
     BsToPhiDilepton::integrated_unnormalized_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const
     {
@@ -604,7 +559,7 @@ namespace eos
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         return (a_c.j6s + 0.5 * a_c.j6c) / Gamma;
-     }
+    }
 
     double
     BsToPhiDilepton::integrated_forward_backward_asymmetry(const double & q2_min, const double & q2_max) const
@@ -663,8 +618,7 @@ namespace eos
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
 
         // cf. [BS:2011A], eq. (34), p. 9 for the massless case
-        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9)))
-            / 8.0 / a_c.j2s;
+        return std::sqrt(16.0 * power_of<2>(a_c.j2s) - power_of<2>(a_c.j6s) - 4.0 * (power_of<2>(a_c.j3) + power_of<2>(a_c.j9))) / 8.0 / a_c.j2s;
     }
 
     double
@@ -696,7 +650,7 @@ namespace eos
     {
         // cf. [BHvD:2010A], p. 7, eq. (2.14)
         AngularCoefficients a_c = _imp->integrated_angular_coefficients(q2_min, q2_max);
-        return  a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
+        return a_c.j5 / sqrt(-2.0 * a_c.j2c * (2.0 * a_c.j2s + a_c.j3));
     }
 
     double
@@ -813,24 +767,21 @@ namespace eos
     BsToPhiDilepton::differential_symrel_le_a1v(const double & q2) const
     {
         const auto & ag = *_imp->amplitude_generator;
-        return power_of<2>(ag.m_B() + ag.m_V()) / (2.0 * ag.m_B() * ag.energy(q2))
-            * ag.form_factors->a_1(q2) / ag.form_factors->v(q2);
+        return power_of<2>(ag.m_B() + ag.m_V()) / (2.0 * ag.m_B() * ag.energy(q2)) * ag.form_factors->a_1(q2) / ag.form_factors->v(q2);
     }
 
     double
     BsToPhiDilepton::differential_symrel_le_t1v(const double & q2) const
     {
         const auto & ag = *_imp->amplitude_generator;
-        return (ag.m_B() + ag.m_V()) / ag.m_B()
-            * ag.form_factors->t_1(q2) / ag.form_factors->v(q2);
+        return (ag.m_B() + ag.m_V()) / ag.m_B() * ag.form_factors->t_1(q2) / ag.form_factors->v(q2);
     }
 
     double
     BsToPhiDilepton::differential_symrel_le_t2v(const double & q2) const
     {
         const auto & ag = *_imp->amplitude_generator;
-        return (ag.m_B() + ag.m_V()) / (2.0 * ag.energy(q2))
-            * ag.form_factors->t_2(q2) / ag.form_factors->v(q2);
+        return (ag.m_B() + ag.m_V()) / (2.0 * ag.energy(q2)) * ag.form_factors->t_2(q2) / ag.form_factors->v(q2);
     }
 
     double
@@ -838,42 +789,40 @@ namespace eos
     {
         return _imp->amplitude_generator->real_C9_perp(q2);
     }
+
     double
     BsToPhiDilepton::real_C9_para(const double & q2) const
     {
         return _imp->amplitude_generator->real_C9_para(q2);
     }
+
     double
     BsToPhiDilepton::imag_C9_perp(const double & q2) const
     {
         return _imp->amplitude_generator->imag_C9_perp(q2);
     }
+
     double
     BsToPhiDilepton::imag_C9_para(const double & q2) const
     {
         return _imp->amplitude_generator->imag_C9_para(q2);
     }
 
-    const std::string
-    BsToPhiDilepton::description = "\
+    const std::string BsToPhiDilepton::description = "\
 The decay Bsbar->phi(-> Kbar K) l^+ l^-, with l=e,mu,tau \
 a charged lepton. Various theory models can be selected using \
 the 'tag' option";
 
-    const std::string
-    BsToPhiDilepton::kinematics_description_q2 = "\
+    const std::string BsToPhiDilepton::kinematics_description_q2 = "\
 The invariant mass of the charged lepton pair in GeV^2.";
 
-    const std::string
-    BsToPhiDilepton::kinematics_description_c_theta_l = "\
+    const std::string BsToPhiDilepton::kinematics_description_c_theta_l = "\
 The cosine of the negatively-charged lepton l^-'s helicity angle theta_l in the l^+l^- rest frame.";
 
-    const std::string
-    BsToPhiDilepton::kinematics_description_c_theta_k = "\
+    const std::string BsToPhiDilepton::kinematics_description_c_theta_k = "\
 The cosine of the Kbar's helicity angle theta_k in the Kbar-K rest frame.";
 
-    const std::string
-    BsToPhiDilepton::kinematics_description_phi = "\
+    const std::string BsToPhiDilepton::kinematics_description_phi = "\
 The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
 
     BsToPhiDilepton::Amplitudes
@@ -894,10 +843,7 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         return _imp->phiBs;
     }
 
-    const std::set<ReferenceName>
-    BsToPhiDilepton::references
-    {
-    };
+    const std::set<ReferenceName> BsToPhiDilepton::references{};
 
     std::vector<OptionSpecification>::const_iterator
     BsToPhiDilepton::begin_options()
@@ -911,7 +857,6 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         return Implementation<BsToPhiDilepton>::options.cend();
     }
 
-
     BsToPhiDileptonAndConjugate::BsToPhiDileptonAndConjugate(const Parameters & parameters, const Options & options):
         bstophidilepton(parameters, options + Options{{"cp-conjugate"_ok, "true"_ov}}),
         bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate"_ok, "false"_ov}})
@@ -922,38 +867,36 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
 
     struct BsToPhiDileptonAndConjugate::AngularhCoefficients
     {
-        double h1s, h1c;
-        double h2s, h2c;
-        double h3;
-        double h4;
-        double h5;
-        double h6s, h6c;
-        double h7;
-        double h8;
-        double h9;
+            double h1s, h1c;
+            double h2s, h2c;
+            double h3;
+            double h4;
+            double h5;
+            double h6s, h6c;
+            double h7;
+            double h8;
+            double h9;
 
-        AngularhCoefficients()
-        {
-        }
+            AngularhCoefficients() {}
 
-        AngularhCoefficients(const std::array<double, 12> & a) :
-            h1s(a[0]),
-            h1c(a[1]),
-            h2s(a[2]),
-            h2c(a[3]),
-            h3(a[4]),
-            h4(a[5]),
-            h5(a[6]),
-            h6s(a[7]),
-            h6c(a[8]),
-            h7(a[9]),
-            h8(a[10]),
-            h9(a[11])
-        {
-        }
+            AngularhCoefficients(const std::array<double, 12> & a) :
+                h1s(a[0]),
+                h1c(a[1]),
+                h2s(a[2]),
+                h2c(a[3]),
+                h3(a[4]),
+                h4(a[5]),
+                h5(a[6]),
+                h6s(a[7]),
+                h6c(a[8]),
+                h7(a[9]),
+                h8(a[10]),
+                h9(a[11])
+            {
+            }
     };
 
-
+    // clang-format off
     inline std::array<double, 12>
     BsToPhiDileptonAndConjugate::angular_h_coefficients_array(const BsToPhiDilepton::Amplitudes & A,
                                                               const BsToPhiDilepton::Amplitudes & Atilda,
@@ -1128,12 +1071,9 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
     BsToPhiDileptonAndConjugate::references
     {
     };
+    // clang-format on
 
-    const std::vector<OptionSpecification>
-    BsToPhiDileptonAndConjugate::options
-    {
-    };
-
+    const std::vector<OptionSpecification> BsToPhiDileptonAndConjugate::options{};
 
     std::vector<OptionSpecification>::const_iterator
     BsToPhiDileptonAndConjugate::begin_options()
@@ -1147,4 +1087,4 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         return options.cend();
     }
 
-}
+} // namespace eos

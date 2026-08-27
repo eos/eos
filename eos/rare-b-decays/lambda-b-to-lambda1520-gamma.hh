@@ -32,9 +32,7 @@ namespace eos
     /*!
      * Calculates observables in Lambda_b -> Lambda1520 gamma decays
      */
-    class LambdaBToLambda1520Gamma :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaBToLambda1520Gamma>
+    class LambdaBToLambda1520Gamma : public ParameterUser, public PrivateImplementationPattern<LambdaBToLambda1520Gamma>
     {
         public:
             LambdaBToLambda1520Gamma(const Parameters & parameters, const Options & options);
@@ -70,11 +68,11 @@ namespace eos
      */
     struct LambdaBToLambda1520Gamma::Amplitudes
     {
-        complex<double> a_perp12;
-        complex<double> a_para12;
-        complex<double> a_perp32;
-        complex<double> a_para32;
+            complex<double> a_perp12;
+            complex<double> a_para12;
+            complex<double> a_perp32;
+            complex<double> a_para32;
     };
-}
+} // namespace eos
 
 #endif

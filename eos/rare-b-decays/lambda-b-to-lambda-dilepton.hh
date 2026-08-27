@@ -32,9 +32,7 @@ namespace eos
     /*
      * Decay: Lambda_b -> Lambda l^+ l^- at large recoil, cf. [BFvD:2014A]
      */
-    template <> class LambdaBToLambdaDilepton<LargeRecoil> :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaBToLambdaDilepton<LargeRecoil>>
+    template <> class LambdaBToLambdaDilepton<LargeRecoil> : public ParameterUser, public PrivateImplementationPattern<LambdaBToLambdaDilepton<LargeRecoil>>
     {
         public:
             LambdaBToLambdaDilepton(const Parameters &, const Options &);
@@ -102,9 +100,7 @@ namespace eos
     /*
      * Decay: Lambda_b -> Lambda l^+ l^- at low recoil, cf. [BFvD:2014A]
      */
-    template <> class LambdaBToLambdaDilepton<LowRecoil> :
-        public ParameterUser,
-        public PrivateImplementationPattern<LambdaBToLambdaDilepton<LowRecoil>>
+    template <> class LambdaBToLambdaDilepton<LowRecoil> : public ParameterUser, public PrivateImplementationPattern<LambdaBToLambdaDilepton<LowRecoil>>
     {
         public:
             LambdaBToLambdaDilepton(const Parameters &, const Options &);
@@ -179,6 +175,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

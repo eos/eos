@@ -28,60 +28,55 @@ namespace eos
      */
     struct BToKstarDilepton::Amplitudes
     {
-        complex<double> a_long_right, a_long_left;
-        complex<double> a_perp_right, a_perp_left;
-        complex<double> a_para_right, a_para_left;
-        complex<double> a_time, a_scal;
-        complex<double> a_para_perp, a_time_long;
-        complex<double> a_time_perp, a_long_perp;
-        complex<double> a_time_para, a_long_para;
+            complex<double> a_long_right, a_long_left;
+            complex<double> a_perp_right, a_perp_left;
+            complex<double> a_para_right, a_para_left;
+            complex<double> a_time, a_scal;
+            complex<double> a_para_perp, a_time_long;
+            complex<double> a_time_perp, a_long_perp;
+            complex<double> a_time_para, a_long_para;
     };
 
     struct BToKstarDilepton::AngularCoefficients
     {
-        double j1s, j1c;
-        double j2s, j2c;
-        double j3;
-        double j4;
-        double j5;
-        double j6s, j6c;
-        double j7;
-        double j8;
-        double j9;
+            double j1s, j1c;
+            double j2s, j2c;
+            double j3;
+            double j4;
+            double j5;
+            double j6s, j6c;
+            double j7;
+            double j8;
+            double j9;
 
-        AngularCoefficients()
-        {
-        }
+            AngularCoefficients() {}
 
-        AngularCoefficients(const std::array<double, 12> & a) :
-            j1s(a[0]),
-            j1c(a[1]),
-            j2s(a[2]),
-            j2c(a[3]),
-            j3(a[4]),
-            j4(a[5]),
-            j5(a[6]),
-            j6s(a[7]),
-            j6c(a[8]),
-            j7(a[9]),
-            j8(a[10]),
-            j9(a[11])
-        {
-        }
+            AngularCoefficients(const std::array<double, 12> & a) :
+                j1s(a[0]),
+                j1c(a[1]),
+                j2s(a[2]),
+                j2c(a[3]),
+                j3(a[4]),
+                j4(a[5]),
+                j5(a[6]),
+                j6s(a[7]),
+                j6c(a[8]),
+                j7(a[9]),
+                j8(a[10]),
+                j9(a[11])
+            {
+            }
     };
 
-    class BToKstarDilepton::IntermediateResult :
-        public CacheableObservable::IntermediateResult
+    class BToKstarDilepton::IntermediateResult : public CacheableObservable::IntermediateResult
     {
         public:
             BToKstarDilepton::AngularCoefficients ac;
 
-            IntermediateResult()
-            {
-            }
+            IntermediateResult() {}
 
             ~IntermediateResult() = default;
     };
-}
+} // namespace eos
 
 #endif

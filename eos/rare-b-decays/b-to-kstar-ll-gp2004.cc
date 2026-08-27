@@ -22,19 +22,18 @@
  */
 
 #include <eos/maths/power-of.hh>
-#include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
-#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/nonlocal-form-factors/hard-scattering.hh>
 #include <eos/nonlocal-form-factors/long-distance.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-gp2004.hh>
+#include <eos/rare-b-decays/b-to-kstar-ll-impl.hh>
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>
 
 namespace eos
 {
 
-    BToKstarDileptonAmplitudes<tag::GP2004>::BToKstarDileptonAmplitudes(const Parameters & p,
-            const Options & o) :
+    BToKstarDileptonAmplitudes<tag::GP2004>::BToKstarDileptonAmplitudes(const Parameters & p, const Options & o) :
         AmplitudeGenerator(p, o),
         hbar(p["QM::hbar"], *this),
         m_b_MSbar(p["mass::b(MSbar)"], *this),
@@ -56,16 +55,12 @@ namespace eos
         Context ctx("When constructing B->K^*ll GP2004 amplitudes");
     }
 
-    BToKstarDileptonAmplitudes<tag::GP2004>::~BToKstarDileptonAmplitudes()
-    {
-    }
+    BToKstarDileptonAmplitudes<tag::GP2004>::~BToKstarDileptonAmplitudes() {}
 
-    const std::vector<OptionSpecification>
-    BToKstarDileptonAmplitudes<tag::GP2004>::options
-    {
-        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov },  "false"_ov },
-        { "nlo"_ok,             { "true"_ov, "false"_ov },  "true"_ov  },
-        { "simple-sl"_ok,       { "true"_ov, "false"_ov },  "false"_ov }
+    const std::vector<OptionSpecification> BToKstarDileptonAmplitudes<tag::GP2004>::options{
+        { "ccbar-resonance"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        {             "nlo"_ok, { "true"_ov, "false"_ov },  "true"_ov },
+        {       "simple-sl"_ok, { "true"_ov, "false"_ov }, "false"_ov }
     };
 
     // cf. [GP:2004A], Eq. (56)
@@ -109,9 +104,8 @@ namespace eos
     {
         double lambda_t = abs(model->ckm_tb() * conj(model->ckm_ts()));
 
-        return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B
-                * lambda_t * lambda_t * s_hat(q2) * beta_l(q2)
-                * std::sqrt(eos::lambda(m_B * m_B, m_Kstar * m_Kstar, q2))); // cf. [BHP:2008A], Eq. (C.6), p. 21
+        return std::sqrt(power_of<2>(g_fermi() * alpha_e()) / 3.0 / 1024 / power_of<5>(M_PI) / m_B * lambda_t * lambda_t * s_hat(q2) * beta_l(q2)
+                         * std::sqrt(eos::lambda(m_B * m_B, m_Kstar * m_Kstar, q2))); // cf. [BHP:2008A], Eq. (C.6), p. 21
     }
 
     BToKstarDilepton::Amplitudes
@@ -124,75 +118,72 @@ namespace eos
         WilsonCoefficients<BToS> wc = model->wilson_coefficients_b_to_s(mu(), lepton_flavor, cp_conjugate);
 
         const double m_B2 = m_B * m_B, m_Kstar2 = m_Kstar * m_Kstar, m2_diff = m_B2 - m_Kstar2;
-        const double m_Kstarhat = m_Kstar / m_B;
+        const double m_Kstarhat  = m_Kstar / m_B;
         const double m_Kstarhat2 = power_of<2>(m_Kstarhat);
-        const double s_hat = q2 / m_B / m_B;
+        const double s_hat       = q2 / m_B / m_B;
         const double a_1 = form_factors->a_1(q2), a_2 = form_factors->a_2(q2);
-        const double alpha_s = model->alpha_s(mu());
-        const double norm_s = this->norm(q2);
-        const double lam = this->lambda(q2);
+        const double alpha_s  = model->alpha_s(mu());
+        const double norm_s   = this->norm(q2);
+        const double lam      = this->lambda(q2);
         const double sqrt_lam = std::sqrt(lam);
-        const double sqrt_s = std::sqrt(q2);
+        const double sqrt_s   = std::sqrt(q2);
 
         const complex<double> subleading_perp = 0.5 / m_B * alpha_s * std::polar(lambda_perp(), sl_phase_perp());
         const complex<double> subleading_par  = 0.5 / m_B * alpha_s * std::polar(lambda_par(), sl_phase_par());
         const complex<double> subleading_long = 0.5 / m_B * alpha_s * std::polar(lambda_long(), sl_phase_long());
 
-        const complex<double> c_9eff = c9eff(wc, q2);
-        const complex<double> c_7eff = c7eff(wc, q2);
+        const complex<double> c_9eff           = c9eff(wc, q2);
+        const complex<double> c_7eff           = c7eff(wc, q2);
         const complex<double> c910_plus_left   = (c_9eff + wc.c9prime()) - (wc.c10() + wc.c10prime());
         const complex<double> c910_plus_right  = (c_9eff + wc.c9prime()) + (wc.c10() + wc.c10prime());
         const complex<double> c910_minus_left  = (c_9eff - wc.c9prime()) - (wc.c10() - wc.c10prime());
         const complex<double> c910_minus_right = (c_9eff - wc.c9prime()) + (wc.c10() - wc.c10prime());
-        const complex<double> c7_plus  = kappa() * (c_7eff + wc.c7prime()) * (2.0 * m_B / q2);
-        const complex<double> c7_minus = kappa() * (c_7eff - wc.c7prime()) * (2.0 * m_B / q2);
+        const complex<double> c7_plus          = kappa() * (c_7eff + wc.c7prime()) * (2.0 * m_B / q2);
+        const complex<double> c7_minus         = kappa() * (c_7eff - wc.c7prime()) * (2.0 * m_B / q2);
 
         // longitudinal
-        complex<double> prefactor_long = complex<double>(-1.0, 0.0) * m_B()
-            / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
+        complex<double> prefactor_long     = complex<double>(-1.0, 0.0) * m_B() / (2.0 * m_Kstarhat * (1.0 + m_Kstarhat) * std::sqrt(s_hat));
         complex<double> wilson_long1_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
-        complex<double> wilson_long1_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
+        complex<double> wilson_long1_left  = c910_minus_left + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
         complex<double> wilson_long2_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
-        complex<double> wilson_long2_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
+        complex<double> wilson_long2_left  = c910_minus_left + c7_minus * (m_b_MSbar() - m_s() - lambda_long()) - subleading_long;
 
         double formfactor_long1 = (1.0 - m_Kstarhat2 - s_hat) * power_of<2>(1.0 + m_Kstarhat) * a_1;
         double formfactor_long2 = -eos::lambda(1.0, m_Kstarhat2, s_hat) * a_2;
         // cf. [BHvD:2010A], Eq. (3.15), p. 10
-        result.a_long_right = norm_s * prefactor_long * (wilson_long1_right * formfactor_long1 + wilson_long2_right * formfactor_long2);
-        result.a_long_left  = norm_s * prefactor_long * (wilson_long1_left  * formfactor_long1 + wilson_long2_left  * formfactor_long2);
+        result.a_long_right     = norm_s * prefactor_long * (wilson_long1_right * formfactor_long1 + wilson_long2_right * formfactor_long2);
+        result.a_long_left      = norm_s * prefactor_long * (wilson_long1_left * formfactor_long1 + wilson_long2_left * formfactor_long2);
 
         // perpendicular
-        complex<double> prefactor_perp = complex<double>(1.0, 0.0) * m_B();
+        complex<double> prefactor_perp    = complex<double>(1.0, 0.0) * m_B();
         complex<double> wilson_perp_right = c910_plus_right + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
-        complex<double> wilson_perp_left  = c910_plus_left  + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
+        complex<double> wilson_perp_left  = c910_plus_left + c7_plus * (m_b_MSbar() + m_s() + lambda_perp()) - subleading_perp;
 
         double formfactor_perp = std::sqrt(2.0 * eos::lambda(1.0, m_Kstarhat2, s_hat)) / (1.0 + m_Kstarhat) * form_factors->v(q2);
         // cf. [BHvD:2010A], Eq. (3.13), p. 10
-        result.a_perp_right = norm_s * prefactor_perp * wilson_perp_right * formfactor_perp;
-        result.a_perp_left  = norm_s * prefactor_perp * wilson_perp_left  * formfactor_perp;
+        result.a_perp_right    = norm_s * prefactor_perp * wilson_perp_right * formfactor_perp;
+        result.a_perp_left     = norm_s * prefactor_perp * wilson_perp_left * formfactor_perp;
 
         // parallel
-        complex<double> prefactor_par = complex<double>(-1.0, 0.0) * m_B();
+        complex<double> prefactor_par    = complex<double>(-1.0, 0.0) * m_B();
         complex<double> wilson_par_right = c910_minus_right + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
-        complex<double> wilson_par_left  = c910_minus_left  + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
-        double formfactor_par = std::sqrt(2) * (1.0 + m_Kstarhat) * a_1;
+        complex<double> wilson_par_left  = c910_minus_left + c7_minus * (m_b_MSbar() - m_s() - lambda_par()) + subleading_par;
+        double          formfactor_par   = std::sqrt(2) * (1.0 + m_Kstarhat) * a_1;
         // cf. [BHvD:2010A], Eq. (3.14), p. 10
-        result.a_para_right = norm_s * prefactor_par * wilson_par_right * formfactor_par;
-        result.a_para_left  = norm_s * prefactor_par * wilson_par_left  * formfactor_par;
+        result.a_para_right              = norm_s * prefactor_par * wilson_par_right * formfactor_par;
+        result.a_para_left               = norm_s * prefactor_par * wilson_par_left * formfactor_par;
 
         // timelike
-        result.a_time = norm_s * sqrt_lam / sqrt_s
-            * (2.0 * (wc.c10() - wc.c10prime()) + q2 / m_l / (m_b_MSbar + m_s()) * (wc.cP() - wc.cPprime()))
-            * form_factors->a_0(q2);
+        result.a_time = norm_s * sqrt_lam / sqrt_s * (2.0 * (wc.c10() - wc.c10prime()) + q2 / m_l / (m_b_MSbar + m_s()) * (wc.cP() - wc.cPprime())) * form_factors->a_0(q2);
 
         // scalar amplitude
         result.a_scal = -2.0 * norm_s * sqrt_lam * (wc.cS() - wc.cSprime()) / (m_b_MSbar + m_s()) * form_factors->a_0(q2);
 
         // tensor amplitudes [BHvD:2012A]  eqs. (B18 - B20)
         // no form factor relations used
-        const double ff_T1  = form_factors->t_1(q2);
-        const double ff_T2  = form_factors->t_2(q2);
-        const double ff_T3  = form_factors->t_3(q2);
+        const double ff_T1 = form_factors->t_1(q2);
+        const double ff_T2 = form_factors->t_2(q2);
+        const double ff_T3 = form_factors->t_3(q2);
 
         const double kin_tensor_1 = norm_s / m_Kstar * ((m_B2 + 3.0 * m_Kstar2 - q2) * ff_T2 - lam / m2_diff * ff_T3);
         const double kin_tensor_2 = 2.0 * norm_s * sqrt_lam / sqrt_s * ff_T1;
@@ -203,7 +194,7 @@ namespace eos
         static const double sign = -1;
 
         result.a_para_perp = kin_tensor_1 * wc.cT();
-        result.a_time_long  = kin_tensor_1 * sign * wc.cT5();
+        result.a_time_long = kin_tensor_1 * sign * wc.cT5();
 
         result.a_time_perp = kin_tensor_2 * wc.cT();
         result.a_long_perp = kin_tensor_2 * sign * wc.cT5();
@@ -213,4 +204,4 @@ namespace eos
 
         return result;
     }
-}
+} // namespace eos
