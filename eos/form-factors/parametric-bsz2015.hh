@@ -20,8 +20,8 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BSZ2015_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BSZ2015_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
@@ -35,11 +35,8 @@ namespace eos
 
     template <typename Process_, typename Transition_> class BSZ2015FormFactorTraits;
 
-
     // P -> V
-    template <typename Process_>
-    class BSZ2015FormFactorTraits<Process_, PToV> :
-        public virtual ParameterUser
+    template <typename Process_> class BSZ2015FormFactorTraits<Process_, PToV> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
@@ -60,34 +57,38 @@ namespace eos
             {
             }
 
-            double tp() const
+            double
+            tp() const
             {
                 return power_of<2>(m_B + m_V);
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_V);
             }
 
-            double t0() const
+            double
+            t0() const
             {
                 return tp() * (1.0 - std::sqrt(1.0 - tm() / tp()));
             }
 
-            complex<double> calc_z(const complex<double> & s) const
+            complex<double>
+            calc_z(const complex<double> & s) const
             {
                 return (std::sqrt(tp() - s) - std::sqrt(tp() - t0())) / (std::sqrt(tp() - s) + std::sqrt(tp() - t0()));
             }
 
-            double calc_z(const double & s) const
+            double
+            calc_z(const double & s) const
             {
                 return real(calc_z(complex<double>(s, 0.0)));
             }
     };
 
-    template <typename Process_> class BSZ2015FormFactors<Process_, PToV> :
-        public FormFactors<PToV>
+    template <typename Process_> class BSZ2015FormFactors<Process_, PToV> : public FormFactors<PToV>
     {
         private:
             // fit parametrization for P -> V according to [BSZ:2015A]
@@ -97,10 +98,9 @@ namespace eos
 
             const BSZ2015FormFactorTraits<Process_, PToV> _traits;
 
-            const UsedParameter & _mB, _mV;
+            const UsedParameter &_mB, _mV;
 
-            template <typename Parameter_>
-            complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const;
+            template <typename Parameter_> complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const;
 
             static std::string _par_name(const std::string & ff_name);
 
@@ -167,11 +167,8 @@ namespace eos
     extern template class BSZ2015FormFactors<BsToKstar, PToV>;
     extern template class BSZ2015FormFactors<BsToPhi, PToV>;
 
-
     // P -> P
-    template <typename Process_>
-    class BSZ2015FormFactorTraits<Process_, PToP> :
-        public virtual ParameterUser
+    template <typename Process_> class BSZ2015FormFactorTraits<Process_, PToP> : public virtual ParameterUser
     {
         public:
             // The following parameters are part of the parameterization and should match the
@@ -190,34 +187,38 @@ namespace eos
             {
             }
 
-            double tp() const
+            double
+            tp() const
             {
                 return power_of<2>(m_B + m_P);
             }
 
-            double tm() const
+            double
+            tm() const
             {
                 return power_of<2>(m_B - m_P);
             }
 
-            double t0() const
+            double
+            t0() const
             {
                 return tp() * (1.0 - std::sqrt(1.0 - tm() / tp()));
             }
 
-            complex<double> calc_z(const complex<double> & s) const
+            complex<double>
+            calc_z(const complex<double> & s) const
             {
                 return (std::sqrt(tp() - s) - std::sqrt(tp() - t0())) / (std::sqrt(tp() - s) + std::sqrt(tp() - t0()));
             }
 
-            double calc_z(const double & s) const
+            double
+            calc_z(const double & s) const
             {
                 return real(calc_z(complex<double>(s, 0.0)));
             }
     };
 
-    template <typename Process_> class BSZ2015FormFactors<Process_, PToP> :
-        public FormFactors<PToP>
+    template <typename Process_> class BSZ2015FormFactors<Process_, PToP> : public FormFactors<PToP>
     {
         private:
             // fit parametrization for P -> P inspired by [BSZ:2015A]
@@ -227,10 +228,9 @@ namespace eos
 
             const BSZ2015FormFactorTraits<Process_, PToP> _traits;
 
-            const UsedParameter & _mB, _mP;
+            const UsedParameter &_mB, _mP;
 
-            template <typename Parameter_>
-            complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const;
+            template <typename Parameter_> complex<double> _calc_ff(const complex<double> & s, const double & m2_R, const std::array<Parameter_, 3> & a) const;
 
             static std::string _par_name(const std::string & ff_name);
 
@@ -268,6 +268,6 @@ namespace eos
     extern template class BSZ2015FormFactors<DsToK, PToP>;
     extern template class BSZ2015FormFactors<DsToEta, PToP>;
     extern template class BSZ2015FormFactors<DsToEtaPrime, PToP>;
-}
+} // namespace eos
 
 #endif

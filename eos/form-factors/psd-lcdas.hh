@@ -20,13 +20,12 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PSD_LCDAS_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PSD_LCDAS_HH 1
 
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class PseudoscalarLCDAs :
-        public ParameterUser
+    class PseudoscalarLCDAs : public ParameterUser
     {
         public:
             virtual ~PseudoscalarLCDAs() = 0;
@@ -38,11 +37,11 @@ namespace eos
             virtual double a4(const double & mu) const = 0;
 
             /* Twist 3 LCDA parameters */
-            virtual double mu3(const double & mu) const = 0;
-            virtual double f3(const double & mu) const = 0;
-            virtual double eta3(const double & mu) const = 0;
+            virtual double mu3(const double & mu) const     = 0;
+            virtual double f3(const double & mu) const      = 0;
+            virtual double eta3(const double & mu) const    = 0;
             virtual double lambda3(const double & mu) const = 0;
-            virtual double omega3(const double & mu) const = 0;
+            virtual double omega3(const double & mu) const  = 0;
 
             /* Twist 4 LCDA parameter */
             virtual double delta4(const double & mu) const = 0;
@@ -53,19 +52,19 @@ namespace eos
             virtual double phi(const double & u, const double & mu) const = 0;
 
             /* Twist 3 LCDAs and their derivatives */
-            virtual double phi3p(const double & u, const double & mu) const = 0;
-            virtual double phi3s(const double & u, const double & mu) const = 0;
+            virtual double phi3p(const double & u, const double & mu) const    = 0;
+            virtual double phi3s(const double & u, const double & mu) const    = 0;
             virtual double phi3s_d1(const double & u, const double & mu) const = 0;
 
             /* Twist 4 LCDAs, their derivatives and integrals */
-            virtual double phi4(const double & u, const double & mu) const = 0;
+            virtual double phi4(const double & u, const double & mu) const    = 0;
             virtual double phi4_d1(const double & u, const double & mu) const = 0;
             virtual double phi4_d2(const double & u, const double & mu) const = 0;
-            virtual double psi4(const double & u, const double & mu) const = 0;
-            virtual double psi4_i(const double & u, const double & mu) const = 0;
+            virtual double psi4(const double & u, const double & mu) const    = 0;
+            virtual double psi4_i(const double & u, const double & mu) const  = 0;
 
             static std::shared_ptr<PseudoscalarLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
     };
-}
+} // namespace eos
 
 #endif

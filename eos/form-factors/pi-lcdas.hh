@@ -23,14 +23,12 @@
 #include <eos/form-factors/psd-lcdas.hh>
 #include <eos/maths/gegenbauer-polynomial.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class PionLCDAs :
-        public PseudoscalarLCDAs,
-        public PrivateImplementationPattern<PionLCDAs>
+    class PionLCDAs : public PseudoscalarLCDAs, public PrivateImplementationPattern<PionLCDAs>
     {
         public:
             PionLCDAs(const Parameters &, const Options &);
@@ -39,21 +37,44 @@ namespace eos
             static PseudoscalarLCDAs * make(const Parameters &, const Options &);
 
             /* Twist 2 LCDA (even) Gegenbauer coefficients */
-            double a1(const double & /*mu*/) const override { return 0.0; }
+            double
+            a1(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double a2(const double & mu) const override;
-            double a3(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            a3(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double a4(const double & mu) const override;
 
             /* Twist 3 LCDA parameters */
             double mu3(const double & mu) const override;
             double f3(const double & mu) const override;
             double eta3(const double & mu) const override;
-            double lambda3(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            lambda3(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double omega3(const double & mu) const override;
 
             /* Twist 4 LCDA parameter */
             double delta4(const double & mu) const override;
-            double kappa4(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            kappa4(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double omega4(const double & mu) const override;
 
             /* Twist 2 LCDA */
@@ -74,6 +95,6 @@ namespace eos
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
-}
+} // namespace eos
 
 #endif

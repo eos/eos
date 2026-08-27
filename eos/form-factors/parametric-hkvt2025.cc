@@ -24,4 +24,4 @@ namespace eos
 
     // b -> u
     template class HKVT2025FormFactors<BToPiPi, PToPP>;
-}
+} // namespace eos

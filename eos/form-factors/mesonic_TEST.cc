@@ -15,18 +15,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/form-factors.hh>
 #include <eos/form-factors/mesonic.hh>
-
-#include <eos/models/model.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/model.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class PToPFormFactorsTest :
-    public TestCase
+class PToPFormFactorsTest : public TestCase
 {
     public:
         PToPFormFactorsTest() :
@@ -34,7 +33,8 @@ class PToPFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -42,13 +42,12 @@ class PToPFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToP>::create("Foo->Bar::BSZ2015", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToP>::create("B->pi::FooBar",     parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToP>::create("B->pi::FooBar", parameter, options));
             }
         }
 } p_to_p_form_factor_test;
 
-class PToPPFormFactorsTest :
-    public TestCase
+class PToPPFormFactorsTest : public TestCase
 {
     public:
         PToPPFormFactorsTest() :
@@ -56,7 +55,8 @@ class PToPPFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -64,13 +64,12 @@ class PToPPFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToPP>::create("Foo->BarBaz::FvDV2018", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToPP>::create("B->pipi::BazBar",       parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToPP>::create("B->pipi::BazBar", parameter, options));
             }
         }
 } p_to_pp_form_factor_test;
 
-class PToVFormFactorsTest :
-    public TestCase
+class PToVFormFactorsTest : public TestCase
 {
     public:
         PToVFormFactorsTest() :
@@ -78,7 +77,8 @@ class PToVFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -86,13 +86,12 @@ class PToVFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToV>::create("Foo->Baz::BSZ2015", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToV>::create("B->rho::FooBaz",    parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToV>::create("B->rho::FooBaz", parameter, options));
             }
         }
 } p_to_v_form_factor_test;
 
-class PToGammaFormFactorsTest :
-    public TestCase
+class PToGammaFormFactorsTest : public TestCase
 {
     public:
         PToGammaFormFactorsTest() :
@@ -100,7 +99,8 @@ class PToGammaFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -108,13 +108,12 @@ class PToGammaFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToGamma>::create("Foo->gluon::FLvD2022QCDF", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToGamma>::create("B->gamma::FooBaz",         parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToGamma>::create("B->gamma::FooBaz", parameter, options));
             }
         }
 } p_to_gamma_form_factor_test;
 
-class PToGammaOffShellFormFactorsTest :
-    public TestCase
+class PToGammaOffShellFormFactorsTest : public TestCase
 {
     public:
         PToGammaOffShellFormFactorsTest() :
@@ -122,7 +121,8 @@ class PToGammaOffShellFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -130,13 +130,12 @@ class PToGammaOffShellFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToGammaOffShell>::create("Foo->gluon^*::KKvDZ2022", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToGammaOffShell>::create("B->gamma^*::FooBaz",      parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<PToGammaOffShell>::create("B->gamma^*::FooBaz", parameter, options));
             }
         }
 } p_to_gamma_off_shell_form_factor_test;
 
-class VToPFormFactorsTest :
-    public TestCase
+class VToPFormFactorsTest : public TestCase
 {
     public:
         VToPFormFactorsTest() :
@@ -144,7 +143,8 @@ class VToPFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -152,13 +152,12 @@ class VToPFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<VToP>::create("Foo->Baz::BGJvD2019", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<VToP>::create("B^*->D::FooBaz",      parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<VToP>::create("B^*->D::FooBaz", parameter, options));
             }
         }
 } v_to_p_form_factor_test;
 
-class VToVFormFactorsTest :
-    public TestCase
+class VToVFormFactorsTest : public TestCase
 {
     public:
         VToVFormFactorsTest() :
@@ -166,7 +165,8 @@ class VToVFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
@@ -174,7 +174,7 @@ class VToVFormFactorsTest :
                 auto options   = Options();
 
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<VToV>::create("Foo->Baz::BGJvD2019", parameter, options));
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<VToV>::create("B^*->D^*::FooBaz",    parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<VToV>::create("B^*->D^*::FooBaz", parameter, options));
             }
         }
 } v_to_v_form_factor_test;

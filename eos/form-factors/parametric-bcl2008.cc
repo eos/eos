@@ -28,4 +28,4 @@ namespace eos
     template class BCL2008FormFactors<BToK, 3u>;
 
     template class BCL2008FormFactors<BToD, 3u>;
-}
+} // namespace eos

@@ -22,18 +22,17 @@
 
 namespace eos
 {
-    template <>
-    struct AnalyticFormFactorBToVLCSRTraits<BsToDsstar>
+    template <> struct AnalyticFormFactorBToVLCSRTraits<BsToDsstar>
     {
-        static constexpr const char * label  = "B_s->D_s^*";
-        static constexpr const char * name_B = "mass::B_s";
-        static constexpr const char * f_B    = "decay-constant::B_s";
-        static constexpr const char * name_V = "mass::D_s^*";
-        static constexpr const char * f_V    = "decay-constant::D_s^*";
-        static constexpr const std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
-        static constexpr const QuarkFlavor spectator_flavor                             = QuarkFlavor::strange;
-        static constexpr const double chi2 = 1.0;
+            static const constexpr char *                               label               = "B_s->D_s^*";
+            static const constexpr char *                               name_B              = "mass::B_s";
+            static const constexpr char *                               f_B                 = "decay-constant::B_s";
+            static const constexpr char *                               name_V              = "mass::D_s^*";
+            static const constexpr char *                               f_V                 = "decay-constant::D_s^*";
+            static const constexpr std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition = std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm);
+            static const constexpr QuarkFlavor                          spectator_flavor    = QuarkFlavor::strange;
+            static const constexpr double                               chi2                = 1.0;
     };
 
     template class AnalyticFormFactorBToVLCSR<BsToDsstar>;
-}
+} // namespace eos

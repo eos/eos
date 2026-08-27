@@ -36,4 +36,4 @@ namespace eos
     template class G2026FormFactors<BsToDs, PToP>;
     template class G2026FormFactors<BToDstar, PToV>;
     template class G2026FormFactors<BsToDsstar, PToV>;
-}
+} // namespace eos

@@ -30,18 +30,18 @@ namespace eos
      */
     struct LCDA
     {
-        /*!
-         * Evolve the nth Gegenbauer moment a_n_0 from a scale mu_0 to a scale mu according to the LL RGE.
-         *
-         * Calculation according to [BBL:2006A].
-         *
-         * @param a_n_0 The Gegenbauer moment at the scale mu_0.
-         * @param n     The index of the Gegenbauer moment.
-         * @param eta   The ratio alpha_s(mu)/alpha_s(mu_0).
-         * @param beta  The coefficients of the QCD beta function.
-         */
-        static double evolve_gegenbauer_moment(const double & a_n_0, const unsigned & n, const double & eta, const QCD::BetaFunction & beta);
+            /*!
+             * Evolve the nth Gegenbauer moment a_n_0 from a scale mu_0 to a scale mu according to the LL RGE.
+             *
+             * Calculation according to [BBL:2006A].
+             *
+             * @param a_n_0 The Gegenbauer moment at the scale mu_0.
+             * @param n     The index of the Gegenbauer moment.
+             * @param eta   The ratio alpha_s(mu)/alpha_s(mu_0).
+             * @param beta  The coefficients of the QCD beta function.
+             */
+            static double evolve_gegenbauer_moment(const double & a_n_0, const unsigned & n, const double & eta, const QCD::BetaFunction & beta);
     };
-}
+} // namespace eos
 
 #endif

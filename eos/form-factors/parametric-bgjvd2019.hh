@@ -20,17 +20,17 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BGJvD2019_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BGJvD2019_HH 1
 
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/maths/derivative.hh>
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
 #include <eos/utils/kinematic.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/reference-name.hh>
-#include <eos/maths/polylog.hh>
-#include <eos/maths/power-of.hh>
 
 #include <cmath>
 #include <limits>
@@ -40,8 +40,7 @@ namespace eos
     /* HQET Form Factors, based on [BLPR:2017A] and [JS:2018A] */
     template <typename Process_, typename Transition_> class HQETFormFactors;
 
-    class HQETFormFactorBase :
-        public virtual ParameterUser
+    class HQETFormFactorBase : public virtual ParameterUser
     {
         protected:
             std::shared_ptr<Model> _model;
@@ -53,23 +52,23 @@ namespace eos
             UsedParameter _a;
 
             // option to determine the model for the leading-power IW function
-            SwitchOption _opt_lp_model;
-            std::function<double (const double &)> _xi;
+            SwitchOption                          _opt_lp_model;
+            std::function<double(const double &)> _xi;
 
             // option to determine if we use z^3 terms in the leading-power IW function
             IntegerOption _opt_lp_zorder;
-            double _enable_lp_z3;
-            double _enable_lp_z4;
-            double _enable_lp_z5;
+            double        _enable_lp_z3;
+            double        _enable_lp_z4;
+            double        _enable_lp_z5;
 
             // option to determine if we use z^2 terms in the subleading-power IW function
             IntegerOption _opt_slp_zorder;
-            double _enable_slp_z2;
+            double        _enable_slp_z2;
 
             // option to determine if we use z^2 terms in the subsubleading-power IW function
             IntegerOption _opt_sslp_zorder;
-            double _enable_sslp_z1;
-            double _enable_sslp_z2;
+            double        _enable_sslp_z1;
+            double        _enable_sslp_z2;
 
             // option to determine if we use the SU3_F-symmetry limit for the subsubleading-power IW functions
             BooleanOption _opt_sslp_limit;
@@ -118,6 +117,7 @@ namespace eos
             /*
              * HQET parameters following [BLPR:2017A]
              */
+            // clang-format off
             inline double _mu() const { return 2.31; } // mu^2 = m_b * m_c
             inline double _alpha_s() const { return 0.26; }
             inline double _m_b_1S() const { return 4.71; }
@@ -130,14 +130,17 @@ namespace eos
              * Interface to Process_-specific kinematics.
              */
             virtual double _w(const double & q2) const = 0;
+            // clang-format on
             virtual double _q2(const double & w) const = 0;
 
-            inline double _zw(const double & w) const
+            inline double
+            _zw(const double & w) const
             {
                 return (std::sqrt(w + 1.0) - std::sqrt(2.0) * _a()) / (std::sqrt(w + 1.0) + std::sqrt(2.0) * _a());
             }
 
-            inline double _z(const double & q2) const
+            inline double
+            _z(const double & q2) const
             {
                 const double w = _w(q2);
 
@@ -166,34 +169,54 @@ namespace eos
              * which yields mu = 2.31 GeV.
              */
 
-            inline double _wz(const double & z) const
+            inline double
+            _wz(const double & z) const
             {
                 return 0.5 * (z + 1.0 / z);
             }
 
-            inline double _wp(const double & w) const { return w + std::sqrt(w * w - 1.0); }
-            inline double _wm(const double & w) const { return w - std::sqrt(w * w - 1.0); }
+            inline double
+            _wp(const double & w) const
+            {
+                return w + std::sqrt(w * w - 1.0);
+            }
 
-            inline double _r(const double & w) const
+            inline double
+            _wm(const double & w) const
+            {
+                return w - std::sqrt(w * w - 1.0);
+            }
+
+            inline double
+            _r(const double & w) const
             {
                 if (w < 1.0)
+                {
                     return std::numeric_limits<double>::quiet_NaN();
+                }
 
                 if (w - 1.0 < 1.0e-5)
+                {
                     return 1.0 - (w - 1.0) / 3.0;
+                }
 
                 return std::log(_wp(w)) / std::sqrt(w * w - 1.0);
             }
 
-            inline double _Omega(const double & w, const double & z) const
+            inline double
+            _Omega(const double & w, const double & z) const
             {
                 if (w < 1.0)
+                {
                     return std::numeric_limits<double>::quiet_NaN();
+                }
 
                 const double lnz = std::log(z);
 
                 if (w - 1.0 < 1.0e-5)
+                {
                     return -1.0 - (1.0 + z) / (1.0 - z) * lnz;
+                }
 
                 const double wm = _wm(w);
                 const double wp = _wp(w);
@@ -203,8 +226,7 @@ namespace eos
                 const complex<double> li2wm2 = dilog(1.0 - wm * wm);
                 const complex<double> li2wp2 = dilog(1.0 - wp * wp);
 
-                return w * real(2.0 * (li2wmz - li2wpz) + li2wp2 - li2wm2) / (2.0 * std::sqrt(w * w - 1.0))
-                    - w * _r(w) * lnz + 1.0;
+                return w * real(2.0 * (li2wmz - li2wpz) + li2wp2 - li2wm2) / (2.0 * std::sqrt(w * w - 1.0)) - w * _r(w) * lnz + 1.0;
             }
 
             /* Power corrections */
@@ -229,9 +251,7 @@ namespace eos
             double _CT3(const double & w, const double & z) const;
     };
 
-    template <typename Process_> class HQETFormFactors<Process_, PToP> :
-        public virtual HQETFormFactorBase,
-        public virtual FormFactors<PToP>
+    template <typename Process_> class HQETFormFactors<Process_, PToP> : public virtual HQETFormFactorBase, public virtual FormFactors<PToP>
     {
         private:
             UsedParameter _m_B;
@@ -260,13 +280,32 @@ namespace eos
             virtual double f_0(const double & q2) const override;
             virtual double f_t(const double & q2) const override;
             virtual double f_plus_T(const double & q2) const override;
-            double f_m(const double & q2) const;
+            double         f_m(const double & q2) const;
 
             /* HQET form factors h_i */
-            inline double h_p(const double & q2) const { return _h_p(q2); };
-            inline double h_m(const double & q2) const { return _h_m(q2); };
-            inline double h_S(const double & q2) const { return _h_S(q2); };
-            inline double h_T(const double & q2) const { return _h_T(q2); };
+            inline double
+            h_p(const double & q2) const
+            {
+                return _h_p(q2);
+            }
+
+            inline double
+            h_m(const double & q2) const
+            {
+                return _h_m(q2);
+            }
+
+            inline double
+            h_S(const double & q2) const
+            {
+                return _h_S(q2);
+            }
+
+            inline double
+            h_T(const double & q2) const
+            {
+                return _h_T(q2);
+            }
 
             Diagnostics diagnostics() const;
 
@@ -279,12 +318,10 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
-    extern template class HQETFormFactors<BToD,   PToP>;
+    extern template class HQETFormFactors<BToD, PToP>;
     extern template class HQETFormFactors<BsToDs, PToP>;
 
-    template <typename Process_> class HQETFormFactors<Process_, PToV> :
-        public virtual HQETFormFactorBase,
-        public virtual FormFactors<PToV>
+    template <typename Process_> class HQETFormFactors<Process_, PToV> : public virtual HQETFormFactorBase, public virtual FormFactors<PToV>
     {
         private:
             UsedParameter _m_B;
@@ -326,14 +363,47 @@ namespace eos
             double a_3(const double & q2) const;
 
             /* HQET form factors h_i */
-            inline double h_a1(const double & q2) const { return _h_a1(q2); };
-            inline double h_a2(const double & q2) const { return _h_a2(q2); };
-            inline double h_a3(const double & q2) const { return _h_a3(q2); };
-            inline double h_v(const double & q2)  const { return _h_v(q2);  };
-            inline double h_t1(const double & q2) const { return _h_t1(q2); };
-            inline double h_t2(const double & q2) const { return _h_t2(q2); };
-            inline double h_t3(const double & q2) const { return _h_t3(q2); };
+            inline double
+            h_a1(const double & q2) const
+            {
+                return _h_a1(q2);
+            }
 
+            inline double
+            h_a2(const double & q2) const
+            {
+                return _h_a2(q2);
+            }
+
+            inline double
+            h_a3(const double & q2) const
+            {
+                return _h_a3(q2);
+            }
+
+            inline double
+            h_v(const double & q2) const
+            {
+                return _h_v(q2);
+            }
+
+            inline double
+            h_t1(const double & q2) const
+            {
+                return _h_t1(q2);
+            }
+
+            inline double
+            h_t2(const double & q2) const
+            {
+                return _h_t2(q2);
+            }
+
+            inline double
+            h_t3(const double & q2) const
+            {
+                return _h_t3(q2);
+            }
 
             virtual double f_perp(const double &) const override;
             virtual double f_para(const double &) const override;
@@ -353,9 +423,7 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
-    template <typename Process_> class HQETFormFactors<Process_, VToP> :
-        public HQETFormFactorBase,
-        public FormFactors<VToP>
+    template <typename Process_> class HQETFormFactors<Process_, VToP> : public HQETFormFactorBase, public FormFactors<VToP>
     {
         private:
             UsedParameter _m_Bst;
@@ -390,9 +458,7 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
 
-    template <typename Process_> class HQETFormFactors<Process_, VToV> :
-        public HQETFormFactorBase,
-        public FormFactors<VToV>
+    template <typename Process_> class HQETFormFactors<Process_, VToV> : public HQETFormFactorBase, public FormFactors<VToV>
     {
         private:
             /*
@@ -433,6 +499,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

@@ -15,18 +15,17 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/form-factors.hh>
-
-#include <eos/models/model.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/model.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class OneHalfPlusToOneHalfPlusFormFactorsTest :
-    public TestCase
+class OneHalfPlusToOneHalfPlusFormFactorsTest : public TestCase
 {
     public:
         OneHalfPlusToOneHalfPlusFormFactorsTest() :
@@ -34,21 +33,21 @@ class OneHalfPlusToOneHalfPlusFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
                 auto parameter = Parameters::Defaults();
                 auto options   = Options();
 
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Foo->Bar::DM2015",         parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Foo->Bar::DM2015", parameter, options));
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::FooBar", parameter, options));
             }
         }
 } one_half_plus_to_one_half_plus_form_factor_test;
 
-class OneHalfPlusToOneHalfMinusFormFactorsTest :
-    public TestCase
+class OneHalfPlusToOneHalfMinusFormFactorsTest : public TestCase
 {
     public:
         OneHalfPlusToOneHalfMinusFormFactorsTest() :
@@ -56,21 +55,21 @@ class OneHalfPlusToOneHalfMinusFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
                 auto parameter = Parameters::Defaults();
                 auto options   = Options();
 
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Foo->Bar::HQET",             parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Foo->Bar::HQET", parameter, options));
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c::FooBar", parameter, options));
             }
         }
 } one_half_plus_to_one_half_minus_form_factor_test;
 
-class OneHalfPlusToThreeHalfMinusFormFactorsTest :
-    public TestCase
+class OneHalfPlusToThreeHalfMinusFormFactorsTest : public TestCase
 {
     public:
         OneHalfPlusToThreeHalfMinusFormFactorsTest() :
@@ -78,14 +77,15 @@ class OneHalfPlusToThreeHalfMinusFormFactorsTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             // creation
             {
                 auto parameter = Parameters::Defaults();
                 auto options   = Options();
 
-                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Foo->Bar::SE",                  parameter, options));
+                TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Foo->Bar::SE", parameter, options));
                 TEST_CHECK_THROWS(NoSuchFormFactorError, FormFactorFactory<OneHalfPlusToThreeHalfMinus>::create("Lambda_b->Lambda(1520)::FooBar", parameter, options));
             }
         }

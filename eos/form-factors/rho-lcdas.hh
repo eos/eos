@@ -23,14 +23,12 @@
 #include <eos/form-factors/vec-lcdas.hh>
 #include <eos/maths/gegenbauer-polynomial.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class RhoLCDAs :
-        public VectorLCDAs,
-        public PrivateImplementationPattern<RhoLCDAs>
+    class RhoLCDAs : public VectorLCDAs, public PrivateImplementationPattern<RhoLCDAs>
     {
         public:
             RhoLCDAs(const Parameters &, const Options &);
@@ -43,37 +41,97 @@ namespace eos
             const GegenbauerPolynomial gp_4_3o2;
 
             /* Twist 2 LCDA (even) para Gegenbauer coefficients */
-            double a1para(const double & /*mu*/) const override { return 0.0; }
+            double
+            a1para(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double a2para(const double & mu) const override;
-            double a3para(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            a3para(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double a4para(const double & mu) const override;
             double fpara() const override;
 
             /* Twist 2 LCDA (even) perp Gegenbauer coefficients */
-            double a1perp(const double & /*mu*/) const override { return 0.0; }
+            double
+            a1perp(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double a2perp(const double & mu) const override;
-            double a3perp(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            a3perp(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double a4perp(const double & mu) const override;
             double fperp(const double & mu) const override;
 
             /* Twist 3 LCDA parameters */
-            double kappa3para(const double & /*mu*/) const override { return 0.0; }
+            double
+            kappa3para(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double omega3para(const double & mu) const override;
-            double lambda3para(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            lambda3para(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double zeta3para(const double & mu) const override;
-            double lambda3paratilde(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            lambda3paratilde(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double omega3paratilde(const double & mu) const override;
-            double kappa3perp(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            kappa3perp(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
             double omega3perp(const double & mu) const override;
-            double lambda3perp(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            lambda3perp(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 4 LCDA parameters */
             double zeta4para(const double & mu) const override;
             double omega4paratilde(const double & mu) const override;
             double zeta4perp(const double & mu) const override;
             double zeta4perptilde(const double & mu) const override;
-            double kappa4para(const double & /*mu*/) const override { return 0.0; }
-            double kappa4perp(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            kappa4para(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            kappa4perp(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 2 LCDAs */
             double phi2para(const double & u, const double & mu) const override;
@@ -95,7 +153,12 @@ namespace eos
             double Psi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Phi4para(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Phi4paratilde(const double & u1, const double & u2, const double & u3, const double & mu) const override;
-            double Xi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+
+            double
+            Xi4para(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 4 three particle chiral odd LCDAs */
             double Psi4perp(const double & u1, const double & u2, const double & u3, const double & mu) const override;
@@ -108,23 +171,46 @@ namespace eos
             double Phi4perptilde2(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Phi4perptilde3(const double & u1, const double & u2, const double & u3, const double & mu) const override;
             double Phi4perptilde4(const double & u1, const double & u2, const double & u3, const double & mu) const override;
-            double Xi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override { return 0.0; }
+
+            double
+            Xi4perp(const double & /*u1*/, const double & /*u2*/, const double & /*u3*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 4 chiral even two particle LCDAs */
             double psi4para(const double & u, const double & mu) const override;
             double phi4para(const double & u, const double & mu) const override;
 
             /* Twist 4 chiral odd two particle LCDAs */
-            double psi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi4perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double
+            psi4perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            phi4perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 5 chiral odd two particle LCDAs */
-            double psi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
-            double phi5perp(const double & /*u*/, const double & /*mu*/) const override { return 0.0; }
+            double
+            psi5perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            phi5perp(const double & /*u*/, const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
-}
+} // namespace eos
 
 #endif

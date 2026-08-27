@@ -29,50 +29,25 @@ namespace eos
     KKvDZ2022FormFactors::KKvDZ2022FormFactors(const Parameters & p, const Options & o) :
         opt_subtracted(o, options, "subtracted"_ok),
         switch_subtracted(0.0),
-        _s_0(p[_par_name("s_0")],  *this),
-        _a_omega{{{ UsedParameter(p[_par_name("N^omega_1_0")],  *this),
-                   UsedParameter(p[_par_name("N^omega_1_1")],  *this),
-                   UsedParameter(p[_par_name("N^omega_1_2")],  *this) },
-                 { UsedParameter(p[_par_name("N^omega_2_0")],  *this),
-                   UsedParameter(p[_par_name("N^omega_2_1")],  *this),
-                   UsedParameter(p[_par_name("N^omega_2_2")],  *this) },
-                 { UsedParameter(p[_par_name("N^omega_3_0")],  *this),
-                   UsedParameter(p[_par_name("N^omega_3_1")],  *this),
-                   UsedParameter(p[_par_name("N^omega_3_2")],  *this) },
-                 { UsedParameter(p[_par_name("N^omega_4_0")],  *this),
-                   UsedParameter(p[_par_name("N^omega_4_1")],  *this),
-                   UsedParameter(p[_par_name("N^omega_4_2")],  *this) }}},
-        _a_rho{{{ UsedParameter(p[_par_name("N^rho_1_0")],  *this),
-                 UsedParameter(p[_par_name("N^rho_1_1")],  *this),
-                 UsedParameter(p[_par_name("N^rho_1_2")],  *this) },
-               { UsedParameter(p[_par_name("N^rho_2_0")],  *this),
-                 UsedParameter(p[_par_name("N^rho_2_1")],  *this),
-                 UsedParameter(p[_par_name("N^rho_2_2")],  *this) },
-               { UsedParameter(p[_par_name("N^rho_3_0")],  *this),
-                 UsedParameter(p[_par_name("N^rho_3_1")],  *this),
-                 UsedParameter(p[_par_name("N^rho_3_2")],  *this) },
-               { UsedParameter(p[_par_name("N^rho_4_0")],  *this),
-                 UsedParameter(p[_par_name("N^rho_4_1")],  *this),
-                 UsedParameter(p[_par_name("N^rho_4_2")],  *this) }}},
-        _c_subtraction{{{ UsedParameter(p[_par_name("c_1_0")],  *this),
-                         UsedParameter(p[_par_name("c_1_1")],  *this),
-                         UsedParameter(p[_par_name("c_1_2")],  *this) },
-                       { UsedParameter(p[_par_name("c_2_0")],  *this),
-                         UsedParameter(p[_par_name("c_2_1")],  *this),
-                         UsedParameter(p[_par_name("c_2_2")],  *this) },
-                       { UsedParameter(p[_par_name("c_3_0")],  *this),
-                         UsedParameter(p[_par_name("c_3_1")],  *this),
-                         UsedParameter(p[_par_name("c_3_2")],  *this) },
-                       { UsedParameter(p[_par_name("c_4_0")],  *this),
-                         UsedParameter(p[_par_name("c_4_1")],  *this),
-                         UsedParameter(p[_par_name("c_4_2")],  *this) }}}
+        _s_0(p[_par_name("s_0")], *this),
+        _a_omega{
+            { { UsedParameter(p[_par_name("N^omega_1_0")], *this), UsedParameter(p[_par_name("N^omega_1_1")], *this), UsedParameter(p[_par_name("N^omega_1_2")], *this) },
+             { UsedParameter(p[_par_name("N^omega_2_0")], *this), UsedParameter(p[_par_name("N^omega_2_1")], *this), UsedParameter(p[_par_name("N^omega_2_2")], *this) },
+             { UsedParameter(p[_par_name("N^omega_3_0")], *this), UsedParameter(p[_par_name("N^omega_3_1")], *this), UsedParameter(p[_par_name("N^omega_3_2")], *this) },
+             { UsedParameter(p[_par_name("N^omega_4_0")], *this), UsedParameter(p[_par_name("N^omega_4_1")], *this), UsedParameter(p[_par_name("N^omega_4_2")], *this) } }
+    },
+        _a_rho{ { { UsedParameter(p[_par_name("N^rho_1_0")], *this), UsedParameter(p[_par_name("N^rho_1_1")], *this), UsedParameter(p[_par_name("N^rho_1_2")], *this) },
+                  { UsedParameter(p[_par_name("N^rho_2_0")], *this), UsedParameter(p[_par_name("N^rho_2_1")], *this), UsedParameter(p[_par_name("N^rho_2_2")], *this) },
+                  { UsedParameter(p[_par_name("N^rho_3_0")], *this), UsedParameter(p[_par_name("N^rho_3_1")], *this), UsedParameter(p[_par_name("N^rho_3_2")], *this) },
+                  { UsedParameter(p[_par_name("N^rho_4_0")], *this), UsedParameter(p[_par_name("N^rho_4_1")], *this), UsedParameter(p[_par_name("N^rho_4_2")], *this) } } },
+        _c_subtraction{ { { UsedParameter(p[_par_name("c_1_0")], *this), UsedParameter(p[_par_name("c_1_1")], *this), UsedParameter(p[_par_name("c_1_2")], *this) },
+                          { UsedParameter(p[_par_name("c_2_0")], *this), UsedParameter(p[_par_name("c_2_1")], *this), UsedParameter(p[_par_name("c_2_2")], *this) },
+                          { UsedParameter(p[_par_name("c_3_0")], *this), UsedParameter(p[_par_name("c_3_1")], *this), UsedParameter(p[_par_name("c_3_2")], *this) },
+                          { UsedParameter(p[_par_name("c_4_0")], *this), UsedParameter(p[_par_name("c_4_1")], *this), UsedParameter(p[_par_name("c_4_2")], *this) } } }
     {
-        static const Log::OneTimeMessage message_KKvDZ2022_FFs
-        (
-            "KKvDZ2022FormFactors",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention."
-        );
+        static const Log::OneTimeMessage message_KKvDZ2022_FFs("KKvDZ2022FormFactors",
+                                                               ll_warning,
+                                                               "This form factor parametrization is not a general one and requires careful attention.");
 
         if (opt_subtracted.value())
         {
@@ -121,7 +96,7 @@ namespace eos
 
         if (q2 - 4.0 * m_pion_sq > 0.0)
         {
-            return std::pow((q2 - 4.0 * m_pion_sq)/(m_rho_sq - 4.0 * m_pion_sq), 1.5) * m_rho_sq/q2 * constant_rho_width_approximation;
+            return std::pow((q2 - 4.0 * m_pion_sq) / (m_rho_sq - 4.0 * m_pion_sq), 1.5) * m_rho_sq / q2 * constant_rho_width_approximation;
         }
         if (q2 - 4.0 * m_pion_sq <= 0.0)
         {
@@ -138,9 +113,9 @@ namespace eos
     {
         const double m_B = BToOmega::m_B, m_omega = BToOmega::m_V;
         const double t_p_omega = power_of<2>(m_B + m_omega), t_m_omega = power_of<2>(m_B - m_omega);
-        const double t_0_omega = t_p_omega*(1.0 - sqrt(1.0 - t_m_omega/t_p_omega));
+        const double t_0_omega = t_p_omega * (1.0 - sqrt(1.0 - t_m_omega / t_p_omega));
 
-        return (sqrt(t_p_omega - k2) - sqrt(t_p_omega - t_0_omega))/(sqrt(t_p_omega - k2) + sqrt(t_p_omega - t_0_omega));
+        return (sqrt(t_p_omega - k2) - sqrt(t_p_omega - t_0_omega)) / (sqrt(t_p_omega - k2) + sqrt(t_p_omega - t_0_omega));
     }
 
     double
@@ -148,46 +123,46 @@ namespace eos
     {
         const double m_B = BToOmega::m_B, m_rho = BToRho::m_V;
         const double t_p_rho = power_of<2>(m_B + m_rho), t_m_rho = power_of<2>(m_B - m_rho);
-        const double t_0_rho = t_p_rho*(1.0 - sqrt(1.0 - t_m_rho/t_p_rho));
+        const double t_0_rho = t_p_rho * (1.0 - sqrt(1.0 - t_m_rho / t_p_rho));
 
-        return (sqrt(t_p_rho - k2) - sqrt(t_p_rho - t_0_rho))/(sqrt(t_p_rho - k2) + sqrt(t_p_rho - t_0_rho));
+        return (sqrt(t_p_rho - k2) - sqrt(t_p_rho - t_0_rho)) / (sqrt(t_p_rho - k2) + sqrt(t_p_rho - t_0_rho));
     }
 
     complex<double>
     KKvDZ2022FormFactors::_calc_ff_contribution_omega(const double & q2, const double & k2, const double & m_r_sq, const std::array<UsedParameter, 3> & a,
-                                                                  const UsedParameter & s_0) const
+                                                      const UsedParameter & s_0) const
     {
-        double a_0(a[0]),a_1(a[1]),a_2(a[2]);
-        const double diff_z = _z_omega(k2) - _z_omega(0.0);
-        const double m_omega = BToOmega::m_V, m_omega_sq = m_omega * m_omega;
-        const complex<double> omega_bw = m_omega_sq / ( m_omega_sq - q2 - 1.0i * m_omega * _width_omega(q2) );
+        double                a_0(a[0]), a_1(a[1]), a_2(a[2]);
+        const double          diff_z  = _z_omega(k2) - _z_omega(0.0);
+        const double          m_omega = BToOmega::m_V, m_omega_sq = m_omega * m_omega;
+        const complex<double> omega_bw = m_omega_sq / (m_omega_sq - q2 - 1.0i * m_omega * _width_omega(q2));
 
-        return 1.0 / (1.0 - k2 / m_r_sq) * (
-               omega_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z) ) * (1.0 - switch_subtracted) +
-               switch_subtracted * (q2 - s_0) / (m_omega_sq - s_0) * omega_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z) ) );
+        return 1.0 / (1.0 - k2 / m_r_sq)
+               * (omega_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z)) * (1.0 - switch_subtracted)
+                  + switch_subtracted * (q2 - s_0) / (m_omega_sq - s_0) * omega_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z)));
     }
 
     complex<double>
     KKvDZ2022FormFactors::_calc_ff_contribution_rho(const double & q2, const double & k2, const double & m_r_sq, const std::array<UsedParameter, 3> & a,
-                                                                  const UsedParameter & s_0) const
+                                                    const UsedParameter & s_0) const
     {
-        double a_0(a[0]),a_1(a[1]),a_2(a[2]);
-        const double diff_z = _z_rho(k2) - _z_rho(0.0);
-        const double m_rho = BToRho::m_V, m_rho_sq = m_rho * m_rho;
-        const complex<double> rho_bw = m_rho_sq / ( m_rho_sq - q2 - 1.0i * sqrt(q2) * _width_rho(q2) );
+        double                a_0(a[0]), a_1(a[1]), a_2(a[2]);
+        const double          diff_z = _z_rho(k2) - _z_rho(0.0);
+        const double          m_rho = BToRho::m_V, m_rho_sq = m_rho * m_rho;
+        const complex<double> rho_bw = m_rho_sq / (m_rho_sq - q2 - 1.0i * sqrt(q2) * _width_rho(q2));
 
-        return 1.0 / (1.0 - k2 / m_r_sq) * (
-               rho_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z) ) * (1.0 - switch_subtracted) +
-               switch_subtracted * (q2 - s_0) / (m_rho_sq - s_0) * rho_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z) ) );
+        return 1.0 / (1.0 - k2 / m_r_sq)
+               * (rho_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z)) * (1.0 - switch_subtracted)
+                  + switch_subtracted * (q2 - s_0) / (m_rho_sq - s_0) * rho_bw * (a_0 + a_1 * diff_z + a_2 * power_of<2>(diff_z)));
     }
 
     double
     KKvDZ2022FormFactors::_subtraction_polynomial(const double & k2, const std::array<UsedParameter, 3> & c) const
     {
-        double c_0(c[0]),c_1(c[1]),c_2(c[2]);
+        double       c_0(c[0]), c_1(c[1]), c_2(c[2]);
         const double diff_z = _z_rho(k2) - _z_rho(0.0);
 
-        return switch_subtracted * (c_0 + c_1 * diff_z + c_2 * power_of<2>(diff_z) );
+        return switch_subtracted * (c_0 + c_1 * diff_z + c_2 * power_of<2>(diff_z));
     }
 
     complex<double>
@@ -196,7 +171,7 @@ namespace eos
         const double m_B1_sq = BToOmega::mR2_1p;
 
         return _subtraction_polynomial(k2, _c_subtraction[0]) + _calc_ff_contribution_omega(q2, k2, m_B1_sq, _a_omega[0], _s_0)
-                        + _calc_ff_contribution_rho(q2, k2, m_B1_sq, _a_rho[0], _s_0);
+               + _calc_ff_contribution_rho(q2, k2, m_B1_sq, _a_rho[0], _s_0);
     }
 
     complex<double>
@@ -205,7 +180,7 @@ namespace eos
         const double m_B1_sq = BToOmega::mR2_1p;
 
         return _subtraction_polynomial(k2, _c_subtraction[1]) + _calc_ff_contribution_omega(q2, k2, m_B1_sq, _a_omega[1], _s_0)
-                        + _calc_ff_contribution_rho(q2, k2, m_B1_sq, _a_rho[1], _s_0);
+               + _calc_ff_contribution_rho(q2, k2, m_B1_sq, _a_rho[1], _s_0);
     }
 
     complex<double>
@@ -214,7 +189,7 @@ namespace eos
         const double m_B = BToOmega::m_B;
 
         return _subtraction_polynomial(k2, _c_subtraction[2]) + _calc_ff_contribution_omega(q2, k2, m_B * m_B, _a_omega[2], _s_0)
-                        + _calc_ff_contribution_rho(q2, k2, m_B * m_B, _a_rho[2], _s_0);
+               + _calc_ff_contribution_rho(q2, k2, m_B * m_B, _a_rho[2], _s_0);
     }
 
     complex<double>
@@ -223,17 +198,12 @@ namespace eos
         const double m_Bstar_sq = BToOmega::mR2_1m;
 
         return _subtraction_polynomial(k2, _c_subtraction[3]) + _calc_ff_contribution_omega(q2, k2, m_Bstar_sq, _a_omega[3], _s_0)
-                        + _calc_ff_contribution_rho(q2, k2, m_Bstar_sq, _a_rho[3], _s_0);
+               + _calc_ff_contribution_rho(q2, k2, m_Bstar_sq, _a_rho[3], _s_0);
     }
 
-    const std::set<ReferenceName>
-    KKvDZ2022FormFactors::references
-    {
-        "KKvDZ:2022A"_rn
-    };
+    const std::set<ReferenceName> KKvDZ2022FormFactors::references{ "KKvDZ:2022A"_rn };
 
-    const std::vector<OptionSpecification> KKvDZ2022FormFactors::options
-    {
+    const std::vector<OptionSpecification> KKvDZ2022FormFactors::options{
         { "subtracted"_ok, { "true"_ov, "false"_ov }, "false"_ov }
     };
 
@@ -248,4 +218,4 @@ namespace eos
     {
         return options.cend();
     }
-}
+} // namespace eos

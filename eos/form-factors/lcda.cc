@@ -19,9 +19,9 @@
 
 #include <eos/form-factors/lcda.hh>
 
-#include <cmath>
-
 #include <gsl/gsl_sf_psi.h>
+
+#include <cmath>
 
 namespace eos
 {
@@ -37,4 +37,4 @@ namespace eos
         // cf. [BBL:2006A], Eq. (2.13), p. 5
         return std::pow(eta, gamma_0 / 2.0 / beta[0]) * a_n_0;
     }
-}
+} // namespace eos

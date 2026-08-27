@@ -27,51 +27,43 @@ namespace eos
 {
     // 1/2^+ -> 1/2^+
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0m_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0m_names{
+        { std::make_tuple(QuarkFlavor::bottom,    QuarkFlavor::down), "mass::B_d@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::up), "mass::D_u@HME" }
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::charm), "mass::B_c@HME" },
+        {  std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange), "mass::D_s@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,    QuarkFlavor::down), "mass::D_d@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,      QuarkFlavor::up), "mass::D_u@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0p_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,0@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_0p_names{
+        { std::make_tuple(QuarkFlavor::bottom,    QuarkFlavor::down), "mass::B_d,0@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,0@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,0@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,0@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,0@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::up), "mass::D_u,0@HME" }
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::charm), "mass::B_c,0@HME" },
+        {  std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange), "mass::D_s,0@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,    QuarkFlavor::down), "mass::D_d,0@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,      QuarkFlavor::up), "mass::D_u,0@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1m_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d^*@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1m_names{
+        { std::make_tuple(QuarkFlavor::bottom,    QuarkFlavor::down), "mass::B_d^*@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s^*@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c^*@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s^*@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d^*@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::up), "mass::D_u^*@HME" }
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::charm), "mass::B_c^*@HME" },
+        {  std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange), "mass::D_s^*@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,    QuarkFlavor::down), "mass::D_d^*@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,      QuarkFlavor::up), "mass::D_u^*@HME" }
     };
 
     template <typename Process_>
-    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string>
-    SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1p_names
-    {
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::down), "mass::B_d,1@HME" },
+    const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, std::string> SSEFormFactorTraits<Process_, OneHalfPlusToOneHalfPlus>::resonance_1p_names{
+        { std::make_tuple(QuarkFlavor::bottom,    QuarkFlavor::down), "mass::B_d,1@HME" },
         { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::strange), "mass::B_s,1@HME" },
-        { std::make_tuple(QuarkFlavor::bottom, QuarkFlavor::charm), "mass::B_c,1@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::strange), "mass::D_s,1@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::down), "mass::D_d,1@HME" },
-        { std::make_tuple(QuarkFlavor::charm,  QuarkFlavor::up), "mass::D_u,1@HME" }
+        { std::make_tuple(QuarkFlavor::bottom,   QuarkFlavor::charm), "mass::B_c,1@HME" },
+        {  std::make_tuple(QuarkFlavor::charm, QuarkFlavor::strange), "mass::D_s,1@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,    QuarkFlavor::down), "mass::D_d,1@HME" },
+        {  std::make_tuple(QuarkFlavor::charm,      QuarkFlavor::up), "mass::D_u,1@HME" }
     };
 
     template <typename Process_>
@@ -83,42 +75,25 @@ namespace eos
 
     template <typename Process_>
     SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::SSEFormFactors(const Parameters & p, const Options &) :
-        _a_long_v{{ UsedParameter(p[_par_name("0", "V", 0)], *this),
-                    UsedParameter(p[_par_name("0", "V", 1)], *this),
-                    UsedParameter(p[_par_name("0", "V", 2)], *this) }},
-        _a_perp_v{{ UsedParameter(p[_par_name("perp", "V", 0)], *this),
-                    UsedParameter(p[_par_name("perp", "V", 1)], *this),
-                    UsedParameter(p[_par_name("perp", "V", 2)], *this) }},
-        _a_long_a{{ UsedParameter(p[_par_name("0", "A", 0)], *this),
-                    UsedParameter(p[_par_name("0", "A", 1)], *this),
-                    UsedParameter(p[_par_name("0", "A", 2)], *this) }},
-        _a_long_t{{ UsedParameter(p[_par_name("0", "T", 0)], *this),
-                    UsedParameter(p[_par_name("0", "T", 1)], *this),
-                    UsedParameter(p[_par_name("0", "T", 2)], *this) }},
-        _a_perp_t5{{ UsedParameter(p[_par_name("perp", "T5", 0)], *this),
-                     UsedParameter(p[_par_name("perp", "T5", 1)], *this),
-                     UsedParameter(p[_par_name("perp", "T5", 2)], *this) }},
+        _a_long_v{
+            { UsedParameter(p[_par_name("0", "V", 0)], *this), UsedParameter(p[_par_name("0", "V", 1)], *this), UsedParameter(p[_par_name("0", "V", 2)], *this) }
+    },
+        _a_perp_v{ { UsedParameter(p[_par_name("perp", "V", 0)], *this), UsedParameter(p[_par_name("perp", "V", 1)], *this), UsedParameter(p[_par_name("perp", "V", 2)], *this) } },
+        _a_long_a{ { UsedParameter(p[_par_name("0", "A", 0)], *this), UsedParameter(p[_par_name("0", "A", 1)], *this), UsedParameter(p[_par_name("0", "A", 2)], *this) } },
+        _a_long_t{ { UsedParameter(p[_par_name("0", "T", 0)], *this), UsedParameter(p[_par_name("0", "T", 1)], *this), UsedParameter(p[_par_name("0", "T", 2)], *this) } },
+        _a_perp_t5{
+            { UsedParameter(p[_par_name("perp", "T5", 0)], *this), UsedParameter(p[_par_name("perp", "T5", 1)], *this), UsedParameter(p[_par_name("perp", "T5", 2)], *this) }
+        },
         // leading coefficient replaced by an equation of motion
-        _a_time_v{{ UsedParameter(p[_par_name("t", "V", 1)], *this),
-                    UsedParameter(p[_par_name("t", "V", 2)], *this) }},
-        _a_time_a{{ UsedParameter(p[_par_name("t", "A", 1)], *this),
-                    UsedParameter(p[_par_name("t", "A", 2)], *this) }},
-        _a_perp_a{{ UsedParameter(p[_par_name("perp", "A", 1)], *this),
-                    UsedParameter(p[_par_name("perp", "A", 2)], *this) }},
-        _a_perp_t{{ UsedParameter(p[_par_name("perp", "T", 1)], *this),
-                    UsedParameter(p[_par_name("perp", "T", 2)], *this) }},
-        _a_long_t5{{ UsedParameter(p[_par_name("0", "T5", 1)], *this),
-                     UsedParameter(p[_par_name("0", "T5", 2)], *this) }},
-        _traits(p),
-        _m_1(_traits.m_1),
-        _m_2(_traits.m_2)
+        _a_time_v{ { UsedParameter(p[_par_name("t", "V", 1)], *this), UsedParameter(p[_par_name("t", "V", 2)], *this) } },
+        _a_time_a{ { UsedParameter(p[_par_name("t", "A", 1)], *this), UsedParameter(p[_par_name("t", "A", 2)], *this) } },
+        _a_perp_a{ { UsedParameter(p[_par_name("perp", "A", 1)], *this), UsedParameter(p[_par_name("perp", "A", 2)], *this) } },
+        _a_perp_t{ { UsedParameter(p[_par_name("perp", "T", 1)], *this), UsedParameter(p[_par_name("perp", "T", 2)], *this) } },
+        _a_long_t5{ { UsedParameter(p[_par_name("0", "T5", 1)], *this), UsedParameter(p[_par_name("0", "T5", 2)], *this) } }, _traits(p), _m_1(_traits.m_1), _m_2(_traits.m_2)
     {
     }
 
-    template <typename Process_>
-    SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::~SSEFormFactors()
-    {
-    }
+    template <typename Process_> SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::~SSEFormFactors() {}
 
     template <typename Process_>
     FormFactors<OneHalfPlusToOneHalfPlus> *
@@ -176,8 +151,7 @@ namespace eos
         // so the two are evaluated at different values of z(0).
         const double z0_v = _traits.calc_z(0.0, _traits.tp_v);
         const double z0_a = _traits.calc_z(0.0, _traits.tp_a);
-        return _a_perp_t5[0] + _a_perp_t5[1] * z0_a + _a_perp_t5[2] * power_of<2>(z0_a)
-            - _a_perp_t[0] * z0_v - _a_perp_t[1] * power_of<2>(z0_v);
+        return _a_perp_t5[0] + _a_perp_t5[1] * z0_a + _a_perp_t5[2] * power_of<2>(z0_a) - _a_perp_t[0] * z0_v - _a_perp_t[1] * power_of<2>(z0_v);
     }
 
     template <typename Process_>
@@ -194,7 +168,9 @@ namespace eos
     double
     SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_time_v(const double & s) const
     {
-        const std::array<double, 3> a{{ _a_time_v_0(), _a_time_v[0], _a_time_v[1] }};
+        const std::array<double, 3> a{
+            { _a_time_v_0(), _a_time_v[0], _a_time_v[1] }
+        };
         return _calc_ff(s, _traits.m_R_0p, _traits.tp_v, a);
     }
 
@@ -216,7 +192,9 @@ namespace eos
     double
     SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_time_a(const double & s) const
     {
-        const std::array<double, 3> a{{ _a_time_a_0(), _a_time_a[0], _a_time_a[1] }};
+        const std::array<double, 3> a{
+            { _a_time_a_0(), _a_time_a[0], _a_time_a[1] }
+        };
         return _calc_ff(s, _traits.m_R_0m, _traits.tp_a, a);
     }
 
@@ -231,7 +209,9 @@ namespace eos
     double
     SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_perp_a(const double & s) const
     {
-        const std::array<double, 3> a{{ _a_perp_a_0(), _a_perp_a[0], _a_perp_a[1] }};
+        const std::array<double, 3> a{
+            { _a_perp_a_0(), _a_perp_a[0], _a_perp_a[1] }
+        };
         return _calc_ff(s, _traits.m_R_1p, _traits.tp_a, a);
     }
 
@@ -246,7 +226,9 @@ namespace eos
     double
     SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_perp_t(const double & s) const
     {
-        const std::array<double, 3> a{{ _a_perp_t_0(), _a_perp_t[0], _a_perp_t[1] }};
+        const std::array<double, 3> a{
+            { _a_perp_t_0(), _a_perp_t[0], _a_perp_t[1] }
+        };
         return _calc_ff(s, _traits.m_R_1m, _traits.tp_v, a);
     }
 
@@ -254,7 +236,9 @@ namespace eos
     double
     SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::f_long_t5(const double & s) const
     {
-        const std::array<double, 3> a{{ _a_long_t5_0(), _a_long_t5[0], _a_long_t5[1] }};
+        const std::array<double, 3> a{
+            { _a_long_t5_0(), _a_long_t5[0], _a_long_t5[1] }
+        };
         return _calc_ff(s, _traits.m_R_1p, _traits.tp_a, a);
     }
 
@@ -264,6 +248,6 @@ namespace eos
     {
         return _calc_ff(s, _traits.m_R_1p, _traits.tp_a, _a_perp_t5);
     }
-}
+} // namespace eos
 
 #endif

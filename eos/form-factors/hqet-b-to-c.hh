@@ -30,9 +30,7 @@
 
 namespace eos
 {
-    class HQETBToC :
-        public ParameterUser,
-        public PrivateImplementationPattern<HQETBToC>
+    class HQETBToC : public ParameterUser, public PrivateImplementationPattern<HQETBToC>
     {
         public:
             HQETBToC(const Parameters &, const Options &);
@@ -66,6 +64,6 @@ namespace eos
              */
             static const std::set<ReferenceName> references;
     };
-}
+} // namespace eos
 
 #endif

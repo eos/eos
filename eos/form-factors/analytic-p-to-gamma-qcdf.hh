@@ -22,43 +22,40 @@
 #define EOS_GUARD_SRC_FORM_FACTORS_ANALYTIC_B_TO_GAMMA_QCDF_HH 1
 
 #include <eos/form-factors/heavy-meson-lcdas.hh>
-#include <eos/form-factors/mesonic.hh>
 #include <eos/form-factors/mesonic-processes.hh>
+#include <eos/form-factors/mesonic.hh>
 #include <eos/models/model.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/options.hh>
 #include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
 #include <array>
-#include <string>
 #include <memory>
+#include <string>
 
 namespace eos
 {
-    template <typename Process_>
-    struct AnalyticFormFactorPToGammaQCDFTraits;
+    template <typename Process_> struct AnalyticFormFactorPToGammaQCDFTraits;
 
-    template <>
-    struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
+    template <> struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
     {
-        std::shared_ptr<HeavyMesonLCDAs> blcdas;
-        std::shared_ptr<Model> model;
+            std::shared_ptr<HeavyMesonLCDAs> blcdas;
+            std::shared_ptr<Model>           model;
 
-        static const qnp::Prefix prefix;
-        static const qnp::Prefix hadronic_prefix;
-        static const qnp::Prefix process;
-        static const QualifiedName decay_constant;
-        static const QualifiedName mass;
+            static const qnp::Prefix   prefix;
+            static const qnp::Prefix   hadronic_prefix;
+            static const qnp::Prefix   process;
+            static const QualifiedName decay_constant;
+            static const QualifiedName mass;
 
-        static const constexpr double e_spectator =  2.0 / 3.0;
-        static const constexpr double e_heavy     = -1.0 / 3.0;
+            static const constexpr double e_spectator = 2.0 / 3.0;
+            static const constexpr double e_heavy     = -1.0 / 3.0;
 
-        AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o);
+            AnalyticFormFactorPToGammaQCDFTraits(const Parameters & p, const Options & o);
 
-        double m_heavy_pole(unsigned int loop_order) const;
-
+            double m_heavy_pole(unsigned int loop_order) const;
     };
 
     /*!
@@ -70,9 +67,7 @@ namespace eos
      * We further parametrize the leading LCDA phi_+ as described in
      * Ref. [FLvD:2022A] and presently omit higher-twist contributions.
      */
-    template <typename Process_>
-    class AnalyticFormFactorPToGammaQCDF:
-        public FormFactors<PToGamma>
+    template <typename Process_> class AnalyticFormFactorPToGammaQCDF : public FormFactors<PToGamma>
     {
         private:
             using Traits = AnalyticFormFactorPToGammaQCDFTraits<Process_>;
@@ -93,9 +88,9 @@ namespace eos
              * We implement the weights as fixed-size arrays.
              */
             static const unsigned int number_of_parameters = 9u;
-            using Weights = std::array<double, number_of_parameters>;
+            using Weights                                  = std::array<double, number_of_parameters>;
 
-            Traits traits;
+            Traits                 traits;
             std::shared_ptr<Model> model;
 
             UsedParameter mu;
@@ -112,14 +107,14 @@ namespace eos
             UsedParameter mu_h2;
 
             SwitchOption opt_contributions;
-            double switch_ht;
-            double switch_soft;
-            double switch_soft_tw_3_4;
+            double       switch_ht;
+            double       switch_soft;
+            double       switch_soft_tw_3_4;
 
             static const constexpr double e_spectator = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_spectator;
             static const constexpr double e_heavy     = AnalyticFormFactorPToGammaQCDFTraits<Process_>::e_heavy;
-            static const constexpr double C_F         =  4.0 / 3.0;
-            static const constexpr double n_l         =  4.0;
+            static const constexpr double C_F         = 4.0 / 3.0;
+            static const constexpr double n_l         = 4.0;
 
             std::string par_qname(const std::string & _name) const;
 
@@ -132,9 +127,9 @@ namespace eos
              */
             ///@{
             std::tuple<double, double, double> C_K_inv_U(const double & Egamma) const;
-            double F_leading_power(const double & Egamma) const;
-            double xi(const double & Egamma) const;
-            double delta_xi(const double & Egamma) const;
+            double                             F_leading_power(const double & Egamma) const;
+            double                             xi(const double & Egamma) const;
+            double                             delta_xi(const double & Egamma) const;
             ///@}
 
             /*!
@@ -217,6 +212,6 @@ namespace eos
     };
 
     extern template class AnalyticFormFactorPToGammaQCDF<BToGamma>;
-}
+} // namespace eos
 
 #endif

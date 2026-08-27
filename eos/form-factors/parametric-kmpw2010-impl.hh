@@ -43,21 +43,25 @@ namespace eos
     }
 
     KMPW2010FormFactors<PToV>::KMPW2010FormFactors(const Parameters & p, const Options &) :
-        _f0_V(p["B->K^*::F^V(0)@KMPW2010"],   *this),   _b1_V(p["B->K^*::b^V_1@KMPW2010"],    *this),
-        _f0_A0(p["B->K^*::F^A0(0)@KMPW2010"], *this),   _b1_A0(p["B->K^*::b^A0_1@KMPW2010"],  *this),
-        _f0_A1(p["B->K^*::F^A1(0)@KMPW2010"], *this),   _b1_A1(p["B->K^*::b^A1_1@KMPW2010"],  *this),
-        _f0_A2(p["B->K^*::F^A2(0)@KMPW2010"], *this),   _b1_A2(p["B->K^*::b^A2_1@KMPW2010"],  *this),
-        _f0_T1(p["B->K^*::F^T1(0)@KMPW2010"], *this),   _b1_T1(p["B->K^*::b^T1_1@KMPW2010"],  *this),
-        _f0_T2(p["B->K^*::F^T2(0)@KMPW2010"], *this),   _b1_T2(p["B->K^*::b^T2_1@KMPW2010"],  *this),
-        _f0_T3(p["B->K^*::F^T3(0)@KMPW2010"], *this),   _b1_T3(p["B->K^*::b^T3_1@KMPW2010"],  *this)
+        _f0_V(p["B->K^*::F^V(0)@KMPW2010"], *this),
+        _b1_V(p["B->K^*::b^V_1@KMPW2010"], *this),
+        _f0_A0(p["B->K^*::F^A0(0)@KMPW2010"], *this),
+        _b1_A0(p["B->K^*::b^A0_1@KMPW2010"], *this),
+        _f0_A1(p["B->K^*::F^A1(0)@KMPW2010"], *this),
+        _b1_A1(p["B->K^*::b^A1_1@KMPW2010"], *this),
+        _f0_A2(p["B->K^*::F^A2(0)@KMPW2010"], *this),
+        _b1_A2(p["B->K^*::b^A2_1@KMPW2010"], *this),
+        _f0_T1(p["B->K^*::F^T1(0)@KMPW2010"], *this),
+        _b1_T1(p["B->K^*::b^T1_1@KMPW2010"], *this),
+        _f0_T2(p["B->K^*::F^T2(0)@KMPW2010"], *this),
+        _b1_T2(p["B->K^*::b^T2_1@KMPW2010"], *this),
+        _f0_T3(p["B->K^*::F^T3(0)@KMPW2010"], *this),
+        _b1_T3(p["B->K^*::b^T3_1@KMPW2010"], *this)
     {
-        static const Log::OneTimeMessage message_KMPW2010_FFs_PToV
-        (
-            "KMPW2010FormFactors<PToV>",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_KMPW2010_FFs_PToV("KMPW2010FormFactors<PToV>",
+                                                                   ll_warning,
+                                                                   "This form factor parametrization is not a general one and requires careful attention. "
+                                                                   "By default, it returns zeros for all form factors.");
     }
 
     FormFactors<PToV> *
@@ -97,8 +101,7 @@ namespace eos
         const double mV = BToKstar::m_V, mV2 = mV * mV;
         const double lambda = eos::lambda(mB2, mV2, s);
 
-        return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s)
-            - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
+        return ((mB + mV) * (mB + mV) * (mB2 - mV2 - s) * this->a_1(s) - lambda * this->a_2(s)) / (16.0 * mB * mV2 * (mB + mV));
     }
 
     double
@@ -126,8 +129,7 @@ namespace eos
         const double mV = BToKstar::m_V, mV2 = mV * mV;
         const double lambda = eos::lambda(mB2, mV2, s);
 
-        return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s)
-                - lambda * this->t_3(s)) / (8.0 * mB * mV2 * (mB - mV));
+        return ((mB2 - mV2) * (mB2 + 3.0 * mV2 - s) * this->t_2(s) - lambda * this->t_3(s)) / (8.0 * mB * mV2 * (mB - mV));
     }
 
     double
@@ -166,7 +168,6 @@ namespace eos
         return 0.;
     }
 
-
     double
     KMPW2010FormFactors<PToP>::_calc_z(const double & s)
     {
@@ -180,13 +181,10 @@ namespace eos
         _f0_p(p["B->K::F^p(0)@KMPW2010"], *this),
         _f0_t(p["B->K::F^t(0)@KMPW2010"], *this)
     {
-        static const Log::OneTimeMessage message_KMPW2010_FFs_PToP
-        (
-            "KMPW2010FormFactors<PToP>",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_KMPW2010_FFs_PToP("KMPW2010FormFactors<PToP>",
+                                                                   ll_warning,
+                                                                   "This form factor parametrization is not a general one and requires careful attention. "
+                                                                   "By default, it returns zeros for all form factors.");
     }
 
     FormFactors<PToP> *
@@ -227,6 +225,6 @@ namespace eos
     {
         return 0.0;
     }
-}
+} // namespace eos
 
 #endif

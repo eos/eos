@@ -17,16 +17,16 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/form-factors/hqet-b-to-c.hh>
+
+#include <test/test.hh>
 
 #include <iostream>
 
 using namespace test;
 using namespace eos;
 
-class HQETBToCTest :
-    public TestCase
+class HQETBToCTest : public TestCase
 {
     public:
         HQETBToCTest() :
@@ -34,10 +34,11 @@ class HQETBToCTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             Parameters p = Parameters::Defaults();
-            HQETBToC hqet(p, Options{ });
+            HQETBToC   hqet(p, Options{});
 
             Diagnostics diag = hqet.diagnostics();
             for (auto d : diag)

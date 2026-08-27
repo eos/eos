@@ -21,20 +21,18 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_ZERO_RECOIL_SUM_RULE_HH 1
 
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/reference-name.hh>
 
 namespace eos
 {
     template <typename Tag_> class ZeroRecoilSumRule;
 
-    class LambdaBToC {};
+    class LambdaBToC
+    {};
 
-    template <>
-    class ZeroRecoilSumRule<LambdaBToC> :
-        public ParameterUser,
-        public PrivateImplementationPattern<ZeroRecoilSumRule<LambdaBToC>>
+    template <> class ZeroRecoilSumRule<LambdaBToC> : public ParameterUser, public PrivateImplementationPattern<ZeroRecoilSumRule<LambdaBToC>>
     {
         public:
             ZeroRecoilSumRule(const Parameters &, const Options &);
@@ -63,6 +61,6 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos
 
 #endif

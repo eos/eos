@@ -21,13 +21,13 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_PARAMETRIC_BGJvD2019_IMPL_HH 1
 
 #include <eos/form-factors/parametric-bgjvd2019.hh>
-#include <eos/utils/kinematic.hh>
-#include <eos/models/model.hh>
-#include <eos/utils/options.hh>
-#include <eos/utils/options-impl.hh>
 #include <eos/maths/polylog.hh>
 #include <eos/maths/power-of.hh>
+#include <eos/models/model.hh>
+#include <eos/utils/kinematic.hh>
 #include <eos/utils/log.hh>
+#include <eos/utils/options-impl.hh>
+#include <eos/utils/options.hh>
 
 #include <cmath>
 #include <limits>
@@ -68,7 +68,7 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
+        const double xi   = _xi(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -78,10 +78,10 @@ namespace eos
         // chi_1 is absorbed into def. of xi for LP and LV
         const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
 
-        double result = 1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z)));
-        result += eps_c * (L1);
-        result += eps_b * (L1);
-        result += eps_c * eps_c * _l1(w);
+        double result  = 1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z)));
+        result        += eps_c * (L1);
+        result        += eps_b * (L1);
+        result        += eps_c * eps_c * _l1(w);
 
         return result * xi;
     }
@@ -107,17 +107,17 @@ namespace eos
         // chi_1 is absorbed into def. of xi for LP and LV
         const double L4 = 2.0 * eta - 1.0;
 
-        double result = (0.0 + as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z)));
-        result += eps_c * L4;
-        result -= eps_b * L4;
-        result += eps_c * eps_c * _l4(w);
+        double result  = (0.0 + as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z)));
+        result        += eps_c * L4;
+        result        -= eps_b * L4;
+        result        += eps_c * eps_c * _l4(w);
 
         return result * xi;
     }
 
     template <typename Process_>
     double
-    HQETFormFactors<Process_, PToP>:: _h_S(const double & q2) const
+    HQETFormFactors<Process_, PToP>::_h_S(const double & q2) const
     {
         const double m_b_pole = _m_b_pole();
         const double m_c_pole = _m_c_pole();
@@ -127,8 +127,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -139,10 +139,10 @@ namespace eos
         const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
         const double L4 = 2.0 * eta - 1.0;
 
-        double result = (1.0 + as * _CS(w, z));
-        result += eps_c * (L1 - (w - 1.0) / (w + 1.0) * L4);
-        result += eps_b * (L1 - (w - 1.0) / (w + 1.0) * L4);
-        result += eps_c * eps_c * (_l1(w) - (w - 1.0) / (w + 1.0) * _l4(w));
+        double result  = (1.0 + as * _CS(w, z));
+        result        += eps_c * (L1 - (w - 1.0) / (w + 1.0) * L4);
+        result        += eps_b * (L1 - (w - 1.0) / (w + 1.0) * L4);
+        result        += eps_c * eps_c * (_l1(w) - (w - 1.0) / (w + 1.0) * _l4(w));
 
         return result * xi;
     }
@@ -159,8 +159,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -171,14 +171,13 @@ namespace eos
         const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
         const double L4 = 2.0 * eta - 1.0;
 
-        double result = 1.0 + as * (_CT1(w, z) - _CT2(w, z) + _CT3(w, z));
-        result += eps_c * (L1 - L4);
-        result += eps_b * (L1 - L4);
-        result += eps_c * eps_c * (_l1(w) - _l4(w));
+        double result  = 1.0 + as * (_CT1(w, z) - _CT2(w, z) + _CT3(w, z));
+        result        += eps_c * (L1 - L4);
+        result        += eps_b * (L1 - L4);
+        result        += eps_c * eps_c * (_l1(w) - _l4(w));
 
         return result * xi;
     }
-
 
     template <typename Process_>
     HQETFormFactors<Process_, PToP>::HQETFormFactors(const Parameters & p, const Options & o) :
@@ -186,17 +185,13 @@ namespace eos
         _m_B(p[Process_::name_B], *static_cast<ParameterUser *>(this)),
         _m_P(p[Process_::name_P], *static_cast<ParameterUser *>(this))
     {
-        static const Log::OneTimeMessage message_HQET_FFs_PToP
-        (
-            std::string("HQETFormFactors<") + Process_::label + ",PToP>",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_HQET_FFs_PToP(std::string("HQETFormFactors<") + Process_::label + ",PToP>",
+                                                               ll_warning,
+                                                               "This form factor parametrization is not a general one and requires careful attention. "
+                                                               "By default, it returns zeros for all form factors.");
     }
 
-    template <typename Process_>
-    HQETFormFactors<Process_, PToP>::~HQETFormFactors() = default;
+    template <typename Process_> HQETFormFactors<Process_, PToP>::~HQETFormFactors() = default;
 
     template <typename Process_>
     FormFactors<PToP> *
@@ -263,15 +258,15 @@ namespace eos
             const double z   = m_c / m_b;
             const double wz  = _wz(z);
 
-            results.add(Diagnostics::Entry{ z,  "z = m_c_pole / m_b_pole" });
-            results.add(Diagnostics::Entry{ wz, "w_z"                     });
+            results.add(Diagnostics::Entry{ z, "z = m_c_pole / m_b_pole" });
+            results.add(Diagnostics::Entry{ wz, "w_z" });
         }
 
         // Switches
         {
-            results.add(Diagnostics::Entry{ _enable_lp_z3,  "enable LP  z^3 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z4,  "enable LP  z^4 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z5,  "enable LP  z^5 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z3, "enable LP  z^3 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z4, "enable LP  z^4 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z5, "enable LP  z^5 terms" });
             results.add(Diagnostics::Entry{ _enable_slp_z2, "enable SLP z^2 terms" });
         }
 
@@ -320,35 +315,35 @@ namespace eos
 
         // r(w)
         {
-            results.add(Diagnostics::Entry{ _r(1.1),     "r(w = 1.1)"     });
-            results.add(Diagnostics::Entry{ _r(1.0007),  "r(w = 1.0007)"  });
-            results.add(Diagnostics::Entry{ _r(1.0001),  "r(w = 1.0001)"  });
+            results.add(Diagnostics::Entry{ _r(1.1), "r(w = 1.1)" });
+            results.add(Diagnostics::Entry{ _r(1.0007), "r(w = 1.0007)" });
+            results.add(Diagnostics::Entry{ _r(1.0001), "r(w = 1.0001)" });
             results.add(Diagnostics::Entry{ _r(1.00005), "r(w = 1.00005)" });
-            results.add(Diagnostics::Entry{ _r(1.0),     "r(w = 1.0)"     });
+            results.add(Diagnostics::Entry{ _r(1.0), "r(w = 1.0)" });
         }
 
         // Omega(w, z = 0.25)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.25), "Omega(w = 1.1,     z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.25), "Omega(w = 1.0007,  z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.25), "Omega(w = 1.0001,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.25), "Omega(w = 1.1,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.25), "Omega(w = 1.0007,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.25), "Omega(w = 1.0001,  z = 0.25)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.25), "Omega(w = 1.00005, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.25), "Omega(w = 1.0,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.25), "Omega(w = 1.0,     z = 0.25)" });
         }
 
         // Omega(w, z = 0.20)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.20), "Omega(w = 1.1,     z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.20), "Omega(w = 1.0007,  z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.20), "Omega(w = 1.0001,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.20), "Omega(w = 1.1,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.20), "Omega(w = 1.0007,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.20), "Omega(w = 1.0001,  z = 0.20)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.20), "Omega(w = 1.00005, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.20), "Omega(w = 1.0,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.20), "Omega(w = 1.0,     z = 0.20)" });
         }
 
         // WCs at w = 1.2, z = 0.20
         {
-            results.add(Diagnostics::Entry{ _CS( 1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _CP( 1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CS(1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CP(1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV1(1.2, 0.20), "C_{V_1}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV2(1.2, 0.20), "C_{V_2}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV3(1.2, 0.20), "C_{V_3}(w = 1.2, z = 0.20)" });
@@ -362,8 +357,8 @@ namespace eos
 
         // WCs at w = 1.0, z = 0.25
         {
-            results.add(Diagnostics::Entry{ _CS( 1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _CP( 1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CS(1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CP(1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV1(1.0, 0.25), "C_{V_1}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV2(1.0, 0.25), "C_{V_2}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV3(1.0, 0.25), "C_{V_3}(w = 1.0, z = 0.25)" });
@@ -439,8 +434,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -453,10 +448,10 @@ namespace eos
         const double L4 = 2.0 * eta - 1.0;
         const double L5 = -1.0;
 
-        double result = (1.0 + as * _CA1(w, z));
-        result += eps_c * (L2 - L5 * (w - 1.0) / (w + 1.0));
-        result += eps_b * (L1 - L4 * (w - 1.0) / (w + 1.0));
-        result += eps_c * eps_c * (_l2(w) - (w - 1.0) / (w + 1.0) * _l5(w));
+        double result  = (1.0 + as * _CA1(w, z));
+        result        += eps_c * (L2 - L5 * (w - 1.0) / (w + 1.0));
+        result        += eps_b * (L1 - L4 * (w - 1.0) / (w + 1.0));
+        result        += eps_c * eps_c * (_l2(w) - (w - 1.0) / (w + 1.0) * _l5(w));
 
         return result * xi;
     }
@@ -473,8 +468,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
@@ -483,9 +478,9 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 + as * _CA2(w, z));
-        result += eps_c * (L3 + L6);
-        result += eps_c * eps_c * (_l3(w) + _l6(w));
+        double result  = (0.0 + as * _CA2(w, z));
+        result        += eps_c * (L3 + L6);
+        result        += eps_c * eps_c * (_l3(w) + _l6(w));
 
         return result * xi;
     }
@@ -502,8 +497,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -518,10 +513,10 @@ namespace eos
         const double L5 = -1.0;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (1.0 + as * (_CA1(w, z) +_CA3(w, z)));
-        result += eps_c * (L2 - L3 + L6 - L5);
-        result += eps_b * (L1 - L4);
-        result += eps_c * eps_c * (_l2(w) - _l3(w) + _l6(w) - _l5(w));
+        double result  = (1.0 + as * (_CA1(w, z) + _CA3(w, z)));
+        result        += eps_c * (L2 - L3 + L6 - L5);
+        result        += eps_b * (L1 - L4);
+        result        += eps_c * eps_c * (_l2(w) - _l3(w) + _l6(w) - _l5(w));
 
         return result * xi;
     }
@@ -538,8 +533,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -552,10 +547,10 @@ namespace eos
         const double L4 = 2.0 * eta - 1.0;
         const double L5 = -1.0;
 
-        double result = (1.0 + as * _CV1(w, z));
-        result += eps_c * (L2 - L5);
-        result += eps_b * (L1 - L4);
-        result += eps_c * eps_c * (_l2(w) - _l5(w));
+        double result  = (1.0 + as * _CV1(w, z));
+        result        += eps_c * (L2 - L5);
+        result        += eps_b * (L1 - L4);
+        result        += eps_c * eps_c * (_l2(w) - _l5(w));
 
         return result * xi;
     }
@@ -572,7 +567,7 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
+        const double xi   = _xi(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -583,10 +578,10 @@ namespace eos
         const double L1 = -4.0 * (w - 1.0) * chi2 + 12.0 * chi3;
         const double L2 = -4.0 * chi3;
 
-        double result = (1.0 + as * (_CT1(w, z) + (w - 1.0) / 2.0 * (_CT2(w, z) - _CT3(w, z))));
-        result += eps_c * L2;
-        result += eps_b * L1;
-        result += eps_c * eps_c * _l2(w);
+        double result  = (1.0 + as * (_CT1(w, z) + (w - 1.0) / 2.0 * (_CT2(w, z) - _CT3(w, z))));
+        result        += eps_c * L2;
+        result        += eps_b * L1;
+        result        += eps_c * eps_c * _l2(w);
 
         return result * xi;
     }
@@ -613,10 +608,10 @@ namespace eos
         const double L4 = 2.0 * eta - 1.0;
         const double L5 = -1.0;
 
-        double result = (0.0 + as * (w + 1.0) / 2.0 * (_CT2(w, z) + _CT3(w, z)));
-        result += eps_c * L5;
-        result -= eps_b * L4;
-        result += eps_c * eps_c * _l5(w);
+        double result  = (0.0 + as * (w + 1.0) / 2.0 * (_CT2(w, z) + _CT3(w, z)));
+        result        += eps_c * L5;
+        result        -= eps_b * L4;
+        result        += eps_c * eps_c * _l5(w);
 
         return result * xi;
     }
@@ -633,8 +628,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
@@ -643,9 +638,9 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 + as * _CT2(w, z));
-        result += eps_c * (L6 - L3);
-        result += eps_c * eps_c * (_l6(w) - _l3(w));
+        double result  = (0.0 + as * _CT2(w, z));
+        result        += eps_c * (L6 - L3);
+        result        += eps_c * eps_c * (_l6(w) - _l3(w));
 
         return result * xi;
     }
@@ -656,17 +651,13 @@ namespace eos
         _m_B(p[Process_::name_B], *static_cast<ParameterUser *>(this)),
         _m_V(p[Process_::name_V], *static_cast<ParameterUser *>(this))
     {
-        static const Log::OneTimeMessage message_HQET_FFs_PToV
-        (
-            std::string("HQETFormFactors<") + Process_::label + ",PToV>",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_HQET_FFs_PToV(std::string("HQETFormFactors<") + Process_::label + ",PToV>",
+                                                               ll_warning,
+                                                               "This form factor parametrization is not a general one and requires careful attention. "
+                                                               "By default, it returns zeros for all form factors.");
     }
 
-    template <typename Process_>
-    HQETFormFactors<Process_, PToV>::~HQETFormFactors() = default;
+    template <typename Process_> HQETFormFactors<Process_, PToV>::~HQETFormFactors() = default;
 
     template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
@@ -681,7 +672,6 @@ namespace eos
     {
         return option_specifications.cend();
     }
-
 
     template <typename Process_>
     FormFactors<PToV> *
@@ -709,8 +699,8 @@ namespace eos
 
         return 1.0 / (2.0 * sqrt(r)) * ((1.0 + w) * _h_a1(q2) + (r * w - 1.0) * _h_a2(q2) + (r - w) * _h_a3(q2));
         // cf. [FKKM:2008A], eq. (22)
-        //const double a_30 = (1.0 + r * r - 2.0 * r * w) / (4.0 * r * sqrt(r)) * (r * _h_a2(q2) - _h_a3(q2));
-        //return a_3(q2) - a_30;
+        // const double a_30 = (1.0 + r * r - 2.0 * r * w) / (4.0 * r * sqrt(r)) * (r * _h_a2(q2) - _h_a3(q2));
+        // return a_3(q2) - a_30;
     }
 
     template <typename Process_>
@@ -752,8 +742,8 @@ namespace eos
         const double m_V = this->_m_V(), m_V2 = power_of<2>(m_V);
         const double lambda = eos::lambda(m_B2, m_V2, q2);
 
-        double result = (m_B + m_V) * (m_B + m_V) * (m_B2 - m_V2 - q2) * a_1(q2) - lambda * a_2(q2);
-        result /= 16.0 * m_B * m_V2 * (m_B + m_V);
+        double result  = (m_B + m_V) * (m_B + m_V) * (m_B2 - m_V2 - q2) * a_1(q2) - lambda * a_2(q2);
+        result        /= 16.0 * m_B * m_V2 * (m_B + m_V);
 
         return result;
     }
@@ -852,15 +842,15 @@ namespace eos
             const double z   = m_c / m_b;
             const double wz  = _wz(z);
 
-            results.add(Diagnostics::Entry{ z,  "z = m_c_pole / m_b_pole" });
-            results.add(Diagnostics::Entry{ wz, "w_z"                     });
+            results.add(Diagnostics::Entry{ z, "z = m_c_pole / m_b_pole" });
+            results.add(Diagnostics::Entry{ wz, "w_z" });
         }
 
         // Switches
         {
-            results.add(Diagnostics::Entry{ _enable_lp_z3,  "enable LP  z^3 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z4,  "enable LP  z^4 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z5,  "enable LP  z^5 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z3, "enable LP  z^3 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z4, "enable LP  z^4 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z5, "enable LP  z^5 terms" });
             results.add(Diagnostics::Entry{ _enable_slp_z2, "enable SLP z^2 terms" });
         }
 
@@ -909,35 +899,35 @@ namespace eos
 
         // r(w)
         {
-            results.add(Diagnostics::Entry{ _r(1.1),     "r(w = 1.1)"     });
-            results.add(Diagnostics::Entry{ _r(1.0007),  "r(w = 1.0007)"  });
-            results.add(Diagnostics::Entry{ _r(1.0001),  "r(w = 1.0001)"  });
+            results.add(Diagnostics::Entry{ _r(1.1), "r(w = 1.1)" });
+            results.add(Diagnostics::Entry{ _r(1.0007), "r(w = 1.0007)" });
+            results.add(Diagnostics::Entry{ _r(1.0001), "r(w = 1.0001)" });
             results.add(Diagnostics::Entry{ _r(1.00005), "r(w = 1.00005)" });
-            results.add(Diagnostics::Entry{ _r(1.0),     "r(w = 1.0)"     });
+            results.add(Diagnostics::Entry{ _r(1.0), "r(w = 1.0)" });
         }
 
         // Omega(w, z = 0.25)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.25), "Omega(w = 1.1,     z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.25), "Omega(w = 1.0007,  z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.25), "Omega(w = 1.0001,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.25), "Omega(w = 1.1,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.25), "Omega(w = 1.0007,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.25), "Omega(w = 1.0001,  z = 0.25)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.25), "Omega(w = 1.00005, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.25), "Omega(w = 1.0,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.25), "Omega(w = 1.0,     z = 0.25)" });
         }
 
         // Omega(w, z = 0.20)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.20), "Omega(w = 1.1,     z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.20), "Omega(w = 1.0007,  z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.20), "Omega(w = 1.0001,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.20), "Omega(w = 1.1,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.20), "Omega(w = 1.0007,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.20), "Omega(w = 1.0001,  z = 0.20)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.20), "Omega(w = 1.00005, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.20), "Omega(w = 1.0,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.20), "Omega(w = 1.0,     z = 0.20)" });
         }
 
         // WCs at w = 1.2, z = 0.20
         {
-            results.add(Diagnostics::Entry{ _CS( 1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _CP( 1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CS(1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CP(1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV1(1.2, 0.20), "C_{V_1}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV2(1.2, 0.20), "C_{V_2}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV3(1.2, 0.20), "C_{V_3}(w = 1.2, z = 0.20)" });
@@ -951,8 +941,8 @@ namespace eos
 
         // WCs at w = 1.0, z = 0.25
         {
-            results.add(Diagnostics::Entry{ _CS( 1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _CP( 1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CS(1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CP(1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV1(1.0, 0.25), "C_{V_1}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV2(1.0, 0.25), "C_{V_2}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV3(1.0, 0.25), "C_{V_3}(w = 1.0, z = 0.25)" });
@@ -969,7 +959,7 @@ namespace eos
             results.add(Diagnostics::Entry{ _h_a1(_q2(1.4)), "h_A1(w = 1.4)" });
             results.add(Diagnostics::Entry{ _h_a2(_q2(1.4)), "h_A2(w = 1.4)" });
             results.add(Diagnostics::Entry{ _h_a3(_q2(1.4)), "h_A3(w = 1.4)" });
-            results.add(Diagnostics::Entry{ _h_v (_q2(1.4)), "h_V (w = 1.4)" });
+            results.add(Diagnostics::Entry{ _h_v(_q2(1.4)), "h_V (w = 1.4)" });
             results.add(Diagnostics::Entry{ _h_t1(_q2(1.4)), "h_T1(w = 1.4)" });
             results.add(Diagnostics::Entry{ _h_t2(_q2(1.4)), "h_T2(w = 1.4)" });
             results.add(Diagnostics::Entry{ _h_t3(_q2(1.4)), "h_T3(w = 1.4)" });
@@ -977,7 +967,7 @@ namespace eos
             results.add(Diagnostics::Entry{ _h_a1(_q2(1.2)), "h_A1(w = 1.2)" });
             results.add(Diagnostics::Entry{ _h_a2(_q2(1.2)), "h_A2(w = 1.2)" });
             results.add(Diagnostics::Entry{ _h_a3(_q2(1.2)), "h_A3(w = 1.2)" });
-            results.add(Diagnostics::Entry{ _h_v (_q2(1.2)), "h_V (w = 1.2)" });
+            results.add(Diagnostics::Entry{ _h_v(_q2(1.2)), "h_V (w = 1.2)" });
             results.add(Diagnostics::Entry{ _h_t1(_q2(1.2)), "h_T1(w = 1.2)" });
             results.add(Diagnostics::Entry{ _h_t2(_q2(1.2)), "h_T2(w = 1.2)" });
             results.add(Diagnostics::Entry{ _h_t3(_q2(1.2)), "h_T3(w = 1.2)" });
@@ -985,7 +975,7 @@ namespace eos
             results.add(Diagnostics::Entry{ _h_a1(_q2(1.0)), "h_A1(w = 1.0)" });
             results.add(Diagnostics::Entry{ _h_a2(_q2(1.0)), "h_A2(w = 1.0)" });
             results.add(Diagnostics::Entry{ _h_a3(_q2(1.0)), "h_A3(w = 1.0)" });
-            results.add(Diagnostics::Entry{ _h_v (_q2(1.0)), "h_V (w = 1.0)" });
+            results.add(Diagnostics::Entry{ _h_v(_q2(1.0)), "h_V (w = 1.0)" });
             results.add(Diagnostics::Entry{ _h_t1(_q2(1.0)), "h_T1(w = 1.0)" });
             results.add(Diagnostics::Entry{ _h_t2(_q2(1.0)), "h_T2(w = 1.0)" });
             results.add(Diagnostics::Entry{ _h_t3(_q2(1.0)), "h_T3(w = 1.0)" });
@@ -999,7 +989,7 @@ namespace eos
     HQETFormFactors<Process_, VToP>::_w(const double & q2) const
     {
         const double m_Bst = this->_m_Bst(), m_Bst2 = power_of<2>(m_Bst);
-        const double m_P   = this->_m_P(),   m_P2   = power_of<2>(m_P);
+        const double m_P = this->_m_P(), m_P2 = power_of<2>(m_P);
 
         return (m_Bst2 + m_P2 - q2) / (2.0 * m_Bst * m_P);
     }
@@ -1009,7 +999,7 @@ namespace eos
     HQETFormFactors<Process_, VToP>::_q2(const double & w) const
     {
         const double m_Bst = this->_m_Bst(), m_Bst2 = power_of<2>(m_Bst);
-        const double m_P   = this->_m_P(),   m_P2   = power_of<2>(m_P);
+        const double m_P = this->_m_P(), m_P2 = power_of<2>(m_P);
 
         return m_Bst2 + m_P2 - 2.0 * m_Bst * m_P * w;
     }
@@ -1020,17 +1010,13 @@ namespace eos
         _m_Bst(p[Process_::name_Bst], *static_cast<ParameterUser *>(this)),
         _m_P(p[Process_::name_P], *static_cast<ParameterUser *>(this))
     {
-        static const Log::OneTimeMessage message_HQET_FFs_VToP
-        (
-            std::string("HQETFormFactors<") + Process_::label + ",VToP>",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_HQET_FFs_VToP(std::string("HQETFormFactors<") + Process_::label + ",VToP>",
+                                                               ll_warning,
+                                                               "This form factor parametrization is not a general one and requires careful attention. "
+                                                               "By default, it returns zeros for all form factors.");
     }
 
-    template <typename Process_>
-    HQETFormFactors<Process_, VToP>::~HQETFormFactors() = default;
+    template <typename Process_> HQETFormFactors<Process_, VToP>::~HQETFormFactors() = default;
 
     template <typename Process_>
     FormFactors<VToP> *
@@ -1053,8 +1039,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -1067,10 +1053,10 @@ namespace eos
         const double L4 = 2.0 * eta - 1.0;
         const double L5 = -1.0;
 
-        double result = (1.0 + as * _CA1(w, z));
-        result += eps_c * (L1 - L4 * (w - 1.0) / (w + 1.0));
-        result += eps_b * (L2 - L5 * (w - 1.0) / (w + 1.0));
-        result += eps_c * eps_c * (_l1(w) - _l4(w) * (w - 1.0) / (w + 1.0));
+        double result  = (1.0 + as * _CA1(w, z));
+        result        += eps_c * (L1 - L4 * (w - 1.0) / (w + 1.0));
+        result        += eps_b * (L2 - L5 * (w - 1.0) / (w + 1.0));
+        result        += eps_c * eps_c * (_l1(w) - _l4(w) * (w - 1.0) / (w + 1.0));
 
         return result * xi;
     }
@@ -1087,8 +1073,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
@@ -1097,8 +1083,8 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 - as * _CA3(w, z));
-        result += eps_b * (L3 + L6);
+        double result  = (0.0 - as * _CA3(w, z));
+        result        += eps_b * (L3 + L6);
 
         return result * xi;
     }
@@ -1115,8 +1101,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -1131,10 +1117,10 @@ namespace eos
         const double L5 = -1.0;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (1.0 + as * (_CA1(w, z) - _CA2(w, z)));
-        result += eps_b * (L2 - L3 + L6 - L5);
-        result += eps_c * (L1 - L4);
-        result += eps_c * eps_c * (_l1(w) - _l4(w));
+        double result  = (1.0 + as * (_CA1(w, z) - _CA2(w, z)));
+        result        += eps_b * (L2 - L3 + L6 - L5);
+        result        += eps_c * (L1 - L4);
+        result        += eps_c * eps_c * (_l1(w) - _l4(w));
 
         return result * xi;
     }
@@ -1151,8 +1137,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -1165,10 +1151,10 @@ namespace eos
         const double L4 = 2.0 * eta - 1.0;
         const double L5 = -1.0;
 
-        double result = (1.0 + as * _CV1(w, z));
-        result += eps_b * (L2 - L5);
-        result += eps_c * (L1 - L4);
-        result += eps_c * eps_c * (_l1(w) - _l4(w));
+        double result  = (1.0 + as * _CV1(w, z));
+        result        += eps_b * (L2 - L5);
+        result        += eps_c * (L1 - L4);
+        result        += eps_c * eps_c * (_l1(w) - _l4(w));
 
         return result * xi;
     }
@@ -1186,15 +1172,15 @@ namespace eos
             const double z   = m_c / m_b;
             const double wz  = _wz(z);
 
-            results.add(Diagnostics::Entry{ z,  "z = m_c / m_b" });
-            results.add(Diagnostics::Entry{ wz, "w_z"           });
+            results.add(Diagnostics::Entry{ z, "z = m_c / m_b" });
+            results.add(Diagnostics::Entry{ wz, "w_z" });
         }
 
         // Switches
         {
-            results.add(Diagnostics::Entry{ _enable_lp_z3,  "enable LP  z^3 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z4,  "enable LP  z^4 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z5,  "enable LP  z^5 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z3, "enable LP  z^3 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z4, "enable LP  z^4 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z5, "enable LP  z^5 terms" });
             results.add(Diagnostics::Entry{ _enable_slp_z2, "enable SLP z^2 terms" });
         }
 
@@ -1243,35 +1229,35 @@ namespace eos
 
         // r(w)
         {
-            results.add(Diagnostics::Entry{ _r(1.1),     "r(w = 1.1)"     });
-            results.add(Diagnostics::Entry{ _r(1.0007),  "r(w = 1.0007)"  });
-            results.add(Diagnostics::Entry{ _r(1.0001),  "r(w = 1.0001)"  });
+            results.add(Diagnostics::Entry{ _r(1.1), "r(w = 1.1)" });
+            results.add(Diagnostics::Entry{ _r(1.0007), "r(w = 1.0007)" });
+            results.add(Diagnostics::Entry{ _r(1.0001), "r(w = 1.0001)" });
             results.add(Diagnostics::Entry{ _r(1.00005), "r(w = 1.00005)" });
-            results.add(Diagnostics::Entry{ _r(1.0),     "r(w = 1.0)"     });
+            results.add(Diagnostics::Entry{ _r(1.0), "r(w = 1.0)" });
         }
 
         // Omega(w, z = 0.25)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.25), "Omega(w = 1.1,     z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.25), "Omega(w = 1.0007,  z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.25), "Omega(w = 1.0001,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.25), "Omega(w = 1.1,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.25), "Omega(w = 1.0007,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.25), "Omega(w = 1.0001,  z = 0.25)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.25), "Omega(w = 1.00005, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.25), "Omega(w = 1.0,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.25), "Omega(w = 1.0,     z = 0.25)" });
         }
 
         // Omega(w, z = 0.20)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.20), "Omega(w = 1.1,     z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.20), "Omega(w = 1.0007,  z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.20), "Omega(w = 1.0001,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.20), "Omega(w = 1.1,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.20), "Omega(w = 1.0007,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.20), "Omega(w = 1.0001,  z = 0.20)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.20), "Omega(w = 1.00005, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.20), "Omega(w = 1.0,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.20), "Omega(w = 1.0,     z = 0.20)" });
         }
 
         // WCs at w = 1.2, z = 0.20
         {
-            results.add(Diagnostics::Entry{ _CS( 1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _CP( 1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CS(1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CP(1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV1(1.2, 0.20), "C_{V_1}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV2(1.2, 0.20), "C_{V_2}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV3(1.2, 0.20), "C_{V_3}(w = 1.2, z = 0.20)" });
@@ -1285,8 +1271,8 @@ namespace eos
 
         // WCs at w = 1.0, z = 0.25
         {
-            results.add(Diagnostics::Entry{ _CS( 1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _CP( 1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CS(1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CP(1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV1(1.0, 0.25), "C_{V_1}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV2(1.0, 0.25), "C_{V_2}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV3(1.0, 0.25), "C_{V_3}(w = 1.0, z = 0.25)" });
@@ -1303,17 +1289,17 @@ namespace eos
             results.add(Diagnostics::Entry{ h_abar_1(_q2(1.4)), "h_Abar1(w = 1.4)" });
             results.add(Diagnostics::Entry{ h_abar_2(_q2(1.4)), "h_Abar2(w = 1.4)" });
             results.add(Diagnostics::Entry{ h_abar_3(_q2(1.4)), "h_Abar3(w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_vbar (_q2(1.4)),  "h_Vbar (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_vbar(_q2(1.4)), "h_Vbar (w = 1.4)" });
 
             results.add(Diagnostics::Entry{ h_abar_1(_q2(1.2)), "h_Abar1(w = 1.2)" });
             results.add(Diagnostics::Entry{ h_abar_2(_q2(1.2)), "h_Abar2(w = 1.2)" });
             results.add(Diagnostics::Entry{ h_abar_3(_q2(1.2)), "h_Abar3(w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_vbar (_q2(1.2)),  "h_Vbar (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_vbar(_q2(1.2)), "h_Vbar (w = 1.2)" });
 
             results.add(Diagnostics::Entry{ h_abar_1(_q2(1.0)), "h_Abar1(w = 1.0)" });
             results.add(Diagnostics::Entry{ h_abar_2(_q2(1.0)), "h_Abar2(w = 1.0)" });
             results.add(Diagnostics::Entry{ h_abar_3(_q2(1.0)), "h_Abar3(w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_vbar (_q2(1.0)),  "h_Vbar (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_vbar(_q2(1.0)), "h_Vbar (w = 1.0)" });
         }
 
         return results;
@@ -1343,17 +1329,13 @@ namespace eos
     HQETFormFactors<Process_, VToV>::HQETFormFactors(const Parameters & p, const Options & o) :
         HQETFormFactorBase(p, o, Process_::hqe_prefix)
     {
-        static const Log::OneTimeMessage message_HQET_FFs_VToV
-        (
-            std::string("HQETFormFactors<") + Process_::label + ",VToV>",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention. "
-            "By default, it returns zeros for all form factors."
-        );
+        static const Log::OneTimeMessage message_HQET_FFs_VToV(std::string("HQETFormFactors<") + Process_::label + ",VToV>",
+                                                               ll_warning,
+                                                               "This form factor parametrization is not a general one and requires careful attention. "
+                                                               "By default, it returns zeros for all form factors.");
     }
 
-    template <typename Process_>
-    HQETFormFactors<Process_, VToV>::~HQETFormFactors() = default;
+    template <typename Process_> HQETFormFactors<Process_, VToV>::~HQETFormFactors() = default;
 
     template <typename Process_>
     FormFactors<VToV> *
@@ -1377,7 +1359,7 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
+        const double xi   = _xi(q2);
         const double chi3 = _chi3(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
@@ -1386,10 +1368,10 @@ namespace eos
         // chi_1 is absorbed into def. of xi for LP and LV
         const double L2 = -4.0 * chi3;
 
-        double result = 1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z)));
-        result += eps_c * L2;
-        result += eps_b * L2;
-        result += eps_c * eps_c * _l2(w);
+        double result  = 1.0 + as * (_CV1(w, z) + (w + 1.0) / 2.0 * (_CV2(w, z) + _CV3(w, z)));
+        result        += eps_c * L2;
+        result        += eps_b * L2;
+        result        += eps_c * eps_c * _l2(w);
 
         return result * xi;
     }
@@ -1406,7 +1388,7 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
+        const double xi = _xi(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
         const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
@@ -1414,10 +1396,10 @@ namespace eos
         // chi_1 is absorbed into def. of xi for LP and LV
         const double L5 = -1.0;
 
-        double result = as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z));
-        result += eps_c * L5;
-        result -= eps_b * L5;
-        result += eps_c * eps_c * _l5(w);
+        double result  = as * (w + 1.0) / 2.0 * (_CV2(w, z) - _CV3(w, z));
+        result        += eps_c * L5;
+        result        -= eps_b * L5;
+        result        += eps_c * eps_c * _l5(w);
 
         return result * xi;
     }
@@ -1434,8 +1416,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -1448,10 +1430,10 @@ namespace eos
         const double L5 = -1.0;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (1.0 + as * _CV1(w, z));
-        result += eps_c * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
-        result += eps_b * (L2 - L5);
-        result += eps_c * eps_c * (_l2(w) + _l5(w) + (w - 1.0) * _l3(w) - (w + 1.0) * _l6(w));
+        double result  = (1.0 + as * _CV1(w, z));
+        result        += eps_c * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
+        result        += eps_b * (L2 - L5);
+        result        += eps_c * eps_c * (_l2(w) + _l5(w) + (w - 1.0) * _l3(w) - (w + 1.0) * _l6(w));
 
         return result * xi;
     }
@@ -1468,8 +1450,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
         const double chi3 = _chi3(q2);
 
@@ -1482,10 +1464,10 @@ namespace eos
         const double L5 = -1.0;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (1.0 + as * _CV1(w, z));
-        result += eps_b * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
-        result += eps_c * (L2 - L5);
-        result += eps_c * eps_c * (_l2(w) - _l5(w));
+        double result  = (1.0 + as * _CV1(w, z));
+        result        += eps_b * (L2 + L5 + (w - 1.0) * L3 - (w + 1.0) * L6);
+        result        += eps_c * (L2 - L5);
+        result        += eps_c * eps_c * (_l2(w) - _l5(w));
 
         return result * xi;
     }
@@ -1502,8 +1484,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
@@ -1512,9 +1494,9 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 - as * _CV2(w, z));
-        result += eps_c * (L3 - L6);
-        result += eps_c * eps_c * (_l3(w) - _l6(w));
+        double result  = (0.0 - as * _CV2(w, z));
+        result        += eps_c * (L3 - L6);
+        result        += eps_c * eps_c * (_l3(w) - _l6(w));
 
         return result * xi;
     }
@@ -1531,8 +1513,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
@@ -1541,8 +1523,8 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 - as * _CV3(w, z));
-        result += eps_b * (L3 - L6);
+        double result  = (0.0 - as * _CV3(w, z));
+        result        += eps_b * (L3 - L6);
 
         return result * xi;
     }
@@ -1560,7 +1542,7 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
+        const double xi   = _xi(q2);
         const double chi3 = _chi3(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
@@ -1569,10 +1551,10 @@ namespace eos
         // chi_1 is absorbed into def. of xi for LP and LV
         const double L2 = -4.0 * chi3;
 
-        double result = 1.0 + as * (_CA1(w, z) + (w - 1.0) / 2.0 * (_CA2(w, z) - _CA3(w, z)));
-        result += eps_b * L2;
-        result += eps_c * L2;
-        result += eps_c * eps_c * _l2(w);
+        double result  = 1.0 + as * (_CA1(w, z) + (w - 1.0) / 2.0 * (_CA2(w, z) - _CA3(w, z)));
+        result        += eps_b * L2;
+        result        += eps_c * L2;
+        result        += eps_c * eps_c * _l2(w);
 
         return result * xi;
     }
@@ -1589,7 +1571,7 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
+        const double xi = _xi(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
         const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
@@ -1597,10 +1579,10 @@ namespace eos
         // chi_1 is absorbed into def. of xi for LP and LV
         const double L5 = -1.0;
 
-        double result = as * (w + 1.0) / 2.0 * (_CA2(w, z) + _CA3(w, z));
-        result += eps_c * L5;
-        result -= eps_b * L5;
-        result += eps_c * eps_c * _l5(w);
+        double result  = as * (w + 1.0) / 2.0 * (_CA2(w, z) + _CA3(w, z));
+        result        += eps_c * L5;
+        result        -= eps_b * L5;
+        result        += eps_c * eps_c * _l5(w);
 
         return result * xi;
     }
@@ -1617,8 +1599,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_c = _LambdaBar() / (2.0 * m_c_pole);
@@ -1627,9 +1609,9 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 - as * _CA2(w, z));
-        result += eps_c * (L3 - L6);
-        result += eps_c * eps_c * (_l3(w) - _l6(w));
+        double result  = (0.0 - as * _CA2(w, z));
+        result        += eps_c * (L3 - L6);
+        result        += eps_c * eps_c * (_l3(w) - _l6(w));
 
         return result * xi;
     }
@@ -1646,8 +1628,8 @@ namespace eos
 
         const double as = _alpha_s() / M_PI;
 
-        const double xi  = _xi(q2);
-        const double eta = _eta(q2);
+        const double xi   = _xi(q2);
+        const double eta  = _eta(q2);
         const double chi2 = _chi2(q2);
 
         const double eps_b = _LambdaBar() / (2.0 * m_b_pole);
@@ -1656,8 +1638,8 @@ namespace eos
         const double L3 = 4.0 * chi2;
         const double L6 = -2.0 * (1.0 + eta) / (w + 1.0);
 
-        double result = (0.0 + as * _CA3(w, z));
-        result += eps_b * (L3 - L6);
+        double result  = (0.0 + as * _CA3(w, z));
+        result        += eps_b * (L3 - L6);
 
         return result * xi;
     }
@@ -1675,15 +1657,15 @@ namespace eos
             const double z   = m_c / m_b;
             const double wz  = _wz(z);
 
-            results.add(Diagnostics::Entry{ z,  "z = m_c / m_b" });
-            results.add(Diagnostics::Entry{ wz, "w_z"           });
+            results.add(Diagnostics::Entry{ z, "z = m_c / m_b" });
+            results.add(Diagnostics::Entry{ wz, "w_z" });
         }
 
         // Switches
         {
-            results.add(Diagnostics::Entry{ _enable_lp_z3,  "enable LP  z^3 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z4,  "enable LP  z^4 terms" });
-            results.add(Diagnostics::Entry{ _enable_lp_z5,  "enable LP  z^5 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z3, "enable LP  z^3 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z4, "enable LP  z^4 terms" });
+            results.add(Diagnostics::Entry{ _enable_lp_z5, "enable LP  z^5 terms" });
             results.add(Diagnostics::Entry{ _enable_slp_z2, "enable SLP z^2 terms" });
         }
 
@@ -1732,35 +1714,35 @@ namespace eos
 
         // r(w)
         {
-            results.add(Diagnostics::Entry{ _r(1.1),     "r(w = 1.1)"     });
-            results.add(Diagnostics::Entry{ _r(1.0007),  "r(w = 1.0007)"  });
-            results.add(Diagnostics::Entry{ _r(1.0001),  "r(w = 1.0001)"  });
+            results.add(Diagnostics::Entry{ _r(1.1), "r(w = 1.1)" });
+            results.add(Diagnostics::Entry{ _r(1.0007), "r(w = 1.0007)" });
+            results.add(Diagnostics::Entry{ _r(1.0001), "r(w = 1.0001)" });
             results.add(Diagnostics::Entry{ _r(1.00005), "r(w = 1.00005)" });
-            results.add(Diagnostics::Entry{ _r(1.0),     "r(w = 1.0)"     });
+            results.add(Diagnostics::Entry{ _r(1.0), "r(w = 1.0)" });
         }
 
         // Omega(w, z = 0.25)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.25), "Omega(w = 1.1,     z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.25), "Omega(w = 1.0007,  z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.25), "Omega(w = 1.0001,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.25), "Omega(w = 1.1,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.25), "Omega(w = 1.0007,  z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.25), "Omega(w = 1.0001,  z = 0.25)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.25), "Omega(w = 1.00005, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.25), "Omega(w = 1.0,     z = 0.25)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.25), "Omega(w = 1.0,     z = 0.25)" });
         }
 
         // Omega(w, z = 0.20)
         {
-            results.add(Diagnostics::Entry{ _Omega(1.1,     0.20), "Omega(w = 1.1,     z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0007,  0.20), "Omega(w = 1.0007,  z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0001,  0.20), "Omega(w = 1.0001,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.1, 0.20), "Omega(w = 1.1,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0007, 0.20), "Omega(w = 1.0007,  z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0001, 0.20), "Omega(w = 1.0001,  z = 0.20)" });
             results.add(Diagnostics::Entry{ _Omega(1.00005, 0.20), "Omega(w = 1.00005, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _Omega(1.0,     0.20), "Omega(w = 1.0,     z = 0.20)" });
+            results.add(Diagnostics::Entry{ _Omega(1.0, 0.20), "Omega(w = 1.0,     z = 0.20)" });
         }
 
         // WCs at w = 1.2, z = 0.20
         {
-            results.add(Diagnostics::Entry{ _CS( 1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
-            results.add(Diagnostics::Entry{ _CP( 1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CS(1.2, 0.20), "C_{S  }(w = 1.2, z = 0.20)" });
+            results.add(Diagnostics::Entry{ _CP(1.2, 0.20), "C_{P  }(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV1(1.2, 0.20), "C_{V_1}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV2(1.2, 0.20), "C_{V_2}(w = 1.2, z = 0.20)" });
             results.add(Diagnostics::Entry{ _CV3(1.2, 0.20), "C_{V_3}(w = 1.2, z = 0.20)" });
@@ -1774,8 +1756,8 @@ namespace eos
 
         // WCs at w = 1.0, z = 0.25
         {
-            results.add(Diagnostics::Entry{ _CS( 1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
-            results.add(Diagnostics::Entry{ _CP( 1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CS(1.0, 0.25), "C_{S  }(w = 1.0, z = 0.25)" });
+            results.add(Diagnostics::Entry{ _CP(1.0, 0.25), "C_{P  }(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV1(1.0, 0.25), "C_{V_1}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV2(1.0, 0.25), "C_{V_2}(w = 1.0, z = 0.25)" });
             results.add(Diagnostics::Entry{ _CV3(1.0, 0.25), "C_{V_3}(w = 1.0, z = 0.25)" });
@@ -1789,42 +1771,42 @@ namespace eos
 
         // HQET definition of the form factors
         {
-            results.add(Diagnostics::Entry{ h_1(_q2(1.4)),  "h_1 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_2(_q2(1.4)),  "h_2 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_3(_q2(1.4)),  "h_3 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_4(_q2(1.4)),  "h_4 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_5(_q2(1.4)),  "h_5 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_6(_q2(1.4)),  "h_6 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_7(_q2(1.4)),  "h_7 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_8(_q2(1.4)),  "h_8 (w = 1.4)" });
-            results.add(Diagnostics::Entry{ h_9(_q2(1.4)),  "h_9 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_1(_q2(1.4)), "h_1 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_2(_q2(1.4)), "h_2 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_3(_q2(1.4)), "h_3 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_4(_q2(1.4)), "h_4 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_5(_q2(1.4)), "h_5 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_6(_q2(1.4)), "h_6 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_7(_q2(1.4)), "h_7 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_8(_q2(1.4)), "h_8 (w = 1.4)" });
+            results.add(Diagnostics::Entry{ h_9(_q2(1.4)), "h_9 (w = 1.4)" });
             results.add(Diagnostics::Entry{ h_10(_q2(1.4)), "h_10(w = 1.4)" });
 
-            results.add(Diagnostics::Entry{ h_1(_q2(1.2)),  "h_1 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_2(_q2(1.2)),  "h_2 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_3(_q2(1.2)),  "h_3 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_4(_q2(1.2)),  "h_4 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_5(_q2(1.2)),  "h_5 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_6(_q2(1.2)),  "h_6 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_7(_q2(1.2)),  "h_7 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_8(_q2(1.2)),  "h_8 (w = 1.2)" });
-            results.add(Diagnostics::Entry{ h_9(_q2(1.2)),  "h_9 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_1(_q2(1.2)), "h_1 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_2(_q2(1.2)), "h_2 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_3(_q2(1.2)), "h_3 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_4(_q2(1.2)), "h_4 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_5(_q2(1.2)), "h_5 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_6(_q2(1.2)), "h_6 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_7(_q2(1.2)), "h_7 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_8(_q2(1.2)), "h_8 (w = 1.2)" });
+            results.add(Diagnostics::Entry{ h_9(_q2(1.2)), "h_9 (w = 1.2)" });
             results.add(Diagnostics::Entry{ h_10(_q2(1.2)), "h_10(w = 1.2)" });
 
-            results.add(Diagnostics::Entry{ h_1(_q2(1.0)),  "h_1 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_2(_q2(1.0)),  "h_2 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_3(_q2(1.0)),  "h_3 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_4(_q2(1.0)),  "h_4 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_5(_q2(1.0)),  "h_5 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_6(_q2(1.0)),  "h_6 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_7(_q2(1.0)),  "h_7 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_8(_q2(1.0)),  "h_8 (w = 1.0)" });
-            results.add(Diagnostics::Entry{ h_9(_q2(1.0)),  "h_9 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_1(_q2(1.0)), "h_1 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_2(_q2(1.0)), "h_2 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_3(_q2(1.0)), "h_3 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_4(_q2(1.0)), "h_4 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_5(_q2(1.0)), "h_5 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_6(_q2(1.0)), "h_6 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_7(_q2(1.0)), "h_7 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_8(_q2(1.0)), "h_8 (w = 1.0)" });
+            results.add(Diagnostics::Entry{ h_9(_q2(1.0)), "h_9 (w = 1.0)" });
             results.add(Diagnostics::Entry{ h_10(_q2(1.0)), "h_10(w = 1.0)" });
         }
 
         return results;
     }
-}
+} // namespace eos
 
 #endif

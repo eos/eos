@@ -24,14 +24,12 @@
 #include <eos/form-factors/psd-lcdas.hh>
 #include <eos/maths/gegenbauer-polynomial.hh>
 #include <eos/utils/diagnostics.hh>
-#include <eos/utils/parameters.hh>
 #include <eos/utils/options.hh>
+#include <eos/utils/parameters.hh>
 
 namespace eos
 {
-    class AntiKaonLCDAs :
-        public PseudoscalarLCDAs,
-        public PrivateImplementationPattern<AntiKaonLCDAs>
+    class AntiKaonLCDAs : public PseudoscalarLCDAs, public PrivateImplementationPattern<AntiKaonLCDAs>
     {
         public:
             AntiKaonLCDAs(const Parameters &, const Options &);
@@ -42,8 +40,18 @@ namespace eos
             /* Twist 2 LCDA Gegenbauer coefficients */
             double a1(const double & mu) const override;
             double a2(const double & mu) const override;
-            double a3(const double & /*mu*/) const override { return 0.0; }
-            double a4(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            a3(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            a4(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 3 LCDA parameters */
             double mu3(const double & mu) const override;
@@ -76,9 +84,7 @@ namespace eos
             Diagnostics diagnostics() const;
     };
 
-    class KaonLCDAs :
-        public PseudoscalarLCDAs,
-        public PrivateImplementationPattern<KaonLCDAs>
+    class KaonLCDAs : public PseudoscalarLCDAs, public PrivateImplementationPattern<KaonLCDAs>
     {
         public:
             KaonLCDAs(const Parameters &, const Options &);
@@ -89,8 +95,18 @@ namespace eos
             /* Twist 2 LCDA Gegenbauer coefficients */
             double a1(const double & mu) const override;
             double a2(const double & mu) const override;
-            double a3(const double & /*mu*/) const override { return 0.0; }
-            double a4(const double & /*mu*/) const override { return 0.0; }
+
+            double
+            a3(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
+
+            double
+            a4(const double & /*mu*/) const override
+            {
+                return 0.0;
+            }
 
             /* Twist 3 LCDA parameters */
             double mu3(const double & mu) const override;
@@ -122,6 +138,6 @@ namespace eos
             /* Internal diagnostics */
             Diagnostics diagnostics() const;
     };
-}
+} // namespace eos
 
 #endif

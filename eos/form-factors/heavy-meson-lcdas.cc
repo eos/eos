@@ -35,20 +35,20 @@ namespace eos
 
         std::shared_ptr<HeavyMesonLCDAs> result;
 
-        using type = std::function<HeavyMesonLCDAs * (const Parameters &, const Options &)>;
+        using type                               = std::function<HeavyMesonLCDAs *(const Parameters &, const Options &)>;
         const std::map<std::string, type> models = {
-            { "exponential",      &heavy_meson_lcdas::Exponential::make      },
-            { "FLvD2022",         &heavy_meson_lcdas::FLvD2022::make         }
+            { "exponential", &heavy_meson_lcdas::Exponential::make },
+            {    "FLvD2022",    &heavy_meson_lcdas::FLvD2022::make }
         };
 
         auto i = models.find(name);
         if (i != models.end())
         {
-            result.reset( i->second(parameters, options) );
+            result.reset(i->second(parameters, options));
             return result;
         }
 
         throw InternalError("Unknown B-meson LCDA model: " + name);
         return result;
     }
-}
+} // namespace eos

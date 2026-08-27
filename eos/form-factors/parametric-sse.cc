@@ -23,10 +23,10 @@
 
 namespace eos
 {
-    template class SSEFormFactors<LambdaBToLambda,  OneHalfPlusToOneHalfPlus>;
-    template class SSEFormFactors<LambdaCToLambda,  OneHalfPlusToOneHalfPlus>;
+    template class SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>;
+    template class SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>;
     template class SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>;
-    template class SSEFormFactors<LambdaCToProton,  OneHalfPlusToOneHalfPlus>;
+    template class SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>;
 
     template class SSEFormFactors<BToDstar, PToV>;
     template class SSEFormFactors<BToKstar, PToV>;
@@ -53,4 +53,4 @@ namespace eos
     template class SSEFormFactors<DsToEta, PToP>;
     template class SSEFormFactors<DsToEtaPrime, PToP>;
     template class SSEFormFactors<DsToK, PToP>;
-}
+} // namespace eos

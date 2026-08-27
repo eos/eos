@@ -25,4 +25,4 @@ namespace eos
     template struct DKMMO2008Base<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>;
     template class Implementation<AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>>;
     template class AnalyticFormFactorBToPseudoscalarDKMMO2008<QuarkFlavor::bottom, QuarkFlavor::up, QuarkFlavor::strange>;
-}
+} // namespace eos

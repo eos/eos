@@ -20,17 +20,15 @@
  */
 
 #include <eos/form-factors/mesonic.hh>
-#include <eos/utils/kinematic.hh>
 #include <eos/models/model.hh>
+#include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/reference-name.hh>
 
 namespace eos
 {
-    class BGLCoefficients :
-        public virtual ParameterUser,
-        public PrivateImplementationPattern<BGLCoefficients>
+    class BGLCoefficients : public virtual ParameterUser, public PrivateImplementationPattern<BGLCoefficients>
     {
         public:
             BGLCoefficients(const Parameters &, const Options &);
@@ -345,9 +343,7 @@ namespace eos
     };
 
     /* Unitarity bound implemented as discussed in [BJvD:2019A] */
-    class HQETUnitarityBounds :
-        public virtual ParameterUser,
-        public PrivateImplementationPattern<HQETUnitarityBounds>
+    class HQETUnitarityBounds : public virtual ParameterUser, public PrivateImplementationPattern<HQETUnitarityBounds>
     {
         public:
             HQETUnitarityBounds(const Parameters &, const Options &);
@@ -379,9 +375,7 @@ namespace eos
     };
 
     /* Unitarity bounds as calculated in the OPE up to dim=4 operators and to NLO in alpha_s [BGL:1997A] */
-    class OPEUnitarityBounds :
-        public virtual ParameterUser,
-        public PrivateImplementationPattern<OPEUnitarityBounds>
+    class OPEUnitarityBounds : public virtual ParameterUser, public PrivateImplementationPattern<OPEUnitarityBounds>
     {
         public:
             OPEUnitarityBounds(const Parameters &, const Options &);
@@ -407,4 +401,4 @@ namespace eos
             static std::vector<OptionSpecification>::const_iterator begin_options();
             static std::vector<OptionSpecification>::const_iterator end_options();
     };
-}
+} // namespace eos

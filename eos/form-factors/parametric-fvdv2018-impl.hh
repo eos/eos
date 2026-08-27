@@ -60,7 +60,7 @@ namespace eos
         static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         static constexpr double that_p = power_of<2>(mB + mP2);
-        static const     double that_0 = that_p - std::sqrt(that_p * (that_p - mBst2));
+        static const double     that_0 = that_p - std::sqrt(that_p * (that_p - mBst2));
 
         return _calc_z(that, that_p, that_0);
     }
@@ -75,8 +75,8 @@ namespace eos
         const double zhBst2 = _zhat(mBst2);
 
         double result  = 1.0;
-        result *= (1.0 - z  *  zBst2) / (z  -  zBst2);
-        result *= (1.0 - zh * zhBst2) / (zh - zhBst2);
+        result        *= (1.0 - z * zBst2) / (z - zBst2);
+        result        *= (1.0 - zh * zhBst2) / (zh - zhBst2);
 
         return result;
     }
@@ -91,10 +91,10 @@ namespace eos
 
         static constexpr double that_p = power_of<2>(mB + mP2);
 
-        const double zBst2  = _z(mBst2);
+        const double zBst2 = _z(mBst2);
 
         double result  = 4.0 * (mBst2 - that_p);
-        result *= (1.0 - z  *  zBst2) / (z  -  zBst2);
+        result        *= (1.0 - z * zBst2) / (z - zBst2);
 
         return result;
     }
@@ -197,16 +197,12 @@ namespace eos
         _F_switch(opt_L.value() && PartialWave::F),
         cub_conf(cubature::Config().epsrel(5e-3))
     {
-        static const Log::OneTimeMessage message_FvDV2018_FFs
-        (
-            "FvDV2018FormFactors",
-            ll_warning,
-            "This form factor parametrization is not a general one and requires careful attention."
-        );
+        static const Log::OneTimeMessage message_FvDV2018_FFs("FvDV2018FormFactors",
+                                                              ll_warning,
+                                                              "This form factor parametrization is not a general one and requires careful attention.");
     }
 
-    template <typename Process_>
-    FvDV2018FormFactors<Process_>::~FvDV2018FormFactors() = default;
+    template <typename Process_> FvDV2018FormFactors<Process_>::~FvDV2018FormFactors() = default;
 
     template <typename Process_>
     FormFactors<PToPP> *
@@ -219,22 +215,13 @@ namespace eos
     std::array<complex<double>, 4>
     FvDV2018FormFactors<Process_>::f_perp(const double & q2, const double & k2) const
     {
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        std::array<complex<double>, 4> res = { 0.0, 0.0, 0.0, 0.0 };
 
-        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
-        {
-            return 0.5 / std::sqrt(3.0) * this->f_perp(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandP = [&](const double & x) { return 0.5 / std::sqrt(3.0) * this->f_perp(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
-        {
-            return 0.5 / std::sqrt(5.0) * x * this->f_perp(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandD = [&](const double & x) { return 0.5 / std::sqrt(5.0) * x * this->f_perp(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
-        {
-            return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_perp(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandF = [&](const double & x) { return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_perp(q2, k2, x); };
 
         res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
         res[2] = integrate<1, 1, complex<double>>(integrandD, -1.0, 1.0, this->cub_conf) * this->_D_switch;
@@ -247,7 +234,7 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_perp(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
@@ -257,9 +244,12 @@ namespace eos
         const double z  = this->_z(q2);
         const double zh = this->_zhat(qhat2);
 
-        const double a = _a_Fperp_0_0 + _a_Fperp_1_0 * z + _a_Fperp_0_1 * zh + _a_Fperp_1_1 * z * zh + _a_Fperp_1_2 * z * zh * zh + _a_Fperp_0_2 * zh * zh + _a_Fperp_0_3 * zh * zh * zh;
-        const double b = _b_Fperp_0_0 + _b_Fperp_1_0 * z + _b_Fperp_0_1 * zh + _b_Fperp_1_1 * z * zh + _b_Fperp_1_2 * z * zh * zh + _b_Fperp_0_2 * zh * zh + _b_Fperp_0_3 * zh * zh * zh;
-        const double c = _c_Fperp_0_0 + _c_Fperp_1_0 * z + _c_Fperp_0_1 * zh + _c_Fperp_1_1 * z * zh + _c_Fperp_1_2 * z * zh * zh + _c_Fperp_0_2 * zh * zh + _c_Fperp_0_3 * zh * zh * zh;
+        const double a =
+                _a_Fperp_0_0 + _a_Fperp_1_0 * z + _a_Fperp_0_1 * zh + _a_Fperp_1_1 * z * zh + _a_Fperp_1_2 * z * zh * zh + _a_Fperp_0_2 * zh * zh + _a_Fperp_0_3 * zh * zh * zh;
+        const double b =
+                _b_Fperp_0_0 + _b_Fperp_1_0 * z + _b_Fperp_0_1 * zh + _b_Fperp_1_1 * z * zh + _b_Fperp_1_2 * z * zh * zh + _b_Fperp_0_2 * zh * zh + _b_Fperp_0_3 * zh * zh * zh;
+        const double c =
+                _c_Fperp_0_0 + _c_Fperp_1_0 * z + _c_Fperp_0_1 * zh + _c_Fperp_1_1 * z * zh + _c_Fperp_1_2 * z * zh * zh + _c_Fperp_0_2 * zh * zh + _c_Fperp_0_3 * zh * zh * zh;
 
         const double blaschke = this->_blaschke(z, zh);
 
@@ -272,16 +262,19 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_perp_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double lambda = eos::lambda(q2, k2, mB2);
-        const double z  = this->_z(q2);
-        const double zh = this->_z(mBst2);
+        const double z      = this->_z(q2);
+        const double zh     = this->_z(mBst2);
 
-        const double a = _a_Fperp_0_0 + _a_Fperp_1_0 * z + _a_Fperp_0_1 * zh + _a_Fperp_1_1 * z * zh + _a_Fperp_1_2 * z * zh * zh + _a_Fperp_0_2 * zh * zh + _a_Fperp_0_3 * zh * zh * zh;
-        const double b = _b_Fperp_0_0 + _b_Fperp_1_0 * z + _b_Fperp_0_1 * zh + _b_Fperp_1_1 * z * zh + _b_Fperp_1_2 * z * zh * zh + _b_Fperp_0_2 * zh * zh + _b_Fperp_0_3 * zh * zh * zh;
-        const double c = _c_Fperp_0_0 + _c_Fperp_1_0 * z + _c_Fperp_0_1 * zh + _c_Fperp_1_1 * z * zh + _c_Fperp_1_2 * z * zh * zh + _c_Fperp_0_2 * zh * zh + _c_Fperp_0_3 * zh * zh * zh;
+        const double a =
+                _a_Fperp_0_0 + _a_Fperp_1_0 * z + _a_Fperp_0_1 * zh + _a_Fperp_1_1 * z * zh + _a_Fperp_1_2 * z * zh * zh + _a_Fperp_0_2 * zh * zh + _a_Fperp_0_3 * zh * zh * zh;
+        const double b =
+                _b_Fperp_0_0 + _b_Fperp_1_0 * z + _b_Fperp_0_1 * zh + _b_Fperp_1_1 * z * zh + _b_Fperp_1_2 * z * zh * zh + _b_Fperp_0_2 * zh * zh + _b_Fperp_0_3 * zh * zh * zh;
+        const double c =
+                _c_Fperp_0_0 + _c_Fperp_1_0 * z + _c_Fperp_0_1 * zh + _c_Fperp_1_1 * z * zh + _c_Fperp_1_2 * z * zh * zh + _c_Fperp_0_2 * zh * zh + _c_Fperp_0_3 * zh * zh * zh;
 
         const double blaschke_res_qhat2 = this->_blaschke_res_qhat2(z);
 
@@ -294,22 +287,13 @@ namespace eos
     std::array<complex<double>, 4>
     FvDV2018FormFactors<Process_>::f_para(const double & q2, const double & k2) const
     {
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        std::array<complex<double>, 4> res = { 0.0, 0.0, 0.0, 0.0 };
 
-        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
-        {
-            return 0.5 / std::sqrt(3.0) * this->f_para(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandP = [&](const double & x) { return 0.5 / std::sqrt(3.0) * this->f_para(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
-        {
-            return 0.5 / std::sqrt(5.0) * x * this->f_para(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandD = [&](const double & x) { return 0.5 / std::sqrt(5.0) * x * this->f_para(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
-        {
-            return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_para(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandF = [&](const double & x) { return 0.125 / std::sqrt(7.0) * (5.0 * x * x - 1.0) * this->f_para(q2, k2, x); };
 
         res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
         res[2] = integrate<1, 1, complex<double>>(integrandD, -1.0, 1.0, this->cub_conf) * this->_D_switch;
@@ -322,7 +306,7 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_para(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
@@ -332,9 +316,12 @@ namespace eos
         const double z  = this->_z(q2);
         const double zh = this->_zhat(qhat2);
 
-        const double a = _a_Fpara_0_0 + _a_Fpara_1_0 * z + _a_Fpara_0_1 * zh + _a_Fpara_1_1 * z * zh + _a_Fpara_1_2 * z * zh * zh + _a_Fpara_0_2 * zh * zh + _a_Fpara_0_3 * zh * zh * zh;
-        const double b = _b_Fpara_0_0 + _b_Fpara_1_0 * z + _b_Fpara_0_1 * zh + _b_Fpara_1_1 * z * zh + _b_Fpara_1_2 * z * zh * zh + _b_Fpara_0_2 * zh * zh + _b_Fpara_0_3 * zh * zh * zh;
-        const double c = _c_Fpara_0_0 + _c_Fpara_1_0 * z + _c_Fpara_0_1 * zh + _c_Fpara_1_1 * z * zh + _c_Fpara_1_2 * z * zh * zh + _c_Fpara_0_2 * zh * zh + _c_Fpara_0_3 * zh * zh * zh;
+        const double a =
+                _a_Fpara_0_0 + _a_Fpara_1_0 * z + _a_Fpara_0_1 * zh + _a_Fpara_1_1 * z * zh + _a_Fpara_1_2 * z * zh * zh + _a_Fpara_0_2 * zh * zh + _a_Fpara_0_3 * zh * zh * zh;
+        const double b =
+                _b_Fpara_0_0 + _b_Fpara_1_0 * z + _b_Fpara_0_1 * zh + _b_Fpara_1_1 * z * zh + _b_Fpara_1_2 * z * zh * zh + _b_Fpara_0_2 * zh * zh + _b_Fpara_0_3 * zh * zh * zh;
+        const double c =
+                _c_Fpara_0_0 + _c_Fpara_1_0 * z + _c_Fpara_0_1 * zh + _c_Fpara_1_1 * z * zh + _c_Fpara_1_2 * z * zh * zh + _c_Fpara_0_2 * zh * zh + _c_Fpara_0_3 * zh * zh * zh;
 
         const double blaschke = this->_blaschke(z, zh);
 
@@ -347,15 +334,18 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_para_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double z  = this->_z(q2);
         const double zh = this->_z(mBst2);
 
-        const double a = _a_Fpara_0_0 + _a_Fpara_1_0 * z + _a_Fpara_0_1 * zh + _a_Fpara_1_1 * z * zh + _a_Fpara_1_2 * z * zh * zh + _a_Fpara_0_2 * zh * zh + _a_Fpara_0_3 * zh * zh * zh;
-        const double b = _b_Fpara_0_0 + _b_Fpara_1_0 * z + _b_Fpara_0_1 * zh + _b_Fpara_1_1 * z * zh + _b_Fpara_1_2 * z * zh * zh + _b_Fpara_0_2 * zh * zh + _b_Fpara_0_3 * zh * zh * zh;
-        const double c = _c_Fpara_0_0 + _c_Fpara_1_0 * z + _c_Fpara_0_1 * zh + _c_Fpara_1_1 * z * zh + _c_Fpara_1_2 * z * zh * zh + _c_Fpara_0_2 * zh * zh + _c_Fpara_0_3 * zh * zh * zh;
+        const double a =
+                _a_Fpara_0_0 + _a_Fpara_1_0 * z + _a_Fpara_0_1 * zh + _a_Fpara_1_1 * z * zh + _a_Fpara_1_2 * z * zh * zh + _a_Fpara_0_2 * zh * zh + _a_Fpara_0_3 * zh * zh * zh;
+        const double b =
+                _b_Fpara_0_0 + _b_Fpara_1_0 * z + _b_Fpara_0_1 * zh + _b_Fpara_1_1 * z * zh + _b_Fpara_1_2 * z * zh * zh + _b_Fpara_0_2 * zh * zh + _b_Fpara_0_3 * zh * zh * zh;
+        const double c =
+                _c_Fpara_0_0 + _c_Fpara_1_0 * z + _c_Fpara_0_1 * zh + _c_Fpara_1_1 * z * zh + _c_Fpara_1_2 * z * zh * zh + _c_Fpara_0_2 * zh * zh + _c_Fpara_0_3 * zh * zh * zh;
 
         const double blaschke_res_qhat2 = this->_blaschke_res_qhat2(z);
 
@@ -368,27 +358,15 @@ namespace eos
     std::array<complex<double>, 4>
     FvDV2018FormFactors<Process_>::f_long(const double & q2, const double & k2) const
     {
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        std::array<complex<double>, 4> res = { 0.0, 0.0, 0.0, 0.0 };
 
-        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
-        {
-            return 0.5 * this->f_long(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandS = [&](const double & x) { return 0.5 * this->f_long(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
-        {
-            return 0.5 * std::sqrt(3.0) * x * this->f_long(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandP = [&](const double & x) { return 0.5 * std::sqrt(3.0) * x * this->f_long(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
-        {
-            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_long(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandD = [&](const double & x) { return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_long(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
-        {
-            return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_long(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandF = [&](const double & x) { return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_long(q2, k2, x); };
 
         res[0] = integrate<1, 1, complex<double>>(integrandS, -1.0, 1.0, this->cub_conf) * this->_S_switch;
         res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
@@ -402,7 +380,7 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_long(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
@@ -412,9 +390,12 @@ namespace eos
         const double z  = this->_z(q2);
         const double zh = this->_zhat(qhat2);
 
-        const double a = _a_Flong_0_0 + _a_Flong_1_0 * z + _a_Flong_0_1 * zh + _a_Flong_1_1 * z * zh + _a_Flong_1_2 * z * zh * zh + _a_Flong_0_2 * zh * zh + _a_Flong_0_3 * zh * zh * zh;
-        const double b = _b_Flong_0_0 + _b_Flong_1_0 * z + _b_Flong_0_1 * zh + _b_Flong_1_1 * z * zh + _b_Flong_1_2 * z * zh * zh + _b_Flong_0_2 * zh * zh + _b_Flong_0_3 * zh * zh * zh;
-        const double c = _c_Flong_0_0 + _c_Flong_1_0 * z + _c_Flong_0_1 * zh + _c_Flong_1_1 * z * zh + _c_Flong_1_2 * z * zh * zh + _c_Flong_0_2 * zh * zh + _c_Flong_0_3 * zh * zh * zh;
+        const double a =
+                _a_Flong_0_0 + _a_Flong_1_0 * z + _a_Flong_0_1 * zh + _a_Flong_1_1 * z * zh + _a_Flong_1_2 * z * zh * zh + _a_Flong_0_2 * zh * zh + _a_Flong_0_3 * zh * zh * zh;
+        const double b =
+                _b_Flong_0_0 + _b_Flong_1_0 * z + _b_Flong_0_1 * zh + _b_Flong_1_1 * z * zh + _b_Flong_1_2 * z * zh * zh + _b_Flong_0_2 * zh * zh + _b_Flong_0_3 * zh * zh * zh;
+        const double c =
+                _c_Flong_0_0 + _c_Flong_1_0 * z + _c_Flong_0_1 * zh + _c_Flong_1_1 * z * zh + _c_Flong_1_2 * z * zh * zh + _c_Flong_0_2 * zh * zh + _c_Flong_0_3 * zh * zh * zh;
 
         const double blaschke = this->_blaschke(z, zh);
 
@@ -427,16 +408,19 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_long_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double lambda = eos::lambda(q2, k2, mB2);
-        const double z  = this->_z(q2);
-        const double zh = this->_z(mBst2);
+        const double z      = this->_z(q2);
+        const double zh     = this->_z(mBst2);
 
-        const double a = _a_Flong_0_0 + _a_Flong_1_0 * z + _a_Flong_0_1 * zh + _a_Flong_1_1 * z * zh + _a_Flong_1_2 * z * zh * zh + _a_Flong_0_2 * zh * zh + _a_Flong_0_3 * zh * zh * zh;
-        const double b = _b_Flong_0_0 + _b_Flong_1_0 * z + _b_Flong_0_1 * zh + _b_Flong_1_1 * z * zh + _b_Flong_1_2 * z * zh * zh + _b_Flong_0_2 * zh * zh + _b_Flong_0_3 * zh * zh * zh;
-        const double c = _c_Flong_0_0 + _c_Flong_1_0 * z + _c_Flong_0_1 * zh + _c_Flong_1_1 * z * zh + _c_Flong_1_2 * z * zh * zh + _c_Flong_0_2 * zh * zh + _c_Flong_0_3 * zh * zh * zh;
+        const double a =
+                _a_Flong_0_0 + _a_Flong_1_0 * z + _a_Flong_0_1 * zh + _a_Flong_1_1 * z * zh + _a_Flong_1_2 * z * zh * zh + _a_Flong_0_2 * zh * zh + _a_Flong_0_3 * zh * zh * zh;
+        const double b =
+                _b_Flong_0_0 + _b_Flong_1_0 * z + _b_Flong_0_1 * zh + _b_Flong_1_1 * z * zh + _b_Flong_1_2 * z * zh * zh + _b_Flong_0_2 * zh * zh + _b_Flong_0_3 * zh * zh * zh;
+        const double c =
+                _c_Flong_0_0 + _c_Flong_1_0 * z + _c_Flong_0_1 * zh + _c_Flong_1_1 * z * zh + _c_Flong_1_2 * z * zh * zh + _c_Flong_0_2 * zh * zh + _c_Flong_0_3 * zh * zh * zh;
 
         const double blaschke_res_qhat2 = this->_blaschke_res_qhat2(z);
 
@@ -449,27 +433,15 @@ namespace eos
     std::array<complex<double>, 4>
     FvDV2018FormFactors<Process_>::f_time(const double & q2, const double & k2) const
     {
-        std::array<complex<double>, 4> res = {0.0, 0.0, 0.0, 0.0};
+        std::array<complex<double>, 4> res = { 0.0, 0.0, 0.0, 0.0 };
 
-        std::function<complex<double>(const double &)> integrandS = [&] (const double & x)
-        {
-            return 0.5 * this->f_time(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandS = [&](const double & x) { return 0.5 * this->f_time(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandP = [&] (const double & x)
-        {
-            return 0.5 * std::sqrt(3.0) * x * this->f_time(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandP = [&](const double & x) { return 0.5 * std::sqrt(3.0) * x * this->f_time(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandD = [&] (const double & x)
-        {
-            return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_time(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandD = [&](const double & x) { return 0.25 * std::sqrt(5.0) * (3.0 * x * x - 1.0) * this->f_time(q2, k2, x); };
 
-        std::function<complex<double>(const double &)> integrandF = [&] (const double & x)
-        {
-            return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_time(q2, k2, x);
-        };
+        std::function<complex<double>(const double &)> integrandF = [&](const double & x) { return 0.25 * std::sqrt(7.0) * x * (5.0 * x * x - 3.0) * this->f_time(q2, k2, x); };
 
         res[0] = integrate<1, 1, complex<double>>(integrandS, -1.0, 1.0, this->cub_conf) * this->_S_switch;
         res[1] = integrate<1, 1, complex<double>>(integrandP, -1.0, 1.0, this->cub_conf) * this->_P_switch;
@@ -483,7 +455,7 @@ namespace eos
     complex<double>
     FvDV2018FormFactors<Process_>::f_time(const double & q2, const double & k2, const double & ctheta) const
     {
-        static constexpr double mB  = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mP2 = Process_::m_P2, mP22 = mP2 * mP2;
 
         const double lambda = eos::lambda(q2, k2, mB2);
@@ -493,9 +465,12 @@ namespace eos
         const double z  = this->_z(q2);
         const double zh = this->_zhat(qhat2);
 
-        const double a = _a_Ftime_0_0 + _a_Ftime_1_0 * z + _a_Ftime_0_1 * zh + _a_Ftime_1_1 * z * zh + _a_Ftime_1_2 * z * zh * zh + _a_Ftime_0_2 * zh * zh + _a_Ftime_0_3 * zh * zh * zh;
-        const double b = _b_Ftime_0_0 + _b_Ftime_1_0 * z + _b_Ftime_0_1 * zh + _b_Ftime_1_1 * z * zh + _b_Ftime_1_2 * z * zh * zh + _b_Ftime_0_2 * zh * zh + _b_Ftime_0_3 * zh * zh * zh;
-        const double c = _c_Ftime_0_0 + _c_Ftime_1_0 * z + _c_Ftime_0_1 * zh + _c_Ftime_1_1 * z * zh + _c_Ftime_1_2 * z * zh * zh + _c_Ftime_0_2 * zh * zh + _c_Ftime_0_3 * zh * zh * zh;
+        const double a =
+                _a_Ftime_0_0 + _a_Ftime_1_0 * z + _a_Ftime_0_1 * zh + _a_Ftime_1_1 * z * zh + _a_Ftime_1_2 * z * zh * zh + _a_Ftime_0_2 * zh * zh + _a_Ftime_0_3 * zh * zh * zh;
+        const double b =
+                _b_Ftime_0_0 + _b_Ftime_1_0 * z + _b_Ftime_0_1 * zh + _b_Ftime_1_1 * z * zh + _b_Ftime_1_2 * z * zh * zh + _b_Ftime_0_2 * zh * zh + _b_Ftime_0_3 * zh * zh * zh;
+        const double c =
+                _c_Ftime_0_0 + _c_Ftime_1_0 * z + _c_Ftime_0_1 * zh + _c_Ftime_1_1 * z * zh + _c_Ftime_1_2 * z * zh * zh + _c_Ftime_0_2 * zh * zh + _c_Ftime_0_3 * zh * zh * zh;
 
         const double blaschke = this->_blaschke(z, zh);
 
@@ -508,15 +483,18 @@ namespace eos
     double
     FvDV2018FormFactors<Process_>::f_time_im_res_qhat2(const double & q2, const double & k2) const
     {
-        static constexpr double mB    = Process_::m_B,  mB2  = mB  * mB;
+        static constexpr double mB = Process_::m_B, mB2 = mB * mB;
         static constexpr double mBst2 = power_of<2>(Process_::m_Bst);
 
         const double z  = this->_z(q2);
         const double zh = this->_z(mBst2);
 
-        const double a = _a_Ftime_0_0 + _a_Ftime_1_0 * z + _a_Ftime_0_1 * zh + _a_Ftime_1_1 * z * zh + _a_Ftime_1_2 * z * zh * zh + _a_Ftime_0_2 * zh * zh + _a_Ftime_0_3 * zh * zh * zh;
-        const double b = _b_Ftime_0_0 + _b_Ftime_1_0 * z + _b_Ftime_0_1 * zh + _b_Ftime_1_1 * z * zh + _b_Ftime_1_2 * z * zh * zh + _b_Ftime_0_2 * zh * zh + _b_Ftime_0_3 * zh * zh * zh;
-        const double c = _c_Ftime_0_0 + _c_Ftime_1_0 * z + _c_Ftime_0_1 * zh + _c_Ftime_1_1 * z * zh + _c_Ftime_1_2 * z * zh * zh + _c_Ftime_0_2 * zh * zh + _c_Ftime_0_3 * zh * zh * zh;
+        const double a =
+                _a_Ftime_0_0 + _a_Ftime_1_0 * z + _a_Ftime_0_1 * zh + _a_Ftime_1_1 * z * zh + _a_Ftime_1_2 * z * zh * zh + _a_Ftime_0_2 * zh * zh + _a_Ftime_0_3 * zh * zh * zh;
+        const double b =
+                _b_Ftime_0_0 + _b_Ftime_1_0 * z + _b_Ftime_0_1 * zh + _b_Ftime_1_1 * z * zh + _b_Ftime_1_2 * z * zh * zh + _b_Ftime_0_2 * zh * zh + _b_Ftime_0_3 * zh * zh * zh;
+        const double c =
+                _c_Ftime_0_0 + _c_Ftime_1_0 * z + _c_Ftime_0_1 * zh + _c_Ftime_1_1 * z * zh + _c_Ftime_1_2 * z * zh * zh + _c_Ftime_0_2 * zh * zh + _c_Ftime_0_3 * zh * zh * zh;
 
         const double blaschke_res_qhat2 = this->_blaschke_res_qhat2(z);
 
@@ -525,31 +503,26 @@ namespace eos
         return result;
     }
 
-    template<typename Process_>
-    const std::set<ReferenceName> FvDV2018FormFactors<Process_>::references
-    {
-        "FvDV:2018A"_rn
-    };
+    template <typename Process_> const std::set<ReferenceName> FvDV2018FormFactors<Process_>::references{ "FvDV:2018A"_rn };
 
-    template<typename Process_>
-    const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options
-    {
+    template <typename Process_>
+    const std::vector<OptionSpecification> FvDV2018FormFactors<Process_>::options{
         { "L"_ok, "S|P|D|F"_ov, "S|P|D|F"_ov },
     };
 
-    template<typename Process_>
+    template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
     FvDV2018FormFactors<Process_>::begin_options()
     {
         return options.cbegin();
     }
 
-    template<typename Process_>
+    template <typename Process_>
     std::vector<OptionSpecification>::const_iterator
     FvDV2018FormFactors<Process_>::end_options()
     {
         return options.cend();
     }
-}
+} // namespace eos
 
 #endif
