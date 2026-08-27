@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007, 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2007-2026 Danny van Dyk
  *
  * Based upon 'mutex.cc' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
@@ -41,7 +41,7 @@ namespace eos
     {
         if (0 != pthread_mutex_trylock(_mutex->mutex()))
         {
-            _mutex = 0;
+            _mutex = nullptr;
         }
     }
 

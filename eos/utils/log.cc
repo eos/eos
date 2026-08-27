@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * Based upon 'paludis/util/log.cc', which is
  *
@@ -28,9 +28,10 @@
 #include <eos/utils/mutex.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
+#include <ctime>
 #include <iostream>
 #include <set>
-#include <time.h>
+#include <utility>
 #include <vector>
 
 namespace eos
@@ -132,9 +133,9 @@ namespace eos
     {
             Mutex mutex;
 
-            LogLevel log_level;
+            LogLevel log_level{ ll_error };
 
-            std::ostream * stream;
+            std::ostream * stream{ nullptr };
 
             std::string program_name;
 
@@ -142,11 +143,7 @@ namespace eos
 
             std::set<std::string> one_time_messages;
 
-            Implementation() :
-                log_level(ll_error),
-                stream(nullptr)
-            {
-            }
+            Implementation() = default;
 
             void
             message(const std::string & id, const LogLevel & l, const std::string & m)
@@ -167,7 +164,7 @@ namespace eos
                     return;
                 }
 
-                *stream << program_name << '@' << ::time(0) << ": ";
+                *stream << program_name << '@' << ::time(nullptr) << ": ";
 
                 do
                 {
@@ -196,7 +193,7 @@ namespace eos
                 }
                 while (false);
 
-                *stream << m << std::endl;
+                *stream << m << '\n' << std::flush;
             }
     };
 
@@ -207,7 +204,7 @@ namespace eos
     {
     }
 
-    Log::~Log() {}
+    Log::~Log() = default;
 
     const LogLevel &
     Log::get_log_level() const
@@ -276,10 +273,10 @@ namespace eos
     }
 
     /* LogMessageHandler */
-    LogMessageHandler::LogMessageHandler(Log * const log, const LogLevel & log_level, const std::string & id) :
+    LogMessageHandler::LogMessageHandler(Log * const log, const LogLevel & log_level, std::string id) :
         _log(log),
         _log_level(log_level),
-        _id(id)
+        _id(std::move(id))
     {
     }
 

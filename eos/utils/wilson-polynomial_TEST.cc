@@ -62,44 +62,44 @@ struct WilsonPolynomialTestObservable : public Observable
         {
         }
 
-        virtual const QualifiedName &
-        name() const
+        [[nodiscard]] const QualifiedName &
+        name() const override
         {
             return n;
         }
 
-        virtual Parameters
-        parameters()
+        Parameters
+        parameters() override
         {
             return p;
         }
 
-        virtual Kinematics
-        kinematics()
+        Kinematics
+        kinematics() override
         {
             return k;
         }
 
-        virtual Options
-        options()
+        Options
+        options() override
         {
-            return Options();
+            return {};
         }
 
-        virtual ObservablePtr
-        clone() const
+        [[nodiscard]] ObservablePtr
+        clone() const override
         {
             return ObservablePtr(new WilsonPolynomialTestObservable(p.clone(), k.clone(), Options()));
         }
 
-        virtual ObservablePtr
-        clone(const Parameters & p) const
+        [[nodiscard]] ObservablePtr
+        clone(const Parameters & p) const override
         {
             return ObservablePtr(new WilsonPolynomialTestObservable(p, k.clone(), Options()));
         }
 
-        virtual double
-        evaluate() const
+        [[nodiscard]] double
+        evaluate() const override
         {
             complex<double> c7(re_c7(), im_c7());
             complex<double> c9(re_c9(), im_c9());
@@ -141,8 +141,8 @@ class WilsonPolynomialTest : public TestCase
             TEST_CHECK_NEARLY_EQUAL(o->evaluate(), std::visit(evaluator, p), eps);
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             Parameters parameters = Parameters::Defaults();
             Kinematics kinematics;
@@ -185,8 +185,8 @@ class WilsonPolynomialClonerTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             Parameters parameters = Parameters::Defaults();
             Kinematics kinematics;

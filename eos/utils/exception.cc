@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2022 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,7 @@
 #include <eos/utils/exception.hh>
 
 #include <list>
+#include <utility>
 
 namespace eos
 {
@@ -30,7 +31,7 @@ namespace eos
 
     Context::Context(const std::string & entry, const source_location location)
     {
-        impl::context.push_back(std::make_tuple(location, entry));
+        impl::context.emplace_back(location, entry);
     }
 
     Context::Context(const Context & other) = default;
@@ -64,9 +65,9 @@ namespace eos
             result += delimiter;
         };
 
-        for (auto c = impl::context.cbegin(), c_end = impl::context.cend(); c != c_end; ++c)
+        for (const auto & c : impl::context)
         {
-            append(*c);
+            append(c);
         }
 
         return result;
@@ -87,8 +88,8 @@ namespace eos
             ~ContextData()                   = default;
     };
 
-    Exception::Exception(const std::string & message) noexcept :
-        _message(message),
+    Exception::Exception(std::string message) noexcept :
+        _message(std::move(message)),
         _context_data(std::make_unique<ContextData>())
     {
     }
@@ -100,7 +101,7 @@ namespace eos
     {
     }
 
-    Exception::~Exception() noexcept {}
+    Exception::~Exception() noexcept = default;
 
     std::string
     Exception::backtrace(const std::string & delimiter) const
@@ -119,36 +120,36 @@ namespace eos
             result += delimiter;
         };
 
-        for (auto c = _context_data->local_context.cbegin(), c_end = _context_data->local_context.cend(); c != c_end; ++c)
+        for (const auto & c : _context_data->local_context)
         {
-            append(*c);
+            append(c);
         }
 
         return result;
     }
 
     const char *
-    Exception::what() const throw()
+    Exception::what() const noexcept
     {
         return _message.c_str();
     }
 
-    InternalError::InternalError(const std::string & message) throw() :
+    InternalError::InternalError(const std::string & message) noexcept :
         Exception("Internal Error: " + message)
     {
     }
 
-    UnknownObservableError::UnknownObservableError(const std::string & message) throw() :
+    UnknownObservableError::UnknownObservableError(const std::string & message) noexcept :
         Exception("Unknown Observable Error: " + message)
     {
     }
 
-    GSLError::GSLError(const std::string & message) throw() :
+    GSLError::GSLError(const std::string & message) noexcept :
         Exception("GSL Error: " + message)
     {
     }
 
-    ParsingError::ParsingError(const std::string & message) throw() :
+    ParsingError::ParsingError(const std::string & message) noexcept :
         Exception("Parsing Error: " + message)
     {
     }

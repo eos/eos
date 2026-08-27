@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2016      Rafael Silva Coutinho
  *
  * This file is part of the EOS project. EOS is free software;
@@ -38,7 +38,7 @@ namespace eos
             public:
                 Prefix(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _prefix;
@@ -65,7 +65,7 @@ namespace eos
             public:
                 Name(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _name;
@@ -93,13 +93,13 @@ namespace eos
                 Suffix();
                 Suffix(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _suffix;
                 }
 
-                bool
+                [[nodiscard]] bool
                 empty() const
                 {
                     return _suffix.empty();
@@ -120,7 +120,7 @@ namespace eos
             public:
                 OptionKey(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _key;
@@ -139,7 +139,7 @@ namespace eos
             public:
                 OptionValue(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _value;

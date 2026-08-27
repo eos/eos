@@ -67,8 +67,8 @@ namespace eos
             Unit(Unit &&)      = default;
             ~Unit()            = default;
 
-            const std::string & latex() const;
-            const std::string & string() const;
+            [[nodiscard]] const std::string & latex() const;
+            [[nodiscard]] const std::string & string() const;
 
             static Unit Undefined();
             static Unit None();

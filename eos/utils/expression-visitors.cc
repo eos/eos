@@ -35,7 +35,9 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
+#include <algorithm>
 #include <iostream>
+#include <memory>
 #include <set>
 
 namespace eos::exp
@@ -319,13 +321,13 @@ namespace eos::exp
     Expression
     ExpressionCloner::operator() (const BinaryExpression & e)
     {
-        return BinaryExpression(e.op, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.lhs)))), ExpressionPtr(new Expression(std::move(std::visit(*this, *e.rhs)))));
+        return BinaryExpression(e.op, std::make_shared<Expression>(std::move(std::visit(*this, *e.lhs))), std::make_shared<Expression>(std::move(std::visit(*this, *e.rhs))));
     }
 
     Expression
     ExpressionCloner::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
+        return FunctionExpression(e.fname, std::make_shared<Expression>(std::move(std::visit(*this, *e.arg))));
     }
 
     Expression
@@ -447,13 +449,13 @@ namespace eos::exp
     Expression
     ExpressionMaker::operator() (const BinaryExpression & e)
     {
-        return BinaryExpression(e.op, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.lhs)))), ExpressionPtr(new Expression(std::move(std::visit(*this, *e.rhs)))));
+        return BinaryExpression(e.op, std::make_shared<Expression>(std::move(std::visit(*this, *e.lhs))), std::make_shared<Expression>(std::move(std::visit(*this, *e.rhs))));
     }
 
     Expression
     ExpressionMaker::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
+        return FunctionExpression(e.fname, std::make_shared<Expression>(std::move(std::visit(*this, *e.arg))));
     }
 
     Expression
@@ -756,13 +758,13 @@ namespace eos::exp
     Expression
     ExpressionCacher::operator() (const BinaryExpression & e)
     {
-        return BinaryExpression(e.op, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.lhs)))), ExpressionPtr(new Expression(std::move(std::visit(*this, *e.rhs)))));
+        return BinaryExpression(e.op, std::make_shared<Expression>(std::move(std::visit(*this, *e.lhs))), std::make_shared<Expression>(std::move(std::visit(*this, *e.rhs))));
     }
 
     Expression
     ExpressionCacher::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
+        return FunctionExpression(e.fname, std::make_shared<Expression>(std::move(std::visit(*this, *e.arg))));
     }
 
     Expression
@@ -865,7 +867,7 @@ namespace eos::exp
     void
     ExpressionUsedParameterReader::operator() (const ObservableExpression & e)
     {
-        const ParameterUser & parameter_user = static_cast<const ParameterUser &>(*e.observable);
+        const auto & parameter_user = static_cast<const ParameterUser &>(*e.observable);
         for (const auto & parameter_id : parameter_user)
         {
             this->parameter_ids.insert(parameter_id);
@@ -932,7 +934,7 @@ namespace eos::exp
     void
     ExpressionUsedKinematicsReader::operator() (const ObservableExpression & e)
     {
-        const KinematicUser & kinematic_user = static_cast<const KinematicUser &>(*e.observable);
+        const auto & kinematic_user = static_cast<const KinematicUser &>(*e.observable);
         for (auto k = kinematic_user.begin_kinematics(), k_end = kinematic_user.end_kinematics(); k != k_end; ++k)
         {
             this->kinematic_variable_ids.insert(*k);

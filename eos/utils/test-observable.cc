@@ -3,7 +3,7 @@
 
 /*
  * Copyright (c) 2011, 2014 Frederik Beaujean
- * Copyright (c) 2022-2024 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -22,6 +22,8 @@
 #include <eos/observable-impl.hh>
 #include <eos/utils/test-observable.hh>
 
+#include <utility>
+
 namespace eos
 {
     TestObservable::TestObservable(const Parameters & p, const Kinematics & k, const Options & o, const QualifiedName & observable_name,
@@ -32,14 +34,14 @@ namespace eos
         observable_name(observable_name),
         function(function)
     {
-        for (auto kvn : kinematic_variable_names)
+        for (const auto & kvn : kinematic_variable_names)
         {
             kv.emplace_back(std::move(k[kvn]));
             this->uses_kinematic(kv.back().id());
         }
     }
 
-    TestObservable::~TestObservable() {}
+    TestObservable::~TestObservable() = default;
 
     double
     TestObservable::evaluate() const
@@ -83,18 +85,18 @@ namespace eos
         return observable_name;
     }
 
-    TestObservableEntry::TestObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
+    TestObservableEntry::TestObservableEntry(const QualifiedName & name, std::string latex, const Unit & unit,
                                              const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function,
                                              const std::vector<std::string> &                                                                           kinematics_names) :
         _name(name),
-        _latex(latex),
+        _latex(std::move(latex)),
         _unit(unit),
         _function(function),
         _kinematics_names(kinematics_names)
     {
     }
 
-    TestObservableEntry::~TestObservableEntry() {}
+    TestObservableEntry::~TestObservableEntry() = default;
 
     const QualifiedName &
     TestObservableEntry::name() const
@@ -149,7 +151,7 @@ namespace eos
     std::ostream &
     TestObservableEntry::insert(std::ostream & os) const
     {
-        os << "    type: test observable (name=" << _name << ")" << std::endl;
+        os << "    type: test observable (name=" << _name << ")" << '\n';
 
         return os;
     }

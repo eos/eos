@@ -34,7 +34,7 @@ namespace eos
             // <observable name, index>
             std::map<QualifiedName, unsigned> observable_names;
 
-            Implementation() {}
+            Implementation() = default;
 
             std::pair<unsigned, bool>
             add(const ObservablePtr & observable)
@@ -90,7 +90,7 @@ namespace eos
     {
     }
 
-    ObservableSet::~ObservableSet() {}
+    ObservableSet::~ObservableSet() = default;
 
     std::pair<unsigned, bool>
     ObservableSet::add(const ObservablePtr & observable)

@@ -35,8 +35,8 @@ class ObservableSetTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // create simple observables vector
             {
@@ -52,9 +52,9 @@ class ObservableSetTest : public TestCase
 
                 // evaluate the observables
                 std::vector<double> results;
-                for (auto i = o.begin(), i_end = o.end(); i != i_end; ++i)
+                for (auto & i : o)
                 {
-                    results.push_back((**i).evaluate());
+                    results.push_back((*i).evaluate());
                 }
 
                 TEST_CHECK_EQUAL(results[0], 4.5);

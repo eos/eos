@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * Based upon 'paludis/util/log.hh', which is
  *
@@ -88,7 +88,7 @@ namespace eos
             ///@{
 
             /// Get the current log level
-            const LogLevel & get_log_level() const;
+            [[nodiscard]] const LogLevel & get_log_level() const;
 
             /*!
              * Set the log level.
@@ -149,7 +149,7 @@ namespace eos
             LogMessageHandler(const LogMessageHandler &);
 
             /// Constructor.
-            LogMessageHandler(Log * const log, const LogLevel & log_level, const std::string & id);
+            LogMessageHandler(Log * const log, const LogLevel & log_level, std::string id);
 
             /// Assignment operator.
             void operator= (const LogMessageHandler &);

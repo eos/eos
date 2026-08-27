@@ -36,6 +36,7 @@
 #include <iostream>
 #include <map>
 #include <random>
+#include <utility>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
@@ -151,9 +152,9 @@ namespace eos
 
             std::vector<Parameter> entries;
 
-            Implementation(const std::string & name, const std::string & description, std::vector<Parameter> && entries) :
-                name(name),
-                description(description),
+            Implementation(std::string name, std::string description, std::vector<Parameter> && entries) :
+                name(std::move(name)),
+                description(std::move(description)),
                 entries(entries)
             {
             }
@@ -206,9 +207,9 @@ namespace eos
 
             std::vector<ParameterGroup> groups;
 
-            Implementation(const std::string & name, const std::string & description, const std::vector<ParameterGroup> & groups) :
-                name(name),
-                description(description),
+            Implementation(std::string name, std::string description, const std::vector<ParameterGroup> & groups) :
+                name(std::move(name)),
+                description(std::move(description)),
                 groups(groups)
             {
             }
@@ -376,7 +377,7 @@ namespace eos
                         {
                             throw ParameterInputFileNodeError(file, "title", "is not a scalar");
                         }
-                        std::string section_title = section_title_node.as<std::string>();
+                        auto section_title = section_title_node.as<std::string>();
 
                         Context ctx("When parsing metadata for section '" + section_title + "'");
 
@@ -389,7 +390,7 @@ namespace eos
                         {
                             throw ParameterInputFileNodeError(file, "description", "is not a scalar");
                         }
-                        std::string section_desc = section_desc_node.as<std::string>();
+                        auto section_desc = section_desc_node.as<std::string>();
 
                         auto section_groups_node = root_node["groups"];
                         if (! section_groups_node)
@@ -415,7 +416,7 @@ namespace eos
                             {
                                 throw ParameterInputFileNodeError(file, "title", "is not a scalar");
                             }
-                            std::string group_title = group_title_node.as<std::string>();
+                            auto group_title = group_title_node.as<std::string>();
 
                             Context ctx("When parsing metadata for group '" + group_title + "'");
 
@@ -428,7 +429,7 @@ namespace eos
                             {
                                 throw ParameterInputFileNodeError(file, "'" + group_title + "'.description", "is not a scalar");
                             }
-                            std::string group_desc = group_desc_node.as<std::string>();
+                            auto group_desc = group_desc_node.as<std::string>();
 
                             auto group_parameters_node = group_node["parameters"];
                             if (! group_parameters_node)
@@ -523,7 +524,7 @@ namespace eos
                                     }
                                 }
 
-                                if (name.find("%") == std::string::npos) // The parameter is not templated
+                                if (name.find('%') == std::string::npos) // The parameter is not templated
                                 {
                                     if (_map.end() != _map.find(name))
                                     {
@@ -540,7 +541,9 @@ namespace eos
                                         latex = latex_node.as<std::string>();
                                     }
 
-                                    _data->data.push_back(Parameter::Data(Parameter::Template{ QualifiedName(name), min, central, max, latex, unit }, idx));
+                                    _data->data.emplace_back(
+                                            Parameter::Template{ .name = QualifiedName(name), .min = min, .central = central, .max = max, .latex = latex, .unit = unit },
+                                            idx);
                                     _map[name] = idx;
                                     for (auto && alias_of_item : alias_of_list)
                                     {
@@ -626,7 +629,9 @@ namespace eos
                                                 throw ParameterInputDuplicateError(file, qn.str());
                                             }
 
-                                            _data->data.push_back(Parameter::Data(Parameter::Template{ qn, min, central, max, templated_latex, unit }, idx));
+                                            _data->data.emplace_back(
+                                                    Parameter::Template{ .name = qn, .min = min, .central = central, .max = max, .latex = templated_latex, .unit = unit },
+                                                    idx);
                                             _map[templated_name] = idx;
                                             group_parameters.push_back(Parameter(_data, idx));
 
@@ -638,7 +643,7 @@ namespace eos
 
                             section_groups.push_back(ParameterGroup(new Implementation<ParameterGroup>(group_title, group_desc, std::move(group_parameters))));
                         }
-                        _sections.push_back(ParameterSection(new Implementation<ParameterSection>(section_title, section_desc, std::move(section_groups))));
+                        _sections.push_back(ParameterSection(new Implementation<ParameterSection>(section_title, section_desc, section_groups)));
                     }
                     catch (std::exception & e)
                     {
@@ -650,19 +655,19 @@ namespace eos
         public:
             friend class InstantiationPolicy<ParameterDefaults, Singleton>;
 
-            const Parameters::Data &
+            [[nodiscard]] const Parameters::Data &
             data() const
             {
                 return *_data;
             }
 
-            const std::map<QualifiedName, unsigned> &
+            [[nodiscard]] const std::map<QualifiedName, unsigned> &
             map() const
             {
                 return _map;
             }
 
-            const std::vector<ParameterSection> &
+            [[nodiscard]] const std::vector<ParameterSection> &
             sections() const
             {
                 return _sections;
@@ -672,7 +677,7 @@ namespace eos
             declare(const QualifiedName & key, const Parameter::Template & value)
             {
                 unsigned idx = _data->data.size();
-                _data->data.push_back(Parameter::Data{ value, idx });
+                _data->data.emplace_back(value, idx);
                 _map[key] = idx;
 
                 return idx;
@@ -703,9 +708,9 @@ namespace eos
                 parameters_data(new Parameters::Data(ParameterDefaults::instance()->data())),
                 parameters_map(ParameterDefaults::instance()->map())
             {
-                for (auto i = parameters_data->data.begin(), i_end = parameters_data->data.end(); i != i_end; ++i)
+                for (auto & i : parameters_data->data)
                 {
-                    parameters.push_back(Parameter(parameters_data, i->id));
+                    parameters.push_back(Parameter(parameters_data, i.id));
                 }
             }
 
@@ -842,7 +847,9 @@ namespace eos
                             }
 
                             auto idx = parameters_data->data.size();
-                            parameters_data->data.push_back(Parameter::Data(Parameter::Template{ QualifiedName(name), min, central, max, latex, unit }, idx));
+                            parameters_data->data.emplace_back(
+                                    Parameter::Template{ .name = QualifiedName(name), .min = min, .central = central, .max = max, .latex = latex, .unit = unit },
+                                    idx);
                             parameters_map[name] = idx;
                             parameters.push_back(Parameter(parameters_data, idx));
                         }
@@ -860,12 +867,12 @@ namespace eos
     {
     }
 
-    Parameters::~Parameters() {}
+    Parameters::~Parameters() = default;
 
     Parameters
     Parameters::clone() const
     {
-        return Parameters(new Implementation<Parameters>(*_imp));
+        return { new Implementation<Parameters>(*_imp) };
     }
 
     Parameter
@@ -895,7 +902,7 @@ namespace eos
     Parameter::Id
     Parameters::declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
-        return ParameterDefaults::instance()->declare(name, Parameter::Template{ name, min, value, max, latex, unit });
+        return ParameterDefaults::instance()->declare(name, Parameter::Template{ .name = name, .min = min, .central = value, .max = max, .latex = latex, .unit = unit });
     }
 
     Parameter
@@ -912,11 +919,11 @@ namespace eos
         }
 
         // declare the new parameter ...
-        ParameterDefaults::instance()->declare(name, Parameter::Template{ name, min, value, max, latex, unit });
+        ParameterDefaults::instance()->declare(name, Parameter::Template{ .name = name, .min = min, .central = value, .max = max, .latex = latex, .unit = unit });
 
         // ... and insert it into this parameter set ...
         unsigned idx = _imp->parameters.size();
-        _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template{ name, min, value, max, latex, unit }, idx));
+        _imp->parameters_data->data.emplace_back(Parameter::Template{ .name = name, .min = min, .central = value, .max = max, .latex = latex, .unit = unit }, idx);
         _imp->parameters_map[name] = idx;
         _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
 
@@ -1000,7 +1007,7 @@ namespace eos
     {
         auto imp = new Implementation<Parameters>();
 
-        return Parameters(imp);
+        return { imp };
     }
 
     void
@@ -1021,7 +1028,7 @@ namespace eos
     {
     }
 
-    Parameter::~Parameter() {}
+    Parameter::~Parameter() = default;
 
     MutablePtr
     Parameter::clone() const
@@ -1170,22 +1177,22 @@ namespace eos
         user.uses(parameter.id());
     }
 
-    UnknownParameterError::UnknownParameterError(const QualifiedName & name) throw() :
+    UnknownParameterError::UnknownParameterError(const QualifiedName & name) noexcept :
         Exception("Unknown parameter: '" + name.full() + "'")
     {
     }
 
-    ParameterInputFileParseError::ParameterInputFileParseError(const std::string & file, const std::string & msg) throw() :
+    ParameterInputFileParseError::ParameterInputFileParseError(const std::string & file, const std::string & msg) noexcept :
         Exception("Malformed parameter input file '" + file + "': " + msg)
     {
     }
 
-    ParameterInputFileNodeError::ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw() :
+    ParameterInputFileNodeError::ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) noexcept :
         Exception("Malformed parameter input file '" + file + "': Node '" + node + "' " + msg)
     {
     }
 
-    ParameterInputDuplicateError::ParameterInputDuplicateError(const std::string & file, const std::string & node) throw() :
+    ParameterInputDuplicateError::ParameterInputDuplicateError(const std::string & file, const std::string & node) noexcept :
         Exception("Malformed parameter input file '" + file + "': Duplicate entry for parameter '" + node + "'")
     {
     }

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2014 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -106,7 +106,7 @@ namespace eos
 
         double                a = alpha_s_0 / M_PI;
         std::array<double, 4> switches;
-        std::generate(switches.begin(), switches.end(), [i = 0u, l = loop_order]() mutable { return (i++ < l) ? 1.0 : 0.0; });
+        std::ranges::generate(switches, [i = 0u, l = loop_order]() mutable { return (i++ < l) ? 1.0 : 0.0; });
 
         // Adjust for a different convention on beta function coefficients
         double beta0 = beta[0] / 4.0;
@@ -149,7 +149,7 @@ namespace eos
         double                a_mu0 = alpha_s_0 / M_PI;
         double                a_mu  = alpha_s_mu / M_PI;
         std::array<double, 4> switches;
-        std::generate(switches.begin(), switches.end(), [i = 0u, l = loop_order]() mutable { return (i++ < l) ? 1.0 : 0.0; });
+        std::ranges::generate(switches, [i = 0u, l = loop_order]() mutable { return (i++ < l) ? 1.0 : 0.0; });
 
         // Adjust for a different convention on beta function coefficients
         double beta0 = beta[0] / 4.0;
@@ -240,7 +240,7 @@ namespace eos
     QCD::m_q_kin(const double & m_q_MSbar, const double & alpha_s_mq, const double & mu, const BetaFunction & beta)
     {
         static const double zeta3 = 1.20206;
-        static const double ln2   = log(2.0);
+        static const double ln2   = std::numbers::ln2;
         static const double pi = M_PI, pi2 = pi * pi;
 
         double a_s = alpha_s_mq / M_PI, r = mu / m_q_MSbar;

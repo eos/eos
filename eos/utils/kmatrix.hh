@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2019 Stephan Kürten
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -32,6 +32,7 @@
 
 #include <array>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace eos
@@ -69,7 +70,7 @@ namespace eos
             ~KMatrix();
 
             // Adapt s to avoid resonnances masses
-            complex<double> adapt_s(const complex<double> s) const;
+            [[nodiscard]] complex<double> adapt_s(const complex<double> s) const;
 
             // Return the rowindex^th row of the T matrix on the first Riemann sheet, i.e. defined as T = n * (1 - i * K * rho * n * n)^(-1) * K * n
             // rowindex corresponds to the initial channel
@@ -79,12 +80,12 @@ namespace eos
 
             // Return the K matrix partial and total widths of a resonance.
             // Note that these widths do not necessarily correspond to the experimental ones.
-            double partial_width(unsigned resonance, unsigned channel) const;
+            [[nodiscard]] double partial_width(unsigned resonance, unsigned channel) const;
 
-            double width(unsigned resonance) const;
+            [[nodiscard]] double width(unsigned resonance) const;
 
             // Spectral function of a resonance.
-            double spectral_function(unsigned resonance, const double & s) const;
+            [[nodiscard]] double spectral_function(unsigned resonance, const double & s) const;
     };
 
     template <unsigned nchannels_, unsigned nresonances_> struct KMatrix<nchannels_, nresonances_>::Channel
@@ -100,8 +101,8 @@ namespace eos
 
             std::array<Parameter, nresonances_> _g0s;
 
-            Channel(std::string name, Parameter m1, Parameter m2, unsigned l_orbital, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                _name(name),
+            Channel(std::string name, const Parameter & m1, const Parameter & m2, unsigned l_orbital, const Parameter & q0, std::array<Parameter, nresonances_> g0s) :
+                _name(std::move(name)),
                 _m1(m1),
                 _m2(m2),
                 _l_orbital(l_orbital),
@@ -132,8 +133,8 @@ namespace eos
             // Mass of the resonance
             Parameter _m;
 
-            Resonance(std::string name, Parameter m) :
-                _name(name),
+            Resonance(std::string name, const Parameter & m) :
+                _name(std::move(name)),
                 _m(m)
             {
                 if (m.evaluate() < 0)

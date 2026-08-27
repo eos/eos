@@ -35,7 +35,7 @@ namespace eos
      */
     struct UnknownKinematicVariableError : public Exception
     {
-            UnknownKinematicVariableError(const std::string & variable) throw();
+            UnknownKinematicVariableError(const std::string & variable) noexcept;
     };
 
     /*!
@@ -43,7 +43,7 @@ namespace eos
      */
     struct DuplicateKinematicAliasError : public Exception
     {
-            DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw();
+            DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) noexcept;
     };
 
     /*!
@@ -52,7 +52,7 @@ namespace eos
      */
     struct UnknownKinematicAliasError : public Exception
     {
-            UnknownKinematicAliasError(const std::string & alias) throw();
+            UnknownKinematicAliasError(const std::string & alias) noexcept;
     };
 
     // Forward declaration.
@@ -89,7 +89,7 @@ namespace eos
             /*!
              * Create an independent copy of this Kinematics object.
              */
-            Kinematics clone() const;
+            [[nodiscard]] Kinematics clone() const;
 
             Kinematics operator+ (const Kinematics & rhs) const;
 
@@ -151,7 +151,7 @@ namespace eos
              *
              * @param variable  The name to be checked against the known kinematic variables.
              */
-            bool has(const std::string & variable) const;
+            [[nodiscard]] bool has(const std::string & variable) const;
             ///@}
 
             ///@name Iteration over our kinematic variables
@@ -159,8 +159,8 @@ namespace eos
             struct KinematicVariableIteratorTag;
             using KinematicVariableIterator = WrappedForwardIterator<KinematicVariableIteratorTag, const KinematicVariable>;
 
-            KinematicVariableIterator begin() const;
-            KinematicVariableIterator end() const;
+            [[nodiscard]] KinematicVariableIterator begin() const;
+            [[nodiscard]] KinematicVariableIterator end() const;
             ///@}
 
             ///@name Output
@@ -169,7 +169,7 @@ namespace eos
              * Retrieve a string representation of the set of kinematic
              * variables.
              */
-            std::string as_string() const;
+            [[nodiscard]] std::string as_string() const;
             ///@}
     };
 
@@ -206,37 +206,37 @@ namespace eos
 
             ///@name Basic Functions
             ///@{
-            ~KinematicVariable();
+            ~KinematicVariable() override;
 
             /// Make a copy of this KinematicVariable as a MutablePtr.
-            MutablePtr clone() const;
+            [[nodiscard]] MutablePtr clone() const override;
             ///@}
 
             ///@name Access & Modification of the Numeric Value
             ///@{
             /// Cast a KinematicVariable's numeric value to a double.
-            operator double () const;
+            operator double () const override;
 
             /// Retrieve a KinematicVariable's numeric value.
-            double operator() () const;
+            double operator() () const override;
 
             /// Retrieve a KinematicVariable's numeric value.
-            virtual double evaluate() const;
+            [[nodiscard]] double evaluate() const override;
 
             /// Set a KinematicVariable's numeric value.
-            const KinematicVariable & operator= (const double &);
+            const KinematicVariable & operator= (const double &) override;
 
             /// Retrieve the Parameter's id.
-            Id id() const;
+            [[nodiscard]] Id id() const;
 
             /// Set a KinematicVariable's numeric value.
-            virtual void set(const double &);
+            void set(const double &) override;
             ///@}
 
             ///@name Access to Meta Data
             ///@{
             /// Retrieve the Parameter's name.
-            virtual const std::string & name() const;
+            [[nodiscard]] const std::string & name() const override;
             ///@}
     };
 
@@ -254,8 +254,8 @@ namespace eos
             struct ConstIteratorTag;
             using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const KinematicVariable::Id>;
 
-            ConstIterator begin_kinematics() const;
-            ConstIterator end_kinematics() const;
+            [[nodiscard]] ConstIterator begin_kinematics() const;
+            [[nodiscard]] ConstIterator end_kinematics() const;
             ///@}
 
             ///@name Access

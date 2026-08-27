@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  * Copyright (c) 2013 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -25,7 +25,7 @@
 
 namespace eos
 {
-    Density::~Density() {}
+    Density::~Density() = default;
 
     template class WrappedForwardIterator<Density::IteratorTag, const ParameterDescription>;
 } // namespace eos

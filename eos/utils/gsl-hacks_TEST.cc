@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,8 +34,8 @@ class GSLErrorHandlerTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             gsl_sf_result result;
             int           status;

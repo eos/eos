@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013, 2015 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  * Copyright (c) 2013 Frederik Beaujean
  *
  * This file is part of the EOS project. EOS is free software;
@@ -40,15 +40,15 @@ namespace eos
              * Evaluate the density function at the current parameter point
              * on the _log_ scale.
              */
-            virtual double evaluate() const = 0;
+            [[nodiscard]] virtual double evaluate() const = 0;
 
             /// Iterate over the parameters relevant to this density function.
             ///@{
             struct IteratorTag;
             using Iterator = WrappedForwardIterator<IteratorTag, const ParameterDescription>;
 
-            virtual Iterator begin() const = 0;
-            virtual Iterator end() const   = 0;
+            [[nodiscard]] virtual Iterator begin() const = 0;
+            [[nodiscard]] virtual Iterator end() const   = 0;
             ///@}
     };
 

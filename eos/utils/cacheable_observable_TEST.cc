@@ -53,7 +53,7 @@ namespace eos
             ~TestCacheableObservableProvider();
 
             // Observables
-            const IntermediateResult * prepare(const double & q2) const;
+            [[nodiscard]] const IntermediateResult * prepare(const double & q2) const;
 
             double evaluate1(const IntermediateResult *) const;
             double evaluate2(const IntermediateResult *) const;
@@ -108,7 +108,7 @@ namespace eos
     {
     }
 
-    TestCacheableObservableProvider::~TestCacheableObservableProvider() {}
+    TestCacheableObservableProvider::~TestCacheableObservableProvider() = default;
 
     const TestCacheableObservableProvider::IntermediateResult *
     TestCacheableObservableProvider::prepare(const double & q2) const
@@ -138,8 +138,8 @@ namespace eos
             ~TestRegularObservableProvider();
 
             // Observables
-            double evaluate1(const double & q2) const;
-            double evaluate2(const double & q2) const;
+            [[nodiscard]] double evaluate1(const double & q2) const;
+            [[nodiscard]] double evaluate2(const double & q2) const;
 
             /*!
              * References used in the computation of our observables.
@@ -181,7 +181,7 @@ namespace eos
     {
     }
 
-    TestRegularObservableProvider::~TestRegularObservableProvider() {}
+    TestRegularObservableProvider::~TestRegularObservableProvider() = default;
 
     double
     TestRegularObservableProvider::evaluate1(const double & q2) const
@@ -204,8 +204,8 @@ class CacheableObservableTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             {
                 Parameters p   = Parameters::Defaults();

@@ -71,37 +71,37 @@ namespace eos
             QualifiedName(const qnp::Prefix & prefix, const qnp::Name & name, const qnp::Suffix & suffix = qnp::Suffix());
             ~QualifiedName();
 
-            inline const std::string &
+            [[nodiscard]] inline const std::string &
             str() const
             {
                 return _str;
             }
 
-            inline const std::string &
+            [[nodiscard]] inline const std::string &
             full() const
             {
                 return _full;
             }
 
-            inline const qnp::Prefix &
+            [[nodiscard]] inline const qnp::Prefix &
             prefix_part() const
             {
                 return _prefix;
             }
 
-            inline const qnp::Name &
+            [[nodiscard]] inline const qnp::Name &
             name_part() const
             {
                 return _name;
             }
 
-            inline const qnp::Suffix &
+            [[nodiscard]] inline const qnp::Suffix &
             suffix_part() const
             {
                 return _suffix;
             }
 
-            inline const Options &
+            [[nodiscard]] inline const Options &
             options() const
             {
                 return _options;

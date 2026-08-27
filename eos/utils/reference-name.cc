@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -139,15 +139,9 @@ namespace eos
     {
     }
 
-    ReferenceName::ReferenceName(const ReferenceName & other) :
-        _str(other._str),
-        _name(other._name),
-        _year(other._year),
-        _index(other._index)
-    {
-    }
+    ReferenceName::ReferenceName(const ReferenceName & other) = default;
 
-    ReferenceName::~ReferenceName() {}
+    ReferenceName::~ReferenceName() = default;
 
     ReferenceNameSyntaxError::ReferenceNameSyntaxError(const std::string & msg) :
         Exception(msg)

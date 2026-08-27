@@ -20,6 +20,8 @@
 #include <eos/utils/concrete-signal-pdf.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <utility>
+
 namespace eos
 {
     ConcreteSignalPDF::ConcreteSignalPDF(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
@@ -123,11 +125,11 @@ namespace eos
         return Density::Iterator(_descriptions.cend());
     }
 
-    ConcreteSignalPDFEntry::ConcreteSignalPDFEntry(const QualifiedName & name, const std::string & description, const Options & default_options, const QualifiedName & numerator,
+    ConcreteSignalPDFEntry::ConcreteSignalPDFEntry(const QualifiedName & name, std::string description, const Options & default_options, const QualifiedName & numerator,
                                                    const QualifiedName & normalization, const std::vector<std::string> & numerator_kinematic_names,
                                                    const std::vector<std::string> & normalization_kinematic_names) :
         _name(name),
-        _description(description),
+        _description(std::move(description)),
         _default_options(default_options),
         _numerator(numerator),
         _normalization(normalization),

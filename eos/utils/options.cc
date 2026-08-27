@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
@@ -26,6 +26,7 @@
 
 #include <algorithm>
 #include <map>
+#include <utility>
 
 namespace eos
 {
@@ -39,7 +40,7 @@ namespace eos
     {
             std::map<qnp::OptionKey, qnp::OptionValue> options;
 
-            Implementation() {}
+            Implementation() = default;
 
             Implementation(const std::initializer_list<std::pair<qnp::OptionKey, qnp::OptionValue>> & _options)
             {
@@ -60,7 +61,7 @@ namespace eos
     {
     }
 
-    Options::~Options() {}
+    Options::~Options() = default;
 
     bool
     Options::operator== (const Options & rhs) const
@@ -171,17 +172,17 @@ namespace eos
         return _imp->options.empty();
     }
 
-    UnknownOptionError::UnknownOptionError(const qnp::OptionKey & key) throw() :
+    UnknownOptionError::UnknownOptionError(const qnp::OptionKey & key) noexcept :
         Exception("Unknown option: '" + key.str() + "'")
     {
     }
 
-    InvalidOptionValueError::InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed) throw() :
+    InvalidOptionValueError::InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed) noexcept :
         Exception("Invalid value '" + value + "' for option: '" + key.str() + "'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
     {
     }
 
-    UnspecifiedOptionError::UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed) throw() :
+    UnspecifiedOptionError::UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed) noexcept :
         Exception("Mandatory option '" + key.str() + "' not specified'" + (allowed.empty() ? "" : ". Allowed values: '" + allowed + "'"))
     {
     }
@@ -197,7 +198,7 @@ namespace eos
          * merge all options from rhs into result. Make sure to overwrite
          * existing lhs options with the same key.
          */
-        for (auto o : rhs._imp->options)
+        for (const auto & o : rhs._imp->options)
         {
             auto retval = result._imp->options.insert(o);
 
@@ -212,27 +213,27 @@ namespace eos
 
     OptionSpecification::OptionSpecification(const OptionSpecification &) = default;
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in) :
-        key(key_in),
+    OptionSpecification::OptionSpecification(qnp::OptionKey key_in, const std::vector<qnp::OptionValue> & allowed_values_in) :
+        key(std::move(key_in)),
         allowed_values(allowed_values_in)
     {
     }
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in, const qnp::OptionValue & default_value_in) :
-        key(key_in),
+    OptionSpecification::OptionSpecification(qnp::OptionKey key_in, const std::vector<qnp::OptionValue> & allowed_values_in, const qnp::OptionValue & default_value_in) :
+        key(std::move(key_in)),
         allowed_values(allowed_values_in),
         default_value(default_value_in)
     {
     }
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in) :
-        key(key_in),
+    OptionSpecification::OptionSpecification(qnp::OptionKey key_in, const qnp::OptionValue & allowed_value_in) :
+        key(std::move(key_in)),
         allowed_values(allowed_value_in)
     {
     }
 
-    OptionSpecification::OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in, const qnp::OptionValue & default_value_in) :
-        key(key_in),
+    OptionSpecification::OptionSpecification(qnp::OptionKey key_in, const qnp::OptionValue & allowed_value_in, const qnp::OptionValue & default_value_in) :
+        key(std::move(key_in)),
         allowed_values(allowed_value_in),
         default_value(default_value_in)
     {
@@ -269,7 +270,7 @@ namespace eos
     SpecifiedOption::SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
         _specification("dummy"_ok, "dummy"_ov, "dummy"_ov)
     {
-        const auto s = std::find_if(specifications.cbegin(), specifications.cend(), [&](const auto & e) -> bool { return e.key == key; });
+        const auto s = std::ranges::find_if(specifications, [&](const auto & e) -> bool { return e.key == key; });
 
         if (specifications.cend() == s)
         {
@@ -296,7 +297,7 @@ namespace eos
                                             ? std::vector<qnp::OptionValue>{ std::get<qnp::OptionValue>(this->_specification.allowed_values) }
                                             : std::get<std::vector<qnp::OptionValue>>(this->_specification.allowed_values);
 
-        if (std::find_if(allowed_values.cbegin(), allowed_values.cend(), [this](const auto & v) { return v.str() == _value; }) == allowed_values.cend())
+        if (std::ranges::find_if(allowed_values, [this](const auto & v) { return v.str() == _value; }) == allowed_values.cend())
         {
             throw InvalidOptionValueError(_specification.key, _value, join(allowed_values.cbegin(), allowed_values.cend()));
         }

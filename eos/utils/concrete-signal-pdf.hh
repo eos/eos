@@ -210,17 +210,17 @@ namespace eos
                 using type = indices<>;
         };
 
-        template <typename T_> using Bare = typename std::remove_cv<typename std::remove_reference<T_>::type>::type;
+        template <typename T_> using Bare = std::remove_cv_t<std::remove_reference_t<T_>>;
 
         template <typename Tuple_>
-        constexpr typename build_indices<std::tuple_size<Bare<Tuple_>>::value>::type
+        constexpr typename build_indices<std::tuple_size_v<Bare<Tuple_>>>::type
         make_indices()
         {
             return {};
         }
 
         template <typename Tuple_, int... Indices_>
-        std::vector<typename std::tuple_element<0, Bare<Tuple_>>::type>
+        std::vector<std::tuple_element_t<0, Bare<Tuple_>>>
         to_vector(Tuple_ && tuple, indices<Indices_...>)
         {
             using std::get;
@@ -275,27 +275,27 @@ namespace eos
             ConcreteSignalPDF(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
                               const QualifiedName & unnormalized_pdf, const QualifiedName & normalization);
 
-            virtual const QualifiedName & name() const;
+            [[nodiscard]] const QualifiedName & name() const override;
 
-            virtual double evaluate() const;
+            [[nodiscard]] double evaluate() const override;
 
-            virtual double evaluate_linear() const;
+            [[nodiscard]] double evaluate_linear() const override;
 
-            virtual double normalization() const;
+            [[nodiscard]] double normalization() const override;
 
-            virtual Parameters parameters();
+            Parameters parameters() override;
 
-            virtual Kinematics kinematics();
+            Kinematics kinematics() override;
 
-            virtual Options options();
+            Options options() override;
 
-            virtual DensityPtr clone() const;
+            [[nodiscard]] DensityPtr clone() const override;
 
-            virtual DensityPtr clone(const Parameters & parameters) const;
+            [[nodiscard]] DensityPtr clone(const Parameters & parameters) const override;
 
-            virtual Density::Iterator begin() const;
+            [[nodiscard]] Density::Iterator begin() const override;
 
-            virtual Density::Iterator end() const;
+            [[nodiscard]] Density::Iterator end() const override;
     };
 
     class ConcreteSignalPDFEntry : public SignalPDFEntry
@@ -316,24 +316,24 @@ namespace eos
             std::vector<std::string> _normalization_kinematic_names;
 
         public:
-            ConcreteSignalPDFEntry(const QualifiedName & name, const std::string & description, const Options & default_options, const QualifiedName & numerator,
+            ConcreteSignalPDFEntry(const QualifiedName & name, std::string description, const Options & default_options, const QualifiedName & numerator,
                                    const QualifiedName & normalization, const std::vector<std::string> & numerator_kinematic_names,
                                    const std::vector<std::string> & normalization_kinematic_names);
-            ~ConcreteSignalPDFEntry();
+            ~ConcreteSignalPDFEntry() override;
 
-            virtual const QualifiedName &                              name() const;
-            virtual const std::string &                                description() const;
-            virtual SignalPDFEntry::NumeratorKinematicVariableIterator begin_numerator_kinematic_variables() const;
+            [[nodiscard]] const QualifiedName &                              name() const override;
+            [[nodiscard]] const std::string &                                description() const override;
+            [[nodiscard]] SignalPDFEntry::NumeratorKinematicVariableIterator begin_numerator_kinematic_variables() const override;
 
-            virtual SignalPDFEntry::NumeratorKinematicVariableIterator end_numerator_kinematic_variables() const;
+            [[nodiscard]] SignalPDFEntry::NumeratorKinematicVariableIterator end_numerator_kinematic_variables() const override;
 
-            virtual SignalPDFEntry::DenominatorKinematicVariableIterator begin_denominator_kinematic_variables() const;
+            [[nodiscard]] SignalPDFEntry::DenominatorKinematicVariableIterator begin_denominator_kinematic_variables() const override;
 
-            virtual SignalPDFEntry::DenominatorKinematicVariableIterator end_denominator_kinematic_variables() const;
+            [[nodiscard]] SignalPDFEntry::DenominatorKinematicVariableIterator end_denominator_kinematic_variables() const override;
 
-            virtual SignalPDFPtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
+            [[nodiscard]] SignalPDFPtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const override;
 
-            virtual std::ostream & insert(std::ostream & os) const;
+            std::ostream & insert(std::ostream & os) const override;
     };
 
     template <typename... NumeratorKinematicNames_, typename... NormalizationKinematicNames_>

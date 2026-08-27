@@ -38,8 +38,8 @@ class ParametersTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // Setting and retrieval
             {
@@ -349,7 +349,7 @@ class ParametersTest : public TestCase
                 Parameters p   = Parameters::Defaults();
                 MutablePtr mut = std::make_shared<Parameter>(p["mass::c"]);
 
-                ParameterDescription a{ mut, 0.0, 1.0, false };
+                ParameterDescription a{ .parameter = mut, .min = 0.0, .max = 1.0, .nuisance = false };
 
                 TEST_CHECK((a == ParameterDescription{ mut, 0.0, 1.0, false }));   // all equal
                 TEST_CHECK(! (a == ParameterDescription{ mut, 9.0, 1.0, false })); // min differs

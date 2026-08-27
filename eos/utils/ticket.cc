@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2008, 2015 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2008-2026 Danny van Dyk
  *
  * This file is part of the EOS program. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,12 +35,9 @@ namespace eos
 
             ConditionVariable completion;
 
-            bool completed;
+            bool completed{ false };
 
-            Implementation() :
-                completed(false)
-            {
-            }
+            Implementation() = default;
     };
 
     Ticket::Ticket() :
@@ -48,7 +45,7 @@ namespace eos
     {
     }
 
-    Ticket::~Ticket() {}
+    Ticket::~Ticket() = default;
 
     void
     Ticket::mark()
@@ -80,7 +77,7 @@ namespace eos
     {
     }
 
-    TicketList::~TicketList() {}
+    TicketList::~TicketList() = default;
 
     void
     TicketList::push_back(const Ticket & ticket)

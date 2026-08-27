@@ -23,6 +23,7 @@
 #include <eos/utils/wilson-polynomial.hh>
 
 #include <cmath>
+#include <memory>
 
 namespace eos
 {
@@ -137,49 +138,50 @@ namespace eos
         compute_polynomial_coefficients(o, _coefficients, constant, linear.data(), bilinear.data());
 
         std::vector<Parameter> parameters;
+        parameters.reserve(size);
         for (unsigned i = 0; i < size; ++i)
         {
             parameters.push_back(o->parameters()[_coefficients[i]]);
         }
 
         // Account for the constant part
-        exp::ExpressionPtr result = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(constant))));
+        exp::ExpressionPtr result = std::make_shared<exp::Expression>(exp::ConstantExpression(constant));
 
         // Account for the true quadratic terms 'q_i' and linear terms 'l_i'
         for (unsigned i = 0; i < size; ++i)
         {
-            Parameter p_i = parameters[i];
+            const Parameter & p_i = parameters[i];
 
             double q_i = bilinear[i * size + i];
             double l_i = linear[i];
 
-            auto p_i_expr         = exp::ExpressionPtr(new exp::Expression(std::move(exp::ParameterExpression(p_i))));
-            auto q_i_expr         = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(q_i))));
-            auto p_i_squared_expr = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', p_i_expr, p_i_expr))));
-            auto square_term_expr = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', q_i_expr, p_i_squared_expr))));
-            result                = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('+', result, square_term_expr))));
+            auto p_i_expr         = std::make_shared<exp::Expression>(std::move(exp::ParameterExpression(p_i)));
+            auto q_i_expr         = std::make_shared<exp::Expression>(exp::ConstantExpression(q_i));
+            auto p_i_squared_expr = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('*', p_i_expr, p_i_expr)));
+            auto square_term_expr = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('*', q_i_expr, p_i_squared_expr)));
+            result                = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('+', result, square_term_expr)));
 
-            auto l_i_expr         = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(l_i))));
-            auto linear_term_expr = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', l_i_expr, p_i_expr))));
-            result                = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('+', result, linear_term_expr))));
+            auto l_i_expr         = std::make_shared<exp::Expression>(exp::ConstantExpression(l_i));
+            auto linear_term_expr = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('*', l_i_expr, p_i_expr)));
+            result                = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('+', result, linear_term_expr)));
         }
 
         // Account for the remaining bilinear terms 'b_{ij}'
         for (unsigned i = 0; i < size; ++i)
         {
-            Parameter p_i = parameters[i];
+            const Parameter & p_i = parameters[i];
 
             for (unsigned j = i + 1; j < size; ++j)
             {
-                Parameter p_j  = parameters[j];
-                double    b_ij = bilinear[i * size + j];
+                const Parameter & p_j  = parameters[j];
+                double            b_ij = bilinear[i * size + j];
 
-                auto p_i_expr           = exp::ExpressionPtr(new exp::Expression(std::move(exp::ParameterExpression(p_i))));
-                auto p_j_expr           = exp::ExpressionPtr(new exp::Expression(std::move(exp::ParameterExpression(p_j))));
-                auto b_ij_expr          = exp::ExpressionPtr(new exp::Expression(std::move(exp::ConstantExpression(b_ij))));
-                auto p_ij_expr          = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', p_i_expr, p_j_expr))));
-                auto bilinear_term_expr = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('*', b_ij_expr, p_ij_expr))));
-                result                  = exp::ExpressionPtr(new exp::Expression(std::move(exp::BinaryExpression('+', result, bilinear_term_expr))));
+                auto p_i_expr           = std::make_shared<exp::Expression>(std::move(exp::ParameterExpression(p_i)));
+                auto p_j_expr           = std::make_shared<exp::Expression>(std::move(exp::ParameterExpression(p_j)));
+                auto b_ij_expr          = std::make_shared<exp::Expression>(exp::ConstantExpression(b_ij));
+                auto p_ij_expr          = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('*', p_i_expr, p_j_expr)));
+                auto bilinear_term_expr = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('*', b_ij_expr, p_ij_expr)));
+                result                  = std::make_shared<exp::Expression>(std::move(exp::BinaryExpression('+', result, bilinear_term_expr)));
             }
         }
 
@@ -189,8 +191,8 @@ namespace eos
     exp::Expression
     make_polynomial_ratio(const ObservablePtr & numerator, const ObservablePtr & denominator, const std::vector<QualifiedName> & coefficients)
     {
-        const auto numerator_exp   = exp::ExpressionPtr(new exp::Expression(std::move(make_polynomial(numerator, coefficients))));
-        const auto denominator_exp = exp::ExpressionPtr(new exp::Expression(std::move(make_polynomial(denominator, coefficients))));
+        const auto numerator_exp   = std::make_shared<exp::Expression>(std::move(make_polynomial(numerator, coefficients)));
+        const auto denominator_exp = std::make_shared<exp::Expression>(std::move(make_polynomial(denominator, coefficients)));
 
         return exp::BinaryExpression('/', numerator_exp, denominator_exp);
     }

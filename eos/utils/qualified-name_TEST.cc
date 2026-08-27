@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2016 Rafael Silva Coutinho
  *
  * This file is part of the EOS project. EOS is free software;
@@ -36,8 +36,8 @@ class PrefixTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto p = qnp::Prefix("B->K^*ll"));
             TEST_CHECK_NO_THROW(auto p = qnp::Prefix("B->B"));
@@ -56,8 +56,8 @@ class NameTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto n = qnp::Name("A_FB(s)"));
             TEST_CHECK_NO_THROW(auto n = qnp::Name("dBR/ds"));
@@ -77,8 +77,8 @@ class SuffixTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto p = qnp::Suffix("LargeRecoil"));
             TEST_CHECK_NO_THROW(auto p = qnp::Suffix("LHCb:2014A"));
@@ -99,8 +99,8 @@ class OptionKeyTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto k = qnp::OptionKey("form-factors"));
             TEST_CHECK_NO_THROW(auto k = qnp::OptionKey("correlator"));
@@ -120,8 +120,8 @@ class OptionValueTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("KMPW2010"));
             TEST_CHECK_NO_THROW(auto p = qnp::OptionValue("BCvD2016-model1"));
@@ -142,8 +142,8 @@ class QualifiedNameTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=KMPW2010"));
             TEST_CHECK_NO_THROW(auto qn = QualifiedName("B->K^*ll::A_FB(s)@LargeRecoil;form-factors=BSZ2015"));

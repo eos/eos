@@ -33,7 +33,9 @@
 
 #include <test/test.hh>
 
+#include <algorithm>
 #include <iostream>
+#include <utility>
 
 using namespace test;
 using namespace eos::exp;
@@ -51,8 +53,8 @@ class ExpressionTest
         using It = std::string::const_iterator;
         ExpressionParser<It> parser;
 
-        ExpressionTest(const std::string input) :
-            _input(input)
+        ExpressionTest(std::string input) :
+            _input(std::move(input))
         {
             It first(_input.begin()), last(_input.end());
             completed = qi::phrase_parse(first, last, parser, ascii::space, e) && (first == last);
@@ -67,8 +69,8 @@ class ExpressionParserTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // Analyze directly referenced names without resolving them.
             {
@@ -388,11 +390,11 @@ class ExpressionParserTest : public TestCase
 
                 // Check the overlap between the set of used kinematic variables and the set of aliased variables
                 std::set<std::string> intersection;
-                std::set_intersection(kinematic_reader.kinematics.begin(),
-                                      kinematic_reader.kinematics.end(),
-                                      kinematic_reader.aliases.begin(),
-                                      kinematic_reader.aliases.end(),
-                                      std::inserter(intersection, intersection.begin()));
+                std::ranges::set_intersection(kinematic_reader.kinematics,
+
+                                              kinematic_reader.aliases,
+
+                                              std::inserter(intersection, intersection.begin()));
                 TEST_CHECK(intersection.empty());
 
                 // Problematic case, conflict between the alias and the kinematic variable
@@ -401,11 +403,11 @@ class ExpressionParserTest : public TestCase
                 std::visit(kinematic_reader, *test2.e);
 
                 intersection.clear();
-                std::set_intersection(kinematic_reader.kinematics.begin(),
-                                      kinematic_reader.kinematics.end(),
-                                      kinematic_reader.aliases.begin(),
-                                      kinematic_reader.aliases.end(),
-                                      std::inserter(intersection, intersection.begin()));
+                std::ranges::set_intersection(kinematic_reader.kinematics,
+
+                                              kinematic_reader.aliases,
+
+                                              std::inserter(intersection, intersection.begin()));
                 TEST_CHECK(! intersection.empty());
             }
 

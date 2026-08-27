@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016, 2017 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2007-2011 Ciaran McCreesh
@@ -45,13 +45,7 @@ namespace eos
     {
     }
 
-    template <typename Iter_, typename Value_>
-    IndirectIterator<Iter_, Value_> &
-    IndirectIterator<Iter_, Value_>::operator= (const IndirectIterator & i)
-    {
-        _iter = i._iter;
-        return *this;
-    }
+    template <typename Iter_, typename Value_> IndirectIterator<Iter_, Value_> & IndirectIterator<Iter_, Value_>::operator= (const IndirectIterator & i) = default;
 
     template <typename Iter_, typename Value_>
     IndirectIterator<Iter_, Value_> &

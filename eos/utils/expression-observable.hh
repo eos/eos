@@ -49,37 +49,37 @@ namespace eos
             ExpressionObservable(const QualifiedName & name, const ObservableCache & cache, const Kinematics & kinematics, const Options & options,
                                  const eos::exp::ExpressionPtr & expression);
 
-            ~ExpressionObservable() {}
+            ~ExpressionObservable() override = default;
 
-            virtual double        evaluate() const;
-            virtual ObservablePtr clone() const;
-            virtual ObservablePtr clone(const Parameters & parameters) const;
+            [[nodiscard]] double        evaluate() const override;
+            [[nodiscard]] ObservablePtr clone() const override;
+            [[nodiscard]] ObservablePtr clone(const Parameters & parameters) const override;
 
-            virtual const QualifiedName &
-            name() const
+            [[nodiscard]] const QualifiedName &
+            name() const override
             {
                 return _name;
             }
 
-            virtual Parameters
-            parameters()
+            Parameters
+            parameters() override
             {
                 return _parameters;
             }
 
-            virtual Kinematics
-            kinematics()
+            Kinematics
+            kinematics() override
             {
                 return _kinematics;
             }
 
-            virtual Options
-            options()
+            Options
+            options() override
             {
                 return _options;
             }
 
-            const eos::exp::ExpressionPtr &
+            [[nodiscard]] const eos::exp::ExpressionPtr &
             expression() const
             {
                 return _expression;
@@ -104,33 +104,32 @@ namespace eos
             std::vector<OptionSpecification> _option_specifications;
 
         public:
-            ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const eos::exp::ExpressionPtr & expression,
-                                      const Options & forced_options);
+            ExpressionObservableEntry(const QualifiedName & name, std::string latex, const Unit & unit, eos::exp::ExpressionPtr expression, const Options & forced_options);
 
-            ~ExpressionObservableEntry() {}
+            ~ExpressionObservableEntry() override = default;
 
-            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const;
-            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const;
+            [[nodiscard]] ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const override;
+            [[nodiscard]] ObservableEntry::KinematicVariableIterator end_kinematic_variables() const override;
 
-            virtual ObservableEntry::OptionIterator begin_options() const;
-            virtual ObservableEntry::OptionIterator end_options() const;
+            [[nodiscard]] ObservableEntry::OptionIterator begin_options() const override;
+            [[nodiscard]] ObservableEntry::OptionIterator end_options() const override;
 
-            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
+            [[nodiscard]] ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const override;
 
-            virtual const QualifiedName &
-            name() const
+            [[nodiscard]] const QualifiedName &
+            name() const override
             {
                 return _name;
             }
 
-            virtual const std::string &
-            latex() const
+            [[nodiscard]] const std::string &
+            latex() const override
             {
                 return _latex;
             }
 
-            virtual const Unit &
-            unit() const
+            [[nodiscard]] const Unit &
+            unit() const override
             {
                 return _unit;
             }

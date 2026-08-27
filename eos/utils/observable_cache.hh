@@ -66,14 +66,14 @@ namespace eos
             void update();
 
             /// Retrieve the cache's common Parameters object.
-            Parameters parameters() const;
+            [[nodiscard]] Parameters parameters() const;
 
             /*!
              * Retrieve a unique observable by its ObservableCache::ObservableId.
              *
              * @param id The ObservableCache::ObservableId whose associated ObservablePtr shall be retrieved.
              */
-            ObservablePtr observable(const ObservableCache::ObservableId & id) const;
+            [[nodiscard]] ObservablePtr observable(const ObservableCache::ObservableId & id) const;
 
             /*!
              * Retrieve the prediction for a given observable from the cache.
@@ -83,16 +83,16 @@ namespace eos
             double operator[] (const ObservableCache::ObservableId & id) const;
 
             /// Retrieve the number of independent predictions from the cache.
-            unsigned size() const;
+            [[nodiscard]] unsigned size() const;
 
             struct IteratorTag;
             using Iterator = WrappedForwardIterator<IteratorTag, ObservablePtr>;
-            Iterator begin() const;
-            Iterator end() const;
+            [[nodiscard]] Iterator begin() const;
+            [[nodiscard]] Iterator end() const;
             ///@}
 
             /// Clone this cache whilst keeping the observables in the given order, i.e. all ids remain valid.
-            ObservableCache clone(const Parameters & parameters) const;
+            [[nodiscard]] ObservableCache clone(const Parameters & parameters) const;
     };
 
     extern template class WrappedForwardIterator<ObservableCache::IteratorTag, ObservablePtr>;

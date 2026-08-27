@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2008-2010 Ciaran McCreesh
@@ -49,7 +49,7 @@ namespace eos
      */
     template <typename K_, typename V_> class NamedValue
     {
-            static_assert(! std::is_reference<V_>::value, "Tried to make a NamedValue hold a reference");
+            static_assert(! std::is_reference_v<V_>, "Tried to make a NamedValue hold a reference");
 
         private:
             V_ _value;
@@ -85,17 +85,12 @@ namespace eos
             {
             }
 
-            NamedValue(NamedValue && v) :
+            NamedValue(NamedValue && v) noexcept :
                 _value(std::move(v._value))
             {
             }
 
-            NamedValue &
-            operator= (const NamedValue & v)
-            {
-                _value = v._value;
-                return *this;
-            }
+            NamedValue & operator= (const NamedValue & v) = default;
 
             V_ &
             operator() ()
@@ -124,10 +119,10 @@ namespace eos
             }
 
             template <typename V_>
-            NamedValue<Name<T_>, typename std::remove_reference<V_>::type>
+            NamedValue<Name<T_>, std::remove_reference_t<V_>>
             operator= (V_ && v) const
             {
-                return NamedValue<Name<T_>, typename std::remove_reference<V_>::type>(v);
+                return NamedValue<Name<T_>, std::remove_reference_t<V_>>(v);
             }
 
             NamedValue<Name<T_>, std::string>

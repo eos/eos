@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -36,14 +36,14 @@ class JoinTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // filled vector
             {
                 std::vector<int> items{ 1, 4, 7 };
 
-                std::cout << join(items.begin(), items.end()) << std::endl;
+                std::cout << join(items.begin(), items.end()) << '\n';
                 TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end()));
                 TEST_CHECK_EQUAL("1, 4, 7", join(items.begin(), items.end(), ", "));
                 TEST_CHECK_EQUAL("1:4:7", join(items.begin(), items.end(), ":"));

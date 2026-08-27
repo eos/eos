@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -43,11 +43,11 @@ class MemoiseTest : public TestCase
         static std::complex<double>
         f2(const double & x, const double & y)
         {
-            return std::complex<double>(x, y);
+            return { x, y };
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             /* f1 */
             {

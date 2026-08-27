@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,8 +33,8 @@ class LogLevelTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // stringification
             {
@@ -150,14 +150,14 @@ class LogOneTimeMessageTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             std::vector<std::tuple<std::string, LogLevel, std::string>> messages;
 
             // register callback
             std::function<void(const std::string &, const LogLevel &, const std::string &)> callback =
-                    [&messages](const std::string & id, const LogLevel & level, const std::string & message) { messages.push_back(std::make_tuple(id, level, message)); };
+                    [&messages](const std::string & id, const LogLevel & level, const std::string & message) { messages.emplace_back(id, level, message); };
             Log::instance()->register_callback(callback);
 
             // first message

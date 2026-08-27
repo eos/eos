@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016, 2017 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2007-2011 Ciaran McCreesh
@@ -90,9 +90,9 @@ namespace eos
             ///@name Standard library typedefs
             ///@{
 
-            typedef typename std::remove_reference<Value_>::type & value_type;
-            typedef typename std::remove_reference<Value_>::type & reference;
-            typedef typename std::remove_reference<Value_>::type * pointer;
+            using value_type        = std::remove_reference_t<Value_> &;
+            using reference         = std::remove_reference_t<Value_> &;
+            using pointer           = std::remove_reference_t<Value_> *;
             using difference_type   = std::ptrdiff_t;
             using iterator_category = std::forward_iterator_tag;
 

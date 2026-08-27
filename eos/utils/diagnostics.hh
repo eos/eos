@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -55,13 +55,13 @@ namespace eos
             using Iterator = WrappedForwardIterator<IteratorTag, const Entry>;
 
             /// Returns Iterator pointing to the first entry.
-            Iterator begin() const;
+            [[nodiscard]] Iterator begin() const;
 
             /// Returns Iterator pointing beyond the last entry.
-            Iterator end() const;
+            [[nodiscard]] Iterator end() const;
 
             /// Return the total number of entries.
-            unsigned size() const;
+            [[nodiscard]] unsigned size() const;
             ///@}
     };
 

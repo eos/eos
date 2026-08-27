@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016, 2017 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2008-2013 Ciaran McCreesh
@@ -112,7 +112,7 @@ namespace eos
             using Type = R_;
     };
 
-    template <typename T_> using CallResultType = typename std::remove_const<typename ExtractResultType<decltype(&T_::operator())>::Type>::type;
+    template <typename T_> using CallResultType = std::remove_const_t<typename ExtractResultType<decltype(&T_::operator())>::Type>;
 
     template <typename Revisitor_, typename Result_, typename... Cases_> struct MadeVisitor;
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007, 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2007-2026 Danny van Dyk
  *
  * Based upon 'mutex.hh' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
@@ -59,7 +59,7 @@ namespace eos
             bool
             operator() () const
             {
-                return 0 != _mutex;
+                return nullptr != _mutex;
             }
     };
 } // namespace eos

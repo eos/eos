@@ -23,6 +23,7 @@
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <map>
+#include <memory>
 #include <set>
 #include <vector>
 
@@ -75,14 +76,14 @@ namespace eos
         }
     }
 
-    Kinematics::~Kinematics() {}
+    Kinematics::~Kinematics() = default;
 
     Kinematics
     Kinematics::clone() const
     {
         Kinematics result;
 
-        result._imp.reset(new Implementation<Kinematics>(*_imp));
+        result._imp = std::make_shared<Implementation<Kinematics>>(*_imp);
 
         return result;
     }
@@ -322,7 +323,7 @@ namespace eos
     {
     }
 
-    KinematicVariable::~KinematicVariable() {}
+    KinematicVariable::~KinematicVariable() = default;
 
     MutablePtr
     KinematicVariable::clone() const
@@ -417,17 +418,17 @@ namespace eos
         user.uses_kinematic(variable.id());
     }
 
-    UnknownKinematicVariableError::UnknownKinematicVariableError(const std::string & variable) throw() :
+    UnknownKinematicVariableError::UnknownKinematicVariableError(const std::string & variable) noexcept :
         Exception("Unknown kinematic variable: '" + variable + "'")
     {
     }
 
-    DuplicateKinematicAliasError::DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) throw() :
+    DuplicateKinematicAliasError::DuplicateKinematicAliasError(const std::string & alias, const std::string & variable) noexcept :
         Exception("Alias: '" + alias + "' cannot be used for variable: '" + variable + "' since it was already defined")
     {
     }
 
-    UnknownKinematicAliasError::UnknownKinematicAliasError(const std::string & alias) throw() :
+    UnknownKinematicAliasError::UnknownKinematicAliasError(const std::string & alias) noexcept :
         Exception("Unknown kinematic alias: '" + alias + "'")
     {
     }

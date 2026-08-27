@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  * Copyright (c) 2025 Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
@@ -35,8 +35,8 @@ class LeptonFlavorTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_EQUAL_STR("e", stringify(LeptonFlavor::electron));
             TEST_CHECK_EQUAL_STR("mu", stringify(LeptonFlavor::muon));
@@ -52,8 +52,8 @@ class QuarkFlavorTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_EQUAL_STR("u", stringify(QuarkFlavor::up));
             TEST_CHECK_EQUAL_STR("d", stringify(QuarkFlavor::down));
@@ -72,8 +72,8 @@ class IsospinTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_EQUAL_STR("", stringify(Isospin::none));
             TEST_CHECK_EQUAL_STR("0", stringify(Isospin::zero));
@@ -101,8 +101,8 @@ class IsospinRepresentationTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_EQUAL_STR("0", stringify(IsospinRepresentation::zero));
             TEST_CHECK_EQUAL_STR("1", stringify(IsospinRepresentation::one));
@@ -120,8 +120,8 @@ class LightMesonTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_EQUAL_STR("pi^0", stringify(LightMeson::pi0));
             TEST_CHECK_EQUAL_STR("pi^+", stringify(LightMeson::piplus));
@@ -144,8 +144,8 @@ class PartialWaveTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_EQUAL_STR("", stringify(PartialWave::none));
             TEST_CHECK_EQUAL_STR("S", stringify(PartialWave::S));

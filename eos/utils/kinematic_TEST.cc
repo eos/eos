@@ -34,8 +34,8 @@ class KinematicsTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // Creation from initializer list
             {

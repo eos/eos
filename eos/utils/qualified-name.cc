@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2023 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2016 Rafael Silva Coutinho
  *
  * This file is part of the EOS project. EOS is free software;
@@ -85,10 +85,7 @@ namespace eos
             }
         }
 
-        Suffix::Suffix() :
-            _suffix()
-        {
-        }
+        Suffix::Suffix() = default;
 
         Suffix::Suffix(const std::string & suffix) :
             _suffix(suffix)
@@ -156,8 +153,7 @@ namespace eos
         _full(input),
         _prefix("null"),
         _name("empty"),
-        _suffix(""),
-        _options()
+        _suffix("")
     {
         if (input.empty())
         {
@@ -235,27 +231,18 @@ namespace eos
     {
     }
 
-    QualifiedName::QualifiedName(const QualifiedName & other) :
-        _str(other._str),
-        _full(other._full),
-        _prefix(other._prefix),
-        _name(other._name),
-        _suffix(other._suffix),
-        _options(other._options)
-    {
-    }
+    QualifiedName::QualifiedName(const QualifiedName & other) = default;
 
     QualifiedName::QualifiedName(const qnp::Prefix & p, const qnp::Name & n, const qnp::Suffix & s) :
         _str(p.str() + "::" + n.str() + (s.empty() ? std::string() : "@" + s.str())),
         _full(_str),
         _prefix(p),
         _name(n),
-        _suffix(s),
-        _options()
+        _suffix(s)
     {
     }
 
-    QualifiedName::~QualifiedName() {}
+    QualifiedName::~QualifiedName() = default;
 
     QualifiedNameSyntaxError::QualifiedNameSyntaxError(const std::string & msg) :
         Exception(msg)

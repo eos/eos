@@ -3,7 +3,7 @@
 /*
  * Copyright (c) 2011, 2014 Frederik Beaujean
  * Copyright (c) 2022 Méril Reboud
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -42,21 +42,21 @@ namespace eos
                            const std::vector<std::string> &                                                                           kinematic_variable_names,
                            const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function);
 
-            virtual ~TestObservable();
+            ~TestObservable() override;
 
-            virtual double evaluate() const;
+            [[nodiscard]] double evaluate() const override;
 
-            virtual ObservablePtr clone() const;
+            [[nodiscard]] ObservablePtr clone() const override;
 
-            virtual ObservablePtr clone(const Parameters & parameters) const;
+            [[nodiscard]] ObservablePtr clone(const Parameters & parameters) const override;
 
-            virtual Parameters parameters();
+            Parameters parameters() override;
 
-            virtual Kinematics kinematics();
+            Kinematics kinematics() override;
 
-            virtual Options options();
+            Options options() override;
 
-            const QualifiedName & name() const;
+            [[nodiscard]] const QualifiedName & name() const override;
     };
 
     class TestObservableEntry : public ObservableEntry
@@ -75,27 +75,27 @@ namespace eos
             std::vector<OptionSpecification> _options;
 
         public:
-            TestObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
+            TestObservableEntry(const QualifiedName & name, std::string latex, const Unit & unit,
                                 const std::function<double(const Parameters &, const std::vector<KinematicVariable> &, const Options &)> & function,
                                 const std::vector<std::string> &                                                                           kinematics_names);
 
-            virtual ~TestObservableEntry();
+            ~TestObservableEntry() override;
 
-            virtual const QualifiedName & name() const;
+            [[nodiscard]] const QualifiedName & name() const override;
 
-            virtual const std::string & latex() const;
+            [[nodiscard]] const std::string & latex() const override;
 
-            virtual const Unit & unit() const;
+            [[nodiscard]] const Unit & unit() const override;
 
-            virtual ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const;
+            [[nodiscard]] ObservableEntry::KinematicVariableIterator begin_kinematic_variables() const override;
 
-            virtual ObservableEntry::KinematicVariableIterator end_kinematic_variables() const;
+            [[nodiscard]] ObservableEntry::KinematicVariableIterator end_kinematic_variables() const override;
 
-            virtual ObservableEntry::OptionIterator begin_options() const;
+            [[nodiscard]] ObservableEntry::OptionIterator begin_options() const override;
 
-            virtual ObservableEntry::OptionIterator end_options() const;
+            [[nodiscard]] ObservableEntry::OptionIterator end_options() const override;
 
-            virtual ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const;
+            [[nodiscard]] ObservablePtr make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const override;
 
             virtual std::ostream & insert(std::ostream & os) const;
     };

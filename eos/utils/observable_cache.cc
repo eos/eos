@@ -71,13 +71,13 @@ namespace eos
             {
             }
 
-            ~Implementation() {}
+            ~Implementation() = default;
 
             static bool
             identical_observables(const ObservablePtr & lhs, const ObservablePtr & rhs)
             {
-                const KinematicUser &                     kinematic_user_lhs = static_cast<const KinematicUser &>(*lhs);
-                const KinematicUser &                     kinematic_user_rhs = static_cast<const KinematicUser &>(*rhs);
+                const auto &                              kinematic_user_lhs = static_cast<const KinematicUser &>(*lhs);
+                const auto &                              kinematic_user_rhs = static_cast<const KinematicUser &>(*rhs);
                 std::unordered_set<KinematicVariable::Id> kinematic_ids_lhs(kinematic_user_lhs.begin_kinematics(), kinematic_user_lhs.end_kinematics());
                 std::unordered_set<KinematicVariable::Id> kinematic_ids_rhs(kinematic_user_rhs.begin_kinematics(), kinematic_user_rhs.end_kinematics());
 
@@ -126,8 +126,8 @@ namespace eos
                     }
                 }
 
-                CacheableObservable *  cacheable_observable  = dynamic_cast<CacheableObservable *>(observable.get());
-                ExpressionObservable * expression_observable = dynamic_cast<ExpressionObservable *>(observable.get());
+                auto * cacheable_observable  = dynamic_cast<CacheableObservable *>(observable.get());
+                auto * expression_observable = dynamic_cast<ExpressionObservable *>(observable.get());
 
                 if (nullptr != expression_observable) // is the new observable an expression?
                 {
@@ -142,7 +142,7 @@ namespace eos
 
                     observables.push_back(cached_expression_observable);
                     predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                    expression_observables.push_back(std::make_tuple(cached_expression_observable, ObservableCache::ObservableId(index)));
+                    expression_observables.emplace_back(cached_expression_observable, ObservableCache::ObservableId(index));
 
                     return ObservableCache::ObservableId(index);
                 }
@@ -164,8 +164,8 @@ namespace eos
                         {
                             continue;
                         }
-                        const KinematicUser &                     kinematic_user_cacheable_obs = static_cast<const KinematicUser &>(*cacheable_observable);
-                        const KinematicUser &                     kinematic_user_cached_obs    = static_cast<const KinematicUser &>(*std::get<0>(c->second));
+                        const auto &                              kinematic_user_cacheable_obs = static_cast<const KinematicUser &>(*cacheable_observable);
+                        const auto &                              kinematic_user_cached_obs    = static_cast<const KinematicUser &>(*std::get<0>(c->second));
                         std::unordered_set<KinematicVariable::Id> kinematic_ids_cacheable_obs(kinematic_user_cacheable_obs.begin_kinematics(),
                                                                                               kinematic_user_cacheable_obs.end_kinematics());
                         std::unordered_set<KinematicVariable::Id> kinematic_ids_cached_obs(kinematic_user_cached_obs.begin_kinematics(),
@@ -185,7 +185,7 @@ namespace eos
                         // add the newly created cached observable
                         observables.push_back(cached_observable);
                         predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                        cached_observables.push_back(std::make_tuple(cached_observable, ObservableCache::ObservableId(index)));
+                        cached_observables.emplace_back(cached_observable, ObservableCache::ObservableId(index));
 
                         return ObservableCache::ObservableId(index);
                     }
@@ -202,7 +202,7 @@ namespace eos
                     // add this new regular observable
                     observables.push_back(observable);
                     predictions.push_back(std::numeric_limits<double>::quiet_NaN());
-                    regular_observables.push_back(std::make_tuple(observable, ObservableCache::ObservableId(index)));
+                    regular_observables.emplace_back(observable, ObservableCache::ObservableId(index));
 
                     return ObservableCache::ObservableId(index);
                 }
@@ -216,7 +216,7 @@ namespace eos
     {
     }
 
-    ObservableCache::~ObservableCache() {}
+    ObservableCache::~ObservableCache() = default;
 
     ObservableCache::ObservableId
     ObservableCache::add(const ObservablePtr & observable)
@@ -256,7 +256,7 @@ namespace eos
         regular_tickets.reserve(_imp->regular_observables.size());
 
         // evaluate all regular observables in parallel
-        for (auto ro : _imp->regular_observables)
+        for (const auto & ro : _imp->regular_observables)
         {
             auto f = [=, this]()
             {
@@ -277,7 +277,7 @@ namespace eos
         }
 
         // await completion of the cacheable observables
-        for (auto ticket : cacheable_tickets)
+        for (const auto & ticket : cacheable_tickets)
         {
             ticket.wait();
         }
@@ -286,7 +286,7 @@ namespace eos
         cached_tickets.reserve(_imp->cached_observables.size());
 
         // evaluate all cached observables in parallel
-        for (auto co : _imp->cached_observables)
+        for (const auto & co : _imp->cached_observables)
         {
             auto f = [=, this]()
             {
@@ -307,13 +307,13 @@ namespace eos
         }
 
         // await completion of the regular observables
-        for (auto ticket : regular_tickets)
+        for (const auto & ticket : regular_tickets)
         {
             ticket.wait();
         }
 
         // await completion of the cached observables
-        for (auto ticket : cached_tickets)
+        for (const auto & ticket : cached_tickets)
         {
             ticket.wait();
         }

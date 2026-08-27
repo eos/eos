@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,7 +20,8 @@
 #include <eos/utils/expression.hh>
 #include <eos/utils/stringify.hh>
 
-#include <math.h>
+#include <cmath>
+#include <utility>
 
 namespace eos::exp
 {
@@ -73,10 +74,10 @@ namespace eos::exp
         }
     }
 
-    FunctionExpression::FunctionExpression(const std::string & f, const ExpressionPtr & arg) :
+    FunctionExpression::FunctionExpression(const std::string & f, ExpressionPtr arg) :
         f(nullptr),
         fname(f),
-        arg(arg)
+        arg(std::move(arg))
     {
         static const std::map<std::string, FunctionType> function_table{
             { std::string("exp"), FunctionType([](const double & x) -> double { return std::exp(x); }) },

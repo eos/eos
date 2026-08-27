@@ -2,7 +2,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  * Copyright (c) 2026 Dominik Suelmann
  *
  * This file is part of the EOS project. EOS is free software;
@@ -36,8 +36,8 @@ class MultiplicativeRGELLTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // trivial test case (nf = 5, dim = 10)
             {
@@ -76,7 +76,7 @@ class MultiplicativeRGELLTest : public TestCase
 
             // current-current test case (nf = 5, dim = 2), checked by S. Meiser 2023/07/10
             {
-                const double                                 sq2 = std::sqrt(2.0);
+                const double                                 sq2 = std::numbers::sqrt2;
                 const std::array<double, 2u>                 gamma_0_ev{ -8.0, +4.0 };
                 const std::array<std::array<double, 2u>, 2u> V{
                     {
@@ -127,8 +127,8 @@ class MultiplicativeRGENLLTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // trivial test case (nf = 5, dim = 10)
             {
@@ -180,7 +180,7 @@ class MultiplicativeRGENLLTest : public TestCase
 
             // current-current test case (nf = 5, dim = 2)
             {
-                const double                                 sq2 = std::sqrt(2.0);
+                const double                                 sq2 = std::numbers::sqrt2;
                 const std::array<double, 2u>                 gamma_0_ev{ -8.0, +4.0 };
                 const std::array<std::array<double, 2u>, 2u> V{
                     {
@@ -284,8 +284,8 @@ class MultiplicativeRGENNLLTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // trivial test case (nf = 5, dim = 10)
             {
@@ -350,7 +350,7 @@ class MultiplicativeRGENNLLTest : public TestCase
 
             // current-current test case (nf = 5, dim = 2)
             {
-                const double                                 sq2 = std::sqrt(2.0);
+                const double                                 sq2 = std::numbers::sqrt2;
                 const std::array<double, 2u>                 gamma_0_ev{ -8.0, +4.0 };
                 const std::array<std::array<double, 2u>, 2u> V{
                     {

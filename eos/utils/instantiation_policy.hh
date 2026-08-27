@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2008-2026 Danny van Dyk
  *
  * Base upon 'instantiation_policy.hh' from Paludis, which is:
  *     Copyright (c) 2005, 2006, 2007 Ciaran McCreesh
@@ -62,27 +62,27 @@ namespace eos
     {
         private:
             /// Unwanted copy constructor: Do not implement!
-            InstantiationPolicy(const InstantiationPolicy &);
+            InstantiationPolicy(const InstantiationPolicy &) = delete;
 
             /// Unwanted copy assignment operator: Do not implement!
-            InstantiationPolicy & operator= (const InstantiationPolicy &);
+            InstantiationPolicy & operator= (const InstantiationPolicy &) = delete;
 
         public:
             /// Default constructor.
-            InstantiationPolicy() {}
+            InstantiationPolicy() = default;
     };
 
     template <typename T_> class InstantiationPolicy<T_, NonInstantiable>
     {
         private:
             /// Unwanted copy constructor: Do not implement!
-            InstantiationPolicy(const InstantiationPolicy &);
+            InstantiationPolicy(const InstantiationPolicy &) = delete;
 
             /// Unwanted copy assignment operator: Do not implement!
-            InstantiationPolicy & operator= (const InstantiationPolicy &);
+            InstantiationPolicy & operator= (const InstantiationPolicy &) = delete;
 
             /// Unwanted default constructor: Do not implement!
-            InstantiationPolicy();
+            InstantiationPolicy() = delete;
     };
 
     template <typename T_> class InstantiationPolicy<T_, Singleton>
@@ -106,7 +106,7 @@ namespace eos
 
         protected:
             /// Default constructor.
-            InstantiationPolicy() {}
+            InstantiationPolicy() = default;
 
         public:
             /// Returns the instance.

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2005-2011 Ciaran McCreesh
@@ -54,8 +54,8 @@ class IndirectIteratorTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // TEST(IndirectIterator, VectorSharedInt)
             {
@@ -103,7 +103,7 @@ class IndirectIteratorTest : public TestCase
                 TEST_CHECK_EQUAL(10, *vi);
                 TEST_CHECK(++vi == vi_end);
 
-                std::for_each(v.begin(), v.end(), Deleter());
+                std::ranges::for_each(v, Deleter());
             }
 
             // TEST(IndirectIterator, ListIntStar)
@@ -118,7 +118,7 @@ class IndirectIteratorTest : public TestCase
                 TEST_CHECK_EQUAL(10, *vi);
                 TEST_CHECK(++vi == vi_end);
 
-                std::for_each(v.begin(), v.end(), Deleter());
+                std::ranges::for_each(v, Deleter());
             }
 
             // TEST(IndirectIterator, ListIntListIterator)

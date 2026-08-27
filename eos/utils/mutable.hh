@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -39,7 +39,7 @@ namespace eos
             virtual ~Mutable() = 0;
 
             /// Make a copy of this Mutable.
-            virtual MutablePtr clone() const = 0;
+            [[nodiscard]] virtual MutablePtr clone() const = 0;
 
             ///@name Access & Modification of the numeric Value
             ///@{
@@ -51,7 +51,7 @@ namespace eos
 
             /// Retrieve a Mutable's numeric value.
             // TODO: evaluate -> get
-            virtual double evaluate() const = 0;
+            [[nodiscard]] virtual double evaluate() const = 0;
 
             /// Set a Mutable's numeric value.
             virtual const Mutable & operator= (const double &) = 0;
@@ -63,7 +63,7 @@ namespace eos
             ///@name Access to Meta Data
             ///@{
             /// Retrieve the Parameter's name.
-            virtual const std::string & name() const = 0;
+            [[nodiscard]] virtual const std::string & name() const = 0;
             ///@}
     };
 } // namespace eos

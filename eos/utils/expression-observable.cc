@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2024 Danny van Dyk
+ * Copyright (c) 2024-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -28,7 +28,10 @@
 #include <eos/utils/expression-used-parameter-reader.hh>
 #include <eos/utils/log.hh>
 
+#include <algorithm>
+#include <memory>
 #include <set>
+#include <utility>
 
 namespace eos
 {
@@ -48,7 +51,7 @@ namespace eos
         }
 
         exp::ExpressionMaker maker(parameters, kinematics, options, this);
-        _expression = eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(std::visit(maker, *expression))));
+        _expression = std::make_shared<eos::exp::Expression>(std::move(std::visit(maker, *expression)));
 
         exp::ExpressionUsedParameterReader reader;
         std::visit(reader, *_expression);
@@ -80,7 +83,7 @@ namespace eos
         }
 
         exp::ExpressionCacher cacher(cache);
-        _expression = eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(std::visit(cacher, *expression))));
+        _expression = std::make_shared<eos::exp::Expression>(std::move(std::visit(cacher, *expression)));
 
         exp::ExpressionUsedParameterReader reader;
         std::visit(reader, *_expression);
@@ -115,7 +118,7 @@ namespace eos
 
         exp::ExpressionCloner cloner(parameters, kinematics, _options);
 
-        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, ExpressionPtr(new Expression(std::move(std::visit(cloner, *_expression))))));
+        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, std::make_shared<Expression>(std::move(std::visit(cloner, *_expression)))));
     }
 
     ObservablePtr
@@ -125,15 +128,15 @@ namespace eos
 
         exp::ExpressionCloner cloner(parameters, kinematics, _options);
 
-        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, ExpressionPtr(new Expression(std::move(std::visit(cloner, *_expression))))));
+        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, std::make_shared<Expression>(std::move(std::visit(cloner, *_expression)))));
     }
 
-    ExpressionObservableEntry::ExpressionObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, const ExpressionPtr & expression,
+    ExpressionObservableEntry::ExpressionObservableEntry(const QualifiedName & name, std::string latex, const Unit & unit, ExpressionPtr expression,
                                                          const Options & forced_options) :
         _name(name),
-        _latex(latex),
+        _latex(std::move(latex)),
         _unit(unit),
-        _expression(expression),
+        _expression(std::move(expression)),
         _forced_options(forced_options)
     {
         if (_expression == nullptr)
@@ -147,11 +150,11 @@ namespace eos
 
         // Check the absence of overlap between the used kinematic variables and the aliased variables
         std::set<std::string> intersection;
-        std::set_intersection(kinematic_reader.kinematics.begin(),
-                              kinematic_reader.kinematics.end(),
-                              kinematic_reader.aliases.begin(),
-                              kinematic_reader.aliases.end(),
-                              std::inserter(intersection, intersection.begin()));
+        std::ranges::set_intersection(kinematic_reader.kinematics,
+
+                                      kinematic_reader.aliases,
+
+                                      std::inserter(intersection, intersection.begin()));
 
         if (! intersection.empty())
         {

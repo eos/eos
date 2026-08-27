@@ -49,10 +49,10 @@ namespace eos
             using Iterator = WrappedForwardIterator<IteratorTag, ObservablePtr>;
 
             /// Iterator to the first observable.
-            Iterator begin() const;
+            [[nodiscard]] Iterator begin() const;
 
             /// Iterator pointing past the last observable.
-            Iterator end() const;
+            [[nodiscard]] Iterator end() const;
 
             /*!
              * Random access to an observable.
@@ -77,7 +77,7 @@ namespace eos
             Parameters parameters();
 
             /// The total number of elements.
-            unsigned size() const;
+            [[nodiscard]] unsigned size() const;
             ///@}
     };
 

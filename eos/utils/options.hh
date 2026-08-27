@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2025      Florian Herren
  *
  * This file is part of the EOS project. EOS is free software;
@@ -39,7 +39,7 @@ namespace eos
      */
     struct UnknownOptionError : public Exception
     {
-            UnknownOptionError(const qnp::OptionKey & key) throw();
+            UnknownOptionError(const qnp::OptionKey & key) noexcept;
     };
 
     /*!
@@ -47,7 +47,7 @@ namespace eos
      */
     struct InvalidOptionValueError : public Exception
     {
-            InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed = "") throw();
+            InvalidOptionValueError(const qnp::OptionKey & key, const std::string & value, const std::string & allowed = "") noexcept;
     };
 
     /*!
@@ -55,7 +55,7 @@ namespace eos
      */
     struct UnspecifiedOptionError : public Exception
     {
-            UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed = "") throw();
+            UnspecifiedOptionError(const qnp::OptionKey & key, const std::string & allowed = "") noexcept;
     };
 
     /*!
@@ -96,15 +96,15 @@ namespace eos
             ///@{
             const qnp::OptionValue & operator[] (const qnp::OptionKey & key) const;
 
-            bool has(const qnp::OptionKey & key) const;
+            [[nodiscard]] bool has(const qnp::OptionKey & key) const;
 
             void declare(const qnp::OptionKey & key, const qnp::OptionValue & value);
 
-            qnp::OptionValue get(const qnp::OptionKey & key, const qnp::OptionValue & default_value) const;
+            [[nodiscard]] qnp::OptionValue get(const qnp::OptionKey & key, const qnp::OptionValue & default_value) const;
 
-            std::string as_string() const;
+            [[nodiscard]] std::string as_string() const;
 
-            bool empty() const;
+            [[nodiscard]] bool empty() const;
             ///@}
 
             ///@name Iteration over our options
@@ -112,8 +112,8 @@ namespace eos
             struct OptionIteratorTag;
             using OptionIterator = WrappedForwardIterator<OptionIteratorTag, const std::pair<const qnp::OptionKey, qnp::OptionValue>>;
 
-            OptionIterator begin() const;
-            OptionIterator end() const;
+            [[nodiscard]] OptionIterator begin() const;
+            [[nodiscard]] OptionIterator end() const;
             ///@}
     };
 
@@ -128,10 +128,10 @@ namespace eos
     struct OptionSpecification
     {
             OptionSpecification(const OptionSpecification &);
-            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in);
-            OptionSpecification(const qnp::OptionKey & key_in, const std::vector<qnp::OptionValue> & allowed_values_in, const qnp::OptionValue & default_value_in);
-            OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in);
-            OptionSpecification(const qnp::OptionKey & key_in, const qnp::OptionValue & allowed_value_in, const qnp::OptionValue & default_value_in);
+            OptionSpecification(qnp::OptionKey key_in, const std::vector<qnp::OptionValue> & allowed_values_in);
+            OptionSpecification(qnp::OptionKey key_in, const std::vector<qnp::OptionValue> & allowed_values_in, const qnp::OptionValue & default_value_in);
+            OptionSpecification(qnp::OptionKey key_in, const qnp::OptionValue & allowed_value_in);
+            OptionSpecification(qnp::OptionKey key_in, const qnp::OptionValue & allowed_value_in, const qnp::OptionValue & default_value_in);
 
             ~OptionSpecification();
 
@@ -159,7 +159,7 @@ namespace eos
             SpecifiedOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~SpecifiedOption();
 
-            const std::string & value() const;
+            [[nodiscard]] const std::string & value() const;
     };
 
     class RestrictedOption : public SpecifiedOption
@@ -178,8 +178,8 @@ namespace eos
             BooleanOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "true"_ok);
             ~BooleanOption();
 
-            bool                value() const;
-            const std::string & str() const;
+            [[nodiscard]] bool                value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class IntegerOption : public SpecifiedOption
@@ -191,8 +191,8 @@ namespace eos
             IntegerOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~IntegerOption();
 
-            double              value() const;
-            const std::string & str() const;
+            [[nodiscard]] double              value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class FloatOption : public SpecifiedOption
@@ -204,8 +204,8 @@ namespace eos
             FloatOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~FloatOption();
 
-            double              value() const;
-            const std::string & str() const;
+            [[nodiscard]] double              value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class LeptonFlavorOption : public RestrictedOption
@@ -214,8 +214,8 @@ namespace eos
             LeptonFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "l"_ok);
             ~LeptonFlavorOption();
 
-            LeptonFlavor        value() const;
-            const std::string & str() const;
+            [[nodiscard]] LeptonFlavor        value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class QuarkFlavorOption : public RestrictedOption
@@ -224,8 +224,8 @@ namespace eos
             QuarkFlavorOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "q"_ok);
             ~QuarkFlavorOption();
 
-            QuarkFlavor         value() const;
-            const std::string & str() const;
+            [[nodiscard]] QuarkFlavor         value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class LightMesonOption : public RestrictedOption
@@ -234,8 +234,8 @@ namespace eos
             LightMesonOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key);
             ~LightMesonOption();
 
-            LightMeson          value() const;
-            const std::string & str() const;
+            [[nodiscard]] LightMeson          value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class IsospinOption : public SpecifiedOption
@@ -247,8 +247,8 @@ namespace eos
             IsospinOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "I"_ok);
             ~IsospinOption();
 
-            Isospin             value() const;
-            const std::string & str() const;
+            [[nodiscard]] Isospin             value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 
     class PartialWaveOption : public SpecifiedOption
@@ -260,8 +260,8 @@ namespace eos
             PartialWaveOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "L"_ok);
             ~PartialWaveOption();
 
-            PartialWave         value() const;
-            const std::string & str() const;
+            [[nodiscard]] PartialWave         value() const;
+            [[nodiscard]] const std::string & str() const;
     };
 } // namespace eos
 

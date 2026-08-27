@@ -29,6 +29,7 @@
 #include <iostream>
 #include <map>
 #include <memory>
+#include <utility>
 
 namespace eos::exp
 {
@@ -54,12 +55,12 @@ namespace eos::exp
 
             static BinaryExpression::func Method(char op);
 
-            BinaryExpression() {}
+            BinaryExpression() = default;
 
-            BinaryExpression(char op, const ExpressionPtr & l, const ExpressionPtr & r) :
+            BinaryExpression(char op, ExpressionPtr l, ExpressionPtr r) :
                 op(op),
-                lhs(l),
-                rhs(r)
+                lhs(std::move(l)),
+                rhs(std::move(r))
             {
             }
     };
@@ -73,9 +74,9 @@ namespace eos::exp
             std::string   fname;
             ExpressionPtr arg;
 
-            FunctionExpression() {}
+            FunctionExpression() = default;
 
-            FunctionExpression(const std::string & f, const ExpressionPtr & arg);
+            FunctionExpression(const std::string & f, ExpressionPtr arg);
     };
 
     class ConstantExpression
@@ -113,8 +114,8 @@ namespace eos::exp
         public:
             std::string variable_name;
 
-            KinematicVariableNameExpression(const std::string & variable_name) :
-                variable_name(variable_name)
+            KinematicVariableNameExpression(std::string variable_name) :
+                variable_name(std::move(variable_name))
             {
             }
     };
@@ -136,9 +137,9 @@ namespace eos::exp
             QualifiedName           observable_name;
             KinematicsSpecification kinematics_specification;
 
-            ObservableNameExpression(const QualifiedName & observable_name, const KinematicsSpecification & kinematics_specification) :
+            ObservableNameExpression(const QualifiedName & observable_name, KinematicsSpecification kinematics_specification) :
                 observable_name(observable_name),
-                kinematics_specification(kinematics_specification)
+                kinematics_specification(std::move(kinematics_specification))
             {
             }
     };
@@ -149,9 +150,9 @@ namespace eos::exp
             ObservablePtr           observable;
             KinematicsSpecification kinematics_specification;
 
-            ObservableExpression(ObservablePtr observable, const KinematicsSpecification & kinematics_specification) :
-                observable(observable),
-                kinematics_specification(kinematics_specification)
+            ObservableExpression(ObservablePtr observable, KinematicsSpecification kinematics_specification) :
+                observable(std::move(observable)),
+                kinematics_specification(std::move(kinematics_specification))
             {
             }
     };
@@ -163,10 +164,10 @@ namespace eos::exp
             ObservableCache::ObservableId id;
             KinematicsSpecification       kinematics_specification;
 
-            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::ObservableId & id, const KinematicsSpecification & kinematics_specification) :
+            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::ObservableId & id, KinematicsSpecification kinematics_specification) :
                 cache(cache),
                 id(id),
-                kinematics_specification(kinematics_specification)
+                kinematics_specification(std::move(kinematics_specification))
             {
             }
     };

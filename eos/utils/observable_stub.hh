@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,21 +31,21 @@ namespace eos
         public:
             ObservableStub(const Parameters & parameters, const QualifiedName & name, const Kinematics & kinematics = Kinematics());
 
-            ~ObservableStub();
+            ~ObservableStub() override;
 
-            virtual const QualifiedName & name() const;
+            [[nodiscard]] const QualifiedName & name() const override;
 
-            virtual double evaluate() const;
+            [[nodiscard]] double evaluate() const override;
 
-            virtual Kinematics kinematics();
+            Kinematics kinematics() override;
 
-            virtual Parameters parameters();
+            Parameters parameters() override;
 
-            virtual Options options();
+            Options options() override;
 
-            virtual ObservablePtr clone() const;
+            [[nodiscard]] ObservablePtr clone() const override;
 
-            virtual ObservablePtr clone(const Parameters & parameters) const;
+            [[nodiscard]] ObservablePtr clone(const Parameters & parameters) const override;
     };
 } // namespace eos
 

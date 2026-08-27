@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #include <boost/fusion/adapted.hpp>
 #include <boost/spirit/include/qi.hpp>
 
+#include <memory>
 #include <utility>
 
 namespace eos
@@ -48,20 +49,19 @@ namespace eos
 
         exponential_expr = primary_expr[_val = _1] >> -(char_("^") >> primary_expr)[_val = phx::bind(make_binary, _1, _val, _2)];
 
-        auto make_double_constant = [](const double & value) -> eos::exp::ExpressionPtr
-        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::ConstantExpression(value)))); };
+        auto make_double_constant = [](const double & value) -> eos::exp::ExpressionPtr { return std::make_shared<eos::exp::Expression>(eos::exp::ConstantExpression(value)); };
 
         auto make_int_constant = [](const int & value) -> eos::exp::ExpressionPtr
-        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::ConstantExpression(static_cast<double>(value))))); };
+        { return std::make_shared<eos::exp::Expression>(eos::exp::ConstantExpression(static_cast<double>(value))); };
 
         auto make_observable = [](const std::string & name, const KinematicsSpecification & spec) -> eos::exp::ExpressionPtr
-        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::ObservableNameExpression(name, spec)))); };
+        { return std::make_shared<eos::exp::Expression>(std::move(eos::exp::ObservableNameExpression(name, spec))); };
 
         auto make_parameter = [](const std::string & name) -> eos::exp::ExpressionPtr
-        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::ParameterNameExpression(name)))); };
+        { return std::make_shared<eos::exp::Expression>(std::move(eos::exp::ParameterNameExpression(name))); };
 
         auto make_kinematic_variable = [](const std::string & name) -> eos::exp::ExpressionPtr
-        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::KinematicVariableNameExpression(name)))); };
+        { return std::make_shared<eos::exp::Expression>(std::move(eos::exp::KinematicVariableNameExpression(name))); };
 
         primary_expr = ('(' >> expression >> ')')[_val = _1] | constant[_val = _1] | (observable_name >> kinematics)[_val = phx::bind(make_observable, _1, _2)]
                        | observable_name[_val = phx::bind(make_observable, _1, KinematicsSpecification())] | parameter_name[_val = phx::bind(make_parameter, _1)]
@@ -89,7 +89,7 @@ namespace eos
         function_name = *(string("exp") | string("cos") | string("sin"));
     }
 
-    template <typename Iterator> ExpressionParser<Iterator>::~ExpressionParser() {}
+    template <typename Iterator> ExpressionParser<Iterator>::~ExpressionParser() = default;
 } // namespace eos
 
 #endif

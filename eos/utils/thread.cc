@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007, 2008, 2010 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2007-2026 Danny van Dyk
  *
  * Based upon 'thread.cc' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
@@ -30,6 +30,7 @@
 #include <cerrno>
 #include <cstring>
 #include <pthread.h>
+#include <utility>
 
 namespace eos
 {
@@ -45,12 +46,12 @@ namespace eos
             Mutex * const mutex;
 
             /// Our completion state.
-            bool completed;
+            bool completed{ false };
 
             static void *
             thread_function(void * argument)
             {
-                Implementation * imp(static_cast<Implementation *>(argument));
+                auto * imp(static_cast<Implementation *>(argument));
 
                 /// \todo Implement exception handling for the call to function.
                 try
@@ -73,18 +74,17 @@ namespace eos
                 Lock l(*imp->mutex);
                 imp->completed = true;
 
-                pthread_exit(0);
+                pthread_exit(nullptr);
             }
 
-            Implementation(const Thread::Function & f) :
-                function(f),
+            Implementation(Thread::Function f) :
+                function(std::move(f)),
                 thread(new pthread_t),
-                mutex(new Mutex),
-                completed(false)
+                mutex(new Mutex)
             {
                 int retval;
 
-                if (0 != (retval = pthread_create(thread, 0, &thread_function, this)))
+                if (0 != (retval = pthread_create(thread, nullptr, &thread_function, this)))
                 {
                     throw InternalError("pthread_create failed, " + std::string(strerror(retval)));
                 }
@@ -92,7 +92,7 @@ namespace eos
 
             ~Implementation()
             {
-                pthread_join(*thread, 0);
+                pthread_join(*thread, nullptr);
 
                 delete thread;
                 delete mutex;
@@ -104,7 +104,7 @@ namespace eos
     {
     }
 
-    Thread::~Thread() {}
+    Thread::~Thread() = default;
 
     bool
     Thread::completed() const

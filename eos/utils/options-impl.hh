@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2018      Ahmet Kokulu
  * Copyright (c) 2018      Christoph Bobeth
  *
@@ -72,7 +72,7 @@ namespace eos
                 }
             }
 
-            const qnp::Name &
+            [[nodiscard]] const qnp::Name &
             value() const
             {
                 return *_value;
@@ -99,7 +99,7 @@ namespace eos
 
                 _value = options[key].str();
 
-                if (std::find(allowed_values.begin(), allowed_values.end(), qnp::OptionValue(_value)) == allowed_values.end())
+                if (std::ranges::find(allowed_values, qnp::OptionValue(_value)) == allowed_values.end())
                 {
                     throw InvalidOptionValueError(key, _value, join(allowed_values.begin(), allowed_values.end()));
                 }
@@ -114,13 +114,13 @@ namespace eos
                     throw InternalError("SwitchOption: The list of allowed_values is empty");
                 }
 
-                if (std::find(allowed_values.begin(), allowed_values.end(), default_value) == allowed_values.end())
+                if (std::ranges::find(allowed_values, default_value) == allowed_values.end())
                 {
                     throw InternalError("SwitchOption: The default value '" + default_value.str() + "' is not in the list of allowed values: '"
                                         + join(allowed_values.begin(), allowed_values.end()) + "'");
                 }
 
-                if (std::find(allowed_values.begin(), allowed_values.end(), qnp::OptionValue(_value)) == allowed_values.end())
+                if (std::ranges::find(allowed_values, qnp::OptionValue(_value)) == allowed_values.end())
                 {
                     throw InvalidOptionValueError(key, _value, join(allowed_values.begin(), allowed_values.end()));
                 }
@@ -128,7 +128,7 @@ namespace eos
 
             ~SwitchOption() = default;
 
-            const std::string &
+            [[nodiscard]] const std::string &
             value() const
             {
                 return _value;

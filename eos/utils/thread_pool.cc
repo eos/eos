@@ -47,8 +47,8 @@ namespace eos
             ConditionVariable * const job_arrival;
             ConditionVariable * const job_capacity;
 
-            unsigned long waiting_for_jobs;
-            unsigned long pending_jobs;
+            unsigned long waiting_for_jobs{ 0 };
+            unsigned long pending_jobs{ 0 };
 
             std::list<std::pair<Ticket, std::function<void(void)>>> queue;
 
@@ -131,8 +131,8 @@ namespace eos
                 const char * env_max_threads = std::getenv("EOS_MAX_THREADS");
                 if (env_max_threads)
                 {
-                    unsigned max_threads = destringify<unsigned>(env_max_threads);
-                    result               = std::min(result, max_threads);
+                    auto max_threads = destringify<unsigned>(env_max_threads);
+                    result           = std::min(result, max_threads);
                 }
 
                 return result;
@@ -145,13 +145,11 @@ namespace eos
                 terminate(false),
                 job_mutex(new Mutex),
                 job_arrival(new ConditionVariable),
-                job_capacity(new ConditionVariable),
-                waiting_for_jobs(0),
-                pending_jobs(0)
+                job_capacity(new ConditionVariable)
             {
                 for (unsigned i(0); i < number_of_threads; ++i)
                 {
-                    threads.push_back(new Thread(std::bind(&Implementation<ThreadPool>::thread_function, this)));
+                    threads.push_back(new Thread([this] { thread_function(); }));
                 }
             }
 
@@ -177,7 +175,7 @@ namespace eos
     {
     }
 
-    ThreadPool::~ThreadPool() {}
+    ThreadPool::~ThreadPool() = default;
 
     Ticket
     ThreadPool::enqueue(const std::function<void(void)> & job)
@@ -186,7 +184,7 @@ namespace eos
 
         {
             Lock l(*_imp->job_mutex);
-            _imp->queue.push_back(std::make_pair(ticket, job));
+            _imp->queue.emplace_back(ticket, job);
             _imp->pending_jobs += 1;
 
             if (_imp->waiting_for_jobs > 0)

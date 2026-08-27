@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2025 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -36,8 +36,8 @@ class OptionsTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // Creation from initializer list
             {
@@ -157,8 +157,8 @@ class NameOptionTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // Creation with valid default value, value = default value
             {
@@ -201,8 +201,8 @@ class SwitchOptionTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // Creation with valid default value, value = default value, non-empty list
             {
@@ -287,8 +287,8 @@ class SpecifiedOptionTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // specify permitted options
             std::vector<OptionSpecification> specifications{
@@ -337,8 +337,8 @@ class RestrictedOptionTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // specify permitted options
             std::vector<OptionSpecification> specifications{
@@ -411,8 +411,8 @@ class IsospinOptionTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // correctly specify permitted options
             std::vector<OptionSpecification> specifications{
@@ -470,8 +470,8 @@ class PartialWaveOptionTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             // correctly specify permitted options
             std::vector<OptionSpecification> specifications{

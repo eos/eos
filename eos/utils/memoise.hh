@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2013, 2022 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2010 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -166,7 +166,7 @@ namespace eos
                 _memoisations.clear();
             }
 
-            unsigned
+            [[nodiscard]] unsigned
             number_of_memoisations() const
             {
                 Lock l(*_mutex);

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=140 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,8 +35,8 @@ class NameTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto p = rnp::Name("IKMvD"));
             TEST_CHECK_NO_THROW(auto p = rnp::Name("KMPW"));
@@ -60,8 +60,8 @@ class YearTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto n = rnp::Year("0000"));
             TEST_CHECK_NO_THROW(auto n = rnp::Year("1905"));
@@ -84,8 +84,8 @@ class IndexTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto p = rnp::Index("A"));
             TEST_CHECK_NO_THROW(auto p = rnp::Index("Z"));
@@ -105,8 +105,8 @@ class ReferenceNameTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             TEST_CHECK_NO_THROW(auto qn = ReferenceName("A:2010A"));
             TEST_CHECK_NO_THROW(auto qn = ReferenceName("IKMvD:2014A"));

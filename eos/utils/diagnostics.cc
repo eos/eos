@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -41,7 +41,7 @@ namespace eos
     {
     }
 
-    Diagnostics::~Diagnostics() {}
+    Diagnostics::~Diagnostics() = default;
 
     void
     Diagnostics::add(const Entry & entry)

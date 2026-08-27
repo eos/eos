@@ -47,7 +47,7 @@ namespace eos
             Context(const std::string & entry, const source_location = source_location::current());
             ~Context() noexcept(false);
 
-            std::string backtrace(const std::string & delimiter) const;
+            [[nodiscard]] std::string backtrace(const std::string & delimiter) const;
     };
 
     class Exception : public std::exception
@@ -59,39 +59,39 @@ namespace eos
             const std::unique_ptr<ContextData> _context_data;
 
         protected:
-            Exception(const std::string & message) noexcept;
+            Exception(std::string message) noexcept;
             Exception(const Exception &);
 
         public:
-            ~Exception() noexcept;
+            ~Exception() noexcept override;
 
-            std::string backtrace(const std::string & delimiter) const;
+            [[nodiscard]] std::string backtrace(const std::string & delimiter) const;
 
-            virtual const char * what() const noexcept override;
+            [[nodiscard]] const char * what() const noexcept override;
     };
 
     class InternalError : public Exception
     {
         public:
-            InternalError(const std::string & message) throw();
+            InternalError(const std::string & message) noexcept;
     };
 
     class UnknownObservableError : public Exception
     {
         public:
-            UnknownObservableError(const std::string & message) throw();
+            UnknownObservableError(const std::string & message) noexcept;
     };
 
     class GSLError : public Exception
     {
         public:
-            GSLError(const std::string & message) throw();
+            GSLError(const std::string & message) noexcept;
     };
 
     class ParsingError : public Exception
     {
         public:
-            ParsingError(const std::string & message) throw();
+            ParsingError(const std::string & message) noexcept;
     };
 } // namespace eos
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007, 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2007-2026 Danny van Dyk
  *
  * Based upon 'condition_variable.cc' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
@@ -28,7 +28,7 @@ namespace eos
     ConditionVariable::ConditionVariable() :
         _cond(new pthread_cond_t)
     {
-        pthread_cond_init(_cond, 0);
+        pthread_cond_init(_cond, nullptr);
     }
 
     ConditionVariable::~ConditionVariable()

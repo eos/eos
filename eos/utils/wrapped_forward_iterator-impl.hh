@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * Copied from the Paludis package manager, which is
  * Copyright (c) 2007-2009 Ciaran McCreesh
@@ -168,7 +168,7 @@ namespace eos
         R_
         get_pointer(T_ * t)
         {
-            return GetPointer<R_, T_, std::is_pointer<T_>::value>::get_pointer(t);
+            return GetPointer<R_, T_, std::is_pointer_v<T_>>::get_pointer(t);
         }
     } // namespace impl
 
@@ -206,7 +206,7 @@ namespace eos
         R_
         get_reference(T_ * t)
         {
-            return GetReference<R_, T_, std::is_pointer<T_>::value>::get_reference(t);
+            return GetReference<R_, T_, std::is_pointer_v<T_>>::get_reference(t);
         }
     } // namespace impl
 

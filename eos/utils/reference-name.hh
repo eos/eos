@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -36,7 +36,7 @@ namespace eos
             public:
                 Name(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _name;
@@ -57,7 +57,7 @@ namespace eos
             public:
                 Year(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _year;
@@ -78,13 +78,13 @@ namespace eos
             public:
                 Index(const std::string &);
 
-                const std::string &
+                [[nodiscard]] const std::string &
                 str() const
                 {
                     return _index;
                 }
 
-                bool
+                [[nodiscard]] bool
                 empty() const
                 {
                     return _index.empty();
@@ -127,25 +127,25 @@ namespace eos
             ReferenceName(const ReferenceName & other);
             ~ReferenceName();
 
-            inline const std::string &
+            [[nodiscard]] inline const std::string &
             str() const
             {
                 return _str;
             }
 
-            inline const rnp::Name &
+            [[nodiscard]] inline const rnp::Name &
             name_part() const
             {
                 return _name;
             }
 
-            inline const rnp::Year &
+            [[nodiscard]] inline const rnp::Year &
             year_part() const
             {
                 return _year;
             }
 
-            inline const rnp::Index &
+            [[nodiscard]] inline const rnp::Index &
             index_part() const
             {
                 return _index;
@@ -173,7 +173,7 @@ namespace eos
     inline ReferenceName
     operator""_rn (const char * c, size_t)
     {
-        return ReferenceName(c);
+        return { c };
     }
 
     class ReferenceNameSyntaxError : public Exception

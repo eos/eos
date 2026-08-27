@@ -24,6 +24,7 @@
 
 #include <cmath>
 #include <memory>
+#include <utility>
 
 using namespace test;
 using namespace eos;
@@ -40,8 +41,8 @@ _parameter_names(const Parameters & p, std::integer_sequence<T, indices...>) -> 
 
 template <unsigned nchannels_, unsigned nresonances_> struct PPchannel : public KMatrix<nchannels_, nresonances_>::Channel
 {
-        PPchannel(std::string name, Parameter m1, Parameter m2, unsigned l_orbital, const Parameters & p) :
-            KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, l_orbital, p["test::q0"], _parameter_names(p, std::make_index_sequence<nresonances_>()))
+        PPchannel(std::string name, const Parameter & m1, const Parameter & m2, unsigned l_orbital, const Parameters & p) :
+            KMatrix<nchannels_, nresonances_>::Channel(std::move(name), m1, m2, l_orbital, p["test::q0"], _parameter_names(p, std::make_index_sequence<nresonances_>()))
         {
         }
 
@@ -59,7 +60,7 @@ template <unsigned nchannels_, unsigned nresonances_> struct PPchannel : public 
         const complex<double> i  = complex<double>(0.0, 1.0);
 
         complex<double>
-        rho(const complex<double> & s)
+        rho(const complex<double> & s) override
         {
             if (real(s) < mp * mp)
             {
@@ -72,7 +73,7 @@ template <unsigned nchannels_, unsigned nresonances_> struct PPchannel : public 
         }
 
         complex<double>
-        chew_mandelstam(const complex<double> & S)
+        chew_mandelstam(const complex<double> & S) override
         {
             double s = real(S);
 
@@ -107,8 +108,8 @@ template <unsigned nchannels_, unsigned nresonances_> struct PPchannel : public 
 
 template <unsigned nchannels_, unsigned nresonances_> struct resonance : public KMatrix<nchannels_, nresonances_>::Resonance
 {
-        resonance(std::string name, Parameter m) :
-            KMatrix<nchannels_, nresonances_>::Resonance(name, m)
+        resonance(std::string name, const Parameter & m) :
+            KMatrix<nchannels_, nresonances_>::Resonance(std::move(name), m)
         {
         }
 };
@@ -130,8 +131,8 @@ class KMatrixTest : public TestCase
         {
         }
 
-        virtual void
-        run() const
+        void
+        run() const override
         {
             constexpr double eps = 1e-4;
 

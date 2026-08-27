@@ -43,7 +43,7 @@ namespace eos
      */
     struct UnknownParameterError : public Exception
     {
-            UnknownParameterError(const QualifiedName & variable) throw();
+            UnknownParameterError(const QualifiedName & variable) noexcept;
     };
 
     /*!
@@ -52,7 +52,7 @@ namespace eos
      */
     struct ParameterInputFileParseError : public Exception
     {
-            ParameterInputFileParseError(const std::string & file, const std::string & msg) throw();
+            ParameterInputFileParseError(const std::string & file, const std::string & msg) noexcept;
     };
 
     /*!
@@ -61,7 +61,7 @@ namespace eos
      */
     struct ParameterInputFileNodeError : public Exception
     {
-            ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) throw();
+            ParameterInputFileNodeError(const std::string & file, const std::string & node, const std::string & msg) noexcept;
     };
 
     /*!
@@ -70,7 +70,7 @@ namespace eos
      */
     struct ParameterInputDuplicateError : public Exception
     {
-            ParameterInputDuplicateError(const std::string & file, const std::string & msg) throw();
+            ParameterInputDuplicateError(const std::string & file, const std::string & msg) noexcept;
     };
 
     /*!
@@ -116,7 +116,7 @@ namespace eos
              */
             static Parameters Defaults();
 
-            Parameters clone() const;
+            [[nodiscard]] Parameters clone() const;
             /*!
              * Destructor.
              */
@@ -128,8 +128,8 @@ namespace eos
             struct IteratorTag;
             using Iterator = WrappedForwardIterator<IteratorTag, Parameter>;
 
-            Iterator begin() const;
-            Iterator end() const;
+            [[nodiscard]] Iterator begin() const;
+            [[nodiscard]] Iterator end() const;
             ///@}
 
             ///@name Iteration over parameter sections
@@ -137,8 +137,8 @@ namespace eos
             struct SectionIteratorTag;
             using SectionIterator = WrappedForwardIterator<SectionIteratorTag, const ParameterSection &>;
 
-            SectionIterator begin_sections() const;
-            SectionIterator end_sections() const;
+            [[nodiscard]] SectionIterator begin_sections() const;
+            [[nodiscard]] SectionIterator end_sections() const;
             ///@}
 
             ///@name Access to default parameters
@@ -211,7 +211,7 @@ namespace eos
              *
              * @param name  The name to be checked against the known parameters.
              */
-            bool has(const QualifiedName & name) const;
+            [[nodiscard]] bool has(const QualifiedName & name) const;
 
             /*!
              * Retrieve a parameter's Parameter object by name.
@@ -283,31 +283,31 @@ namespace eos
             Parameter(const Parameter & other);
 
             /// Destructor.
-            ~Parameter();
+            ~Parameter() override;
 
             /// Make a copy of this Parameter as a MutablePtr.
-            MutablePtr clone() const;
+            [[nodiscard]] MutablePtr clone() const override;
             ///@}
 
             ///@name Access & Modification of the Numeric Value
             ///@{
             /// Cast a Parameter's numeric value to a double.
-            virtual operator double () const;
+            operator double () const override;
 
             /// Retrieve a Parameter's numeric value.
-            virtual double operator() () const;
+            double operator() () const override;
 
             /// Retrieve a Parameter's numeric value.
-            virtual double evaluate() const;
+            [[nodiscard]] double evaluate() const override;
 
             /// Retrieve a Parameter's generator value, used for prior sampling.
-            virtual double evaluate_generator() const;
+            [[nodiscard]] virtual double evaluate_generator() const;
 
             /// Set a Parameter's numeric value.
-            virtual const Parameter & operator= (const double &);
+            const Parameter & operator= (const double &) override;
 
             /// Set a Parameter's numeric value.
-            virtual void set(const double &);
+            void set(const double &) override;
 
             /// Set a Parameter's generator value, used for prior sampling.
             virtual void set_generator(const double &);
@@ -316,31 +316,31 @@ namespace eos
             ///@name Access to Meta Data
             ///@{
             /// Retrieve the Parameter's name.
-            virtual const std::string & name() const;
+            [[nodiscard]] const std::string & name() const override;
 
             /// Retrieve the Parameter's (default) central value.
-            const double & central() const;
+            [[nodiscard]] const double & central() const;
 
             /// Retrieve the Parameter's (default) maximal value.
-            const double & max() const;
+            [[nodiscard]] const double & max() const;
 
             /// Set the Parameter's maximal value.
             void set_max(const double &);
 
             /// Retrieve the Parameter's (default) minimal value.
-            const double & min() const;
+            [[nodiscard]] const double & min() const;
 
             /// Set the Parameter's maximal value.
             void set_min(const double &);
 
             /// Retrieve the Parameter's id.
-            Id id() const;
+            [[nodiscard]] Id id() const;
 
             /// Retrieve the Parameter's name as a LaTeX representation
-            const std::string & latex() const;
+            [[nodiscard]] const std::string & latex() const;
 
             /// Retrieve the Parameter's unit
-            Unit unit() const;
+            [[nodiscard]] Unit unit() const;
             ///@}
     };
 
@@ -361,14 +361,14 @@ namespace eos
             struct GroupIteratorTag;
             using GroupIterator = WrappedForwardIterator<GroupIteratorTag, const ParameterGroup &>;
 
-            GroupIterator begin() const;
-            GroupIterator end() const;
+            [[nodiscard]] GroupIterator begin() const;
+            [[nodiscard]] GroupIterator end() const;
             ///@}
 
             ///@name Meta data
             ///@{
-            const std::string & name() const;
-            const std::string & description() const;
+            [[nodiscard]] const std::string & name() const;
+            [[nodiscard]] const std::string & description() const;
             ///@}
     };
     extern template class WrappedForwardIterator<ParameterSection::GroupIteratorTag, const ParameterGroup &>;
@@ -390,14 +390,14 @@ namespace eos
             struct ParameterIteratorTag;
             using ParameterIterator = WrappedForwardIterator<ParameterIteratorTag, const Parameter>;
 
-            ParameterIterator begin() const;
-            ParameterIterator end() const;
+            [[nodiscard]] ParameterIterator begin() const;
+            [[nodiscard]] ParameterIterator end() const;
             ///@}
 
             ///@name Meta data
             ///@{
-            const std::string & name() const;
-            const std::string & description() const;
+            [[nodiscard]] const std::string & name() const;
+            [[nodiscard]] const std::string & description() const;
             ///@}
     };
     extern template class WrappedForwardIterator<ParameterGroup::ParameterIteratorTag, const Parameter>;
@@ -416,8 +416,8 @@ namespace eos
             struct ConstIteratorTag;
             using ConstIterator = WrappedForwardIterator<ConstIteratorTag, const Parameter::Id>;
 
-            ConstIterator begin() const;
-            ConstIterator end() const;
+            [[nodiscard]] ConstIterator begin() const;
+            [[nodiscard]] ConstIterator end() const;
             ///@}
 
             ///@name Access

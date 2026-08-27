@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2011 Christian Wacker
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 #define EOS_GUARD_EOS_UTILS_CARTESIAN_PRODUCT_HH 1
 
 #include <cstddef>
+#include <utility>
 #include <vector>
 
 namespace eos
@@ -42,7 +43,7 @@ namespace eos
             IteratorState _begin, _end;
 
             // The overall number of elements stored in CartesianProduct.
-            size_t _size;
+            size_t _size{ 0 };
 
             using Sizes = std::vector<size_t>;
             Sizes _sizes;
@@ -57,9 +58,9 @@ namespace eos
                     bool              _at_end;
                     std::vector<long> _values;
 
-                    _Iterator(const IteratorState & state, const Sizes & sizes, bool atEnd) :
+                    _Iterator(const IteratorState & state, Sizes sizes, bool atEnd) :
                         _state(state),
-                        _sizes(sizes),
+                        _sizes(std::move(sizes)),
                         _at_end(atEnd),
                         _values(state.size(), 0)
                     {
@@ -155,10 +156,7 @@ namespace eos
             /*!
              * Initializes an empty CartesianProduct.
              */
-            CartesianProduct() :
-                _size(0)
-            {
-            }
+            CartesianProduct() = default;
 
             /*!
              * Adds another container of type T_ to the CartesianProduct. So in some sense a multiplication
@@ -208,7 +206,7 @@ namespace eos
              * Returns the number of elements stored in CartesianProduct. This is the product of the
              * sizes of each stored container.
              */
-            size_t
+            [[nodiscard]] size_t
             size() const
             {
                 return _size;

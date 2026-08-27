@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2019 Stephan Kürten
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -20,26 +20,23 @@
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kmatrix.hh>
 
-namespace eos
+namespace eos::kmatrix_utils
 {
-    namespace kmatrix_utils
+    complex<double>
+    blatt_weisskopf_factor(const unsigned & l, const complex<double> & z)
     {
-        complex<double>
-        blatt_weisskopf_factor(const unsigned & l, const complex<double> & z)
-        {
-            const complex<double> z2 = z * z;
+        const complex<double> z2 = z * z;
 
-            switch (l)
-            {
-                // We use the definitions of the PDG's resonance review
-                // they agree with [CBHKSS:1995A], keeping only the denominator (numerators are accounted for in the K matrix definition)
-                case 0:  return 1.0;
-                case 1:  return std::sqrt(1.0 / (z2 + 1.0));
-                case 2:  return std::sqrt(1.0 / (9.0 + z2 * (3.0 + z2)));
-                case 3:  return std::sqrt(1.0 / (z2 * power_of<2>(z2 - 15.0) + 9.0 * power_of<2>(2.0 * z2 - 5.0))); // This one is wrong in [CBHKSS:1995A]
-                case 4:  return std::sqrt(1.0 / (power_of<2>(power_of<2>(z2) - 45.0 * z2 + 105.0) + 25.0 * z2 * power_of<2>(2.0 * z2 - 21.0)));
-                default: throw InternalError("Blatt-Weisskopf factors are not implemented for l > 4.");
-            }
+        switch (l)
+        {
+            // We use the definitions of the PDG's resonance review
+            // they agree with [CBHKSS:1995A], keeping only the denominator (numerators are accounted for in the K matrix definition)
+            case 0:  return 1.0;
+            case 1:  return std::sqrt(1.0 / (z2 + 1.0));
+            case 2:  return std::sqrt(1.0 / (9.0 + z2 * (3.0 + z2)));
+            case 3:  return std::sqrt(1.0 / (z2 * power_of<2>(z2 - 15.0) + 9.0 * power_of<2>(2.0 * z2 - 5.0))); // This one is wrong in [CBHKSS:1995A]
+            case 4:  return std::sqrt(1.0 / (power_of<2>(power_of<2>(z2) - 45.0 * z2 + 105.0) + 25.0 * z2 * power_of<2>(2.0 * z2 - 21.0)));
+            default: throw InternalError("Blatt-Weisskopf factors are not implemented for l > 4.");
         }
-    } // namespace kmatrix_utils
-} // namespace eos
+    }
+} // namespace eos::kmatrix_utils

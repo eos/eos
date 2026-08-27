@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2007, 2008, 2010, 2015 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2007-2026 Danny van Dyk
  *
  * Based upon 'thread.hh' from Paludis, which is:
  *     Copyright (c) 2007 Ciaran McCreesh
@@ -59,7 +59,7 @@ namespace eos
             /// \}
 
             /// Return wether we have yet completed executing our function.
-            bool completed() const;
+            [[nodiscard]] bool completed() const;
     };
 } // namespace eos
 

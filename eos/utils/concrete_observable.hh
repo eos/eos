@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -31,6 +31,7 @@
 #include <functional>
 #include <string>
 #include <tuple>
+#include <utility>
 
 namespace eos
 {
@@ -80,46 +81,46 @@ namespace eos
                 uses(Decay_::references);
             }
 
-            virtual const QualifiedName &
-            name() const
+            [[nodiscard]] const QualifiedName &
+            name() const override
             {
                 return _name;
             }
 
-            virtual double
-            evaluate() const
+            [[nodiscard]] double
+            evaluate() const override
             {
                 std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type...> values = _argument_tuple;
 
                 return std::apply(_function, values);
             }
 
-            virtual Parameters
-            parameters()
+            Parameters
+            parameters() override
             {
                 return _parameters;
             }
 
-            virtual Kinematics
-            kinematics()
+            Kinematics
+            kinematics() override
             {
                 return _kinematics;
             }
 
-            virtual Options
-            options()
+            Options
+            options() override
             {
                 return _options;
             }
 
-            virtual ObservablePtr
-            clone() const
+            [[nodiscard]] ObservablePtr
+            clone() const override
             {
                 return ObservablePtr(new ConcreteObservable(_name, _parameters.clone(), _kinematics.clone(), _options, _function, _kinematics_names));
             }
 
-            virtual ObservablePtr
-            clone(const Parameters & parameters) const
+            [[nodiscard]] ObservablePtr
+            clone(const Parameters & parameters) const override
             {
                 return ObservablePtr(new ConcreteObservable(_name, parameters, _kinematics.clone(), _options, _function, _kinematics_names));
             }
@@ -143,11 +144,10 @@ namespace eos
             Options _forced_options;
 
         public:
-            ConcreteObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
-                                    const std::function<double(const Decay_ *, const Args_ &...)> &            function,
+            ConcreteObservableEntry(const QualifiedName & name, std::string latex, const Unit & unit, const std::function<double(const Decay_ *, const Args_ &...)> & function,
                                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names, const Options & forced_options) :
                 _name(name),
-                _latex(latex),
+                _latex(std::move(latex)),
                 _unit(unit),
                 _function(function),
                 _kinematics_names(kinematics_names),
@@ -156,52 +156,52 @@ namespace eos
             {
             }
 
-            ~ConcreteObservableEntry() {}
+            ~ConcreteObservableEntry() override = default;
 
-            virtual const QualifiedName &
-            name() const
+            [[nodiscard]] const QualifiedName &
+            name() const override
             {
                 return _name;
             }
 
-            virtual const std::string &
-            latex() const
+            [[nodiscard]] const std::string &
+            latex() const override
             {
                 return _latex;
             }
 
-            virtual const Unit &
-            unit() const
+            [[nodiscard]] const Unit &
+            unit() const override
             {
                 return _unit;
             }
 
-            virtual ObservableEntry::KinematicVariableIterator
-            begin_kinematic_variables() const
+            [[nodiscard]] ObservableEntry::KinematicVariableIterator
+            begin_kinematic_variables() const override
             {
                 return _kinematics_names_array.begin();
             }
 
-            virtual ObservableEntry::KinematicVariableIterator
-            end_kinematic_variables() const
+            [[nodiscard]] ObservableEntry::KinematicVariableIterator
+            end_kinematic_variables() const override
             {
                 return _kinematics_names_array.end();
             }
 
-            virtual ObservableEntry::OptionIterator
-            begin_options() const
+            [[nodiscard]] ObservableEntry::OptionIterator
+            begin_options() const override
             {
                 return Decay_::begin_options();
             }
 
-            virtual ObservableEntry::OptionIterator
-            end_options() const
+            [[nodiscard]] ObservableEntry::OptionIterator
+            end_options() const override
             {
                 return Decay_::end_options();
             }
 
-            virtual ObservablePtr
-            make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
+            [[nodiscard]] ObservablePtr
+            make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const override
             {
                 for (const auto & [key, forced_value] : _forced_options)
                 {
