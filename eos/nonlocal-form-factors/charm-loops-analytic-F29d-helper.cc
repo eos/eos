@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -38,14 +36,15 @@
 
 namespace eos
 {
-	using std::complex;
-	using std::log;
-	using std::real;
-	using std::imag;
+    using std::complex;
+    using std::imag;
+    using std::log;
+    using std::real;
 
-	namespace agv_2019a
-	{
-        complex<double> f29d_part6(const CharmLoopsParameters & clp)
+    namespace agv_2019a
+    {
+        complex<double>
+        f29d_part6(const CharmLoopsParameters & clp)
         {
             const complex<double> xd = clp.xd;
             const complex<double> yd = clp.yd;
@@ -74,6 +73,7 @@ namespace eos
             const complex<double> ln1pyd = log(1.0 + yd);
             const complex<double> ln1myd = log(1.0 - yd);
 
+            // clang-format off
             const complex<double> result = (trilog((2.0 * yd) / (-1.0 + yd)) * (16.0 * log(1.0 - 1.0i * xd) + 16.0 * log(1.0 + 1.0i * xd) - 16.0 * log(xd)) + trilog((2.0 * yd) / (1.0 + yd)) * (16.0 * log(1.0 - 1.0i * xd) + 16.0 * log(1.0 + 1.0i * xd) - 16.0 * log(xd))
                 + trilog(1.0 + w4inv) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log(xd)) + trilog(1.0 / (1.0 - w4)) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log(xd))
                 + trilog(-w4inv) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log(xd)) + trilog(w4inv) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log(xd))
@@ -457,8 +457,9 @@ namespace eos
                     - (8.0 * 1.0i) * M_PI * log(1.0 - w5) * log((1.0 + w5) / 2.0) * my_sign(imag(w5)) * T(1.0, 1.0 + yd, 1.0 - w5) - (8.0 * 1.0i) * M_PI * log((1.0 - w5) / 2.0) * log(1.0 + w5) * my_sign(-imag(w5)) * T(1.0, 1.0 + yd, 1.0 + w5)
                     + (4.0 * 1.0i) * M_PI * power_of<2>(log(1.0 + w5)) * my_sign(-imag(w5)) * T(1.0, 1.0 + yd, 1.0 + w5) - (2.0 * 1.0i) * M_PI * power_of<2>(log(1.0 - w7)) * my_sign(imag(w7)) * T(1.0, 1.0 + yd, 1.0 - w7) + (4.0 * 1.0i) * M_PI * log(1.0 - w7) * log((1.0 + w7) / 2.0) * my_sign(imag(w7)) * T(1.0, 1.0 + yd, 1.0 - w7)
                     + (4.0 * 1.0i) * M_PI * log((1.0 - w7) / 2.0) * log(1.0 + w7) * my_sign(-imag(w7)) * T(1.0, 1.0 + yd, 1.0 + w7) - (2.0 * 1.0i) * M_PI * power_of<2>(log(1.0 + w7)) * my_sign(-imag(w7)) * T(1.0, 1.0 + yd, 1.0 + w7) + 34.0 * zeta3));
+            // clang-format on
 
             return result;
         }
-    }
-}
+    } // namespace agv_2019a
+} // namespace eos

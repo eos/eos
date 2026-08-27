@@ -19,14 +19,14 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
+
+#include <test/test.hh>
 
 using namespace test;
 using namespace eos;
 
-class NonlocalFormFactorGvDV2020Test :
-    public TestCase
+class NonlocalFormFactorGvDV2020Test : public TestCase
 {
     public:
         NonlocalFormFactorGvDV2020Test() :
@@ -34,28 +34,31 @@ class NonlocalFormFactorGvDV2020Test :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
             static const double eps = 1e-5;
 
             {
-                Parameters p = Parameters::Defaults();
-                p["mass::B_d"]                               = 5.279;
-                p["mass::K_d"]                               = 0.492;
-                p["mass::J/psi"]                             = 3.0969;
-                p["mass::psi(2S)"]                           = 3.6860;
-                p["mass::D^0"]                               = 1.86723;
-                p["b->sccbar::t_0"]                          = 4.0;
-                p["b->sccbar::t_s"]                          = -17.4724;
-                p["b->sccbar::chiOPE@GvDV2020"]              = 1.81e-4;
-                p["B->Kccbar::Re{alpha_0^plus}@GvDV2020"]    = 2.0;
-                p["B->Kccbar::Im{alpha_0^plus}@GvDV2020"]    = 3.0;
-                p["B->Kccbar::Re{alpha_1^plus}@GvDV2020"]    = 4.0;
-                p["B->Kccbar::Im{alpha_1^plus}@GvDV2020"]    = 5.0;
-                p["B->Kccbar::Re{alpha_2^plus}@GvDV2020"]    = 6.0;
-                p["B->Kccbar::Im{alpha_2^plus}@GvDV2020"]    = 7.0;
+                Parameters p                              = Parameters::Defaults();
+                p["mass::B_d"]                            = 5.279;
+                p["mass::K_d"]                            = 0.492;
+                p["mass::J/psi"]                          = 3.0969;
+                p["mass::psi(2S)"]                        = 3.6860;
+                p["mass::D^0"]                            = 1.86723;
+                p["b->sccbar::t_0"]                       = 4.0;
+                p["b->sccbar::t_s"]                       = -17.4724;
+                p["b->sccbar::chiOPE@GvDV2020"]           = 1.81e-4;
+                p["B->Kccbar::Re{alpha_0^plus}@GvDV2020"] = 2.0;
+                p["B->Kccbar::Im{alpha_0^plus}@GvDV2020"] = 3.0;
+                p["B->Kccbar::Re{alpha_1^plus}@GvDV2020"] = 4.0;
+                p["B->Kccbar::Im{alpha_1^plus}@GvDV2020"] = 5.0;
+                p["B->Kccbar::Re{alpha_2^plus}@GvDV2020"] = 6.0;
+                p["B->Kccbar::Im{alpha_2^plus}@GvDV2020"] = 7.0;
 
-                Options o = { { "model"_ok, "WET"_ov } };
+                Options o = {
+                    { "model"_ok, "WET"_ov }
+                };
 
                 auto nff = NonlocalFormFactor<PToP>::make("B->K::GvDV2020", p, o);
 
@@ -69,81 +72,81 @@ class NonlocalFormFactorGvDV2020Test :
                 }
                 std::cout << "Diagnostics ended" << std::endl;
 
-                static const std::vector<std::pair<double, double>> reference
-                {
+                static const std::vector<std::pair<double, double>> reference{
                     /* outer functions */
-                    std::make_pair(   0.0,      eps),            // Re{1/phi_+(q2 = 0.0)}
-                    std::make_pair(   0.0,      eps),            // Im{1/phi_+(q2 = 0.0)}
-                    std::make_pair( -17.44509,  eps),            // Re{phi_+(q2 = 16.0)}
-                    std::make_pair(   4.863096, eps),            // Im{phi_+(q2 = 16.0)}
+                    std::make_pair(0.0, eps),       // Re{1/phi_+(q2 = 0.0)}
+                    std::make_pair(0.0, eps),       // Im{1/phi_+(q2 = 0.0)}
+                    std::make_pair(-17.44509, eps), // Re{phi_+(q2 = 16.0)}
+                    std::make_pair(4.863096, eps),  // Im{phi_+(q2 = 16.0)}
 
-                    std::make_pair( -18.00857,  eps),            // Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}
-                    std::make_pair(   0.0,      eps),            // Im{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}
+                    std::make_pair(-18.00857, eps), // Re{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}
+                    std::make_pair(0.0, eps),       // Im{PGvDV2020(q2 = 1.0, sXY = 0.6+0.8i, {2.0, 3.0, 4.0, 5.0})}
 
 
                 };
                 TEST_CHECK_DIAGNOSTICS(diagnostics, reference);
 
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(-1.0)),  0.0925106365,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(-1.0)),  0.1116021529,   eps);
-                TEST_CHECK_NEARLY_EQUAL(  real(nff->H_plus(0.0)),   0.,             eps);
-                TEST_CHECK_NEARLY_EQUAL(  imag(nff->H_plus(0.0)),   0.,             eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(4.0)),  -0.7306769592,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(4.0)),  -0.8733733008,   eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(12.0)),  7.9949120618,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(12.0)),  9.3613667608,   eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(-1.0)), 0.0925106365, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(-1.0)), 0.1116021529, eps);
+                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(0.0)), 0., eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(0.0)), 0., eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(4.0)), -0.7306769592, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(4.0)), -0.8733733008, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(12.0)), 7.9949120618, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(12.0)), 9.3613667608, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_jpsi()),   11.5294356,  eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_jpsi()),   13.5982909,  eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_psi2s()), -3.10770287,  eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_psi2s()), -3.61681383,  eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_jpsi()), 11.5294356, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_jpsi()), 13.5982909, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_psi2s()), -3.10770287, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_psi2s()), -3.61681383, eps);
             }
 
             {
-                Parameters p = Parameters::Defaults();
-                p["mass::B_d"]                                   =  5.279;
-                p["mass::K_d"]                                   =  0.492;
-                p["mass::J/psi"]                                 =  3.0969;
-                p["mass::psi(2S)"]                               =  3.6860;
-                p["mass::D^0"]                                   =  1.86723;
-                p["b->sccbar::t_0"]                              =  4.0;
+                Parameters p                                     = Parameters::Defaults();
+                p["mass::B_d"]                                   = 5.279;
+                p["mass::K_d"]                                   = 0.492;
+                p["mass::J/psi"]                                 = 3.0969;
+                p["mass::psi(2S)"]                               = 3.6860;
+                p["mass::D^0"]                                   = 1.86723;
+                p["b->sccbar::t_0"]                              = 4.0;
                 p["b->sccbar::t_s"]                              = -17.4724;
-                p["b->sccbar::chiOPE@GvDV2020"]                  =  1.81e-4;
-                p["B->Kccbar::Re_Hhat_at_m7_plus@GRvDV2022"]     =  0.01;
+                p["b->sccbar::chiOPE@GvDV2020"]                  = 1.81e-4;
+                p["B->Kccbar::Re_Hhat_at_m7_plus@GRvDV2022"]     = 0.01;
                 p["B->Kccbar::Im_Hhat_at_m7_plus@GRvDV2022"]     = -0.02;
                 p["B->Kccbar::Re_Hhat_at_m5_plus@GRvDV2022"]     = -0.03;
-                p["B->Kccbar::Im_Hhat_at_m5_plus@GRvDV2022"]     =  0.04;
+                p["B->Kccbar::Im_Hhat_at_m5_plus@GRvDV2022"]     = 0.04;
                 p["B->Kccbar::Re_Hhat_at_m3_plus@GRvDV2022"]     = -0.05;
                 p["B->Kccbar::Im_Hhat_at_m3_plus@GRvDV2022"]     = -0.06;
-                p["B->Kccbar::Re_Hhat_at_m1_plus@GRvDV2022"]     =  0.07;
+                p["B->Kccbar::Re_Hhat_at_m1_plus@GRvDV2022"]     = 0.07;
                 p["B->Kccbar::Im_Hhat_at_m1_plus@GRvDV2022"]     = -0.08;
-                p["B->Kccbar::Abs_Hhat_at_Jpsi_plus@GRvDV2022"]  =  0.09;
-                p["B->Kccbar::Arg_Hhat_at_Jpsi_plus@GRvDV2022"]  =  0.10;
-                p["B->Kccbar::Abs_Hhat_at_psi2S_plus@GRvDV2022"] =  0.11;
+                p["B->Kccbar::Abs_Hhat_at_Jpsi_plus@GRvDV2022"]  = 0.09;
+                p["B->Kccbar::Arg_Hhat_at_Jpsi_plus@GRvDV2022"]  = 0.10;
+                p["B->Kccbar::Abs_Hhat_at_psi2S_plus@GRvDV2022"] = 0.11;
                 p["B->Kccbar::Arg_Hhat_at_psi2S_plus@GRvDV2022"] = -0.12;
 
 
-                Options o = { { "model"_ok, "WET"_ov } };
+                Options o = {
+                    { "model"_ok, "WET"_ov }
+                };
 
                 auto nff = NonlocalFormFactor<PToP>::make("B->K::GRvDV2022order5", p, o);
 
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(-1.0)),  0.00124139, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(-1.0)), 0.00124139, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(-1.0)), -0.00141873, eps);
-                TEST_CHECK_NEARLY_EQUAL(  real(nff->H_plus(0.0)),   0.,         eps);
-                TEST_CHECK_NEARLY_EQUAL(  imag(nff->H_plus(0.0)),   0.,         eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(4.0)),  -0.221699,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(4.0)),  -0.264192,   eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(12.0)), -20.9153,    eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(12.0)), -37.2671,    eps);
+                TEST_CHECK_NEARLY_EQUAL(real(nff->H_plus(0.0)), 0., eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(nff->H_plus(0.0)), 0., eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(4.0)), -0.221699, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(4.0)), -0.264192, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus(12.0)), -20.9153, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus(12.0)), -37.2671, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_jpsi()),   0.122788,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_jpsi()),   0.0123199,  eps);
-                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_psi2s()), -0.019915,   eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_psi2s()),  0.00240133, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_jpsi()), 0.122788, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_jpsi()), 0.0123199, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(nff->H_plus_residue_psi2s()), -0.019915, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(nff->H_plus_residue_psi2s()), 0.00240133, eps);
 
-                TEST_CHECK_RELATIVE_ERROR(nff->weak_bound(),   149077281.62, eps);
+                TEST_CHECK_RELATIVE_ERROR(nff->weak_bound(), 149077281.62, eps);
                 TEST_CHECK_RELATIVE_ERROR(nff->strong_bound(), 240635402.59, eps);
             }
-
         }
 } nonlocal_formfactor_gvdv2020_test;

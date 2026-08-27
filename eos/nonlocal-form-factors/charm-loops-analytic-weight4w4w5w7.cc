@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -44,22 +42,25 @@ namespace eos
     namespace agv_2019a
     {
         // the sums of GPLs that contain GPLs of weight 4 with one weight being w4, w5 or w7 can be expressed by the following function
-        complex<double> weight4_w4_w5_w7(const CharmLoopsParameters & clp, const complex<double> & w)
+        complex<double>
+        weight4_w4_w5_w7(const CharmLoopsParameters & clp, const complex<double> & w)
         {
-            const complex<double> yd = clp.yd;
+            const complex<double> yd   = clp.yd;
             const complex<double> winv = 1.0 / w;
 
             // this term multiplies an ill-defined sign(0.0)
             // the terms multiply a function form T(1, x, 1 + y) * T(p(-y, x), 1 + y, 2.0) which is conjectured to be zero for any values of x and y
-            const complex<double> sign0term = + my_sign(0.0) * (-16.0 * pisqu * power_of<2>(log(1.0 + w)) * my_sign(-imag(w)) * T(1.0, 1.0 - yd, 1.0 + w) * T(p(-w, 1.0 - yd), 1.0 - yd, 2.0) - 16.0 * pisqu * power_of<2>(log(1.0 + w)) * my_sign(-imag(w)) * T(1.0, 1.0 + yd, 1.0 + w) * T(p(-w, 1.0 + yd), 1.0 + yd, 2.0));
+            const complex<double> sign0term = +my_sign(0.0)
+                                              * (-16.0 * pisqu * power_of<2>(log(1.0 + w)) * my_sign(-imag(w)) * T(1.0, 1.0 - yd, 1.0 + w) * T(p(-w, 1.0 - yd), 1.0 - yd, 2.0)
+                                                 - 16.0 * pisqu * power_of<2>(log(1.0 + w)) * my_sign(-imag(w)) * T(1.0, 1.0 + yd, 1.0 + w) * T(p(-w, 1.0 + yd), 1.0 + yd, 2.0));
 
-            if(sign0term != 0.0)
+            if (sign0term != 0.0)
             {
                 throw InternalError("Ill-defined Sign(0.0)");
             }
 
             const complex<double> ydinv = 1.0 / yd;
-            const complex<double> yd2 = power_of<2>(yd);
+            const complex<double> yd2   = power_of<2>(yd);
 
             const double imydinv = imag(ydinv);
 
@@ -68,6 +69,7 @@ namespace eos
             const complex<double> ln1pyd = log(1.0 + yd);
             const complex<double> ln1myd = log(1.0 - yd);
 
+            // clang-format off
             const complex<double> part1 = (-2.0 * power_of<4>(M_PI)) / 9.0 - 6.0 * power_of<2>(dilog(1.0 / (1.0 + w))) + 2.0 * power_of<2>(dilog(1.0 + w)) + dilog((2.0 * w) / (-1.0 + w)) * (dilog((w - yd) / (-1.0 + w)) + dilog((w + yd) / (-1.0 + w))) + 16.0 * quadlog(0.5) - 24.0 * quadlog(1.0 + winv) + 8.0 * quadlog(1.0 / (1.0 - w)) + 16.0 * quadlog(1.0 - w) - 24.0 * quadlog(-winv) + 16.0 * quadlog(winv) + 16.0 * quadlog((-1.0 + w) / w) + 16.0 * quadlog(w) + 8.0 * quadlog(w / (-1.0 + w)) + 28.0 * quadlog(1.0 / (1.0 + w)) + 12.0 * quadlog(1.0 + w) - 8.0 * quadlog((1.0 - yd) / 2.0) - 16.0 * quadlog(1.0 - yd) + 4.0 * quadlog((w - yd) / (-1.0 + w)) + 4.0 * quadlog((-1.0 + yd) / (-1.0 + w))
                 - 28.0 * quadlog(-yd) - 28.0 * quadlog(yd) + 4.0 * quadlog(-(yd / w)) + 4.0 * quadlog(yd / w) + 4.0 * quadlog(-(yd / (w - yd))) + 4.0 * quadlog(((-1.0 + w) * yd) / (w - yd)) - 12.0 * quadlog(yd / (-1.0 + yd)) - 8.0 * quadlog(((-1.0 + w) * yd) / (w * (-1.0 + yd))) - 4.0 * quadlog(((1.0 + w) * yd) / (w * (-1.0 + yd))) - 12.0 * quadlog(yd / (1.0 + yd)) - 8.0 * quadlog(((-1.0 + w) * yd) / (w * (1.0 + yd))) - 8.0 * quadlog((1.0 + yd) / 2.0) - 16.0 * quadlog(1.0 + yd) + 4.0 * quadlog((1.0 + yd) / (1.0 - w)) + 4.0 * quadlog(yd / (w + yd)) + 4.0 * quadlog((w + yd) / (-1.0 + w)) + 8.0 * quadlog((w + yd) / w) + 8.0 * quadlog(1.0 - yd / w)
                 + 4.0 * quadlog((yd - w * yd) / (w + yd)) - 4.0 * quadlog((yd + w * yd) / (w + w * yd)) - 2.0 * li22(-1.0, -yd) - 2.0 * li22(-1.0, yd) - 4.0 * li22(0.5, -2.0 / (-1.0 + w)) - 2.0 * li22(0.5, (-1.0 + w) / w) - 14.0 * li22(0.5, 2.0 / (1.0 + w)) + 10.0 * li22(0.5, 1.0 + w) + li22(0.5, (2.0 * w) / (w - yd)) - li22(0.5, (-2.0 * yd) / (w - yd)) + 4.0 * li22(0.5, (2.0 * yd) / (-1.0 + yd)) + 4.0 * li22(0.5, (2.0 * yd) / (1.0 + yd)) + li22(0.5, (2.0 * w) / (w + yd)) - li22(0.5, (2.0 * yd) / (w + yd)) + 4.0 * li22(1.0 / (1.0 - w), 2.0) + 4.0 * li22(1.0 / (1.0 - w), (1.0 - w) / 2.0) + 4.0 * li22(1.0 / (1.0 - w), 1.0 + w)
@@ -404,8 +406,9 @@ namespace eos
                 - (2.0 * pisqu * log((-0.5) * w)) / 3.0 - (2.0 * power_of<3>(log((-0.5) * w))) / 3.0 - (2.0 * pisqu * log(w)) / 3.0 + 2.0 * power_of<2>(log((-1.0 + w) / w)) * log(w) - (2.0 * power_of<3>(log(w))) / 3.0 + (2.0 * pisqu * log(w / (-1.0 + w))) / 3.0 + (2.0 * power_of<3>(log(w / (-1.0 + w)))) / 3.0 - 2.0 * power_of<2>(log(1.0 + winv)) * log((2.0 * w) / (-1.0 + w)) + (pisqu * log(1.0 / (1.0 + w))) / 3.0 + power_of<3>(log(1.0 / (1.0 + w))) / 3.0 - power_of<2>(log(1.0 - w)) * log(2.0 / (1.0 + w)) + 2.0 * power_of<2>(log((-1.0 + w) / w)) * log(2.0 / (1.0 + w)) + 2.0 * ln2squ * log((1.0 - w) / (1.0 + w)) - 2.0 * ln2squ * log((-1.0 + w) / (1.0 + w)) - (2.0 * pisqu * log(-(w / (1.0 + w)))) / 3.0
                 - (2.0 * power_of<3>(log(-(w / (1.0 + w))))) / 3.0 + (2.0 * pisqu * log(w / (1.0 + w))) / 3.0 + (2.0 * power_of<3>(log(w / (1.0 + w)))) / 3.0 + power_of<2>(log(1.0 - w)) * log((2.0 * w) / (1.0 + w)) - 2.0 * power_of<2>(log((-1.0 + w) / w)) * log((2.0 * w) / (1.0 + w)) + power_of<2>(log(1.0 - w)) * log((1.0 + w) / 2.0) - power_of<2>(log(1.0 - w)) * log((1.0 + w) / (2.0 * w)) - (2.0 * pisqu * log(((-1.0 + w) * w) / (w - yd))) / 3.0 - (2.0 * power_of<3>(log(((-1.0 + w) * w) / (w - yd)))) / 3.0 - (2.0 * pisqu * log(1.0 / (-1.0 + yd))) / 3.0 - (2.0 * power_of<3>(log(1.0 / (-1.0 + yd)))) / 3.0 + (4.0 * 1.0i) * M_PI * H1(w / (w - yd), (-1.0 + w) / (w - yd)) * power_of<2>(log((w - yd) / (w - power_of<2>(w)))) * my_sign(imag((-1.0 + w) / (w - yd)))
                 - (4.0 * 1.0i) * M_PI * H1(w / (-1.0 + w), w / (w - yd)) * power_of<2>(log((-1.0 + yd) / w)) * my_sign(imag(w / (w - yd))) + (4.0 * 1.0i) * M_PI * power_of<2>(log(1.0 / (1.0 - w))) * my_sign(imag(w / (-1.0 + w))) * T(1.0, (-1.0 + yd) / (-1.0 + w), 1.0 / (1.0 - w)) + 8.0 * pisqu * ln2 * T(1.0, 1.0 + yd, 1.0 - yd / w) * T(p(yd / w, 1.0 + yd), 1.0 + yd, 2.0) + (21.0 * zeta3) / 2.0);
+            // clang-format on
 
             return part1 + part2 + part3 + part4 + part5 + part6 + part7 + part8;
         }
-    }
-}
+    } // namespace agv_2019a
+} // namespace eos

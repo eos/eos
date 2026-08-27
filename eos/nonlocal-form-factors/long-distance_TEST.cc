@@ -17,20 +17,19 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <test/test.hh>
 #include <eos/nonlocal-form-factors/charm-loops.hh>
 #include <eos/nonlocal-form-factors/long-distance.hh>
 
-#include <cmath>
-#include <vector>
+#include <test/test.hh>
 
+#include <cmath>
 #include <iostream>
+#include <vector>
 
 using namespace test;
 using namespace eos;
 
-class LongDistanceTest :
-    public TestCase
+class LongDistanceTest : public TestCase
 {
     public:
         LongDistanceTest() :
@@ -38,11 +37,12 @@ class LongDistanceTest :
         {
         }
 
-        virtual void run() const
+        virtual void
+        run() const
         {
-            static const double m_c = 1.2;
-            static const double eps = 1e-5;
-            static const std::vector<double> inputs{ 14.00, 15.00, 16.00, 19.21 };
+            static const double                       m_c = 1.2;
+            static const double                       eps = 1e-5;
+            static const std::vector<double>          inputs{ 14.00, 15.00, 16.00, 19.21 };
             static const std::vector<complex<double>> results{
                 complex<double>(1.13014, 0.381747),
                 complex<double>(1.60574, 0.766175),
@@ -50,7 +50,7 @@ class LongDistanceTest :
                 complex<double>(1.02058, 1.780107),
             };
             auto r = results.cbegin();
-            for (auto i = inputs.cbegin() ; inputs.cend() != i ; ++i, ++r)
+            for (auto i = inputs.cbegin(); inputs.cend() != i; ++i, ++r)
             {
                 complex<double> g = LongDistance::g_had_ccbar(*i, m_c);
 

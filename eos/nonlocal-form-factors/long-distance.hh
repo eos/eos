@@ -28,8 +28,8 @@ namespace eos
 
     struct LongDistance
     {
-        static complex<double> g_had_ccbar(const double & s, const double & m_c);
+            static complex<double> g_had_ccbar(const double & s, const double & m_c);
     };
-}
+} // namespace eos
 
 #endif

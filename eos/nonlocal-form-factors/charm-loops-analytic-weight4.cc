@@ -17,12 +17,10 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
@@ -40,7 +38,8 @@ namespace eos
     {
         // The following terms are the GPLs of weight 4 from f27d and f29d.
         // These are identical for the two functions, up to a global polynomial prefactor.
-        complex<double> GPLweight4Parts(const CharmLoopsParameters & clp)
+        complex<double>
+        GPLweight4Parts(const CharmLoopsParameters & clp)
         {
             const complex<double> xd = clp.xd;
             const complex<double> yd = clp.yd;
@@ -67,6 +66,7 @@ namespace eos
             // weight 4 GPLs
 
             // HPLs from F27(9)d that are free from problematic HeavisideTheta(0)
+            // clang-format off
             const complex<double> w4Part1 = (-2.0 * power_of<4>(M_PI)) / 3.0 + 3.0 * power_of<2>(li2half) + (3.0 * power_of<2>(dilog((1.0 - yd) / 2.0))) / 2.0 + (9.0 * power_of<2>(dilog(-yd))) / 2.0 + (9.0 * power_of<2>(dilog(yd))) / 2.0 + (3.0 * power_of<2>(dilog((1.0 + yd) / 2.0))) / 2.0 - 6.0 * quadlog(-1.0) + 18.0 * quadlog(0.5) - 6.0 * quadlog(2.0)
                 + 8.0 * quadlog(0.5 - (1.0i / 2.0) * xd) + 24.0 * quadlog(1.0 - 1.0i * xd) + 8.0 * quadlog(1.0 / (1.0 + 1.0i * xd)) + 8.0 * quadlog(2.0 / (1.0 + 1.0i * xd)) + 8.0 * quadlog((1.0 + 1.0i * xd) / 2.0) + 24.0 * quadlog(1.0 + 1.0i * xd) + 8.0 * quadlog((-1.0i) * xd) + 8.0 * quadlog(1.0i * xd)
                 + 16.0 * quadlog(-1.0i / (-1.0i + xd)) + 24.0 * quadlog(xd / (-1.0i + xd)) + 24.0 * quadlog(1.0i / (1.0i + xd)) + 8.0 * quadlog((2.0 * 1.0i) / (1.0i + xd)) + 24.0 * quadlog(xd / (1.0i + xd)) + 8.0 * quadlog((-1.0i + xd) / (1.0i + xd)) + 8.0 * quadlog((1.0i + xd) / (-1.0i + xd))
@@ -104,26 +104,28 @@ namespace eos
                 - (4.0 * pisqu * log(1.0i / 2.0 * xdinv)) / 3.0 - (4.0 * power_of<3>(log(1.0i / 2.0 * xdinv))) / 3.0 + (4.0 * pisqu * log(-1.0i / (-1.0i + xd))) / 3.0 + (4.0 * power_of<3>(log(-1.0i / (-1.0i + xd)))) / 3.0 + (4.0 * pisqu * log(1.0i / (1.0i + xd))) / 3.0 + (4.0 * power_of<3>(log(1.0i / (1.0i + xd)))) / 3.0 - 16.0 * zeta3)
                 + log((1.0 - yd) / 2.0) * (power_of<3>(ln1pyd) / 2.0 + ln1myd * ((5.0 * power_of<2>(log((1.0 + yd) / 2.0))) / 2.0 - (3.0 * power_of<2>(ln1pyd)) / 2.0) - 5.0 * zeta3) - 6.0 * lnhalf * zeta3 + 8.0 * log((1.0 + 1.0i * xd) / 2.0) * zeta3 + 5.0 * ln1myd * zeta3
                 - 5.0 * log((1.0 + yd) / 2.0) * zeta3 + 5.0 * ln1pyd * zeta3 + log(0.5 - (1.0i / 2.0) * xd) * (log(1.0 - 1.0i * xd) * (-4.0 * power_of<2>(log((1.0 + 1.0i * xd) / 2.0)) + 4.0 * power_of<2>(log(1.0 + 1.0i * xd))) - 4.0 * power_of<2>(log(1.0 + 1.0i * xd)) * log(xd) + 8.0 * zeta3);
+            // clang-format on
 
-            //GPLs form F27(9)d with at least one weight being +-wx3
+            // GPLs form F27(9)d with at least one weight being +-wx3
             const complex<double> w4Part2 = weight4_wx3_wx4(clp, wx3) + weight4_wx3_wx4(clp, -wx3);
 
-            //GPLs form F27(9)d with at least one weight being +-wx4
+            // GPLs form F27(9)d with at least one weight being +-wx4
             const complex<double> w4Part3 = weight4_wx3_wx4(clp, wx4) + weight4_wx3_wx4(clp, -wx4);
 
-            //GPLs form F27(9)d with at least one weight being +-w4
+            // GPLs form F27(9)d with at least one weight being +-w4
             const complex<double> w4Part4 = weight4_w4_w5_w7(clp, w4);
 
-            //GPLs form F27(9)d with at least one weight being +-w5
+            // GPLs form F27(9)d with at least one weight being +-w5
             const complex<double> w4Part5 = weight4_w4_w5_w7(clp, -w5);
 
-            //GPLs form F27(9)d with at least one weight being +-w7
-            const complex<double> w4Part6 = - 0.25 * weight4_w4_w5_w7(clp, w7);
+            // GPLs form F27(9)d with at least one weight being +-w7
+            const complex<double> w4Part6 = -0.25 * weight4_w4_w5_w7(clp, w7);
 
             // Weight 4 HPLs where the weights are a permutation of {a, a, -a, 0}.
             // In order to make the expressions well defined, the replacement -a -> -a * (1 + i eta) was made
             const double eta = 1e-13;
 
+            // clang-format off
             const complex<double> w4HPLs = (-4.0 * power_of<4>(M_PI)) / 3.0 + 3.0 * power_of<2>(dilog(2.0)) - (3.0 * power_of<2>(dilog(1.0 / (2.0 - 1.0i * eta)))) / 2.0 - 9.0 * power_of<2>(dilog(2.0 - 1.0i * eta)) - (51.0 * power_of<2>(dilog(1.0i / (2.0 * 1.0i + eta)))) / 2.0 - 18.0 * quadlog(2.0) + 18.0 * quadlog(1.0 + 1.0 / (1.0 - 1.0i * eta)) - 3.0 * quadlog(1.0 / (2.0 - 1.0i * eta)) + 90.0 * quadlog(2.0 - 1.0i * eta) + 18.0 * quadlog(1.0 / (-1.0 + 1.0i * eta)) + 18.0 * quadlog(-1.0i / (1.0i + eta)) + 93.0 * quadlog(1.0i / (2.0 * 1.0i + eta)) + 18.0 * quadlog((2.0 * 1.0i + eta) / (1.0i + eta)) + 24.0 * quadlog(1.0 - 1.0i * xd) + 24.0 * quadlog(1.0 + 1.0i * xd) + 2.0 * quadlog(1.0 - yd) + 8.0 * quadlog((-1.0 + yd) / (-2.0 + 1.0i * eta)) + 2.0 * quadlog(1.0 + yd) + 8.0 * quadlog((1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta))
                 - 4.0 * li22(1.0 / (2.0 - 1.0i * eta), 1.0 + yd) - 12.0 * li22(2.0 - 1.0i * eta, (1.0i - xd) / (2.0 * 1.0i + eta)) - 12.0 * li22(2.0 - 1.0i * eta, (1.0i + xd) / (2.0 * 1.0i + eta)) - li22(2.0 - 1.0i * eta, (-1.0 + yd) / (-2.0 + 1.0i * eta)) - li22(2.0 - 1.0i * eta, (1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta)) - 4.0 * li22(1.0i / (2.0 * 1.0i + eta), 1.0 - yd) - 20.0 * li22((1.0i - xd) / (2.0 * 1.0i + eta), 2.0 - 1.0i * eta) + 8.0 * li22(0.5 - (1.0i / 2.0) * xd, 2.0) - 12.0 * li22(1.0 - 1.0i * xd, 1.0i / (2.0 * 1.0i + eta)) + 12.0 * li22(1.0 - 1.0i * xd, (2.0 * 1.0i + eta) / (1.0i + xd)) + 8.0 * li22((1.0 + 1.0i * xd) / 2.0, 2.0) - 12.0 * li22(1.0 + 1.0i * xd, 1.0i / (2.0 * 1.0i + eta)) + 12.0 * li22(1.0 + 1.0i * xd, (2.0 * 1.0i + eta) / (1.0i - xd))
                 - 20.0 * li22((1.0i + xd) / (2.0 * 1.0i + eta), 2.0 - 1.0i * eta) - 5.0 * li22((1.0 - yd) / 2.0, 2.0) - 10.0 * li22(1.0 - yd, 1.0i / (2.0 * 1.0i + eta)) + li22(1.0 - yd, (1.0i * (2.0 * 1.0i + eta)) / (-1.0 + yd)) - 2.0 * li22((-1.0 + yd) / (-2.0 + 1.0i * eta), 2.0 - 1.0i * eta) + 4.0 * li22((-1.0 + yd) / (-2.0 + 1.0i * eta), 1.0 / (1.0 - yd)) - 5.0 * li22((1.0 + yd) / 2.0, 2.0) - 10.0 * li22(1.0 + yd, 1.0 / (2.0 - 1.0i * eta)) + li22(1.0 + yd, (2.0 - 1.0i * eta) / (1.0 + yd)) - 2.0 * li22((1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta), 2.0 - 1.0i * eta) + 4.0 * li22((1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta), 1.0 / (1.0 + yd)) + dilog(2.0) * (3.0 * pisqu + 3.0 * power_of<2>(lnm2)) + 3.0 * pisqu * power_of<2>(log(-1.0 + 1.0i * eta))
@@ -191,8 +193,9 @@ namespace eos
                 - (2.0 * 1.0i) * M_PI * power_of<2>(log(-1.0 + 1.0i * eta)) * my_sign(real(eta)) * T(1.0, yd, -1.0 + 1.0i * eta) + power_of<2>(log((eta + 1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta))) * ((5.0 * log(((1.0i + eta) * (-1.0 + yd)) / ((2.0 * 1.0i + eta) * yd))) / 2.0 - 4.0 * log(yd / (-1.0 + 1.0i * eta)) - (7.0 * 1.0i) * M_PI * my_sign(imag((-1.0 + yd) / (-2.0 + 1.0i * eta))) * T(1.0, yd, (eta + 1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta))) - (8.0 * 1.0i) * M_PI * power_of<2>(log((1.0i + eta) / (2.0 * 1.0i + eta))) * my_sign(-real(1.0 / (2.0 * 1.0i + eta))) * T(1.0, (eta + 1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta), (1.0i + eta) / (2.0 * 1.0i + eta))
                 + power_of<2>(log(yd)) * (-log(1.0 + (1.0i * yd) / (1.0i + eta)) - (7.0 * log((1.0i + eta) / (eta + 1.0i * (1.0 + yd)))) / 2.0 + (7.0 * log(-(((1.0i + eta) * (-1.0 + yd)) / (eta + 1.0i * (1.0 + yd))))) / 2.0 + log(-((eta + 1.0i * (1.0 + yd)) / ((1.0i + eta) * (-1.0 + yd)))) + (5.0 * 1.0i) * M_PI * my_sign(imag(yd)) * T(1.0, (eta + 1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta), yd))) + 72.0 * log((1.0i + eta) / (2.0 * 1.0i + eta)) * zeta3 + 8.0 * log((1.0i + eta - xd) / (1.0i + eta)) * zeta3 - 24.0 * log((1.0i + eta - xd) / (2.0 * 1.0i + eta)) * zeta3 + 8.0 * log((1.0i + eta + xd) / (1.0i + eta)) * zeta3 - 24.0 * log((1.0i + eta + xd) / (2.0 * 1.0i + eta)) * zeta3
                 - 12.0 * log((1.0i + eta - 1.0i * yd) / (2.0 * 1.0i + eta)) * zeta3 + 12.0 * log(1.0 - (1.0i * yd) / (1.0i + eta)) * zeta3 + 12.0 * log(1.0 + (1.0i * yd) / (1.0i + eta)) * zeta3 - 12.0 * log((eta + 1.0i * (1.0 + yd)) / (2.0 * 1.0i + eta)) * zeta3 + (48.0 * 1.0i) * M_PI * my_sign(real(eta)) * T(1.0, 1.0 - 1.0i * xd, 2.0 - 1.0i * eta) * zeta3 + (48.0 * 1.0i) * M_PI * my_sign(real(eta)) * T(1.0, 1.0 + 1.0i * xd, 2.0 - 1.0i * eta) * zeta3 + (24.0 * 1.0i) * M_PI * my_sign(real(eta)) * T(1.0, 1.0 - yd, 2.0 - 1.0i * eta) * zeta3 + (24.0 * 1.0i) * M_PI * my_sign(real(eta)) * T(1.0, 1.0 + yd, 2.0 - 1.0i * eta) * zeta3;
+            // clang-format on
 
             return w4Part1 + w4Part2 + w4Part3 + w4Part4 + w4Part5 + w4Part6 + w4HPLs;
         }
-    }
-}
+    } // namespace agv_2019a
+} // namespace eos

@@ -17,20 +17,18 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/power-of.hh>
-#include <eos/maths/polylog.hh>
 #include <eos/maths/multiplepolylog-li22.hh>
-
+#include <eos/maths/polylog.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/nonlocal-form-factors/charm-loops-impl.hh>
-
 #include <eos/utils/exception.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/stringify.hh>
 
+#include <boost/predef.h>
+
 #include <cmath>
 #include <complex>
-
-#include <boost/predef.h>
 
 #if BOOST_COMP_GNUC
 #  pragma GCC optimize("no-var-tracking")
@@ -38,13 +36,13 @@
 
 namespace eos
 {
-	using std::complex;
-	using std::log;
-	using std::real;
-	using std::imag;
+    using std::complex;
+    using std::imag;
+    using std::log;
+    using std::real;
 
-	namespace agv_2019a
-	{
+    namespace agv_2019a
+    {
         /*
             blocks in F27d and F29d:
 
@@ -53,7 +51,8 @@ namespace eos
             f27dpart6 = - num21 * f279d_log2_terms / denom3
         */
 
-        complex<double> f279d_log2_terms(const CharmLoopsParameters & clp)
+        complex<double>
+        f279d_log2_terms(const CharmLoopsParameters & clp)
         {
             const complex<double> xd = clp.xd;
             const complex<double> yd = clp.yd;
@@ -84,6 +83,7 @@ namespace eos
             const complex<double> ln1myd = log(1.0 - yd);
 
 
+            // clang-format off
             const complex<double> resultpart1 = ln2 * (dilog((w5 - yd) / (-1.0 + w5)) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log((wx3 + xd) / wx3) - 8.0 * log((wx4 + xd) / wx4))
                 + dilog(-(yd / w5)) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log((wx3 + xd) / wx3) - 8.0 * log((wx4 + xd) / wx4))
                 + dilog(yd / w5) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log((wx3 + xd) / wx3) - 8.0 * log((wx4 + xd) / wx4)) + dilog((w5 + yd) / (-1.0 + w5)) * (8.0 * log(1.0 - 1.0i * xd) + 8.0 * log(1.0 + 1.0i * xd) - 8.0 * log((wx3 + xd) / wx3)
@@ -464,8 +464,9 @@ namespace eos
                 T(p(1.0i / wx3, 1.0 - xd / wx3), 1.0 - xd / wx3, (1.0i + wx3) / wx3) - 32.0 * pisqu * log((1.0i + wx4) / wx4) * T(1.0, (wx4 + xd) / wx4, (1.0i + wx4) / wx4) * T(p(-1.0i / wx4, (wx4 + xd) / wx4), (wx4 + xd) / wx4, (-1.0i + wx4) / wx4)
                 - 32.0 * pisqu * log((1.0i + wx4) / wx4) * T(1.0, 1.0 - xd / wx4, (1.0i + wx4) / wx4) * T(p(-1.0i / wx4, 1.0 - xd / wx4), 1.0 - xd / wx4, (-1.0i + wx4) / wx4) - 32.0 * pisqu * log((-1.0i + wx4) / wx4) * T(1.0, (wx4 + xd) / wx4, (-1.0i + wx4) / wx4) *
                 T(p(1.0i / wx4, (wx4 + xd) / wx4), (wx4 + xd) / wx4, (1.0i + wx4) / wx4) - 32.0 * pisqu * log((-1.0i + wx4) / wx4) * T(1.0, 1.0 - xd / wx4, (-1.0i + wx4) / wx4) * T(p(1.0i / wx4, 1.0 - xd / wx4), 1.0 - xd / wx4, (1.0i + wx4) / wx4) - 40.0 * zeta3);
+            // clang-format on
 
             return resultpart1 + resultpart2;
         }
-	}
-}
+    } // namespace agv_2019a
+} // namespace eos

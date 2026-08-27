@@ -17,9 +17,9 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/maths/szego-polynomial.hh>
+#include <eos/nonlocal-form-factors/nonlocal-formfactors.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
@@ -27,14 +27,12 @@
 
 namespace eos
 {
-    using std::sin;
     using std::cos;
+    using std::sin;
     using std::sqrt;
 
     // B -> P
-    NonlocalFormFactor<PToP>::~NonlocalFormFactor()
-    {
-    }
+    NonlocalFormFactor<PToP>::~NonlocalFormFactor() {}
 
     complex<double>
     NonlocalFormFactor<PToP>::jpsi_residues_not_implemented() const
@@ -64,9 +62,7 @@ namespace eos
     }
 
     // B -> V
-    NonlocalFormFactor<PToV>::~NonlocalFormFactor()
-    {
-    }
+    NonlocalFormFactor<PToV>::~NonlocalFormFactor() {}
 
     complex<double>
     NonlocalFormFactor<PToV>::jpsi_residues_not_implemented() const
@@ -98,36 +94,39 @@ namespace eos
     namespace nff_utils
     {
 
-        complex<double> z(const complex<double> & q2, complex<double> s_plus, complex<double> s_0)
+        complex<double>
+        z(const complex<double> & q2, complex<double> s_plus, complex<double> s_0)
         {
             return (pow(s_plus - q2, 0.5) - pow(s_plus - s_0, 0.5)) / (pow(s_plus - q2, 0.5) + pow(s_plus - s_0, 0.5));
         }
 
-        complex<double> z(const double & q2, complex<double> s_plus, complex<double> s_0)
+        complex<double>
+        z(const double & q2, complex<double> s_plus, complex<double> s_0)
         {
             return z(complex<double>(q2, 0.0), s_plus, s_0);
         }
 
         // Blaschke factor capturing the two poles for J/psi and psi(2S).
-        complex<double> blaschke_cc(const complex<double> & z, const complex<double> & z_Jpsi, const complex<double> & z_psi2S)
+        complex<double>
+        blaschke_cc(const complex<double> & z, const complex<double> & z_Jpsi, const complex<double> & z_psi2S)
         {
-            return (z - z_Jpsi)/(1.0 - z * std::conj(z_Jpsi)) * (z - z_psi2S)/(1.0 - z * std::conj(z_psi2S));
+            return (z - z_Jpsi) / (1.0 - z * std::conj(z_Jpsi)) * (z - z_psi2S) / (1.0 - z * std::conj(z_psi2S));
         }
-    }
+    } // namespace nff_utils
 
     std::shared_ptr<SzegoPolynomial<5u>>
     PolynomialsFactory::create(const std::string & opt_q)
     {
         switch (opt_q[0])
         {
-        case 's':
-            // These values are computed using t_0 = 4 GeV^2, m_Bs = 5.366 GeV and m_phi = 1.020 GeV
-            return std::make_shared<SzegoPolynomial<5u>>(SzegoPolynomial<5u>::FlatMeasure(2.18309));
-            break;
-        default: // opt_q = u, d
-            // These values are computed using t_0 = 4 GeV^2, m_B = 5.279 GeV and m_K* = 0.896 GeV
-            return std::make_shared<SzegoPolynomial<5u>>(SzegoPolynomial<5u>::FlatMeasure(2.27631));
-            break;
+            case 's':
+                // These values are computed using t_0 = 4 GeV^2, m_Bs = 5.366 GeV and m_phi = 1.020 GeV
+                return std::make_shared<SzegoPolynomial<5u>>(SzegoPolynomial<5u>::FlatMeasure(2.18309));
+                break;
+            default: // opt_q = u, d
+                // These values are computed using t_0 = 4 GeV^2, m_B = 5.279 GeV and m_K* = 0.896 GeV
+                return std::make_shared<SzegoPolynomial<5u>>(SzegoPolynomial<5u>::FlatMeasure(2.27631));
+                break;
         }
     }
-}
+} // namespace eos
