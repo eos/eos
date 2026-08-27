@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2012, 2013, 2015, 2016 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2012, 2013, 2015, 2016-2026 Danny van Dyk
  * Copyright (c) 2021 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -19,7 +19,7 @@
  */
 
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_HH
-#define EOS_GUARD_SRC_RARE_B_DECAYS_B_TO_K_LL_HH 1
+#define EOS_GUARD_EOS_RARE_B_DECAYS_B_TO_K_LL_HH 1
 
 #include <eos/maths/complex.hh>
 #include <eos/utils/options.hh>

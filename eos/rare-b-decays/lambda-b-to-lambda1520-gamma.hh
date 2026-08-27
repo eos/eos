@@ -18,7 +18,7 @@
  */
 
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA1520_GAMMA_HH
-#define EOS_GUARD_SRC_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA1520_GAMMA_HH 1
+#define EOS_GUARD_EOS_RARE_B_DECAYS_LAMBDA_B_TO_LAMBDA1520_GAMMA_HH 1
 
 #include <eos/maths/complex.hh>
 #include <eos/rare-b-decays/decays.hh>

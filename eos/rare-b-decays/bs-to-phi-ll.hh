@@ -18,7 +18,7 @@
  */
 
 #ifndef EOS_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_HH
-#define EOS_GUARD_SRC_RARE_B_DECAYS_BS_TO_PHI_LL_HH 1
+#define EOS_GUARD_EOS_RARE_B_DECAYS_BS_TO_PHI_LL_HH 1
 
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
