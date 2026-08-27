@@ -70,3 +70,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# clang-tidy compile flags, written by configure
+compile_flags.txt

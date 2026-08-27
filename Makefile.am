@@ -1,6 +1,7 @@
 CLEANFILES = *~
 MAINTAINERCLEANFILES = Makefile.in configure config/* aclocal.m4 \
 			config.h config.h.in
+DISTCLEANFILES = compile_flags.txt
 AUTOMAKE_OPTIONS = foreign dist-bzip2
 EXTRA_DIST = autogen.bash build-wheel.bash pyproject.toml.in
 

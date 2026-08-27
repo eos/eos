@@ -6,6 +6,21 @@ repos:
         types_or: ['c++']
         exclude: ^(eos/b-decays/|eos/c-decays/|eos/form-factors/|eos/nonlocal-form-factors/|eos/rare-b-decays/|eos/scattering/)
 
+  - repo: local
+    hooks:
+      - id: clang-tidy
+        name: clang-tidy (report only)
+        description: Report outdated C++ idioms. Does not rewrite any file.
+        language: python
+        additional_dependencies: ['clang-tidy==21.1.1']
+        # compile_flags.txt is written by configure. Without it clang-tidy has no
+        # include paths and every file fails to parse, so skip instead.
+        entry: bash -c 'test -f compile_flags.txt || { echo "clang-tidy hook skipped, the source tree is not configured (run ./configure)." ; exit 0 ; } ; exec clang-tidy --quiet --warnings-as-errors="*" "$@"' --
+        types_or: ['c++']
+        # Only eos/utils/ has been modernised so far. Drop a directory from this
+        # list once its findings have been addressed.
+        exclude: '^(python/|src/|test/|eos/[^/]+\.(cc|hh)$|eos/(b-decays|c-decays|constraints|form-factors|maths|meson-mixing|models|nonleptonic-amplitudes|nonlocal-form-factors|parameters|rare-b-decays|rare-c-decays|s-decays|scattering|statistics|tau-decays)/)'
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:

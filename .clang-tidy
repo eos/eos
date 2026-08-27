@@ -1,0 +1,20 @@
+---
+# Checks are enabled family-wide; individual checks are switched off as needed.
+Checks: >
+  -*,
+  modernize-*,
+  performance-*,
+  readability-container-size-empty,
+  readability-redundant-member-init,
+  readability-redundant-string-init,
+  -modernize-use-trailing-return-type
+
+# Diagnose only the file passed on the command line. Headers are covered by
+# passing them to clang-tidy directly.
+HeaderFilterRegex: ''
+
+# Apply the project's clang-format configuration to any region rewritten by --fix.
+FormatStyle: file
+
+# Manual runs report; they do not fail. The pre-commit hook overrides this.
+WarningsAsErrors: ''

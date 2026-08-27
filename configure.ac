@@ -457,12 +457,62 @@ if test "x$enable_lto" == xyes ; then
 fi
 dnl }}}
 
+dnl {{{ define the compile flags used by clang-tidy
+dnl clang-tidy does not read the automake flags, and it is not the compiler
+dnl this tree is configured for. It needs the project's own include paths, and
+dnl it needs to be told where $CXX keeps its standard library.
+AC_MSG_CHECKING([for the compile flags used by clang-tidy])
+
+eos_prefix=$prefix
+test "x$eos_prefix" = xNONE && eos_prefix=$ac_default_prefix
+eos_datadir=`echo "$datadir" | sed "s|\\\${datarootdir}|$datarootdir|"`
+eos_datadir=`echo "$eos_datadir" | sed "s|\\\${prefix}|$eos_prefix|"`
+
+CLANG_TIDY_CXXFLAGS="-xc++ -std=c++20 -I. -I$ac_abs_confdir -DEOS_DATADIR=\"$eos_datadir\""
+
+dnl Keep only the search paths and macro definitions. Code generation options
+dnl mean nothing to a static analyser, and clang rejects those it does not
+dnl share with $CXX.
+eos_take_next=no
+for eos_flag in $CPPFLAGS $CXXFLAGS $GSL_CXXFLAGS $YAMLCPP_CXXFLAGS $FFTW_CXXFLAGS ; do
+	if test "x$eos_take_next" = xyes ; then
+		CLANG_TIDY_CXXFLAGS="$CLANG_TIDY_CXXFLAGS $eos_flag"
+		eos_take_next=no
+		continue
+	fi
+	case $eos_flag in
+		-isystem | -idirafter)
+			CLANG_TIDY_CXXFLAGS="$CLANG_TIDY_CXXFLAGS $eos_flag"
+			eos_take_next=yes
+			;;
+		-I* | -D* | -U* | -std=*)
+			CLANG_TIDY_CXXFLAGS="$CLANG_TIDY_CXXFLAGS $eos_flag"
+			;;
+	esac
+done
+
+dnl Anything that is not an absolute path is a marker line from -v, and the
+dnl compiler's own include directories belong to $CXX, not to clang.
+for eos_dir in `echo | $CXX -x c++ -E -v - 2>&1 | sed -n '/#include <...> search starts here/,/End of search list/p' | sed -e 's/^ *//'` ; do
+	case $eos_dir in
+		/*/lib/gcc/*/include | /*/lib/gcc/*/include-fixed) ;;
+		/*) CLANG_TIDY_CXXFLAGS="$CLANG_TIDY_CXXFLAGS -isystem $eos_dir" ;;
+	esac
+done
+
+AC_SUBST([CLANG_TIDY_CXXFLAGS])
+AC_MSG_RESULT([$CLANG_TIDY_CXXFLAGS])
+dnl }}}
+
 dnl {{{ output
 AC_CONFIG_HEADERS(config.h)
 AM_EXTRA_RECURSIVE_TARGETS([manual])
 AC_SUBST([AM_CXXFLAGS])
 AC_SUBST([AM_LDFLAGS])
 AC_SUBST([PYPI_VERSION])
+AC_CONFIG_COMMANDS([compile_flags.txt],
+	[printf '%s\n' $CLANG_TIDY_CXXFLAGS > compile_flags.txt],
+	[CLANG_TIDY_CXXFLAGS='$CLANG_TIDY_CXXFLAGS'])
 AC_CONFIG_FILES([Makefile
 	debian/control-focal
 	debian/control-jammy
