@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: clang-format
         types_or: ['c++']
-        exclude: ^(eos/b-decays/|eos/form-factors/|eos/rare-b-decays/)
+        exclude: ^(eos/b-decays/|eos/rare-b-decays/)
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
