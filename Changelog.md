@@ -33,6 +33,8 @@
 - Add the ``eos-data check``, ``create``, ``publish``, and ``register`` commands for validating analysis datasets, creating citable dataset tags, publishing GitHub releases for Zenodo, and registering published datasets (D. van Dyk)
 - Expose the ``name_part()``, ``year_part()``, and ``index_part()`` accessors of ``eos.ReferenceName`` to Python, which ``eos.References``' ``year`` and ``index`` filters require (D. van Dyk)
 - Add a ``has()`` member function to the ``Constraints``, ``Kinematics``, ``Observables``, ``Options``, ``Parameters``, ``References``, and ``SignalPDFs`` classes, and export it to Python as ``__contains__``, so that ``name in eos.Constraints()`` and its analogues report membership (D. van Dyk)
+- Add the ``Bbar^*->D`` and ``Bbar^*->D^*`` tensor form factors in the HQE parametrisation, following [BGJvD:2025A]; the ``FormFactors<VToP>`` and ``FormFactors<VToV>`` interfaces gain ``h_tbar_1`` to ``h_tbar_3`` and ``h_t4`` to ``h_t10`` respectively (D. van Dyk)
+- Add the reference [BGJvD:2025A] and cite it from ``BGLCoefficients`` and ``HQETUnitarityBounds``, which implement its BGL coefficients for the tensor form factors and its ``1^+`` and ``1^-`` tensor bounds (D. van Dyk)
 
 ### Deprecated
 
@@ -53,6 +55,9 @@
 - Fix ``eos.figure.UncertaintyBandItem`` to compare the options of the requested ``observable`` against those recorded in the data file as strings, in lieu of comparing them against ``qnp::OptionKey`` and ``qnp::OptionValue`` objects that never equal them, which silently plotted predictions computed with other options (D. van Dyk)
 - Fix ``eos.figure.ConstraintItem``, ``ConstraintResidueItem``, and ``TwoDimensionalConstraintItem`` to report an unknown constraint as a ``ValueError``, in lieu of the ``RuntimeError`` that reached the user because the guard tested the looked-up entry for falsiness after the lookup had already raised (D. van Dyk)
 - Fix three diagnostic messages in ``eos.figure.ConstraintItem`` and ``eos.figure.ConstraintResidueItem`` that lacked an ``f`` prefix and therefore reported the names of skipped observables as literal braces (D. van Dyk)
+- Use the mass parameters, rather than compile-time constants, when converting ``q2`` to ``w`` in the ``V->V`` HQE form factors, as the other three transitions already did; setting ``mass::B_d^*`` or ``mass::D_u^*`` previously had no effect on the ``Bbar^*->D^*`` form factors (D. van Dyk)
+- Correct the normalization constants ``K`` passed to the outer function ``_phi`` for the tensor form factors ``t_1``, ``t_2``, ``t_23``, and ``f_t`` in the ``BGL1997``-like parametrization (D. van Dyk)
+- Evaluate the HQET form factors at zero recoil independently of the compiler's use of fused multiply-add: reconstructing ``q2`` from the meson masses reproduces ``w = 1`` only up to rounding, and the auxiliary functions ``r`` and ``Omega`` returned NaN whenever it landed a few ulps below the endpoint (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
