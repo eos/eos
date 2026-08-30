@@ -414,10 +414,6 @@ BOOST_PYTHON_MODULE(_eos)
             )",
                  args("self", "file"));
 
-    // Mutable
-    register_ptr_to_python<std::shared_ptr<Mutable>>();
-    class_<Mutable, boost::noncopyable>("Mutable", no_init).def("name", &Mutable::name, return_value_policy<copy_const_reference>());
-
     // Parameter
     class_<Parameter>("Parameter", R"(
             Represents a single real-valued scalar parameter in EOS.
@@ -1152,8 +1148,6 @@ BOOST_PYTHON_MODULE(_eos)
             :rtype: eos.ConstraintEntry
         )",
                  args("self", "name", "entry"));
-
-    class_<ParameterDescription>("ParameterDescription").def_readonly("parameter", &ParameterDescription::parameter);
 
     // LogPrior
     register_ptr_to_python<std::shared_ptr<LogPrior>>();
