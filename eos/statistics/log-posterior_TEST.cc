@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2010, 2011 Frederik Beaujean
- * Copyright (c) 2011-2023 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #include <eos/statistics/log-posterior_TEST.hh>
 
 #include <config.h>
+#include <vector>
 
 using namespace test;
 using namespace eos;
@@ -126,6 +127,61 @@ class LogPosteriorTest : public TestCase
                 LogPosterior log_posterior(llh);
 
                 TEST_CHECK_THROWS(InternalError, log_posterior.log_prior());
+            }
+
+            // reject a second prior on an already-varied parameter
+            {
+                Parameters parameters = Parameters::Defaults();
+
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+
+                // every prior type must be rejected once one of its parameters is varied already
+                const std::vector<LogPriorPtr> priors{ LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5),
+                                                       LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, 4.2, 4.3, 4.5),
+                                                       LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, 4.18, 2.0),
+                                                       LogPrior::Gaussian(parameters, "mass::b(MSbar)", 4.3, 0.1),
+                                                       LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0) };
+
+                for (const LogPriorPtr & prior : priors)
+                {
+                    LogPosterior log_posterior(llh);
+
+                    TEST_CHECK(log_posterior.add(prior));
+                    TEST_CHECK_EQUAL(log_posterior.varied_parameters().size(), 1u);
+
+                    TEST_CHECK(! log_posterior.add(prior));
+                    TEST_CHECK_EQUAL(log_posterior.varied_parameters().size(), 1u);
+
+                    // a prior on a different parameter is still accepted
+                    TEST_CHECK(log_posterior.add(LogPrior::Flat(parameters, "mass::c", 1.0, 1.5)));
+                    TEST_CHECK_EQUAL(log_posterior.varied_parameters().size(), 2u);
+                }
+            }
+
+            // reject a prior that overlaps in only one of several parameters
+            {
+                Parameters parameters = Parameters::Defaults();
+
+                LogLikelihood llh(parameters);
+                llh.add(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")), 4.1, 4.2, 4.3);
+                LogPosterior log_posterior(llh);
+
+                gsl_vector * mean = gsl_vector_alloc(2);
+                gsl_vector_set(mean, 0, 4.3);
+                gsl_vector_set(mean, 1, 1.1);
+                gsl_matrix * cov = gsl_matrix_alloc(2, 2);
+                gsl_matrix_set(cov, 0, 0, 0.01);
+                gsl_matrix_set(cov, 0, 1, 0.0);
+                gsl_matrix_set(cov, 1, 0, 0.0);
+                gsl_matrix_set(cov, 1, 1, 0.0025);
+
+                TEST_CHECK(log_posterior.add(LogPrior::MultivariateGaussian(parameters, { "mass::b(MSbar)", "mass::c" }, mean, cov)));
+                TEST_CHECK_EQUAL(log_posterior.varied_parameters().size(), 2u);
+
+                // 'mass::c' is varied already, so the second prior must be rejected as a whole
+                TEST_CHECK(! log_posterior.add(LogPrior::Flat(parameters, "mass::c", 1.0, 1.5)));
+                TEST_CHECK_EQUAL(log_posterior.varied_parameters().size(), 2u);
             }
         }
 } log_posterior_test;
