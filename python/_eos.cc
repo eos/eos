@@ -337,7 +337,22 @@ BOOST_PYTHON_MODULE(_eos)
             :rtype: list of eos.QualifiedName
         )");
 
-    def("analyze_expression", &analyze_expression, args("input"));
+    def("analyze_expression", &analyze_expression, args("input"), R"(
+        Returns the names that an observable expression refers to.
+
+        Names enclosed in ``<<`` and ``>>`` are read as observables, names enclosed in ``[[`` and
+        ``]]`` as parameters. The names are only checked for being syntactically valid; they need
+        not be known to EOS.
+
+        :param input: The expression to analyze.
+        :type input: str
+
+        :return: The names that the expression refers to.
+        :rtype: eos.ExpressionReferences
+
+        :raises RuntimeError: if the expression does not parse, or if it contains a name that is
+            not a valid qualified name.
+        )");
 
 
     // ParameterSection
