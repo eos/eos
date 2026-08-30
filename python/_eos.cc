@@ -1780,4 +1780,8 @@ BOOST_PYTHON_MODULE(_eos)
     // EOS version
     scope().attr("__version__")      = PACKAGE_VERSION;
     scope().attr("__pkg_data_dir__") = eos::data_dir;
+
+    // Release the Python references held by external observables while the interpreter is still alive.
+    def("_release_python_observables", &release_python_observables);
+    import("atexit").attr("register")(object(scope().attr("_release_python_observables")));
 } // BOOST_PYTHON_MODULE(_eos)

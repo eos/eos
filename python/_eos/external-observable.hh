@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2025      Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -84,10 +84,22 @@ namespace eos
 
             OptionIterator begin_options() const override;
             OptionIterator end_options() const override;
+
+            /// Drop the reference to the provider, so that it is not released after the interpreter has shut down.
+            void release_provider();
     };
 
     std::shared_ptr<const ObservableEntry> register_python_observable(const QualifiedName & name, boost::python::object provider, const std::string & latex = "",
                                                                       const Unit & unit = Unit::Undefined());
+
+    /*!
+     * Drop the references that the registered external observables hold on their providers.
+     *
+     * The entries live in a process-wide singleton that outlives the Python interpreter. Releasing
+     * their references during static destruction would do so after the interpreter has shut down,
+     * hence this is registered with ``atexit`` and run while the interpreter is still alive.
+     */
+    void release_python_observables();
 } // namespace eos
 
 #endif // EOS_PYTHON__EOS_EXTERNAL_OBSERVABLE_HH
