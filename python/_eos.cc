@@ -593,7 +593,20 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self"));
 
     // ParameterUser
-    class_<ParameterUser>("ParameterUser", no_init).def("used_parameter_ids", range(&ParameterUser::begin, &ParameterUser::end));
+    class_<ParameterUser>("ParameterUser", R"(
+            Represents an entity that uses a set of parameters.
+
+            This is a base class; it records which parameters an entity depends on, so that the
+            entity can be notified when one of them changes. :class:`Observable <eos.Observable>`
+            derives from it.
+        )",
+                          no_init)
+            .def("used_parameter_ids", range(&ParameterUser::begin, &ParameterUser::end), R"(
+            Returns an iterator over the ids of the parameters used by this entity.
+
+            Each id can be passed to :meth:`Parameters.by_id <eos._Parameters.by_id>` to obtain the
+            corresponding :class:`Parameter <eos.Parameter>`.
+        )");
 
     // Kinematics
     class_<Kinematics>("Kinematics", R"(
@@ -1624,7 +1637,20 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self", "name"));
 
     // ReferenceUser
-    class_<ReferenceUser>("ReferenceUser", no_init).def("references", range(&ReferenceUser::begin_references, &ReferenceUser::end_references));
+    class_<ReferenceUser>("ReferenceUser", R"(
+            Represents an entity that is based on a set of references.
+
+            This is a base class; it records the literature that an entity's implementation is based
+            on. :class:`Observable <eos.Observable>` derives from it.
+        )",
+                          no_init)
+            .def("references", range(&ReferenceUser::begin_references, &ReferenceUser::end_references), R"(
+            Returns an iterator over the :class:`ReferenceName <eos.ReferenceName>` objects that this
+            entity is based on.
+
+            Each name can be passed to :class:`References <eos.References>` to obtain the corresponding
+            :class:`Reference <eos.Reference>`.
+        )");
 
 
     // Observable

@@ -475,9 +475,7 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
     'ExpressionReferences':                       _TODO,
     'KinematicVariable':                          _TODO,
     'OptionSpecification':                        _TODO,
-    'ParameterUser':                              _TODO,
     'ReferenceName':                              _TODO,
-    'ReferenceUser':                              _TODO,
     'test_statisticsChiSquare':                   _TODO,
 
     ('BToSWilsonCoefficients', 'c1'):             _TODO,
@@ -485,8 +483,6 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
     ('KinematicVariable', 'evaluate'):            _TODO,
     ('KinematicVariable', 'name'):                _TODO,
     ('KinematicVariable', 'set'):                 _TODO,
-    ('ParameterUser', 'used_parameter_ids'):      _TODO,
-    ('ReferenceUser', 'references'):              _TODO,
     ('_SignalPDF', 'make'):                       _TODO,
 }
 
