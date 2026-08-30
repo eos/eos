@@ -409,6 +409,7 @@ namespace eos
                     _sigma(sigma),
                     _ln_norm(-0.5 * std::log(2 * M_PI) - std::log(sigma))
                 {
+                    _varied_parameters.push_back(_parameter);
                 }
 
                 ~Gaussian() = default;

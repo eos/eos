@@ -25,8 +25,11 @@
 
 #include <test/test.hh>
 
+#include <algorithm>
 #include <cmath>
 #include <string>
+#include <utility>
+#include <vector>
 
 using namespace test;
 using namespace eos;
@@ -508,6 +511,57 @@ class LogPriorTest : public TestCase
 
                 // unrecognised type -> UnknownPriorError (derived from Exception)
                 TEST_CHECK_THROWS(Exception, LogPrior::Make(p, "Parameter: CKM::A, prior type: nonsense, range: [0,1]"));
+            }
+
+            // F: every prior reports the parameters that it varies, both directly and after cloning
+            {
+                gsl_vector * mean = gsl_vector_alloc(2);
+                gsl_vector_set(mean, 0, 4.3);
+                gsl_vector_set(mean, 1, 1.1);
+                gsl_matrix * cov = gsl_matrix_alloc(2, 2);
+                gsl_matrix_set(cov, 0, 0, 0.01);
+                gsl_matrix_set(cov, 0, 1, 0.0);
+                gsl_matrix_set(cov, 1, 0, 0.0);
+                gsl_matrix_set(cov, 1, 1, 0.0025);
+
+                std::vector<double>              shift     = { 0.0, 0.0 };
+                std::vector<std::vector<double>> transform = {
+                    {  0.707106, 0.707106 },
+                    { -0.707106, 0.707106 }
+                };
+                std::vector<double> min = { -2.0, -2.0 };
+                std::vector<double> max = { 2.0, 2.0 };
+
+                // LogPosterior::add relies on this to register the varied parameters and to reject
+                // a second prior on any of them, so every prior type must report them.
+                const std::vector<std::pair<LogPriorPtr, std::vector<std::string>>> priors{
+                    { LogPrior::Flat(parameters, "mass::b(MSbar)", 4.2, 4.5), { "mass::b(MSbar)" } },
+                    { LogPrior::CurtailedGauss(parameters, "mass::b(MSbar)", 4.15, 4.57, 4.2, 4.3, 4.5), { "mass::b(MSbar)" } },
+                    { LogPrior::Scale(parameters, "mass::b(MSbar)", 2.0, 10.0, mu_0, lambda), { "mass::b(MSbar)" } },
+                    { LogPrior::Gaussian(parameters, "mass::b(MSbar)", 4.3, 0.1), { "mass::b(MSbar)" } },
+                    { LogPrior::Poisson(parameters, "mass::b(MSbar)", 10.0), { "mass::b(MSbar)" } },
+                    { LogPrior::MultivariateGaussian(parameters, { "mass::b(MSbar)", "mass::c" }, mean, cov), { "mass::b(MSbar)", "mass::c" } },
+                    { LogPrior::Transform(parameters, { "scnuee::Re{cVL}", "scnuee::Re{cVR}" }, shift, transform, min, max), { "scnuee::Re{cVL}", "scnuee::Re{cVR}" } }
+                };
+
+                for (const auto & [prior, expected] : priors)
+                {
+                    for (const LogPriorPtr & p : { prior, prior->clone(parameters) })
+                    {
+                        std::vector<std::string> names;
+                        for (auto i = p->begin(), i_end = p->end(); i != i_end; ++i)
+                        {
+                            names.push_back(i->name());
+                        }
+
+                        TEST_CHECK_EQUAL(names.size(), expected.size());
+
+                        for (auto i = 0u; i < std::min(names.size(), expected.size()); ++i)
+                        {
+                            TEST_CHECK_EQUAL(names[i], expected[i]);
+                        }
+                    }
+                }
             }
         }
 } log_prior_test;
