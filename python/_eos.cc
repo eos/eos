@@ -212,31 +212,66 @@ BOOST_PYTHON_MODULE(_eos)
 
     // {{{ eos/utils
     // qnp::Prefix
-    class_<qnp::Prefix>("qnpPrefix", init<std::string>())
+    class_<qnp::Prefix>("qnpPrefix", R"(
+            Represents the prefix part of a :class:`QualifiedName <eos.QualifiedName>`, i.e. the part
+            preceeding the '::'.
+
+            Objects of this class are returned by :meth:`QualifiedName.prefix_part <eos.QualifiedName.prefix_part>`
+            and can be created from a ``str``.
+        )",
+                        init<std::string>())
             .def("__repr__", &qnp::Prefix::str, return_value_policy<copy_const_reference>())
             .def("__str__", &qnp::Prefix::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &qnp::Prefix::operator<);
 
     // qnp::Name
-    class_<qnp::Name>("qnpName", init<std::string>())
+    class_<qnp::Name>("qnpName", R"(
+            Represents the name part of a :class:`QualifiedName <eos.QualifiedName>`, i.e. the part
+            following the '::' and preceeding any optional '@'.
+
+            Objects of this class are returned by :meth:`QualifiedName.name_part <eos.QualifiedName.name_part>`
+            and can be created from a ``str``.
+        )",
+                      init<std::string>())
             .def("__repr__", &qnp::Name::str, return_value_policy<copy_const_reference>())
             .def("__str__", &qnp::Name::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &qnp::Name::operator<);
 
     // qnp::Suffix
-    class_<qnp::Suffix>("qnpSuffix", init<std::string>())
+    class_<qnp::Suffix>("qnpSuffix", R"(
+            Represents the suffix part of a :class:`QualifiedName <eos.QualifiedName>`, i.e. the part
+            following the optional '@'.
+
+            Objects of this class are returned by :meth:`QualifiedName.suffix_part <eos.QualifiedName.suffix_part>`
+            and can be created from a ``str``.
+        )",
+                        init<std::string>())
             .def("__repr__", &qnp::Suffix::str, return_value_policy<copy_const_reference>())
             .def("__str__", &qnp::Suffix::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &qnp::Suffix::operator<);
 
     // qnp::OptionKey
-    class_<qnp::OptionKey>("qnpOptionKey", init<std::string>())
+    class_<qnp::OptionKey>("qnpOptionKey", R"(
+            Represents the key of a single option within the options part of a
+            :class:`QualifiedName <eos.QualifiedName>`, i.e. the part of an option preceeding the '='.
+
+            Objects of this class occur when iterating :meth:`QualifiedName.options_part <eos.QualifiedName.options_part>`
+            and can be created from a ``str``.
+        )",
+                           init<std::string>())
             .def("__repr__", &qnp::OptionKey::str, return_value_policy<copy_const_reference>())
             .def("__str__", &qnp::OptionKey::str, return_value_policy<copy_const_reference>());
     implicitly_convertible<std::string, qnp::OptionKey>();
 
     // qnp::OptionValue
-    class_<qnp::OptionValue>("qnpOptionValue", init<std::string>())
+    class_<qnp::OptionValue>("qnpOptionValue", R"(
+            Represents the value of a single option within the options part of a
+            :class:`QualifiedName <eos.QualifiedName>`, i.e. the part of an option following the '='.
+
+            Objects of this class occur when iterating :meth:`QualifiedName.options_part <eos.QualifiedName.options_part>`
+            and can be created from a ``str``.
+        )",
+                             init<std::string>())
             .def("__repr__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>())
             .def("__str__", &qnp::OptionValue::str, return_value_policy<copy_const_reference>())
             .def("__eq__", &qnp::OptionValue::operator==)
@@ -910,19 +945,40 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self"));
 
     // rnp::Name
-    class_<rnp::Name>("rnpName", init<std::string>())
+    class_<rnp::Name>("rnpName", R"(
+            Represents the name part of a :class:`ReferenceName <eos.ReferenceName>`, i.e. the part
+            preceeding the ':'.
+
+            Objects of this class are returned by :meth:`ReferenceName.name_part <eos.ReferenceName.name_part>`
+            and can be created from a ``str``.
+        )",
+                      init<std::string>())
             .def("__repr__", &rnp::Name::str, return_value_policy<copy_const_reference>())
             .def("__str__", &rnp::Name::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &rnp::Name::operator<);
 
     // rnp::Year
-    class_<rnp::Year>("rnpYear", init<std::string>())
+    class_<rnp::Year>("rnpYear", R"(
+            Represents the year part of a :class:`ReferenceName <eos.ReferenceName>`, i.e. the four
+            digits following the ':'.
+
+            Objects of this class are returned by :meth:`ReferenceName.year_part <eos.ReferenceName.year_part>`
+            and can be created from a ``str``.
+        )",
+                      init<std::string>())
             .def("__repr__", &rnp::Year::str, return_value_policy<copy_const_reference>())
             .def("__str__", &rnp::Year::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &rnp::Year::operator<);
 
     // rnp::Index
-    class_<rnp::Index>("rnpIndex", init<std::string>())
+    class_<rnp::Index>("rnpIndex", R"(
+            Represents the index part of a :class:`ReferenceName <eos.ReferenceName>`, i.e. the
+            letters following the year part.
+
+            Objects of this class are returned by :meth:`ReferenceName.index_part <eos.ReferenceName.index_part>`
+            and can be created from a ``str``.
+        )",
+                       init<std::string>())
             .def("__repr__", &rnp::Index::str, return_value_policy<copy_const_reference>())
             .def("__str__", &rnp::Index::str, return_value_policy<copy_const_reference>())
             .def("__lt__", &rnp::Index::operator<);

@@ -464,8 +464,6 @@ BINDINGS_XFAILS_UNTESTABLE = {
 }
 
 
-_QNP_HELPER   = 'internal helper for one part of a qualified name'
-_RNP_HELPER   = 'internal helper for one part of a reference name'
 _UNIT_FACTORY = 'named after the unit that it returns'
 _TODO         = 'not yet documented'
 
@@ -488,14 +486,6 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
     'SignalPDFGroup':                             _TODO,
     'SignalPDFSection':                           _TODO,
     'test_statisticsChiSquare':                   _TODO,
-    'qnpName':                                    _QNP_HELPER,
-    'qnpOptionKey':                               _QNP_HELPER,
-    'qnpOptionValue':                             _QNP_HELPER,
-    'qnpPrefix':                                  _QNP_HELPER,
-    'qnpSuffix':                                  _QNP_HELPER,
-    'rnpIndex':                                   _RNP_HELPER,
-    'rnpName':                                    _RNP_HELPER,
-    'rnpYear':                                    _RNP_HELPER,
 
     ('BToSWilsonCoefficients', 'c1'):             _TODO,
     ('BToSWilsonCoefficients', 'c2'):             _TODO,
