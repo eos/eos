@@ -472,7 +472,6 @@ _TODO         = 'not yet documented'
 # since Python's own conventions describe them.
 BINDINGS_XFAILS_UNDOCUMENTED = {
     'BToSWilsonCoefficients':                     _TODO,
-    'ExpressionReferences':                       _TODO,
     'OptionSpecification':                        _TODO,
     'ReferenceName':                              _TODO,
     'test_statisticsChiSquare':                   _TODO,
