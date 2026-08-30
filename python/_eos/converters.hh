@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2025      Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -18,9 +18,11 @@
  */
 
 #include <eos/utils/qualified-name-parts.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <boost/python.hpp>
 
+#include <map>
 #include <string>
 #include <variant>
 #include <vector>
@@ -58,6 +60,51 @@ namespace impl
             get_pytype()
             {
                 return &PyList_Type;
+            }
+    };
+
+    struct LeptonFlavorFromPythonStringConverter
+    {
+            LeptonFlavorFromPythonStringConverter() { boost::python::converter::registry::push_back(&convertible, &construct, boost::python::type_id<eos::LeptonFlavor>()); }
+
+            static const std::map<std::string, eos::LeptonFlavor> &
+            values()
+            {
+                static const std::map<std::string, eos::LeptonFlavor> result{
+                    {   "e", eos::LeptonFlavor::electron },
+                    {  "mu",     eos::LeptonFlavor::muon },
+                    { "tau",    eos::LeptonFlavor::tauon }
+                };
+
+                return result;
+            }
+
+            static void *
+            convertible(PyObject * object)
+            {
+                if (! PyUnicode_Check(object))
+                {
+                    return nullptr;
+                }
+
+                const char * const string = PyUnicode_AsUTF8(object);
+
+                if ((nullptr == string) || (values().end() == values().find(string)))
+                {
+                    return nullptr;
+                }
+
+                return object;
+            }
+
+            static void
+            construct(PyObject * object, boost::python::converter::rvalue_from_python_stage1_data * data)
+            {
+                void * const storage = reinterpret_cast<boost::python::converter::rvalue_from_python_storage<eos::LeptonFlavor> *>(data)->storage.bytes;
+
+                new (storage) eos::LeptonFlavor(values().at(PyUnicode_AsUTF8(object)));
+
+                data->convertible = storage;
             }
     };
 

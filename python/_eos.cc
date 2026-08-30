@@ -667,6 +667,7 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Model
     register_ptr_to_python<std::shared_ptr<Model>>();
+    ::impl::LeptonFlavorFromPythonStringConverter converter_lepton_flavor;
     class_<Model, boost::noncopyable>("Model", R"(
             Represents a physics model, providing access to the CKM matrix elements, quark masses in
             various renormalization schemes, the strong coupling, and Wilson coefficients.
