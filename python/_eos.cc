@@ -1607,10 +1607,29 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self"));
 
     // test_statistics::ChiSquare
-    class_<test_statistics::ChiSquare>("test_statisticsChiSquare", no_init)
-            .def_readonly("chi2", &test_statistics::ChiSquare::chi2)
-            .def_readonly("dof", &test_statistics::ChiSquare::dof)
-            .def_readonly("signed_chi", &test_statistics::ChiSquare::signed_chi);
+    class_<test_statistics::ChiSquare>("test_statisticsChiSquare", R"(
+            Represents the :math:`\chi^2` test statistic for one log-likelihood block.
+
+            Objects of this class cannot be created directly; they are obtained by iterating a
+            :class:`GoodnessOfFit <eos.GoodnessOfFit>` object.
+        )",
+                                       no_init)
+            .def_readonly("chi2", &test_statistics::ChiSquare::chi2, R"(
+            The value of the :math:`\chi^2` test statistic.
+
+            :rtype: float
+        )")
+            .def_readonly("dof", &test_statistics::ChiSquare::dof, R"(
+            The number of degrees of freedom that contribute to the test statistic.
+
+            :rtype: float
+        )")
+            .def_readonly("signed_chi", &test_statistics::ChiSquare::signed_chi, R"(
+            The signed square root of the :math:`\chi^2` test statistic, which is only meaningful
+            for a block with a single degree of freedom.
+
+            :rtype: float
+        )");
 
     // GoodnessOfFit
     ::impl::std_pair_to_python_converter<const QualifiedName, test_statistics::ChiSquare> converter_goodnessoffit_chi_square_iter;
