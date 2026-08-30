@@ -647,11 +647,38 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__str__", &Kinematics::as_string);
 
     // KinematicVariable
-    class_<KinematicVariable>("KinematicVariable", no_init)
+    class_<KinematicVariable>("KinematicVariable", R"(
+            Represents a single kinematic variable within a :class:`Kinematics <eos.Kinematics>` object.
+
+            Users cannot directly create new objects of this class. They are obtained from a
+            :class:`Kinematics <eos.Kinematics>` object by name, by iteration, or as the result of
+            :meth:`Kinematics.declare <eos.Kinematics.declare>`.
+
+            An object of this class is a handle to the variable rather than a copy of its value:
+            :meth:`set <eos.KinematicVariable.set>` changes the value seen by the owning
+            :class:`Kinematics <eos.Kinematics>` object and by everything bound to it.
+        )",
+                              no_init)
             .def(float_(self))
-            .def("name", &KinematicVariable::name, return_value_policy<copy_const_reference>())
-            .def("set", &KinematicVariable::set)
-            .def("evaluate", &KinematicVariable::evaluate);
+            .def("name", &KinematicVariable::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this kinematic variable.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("set", &KinematicVariable::set, R"(
+            Sets the value of this kinematic variable.
+
+            :param value: The new value of the kinematic variable.
+            :type value: float
+        )",
+                 args("self", "value"))
+            .def("evaluate", &KinematicVariable::evaluate, R"(
+            Returns the current value of this kinematic variable.
+
+            :rtype: float
+        )",
+                 args("self"));
 
     // Options
     ::impl::std_pair_to_python_converter<const qnp::OptionKey, qnp::OptionValue> converter_options_iter;

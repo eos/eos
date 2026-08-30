@@ -473,16 +473,12 @@ _TODO         = 'not yet documented'
 BINDINGS_XFAILS_UNDOCUMENTED = {
     'BToSWilsonCoefficients':                     _TODO,
     'ExpressionReferences':                       _TODO,
-    'KinematicVariable':                          _TODO,
     'OptionSpecification':                        _TODO,
     'ReferenceName':                              _TODO,
     'test_statisticsChiSquare':                   _TODO,
 
     ('BToSWilsonCoefficients', 'c1'):             _TODO,
     ('BToSWilsonCoefficients', 'c2'):             _TODO,
-    ('KinematicVariable', 'evaluate'):            _TODO,
-    ('KinematicVariable', 'name'):                _TODO,
-    ('KinematicVariable', 'set'):                 _TODO,
     ('_SignalPDF', 'make'):                       _TODO,
 }
 
