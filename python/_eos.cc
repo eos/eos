@@ -1980,7 +1980,24 @@ BOOST_PYTHON_MODULE(_eos)
             See also `the complete list of PDFs <../reference/signal-pdfs.html>`_.
     )",
                                           no_init)
-            .def("make", &SignalPDF::make, return_value_policy<return_by_value>()) // docstring is maintained in python/eos/signal_pdf.py
+            .def("make", &SignalPDF::make, return_value_policy<return_by_value>(), R"(
+            Makes a new :class:`_SignalPDF` object.
+
+            Use :meth:`SignalPDF.make <eos.SignalPDF.make>` instead, which returns the same object
+            with the ``variables`` and ``bounds`` attributes set.
+
+            :param name: The name of the probability density function (PDF).
+            :type name: eos.QualifiedName
+            :param parameters: The set of parameters to which this PDF is bound.
+            :type parameters: eos.Parameters
+            :param kinematics: The set of kinematic variables to which this PDF is bound.
+            :type kinematics: eos.Kinematics
+            :param options: The set of options relevant to this PDF.
+            :type options: eos.Options
+
+            :return: The new PDF object, or ``None`` if no PDF of that name is known.
+            :rtype: eos._SignalPDF
+        )")
             .staticmethod("make")
             .def("evaluate", &SignalPDF::evaluate, R"(
             Evaluates the (unnormalized) PDF for the present values of the sets of parameters and kinematic variables that it is bound to.
