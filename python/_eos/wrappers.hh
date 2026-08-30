@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -21,6 +21,7 @@
 #include "eos/models/model.hh"
 #include "eos/observable.hh"
 #include "eos/utils/exception.hh"
+#include "eos/utils/observable_cache.hh"
 #include "eos/utils/options.hh"
 #include "eos/utils/qualified-name.hh"
 
@@ -42,6 +43,9 @@ namespace impl
 
     // shim for Model::make, accepting a Python str and implicitly converting it to a qnp::OptionValue
     std::shared_ptr<eos::Model> Model_make(const std::string & name, const eos::Parameters & parameters, const eos::Options & options);
+
+    // representation of an ObservableCache::ObservableId, based on its underlying value
+    std::string ObservableId_repr(const eos::ObservableCache::ObservableId & id);
 
     // converter for eos::Exception
     void translate_exception(const eos::Exception & e);

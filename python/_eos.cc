@@ -851,9 +851,21 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self", "mu"));
 
     class_<ObservableCache::ObservableId>("ObservableId", R"(
-    )",
+            Represents an opaque handle to an observable within an :class:`ObservableCache <eos.ObservableCache>`.
+
+            Users cannot directly create new objects of this class. New handles are obtained from
+            :meth:`ObservableCache.add <eos.ObservableCache.add>`.
+        )",
                                           no_init)
-            .def("value", &ObservableCache::ObservableId::value, return_value_policy<return_by_value>());
+            .def("value", &ObservableCache::ObservableId::value, return_value_policy<return_by_value>(), R"(
+            Returns the underlying numeric value of the handle.
+
+            :rtype: int
+        )",
+                 args("self"))
+            .def("__repr__", &::impl::ObservableId_repr)
+            .def("__hash__", &ObservableCache::ObservableId::value, return_value_policy<return_by_value>())
+            .def(self == self);
 
     // ObservableCache
     class_<ObservableCache>("ObservableCache", R"(
@@ -865,7 +877,7 @@ BOOST_PYTHON_MODULE(_eos)
             Access the cached value of an observable.
 
             :param handle: The handle of the observable.
-            :type handle: int
+            :type handle: eos.ObservableId
         )",
                  args("self", "handle"))
             .def("add", &ObservableCache::add, R"(
@@ -875,7 +887,7 @@ BOOST_PYTHON_MODULE(_eos)
             :type observable: eos.Observable
 
             :returns: An internal handle to the cached observable. The observable's value can be retrieved using ``cache[handle]``.
-            :rtype: int
+            :rtype: eos.ObservableId
         )",
                  args("self", "observable"))
             .def("update", &ObservableCache::update, R"(

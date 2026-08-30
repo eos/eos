@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2016-2023 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -22,6 +22,7 @@
 
 #include "eos/utils/wilson-polynomial.hh"
 
+#include <format>
 #include <vector>
 
 using boost::python::_;
@@ -128,6 +129,13 @@ namespace impl
     Model_make(const std::string & name, const eos::Parameters & parameters, const eos::Options & options)
     {
         return eos::Model::make(eos::qnp::OptionValue(name), parameters, options);
+    }
+
+    // representation of an ObservableCache::ObservableId, based on its underlying value
+    std::string
+    ObservableId_repr(const eos::ObservableCache::ObservableId & id)
+    {
+        return std::format("ObservableId({})", id.value());
     }
 
     // converter for eos::Exception
