@@ -475,7 +475,6 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
 
     ('BToSWilsonCoefficients', 'c1'):             _TODO,
     ('BToSWilsonCoefficients', 'c2'):             _TODO,
-    ('_SignalPDF', 'make'):                       _TODO,
 }
 
 
