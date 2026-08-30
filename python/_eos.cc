@@ -1846,7 +1846,7 @@ BOOST_PYTHON_MODULE(_eos)
         :return: The new observable.
         :rtype: eos.Observable
         )");
-    def("make_wilson_polynomial_ratio_observable", &make_wilson_polynomial_ratio_observable, args("name", "reference_observable", "coefficients"),
+    def("make_wilson_polynomial_ratio_observable", &make_wilson_polynomial_ratio_observable, args("name", "reference_numerator", "reference_denominator", "coefficients"),
         R"(
         Creates a new observable as a ratio of two polynomial expansion of reference observables.
 
