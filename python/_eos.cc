@@ -737,10 +737,28 @@ BOOST_PYTHON_MODULE(_eos)
 
     // OptionSpecification
     ::impl::std_vector_to_python_converter<std::string> converter_option_specifications;
-    class_<OptionSpecification>("OptionSpecification", no_init)
-            .def_readonly("key", &OptionSpecification::key)
-            .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()))
-            .add_property("default_value", &::impl::OptionSpecification_default_value);
+    class_<OptionSpecification>("OptionSpecification", R"(
+            Represents a single option that an observable or signal PDF accepts.
+
+            Objects of this class cannot be created directly; they are obtained by iterating
+            :meth:`ObservableEntry.options <eos.ObservableEntry.options>`.
+        )",
+                                no_init)
+            .def_readonly("key", &OptionSpecification::key, R"(
+            The key under which this option is provided.
+
+            :rtype: eos.qnpOptionKey
+        )")
+            .add_property("allowed_values", make_getter(&OptionSpecification::allowed_values, return_value_policy<return_by_value>()), R"(
+            The values that this option is allowed to take.
+
+            :rtype: list of str
+        )")
+            .add_property("default_value", &::impl::OptionSpecification_default_value, R"(
+            The value that this option takes if it is not provided, or ``None`` if it has no default.
+
+            :rtype: str or None
+        )");
     // register converter for OptionSpecification::allowed_values
     to_python_converter<std::variant<qnp::OptionValue, std::vector<qnp::OptionValue>>, ::impl::VariantOptionAllowedValuesConverter, true>();
 
