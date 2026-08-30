@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,9 +23,22 @@
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <vector>
+
 using boost::python::extract;
 using boost::python::object;
 using boost::python::stl_input_iterator;
+
+namespace
+{
+    std::vector<std::shared_ptr<eos::ExternalObservableEntry>> &
+    registered_entries()
+    {
+        static std::vector<std::shared_ptr<eos::ExternalObservableEntry>> result;
+
+        return result;
+    }
+} // namespace
 
 namespace eos
 {
@@ -117,6 +130,12 @@ namespace eos
 
     ExternalObservableEntry::~ExternalObservableEntry() = default;
 
+    void
+    ExternalObservableEntry::release_provider()
+    {
+        _provider = object();
+    }
+
     ObservablePtr
     ExternalObservableEntry::make(const Parameters & parameters, const Kinematics & kinematics, const Options & options) const
     {
@@ -168,10 +187,22 @@ namespace eos
     std::shared_ptr<const ObservableEntry>
     register_python_observable(const QualifiedName & name, boost::python::object provider, const std::string & latex, const Unit & unit)
     {
-        std::shared_ptr<const ObservableEntry> entry(new ExternalObservableEntry(name, provider, latex, unit));
+        std::shared_ptr<ExternalObservableEntry> entry(new ExternalObservableEntry(name, provider, latex, unit));
 
         ObservableEntries::instance()->insert_or_assign(name, entry);
+        registered_entries().push_back(entry);
 
         return entry;
+    }
+
+    void
+    release_python_observables()
+    {
+        for (auto & entry : registered_entries())
+        {
+            entry->release_provider();
+        }
+
+        registered_entries().clear();
     }
 } // namespace eos
