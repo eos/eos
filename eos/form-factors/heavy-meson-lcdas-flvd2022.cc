@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022-2025 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022-2023 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -132,7 +132,7 @@ namespace eos
                 const double C_A = 3.0;
                 const double C_F = 4.0 / 3.0;
                 const double T_F = 1.0 / 2.0;
-                const double n_f = 5.0;
+                const double n_f = 4.0;
 
                 auto gamma_cusp = [&](const double & alpha_s)
                 {
@@ -140,30 +140,23 @@ namespace eos
                     return (a * 4.0 * C_F + power_of<2>(a) * 4.0 * C_F * ((67.0 / 9.0 - power_of<2>(M_PI) / 3.0) * C_A - 20.0 / 9.0 * T_F * n_f));
                 };
 
-                auto beta = [&](const double & alpha_s)
-                {
-                    const double a = alpha_s / (4.0 * M_PI);
-                    return -2.0 * alpha_s
-                           * (a * (11.0 / 3.0 * C_A - 4.0 / 3.0 * T_F * n_f)
-                              + power_of<2>(a) * (34.0 / 3.0 * power_of<2>(C_A) - 20.0 / 3.0 * C_A * T_F * n_f - 4.0 * C_F * T_F * n_f));
-                };
-
                 auto gamma_plus = [&](const double alpha_s) { return -2.0 * alpha_s * C_F / (4.0 * M_PI); };
 
-                const double alpha_s_0 = this->alpha_s(mu_0);
-                const double alpha_s_h = this->alpha_s(mu);
+                const double log_mu_0 = std::log(mu_0);
+                const double log_mu_h = std::log(mu);
 
-                auto         g_integrand = [&](const double alpha_s) { return gamma_cusp(alpha_s) / beta(alpha_s); };
-                const double g           = integrate<GSL::QAGS>(g_integrand, alpha_s_0, alpha_s_h);
+                // Integrate over the physical scale so the anomalous dimensions use the same
+                // running coupling (including its threshold treatment) as the selected model.
+                auto         g_integrand = [&](const double log_mu) { return gamma_cusp(this->alpha_s(std::exp(log_mu))); };
+                const double g           = integrate<GSL::QAGS>(g_integrand, log_mu_0, log_mu_h);
 
-                auto V_integrand = [&](const double alpha_s)
+                auto V_integrand = [&](const double log_mu)
                 {
-                    auto         inner_integrand = [&](const double alpha_s) { return 1.0 / beta(alpha_s); };
-                    const double inner           = integrate<GSL::QAGS>(inner_integrand, alpha_s_0, alpha_s);
+                    const double alpha_s = this->alpha_s(std::exp(log_mu));
 
-                    return -1.0 / beta(alpha_s) * (gamma_cusp(alpha_s) * inner + gamma_plus(alpha_s));
+                    return -gamma_cusp(alpha_s) * (log_mu - log_mu_0) - gamma_plus(alpha_s);
                 };
-                const double V = integrate<GSL::QAGS>(V_integrand, alpha_s_0, alpha_s_h);
+                const double V = integrate<GSL::QAGS>(V_integrand, log_mu_0, log_mu_h);
 
                 const double g2 = g * g;
                 const double g3 = g2 * g;
@@ -319,6 +312,52 @@ namespace eos
         FLvD2022::phi_plus(const double & /* omega */) const
         {
             throw InternalError("Function not yet implemented");
+        }
+
+        double
+        FLvD2022::phi_minusWW(const double & omega) const
+        {
+            // The Wandzura-Wilczek part of the twist-three LCDA phi_-, i.e.
+            // phi_-^WW(omega) = int_omega^infinity d eta phi_+(eta) / eta.
+            //
+            // cf. [FLvD:2022A], Sec. "Application to Higher Twist". Using the Laguerre generating
+            // function, the omega dependence factorises into exp(-x) times a polynomial in
+            // x = omega / omega_0,
+            //
+            //   phi_-^WW(omega) = exp(-x) / omega_0 sum_k a_k / (1 + k) sum_{j=0}^{k} (-1)^{k-j} L_j(2 x) ,
+            //
+            // which casts it in the same weight-vector form as inverse_moment() below, with the
+            // weights depending on omega. At omega = 0 the inner sums collapse to one and this
+            // reduces to inverse_moment(), as it must; at a_k = (1, 0, ..., 0) the whole
+            // expression reduces to exp(-omega / omega_0) / omega_0, i.e. to the result of the
+            // exponential model.
+            //
+            // Evaluated at mu_0: [BBJW:2018A], Sec. 5, evaluate the higher-twist contributions and
+            // their soft corrections at the reference scale rather than at the hard-collinear one.
+            const double x = omega / omega_0;
+
+            // Laguerre polynomials L_j(2 x) for j = 0 ... number_of_parameters - 1, by the
+            // recurrence (j + 1) L_{j+1}(y) = (2 j + 1 - y) L_j(y) - j L_{j-1}(y).
+            Weights L;
+            L[0] = 1.0;
+            L[1] = 1.0 - 2.0 * x;
+            for (unsigned j = 1; j + 1 < L.size(); ++j)
+            {
+                L[j + 1] = ((2.0 * j + 1.0 - 2.0 * x) * L[j] - j * L[j - 1]) / (j + 1.0);
+            }
+
+            // c_k = 1 / (1 + k) sum_{j=0}^{k} (-1)^{k-j} L_j(2 x), built by the alternating
+            // partial sum s_k = L_k(2 x) - s_{k-1}.
+            Weights c;
+            double  s = 0.0;
+            for (unsigned k = 0; k < c.size(); ++k)
+            {
+                s    = L[k] - s;
+                c[k] = s / (1.0 + k);
+            }
+
+            auto [a_begin, a_end] = this->coefficient_range(mu_0);
+            return std::exp(-x) / omega_0 * std::inner_product(a_begin, a_end, c.begin(), 0.0);
         }
 
         double
@@ -546,9 +585,23 @@ namespace eos
         }
 
         double
+        FLvD2022::xi_1(const double & /* omega */) const
+        {
+            throw InternalError("The twist-3,4 soft contribution is not implemented for the FLvD2022 LCDA model");
+        }
+
+        double
+        FLvD2022::xi_2(const double & /* omega */) const
+        {
+            throw InternalError("The twist-3,4 soft contribution is not implemented for the FLvD2022 LCDA model");
+        }
+
+        double
         FLvD2022::inverse_lambda_plus() const
         {
-            throw InternalError("Function not yet implemented");
+            // 1 / lambda_B(mu_0) = phi_-^WW(0), cf. the comment on phi_minusWW() above for the
+            // choice of scale.
+            return this->inverse_moment(mu_0);
         }
 
         double

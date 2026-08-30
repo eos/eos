@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2024 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2018 Nico Gubernari
  * Copyright (c) 2018 Ahmet Kokulu
  * Copyright (c) 2022 Philip Lüghausen
@@ -45,6 +45,11 @@ namespace eos
          *
          * For the three-particle decomposition, we use the parametrization
          * as defined in [KMO:2006A], eq. (28), p. 10.
+         *
+         * The option ``lambda-b-source`` selects the parameter used for the
+         * inverse-moment scale: ``legacy`` uses ``B::1/lambda_B_p``, while
+         * ``FLvD2022`` uses the flavour-specific ``omega_0@FLvD2022``. The
+         * latter is presently available for the u/d spectator only.
          */
         class Exponential : public HeavyMesonLCDAs
         {
@@ -52,15 +57,17 @@ namespace eos
                 QuarkFlavorOption opt_Q;
                 QuarkFlavorOption opt_q;
                 RestrictedOption  opt_gminus;
+                RestrictedOption  opt_lambda_b_source;
 
-                UsedParameter lambda_B_inv;
+                UsedParameter lambda_B_parameter;
+                Parameter     lambda_bar;
                 UsedParameter lambda_E2;
                 UsedParameter lambda_H2;
 
                 double switch_gminus;
 
                 inline double lambda_B() const;
-                std::string   parameter(const char * _name) const;
+                std::string   parameter(const char * _name, const bool & flvd2022 = false) const;
 
                 static const std::vector<OptionSpecification> options;
 
@@ -76,7 +83,14 @@ namespace eos
                  * omega: plus-component of the spectator momentum
                  */
                 virtual double phi_plus(const double & omega) const final override;
+
+                /*!
+                 * Twist-three two-particle LCDAs
+                 *
+                 * omega: plus-component of the spectator momentum
+                 */
                 virtual double phi_minus(const double & omega) const final override;
+                virtual double phi_minusWW(const double & omega) const final override;
                 virtual double phi_bar(const double & omega) const final override;
                 virtual double phi_bar_d1(const double & omega) const final override;
 
@@ -121,6 +135,9 @@ namespace eos
 
                 virtual double psi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
                 virtual double chi_bar_bar_4(const double & omega_1, const double & omega_2) const final override;
+
+                virtual double xi_1(const double & omega) const final override;
+                virtual double xi_2(const double & omega) const final override;
                 /*!
                  * Pseudo observables for the two-particle LCDAs
                  */
@@ -146,7 +163,7 @@ namespace eos
                 virtual double Ybar_A(const double & omega, const double & xi) const final override;
 
                 /*!
-                 * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
+                 * Parameters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
                  *
                  * mu: the renormalization scale
                  */

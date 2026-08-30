@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2022 Danny van Dyk
+ * Copyright (c) 2022-2026 Danny van Dyk
  * Copyright (c) 2022 Philip Lüghausen
  *
  * This file is part of the EOS project. EOS is free software;
@@ -50,7 +50,7 @@ namespace eos
             static std::shared_ptr<HeavyMesonLCDAs> make(const std::string & name, const Parameters & parameters, const Options & options);
 
             /*!
-             * Parmeters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
+             * Parameters of the B-Meson LCDA phi+ as defined in Ref. [FLvD:2022A]
              *
              * mu: the renormalization scale
              */
@@ -63,10 +63,17 @@ namespace eos
              *
              * omega: plus-component of the spectator momentum
              */
-            virtual double phi_plus(const double & omega) const   = 0;
-            virtual double phi_minus(const double & omega) const  = 0;
-            virtual double phi_bar(const double & omega) const    = 0;
-            virtual double phi_bar_d1(const double & omega) const = 0;
+            virtual double phi_plus(const double & omega) const = 0;
+
+            /*!
+             * Twist-three two-particle LCDAs
+             *
+             * omega: plus-component of the spectator momentum
+             */
+            virtual double phi_minus(const double & omega) const   = 0;
+            virtual double phi_minusWW(const double & omega) const = 0;
+            virtual double phi_bar(const double & omega) const     = 0;
+            virtual double phi_bar_d1(const double & omega) const  = 0;
 
             /*!
              * Next-to-leading twist two-particle LCDAs
@@ -109,10 +116,16 @@ namespace eos
 
             virtual double psi_bar_bar_4(const double & omega_1, const double & omega_2) const = 0;
             virtual double chi_bar_bar_4(const double & omega_1, const double & omega_2) const = 0;
+
+            /*!
+             * Higher-twist kernels entering B -> gamma form factors.
+             */
+            virtual double xi_1(const double & omega) const = 0;
+            virtual double xi_2(const double & omega) const = 0;
             /*!
              * Pseudo observables for the two-particle LCDAs
              */
-            virtual double inverse_lambda_plus() const                                         = 0;
+            virtual double inverse_lambda_plus() const      = 0;
 
             /*!
              * Leading power three-particle LCDAs
