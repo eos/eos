@@ -1146,7 +1146,14 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__lt__", &rnp::Index::operator<);
 
     // ReferenceName
-    class_<ReferenceName>("ReferenceName", init<std::string>())
+    class_<ReferenceName>("ReferenceName", R"(
+            Represents the name of a reference in the EOS bibliography.
+
+            A reference name is composed of a name part, a year part, and an index part, as in
+            ``BSZ:2015A``. Objects of this class can be created from a ``str`` and are used to look
+            up a :class:`Reference <eos.Reference>` in :class:`References <eos.References>`.
+        )",
+                          init<std::string>())
             .def("__str__", &ReferenceName::str, return_value_policy<copy_const_reference>())
             .def("__eq__", &ReferenceName::operator==)
             .def("__ne__", &ReferenceName::operator!=)
