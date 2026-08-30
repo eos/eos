@@ -303,7 +303,15 @@ BOOST_PYTHON_MODULE(_eos)
             .def("description", &ParameterGroup::description, return_value_policy<copy_const_reference>());
 
     // Parameters
-    class_<Parameters>("_Parameters", no_init)
+    class_<Parameters>("_Parameters", R"(
+            Represents the set of parameters known to EOS.
+
+            This is the native base class of :class:`eos.Parameters <eos.Parameters>`, which should be
+            used instead. Objects of this class cannot be created directly; use the
+            :meth:`Defaults <eos._Parameters.Defaults>` static method to obtain an independent instance
+            of the default set of parameters.
+        )",
+                       no_init)
             .def("Defaults", &Parameters::Defaults, R"(
             Returns an independent instance of the default set of parameters known to EOS.
 
@@ -1135,7 +1143,13 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Constraints
     ::impl::std_pair_to_python_converter<const QualifiedName, std::shared_ptr<const ConstraintEntry>> converter_constraints_iter;
-    class_<Constraints>("_Constraints")
+    class_<Constraints>("_Constraints", R"(
+            Represents the complete list of constraints known to EOS.
+
+            This is the native base class of :class:`eos.Constraints <eos.Constraints>`, which should be
+            used instead. Each entry maps a :class:`QualifiedName <eos.QualifiedName>` to a
+            :class:`ConstraintEntry <eos.ConstraintEntry>`.
+        )")
             .def("__getitem__", (std::shared_ptr<const ConstraintEntry>(Constraints::*)(const QualifiedName &) const) & Constraints::operator[])
             .def("__iter__", range(&Constraints::begin, &Constraints::end))
             .def("__contains__", &Constraints::has, R"(
@@ -1446,7 +1460,13 @@ BOOST_PYTHON_MODULE(_eos)
 
     // References
     ::impl::std_pair_to_python_converter<const ReferenceName, ReferencePtr> converter_references_iter;
-    class_<References>("_References")
+    class_<References>("_References", R"(
+            Represents the complete list of references known to EOS.
+
+            This is the native base class of :class:`eos.References <eos.References>`, which should be
+            used instead. Each entry maps a :class:`ReferenceName <eos.ReferenceName>` to a
+            :class:`Reference <eos.Reference>`.
+        )")
             .def("__getitem__", &References::operator[])
             .def("__iter__", range(&References::begin, &References::end))
             .def("__contains__", &References::has, R"(
@@ -1619,7 +1639,13 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Observables
     ::impl::std_pair_to_python_converter<const QualifiedName, ObservableEntryPtr> converter_observables_iter;
-    class_<Observables>("_Observables")
+    class_<Observables>("_Observables", R"(
+            Represents the complete list of observables known to EOS.
+
+            This is the native base class of :class:`eos.Observables <eos.Observables>`, which should be
+            used instead. Each entry maps a :class:`QualifiedName <eos.QualifiedName>` to an
+            :class:`ObservableEntry <eos.ObservableEntry>`.
+        )")
             .def("__getitem__", &Observables::operator[])
             .def("__iter__", range(&Observables::begin, &Observables::end))
             .def("insert", &Observables::insert, R"(
@@ -1742,7 +1768,13 @@ BOOST_PYTHON_MODULE(_eos)
     // SignalPDFs
     ::impl::std_pair_to_python_converter<const QualifiedName, SignalPDFEntryPtr> converter_signalpdfs_iter;
     ::impl::iterable_to_std_vector_converter<std::string>                        iterable_to_std_vector_converter_string;
-    class_<SignalPDFs>("_SignalPDFs")
+    class_<SignalPDFs>("_SignalPDFs", R"(
+            Represents the complete list of signal PDFs known to EOS.
+
+            This is the native base class of :class:`eos.SignalPDFs <eos.SignalPDFs>`, which should be
+            used instead. Each entry maps a :class:`QualifiedName <eos.QualifiedName>` to a
+            :class:`SignalPDFEntry <eos.SignalPDFEntry>`.
+        )")
             .def("__getitem__", &SignalPDFs::operator[])
             .def("__iter__", range(&SignalPDFs::begin, &SignalPDFs::end))
             .def("__contains__", &SignalPDFs::has, R"(
