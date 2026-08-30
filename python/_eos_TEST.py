@@ -464,7 +464,6 @@ BINDINGS_XFAILS_UNTESTABLE = {
 }
 
 
-_UNIT_FACTORY = 'named after the unit that it returns'
 _TODO         = 'not yet documented'
 
 
@@ -488,19 +487,6 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
     ('KinematicVariable', 'set'):                 _TODO,
     ('ParameterUser', 'used_parameter_ids'):      _TODO,
     ('ReferenceUser', 'references'):              _TODO,
-    ('Unit', 'Femtometer2'):                      _UNIT_FACTORY,
-    ('Unit', 'GeV'):                              _UNIT_FACTORY,
-    ('Unit', 'GeV2'):                             _UNIT_FACTORY,
-    ('Unit', 'GeV3'):                             _UNIT_FACTORY,
-    ('Unit', 'GeVSecond'):                        _UNIT_FACTORY,
-    ('Unit', 'InverseGeV'):                       _UNIT_FACTORY,
-    ('Unit', 'InverseGeV2'):                      _UNIT_FACTORY,
-    ('Unit', 'InverseGeV4'):                      _UNIT_FACTORY,
-    ('Unit', 'InversePicoSecond'):                _UNIT_FACTORY,
-    ('Unit', 'InverseSecond'):                    _UNIT_FACTORY,
-    ('Unit', 'Second'):                           _UNIT_FACTORY,
-    ('Unit', 'Undefined'):                        _UNIT_FACTORY,
-    ('Unit', 'Unity'):                            _UNIT_FACTORY,
     ('_SignalPDF', 'make'):                       _TODO,
 }
 

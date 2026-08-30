@@ -709,31 +709,83 @@ BOOST_PYTHON_MODULE(_eos)
               - Femtometer2
         )",
                  init<std::string>())
-            .def("Undefined", &Unit::Undefined)
+            .def("Undefined", &Unit::Undefined, R"(
+            Returns the undefined unit, which is used wherever no unit has been assigned. It is printed as ``undefined``.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("Undefined")
-            .def("Unity", &Unit::None)
+            .def("Unity", &Unit::None, R"(
+            Returns the unit of a dimensionless quantity, which is printed as ``1``.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("Unity")
-            .def("GeV", &Unit::GeV)
+            .def("GeV", &Unit::GeV, R"(
+            Returns the unit :math:`\textrm{GeV}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("GeV")
-            .def("GeV2", &Unit::GeV2)
+            .def("GeV2", &Unit::GeV2, R"(
+            Returns the unit :math:`\textrm{GeV}^2`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("GeV2")
-            .def("GeV3", &Unit::GeV3)
+            .def("GeV3", &Unit::GeV3, R"(
+            Returns the unit :math:`\textrm{GeV}^3`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("GeV3")
-            .def("InverseGeV", &Unit::InverseGeV)
+            .def("InverseGeV", &Unit::InverseGeV, R"(
+            Returns the unit :math:`\textrm{GeV}^{-1}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("InverseGeV")
-            .def("InverseGeV2", &Unit::InverseGeV2)
+            .def("InverseGeV2", &Unit::InverseGeV2, R"(
+            Returns the unit :math:`\textrm{GeV}^{-2}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("InverseGeV2")
-            .def("InverseGeV4", &Unit::InverseGeV4)
+            .def("InverseGeV4", &Unit::InverseGeV4, R"(
+            Returns the unit :math:`\textrm{GeV}^{-4}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("InverseGeV4")
-            .def("Second", &Unit::Second)
+            .def("Second", &Unit::Second, R"(
+            Returns the unit :math:`\textrm{s}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("Second")
-            .def("InverseSecond", &Unit::InverseSecond)
+            .def("InverseSecond", &Unit::InverseSecond, R"(
+            Returns the unit :math:`\textrm{s}^{-1}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("InverseSecond")
-            .def("InversePicoSecond", &Unit::InversePicoSecond)
+            .def("InversePicoSecond", &Unit::InversePicoSecond, R"(
+            Returns the unit :math:`\textrm{ps}^{-1}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("InversePicoSecond")
-            .def("GeVSecond", &Unit::GeVSecond)
+            .def("GeVSecond", &Unit::GeVSecond, R"(
+            Returns the unit :math:`\textrm{GeV}\,\textrm{s}`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("GeVSecond")
-            .def("Femtometer2", &Unit::Femtometer2)
+            .def("Femtometer2", &Unit::Femtometer2, R"(
+            Returns the unit :math:`\textrm{fm}^2`.
+
+            :rtype: eos.Unit
+        )")
             .staticmethod("Femtometer2")
             .def("latex", &Unit::latex, return_value_policy<copy_const_reference>(), R"(
             Returns the LaTeX representation of the unit.
