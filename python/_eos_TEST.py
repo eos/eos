@@ -478,6 +478,14 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
 }
 
 
+# Members whose docstring does not describe every argument that the binding declares, together with
+# the reason why.
+BINDINGS_XFAILS_UNDESCRIBED_ARGUMENTS = {
+    ('LogPrior', 'Flat'):                  'an alias for LogPrior.Uniform, which describes the arguments',
+    ('LogLikelihoodBlock', '_Unbinned1D'): 'the unbinned log-likelihood is not fully supported yet',
+}
+
+
 def _external_block_factory(cache):
     class Block:
         number_of_observations = 0
@@ -519,6 +527,34 @@ def _external_prior_factory(parameters):
 def is_dunder(member):
     "Returns whether the given member name has both leading and trailing double underscores."
     return member.startswith('__') and member.endswith('__')
+
+
+def declared_arguments(subject, member):
+    """Returns the arguments that the binding declares, taken from its automatic signature lines.
+
+    Arguments only appear under their own name if the binding passes ``args(...)``; without it they
+    appear as ``arg1``, ``arg2``, and so on, and carry nothing to compare a docstring against.
+    """
+    attribute = vars(subject)[member]
+    text      = getattr(attribute.__func__ if isinstance(attribute, staticmethod) else attribute, '__doc__', None) or ''
+    result    = []
+
+    for line in text.split('\n'):
+        if not re.match(rf'\s*{re.escape(member)}\s*\(', line) or '->' not in line:
+            continue
+
+        for _, name in re.findall(r'\(([^()]+)\)(\w+)', line):
+            if name == 'self' or re.fullmatch(r'arg\d+', name) or name in result:
+                continue
+
+            result.append(name)
+
+    return result
+
+
+def described_arguments(subject, member):
+    "Returns the arguments that the docstring of the given member describes."
+    return [ match.group(1).strip() for match in re.finditer(r':param\s+([^:]+):', docstring(subject, member)) ]
 
 
 def docstring(subject, member=None):
@@ -646,6 +682,66 @@ class BindingsCoverageTests(unittest.TestCase):
 
         self.assertEqual(set(), undocumented,
                 f'classes and members exported by _eos without a docstring: {sorted(undocumented, key=str)}')
+
+    def test_arguments_are_described(self):
+        "Check that a docstring describes every argument that its binding declares."
+        undescribed = set()
+
+        for name, cls in exported_classes().items():
+            if is_enumeration(cls):
+                continue
+
+            for member in exported_members(cls):
+                if (name, member) in BINDINGS_XFAILS_UNDESCRIBED_ARGUMENTS:
+                    continue
+
+                described = described_arguments(cls, member)
+
+                if any(argument not in described for argument in declared_arguments(cls, member)):
+                    undescribed.add((name, member))
+
+        self.assertEqual(set(), undescribed,
+                f'members whose docstring does not describe every declared argument: {sorted(undescribed)}')
+
+    def test_arguments_are_described_under_their_own_name(self):
+        "Check that a docstring does not describe an argument that its binding does not declare."
+        misnamed = set()
+
+        for name, cls in exported_classes().items():
+            if is_enumeration(cls):
+                continue
+
+            for member in exported_members(cls):
+                declared = declared_arguments(cls, member)
+
+                if not declared:
+                    continue
+
+                if any(argument not in declared for argument in described_arguments(cls, member)):
+                    misnamed.add((name, member))
+
+        self.assertEqual(set(), misnamed,
+                f'members whose docstring describes an argument that the binding does not declare: {sorted(misnamed)}')
+
+    def test_no_stale_undescribed_arguments(self):
+        "Check that BINDINGS_XFAILS_UNDESCRIBED_ARGUMENTS does not excuse a member that describes its arguments."
+        classes = exported_classes()
+        stale   = set()
+
+        for (name, member), reason in BINDINGS_XFAILS_UNDESCRIBED_ARGUMENTS.items():
+            cls = classes.get(name)
+
+            if cls is None or member not in vars(cls):
+                stale.add((name, member))
+                continue
+
+            described = described_arguments(cls, member)
+
+            if all(argument in described for argument in declared_arguments(cls, member)):
+                stale.add((name, member))
+
+        self.assertEqual(set(), stale,
+                f'entries in BINDINGS_XFAILS_UNDESCRIBED_ARGUMENTS that describe their arguments or are no longer exported: {sorted(stale)}')
 
     def test_no_stale_undocumented(self):
         "Check that BINDINGS_XFAILS_UNDOCUMENTED does not excuse anything that is documented or no longer exported."
