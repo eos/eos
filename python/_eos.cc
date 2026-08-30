@@ -1462,7 +1462,7 @@ BOOST_PYTHON_MODULE(_eos)
             Returns a new Scale prior as a LogPrior.
 
             The prior's support is provided by the pair of ``min`` and ``max`` parameters,
-            which should coincide with [``mu_0 / lambda``, ``mu_0 * lambda``]. The PDF is
+            which should coincide with [``mu_0 / scale``, ``mu_0 * scale``]. The PDF is
             chosen such that a renormalization scale is varied in this range and with
             central value `mu_0` such that :math:`\ln x / \mu_0` is uniformly
             distributed in the interval :math:`[-\ln \lambda, +\ln \lambda]`.
@@ -1477,8 +1477,8 @@ BOOST_PYTHON_MODULE(_eos)
             :type max: float
             :param mu_0: The central value of the parameter.
             :type mu_0: float, strictly positive
-            :param lambda: The scale factor.
-            :type lambda: float, strictly positive
+            :param scale: The scale factor.
+            :type scale: float, strictly positive
         )",
                  args("parameters", "name", "min", "max", "mu_0", "scale"))
             .staticmethod("Scale")
