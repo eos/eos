@@ -33,10 +33,17 @@
 - Add the ``eos-data check``, ``create``, ``publish``, and ``register`` commands for validating analysis datasets, creating citable dataset tags, publishing GitHub releases for Zenodo, and registering published datasets (D. van Dyk)
 - Expose the ``name_part()``, ``year_part()``, and ``index_part()`` accessors of ``eos.ReferenceName`` to Python, which ``eos.References``' ``year`` and ``index`` filters require (D. van Dyk)
 - Add a ``has()`` member function to the ``Constraints``, ``Kinematics``, ``Observables``, ``Options``, ``Parameters``, ``References``, and ``SignalPDFs`` classes, and export it to Python as ``__contains__``, so that ``name in eos.Constraints()`` and its analogues report membership (D. van Dyk)
+- Add a test case that creates every class exported to Python and calls each of its members, and that fails for any class or member exported in future without either an entry describing how to exercise it or an explicit exemption (D. van Dyk)
+- Add a test case that checks that every class and member exported to Python carries a docstring, and that the docstring describes every argument that its binding declares under the name that callers must use (D. van Dyk)
+- Add docstrings to the 57 classes and members exported to Python that carried none, among them the ``eos.Parameters``, ``eos.Observables``, ``eos.Constraints``, ``eos.References``, and ``eos.SignalPDFs`` base classes, the section and group classes that organise them, ``eos.KinematicVariable``, ``eos.OptionSpecification``, and all thirteen ``eos.Unit`` factory methods (D. van Dyk)
+- Add ``__repr__``, ``__eq__``, and ``__hash__`` to ``eos.ObservableId``, so that an observable cache handle prints as ``ObservableId(0)``, compares by value, and can serve as a dictionary key (D. van Dyk)
+- Accept the lepton flavor as a ``str`` in ``eos.Model.wilson_coefficients_b_to_s``, which no Python call could satisfy before for want of a converter (D. van Dyk)
 
 ### Deprecated
 
 ### Removed
+
+- Remove the ``eos.Mutable`` and ``eos.ParameterDescription`` classes, which no exported function or member could produce and which therefore could not be reached from Python (D. van Dyk)
 
 ### Fixed
 
@@ -53,6 +60,11 @@
 - Fix ``eos.figure.UncertaintyBandItem`` to compare the options of the requested ``observable`` against those recorded in the data file as strings, in lieu of comparing them against ``qnp::OptionKey`` and ``qnp::OptionValue`` objects that never equal them, which silently plotted predictions computed with other options (D. van Dyk)
 - Fix ``eos.figure.ConstraintItem``, ``ConstraintResidueItem``, and ``TwoDimensionalConstraintItem`` to report an unknown constraint as a ``ValueError``, in lieu of the ``RuntimeError`` that reached the user because the guard tested the looked-up entry for falsiness after the lookup had already raised (D. van Dyk)
 - Fix three diagnostic messages in ``eos.figure.ConstraintItem`` and ``eos.figure.ConstraintResidueItem`` that lacked an ``f`` prefix and therefore reported the names of skipped observables as literal braces (D. van Dyk)
+- Fix an intermittent segfault at interpreter shutdown after ``eos.register_python_observable``: the registered entry holds a reference to the Python provider and lives in a process-wide registry that outlives the interpreter, so releasing the reference during static destruction ran after the interpreter had shut down; the references are now released through ``atexit`` while the interpreter is still alive (D. van Dyk)
+- Fix ``eos.LogPrior.Gaussian``, which reported no varied parameters at all, so that a Gaussian prior contributed none to an ``eos.LogPosterior`` and could not be recognised as varying its parameter (D. van Dyk)
+- Fix ``eos.LogPosterior.add``, which accepted a second prior on an already-varied parameter: the set of names that the duplicate check consults was read but never written (D. van Dyk)
+- Fix the keyword names declared for ``eos.make_wilson_polynomial_ratio_observable``, which named only three of its four arguments and therefore bound ``name`` to the numerator and ``reference_observable`` to the denominator (D. van Dyk)
+- Fix the docstring of ``eos.LogPrior.Scale``, which described its scale factor as ``lambda``, a Python reserved word that can never be a keyword argument, in lieu of the declared ``scale`` (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
