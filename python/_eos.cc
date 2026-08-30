@@ -326,16 +326,53 @@ BOOST_PYTHON_MODULE(_eos)
 
 
     // ParameterSection
-    class_<ParameterSection>("ParameterSection", no_init)
-            .def("__iter__", range(&ParameterSection::begin, &ParameterSection::end))
-            .def("name", &ParameterSection::name, return_value_policy<copy_const_reference>())
-            .def("description", &ParameterSection::description, return_value_policy<copy_const_reference>());
+    class_<ParameterSection>("ParameterSection", R"(
+            Represents one section of the parameters known to EOS.
+
+            Sections are the coarsest level at which the parameters are organised; each contains one or
+            more :class:`ParameterGroup <eos.ParameterGroup>` objects. Objects of this class are obtained
+            by iterating :meth:`Parameters.sections <eos._Parameters.sections>`.
+        )",
+                             no_init)
+            .def("__iter__", range(&ParameterSection::begin, &ParameterSection::end), R"(
+            Returns an iterator over the :class:`ParameterGroup <eos.ParameterGroup>` objects in this section.
+        )")
+            .def("name", &ParameterSection::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this section.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("description", &ParameterSection::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the description of this section.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // ParameterGroup
-    class_<ParameterGroup>("ParameterGroup", no_init)
-            .def("__iter__", range(&ParameterGroup::begin, &ParameterGroup::end))
-            .def("name", &ParameterGroup::name, return_value_policy<copy_const_reference>())
-            .def("description", &ParameterGroup::description, return_value_policy<copy_const_reference>());
+    class_<ParameterGroup>("ParameterGroup", R"(
+            Represents one group of parameters within a :class:`ParameterSection <eos.ParameterSection>`.
+
+            Groups are the finest level at which the parameters are organised; each contains one or more
+            :class:`Parameter <eos.Parameter>` objects.
+        )",
+                           no_init)
+            .def("__iter__", range(&ParameterGroup::begin, &ParameterGroup::end), R"(
+            Returns an iterator over the :class:`Parameter <eos.Parameter>` objects in this group.
+        )")
+            .def("name", &ParameterGroup::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this group.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("description", &ParameterGroup::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the description of this group.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // Parameters
     class_<Parameters>("_Parameters", R"(
@@ -1681,17 +1718,55 @@ BOOST_PYTHON_MODULE(_eos)
 
     // ObservableGroup
     register_ptr_to_python<std::shared_ptr<ObservableGroup>>();
-    class_<ObservableGroup>("ObservableGroup", no_init)
-            .def("__iter__", range(&ObservableGroup::begin, &ObservableGroup::end))
-            .def("name", &ObservableGroup::name, return_value_policy<copy_const_reference>())
-            .def("description", &ObservableGroup::description, return_value_policy<copy_const_reference>());
+    class_<ObservableGroup>("ObservableGroup", R"(
+            Represents one group of observables within an :class:`ObservableSection <eos.ObservableSection>`.
+
+            Groups are the finest level at which the observables are organised. Iterating a group yields
+            one ``(name, entry)`` pair per observable.
+        )",
+                            no_init)
+            .def("__iter__", range(&ObservableGroup::begin, &ObservableGroup::end), R"(
+            Returns an iterator over the observables in this group, as pairs of a
+            :class:`QualifiedName <eos.QualifiedName>` and an :class:`ObservableEntry <eos.ObservableEntry>`.
+        )")
+            .def("name", &ObservableGroup::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this group.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("description", &ObservableGroup::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the description of this group.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // ObservableSection
     register_ptr_to_python<std::shared_ptr<ObservableSection>>();
-    class_<ObservableSection>("ObservableSection", no_init)
-            .def("__iter__", range(&ObservableSection::begin, &ObservableSection::end))
-            .def("name", &ObservableSection::name, return_value_policy<copy_const_reference>())
-            .def("description", &ObservableSection::description, return_value_policy<copy_const_reference>());
+    class_<ObservableSection>("ObservableSection", R"(
+            Represents one section of the observables known to EOS.
+
+            Sections are the coarsest level at which the observables are organised; each contains one or
+            more :class:`ObservableGroup <eos.ObservableGroup>` objects. Objects of this class are obtained
+            by iterating :meth:`Observables.sections <eos._Observables.sections>`.
+        )",
+                              no_init)
+            .def("__iter__", range(&ObservableSection::begin, &ObservableSection::end), R"(
+            Returns an iterator over the :class:`ObservableGroup <eos.ObservableGroup>` objects in this section.
+        )")
+            .def("name", &ObservableSection::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this section.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("description", &ObservableSection::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the description of this section.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // Observables
     ::impl::std_pair_to_python_converter<const QualifiedName, ObservableEntryPtr> converter_observables_iter;
@@ -1809,17 +1884,55 @@ BOOST_PYTHON_MODULE(_eos)
 
     // SignalPDFGroup
     register_ptr_to_python<std::shared_ptr<SignalPDFGroup>>();
-    class_<SignalPDFGroup>("SignalPDFGroup", no_init)
-            .def("__iter__", range(&SignalPDFGroup::begin, &SignalPDFGroup::end))
-            .def("name", &SignalPDFGroup::name, return_value_policy<copy_const_reference>())
-            .def("description", &SignalPDFGroup::description, return_value_policy<copy_const_reference>());
+    class_<SignalPDFGroup>("SignalPDFGroup", R"(
+            Represents one group of signal PDFs within a :class:`SignalPDFSection <eos.SignalPDFSection>`.
+
+            Groups are the finest level at which the signal PDFs are organised. Iterating a group yields
+            one ``(name, entry)`` pair per signal PDF.
+        )",
+                           no_init)
+            .def("__iter__", range(&SignalPDFGroup::begin, &SignalPDFGroup::end), R"(
+            Returns an iterator over the signal PDFs in this group, as pairs of a
+            :class:`QualifiedName <eos.QualifiedName>` and a :class:`SignalPDFEntry <eos.SignalPDFEntry>`.
+        )")
+            .def("name", &SignalPDFGroup::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this group.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("description", &SignalPDFGroup::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the description of this group.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // SignalPDFSection
     register_ptr_to_python<std::shared_ptr<SignalPDFSection>>();
-    class_<SignalPDFSection>("SignalPDFSection", no_init)
-            .def("__iter__", range(&SignalPDFSection::begin, &SignalPDFSection::end))
-            .def("name", &SignalPDFSection::name, return_value_policy<copy_const_reference>())
-            .def("description", &SignalPDFSection::description, return_value_policy<copy_const_reference>());
+    class_<SignalPDFSection>("SignalPDFSection", R"(
+            Represents one section of the signal PDFs known to EOS.
+
+            Sections are the coarsest level at which the signal PDFs are organised; each contains one or
+            more :class:`SignalPDFGroup <eos.SignalPDFGroup>` objects. Objects of this class are obtained
+            by iterating :meth:`SignalPDFs.sections <eos._SignalPDFs.sections>`.
+        )",
+                             no_init)
+            .def("__iter__", range(&SignalPDFSection::begin, &SignalPDFSection::end), R"(
+            Returns an iterator over the :class:`SignalPDFGroup <eos.SignalPDFGroup>` objects in this section.
+        )")
+            .def("name", &SignalPDFSection::name, return_value_policy<copy_const_reference>(), R"(
+            Returns the name of this section.
+
+            :rtype: str
+        )",
+                 args("self"))
+            .def("description", &SignalPDFSection::description, return_value_policy<copy_const_reference>(), R"(
+            Returns the description of this section.
+
+            :rtype: str
+        )",
+                 args("self"));
 
     // SignalPDFs
     ::impl::std_pair_to_python_converter<const QualifiedName, SignalPDFEntryPtr> converter_signalpdfs_iter;
