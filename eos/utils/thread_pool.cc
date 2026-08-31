@@ -28,6 +28,7 @@
 
 #include <atomic>
 #include <list>
+#include <memory>
 #include <unistd.h>
 
 namespace eos
@@ -53,6 +54,8 @@ namespace eos
             std::list<std::pair<Ticket, std::function<void(void)>>> queue;
 
             std::list<Thread *> threads;
+
+            std::function<std::unique_ptr<ThreadPool::WaitGuard>()> wait_guard_factory;
 
             void
             thread_function()
@@ -202,6 +205,30 @@ namespace eos
     ThreadPool::instance()
     {
         return InstantiationPolicy<ThreadPool, Singleton>::instance();
+    }
+
+    ThreadPool::WaitGuard::~WaitGuard() = default;
+
+    void
+    ThreadPool::set_wait_guard_factory(const std::function<std::unique_ptr<WaitGuard>()> & factory)
+    {
+        Lock l(*_imp->job_mutex);
+
+        _imp->wait_guard_factory = factory;
+    }
+
+    std::unique_ptr<ThreadPool::WaitGuard>
+    ThreadPool::wait_guard() const
+    {
+        std::function<std::unique_ptr<WaitGuard>()> factory;
+
+        {
+            Lock l(*_imp->job_mutex);
+
+            factory = _imp->wait_guard_factory;
+        }
+
+        return factory ? factory() : std::unique_ptr<WaitGuard>();
     }
 
     void
