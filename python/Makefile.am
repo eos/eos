@@ -181,6 +181,7 @@ _eos_la_SOURCES = \
 	_eos/external-log-likelihood-block.cc _eos/external-log-likelihood-block.hh \
 	_eos/external-log-prior.cc _eos/external-log-prior.hh \
 	_eos/external-observable.cc _eos/external-observable.hh \
+	_eos/gil.hh \
 	_eos/log.cc _eos/log.hh \
 	_eos/version.cc _eos/version.hh \
 	_eos/wrappers.cc _eos/wrappers.hh

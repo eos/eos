@@ -23,6 +23,8 @@
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include "python/_eos/gil.hh"
+
 #include <vector>
 
 using boost::python::extract;
@@ -80,6 +82,9 @@ namespace eos
     double
     ExternalObservable::evaluate() const
     {
+        // the ThreadPool evaluates observables on threads that are unknown to the interpreter
+        ::impl::ScopedGILAcquire gil;
+
         return extract<double>(_evaluate());
     }
 
