@@ -446,6 +446,7 @@ BINDINGS_TESTS = {
 
     (MODULE, '_emit_native_log'):                ('eos._eos_TEST', _eos._NativeLogLevel.DEBUG, 'test message'),
     (MODULE, '_register_log_callback'):          lambda _: _eos._register_log_callback(lambda *args: None),
+    (MODULE, '_release_python_log_callbacks'):   (),
     (MODULE, '_release_python_observables'):     (),
     (MODULE, '_set_native_log_level'):           (_eos._NativeLogLevel.SILENT,),
     (MODULE, 'analyze_expression'):              ('<<B->D::f_+(q2)>>',),

@@ -2192,6 +2192,10 @@ BOOST_PYTHON_MODULE(_eos)
     def("_release_python_observables", &release_python_observables);
     import("atexit").attr("register")(object(scope().attr("_release_python_observables")));
 
+    // The same for the references held by the log callbacks.
+    def("_release_python_log_callbacks", &::impl::release_python_log_callbacks);
+    import("atexit").attr("register")(object(scope().attr("_release_python_log_callbacks")));
+
     // Let the pool's threads attach themselves to the interpreter while the dispatching thread waits.
     ThreadPool::instance()->set_wait_guard_factory([]() { return std::make_unique<::impl::ScopedGILRelease>(); });
 } // BOOST_PYTHON_MODULE(_eos)

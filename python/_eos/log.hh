@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -26,9 +26,16 @@
 
 namespace impl
 {
-    void logging_callback(PyObject * c, const std::string & id, const eos::LogLevel & l, const std::string & m);
-
     void register_log_callback(PyObject * c);
+
+    /*!
+     * Drop the references that the registered log callbacks hold on their Python callables.
+     *
+     * The callbacks live in a process-wide singleton that outlives the Python interpreter.
+     * Releasing their references during static destruction would do so after the interpreter has
+     * shut down, hence this is registered with ``atexit`` and run while it is still alive.
+     */
+    void release_python_log_callbacks();
 
     void set_native_log_level(const eos::LogLevel & log_level);
 

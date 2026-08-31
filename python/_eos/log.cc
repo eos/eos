@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,53 +19,80 @@
 
 #include "python/_eos/log.hh"
 
-#include <iostream>
+#include "python/_eos/gil.hh"
+
+#include <memory>
+#include <vector>
 
 using namespace boost::python;
 
 namespace impl
 {
-    struct LoggingCallbackPayload
+    namespace
     {
-            PyObject *          callback;
-            const std::string   id;
-            const eos::LogLevel log_level;
-            const std::string   message;
-    };
-
-    int
-    thread_safe_logging_callback(void * p)
-    {
-        // this function is only supposed to be called from the main thread
-        // via Py_AddPendingCall, so we can safely call the Python API here
-        const LoggingCallbackPayload * const payload = static_cast<const LoggingCallbackPayload *>(p);
-
-        call<void>(payload->callback, payload->id, payload->log_level, payload->message);
-
-        delete payload;
-
-        return 0;
-    }
-
-    void
-    logging_callback(PyObject * c, const std::string & id, const eos::LogLevel & l, const std::string & m)
-    {
-        LoggingCallbackPayload * const payload = new LoggingCallbackPayload{ c, id, l, m };
-
-        int result = Py_AddPendingCall(&thread_safe_logging_callback, payload);
-
-        if (result != 0)
+        // Holds a reference to a registered Python callable for as long as the interpreter is alive.
+        struct LogCallback
         {
-            std::cerr << "eos::Log: Warning: Could not schedule log callback via Py_AddPendingCall, error code " << result << "." << std::endl;
+                object callback;
+        };
 
-            delete payload;
+        std::vector<std::shared_ptr<LogCallback>> &
+        registered_callbacks()
+        {
+            static std::vector<std::shared_ptr<LogCallback>> result;
+
+            return result;
         }
-    }
+
+        void
+        logging_callback(const std::shared_ptr<LogCallback> & c, const std::string & id, const eos::LogLevel & l, const std::string & m)
+        {
+            // a message emitted from a static destructor arrives once the interpreter has gone
+            if (! Py_IsInitialized())
+            {
+                return;
+            }
+
+            // the Log notifies us from whichever thread emitted the message, holding no lock of its own
+            ScopedGILAcquire gil;
+
+            // release_python_log_callbacks() has dropped the callable
+            if (c->callback.is_none())
+            {
+                return;
+            }
+
+            try
+            {
+                call<void>(c->callback.ptr(), id, l, m);
+            }
+            catch (const error_already_set &)
+            {
+                // the Log notifies us from a destructor, so nothing may be thrown from here
+                PyErr_WriteUnraisable(c->callback.ptr());
+            }
+        }
+    } // namespace
 
     void
     register_log_callback(PyObject * c)
     {
-        eos::Log::instance()->register_callback(std::bind(&logging_callback, c, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        auto callback = std::make_shared<LogCallback>(LogCallback{ object(handle<>(borrowed(c))) });
+
+        registered_callbacks().push_back(callback);
+
+        eos::Log::instance()->register_callback(std::bind(&logging_callback, callback, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    }
+
+    void
+    release_python_log_callbacks()
+    {
+        for (auto & c : registered_callbacks())
+        {
+            c->callback = object();
+        }
+
+        registered_callbacks().clear();
     }
 
     void
