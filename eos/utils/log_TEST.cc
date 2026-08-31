@@ -22,6 +22,11 @@
 
 #include <test/test.hh>
 
+#include <chrono>
+#include <condition_variable>
+#include <mutex>
+#include <thread>
+
 using namespace test;
 using namespace eos;
 
@@ -186,3 +191,80 @@ class LogOneTimeMessageTest : public TestCase
             }
         }
 } one_time_message_test;
+
+class LogCallbackLockingTest : public TestCase
+{
+    public:
+        LogCallbackLockingTest() :
+            TestCase("log_callback_locking_test")
+        {
+        }
+
+        // the callback outlives run(), so it must not capture anything local to it
+        mutable std::mutex              mutex;
+        mutable std::condition_variable condition;
+        mutable bool                    within_callback      = false;
+        mutable bool                    other_emitted        = false;
+        mutable bool                    emitted_concurrently = false;
+
+        static const std::string &
+        id()
+        {
+            static const std::string result = "test-callback-locking";
+
+            return result;
+        }
+
+        virtual void
+        run() const
+        {
+            static const auto timeout = std::chrono::seconds(5);
+
+            // this callback holds up the emitting thread until a second thread has emitted a
+            // message of its own; that second message needs the Log's lock, which must therefore
+            // not be held while we are here
+            std::function<void(const std::string &, const LogLevel &, const std::string &)> callback = [this, timeout](const std::string & i, const LogLevel &, const std::string &)
+            {
+                if (id() != i)
+                {
+                    return;
+                }
+
+                std::unique_lock<std::mutex> l(mutex);
+
+                within_callback = true;
+                condition.notify_all();
+
+                // the second thread reaches us only if we do not hold the Log's lock; waiting in
+                // vain means that it is blocked on that lock until we return
+                emitted_concurrently = condition.wait_for(l, timeout, [this]() { return other_emitted; });
+            };
+            Log::instance()->register_callback(callback);
+
+            std::thread other([this, timeout]()
+            {
+                {
+                    std::unique_lock<std::mutex> l(mutex);
+
+                    if (! condition.wait_for(l, timeout, [this]() { return within_callback; }))
+                    {
+                        return;
+                    }
+                }
+
+                Log::instance()->message(id() + "-other", ll_debug) << "emitted while the first thread is within the callback";
+
+                std::unique_lock<std::mutex> l(mutex);
+
+                other_emitted = true;
+                condition.notify_all();
+            });
+
+            Log::instance()->message(id(), ll_debug) << "emitted from the first thread";
+
+            other.join();
+
+            TEST_CHECK(other_emitted);
+            TEST_CHECK(emitted_concurrently);
+        }
+} log_callback_locking_test;

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * Based upon 'paludis/util/log.cc', which is
  *
@@ -29,6 +29,7 @@
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <iostream>
+#include <memory>
 #include <set>
 #include <time.h>
 #include <vector>
@@ -130,6 +131,12 @@ namespace eos
 
     template <> struct Implementation<Log>
     {
+            using Callback = std::function<void(const std::string &, const LogLevel &, const std::string &)>;
+
+            // held by value so that an emitting thread can keep reading the list after it has
+            // released our mutex; register_callback replaces the list rather than extending it
+            using Callbacks = std::shared_ptr<const std::vector<Callback>>;
+
             Mutex mutex;
 
             LogLevel log_level;
@@ -138,33 +145,41 @@ namespace eos
 
             std::string program_name;
 
-            std::vector<std::function<void(const std::string &, const LogLevel &, const std::string &)>> callbacks;
+            Callbacks callbacks;
 
             std::set<std::string> one_time_messages;
 
             Implementation() :
                 log_level(ll_error),
-                stream(nullptr)
+                stream(nullptr),
+                callbacks(std::make_shared<const std::vector<Callback>>())
             {
             }
 
-            void
+            /*
+             * Emits the message to the stream, and returns the callbacks that are yet to be
+             * notified, or an empty pointer if the message is filtered out.
+             *
+             * The caller notifies them once it has released our mutex. A callback runs code that we
+             * know nothing about, and may well wait for a resource that another thread holds while
+             * emitting a message of its own; holding any lock of ours across the callback would
+             * deadlock that pair of threads.
+             */
+            Callbacks
             message(const std::string & id, const LogLevel & l, const std::string & m)
             {
+                Lock ll(mutex);
+
                 if (l > log_level)
                 {
-                    return;
+                    return {};
                 }
 
-                // forward message to all callbacks
-                for (auto & c : callbacks)
-                {
-                    c(id, l, m);
-                }
+                Callbacks result = callbacks;
 
                 if (! stream)
                 {
-                    return;
+                    return result;
                 }
 
                 *stream << program_name << '@' << ::time(0) << ": ";
@@ -197,6 +212,8 @@ namespace eos
                 while (false);
 
                 *stream << m << std::endl;
+
+                return result;
             }
     };
 
@@ -209,7 +226,7 @@ namespace eos
 
     Log::~Log() {}
 
-    const LogLevel &
+    LogLevel
     Log::get_log_level() const
     {
         Lock l(_imp->mutex);
@@ -246,15 +263,26 @@ namespace eos
     {
         Lock l(_imp->mutex);
 
-        _imp->callbacks.push_back(callback);
+        auto callbacks = std::make_shared<std::vector<Implementation<Log>::Callback>>(*_imp->callbacks);
+        callbacks->push_back(callback);
+
+        _imp->callbacks = std::move(callbacks);
     }
 
     void
     Log::_message(const std::string & id, const LogLevel & l, const std::string & m)
     {
-        Lock ll(_imp->mutex);
+        const auto callbacks = _imp->message(id, l, m);
 
-        _imp->message(id, l, m);
+        if (! callbacks)
+        {
+            return;
+        }
+
+        for (const auto & c : *callbacks)
+        {
+            c(id, l, m);
+        }
     }
 
     LogMessageHandler
@@ -265,14 +293,16 @@ namespace eos
 
     Log::OneTimeMessage::OneTimeMessage(const std::string & id, const LogLevel & log_level, const std::string & message)
     {
-        auto imp = Log::instance()->_imp;
-
-        Lock ll(imp->mutex);
-
-        if (imp->one_time_messages.insert(id).second)
         {
-            imp->message(id, log_level, message + " (Further messages of this type will be suppressed.)");
+            Lock ll(Log::instance()->_imp->mutex);
+
+            if (! Log::instance()->_imp->one_time_messages.insert(id).second)
+            {
+                return;
+            }
         }
+
+        Log::instance()->_message(id, log_level, message + " (Further messages of this type will be suppressed.)");
     }
 
     /* LogMessageHandler */
