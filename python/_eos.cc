@@ -214,7 +214,7 @@ BOOST_PYTHON_MODULE(_eos)
     // qnp::Prefix
     class_<qnp::Prefix>("qnpPrefix", R"(
             Represents the prefix part of a :class:`QualifiedName <eos.QualifiedName>`, i.e. the part
-            preceeding the '::'.
+            preceding the '::'.
 
             Objects of this class are returned by :meth:`QualifiedName.prefix_part <eos.QualifiedName.prefix_part>`
             and can be created from a ``str``.
@@ -227,7 +227,7 @@ BOOST_PYTHON_MODULE(_eos)
     // qnp::Name
     class_<qnp::Name>("qnpName", R"(
             Represents the name part of a :class:`QualifiedName <eos.QualifiedName>`, i.e. the part
-            following the '::' and preceeding any optional '@'.
+            following the '::' and preceding any optional '@'.
 
             Objects of this class are returned by :meth:`QualifiedName.name_part <eos.QualifiedName.name_part>`
             and can be created from a ``str``.
@@ -253,7 +253,7 @@ BOOST_PYTHON_MODULE(_eos)
     // qnp::OptionKey
     class_<qnp::OptionKey>("qnpOptionKey", R"(
             Represents the key of a single option within the options part of a
-            :class:`QualifiedName <eos.QualifiedName>`, i.e. the part of an option preceeding the '='.
+            :class:`QualifiedName <eos.QualifiedName>`, i.e. the part of an option preceding the '='.
 
             Objects of this class occur when iterating :meth:`QualifiedName.options_part <eos.QualifiedName.options_part>`
             and can be created from a ``str``.
@@ -295,11 +295,11 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__ne__", &QualifiedName::operator!=)
             .def("__lt__", &QualifiedName::operator<)
             .def("prefix_part", &QualifiedName::prefix_part, return_value_policy<copy_const_reference>(), R"(
-            Returns the prefix part of the name, i.e., the part preceeding the '::'.
+            Returns the prefix part of the name, i.e., the part preceding the '::'.
         )",
                  args("self"))
             .def("name_part", &QualifiedName::name_part, return_value_policy<copy_const_reference>(), R"(
-            Returns the name part of the name, i.e., the part following the '::' and preceeding any
+            Returns the name part of the name, i.e., the part following the '::' and preceding any
             optional '@'.
         )",
                  args("self"))
@@ -1124,7 +1124,7 @@ BOOST_PYTHON_MODULE(_eos)
     // rnp::Name
     class_<rnp::Name>("rnpName", R"(
             Represents the name part of a :class:`ReferenceName <eos.ReferenceName>`, i.e. the part
-            preceeding the ':'.
+            preceding the ':'.
 
             Objects of this class are returned by :meth:`ReferenceName.name_part <eos.ReferenceName.name_part>`
             and can be created from a ``str``.
@@ -1174,7 +1174,7 @@ BOOST_PYTHON_MODULE(_eos)
             .def("__ne__", &ReferenceName::operator!=)
             .def("__lt__", &ReferenceName::operator<)
             .def("name_part", &ReferenceName::name_part, return_value_policy<copy_const_reference>(), R"(
-            Returns the name part of the reference name, i.e., the part preceeding the ':'.
+            Returns the name part of the reference name, i.e., the part preceding the ':'.
         )",
                  args("self"))
             .def("year_part", &ReferenceName::year_part, return_value_policy<copy_const_reference>(), R"(
