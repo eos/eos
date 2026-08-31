@@ -17,6 +17,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import _eos
+import atexit
 import eos
 import inspect
 import os
@@ -83,6 +84,9 @@ def _parameter_file():
     handle, path = tempfile.mkstemp(suffix='.yaml')
     with os.fdopen(handle, 'w') as f:
         f.write('mass::b(MSbar):\n    central: 4.18\n    min: 4.0\n    max: 4.4\n')
+
+    atexit.register(lambda: os.path.exists(path) and os.remove(path))
+
     return path
 
 
