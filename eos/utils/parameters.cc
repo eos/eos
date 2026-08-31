@@ -878,6 +878,11 @@ namespace eos
             throw UnknownParameterError(name);
         }
 
+        if (i->second >= _imp->parameters.size())
+        {
+            throw InternalError("Parameters::operator[] (QualifiedName): name '" + name.str() + "' maps to invalid id '" + stringify(i->second) + "'");
+        }
+
         return Parameter(_imp->parameters_data, i->second);
     }
 
