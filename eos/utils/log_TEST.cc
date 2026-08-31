@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -150,14 +150,16 @@ class LogOneTimeMessageTest : public TestCase
         {
         }
 
+        mutable std::vector<std::tuple<std::string, LogLevel, std::string>> messages;
+
         virtual void
         run() const
         {
-            std::vector<std::tuple<std::string, LogLevel, std::string>> messages;
+            // the callback outlives this call, so it must not capture anything local to it
 
             // register callback
             std::function<void(const std::string &, const LogLevel &, const std::string &)> callback =
-                    [&messages](const std::string & id, const LogLevel & level, const std::string & message) { messages.push_back(std::make_tuple(id, level, message)); };
+                    [this](const std::string & id, const LogLevel & level, const std::string & message) { messages.push_back(std::make_tuple(id, level, message)); };
             Log::instance()->register_callback(callback);
 
             // first message
