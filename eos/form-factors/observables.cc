@@ -2930,6 +2930,30 @@ namespace eos
                         Unit::None(),
                         R"(<<decay-constant::D_s,1^T>>^2 / <<mass::D_s,1>>^4 / <<c->s::chiOPE[1^+_T5]>>)"),
 
+                // cd states
+                make_expression_observable("D_d,0::Saturation[0^+_V]", R"(\textrm{Saturation}_{D_{d,0}}[0^+_V])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_d,0>>^2 / <<mass::D_d,0>>^2 / <<c->d::chiOPE[0^+_V]>>)"),
+
+                make_expression_observable("D_d::Saturation[0^-_A]", R"(\textrm{Saturation}_{D_d^0}[0^-_A])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_d>>^2 / <<mass::D_d>>^2 / <<c->d::chiOPE[0^-_A]>>)"),
+
+                make_expression_observable("D_d^*::Saturation[1^-_V]", R"(\textrm{Saturation}_{D_d^*}[1^-_V])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_d^*>>^2 / <<mass::D_d^*>>^4 / <<c->d::chiOPE[1^-_V]>>)"),
+                make_expression_observable("D_d1::Saturation[1^+_A]", R"(\textrm{Saturation}_{D_{d,1}}[1^+_A])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_d,1>>^2 / <<mass::D_d,1>>^4 / <<c->d::chiOPE[1^+_A]>>)"),
+
+                make_expression_observable("D_d^*::Saturation[1^-_T]", R"(\textrm{Saturation}_{D_d^*}[1^-_T])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_d^*,T>>^2 / <<mass::D_d^*>>^4 / <<c->d::chiOPE[1^-_T]>>)"),
+
+                make_expression_observable("D_d1::Saturation[1^+_T5]", R"(\textrm{Saturation}_{D_{d,1}}[1^+_{T_5}])",
+                        Unit::None(),
+                        R"(<<decay-constant::D_d,1^T>>^2 / <<mass::D_d,1>>^4 / <<c->d::chiOPE[1^+_T5]>>)"),
+
                 // ub states
                 make_expression_observable("B_u^*::Saturation[1^-_V]", R"(\textrm{Saturation}_{B_u^*}[1^-_{V}])",
                         Unit::None(),
