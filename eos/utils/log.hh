@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * Based upon 'paludis/util/log.hh', which is
  *
@@ -88,7 +88,7 @@ namespace eos
             ///@{
 
             /// Get the current log level
-            const LogLevel & get_log_level() const;
+            LogLevel get_log_level() const;
 
             /*!
              * Set the log level.
@@ -107,6 +107,10 @@ namespace eos
 
             /*!
              * Register a callback hook with the Log class.
+             *
+             * A callback is invoked without any of the Log's own locks held, so that it may wait
+             * for a resource that another thread holds while emitting a message of its own. Two
+             * threads may therefore invoke it at the same time, and it has to be thread-safe.
              */
             void register_callback(const std::function<void(const std::string &, const LogLevel &, const std::string &)> &);
 
