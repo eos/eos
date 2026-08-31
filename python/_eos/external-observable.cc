@@ -190,6 +190,10 @@ namespace eos
         std::shared_ptr<ExternalObservableEntry> entry(new ExternalObservableEntry(name, provider, latex, unit));
 
         ObservableEntries::instance()->insert_or_assign(name, entry);
+
+        // Drop any entry that this one replaces, so that its provider is released here rather than
+        // being kept alive until the interpreter shuts down.
+        std::erase_if(registered_entries(), [&name](const std::shared_ptr<ExternalObservableEntry> & entry) { return entry->name() == name; });
         registered_entries().push_back(entry);
 
         return entry;
