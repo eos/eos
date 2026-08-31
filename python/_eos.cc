@@ -37,6 +37,7 @@
 #include "eos/utils/parameters.hh"
 #include "eos/utils/qualified-name.hh"
 #include "eos/utils/reference-name.hh"
+#include "eos/utils/thread_pool.hh"
 #include "eos/utils/units.hh"
 #include "eos/utils/wilson-polynomial.hh"
 
@@ -44,6 +45,7 @@
 #include "python/_eos/external-log-likelihood-block.hh"
 #include "python/_eos/external-log-prior.hh"
 #include "python/_eos/external-observable.hh"
+#include "python/_eos/gil.hh"
 #include "python/_eos/log.hh"
 #include "python/_eos/version.hh"
 #include "python/_eos/wrappers.hh"
@@ -51,6 +53,7 @@
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
 
+#include <memory>
 #include <tuple>
 
 using namespace boost::python;
@@ -2188,4 +2191,7 @@ BOOST_PYTHON_MODULE(_eos)
     // Release the Python references held by external observables while the interpreter is still alive.
     def("_release_python_observables", &release_python_observables);
     import("atexit").attr("register")(object(scope().attr("_release_python_observables")));
+
+    // Let the pool's threads attach themselves to the interpreter while the dispatching thread waits.
+    ThreadPool::instance()->set_wait_guard_factory([]() { return std::make_unique<::impl::ScopedGILRelease>(); });
 } // BOOST_PYTHON_MODULE(_eos)

@@ -471,5 +471,42 @@ class ExternalLogPriorTests(unittest.TestCase):
             eos.LogPrior.External(parameters, _IncompleteProvider)
 
 
+class ExternalObservableTests(unittest.TestCase):
+
+    def test_evaluation_within_a_cache(self):
+        "Check that an external observable survives evaluation by the thread pool."
+        import _eos
+        import eos
+
+        class _Provider:
+            kinematic_variables = []
+
+            def __init__(self, parameters, kinematics, options):
+                self._p = parameters['mass::b(MSbar)']
+
+            def evaluate(self):
+                # allocating keeps the interpreter busy for the duration of the call
+                return sum(self._p.evaluate() for _ in range(4)) / 4.0
+
+        names = [f'test::external-observable-{i}' for i in range(4)]
+        for name in names:
+            _eos.register_python_observable(name, _Provider, '', eos.Unit.Unity())
+
+        parameters = eos.Parameters()
+        cache = eos.ObservableCache(parameters)
+        ids = [cache.add(eos.Observable.make(name, parameters, eos.Kinematics(), eos.Options()))
+               for name in names]
+
+        # ObservableCache.update() dispatches the observables to the thread pool, so each
+        # evaluation calls back into the interpreter from a thread that EOS created itself
+        mass_b = parameters['mass::b(MSbar)']
+        for i in range(2000):
+            mass_b.set(4.18 + 1.0e-6 * i)
+            cache.update()
+
+            for id in ids:
+                self.assertAlmostEqual(cache[id], 4.18 + 1.0e-6 * i, places=13)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)
