@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,6 +25,7 @@
 #include <eos/utils/ticket.hh>
 
 #include <functional>
+#include <memory>
 
 namespace eos
 {
@@ -38,6 +39,26 @@ namespace eos
             Ticket enqueue(const std::function<void(void)> & work);
 
             static ThreadPool * instance();
+
+            /*!
+             * A guard that a thread holds while it waits for the work it enqueued.
+             *
+             * An embedding runtime that serialises access to its own state -- the Python
+             * interpreter, say -- must relinquish it for as long as a thread waits, since the
+             * pool's threads need it in turn. Such a runtime derives from this class and
+             * relinquishes that access for as long as one of its guards lives.
+             */
+            class WaitGuard
+            {
+                public:
+                    virtual ~WaitGuard();
+            };
+
+            /// Sets the factory that supplies the wait guards.
+            void set_wait_guard_factory(const std::function<std::unique_ptr<WaitGuard>()> & factory);
+
+            /// Creates a wait guard, or an empty pointer if no factory has been set.
+            std::unique_ptr<WaitGuard> wait_guard() const;
 
             void wait_for_free_capacity();
 

@@ -227,6 +227,9 @@ namespace eos
     void
     ObservableCache::update()
     {
+        // an observable may call back into the embedding runtime from one of the pool's threads
+        const auto guard = ThreadPool::instance()->wait_guard();
+
         // parallelize the evaluation of the observables
         std::vector<Ticket> cacheable_tickets;
         cacheable_tickets.reserve(_imp->cacheable_observables.size());
