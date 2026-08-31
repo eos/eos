@@ -398,6 +398,30 @@ class LoggingTests(unittest.TestCase):
                     [r"""ERROR:EOS:[ConcreteObservableEntry.make] Observable 'B->pilnu::BR' forces option key 'P' to value 'pi', overriding user-provided value 'D'"""])
 
 
+class LogCallbackLifetimeTests(unittest.TestCase):
+
+    def test_callback_outlives_the_caller(self):
+        "Check that a registered callback survives the loss of every other reference to it."
+        import gc
+
+        import _eos
+
+        emitted = []
+
+        # the Log keeps the callback for the lifetime of the process, so registering one that the
+        # caller does not hold on to must not leave a dangling reference behind
+        _eos._register_log_callback(lambda id, level, message: emitted.append((id, message)))
+        gc.collect()
+
+        _eos._set_native_log_level(_eos._NativeLogLevel.WARNING)
+        try:
+            _eos._emit_native_log('test-callback-lifetime', _eos._NativeLogLevel.WARNING, 'a message')
+        finally:
+            _eos._set_native_log_level(_eos._NativeLogLevel.INFO)
+
+        self.assertIn(('test-callback-lifetime', 'a message'), emitted)
+
+
 class ExternalLogPriorTests(unittest.TestCase):
 
     def test_creation(self):
