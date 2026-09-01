@@ -17,6 +17,9 @@
 - Default the ``--with-boost-python-suffix`` used at ``./configure`` time to the Python major+minor version (e.g. ``312`` for CPython 3.12), matching the modern Boost.Python naming convention used by conda-forge and current Debian/Ubuntu/Fedora releases, in lieu of the previous OS/codename-based detection (D. van Dyk)
 - Extend the ``inference`` example figure with a residual panel showing each constraint's pull below the main panel (D. van Dyk)
 - Move the implementation of the ``eos-analysis`` command into the new module ``eos.cli.analysis``, leaving the script as a shim, so that its subcommands can be tested and called from Python (D. van Dyk)
+- Notify the callbacks registered with the ``Log`` singleton without holding its lock, and document that they may therefore be invoked concurrently and have to be thread-safe: a callback that waits for a resource held by a thread which is itself emitting a message deadlocked both threads (D. van Dyk)
+- Deliver a native log message to the Python logger synchronously and in order, in lieu of deferring it to the main thread through ``Py_AddPendingCall``; messages emitted after ``atexit`` no longer reach Python, since that is where the callbacks' references are released (D. van Dyk)
+- Bounds-check the id that a parameter name maps to in ``Parameters::operator[]``, matching the check that its ``Parameter::Id`` overload already performs, so that an id outliving its parameter is reported in lieu of read out of bounds (D. van Dyk)
 
 ### Added
 
@@ -38,6 +41,8 @@
 - Add docstrings to the 57 classes and members exported to Python that carried none, among them the ``eos.Parameters``, ``eos.Observables``, ``eos.Constraints``, ``eos.References``, and ``eos.SignalPDFs`` base classes, the section and group classes that organise them, ``eos.KinematicVariable``, ``eos.OptionSpecification``, and all thirteen ``eos.Unit`` factory methods (D. van Dyk)
 - Add ``__repr__``, ``__eq__``, and ``__hash__`` to ``eos.ObservableId``, so that an observable cache handle prints as ``ObservableId(0)``, compares by value, and can serve as a dictionary key (D. van Dyk)
 - Accept the lepton flavor as a ``str`` in ``eos.Model.wilson_coefficients_b_to_s``, which no Python call could satisfy before for want of a converter (D. van Dyk)
+- Add ``ThreadPool::WaitGuard``, a guard that a thread holds while it waits for the work it enqueued, so that an embedding runtime can relinquish exclusive access to its own state for as long as the pool's threads need it in turn; the Python bindings install one that detaches the calling thread from the interpreter (D. van Dyk)
+- Add a test case that races sixteen threads for a singleton's first ``instance()`` call and checks that exactly one instance is constructed (D. van Dyk)
 
 ### Deprecated
 
@@ -65,6 +70,10 @@
 - Fix ``eos.LogPosterior.add``, which accepted a second prior on an already-varied parameter: the set of names that the duplicate check consults was read but never written (D. van Dyk)
 - Fix the keyword names declared for ``eos.make_wilson_polynomial_ratio_observable``, which named only three of its four arguments and therefore bound ``name`` to the numerator and ``reference_observable`` to the denominator (D. van Dyk)
 - Fix the docstring of ``eos.LogPrior.Scale``, which described its scale factor as ``lambda``, a Python reserved word that can never be a keyword argument, in lieu of the declared ``scale`` (D. van Dyk)
+- Fix a segfault when evaluating an observable that a Python provider backs: the ``ObservableCache`` dispatches observables to threads of EOS's own making, which called into the interpreter without holding the GIL; the external log prior and log-likelihood block now acquire it as well, although they are reached on the calling thread (D. van Dyk)
+- Fix a segfault when a callback registered with the native log outlives the caller's last reference to it: the ``Log`` singleton recorded the Python callable as a borrowed reference, and now holds one of its own until ``atexit`` (D. van Dyk)
+- Fix ``eos.Parameters.declare`` appending a second entry for a name it has already declared, which grew the process-wide set of default parameters by one entry for every ``eos.AnalysisFile`` that declares parameters of its own and left two ``eos.Parameters`` objects created at different times disagreeing on which id a name denotes (D. van Dyk)
+- Fix the double-checked locking in ``InstantiationPolicy<T_, Singleton>::instance()``, which read the instance pointer outside its lock without synchronisation and could therefore hand a thread a pointer to an object whose construction it cannot yet observe (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
