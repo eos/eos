@@ -223,7 +223,7 @@ class LogCallbackLockingTest : public TestCase
             // this callback holds up the emitting thread until a second thread has emitted a
             // message of its own; that second message needs the Log's lock, which must therefore
             // not be held while we are here
-            std::function<void(const std::string &, const LogLevel &, const std::string &)> callback = [this, timeout](const std::string & i, const LogLevel &, const std::string &)
+            std::function<void(const std::string &, const LogLevel &, const std::string &)> callback = [this](const std::string & i, const LogLevel &, const std::string &)
             {
                 if (id() != i)
                 {
@@ -241,7 +241,7 @@ class LogCallbackLockingTest : public TestCase
             };
             Log::instance()->register_callback(callback);
 
-            std::thread other([this, timeout]()
+            std::thread other([this]()
             {
                 {
                     std::unique_lock<std::mutex> l(mutex);
