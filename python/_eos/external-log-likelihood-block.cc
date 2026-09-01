@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,6 +20,8 @@
 #include "python/_eos/external-log-likelihood-block.hh"
 
 #include "eos/statistics/test-statistic-impl.hh"
+
+#include "python/_eos/gil.hh"
 
 using boost::python::extract;
 using boost::python::object;
@@ -62,6 +64,9 @@ namespace eos
     double
     ExternalLogLikelihoodBlock::evaluate() const
     {
+        // guarded in case a caller has detached its thread from the interpreter
+        ::impl::ScopedGILAcquire gil;
+
         return extract<double>(_evaluate());
     }
 
