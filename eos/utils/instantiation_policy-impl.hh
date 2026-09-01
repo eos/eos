@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2008-2026 Danny van Dyk <danny.dyk@uni-dortmund.de>
  *
  * Based upon 'instantiation_policy-impl.hh' from Paludis, which is:
  *     Copyright (c) 2005, 2006, 2007 Ciaran McCreesh
@@ -39,52 +39,56 @@ namespace eos
     template <typename T_> class InstantiationPolicy<T_, Singleton>::DeleteOnDestruction
     {
         private:
-            T_ ** const _ptr;
+            std::atomic<T_ *> * const _ptr;
 
         public:
-            DeleteOnDestruction(T_ ** const ptr) :
+            DeleteOnDestruction(std::atomic<T_ *> * const ptr) :
                 _ptr(ptr)
             {
             }
 
             ~DeleteOnDestruction()
             {
-                InstantiationPolicy<T_, Singleton>::_delete(*_ptr);
+                InstantiationPolicy<T_, Singleton>::_delete(_ptr->load(std::memory_order_acquire));
 
-                *_ptr = 0;
+                _ptr->store(nullptr, std::memory_order_release);
             }
     };
 
     template <typename T_>
-    T_ **
+    std::atomic<T_ *> &
     InstantiationPolicy<T_, Singleton>::_instance_ptr()
     {
-        static T_ *                instance(0);
+        static std::atomic<T_ *>   instance(nullptr);
         static DeleteOnDestruction delete_instance(&instance);
 
-        return &instance;
+        return instance;
     }
 
     template <typename T_>
     T_ *
     InstantiationPolicy<T_, Singleton>::instance()
     {
-        T_ ** instance_ptr(_instance_ptr());
+        std::atomic<T_ *> & instance_ptr = _instance_ptr();
 
-        if (0 == *instance_ptr)
+        // the acquire/release pair publishes the constructed object along with the pointer to it
+        T_ * result = instance_ptr.load(std::memory_order_acquire);
+
+        if (nullptr == result)
         {
             static Mutex m;
             Lock         l(m);
 
-            instance_ptr = _instance_ptr();
+            result = instance_ptr.load(std::memory_order_relaxed);
 
-            if (0 == *instance_ptr)
+            if (nullptr == result)
             {
-                *instance_ptr = new T_;
+                result = new T_;
+                instance_ptr.store(result, std::memory_order_release);
             }
         }
 
-        return *instance_ptr;
+        return result;
     }
 } // namespace eos
 

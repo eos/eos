@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2008 Danny van Dyk <danny.dyk@uni-dortmund.de>
+ * Copyright (c) 2008-2026 Danny van Dyk <danny.dyk@uni-dortmund.de>
  *
  * Base upon 'instantiation_policy.hh' from Paludis, which is:
  *     Copyright (c) 2005, 2006, 2007 Ciaran McCreesh
@@ -22,6 +22,8 @@
 
 #ifndef EOS_GUARD_EOS_UTILS_INSTANTIATION_POLICY_HH
 #define EOS_GUARD_EOS_UTILS_INSTANTIATION_POLICY_HH 1
+
+#include <atomic>
 
 namespace eos
 {
@@ -92,8 +94,8 @@ namespace eos
 
             friend class DeleteOnDestruction;
 
-            /// Returns a pointer to our instance pointer.
-            static T_ ** _instance_ptr();
+            /// Returns a reference to our instance pointer.
+            static std::atomic<T_ *> & _instance_ptr();
 
             /// Deletes the object of T_ that is pointed at by ptr.
             static void _delete(T_ * const ptr);

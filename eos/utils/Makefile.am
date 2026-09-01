@@ -135,6 +135,7 @@ TESTS = \
 	expression-parser_TEST \
 	gsl-hacks_TEST \
 	indirect-iterator_TEST \
+	instantiation_policy_TEST \
 	join_TEST \
 	kinematic_TEST \
 	kmatrix_TEST \
@@ -173,6 +174,8 @@ gsl_hacks_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 gsl_hacks_TEST_LDFLAGS = $(GSL_LDFLAGS)
 
 indirect_iterator_TEST_SOURCES = indirect-iterator_TEST.cc
+
+instantiation_policy_TEST_SOURCES = instantiation_policy_TEST.cc
 
 join_TEST_SOURCES = join_TEST.cc
 
