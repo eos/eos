@@ -19,6 +19,7 @@
  */
 
 #include <eos/utils/exception.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/parameters.hh>
 
 #include <test/test.hh>
@@ -26,6 +27,7 @@
 #include <cstdlib>
 #include <memory>
 #include <string>
+#include <vector>
 
 using namespace test;
 using namespace eos;
@@ -36,6 +38,24 @@ class ParametersTest : public TestCase
         ParametersTest() :
             TestCase("parameters_test")
         {
+            Log::instance()->register_callback([this](const std::string &, const LogLevel &, const std::string & message) { messages.push_back(message); });
+        }
+
+        // the callback outlives run(), so it must not capture anything local to it
+        mutable std::vector<std::string> messages;
+
+        /// Counts the messages recorded so far that name the given parameter.
+        unsigned
+        count_messages(const std::string & name) const
+        {
+            unsigned result = 0;
+
+            for (const auto & message : messages)
+            {
+                result += (std::string::npos != message.find("Parameter '" + name + "' is already declared")) ? 1 : 0;
+            }
+
+            return result;
         }
 
         virtual void
@@ -316,6 +336,35 @@ class ParametersTest : public TestCase
 
                 TEST_CHECK_EQUAL(first.id(), second.id());
                 TEST_CHECK_NEARLY_EQUAL(second.central(), 1.0, 1e-12); // the original value, not the second call's
+            }
+
+            // D2: static Parameters::declare keeps the parameter that a repeated declaration names,
+            //     and reports only a declaration that differs
+            {
+                const std::string identical = "test::declare-dup-identical";
+                const std::string differing = "test::declare-dup-differing";
+
+                Parameter::Id first  = Parameters::declare(identical, R"(\text{dup})", Unit::None(), 1.0, 0.0, 2.0);
+                Parameter::Id second = Parameters::declare(identical, R"(\text{dup})", Unit::None(), 1.0, 0.0, 2.0);
+
+                // the same declaration twice: the same id, and nothing reported
+                TEST_CHECK_EQUAL(first, second);
+                TEST_CHECK_EQUAL(0u, count_messages(identical));
+
+                // the default set does not grow on the repeated declaration
+                Parameters p = Parameters::Defaults();
+                TEST_CHECK_EQUAL(p[identical].id(), first);
+                TEST_CHECK_NEARLY_EQUAL(p[identical].central(), 1.0, 1e-12);
+
+                Parameter::Id third  = Parameters::declare(differing, R"(\text{dup})", Unit::None(), 1.0, 0.0, 2.0);
+                Parameter::Id fourth = Parameters::declare(differing, R"(\text{dup})", Unit::None(), 9.0, 0.0, 2.0);
+
+                // a differing declaration: still the same id, but reported
+                TEST_CHECK_EQUAL(third, fourth);
+                TEST_CHECK_EQUAL(1u, count_messages(differing));
+
+                // the original declaration is the one that survives
+                TEST_CHECK_NEARLY_EQUAL(Parameters::Defaults()[differing].central(), 1.0, 1e-12);
             }
 
             // E: Parameters::set unknown-name error; static Parameters::redirect (undone afterwards)
