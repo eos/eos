@@ -19,6 +19,8 @@
 
 #include "python/_eos/external-log-prior.hh"
 
+#include "python/_eos/gil.hh"
+
 using boost::python::extract;
 using boost::python::object;
 using boost::python::stl_input_iterator;
@@ -80,18 +82,25 @@ namespace eos
     double
     ExternalLogPrior::operator() () const
     {
+        // guarded in case a caller has detached its thread from the interpreter
+        ::impl::ScopedGILAcquire gil;
+
         return extract<double>(_evaluate());
     }
 
     void
     ExternalLogPrior::sample()
     {
+        ::impl::ScopedGILAcquire gil;
+
         _sample();
     }
 
     void
     ExternalLogPrior::compute_cdf()
     {
+        ::impl::ScopedGILAcquire gil;
+
         _compute_cdf();
     }
 
