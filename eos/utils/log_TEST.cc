@@ -155,39 +155,60 @@ class LogOneTimeMessageTest : public TestCase
         {
         }
 
+        // the callback outlives run() and may be invoked concurrently, so it must neither capture
+        // anything local to run() nor record a message without holding our mutex
+        mutable std::mutex                                                  mutex;
         mutable std::vector<std::tuple<std::string, LogLevel, std::string>> messages;
+
+        unsigned
+        number_of_messages() const
+        {
+            std::unique_lock<std::mutex> l(mutex);
+
+            return messages.size();
+        }
 
         virtual void
         run() const
         {
-            // the callback outlives this call, so it must not capture anything local to it
+            static const std::string id_of_interest = "test-one-time-message";
 
             // register callback
             std::function<void(const std::string &, const LogLevel &, const std::string &)> callback =
-                    [this](const std::string & id, const LogLevel & level, const std::string & message) { messages.push_back(std::make_tuple(id, level, message)); };
+                    [this](const std::string & id, const LogLevel & level, const std::string & message)
+            {
+                if (id_of_interest != id)
+                {
+                    return;
+                }
+
+                std::unique_lock<std::mutex> l(mutex);
+
+                messages.push_back(std::make_tuple(id, level, message));
+            };
             Log::instance()->register_callback(callback);
 
             // first message
             {
                 // no messages yet
-                TEST_CHECK_EQUAL(0u, messages.size());
+                TEST_CHECK_EQUAL(0u, number_of_messages());
 
                 // emit message
-                static const Log::OneTimeMessage first_emission("test-one-time-message", ll_informational, "This is a test message.");
+                static const Log::OneTimeMessage first_emission(id_of_interest, ll_informational, "This is a test message.");
 
                 // one message
-                TEST_CHECK_EQUAL(1u, messages.size());
+                TEST_CHECK_EQUAL(1u, number_of_messages());
 
                 // check message
-                TEST_CHECK_EQUAL("test-one-time-message", std::get<0>(messages.back()));
+                TEST_CHECK_EQUAL(id_of_interest, std::get<0>(messages.back()));
                 TEST_CHECK_EQUAL(ll_informational, std::get<1>(messages.back()));
                 TEST_CHECK_EQUAL("This is a test message. (Further messages of this type will be suppressed.)", std::get<2>(messages.back()));
 
                 // try emitting another message with the same id
-                static const Log::OneTimeMessage second_emission("test-one-time-message", ll_informational, "This is a test message.");
+                static const Log::OneTimeMessage second_emission(id_of_interest, ll_informational, "This is a test message.");
 
                 // still one message
-                TEST_CHECK_EQUAL(1u, messages.size());
+                TEST_CHECK_EQUAL(1u, number_of_messages());
             }
         }
 } one_time_message_test;
