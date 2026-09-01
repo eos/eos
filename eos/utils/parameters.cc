@@ -303,6 +303,12 @@ namespace eos
 
             std::vector<ParameterSection> _sections;
 
+            static bool
+            _identical_declarations(const Parameter::Template & lhs, const Parameter::Template & rhs)
+            {
+                return (lhs.name == rhs.name) && (lhs.min == rhs.min) && (lhs.central == rhs.central) && (lhs.max == rhs.max) && (lhs.latex == rhs.latex) && (lhs.unit == rhs.unit);
+            }
+
             ParameterDefaults() :
                 _data(new Parameters::Data)
             {
@@ -671,6 +677,20 @@ namespace eos
             Parameter::Id
             declare(const QualifiedName & key, const Parameter::Template & value)
             {
+                // keep the parameter already in place, so that ids handed out earlier still denote it
+                auto i = _map.find(key);
+                if (_map.end() != i)
+                {
+                    if (! _identical_declarations(_data->data[i->second], value))
+                    {
+                        Log::instance()->message("[parameters.declare]", ll_error)
+                                << "Parameter '" << key
+                                << "' is already declared with different values, returning the existing instance; check your code for conflicting duplicate declarations";
+                    }
+
+                    return i->second;
+                }
+
                 unsigned idx = _data->data.size();
                 _data->data.push_back(Parameter::Data{ value, idx });
                 _map[key] = idx;
