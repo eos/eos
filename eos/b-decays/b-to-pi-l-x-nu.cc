@@ -19,6 +19,7 @@
 
 #include <eos/b-decays/b-to-pi-l-x-nu.hh>
 #include <eos/form-factors/form-factors.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
@@ -31,6 +32,8 @@ namespace eos
     template <> struct Implementation<BToPiLeptonInclusiveNeutrinos>
     {
             std::shared_ptr<FormFactors<PToP>> form_factors;
+
+            cubature::Config cub_conf;
 
             QuarkFlavorOption opt_q;
 
@@ -52,6 +55,7 @@ namespace eos
 
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
                 form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors"_ok, "BCL2008"_ov).str(), p, o)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_q(o, options, "q"_ok),
                 m_B(p["mass::B_" + opt_q.str()], u),
                 tau_B(p["life_time::B_" + opt_q.str()], u),
@@ -166,7 +170,7 @@ namespace eos
     {
         std::function<double(const double &)> f = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_1nu_1var, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -174,7 +178,7 @@ namespace eos
     {
         std::function<double(const double &)> f = std::bind(&Implementation<BToPiLeptonInclusiveNeutrinos>::differential_decay_width_3nu_1var, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     const std::string BToPiLeptonInclusiveNeutrinos::description = "\

@@ -20,6 +20,7 @@
 
 #include <eos/b-decays/b-to-gamma-l-nu.hh>
 #include <eos/form-factors/mesonic.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
@@ -42,6 +43,9 @@ namespace eos
             std::shared_ptr<Model>                 model;
             std::shared_ptr<FormFactors<PToGamma>> form_factors;
 
+            // integration config
+            cubature::Config cub_conf;
+
             UsedParameter alpha_qed;
             UsedParameter g_fermi;
             UsedParameter v_ub_abs;
@@ -58,6 +62,7 @@ namespace eos
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
                 model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
                 form_factors(FormFactorFactory<PToGamma>::create("B->gamma::" + o.get("form-factors"_ok, "FLvD2022QCDF"_ov).str(), p, o)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 alpha_qed(p["QED::alpha_e(m_b)"], u),
                 g_fermi(p["WET::G_Fermi"], u),
                 v_ub_abs(p["CKM::abs(V_ub)"], u),
@@ -106,7 +111,7 @@ namespace eos
             double
             integrated_decay_width(const double & E_gamma_min) const
             {
-                return integrate<GSL::QAGS>([&](const double & E_gamma) { return differential_decay_width_dEgamma(E_gamma); }, E_gamma_min, m_B / 2.0);
+                return integrate<1, 1>([&](const double & E_gamma) { return differential_decay_width_dEgamma(E_gamma); }, E_gamma_min, m_B / 2.0, cub_conf);
             }
 
             double
@@ -140,8 +145,8 @@ namespace eos
 
                 const double prefactor = alpha_qed * power_of<2>(g_fermi * v_ub_abs) / (16.0 * power_of<2>(M_PI)) * power_of<3>(m_B);
 
-                const double Gamma_forward  = prefactor * integrate<GSL::QAGS>(dGamma_dEgamma_forward, E_gamma_min, m_B / 2.0);
-                const double Gamma_backward = prefactor * integrate<GSL::QAGS>(dGamma_dEgamma_backward, E_gamma_min, m_B / 2.0);
+                const double Gamma_forward  = prefactor * integrate<1, 1>(dGamma_dEgamma_forward, E_gamma_min, m_B / 2.0, cub_conf);
+                const double Gamma_backward = prefactor * integrate<1, 1>(dGamma_dEgamma_backward, E_gamma_min, m_B / 2.0, cub_conf);
 
                 return { Gamma_forward, Gamma_backward };
             }

@@ -188,7 +188,7 @@ namespace eos
                 isospin_factor(_isospin_factor()),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-                cub_conf(cubature::Config().epsrel(1e-5).epsabs(1.0e-9)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
             {
                 Context ctx("When constructing B->Vlnu observable");
@@ -347,8 +347,8 @@ namespace eos
                 const double q2_abs_max = power_of<2>(m_B() - m_V());
 
                 std::function<double(const double &)> f     = std::bind(&Implementation<BToVectorLeptonNeutrino>::normalized_decay_width, this, std::placeholders::_1);
-                const double                          num   = integrate<GSL::QAGS>(f, q2_min, q2_max);
-                const double                          denom = integrate<GSL::QAGS>(f, q2_abs_min, q2_abs_max);
+                const double                          num   = integrate<1, 1>(f, q2_min, q2_max, cub_conf);
+                const double                          denom = integrate<1, 1>(f, q2_abs_min, q2_abs_max, cub_conf);
 
                 return num / denom / (q2_max - q2_min);
             }
