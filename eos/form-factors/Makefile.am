@@ -24,6 +24,7 @@ libeosformfactors_la_SOURCES = \
 	heavy-meson-lcdas.cc heavy-meson-lcdas.hh \
 	heavy-meson-lcdas-exponential.cc heavy-meson-lcdas-exponential.hh \
 	heavy-meson-lcdas-flvd2022.cc heavy-meson-lcdas-flvd2022.hh \
+	heavy-meson-lcdas-flvd2022-profile.cc heavy-meson-lcdas-flvd2022-profile.hh \
 	hqet-b-to-c.hh hqet-b-to-c.cc \
 	k-lcdas.cc k-lcdas.hh \
 	k-star-lcdas.cc k-star-lcdas.hh \
@@ -79,6 +80,7 @@ include_eos_rarebdecays_HEADERS = \
 	heavy-meson-lcdas.hh \
 	heavy-meson-lcdas-exponential.hh \
 	heavy-meson-lcdas-flvd2022.hh \
+	heavy-meson-lcdas-flvd2022-profile.hh \
 	observables.hh \
 	parametric-bbgorvd2018.hh \
 	parametric-bcl2008.hh \
@@ -111,6 +113,7 @@ TESTS = \
 	heavy-meson-lcdas_TEST \
 	heavy-meson-lcdas-exponential_TEST \
 	heavy-meson-lcdas-flvd2022_TEST \
+	heavy-meson-lcdas-flvd2022-profile_TEST \
 	hqet-b-to-c_TEST \
 	k-lcdas_TEST \
 	kstar-lcdas_TEST \
@@ -173,6 +176,8 @@ heavy_meson_lcdas_TEST_SOURCES = heavy-meson-lcdas_TEST.cc
 heavy_meson_lcdas_exponential_TEST_SOURCES = heavy-meson-lcdas-exponential_TEST.cc
 
 heavy_meson_lcdas_flvd2022_TEST_SOURCES = heavy-meson-lcdas-flvd2022_TEST.cc
+
+heavy_meson_lcdas_flvd2022_profile_TEST_SOURCES = heavy-meson-lcdas-flvd2022-profile_TEST.cc
 
 hqet_b_to_c_TEST_SOURCES = hqet-b-to-c_TEST.cc
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2018      Nico Gubernari
  * Copyright (c) 2018      Ahmet Kokulu
  * Copyright (c) 2022      Philip Lüghausen
@@ -38,16 +38,19 @@ namespace eos
         using namespace std::literals::string_literals;
 
         const std::vector<OptionSpecification> Exponential::options{
-            {      "Q"_ok,                   { "b"_ov },        "b"_ov },
-            {      "q"_ok,   { "u"_ov, "d"_ov, "s"_ov },        "u"_ov },
-            { "gminus"_ok, { "zero"_ov, "WW-limit"_ov }, "WW-limit"_ov }
+            {               "Q"_ok,                     { "b"_ov },        "b"_ov },
+            {               "q"_ok,     { "u"_ov, "d"_ov, "s"_ov },        "u"_ov },
+            {          "gminus"_ok,   { "zero"_ov, "WW-limit"_ov }, "WW-limit"_ov },
+            { "lambda-b-source"_ok, { "legacy"_ov, "FLvD2022"_ov },   "legacy"_ov }
         };
 
         Exponential::Exponential(const Parameters & p, const Options & o) :
             opt_Q(o, options, "Q"_ok),
             opt_q(o, options, "q"_ok),
             opt_gminus(o, options, "gminus"_ok),
-            lambda_B_inv(p[parameter("1/lambda_B_p")], *this),
+            opt_lambda_b_source(o, options, "lambda-b-source"_ok),
+            lambda_B_parameter(p[opt_lambda_b_source.value() == "legacy" ? parameter("1/lambda_B_p") : parameter("omega_0", true)], *this),
+            lambda_bar(p[parameter("LambdaBar")]),
             lambda_E2(p[parameter("lambda_E^2")], *this),
             lambda_H2(p[parameter("lambda_H^2")], *this),
             switch_gminus(1.0)
@@ -59,7 +62,7 @@ namespace eos
         }
 
         std::string
-        Exponential::parameter(const char * _name) const
+        Exponential::parameter(const char * _name, const bool & flvd2022) const
         {
             static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, qnp::Prefix> prefixes{
                 {      { QuarkFlavor::bottom, QuarkFlavor::up },   qnp::Prefix("B") },
@@ -71,6 +74,21 @@ namespace eos
             if (it == prefixes.end())
             {
                 throw InternalError("Combination of options Q=" + opt_Q.str() + ", q=" + opt_q.str() + " is not supported");
+            }
+
+            if (flvd2022)
+            {
+                if (opt_q.value() == QuarkFlavor::strange)
+                {
+                    throw InternalError("lambda-b-source=FLvD2022 is not supported for q=s");
+                }
+
+                static const std::map<std::tuple<QuarkFlavor, QuarkFlavor>, qnp::Prefix> flvd2022_prefixes{
+                    {   { QuarkFlavor::bottom, QuarkFlavor::up }, qnp::Prefix("B_u") },
+                    { { QuarkFlavor::bottom, QuarkFlavor::down }, qnp::Prefix("B_u") }
+                };
+
+                return QualifiedName(flvd2022_prefixes.at(std::make_tuple(opt_Q.value(), opt_q.value())), qnp::Name(_name), qnp::Suffix("FLvD2022")).str();
             }
 
             return QualifiedName(it->second, qnp::Name(_name)).str();
@@ -86,13 +104,13 @@ namespace eos
         double
         Exponential::lambda_B() const
         {
-            return 1.0 / lambda_B_inv();
+            return opt_lambda_b_source.value() == "legacy" ? 1.0 / lambda_B_parameter() : lambda_B_parameter();
         }
 
         double
         Exponential::inverse_lambda_plus() const
         {
-            return lambda_B_inv();
+            return 1.0 / lambda_B();
         }
 
         /* Leading twist two-particle LCDAs */
@@ -107,12 +125,21 @@ namespace eos
         }
 
         double
+        Exponential::phi_minusWW(const double & omega) const
+        {
+            // phi_-^WW(omega) = int_omega^infinity d eta phi_+(eta) / eta
+            const double omega_0 = lambda_B();
+
+            return 1.0 / omega_0 * std::exp(-omega / omega_0);
+        }
+
+        double
         Exponential::phi_minus(const double & omega) const
         {
             // cf. [KMO:2006A], eq. (53), p. 16
             const double omega_0 = lambda_B();
 
-            const double limitWW = 1.0 / omega_0 * std::exp(-omega / omega_0);
+            const double limitWW = phi_minusWW(omega);
             const double nonWW =
                     -(lambda_E2 - lambda_H2) / (18.0 * power_of<5>(omega_0)) * (2.0 * omega_0 * omega_0 - 4.0 * omega_0 * omega + omega * omega) * std::exp(-omega / omega_0);
 
@@ -495,6 +522,33 @@ namespace eos
         {
             static const std::array<double, 9> cs = { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
             return { cs.begin(), cs.end() };
+        }
+
+        double
+        Exponential::xi_1(const double & omega) const
+        {
+            // cf. [BBJW:2018A], Eq. (4.15), in the equivalent profile-function form following Eq. (A.39).
+            const double omega_0      = lambda_B();
+            const double f            = std::exp(-omega / omega_0) / (omega_0 * omega_0);
+            const double f_prime      = -f / omega_0;
+            const double phi_minus_ww = std::exp(-omega / omega_0) / omega_0;
+            const double kappa        = 1.0 / (lambda_bar * lambda_bar + (2.0 * lambda_E2 + lambda_H2) / 6.0);
+            const double bracket      = omega * omega * f - 2.0 * omega * phi_minus_ww;
+
+            return 2.0 / 3.0 * kappa * (lambda_E2 + 2.0 * lambda_H2) * bracket - 2.0 * omega * phi_minus_ww + 3.0 * omega * omega * f + omega * omega * omega * f_prime;
+        }
+
+        double
+        Exponential::xi_2(const double & omega) const
+        {
+            // cf. [BBJW:2018A], Eq. (4.16), in the equivalent profile-function form following Eq. (A.39).
+            const double omega_0      = lambda_B();
+            const double f            = std::exp(-omega / omega_0) / (omega_0 * omega_0);
+            const double phi_minus_ww = std::exp(-omega / omega_0) / omega_0;
+            const double kappa        = 1.0 / (lambda_bar * lambda_bar + (2.0 * lambda_E2 + lambda_H2) / 6.0);
+            const double bracket      = omega * omega * f - 2.0 * omega * phi_minus_ww;
+
+            return -2.0 / 3.0 * kappa * (lambda_E2 - lambda_H2) * bracket + (lambda_bar - omega) * omega * f - omega * phi_minus_ww;
         }
 
         Diagnostics
