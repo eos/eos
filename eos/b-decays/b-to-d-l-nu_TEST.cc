@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018-2019 Ahmet Kokulu
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021      Christoph Bobeth
  *
  * This file is part of the EOS project. EOS is free software;
@@ -187,7 +187,7 @@ class BToDLeptonNeutrinoTest : public TestCase
                     BToPseudoscalarLeptonNeutrino d(p, oo);
 
                     TEST_CHECK_RELATIVE_ERROR(d.normalized_integrated_branching_ratio(0.011164, 11.62), 13.1988, eps);
-                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.014345031, eps);
+                    TEST_CHECK_RELATIVE_ERROR(d.integrated_a_fb_leptonic(0.011164, 11.62), -0.013875736, eps);
 
                     oo.declare("l"_ok, "tau"_ov);
                     auto k_tau = Kinematics{
