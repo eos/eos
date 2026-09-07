@@ -20,7 +20,9 @@
 
 #include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-observable.hh>
+#include <eos/utils/lock.hh>
 #include <eos/utils/log.hh>
+#include <eos/utils/mutex.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/observable_set.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -28,11 +30,14 @@
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <algorithm>
+#include <cstddef>
+#include <exception>
 #include <limits>
 #include <map>
 #include <tuple>
 #include <typeindex>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 namespace eos
@@ -65,6 +70,21 @@ namespace eos
 
             // Contains values of all observables
             std::vector<double> predictions;
+
+            // A batch bundles a group of independent computations whose predictions are stored in a
+            // single contiguous block of memory. Batches are addressed by their own BatchId and are
+            // kept separate from the single-observable id space above.
+            struct Batch
+            {
+                    std::vector<ObservablePtr> observables;
+                    std::vector<double>        predictions;
+            };
+
+            // Contains each batch of computations, addressed by its BatchId (i.e. its index).
+            std::vector<Batch> batches;
+
+            // Incremented once per successful update(); never advances on a failed one.
+            unsigned generation = 0;
 
             Implementation(const Parameters & parameters) :
                 parameters(parameters)
@@ -209,6 +229,27 @@ namespace eos
 
                 throw InternalError("should not be reached");
             }
+
+            ObservableCache::BatchId
+            add_batch(std::vector<ObservablePtr> && computations)
+            {
+                for (const auto & observable : computations)
+                {
+                    if (observable->parameters() != parameters)
+                    {
+                        throw InternalError("ObservableCache::add_batch(): Mismatch of Parameters between different observables detected.");
+                    }
+                }
+
+                const unsigned index = batches.size();
+
+                Batch batch;
+                batch.predictions.assign(computations.size(), std::numeric_limits<double>::quiet_NaN());
+                batch.observables = std::move(computations);
+                batches.push_back(std::move(batch));
+
+                return ObservableCache::BatchId(index);
+            }
     };
 
     ObservableCache::ObservableCache(const Parameters & parameters) :
@@ -218,10 +259,28 @@ namespace eos
 
     ObservableCache::~ObservableCache() {}
 
+    bool
+    ObservableCache::operator== (const ObservableCache & rhs) const
+    {
+        return _imp.get() == rhs._imp.get();
+    }
+
+    unsigned
+    ObservableCache::generation() const
+    {
+        return _imp->generation;
+    }
+
     ObservableCache::ObservableId
     ObservableCache::add(const ObservablePtr & observable)
     {
         return _imp->add(observable, *this);
+    }
+
+    ObservableCache::BatchId
+    ObservableCache::add_batch(std::vector<ObservablePtr> && computations)
+    {
+        return _imp->add_batch(std::move(computations));
     }
 
     void
@@ -230,6 +289,41 @@ namespace eos
         // an observable may call back into the embedding runtime from one of the pool's threads
         const auto guard = ThreadPool::instance()->wait_guard();
 
+        // The exception raised first by any evaluation path below, kept across threads so that
+        // update() can rethrow it once every ticket has been waited on.
+        Mutex              exception_mutex;
+        std::exception_ptr exception;
+
+        // Catches whatever evaluate() throws -- not only eos::Exception, since anything else would
+        // otherwise escape into ThreadPool::thread_function and terminate the process. Logs the
+        // observable and the error, then stashes the first exception seen for update() to rethrow.
+        auto record_exception = [&exception_mutex, &exception](const char * kind, Observable & o)
+        {
+            const std::exception_ptr current = std::current_exception();
+
+            std::string what = "unknown exception";
+            try
+            {
+                std::rethrow_exception(current);
+            }
+            catch (const std::exception & e)
+            {
+                what = e.what();
+            }
+            catch (...)
+            {
+            }
+
+            Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating " << kind << " observable '" << o.name() << "["
+                                                                          << o.kinematics().as_string() << "];" << o.options().as_string() << "': " << what;
+
+            Lock lock(exception_mutex);
+            if (! exception)
+            {
+                exception = current;
+            }
+        };
+
         // parallelize the evaluation of the observables
         std::vector<Ticket> cacheable_tickets;
         cacheable_tickets.reserve(_imp->cacheable_observables.size());
@@ -237,7 +331,7 @@ namespace eos
         // evaluate all cacheable observables in parallel
         for (auto co : _imp->cacheable_observables)
         {
-            auto f = [=, this]()
+            auto f = [=, this, &record_exception]()
             {
                 auto & o  = std::get<0>(co.second);
                 auto & id = std::get<1>(co.second);
@@ -245,10 +339,9 @@ namespace eos
                 {
                     _imp->predictions[id.value()] = o->evaluate();
                 }
-                catch (eos::Exception & e)
+                catch (...)
                 {
-                    Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating cacheable observable '" << o->name() << "["
-                                                                                  << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
+                    record_exception("cacheable", *o);
                     _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
                 }
             };
@@ -261,7 +354,7 @@ namespace eos
         // evaluate all regular observables in parallel
         for (auto ro : _imp->regular_observables)
         {
-            auto f = [=, this]()
+            auto f = [=, this, &record_exception]()
             {
                 auto & o  = std::get<0>(ro);
                 auto & id = std::get<1>(ro);
@@ -269,14 +362,65 @@ namespace eos
                 {
                     _imp->predictions[id.value()] = o->evaluate();
                 }
-                catch (eos::Exception & e)
+                catch (...)
                 {
-                    Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating regular observable '" << o->name() << "["
-                                                                                  << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
+                    record_exception("regular", *o);
                     _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
                 }
             };
             regular_tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>(f)));
+        }
+
+        // Flatten the computations of all batches into a single work list of (batch index, index
+        // within batch) pairs. This lets us partition the total amount of batched work across the
+        // available threads irrespective of how it is distributed over the individual batches.
+        std::vector<std::pair<std::size_t, std::size_t>> batch_work;
+        for (std::size_t bi = 0; bi < _imp->batches.size(); ++bi)
+        {
+            for (std::size_t oi = 0; oi < _imp->batches[bi].observables.size(); ++oi)
+            {
+                batch_work.emplace_back(bi, oi);
+            }
+        }
+
+        std::vector<Ticket> batch_tickets;
+
+        // Evaluate all batched computations in parallel by handing each thread a contiguous slice of
+        // the work list; the computations within a slice are evaluated in series. Aiming for roughly
+        // one slice per thread keeps every thread busy while amortising the per-ticket overhead over
+        // many computations. Distinct slices write to disjoint prediction slots, so no locking is
+        // required.
+        if (! batch_work.empty())
+        {
+            const unsigned    number_of_threads = ThreadPool::instance()->number_of_threads();
+            const std::size_t target_slices     = std::max<std::size_t>(1u, number_of_threads);
+            const std::size_t slice             = (batch_work.size() + target_slices - 1) / target_slices;
+
+            for (std::size_t start = 0; start < batch_work.size(); start += slice)
+            {
+                const std::size_t end = std::min(batch_work.size(), start + slice);
+
+                // 'batch_work' outlives every ticket, since update() waits for all batch tickets
+                // before returning; capturing it by reference therefore avoids copying the slice.
+                auto f = [start, end, &batch_work, this, &record_exception]()
+                {
+                    for (std::size_t k = start; k < end; ++k)
+                    {
+                        auto &       batch = _imp->batches[batch_work[k].first];
+                        const auto & o     = batch.observables[batch_work[k].second];
+                        try
+                        {
+                            batch.predictions[batch_work[k].second] = o->evaluate();
+                        }
+                        catch (...)
+                        {
+                            record_exception("batched", *o);
+                            batch.predictions[batch_work[k].second] = std::numeric_limits<double>::quiet_NaN();
+                        }
+                    }
+                };
+                batch_tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>(f)));
+            }
         }
 
         // await completion of the cacheable observables
@@ -291,7 +435,7 @@ namespace eos
         // evaluate all cached observables in parallel
         for (auto co : _imp->cached_observables)
         {
-            auto f = [=, this]()
+            auto f = [=, this, &record_exception]()
             {
                 auto & o  = std::get<0>(co);
                 auto & id = std::get<1>(co);
@@ -299,10 +443,9 @@ namespace eos
                 {
                     _imp->predictions[id.value()] = o->evaluate();
                 }
-                catch (eos::Exception & e)
+                catch (...)
                 {
-                    Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating cached observable '" << o->name() << "["
-                                                                                  << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
+                    record_exception("cached", *o);
                     _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
                 }
             };
@@ -317,6 +460,12 @@ namespace eos
 
         // await completion of the cached observables
         for (auto ticket : cached_tickets)
+        {
+            ticket.wait();
+        }
+
+        // await completion of the batched computations
+        for (auto ticket : batch_tickets)
         {
             ticket.wait();
         }
@@ -337,13 +486,21 @@ namespace eos
             {
                 _imp->predictions[id.value()] = o->evaluate();
             }
-            catch (eos::Exception & e)
+            catch (...)
             {
-                Log::instance()->message("ObservableCache::update", ll_error) << "Exception encountered when evaluating expression observable '" << o->name() << "["
-                                                                              << o->kinematics().as_string() << "];" << o->options().as_string() << "': " << e.what();
+                record_exception("expression", *o);
                 _imp->predictions[id.value()] = std::numeric_limits<double>::quiet_NaN();
             }
         }
+
+        // every ticket has been waited on; surface the first failure on the calling thread rather
+        // than letting a NaN prediction propagate into a log-likelihood
+        if (exception)
+        {
+            std::rethrow_exception(exception);
+        }
+
+        ++_imp->generation;
     }
 
     Parameters
@@ -356,6 +513,14 @@ namespace eos
     ObservableCache::operator[] (const ObservableCache::ObservableId & id) const
     {
         return _imp->predictions[id.value()];
+    }
+
+    std::span<const double>
+    ObservableCache::operator[] (const ObservableCache::BatchId & id) const
+    {
+        const auto & batch = _imp->batches[id.value()];
+
+        return std::span<const double>(batch.predictions.data(), batch.predictions.size());
     }
 
     ObservablePtr
@@ -387,6 +552,9 @@ namespace eos
     {
         ObservableCache result(parameters);
 
+        // Note: batches are intentionally not cloned here. Their owners (e.g. LogLikelihoodBlocks)
+        // re-register them via add_batch() on the cloned cache, which reproduces the original BatchId
+        // ordering. This mirrors how single observables are re-added by their owners after cloning.
         for (auto o = _imp->observables.begin(), o_end = _imp->observables.end(); o != o_end; ++o)
         {
             // cloning cached observables creates independent *cacheable* observables

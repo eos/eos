@@ -142,6 +142,7 @@ TESTS = \
 	log_TEST \
 	memoise_TEST \
 	mutable_TEST \
+	observable-cache_TEST \
 	observable_set_TEST \
 	observable_stub_TEST \
 	options_TEST \
@@ -188,6 +189,8 @@ log_TEST_SOURCES = log_TEST.cc
 memoise_TEST_SOURCES = memoise_TEST.cc
 
 mutable_TEST_SOURCES = mutable_TEST.cc
+
+observable_cache_TEST_SOURCES = observable-cache_TEST.cc
 
 observable_set_TEST_SOURCES = observable_set_TEST.cc
 
