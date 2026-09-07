@@ -78,3 +78,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# clang-tidy
+compile_flags.txt
