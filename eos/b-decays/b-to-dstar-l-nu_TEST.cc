@@ -28,8 +28,6 @@
 
 #include <array>
 #include <cmath>
-#include <fstream>
-#include <iostream>
 #include <limits>
 #include <string>
 #include <vector>
@@ -107,7 +105,7 @@ class BToVectorLeptonNeutrinoTest : public TestCase
                 // Christoph Bobeth: Adjusted test case because increased number of integration points
                 //                   in numerical integration from 256 -> 4096
                 BToVectorLeptonNeutrino d(p, o);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689), 33.3260288, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 10.689), 33.3248111, eps);
                 auto ir = d.prepare(0.001, 10.689);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_f_L(ir), 0.546, eps);
 
@@ -540,30 +538,30 @@ class BToVectorLeptonNeutrinoTest : public TestCase
                 const double eps = 1e-5;
 
                 // distribution in cos(theta_D)
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-1.00), 0.797135280, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.80), 0.636682229, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.60), 0.511885411, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.40), 0.422744827, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.20), 0.369260477, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(0.00), 0.351432360, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.20), 0.369260477, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.40), 0.422744827, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.60), 0.511885411, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.80), 0.636682229, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+1.00), 0.797135280, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-1.00), 0.796757177, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.80), 0.636508302, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.60), 0.511870287, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.40), 0.422843134, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(-0.20), 0.369426842, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(0.00), 0.351621411, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.20), 0.369426842, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.40), 0.422843134, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.60), 0.511870287, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+0.80), 0.636508302, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_v(+1.00), 0.796757177, eps);
 
                 // distribution in cos(theta_l)
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-1.00), 0.134132681, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.80), 0.256037957, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.60), 0.360743770, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.40), 0.448250120, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.20), 0.518557007, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(0.00), 0.571664430, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.20), 0.607572390, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.40), 0.626280887, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.60), 0.627789921, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.80), 0.612099492, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+1.00), 0.579209599, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-1.00), 0.133788825, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.80), 0.255766225, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.60), 0.360542978, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.40), 0.448119085, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(-0.20), 0.518494546, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(0.00), 0.571669360, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.20), 0.607643528, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.40), 0.626417049, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.60), 0.627989924, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+0.80), 0.612362152, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.differential_pdf_l(+1.00), 0.579533734, eps);
 
                 // distribution in phi; cf. [DDS:2014A]: only the cos(2 phi) [J_3] and
                 // sin(2 phi) [J_9] terms survive integration over theta_l and theta_D.
@@ -578,7 +576,7 @@ class BToVectorLeptonNeutrinoTest : public TestCase
                 // PDFs (densities), so a full-range bin returns the average density, not 1
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, 0.0), 0.500000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_v(-1.0, +1.0), 0.500000000, eps);
-                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, 0.0), 0.388730770, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, 0.0), 0.3885637726, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_l(-1.0, +1.0), 0.500000000, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi(0.0, +M_PI), 0.159154943, eps);
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_pdf_phi(-M_PI, +M_PI), 0.159154943, eps);

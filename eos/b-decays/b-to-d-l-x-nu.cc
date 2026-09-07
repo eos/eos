@@ -21,6 +21,7 @@
 
 #include <eos/b-decays/b-to-d-l-x-nu.hh>
 #include <eos/form-factors/form-factors.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
@@ -55,6 +56,8 @@ namespace eos
 
             std::shared_ptr<Model> model;
 
+            cubature::Config cub_conf;
+
             static const std::vector<OptionSpecification> options;
 
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
@@ -68,7 +71,8 @@ namespace eos
                 g_fermi(p["WET::G_Fermi"], u),
                 hbar(p["QM::hbar"], u),
                 opt_model(o, "model"_ok, { "SM"_ov }, "SM"_ov),
-                model(Model::make(opt_model.value(), p, o))
+                model(Model::make(opt_model.value(), p, o)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0))
             {
                 Context ctx("When constructing B->DlX observable");
 
@@ -176,7 +180,7 @@ namespace eos
     {
         std::function<double(const double &)> f = std::bind(&Implementation<BToDLeptonInclusiveNeutrinos>::differential_decay_width_1nu_1var, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     double
@@ -184,7 +188,7 @@ namespace eos
     {
         std::function<double(const double &)> f = std::bind(&Implementation<BToDLeptonInclusiveNeutrinos>::differential_decay_width_3nu_1var, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, s_min, s_max);
+        return integrate<1, 1>(f, s_min, s_max, _imp->cub_conf);
     }
 
     const std::string BToDLeptonInclusiveNeutrinos::description = "\

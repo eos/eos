@@ -21,6 +21,7 @@
 #include <eos/b-decays/lambdab-to-lambdac2595-l-nu.hh>
 #include <eos/form-factors/baryonic.hh>
 #include <eos/form-factors/form-factors.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
@@ -34,6 +35,8 @@ namespace eos
             std::shared_ptr<Model> model;
 
             std::shared_ptr<FormFactors<OneHalfPlusToOneHalfMinus>> form_factors;
+
+            cubature::Config cub_conf;
 
             Parameters parameters;
 
@@ -56,6 +59,7 @@ namespace eos
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
                 model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
                 form_factors(FormFactorFactory<OneHalfPlusToOneHalfMinus>::create("Lambda_b->Lambda_c(2595)::" + o.get("form-factors"_ok, "HQET"_ov).str(), p)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 parameters(p),
                 m_LambdaB(p["mass::Lambda_b"], u),
                 tau_LambdaB(p["life_time::Lambda_b"], u),
@@ -232,7 +236,7 @@ namespace eos
                 std::function<double(const double &)> f =
                         std::bind(&Implementation<LambdaBToLambdaC2595LeptonNeutrino>::differential_branching_ratio, *this, std::placeholders::_1);
 
-                return integrate<GSL::QAGS>(f, q2_min, q2_max);
+                return integrate<1, 1>(f, q2_min, q2_max, cub_conf);
             }
 
             double
@@ -243,8 +247,8 @@ namespace eos
                 std::function<double(const double &)> denominator =
                         std::bind(&Implementation<LambdaBToLambdaC2595LeptonNeutrino>::normalized_differential_decay_width, *this, std::placeholders::_1);
 
-                const double inum   = integrate<GSL::QAGS>(numerator, q2_min, q2_max);
-                const double idenom = integrate<GSL::QAGS>(denominator, q2_min, q2_max);
+                const double inum   = integrate<1, 1>(numerator, q2_min, q2_max, cub_conf);
+                const double idenom = integrate<1, 1>(denominator, q2_min, q2_max, cub_conf);
 
                 return inum / idenom;
             }

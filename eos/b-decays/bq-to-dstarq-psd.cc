@@ -72,6 +72,9 @@ namespace eos
 
             std::shared_ptr<PseudoscalarLCDAs> lcdas;
 
+            // integration config
+            cubature::Config cub_conf;
+
             BooleanOption opt_cp_conjugate;
 
             UsedParameter mu;
@@ -99,6 +102,7 @@ namespace eos
                 m_Dstar(p["mass::D_" + opt_q.str() + "^*"], u),
                 m_P(p["mass::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi^+")], u),
                 f_P(p["decay-constant::" + stringify(opt_q.value() == QuarkFlavor::down ? "K_u" : "pi")], u),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 mu(p[stringify(opt_q.value() == QuarkFlavor::down ? "s" : "d") + "bcu::mu"], u),
                 DeltaV(p["B->DP::DeltaV"], u),
@@ -336,8 +340,8 @@ namespace eos
                 auto a_1_nlo_integrand_re = [this, &a_1_nlo_integrand](const double & u) -> double { return real(a_1_nlo_integrand(u)); };
                 auto a_1_nlo_integrand_im = [this, &a_1_nlo_integrand](const double & u) -> double { return imag(a_1_nlo_integrand(u)); };
 
-                const double a_1_nlo_re = integrate<GSL::QAGS>(a_1_nlo_integrand_re, 0.0, 1.0);
-                const double a_1_nlo_im = integrate<GSL::QAGS>(a_1_nlo_integrand_im, 0.0, 1.0);
+                const double a_1_nlo_re = integrate<1, 1>(a_1_nlo_integrand_re, 0.0, 1.0, cub_conf);
+                const double a_1_nlo_im = integrate<1, 1>(a_1_nlo_integrand_im, 0.0, 1.0, cub_conf);
 
                 const complex<double> a_1_nlo = a_1_nlo_re + a_1_nlo_im * 1.0i;
 
