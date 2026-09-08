@@ -24,6 +24,7 @@ import yaml
 from dataclasses import asdict
 from eos.analysis_file_description import AnalysisFileDescription, PriorDescription, \
                                        MaskExpressionComponent, MaskNamedComponent
+from eos.data.unbinned_likelihood import UnbinnedSampledResolutionDescription
 from eos.diagnostic import Diagnostic, Severity
 from eos.validation_context import ValidationContext
 
@@ -180,6 +181,10 @@ class AnalysisFile:
 
                 external_likelihood.extend([llh_block])
 
+            # create an unbinned likelihood
+            if self._likelihoods[lh].type == 'unbinned':
+                external_likelihood.append(self._unbinned_likelihood_block(self._likelihoods[lh], parameters))
+
         global_options = posterior.global_options
         fixed_parameters = posterior.fixed_parameters
 
@@ -194,6 +199,42 @@ class AnalysisFile:
                             manual_constraints=manual_constraints,
                             fixed_parameters=fixed_parameters,
                             parameters=parameters)
+
+
+    def _unbinned_likelihood_block(self, component, parameters):
+        """Build the eos.LogLikelihoodBlock.Unbinned<N>D block described by an unbinned likelihood component."""
+        data_path = component.data
+        if not os.path.isabs(data_path):
+            data_path = os.path.join(os.path.dirname(os.path.abspath(self.analysis_file)), data_path)
+
+        data = eos.data.UnbinnedLikelihood(data_path)
+
+        crop = { axis.variable: (axis.min, axis.max) for axis in component.axes }
+        cropped_axes = data.cropped_axes(crop)
+
+        options = eos.Options(**component.options)
+        if isinstance(data.resolution, UnbinnedSampledResolutionDescription):
+            kernel = data.resolution_kernel(cropped_axes, tolerance=component.tolerance)
+        else:
+            kernel = data.sampled_resolution_kernel(cropped_axes, parameters=parameters, options=options)
+
+        # A throwaway cache: LogLikelihood.add() clones an external block into its own cache, so this
+        # one only has to satisfy the identity check at construction time (see eos.DetectorLevelPDF).
+        cache = eos.ObservableCache(parameters)
+        pdf = eos.DetectorLevelPDF.make_from_grid(cache, component.pdf, options, cropped_axes, kernel)
+
+        rank = len(cropped_axes)
+        try:
+            factory = getattr(eos.LogLikelihoodBlock, f'Unbinned{rank}D')
+        except AttributeError:
+            raise ValueError(f"Likelihood component '{component.name}' has rank {rank}, which is not supported (must be 1 to 4)")
+
+        observations = [
+            eos.Kinematics({ axis['variable']: float(value) for axis, value in zip(cropped_axes, event) })
+            for event in data.observations
+        ]
+
+        return factory(cache, pdf, observations)
 
 
     def observables(self, _posterior, _prediction, parameters):

@@ -1,6 +1,6 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2021-2023 Danny van Dyk
+# Copyright (c) 2021-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -15,7 +15,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _SignalPDF, _SignalPDFs
+from _eos import _SignalPDF, _SignalPDFs, _DetectorLevelPDF, _DetectorLevelPDFAxis
 import eos
 import numpy as np
 
@@ -136,6 +136,95 @@ class SignalPDF(_SignalPDF):
         pdf.bounds = [(kinematics[v.name() + '_min'], kinematics[v.name() + '_max']) for v in pdf.variables]
 
         return pdf
+
+def _axis_from_dict(axis):
+    """Build a native axis descriptor from a dictionary."""
+    variable = axis['variable']
+    return _DetectorLevelPDFAxis(
+        variable,
+        float(axis['min']),
+        float(axis['max']),
+        int(axis['points']),
+        axis.get('offset_variable', variable)
+    )
+
+
+def _as_signal_pdf(pdf):
+    """Attach the :class:`SignalPDF` interface (and the ``variables``/``bounds`` attributes) to a raw PDF."""
+    kinematics = pdf.kinematics()
+    pdf.__class__ = SignalPDF
+    pdf.variables = list(map(
+        lambda n: kinematics[n],
+        filter(lambda n: not (n.endswith('_min') or n.endswith('_max')), [kv.name() for kv in kinematics])
+    ))
+    pdf.bounds = [(kinematics[v.name() + '_min'], kinematics[v.name() + '_max']) for v in pdf.variables]
+
+    return pdf
+
+
+class DetectorLevelPDF:
+    """
+    Factory for detector-level (resolution-convolved) :class:`SignalPDF` objects.
+
+    A detector-level PDF represents a truth-level :class:`SignalPDF` after convolution with a
+    detector resolution function. The result is itself a :class:`SignalPDF`, so it can be evaluated
+    and plotted like any other PDF. The convolution is circular, so each axis must be padded with a
+    region in which both the PDF and the resolution are negligible.
+    """
+
+    @staticmethod
+    def make(cache, signal, resolution, options, axes):
+        """
+        Make a detector-level PDF whose resolution is supplied as a :class:`SignalPDF`.
+
+        :param cache: The observable cache providing the common set of parameters.
+        :type cache: eos.ObservableCache
+        :param signal: The qualified name of the truth-level SignalPDF.
+        :type signal: eos.QualifiedName or str
+        :param resolution: The qualified name of the resolution SignalPDF, a density over the per-axis
+            offset variables.
+        :type resolution: eos.QualifiedName or str
+        :param options: The options forwarded to both the signal and the resolution SignalPDF.
+        :type options: eos.Options
+        :param axes: One descriptor per sampling axis; each is a dictionary with the keys ``variable``,
+            ``min``, ``max``, ``points`` and, optionally, ``offset_variable`` (defaulting to ``variable``).
+        :type axes: list of dict
+
+        :rtype: eos.SignalPDF
+        """
+        _axes = [_axis_from_dict(axis) for axis in axes]
+        return _as_signal_pdf(_DetectorLevelPDF.make(cache, signal, resolution, options, _axes))
+
+    @staticmethod
+    def make_from_grid(cache, signal, options, axes, resolution):
+        """
+        Make a detector-level PDF from a pre-computed resolution grid, ranks 1 to 4.
+
+        :param cache: The observable cache providing the common set of parameters.
+        :type cache: eos.ObservableCache
+        :param signal: The qualified name of the truth-level SignalPDF.
+        :type signal: eos.QualifiedName or str
+        :param options: The options forwarded to the signal SignalPDF.
+        :type options: eos.Options
+        :param axes: One descriptor per sampling axis; each is a dictionary with the keys ``variable``,
+            ``min``, ``max`` and ``points``. The rank of the resulting PDF is ``len(axes)``.
+        :type axes: list of dict
+        :param resolution: The resolution kernel sampled on the grid in natural (centred) order, i.e.
+            the zero offset sits at the centre of the array along every axis. Its shape must match the
+            grid implied by ``axes``; it is flattened row-major before being passed to the underlying
+            binding.
+        :type resolution: numpy.ndarray or nested list of float
+
+        :rtype: eos.SignalPDF
+        """
+        _axes = [_axis_from_dict(axis) for axis in axes]
+        shape = tuple(int(axis['points']) for axis in axes)
+        values = np.asarray(resolution, dtype=float)
+        if values.shape != shape:
+            raise ValueError(f'resolution has shape {values.shape}, expected {shape} from the given axes')
+        _resolution = values.reshape(-1).tolist()
+        return _as_signal_pdf(_DetectorLevelPDF.make_from_grid(cache, signal, options, _axes, _resolution))
+
 
 class SignalPDFs(_SignalPDFs):
     """

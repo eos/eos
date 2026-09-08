@@ -71,9 +71,48 @@ def _log_posterior():
     return result
 
 
-_UNBINNED_GRID         = [ eos.Kinematics(z=z, z_min=0.0, z_max=4.0) for z in (0.5, 1.5, 2.5, 3.5) ]
-_UNBINNED_RESOLUTION   = [ 0.0, 1.0, 0.0, 0.0 ]
-_UNBINNED_OBSERVATIONS = [ eos.Kinematics(z=2.0, z_min=0.0, z_max=4.0) ]
+# Dummy axis variables beyond 'z' pad a DetectorLevelPDF to ranks 2-4; 'TestLegendre1D::P(z)' does
+# not depend on them, so they only exercise the multi-axis grid machinery.
+_DETECTOR_LEVEL_PDF_VARIABLES = ('z', 'y', 'w', 'v')
+_DETECTOR_LEVEL_PDF_AXES      = [ _eos._DetectorLevelPDFAxis(v, 0.0, 4.0, 4) for v in _DETECTOR_LEVEL_PDF_VARIABLES ]
+
+
+def _detector_level_pdf_cache():
+    "A fresh cache; a DetectorLevelPDF and any block built on it must share exactly one cache."
+    return _eos.ObservableCache(_PARAMETERS)
+
+
+def _detector_level_pdf(rank=1, cache=None):
+    "Build a rank-`rank` DetectorLevelPDF over 'TestLegendre1D::P(z)', from a pre-computed grid."
+    cache = cache if cache is not None else _detector_level_pdf_cache()
+    resolution = [0.0] * (4 ** rank)
+    resolution[0] = 1.0
+    pdf = _eos._DetectorLevelPDF.make_from_grid(cache, 'TestLegendre1D::P(z)', eos.Options(),
+                                                _DETECTOR_LEVEL_PDF_AXES[:rank], resolution)
+    cache.update()
+    return pdf
+
+
+def _unbinned_observation(rank):
+    "One observed event covering the axes of a rank-`rank` _detector_level_pdf()."
+    kinematics = eos.Kinematics(z=2.0, z_min=0.0, z_max=4.0)
+    for variable in _DETECTOR_LEVEL_PDF_VARIABLES[1:rank]:
+        kinematics.declare(variable, 2.0)
+        kinematics.declare(f'{variable}_min', 0.0)
+        kinematics.declare(f'{variable}_max', 4.0)
+    return kinematics
+
+
+_UNBINNED_OBSERVATIONS = [ _unbinned_observation(1) ]
+
+
+def _unbinned_block(rank):
+    "Build the Unbinned<rank>D block for a freshly-built, matching-rank DetectorLevelPDF."
+    cache   = _detector_level_pdf_cache()
+    pdf     = _detector_level_pdf(rank, cache)
+    factory = getattr(_eos.LogLikelihoodBlock, f'Unbinned{rank}D')
+
+    return factory(cache, pdf, [ _unbinned_observation(rank) ])
 
 
 def _wilson_coefficients():
@@ -95,6 +134,8 @@ BINDINGS_FACTORIES = {
     'BToSWilsonCoefficients':   _wilson_coefficients,
     'Constraint':               lambda: _CONSTRAINT,
     'ConstraintEntry':          lambda: eos.Constraints()[_CONSTRAINT_ENTRY_NAME],
+    '_DetectorLevelPDF':        lambda: _detector_level_pdf(),
+    '_DetectorLevelPDFAxis':    lambda: _DETECTOR_LEVEL_PDF_AXES[0],
     'ExpressionReferences':     lambda: _eos.analyze_expression('<<B->D::f_+(q2)>>'),
     'GoodnessOfFit':            lambda: _eos.GoodnessOfFit(_log_posterior()),
     'Kinematics':               lambda: _KINEMATICS,
@@ -165,6 +206,18 @@ BINDINGS_TESTS = {
     ('ExpressionReferences', 'observables'):     (),
     ('ExpressionReferences', 'parameters'):      (),
 
+    ('_DetectorLevelPDF', 'make'):                lambda p: _eos._DetectorLevelPDF.make(_detector_level_pdf_cache(),
+                                                     'TestLegendre1D::P(z)', 'TestLegendre1D::P(z)', eos.Options(), [ _DETECTOR_LEVEL_PDF_AXES[0] ]),
+    ('_DetectorLevelPDF', 'make_1d'):             lambda p: _eos._DetectorLevelPDF.make_1d(_detector_level_pdf_cache(),
+                                                     'TestLegendre1D::P(z)', eos.Options(), _DETECTOR_LEVEL_PDF_AXES[0], [ 0.0, 1.0, 0.0, 0.0 ]),
+    ('_DetectorLevelPDF', 'make_from_grid'):      lambda p: _detector_level_pdf(),
+
+    ('_DetectorLevelPDFAxis', 'maximum'):         (),
+    ('_DetectorLevelPDFAxis', 'minimum'):         (),
+    ('_DetectorLevelPDFAxis', 'offset_variable'): (),
+    ('_DetectorLevelPDFAxis', 'points'):          (),
+    ('_DetectorLevelPDFAxis', 'variable'):        (),
+
     ('GoodnessOfFit', '__iter__'):               lambda g: list(g),
     ('GoodnessOfFit', 'total_chi_square'):       (),
     ('GoodnessOfFit', 'total_degrees_of_freedom'): (),
@@ -187,12 +240,10 @@ BINDINGS_TESTS = {
     ('LogLikelihood', 'observable_cache'):       (),
 
     ('LogLikelihoodBlock', 'External'):          lambda b: _eos.LogLikelihoodBlock.External(_observable_cache(), _external_block_factory),
-    ('LogLikelihoodBlock', 'Unbinned1D'):        lambda b: _eos.LogLikelihoodBlock.Unbinned1D(
-                                                     _observable_cache(), 'TestLegendre1D::P(z)', _UNBINNED_GRID,
-                                                     eos.Options(), _UNBINNED_RESOLUTION, _UNBINNED_OBSERVATIONS),
-    ('LogLikelihoodBlock', '_Unbinned1D'):       lambda b: _eos.LogLikelihoodBlock._Unbinned1D(
-                                                     _observable_cache(), 'TestLegendre1D::P(z)', _UNBINNED_GRID,
-                                                     eos.Options(), [ 1.0, 0.0, 0.0, 0.0 ], _UNBINNED_OBSERVATIONS),
+    ('LogLikelihoodBlock', 'Unbinned1D'):        lambda b: _unbinned_block(1),
+    ('LogLikelihoodBlock', 'Unbinned2D'):        lambda b: _unbinned_block(2),
+    ('LogLikelihoodBlock', 'Unbinned3D'):        lambda b: _unbinned_block(3),
+    ('LogLikelihoodBlock', 'Unbinned4D'):        lambda b: _unbinned_block(4),
     ('LogLikelihoodBlock', '__str__'):           lambda b: str(b),
     ('LogLikelihoodBlock', 'evaluate'):          (),
     ('LogLikelihoodBlock', 'number_of_observations'): (),
@@ -393,6 +444,7 @@ BINDINGS_TESTS = {
     ('_References', '__iter__'):                 lambda r: list(r),
 
     ('_SignalPDF', 'evaluate'):                  (),
+    ('_SignalPDF', 'evaluate_linear'):           (),
     ('_SignalPDF', 'kinematics'):                (),
     ('_SignalPDF', 'make'):                      ('TestLegendre1D::P(z)', _PARAMETERS,
                                                   eos.Kinematics(z=2.0, z_min=0.0, z_max=4.0), eos.Options()),
@@ -486,8 +538,7 @@ BINDINGS_XFAILS_UNDOCUMENTED = {
 # Members whose docstring does not describe every argument that the binding declares, together with
 # the reason why.
 BINDINGS_XFAILS_UNDESCRIBED_ARGUMENTS = {
-    ('LogPrior', 'Flat'):                  'an alias for LogPrior.Uniform, which describes the arguments',
-    ('LogLikelihoodBlock', '_Unbinned1D'): 'the unbinned log-likelihood is not fully supported yet',
+    ('LogPrior', 'Flat'): 'an alias for LogPrior.Uniform, which describes the arguments',
 }
 
 

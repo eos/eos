@@ -38,7 +38,6 @@ if is_wheel:
 else:
     _pkg_data_dir = __pkg_data_dir__
 
-from . import log_likelihood # patches LogLikelihoodBlock.Unbinned1D to accept the resolution in natural order
 from .data import *
 from .plot import *
 from .datasets import DataSets
@@ -49,7 +48,7 @@ from .ipython import __ipython__
 from .observable import Observables
 from .parameter import Parameters
 from .reference import References
-from .signal_pdf import SignalPDF, SignalPDFs
+from .signal_pdf import SignalPDF, SignalPDFs, DetectorLevelPDF
 from .tasks import *
 from .pyhf_likelihood import PyhfLogLikelihood
 

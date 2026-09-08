@@ -1,0 +1,30 @@
+metadata:
+  title: 'Detector-Level PDFs'
+  id: detector-level-pdf-demo
+
+priors:
+  - name: 'FF'
+    descriptions:
+      - { parameter: 'B->D::alpha^f+_1@SSE', min: -3.4, max: -2.6, type: 'uniform' }
+      - { parameter: 'B->D::alpha^f+_2@SSE', min:  2.5, max:  5.5, type: 'uniform' }
+
+likelihoods:
+  - name: 'unbinned-B-to-D'
+    type: 'unbinned'
+    pdf: 'B->Dlnu::P(q2,cos(theta_l))'
+    # 'form-factors' is essential: the default (BSZ2015) would ignore the @SSE parameters below
+    options: { l: 'mu', q: 'd', model: 'WET', form-factors: 'SSE' }
+    data: './detector-level-data/observed-events'
+
+posteriors:
+  - name: 'FF-fit'
+    prior:
+      - 'FF'
+    likelihood:
+      - 'unbinned-B-to-D'
+    fixed_parameters:
+      # the muon is massive, so the scalar form factor contributes; its parameters, the normalization
+      # of f_+, and |V_cb| are all held fixed, leaving only the f_+ shape parameters free
+      'B->D::alpha^f+_0@SSE':  0.74943
+      'B->D::alpha^f0_1@SSE':  0.17113
+      'B->D::alpha^f0_2@SSE': -2.34945

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2014-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -123,8 +123,8 @@ class BToPiLeptonNeutrinoTest : public TestCase
                 const double eps = 1e-5;
                 TEST_CHECK_RELATIVE_ERROR(dtau.integrated_branching_ratio(3.154, 10.00) / dmu.integrated_branching_ratio(0.011, 10.00), obs_Rpi->evaluate(), eps);
                 TEST_CHECK_RELATIVE_ERROR(obs_Rpi->evaluate(), 0.352166, eps);
-                TEST_CHECK_RELATIVE_ERROR(obs_Rpip->evaluate(), 0.204492, eps);
-                TEST_CHECK_RELATIVE_ERROR(obs_Rpi0->evaluate(), 0.147407, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpip->evaluate(), 0.204647, eps);
+                TEST_CHECK_RELATIVE_ERROR(obs_Rpi0->evaluate(), 0.147519, eps);
             }
 
             // Consistency check for isospin

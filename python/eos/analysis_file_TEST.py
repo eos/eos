@@ -22,6 +22,7 @@ import unittest
 import contextlib
 import io
 import eos
+import math
 import os
 from pathlib import Path
 
@@ -253,6 +254,25 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
 
         self.assertEqual([], list(description.validate_structure()))
 
+    def test_unbinned_type_exclusivity(self):
+        # 'type: unbinned' together with 'constraints' (or 'manual_constraints', or 'pyhf') is
+        # rejected rather than silently combined
+        with self.assertRaises(RuntimeError) as context:
+            eos.AnalysisFile(_TESTD / 'invalid' / 'unbinned-type-exclusivity.yaml')
+
+        self.assertIn("must not also declare 'constraints'", str(context.exception))
+
+    def test_unbinned_unknown_type(self):
+        # a typo'd 'type' value is reported by name, rather than as the misleading "must have at
+        # least one of constraints, ..." diagnostic that a missing type would produce
+        with self.assertRaises(RuntimeError) as context:
+            eos.AnalysisFile(_TESTD / 'invalid' / 'unbinned-unknown-type.yaml')
+
+        message = str(context.exception)
+        self.assertIn("unknown type 'unbinnd'", message)
+        self.assertIn('expected one of', message)
+        self.assertNotIn('must have at least one of constraints', message)
+
     def test_multiple_structural_errors_are_reported_together(self):
         with self.assertRaises(RuntimeError) as context:
             eos.AnalysisFile(_TESTD / 'invalid' / 'multiple-structural-errors.yaml')
@@ -269,6 +289,50 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
             'masks/broken-mask/description[0]/mask_name',
         ):
             self.assertIn(fragment, message)
+
+
+class TestAnalysisFileUnbinnedLikelihood(unittest.TestCase):
+    """The 'type: unbinned' likelihood component, built on an eos.data.UnbinnedLikelihood directory.
+
+    Unlike the fixtures in TestAnalysisFileConstructionErrors, these do not fail at
+    eos.AnalysisFile() construction: the data directory is read lazily, when the posterior is
+    actually built, so the failures below surface from validate() or analysis() instead.
+    """
+
+    def test_loads_and_evaluates(self):
+        # the case the notebook depends on: the component builds a working block through
+        # eos.AnalysisFile, and the resulting posterior's log-likelihood evaluates to a finite value
+        af = eos.AnalysisFile(_TESTD / 'unbinned-analysis-file.yaml')
+        self.assertEqual([], [d for d in af.validate() if d.severity is Severity.ERROR])
+
+        analysis = af.analysis('posterior')
+        llh = analysis.log_likelihood([4.18])
+        self.assertTrue(math.isfinite(llh))
+
+    def test_odd_point_count_is_rejected_never_snapped(self):
+        # A21 i: a crop whose derived point count is odd is rejected outright. This is asserted on
+        # two separate code paths: validate() reports it as an ERROR diagnostic (via the deep
+        # phase's generic exception handling), and analysis() raises ValueError directly.
+        af = eos.AnalysisFile(_TESTD / 'unbinned-odd-point-count.yaml')
+
+        diagnostics = af.validate()
+        errors = [d for d in diagnostics if d.severity is Severity.ERROR]
+        self.assertTrue(errors)
+        self.assertTrue(any("Axis 'z'" in d.message and 'odd' in d.message for d in errors))
+
+        with self.assertRaises(ValueError) as context:
+            af.analysis('posterior')
+        self.assertIn("Axis 'z'", str(context.exception))
+
+    def test_misaligned_resolution_is_rejected(self):
+        # the fixture's resolution offsets are declared 0.3 away from the grid the (uncropped)
+        # signal axis requires; the offending offset must be named in the error
+        af = eos.AnalysisFile(_TESTD / 'unbinned-misaligned-resolution.yaml')
+
+        with self.assertRaises(RuntimeError) as context:
+            af.analysis('posterior')
+
+        self.assertIn('-2.0', str(context.exception))
 
 
 class TestAnalysisFileMethods(unittest.TestCase):

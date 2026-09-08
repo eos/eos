@@ -26,6 +26,7 @@ libeosmaths_la_SOURCES = \
 	outer-function.hh outer-function.cc \
 	polylog.cc polylog.hh \
 	power-of.hh \
+	resolution-convolution.cc resolution-convolution.hh resolution-convolution-impl.hh \
 	szego-polynomial.hh
 
 libeosmaths_la_LIBADD = \
@@ -63,6 +64,7 @@ include_eos_utils_HEADERS = \
 	outer-function.hh \
 	polylog.hh \
 	power-of.hh \
+	resolution-convolution.hh resolution-convolution-impl.hh \
 	szego-polynomial.hh
 
 AM_TESTS_ENVIRONMENT = \
@@ -85,6 +87,7 @@ TESTS = \
 	outer-function_TEST \
 	polylog_TEST \
 	power_of_TEST \
+	resolution-convolution_TEST \
 	szego-polynomial_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -128,5 +131,7 @@ outer_function_TEST_SOURCES = outer-function_TEST.cc
 polylog_TEST_SOURCES = polylog_TEST.cc
 
 power_of_TEST_SOURCES = power-of_TEST.cc
+
+resolution_convolution_TEST_SOURCES = resolution-convolution_TEST.cc
 
 szego_polynomial_TEST_SOURCES = szego-polynomial_TEST.cc

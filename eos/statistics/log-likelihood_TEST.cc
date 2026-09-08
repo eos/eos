@@ -22,11 +22,16 @@
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-posterior_TEST.hh>
 #include <eos/statistics/test-statistic-impl.hh>
+#include <eos/utils/detector-level-pdf.hh>
 
+#include <test/test-pdfs.hh>
 #include <test/test.hh>
+
+#include <gsl/gsl_cdf.h>
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
 
 using namespace test;
 using namespace eos;
@@ -802,24 +807,46 @@ namespace eos
                         TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Mixture(comps, weights, test_stat));
                     }
 
-                    // Unbinned1D
+                    // Unbinned1D..4D
                     {
-                        std::vector<Kinematics> kinematics{ Kinematics{} };
-                        std::vector<double>     resolution{ 0.1 };
-                        std::vector<Kinematics> observations{ Kinematics{} };
-                        TEST_CHECK_THROWS(
-                                InternalError,
-                                LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", std::vector<Kinematics>{}, Options{}, resolution, observations)); // empty kinematics
-                        TEST_CHECK_THROWS(InternalError,
-                                          LogLikelihoodBlock::Unbinned1D(cache,
-                                                                         "TestLegendre1D::P(z)",
-                                                                         kinematics,
-                                                                         Options{},
-                                                                         std::vector<double>{ 0.1, 0.2 },
-                                                                         observations)); // size mismatch
-                        TEST_CHECK_THROWS(
-                                InternalError,
-                                LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, resolution, std::vector<Kinematics>{})); // empty observations
+                        static const std::size_t M     = 16;
+                        static const double      x_min = -8.0;
+                        static const double      x_max = +8.0;
+
+                        auto pdf_1d = std::make_shared<DetectorLevelPDF>(cache,
+                                                                         "TestGaussian1D::P(x)",
+                                                                         "TestGaussianResolution1D::P(x)",
+                                                                         Options{
+                        },
+                                                                         std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", x_min, x_max, M } });
+
+                        Kinematics obs;
+                        obs.declare("x", 0.0);
+                        std::vector<Kinematics> observations{ obs };
+
+                        // null pdf
+                        TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, std::shared_ptr<DetectorLevelPDF>{}, observations));
+
+                        // empty observations
+                        TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, pdf_1d, std::vector<Kinematics>{}));
+
+                        // cache mismatch: a second, distinct cache built from the same Parameters
+                        {
+                            ObservableCache other_cache(p);
+                            TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(other_cache, pdf_1d, observations));
+                        }
+
+                        // wrong rank: a rank-2 PDF handed to the rank-1 factory
+                        {
+                            auto pdf_2d = std::make_shared<DetectorLevelPDF>(
+                                    cache,
+                                    "TestGaussian2D::P(x,y)",
+                                    "TestGaussianResolution2D::P(x,y)",
+                                    Options{
+                            },
+                                    std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", x_min, x_max, M }, DetectorLevelPDF::Axis{ "y", x_min, x_max, M } });
+                            TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, pdf_2d, observations));
+                        }
                     }
                 }
 
@@ -846,225 +873,228 @@ namespace eos
             }
     } log_likelihood_test;
 
-    class UnbinnedLogLikelihoodTest : public TestCase
+    // Two Gaussians (truth and resolution) recover the analytic mode and the 68% interval from
+    // Delta log L = 1/2, per PROMPT.md's preferred check for the unbinned likelihood.
+    class UnbinnedLikelihoodGaussianTest : public TestCase
     {
         public:
-            UnbinnedLogLikelihoodTest() :
-                TestCase("unbinned_log_likelihood_test")
+            UnbinnedLikelihoodGaussianTest() :
+                TestCase("unbinned_likelihood_gaussian_test")
             {
             }
 
             virtual void
             run() const
             {
-                // The convolution of the test PDF 'TestLegendre1D::P(z)' with a Gaussian resolution
-                // function (mean 0, standard deviation 0.1), evaluated on a uniform grid of N = 2^8
-                // points spanning the smeared domain [z_smeared_min, z_smeared_max] = [-1.5, 5.5].
-                //
-                // The reference values below are the resolution-smeared density on that grid, computed
-                // independently with Mathematica. They were generated with a grid spacing of 7/(N-1)
-                // (inclusive endpoints), whereas the periodic grid underlying the discrete Fourier
-                // transform has spacing 7/N; the factor (N-1)/N = 255/256 below corrects for this.
-                static const std::size_t N             = 256;
-                static const double      z_smeared_min = -1.5;
-                static const double      z_smeared_max = +5.5;
-                static const double      dz            = (z_smeared_max - z_smeared_min) / N; // = 7/256
-                static const double      sigma         = 0.1;
-
-                static const std::array<double, N> reference{
-                    { 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 9.8096750507335319e-11,
-                     4.8994547536473863e-10, 2.2808818915303313e-09,
-                     9.9003955209872559e-09, 4.0081628049196628e-08,
-                     1.5140779927891626e-07, 5.3388787147320642e-07,
-                     1.7581873495209658e-06, 5.4105051871749915e-06,
-                     1.5568520639437843e-05, 4.1919296052406931e-05,
-                     0.00010570750226186107, 0.00024988876108756496,
-                     0.00055440287373774097, 0.0011558617225092187,
-                     0.0022679740834220794, 0.0041953727246893521,
-                     0.0073309847622660407, 0.012128152463587722,
-                     0.019044987204231922, 0.028468940703678169,
-                     0.04064010963427709, 0.055596606477380954,
-                     0.073160581334740057, 0.092970184593649696,
-                     0.11454685534998099, 0.1373763355568024,
-                     0.1609803899497354, 0.18496366568521261,
-                     0.2090315355161908, 0.23298444582654129,
-                     0.25669891391220345, 0.28010488476152967,
-                     0.30316582942180786, 0.32586420951757183,
-                     0.34819226096975547, 0.37014681131077348,
-                     0.3917266630519648, 0.41293139836227799,
-                     0.43376088240169014, 0.45421507490612867,
-                     0.47429396474657715, 0.49399754907484072,
-                     0.51332582721581699, 0.53227879902127051,
-                     0.55085646446104319, 0.56905882352944925,
-                     0.58688587622549537, 0.60433762254902035,
-                     0.62141406250000009, 0.63811519607843126,
-                     0.65444102328431364, 0.67039154411764701,
-                     0.68596675857843137, 0.7011666666666666,
-                     0.71599126838235294, 0.73044056372549016,
-                     0.74451455269607825, 0.75821323529411755,
-                     0.77153661151960795, 0.78448468137254912,
-                     0.79705744485294128, 0.80925490196078442,
-                     0.82107705269607856, 0.83252389705882368,
-                     0.84359543504901957, 0.85429166666666667,
-                     0.86461259191176476, 0.87455821078431406,
-                     0.88412852328431379, 0.89332352941176485,
-                     0.90214322916666678, 0.9105876225490197,
-                     0.91865670955882361, 0.92635049019607851,
-                     0.9336689644607844, 0.9406121323529415,
-                     0.94717999387254914, 0.95337254901960788,
-                     0.95918979779411773, 0.96463174019607867,
-                     0.96969837622549004, 0.97438970588235285,
-                     0.97870572916666654, 0.98264644607843143,
-                     0.98621185661764721, 0.98940196078431364,
-                     0.99221675857843128, 0.99465625000000024,
-                     0.9967204350490193, 0.99840931372549024,
-                     0.99972288602941162, 1.0006611519607844,
-                     1.0012241115196079, 1.0014117647058822,
-                     1.0012241115196079, 1.0006611519607844,
-                     0.99972288602941184, 0.99840931372549013,
-                     0.99672043504901953, 0.99465625000000024,
-                     0.9922167585784315, 0.98940196078431386,
-                     0.98621185661764721, 0.98264644607843143,
-                     0.97870572916666676, 0.97438970588235307,
-                     0.96969837622549027, 0.96463174019607867,
-                     0.95918979779411773, 0.95337254901960788,
-                     0.94717999387254914, 0.9406121323529415,
-                     0.93366896446078418, 0.92635049019607829,
-                     0.91865670955882339, 0.9105876225490197,
-                     0.90214322916666678, 0.89332352941176463,
-                     0.88412852328431357, 0.87455821078431406,
-                     0.86461259191176443, 0.85429166666666678,
-                     0.84359543504901946, 0.83252389705882368,
-                     0.82107705269607856, 0.80925490196078442,
-                     0.79705744485294128, 0.78448468137254912,
-                     0.77153661151960784, 0.75821323529411766,
-                     0.74451455269607847, 0.73044056372549027,
-                     0.71599126838235305, 0.70116666666666672,
-                     0.68596675857843148, 0.67039154411764712,
-                     0.65444102328431386, 0.63811519607843137,
-                     0.62141406250000009, 0.60433762254902035,
-                     0.58688587622549537, 0.56905882352944925,
-                     0.55085646446104319, 0.53227879902127051,
-                     0.51332582721581699, 0.49399754907484072,
-                     0.47429396474657715, 0.45421507490612856,
-                     0.43376088240169008, 0.41293139836227799,
-                     0.3917266630519648, 0.37014681131077348,
-                     0.34819226096975542, 0.32586420951757178,
-                     0.30316582942180792, 0.28010488476152967,
-                     0.2566989139122034, 0.23298444582654129,
-                     0.2090315355161908, 0.18496366568521261,
-                     0.16098038994973554, 0.13737633555680248,
-                     0.11454685534998099, 0.092970184593649793,
-                     0.073160581334740071, 0.055596606477381003,
-                     0.040640109634277083, 0.028468940703678156,
-                     0.019044987204231999, 0.012128152463587784,
-                     0.0073309847622661031, 0.0041953727246893035,
-                     0.0022679740834221449, 0.0011558617225092449,
-                     0.00055440287373768361, 0.00024988876108765246,
-                     0.00010570750226200931, 4.1919296052469313e-05,
-                     1.5568520639573728e-05, 5.4105051872746119e-06,
-                     1.7581873495215873e-06, 5.3388787161756879e-07,
-                     1.5140779946748343e-07, 4.0081628093235466e-08,
-                     9.9003956910643878e-09, 2.2808819007805453e-09,
-                     4.8994546284965436e-10, 9.8096741187619583e-11,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0, 0,
-                     0 }
-                };
-
                 Parameters      p = Parameters::Defaults();
                 ObservableCache cache(p);
 
-                // Build the grid of kinematics at which the PDF is evaluated, and the resolution function
-                // sampled on the same grid in wrap-around ("FFT-native") order: index 0 is the zero offset,
-                // ascending indices are positive offsets, the high indices are the negative offsets.
-                // The resolution evaluations span [-3.5, +3.5] (= [-N/2, N/2] grid steps from zero).
-                //
-                // The factor 1/4 = 1/max(z (4 - z)) peak-normalizes the *unnormalized* test PDF that the
-                // block evaluates via SignalPDF::evaluate_linear() (whose maximum is 4 at z = 2), so that
-                // the convolved grid matches the unit-peak reference values.
-                std::vector<Kinematics> kinematics;
-                std::vector<double>     resolution(N);
-                for (std::size_t i = 0; i < N; ++i)
-                {
-                    Kinematics k;
-                    k.declare("z", z_smeared_min + i * dz);
-                    k.declare("z_min", z_smeared_min);
-                    k.declare("z_max", z_smeared_max);
-                    kinematics.push_back(k);
+                static const double mu_true = 2.0;
+                static const double sigma_t = 1.2;
+                static const double sigma_r = 0.9;
+                static const double sigma_c = std::sqrt(sigma_t * sigma_t + sigma_r * sigma_r); // = 1.5
 
-                    const double offset = (i <= N / 2 ? static_cast<double>(i) : static_cast<double>(static_cast<long>(i) - static_cast<long>(N))) * dz;
-                    resolution[i]       = std::exp(-offset * offset / (2.0 * sigma * sigma)) / (sigma * std::sqrt(2.0 * M_PI)) * dz / 4.0;
+                p["TestGaussian1D::sigma"]           = sigma_t;
+                p["TestGaussianResolution1D::sigma"] = sigma_r;
+
+                // Grid interpolation error in the smeared density varies with mu (the curve slides
+                // across fixed grid nodes), which biases the log-likelihood's curvature at O(h^2); a
+                // fine grid keeps that bias well below the tolerance used below.
+                static const std::size_t M     = 2048;
+                static const double      x_min = -12.0;
+                static const double      x_max = +12.0;
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(cache,
+                                                              "TestGaussian1D::P(x)",
+                                                              "TestGaussianResolution1D::P(x)",
+                                                              Options{
+                },
+                                                              std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", x_min, x_max, M } });
+
+                // Events placed at the analytic quantiles of N(mu_true, sigma_c), symmetric about
+                // mu_true so their sample mean equals mu_true exactly, removing sampling noise.
+                static const std::size_t n = 8;
+                std::vector<Kinematics>  observations;
+                for (std::size_t k = 0; k < n; ++k)
+                {
+                    const double q = (static_cast<double>(k) + 0.5) / static_cast<double>(n);
+                    const double z = gsl_cdf_ugaussian_Pinv(q);
+
+                    Kinematics obs;
+                    obs.declare("x", mu_true + sigma_c * z);
+                    observations.push_back(obs);
                 }
 
-                // Place one observation at each grid point at which the smeared density is safely positive,
-                // so that interpolation returns the grid value and std::log() stays well-conditioned.
-                std::vector<Kinematics> observations;
-                double                  expected = 0.0;
-                for (std::size_t i = 0; i < N; ++i)
-                {
-                    const double value = reference[i] * 255.0 / 256.0;
-                    if (value < 1.0e-3)
-                    {
-                        continue;
-                    }
+                auto block = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations);
 
-                    Kinematics k;
-                    k.declare("z", z_smeared_min + i * dz);
-                    k.declare("z_min", z_smeared_min);
-                    k.declare("z_max", z_smeared_max);
-                    observations.push_back(k);
+                // The likelihood is exactly quadratic in mu (for fixed sigma_c), so three evaluations
+                // suffice to recover both the mode and the curvature.
+                static const double delta = sigma_c / std::sqrt(static_cast<double>(n));
 
-                    expected += std::log(value);
-                }
+                p["TestGaussian1D::mu"] = mu_true;
+                cache.update();
+                const double log_l_0 = block->evaluate();
 
-                auto block = LogLikelihoodBlock::Unbinned1D(cache, "TestLegendre1D::P(z)", kinematics, Options{}, resolution, observations);
+                p["TestGaussian1D::mu"] = mu_true - delta;
+                cache.update();
+                const double log_l_minus = block->evaluate();
 
-                // The block convolves the PDF with the resolution and sums the logarithm of the smeared
-                // density evaluated at each observation; this must reproduce the reference values.
-                TEST_CHECK_NEARLY_EQUAL(block->evaluate(), expected, 1.0e-6);
+                p["TestGaussian1D::mu"] = mu_true + delta;
+                cache.update();
+                const double log_l_plus = block->evaluate();
 
-                // exercise the remaining Unbinned1DLikelihoodBlock methods
-                TEST_CHECK(block->as_string().find("Unbinned") != std::string::npos);
-                TEST_CHECK_NO_THROW(block->primary_test_statistic());
-                TEST_CHECK_NO_THROW(block->clone(cache));
+                // Vertex of the parabola through three equally spaced points.
+                const double mu_hat = mu_true - delta * (log_l_plus - log_l_minus) / (2.0 * (log_l_plus - 2.0 * log_l_0 + log_l_minus));
 
-                // sample() and significance() are not implemented and must throw
-                gsl_rng * rng = gsl_rng_alloc(gsl_rng_mt19937);
-                TEST_CHECK_THROWS(InternalError, block->sample(rng));
-                gsl_rng_free(rng);
-                TEST_CHECK_THROWS(InternalError, block->significance());
+                static const double tolerance = 1.0e-4;
+
+                TEST_CHECK_NEARLY_EQUAL(mu_hat, mu_true, tolerance);
+                TEST_CHECK_NEARLY_EQUAL(log_l_0 - log_l_minus, 0.5, tolerance);
+                TEST_CHECK_NEARLY_EQUAL(log_l_0 - log_l_plus, 0.5, tolerance);
             }
-    } unbinned_log_likelihood_test;
+    } unbinned_likelihood_gaussian_test;
+
+    // 2D Gaussian, fitting one mean component: the marginal likelihood along mu_x recovers the same
+    // mode/interval check as the 1D case, with events placed exactly at mu_y so the y-density factors
+    // out as a mu_x-independent constant.
+    class UnbinnedLikelihood2DTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihood2DTest() :
+                TestCase("unbinned_likelihood_2d_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                static const double mu_x_true = 2.0;
+                static const double sigma_x   = 1.2;
+                static const double sigma_rx  = 0.9;
+                static const double sigma_cx  = std::sqrt(sigma_x * sigma_x + sigma_rx * sigma_rx); // = 1.5
+
+                p["TestGaussian2D::sigma_x"]           = sigma_x;
+                p["TestGaussianResolution2D::sigma_x"] = sigma_rx;
+
+                const double mu_y = p["TestGaussian2D::mu_y"].evaluate();
+
+                // See the 1D test above for why the x-axis grid needs to be this fine.
+                static const std::size_t Mx    = 2048;
+                static const double      x_min = -12.0;
+                static const double      x_max = +12.0;
+
+                // The kernel and the signal are both separable, so the discrete 2D convolution
+                // factorizes; with every event at mu_y the y factor is a mu_x-independent constant
+                // that cancels from the differences below, and the y axis may stay coarse.
+                static const std::size_t My    = 32;
+                static const double      y_min = -8.0;
+                static const double      y_max = +8.0;
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(
+                        cache,
+                        "TestGaussian2D::P(x,y)",
+                        "TestGaussianResolution2D::P(x,y)",
+                        Options{
+                },
+                        std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", x_min, x_max, Mx }, DetectorLevelPDF::Axis{ "y", y_min, y_max, My } });
+
+                // Events at the analytic quantiles of N(mu_x_true, sigma_cx) along x, held exactly at
+                // mu_y along y so that axis's (fixed) density contributes the same additive constant to
+                // every event's log-density and cancels out of the mu_x likelihood differences below.
+                static const std::size_t n = 8;
+                std::vector<Kinematics>  observations;
+                for (std::size_t k = 0; k < n; ++k)
+                {
+                    const double q = (static_cast<double>(k) + 0.5) / static_cast<double>(n);
+                    const double z = gsl_cdf_ugaussian_Pinv(q);
+
+                    Kinematics obs;
+                    obs.declare("x", mu_x_true + sigma_cx * z);
+                    obs.declare("y", mu_y);
+                    observations.push_back(obs);
+                }
+
+                auto block = LogLikelihoodBlock::Unbinned2D(cache, pdf, observations);
+
+                static const double delta = sigma_cx / std::sqrt(static_cast<double>(n));
+
+                p["TestGaussian2D::mu_x"] = mu_x_true;
+                cache.update();
+                const double log_l_0 = block->evaluate();
+
+                p["TestGaussian2D::mu_x"] = mu_x_true - delta;
+                cache.update();
+                const double log_l_minus = block->evaluate();
+
+                p["TestGaussian2D::mu_x"] = mu_x_true + delta;
+                cache.update();
+                const double log_l_plus = block->evaluate();
+
+                const double mu_hat = mu_x_true - delta * (log_l_plus - log_l_minus) / (2.0 * (log_l_plus - 2.0 * log_l_0 + log_l_minus));
+
+                static const double tolerance = 1.0e-4;
+
+                TEST_CHECK_NEARLY_EQUAL(mu_hat, mu_x_true, tolerance);
+                TEST_CHECK_NEARLY_EQUAL(log_l_0 - log_l_minus, 0.5, tolerance);
+                TEST_CHECK_NEARLY_EQUAL(log_l_0 - log_l_plus, 0.5, tolerance);
+            }
+    } unbinned_likelihood_2d_test;
+
+    // The dangling-span hazard (DESIGN.md, Risks): a clone must not depend on the parent's PDF or
+    // cache in any way. Clone into a fresh cache, destroy the parent block and PDF, then update the
+    // clone's own cache and evaluate it.
+    class UnbinnedLikelihoodCloneTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihoodCloneTest() :
+                TestCase("unbinned_likelihood_clone_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                static const std::size_t M     = 128;
+                static const double      x_min = -15.0;
+                static const double      x_max = +15.0;
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(cache,
+                                                              "TestGaussian1D::P(x)",
+                                                              "TestGaussianResolution1D::P(x)",
+                                                              Options{
+                },
+                                                              std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", x_min, x_max, M } });
+
+                std::vector<Kinematics> observations;
+                for (double x : { -1.0, 0.0, 1.5 })
+                {
+                    Kinematics obs;
+                    obs.declare("x", x);
+                    observations.push_back(obs);
+                }
+
+                auto block = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations);
+
+                cache.update();
+                const double expected = block->evaluate();
+
+                Parameters      p_clone = p.clone();
+                ObservableCache cache_clone(p_clone);
+                auto            block_clone = block->clone(cache_clone);
+
+                // Destroy the parent block and PDF; the clone must not depend on either.
+                pdf.reset();
+                block.reset();
+
+                cache_clone.update();
+
+                TEST_CHECK_NEARLY_EQUAL(block_clone->evaluate(), expected, 1.0e-10);
+            }
+    } unbinned_likelihood_clone_test;
 } // namespace eos

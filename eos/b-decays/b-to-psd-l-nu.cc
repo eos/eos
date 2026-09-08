@@ -88,7 +88,8 @@ namespace eos
             std::function<complex<double>()>                                      v_Ub;
             std::function<WilsonCoefficients<ChargedCurrent>(LeptonFlavor, bool)> wc;
 
-            // integration config
+            // integration config; the integrals here span 1e-19 to 1e-2, so any non-zero
+            // absolute tolerance would satisfy the convergence test before any subdivision
             cubature::Config cub_conf;
 
             BooleanOption opt_cp_conjugate;
@@ -194,7 +195,7 @@ namespace eos
                 hbar(p["QM::hbar"], u),
                 isospin_factor(_isospin_factor()),
                 mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-                cub_conf(cubature::Config().epsrel(1e-5).epsabs(1.0e-9)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
             {
