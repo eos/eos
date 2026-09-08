@@ -18,6 +18,7 @@ and how to `simulate processes <simulation.html>`_.
    predictions
    inference
    simulation
+   detector-level
    analysis-organisation
    tasks
    reproducible-analyses
