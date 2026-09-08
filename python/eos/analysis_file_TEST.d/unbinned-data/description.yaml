@@ -1,0 +1,14 @@
+axes:
+- max: 3.0
+  min: 0.0
+  points: 4
+  variable: z
+resolution:
+  kind: samples
+  offsets:
+  - min: -2.0
+    points: 4
+    spacing: 1.0
+    variable: z
+type: UnbinnedLikelihood
+version: 1.0.21

@@ -26,3 +26,5 @@ from .nabu_likelihood import NabuLikelihood
 from .pmc_sampler import PMCSampler
 from .prediction import Prediction
 from .sample_mask import SampleMask
+from .unbinned_likelihood import UnbinnedLikelihood, UnbinnedAxisDescription, UnbinnedOffsetAxisDescription, \
+    UnbinnedSampledResolutionDescription, UnbinnedExpressionResolutionDescription
