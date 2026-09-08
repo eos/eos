@@ -1,0 +1,21 @@
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data'
+    options:
+      model: 'CKM'
+
+posteriors:
+  - name: posterior
+    global_options:
+      model: 'WET'
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test
