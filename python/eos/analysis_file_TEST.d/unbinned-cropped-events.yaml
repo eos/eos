@@ -1,0 +1,20 @@
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data'
+    axes:
+      # native axis is [0.0, 3.0]; the events at z = 0.5 and z = 2.5 lie outside this window
+      - { variable: 'z', min: 1.0, max: 2.0 }
+
+posteriors:
+  - name: posterior
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test
