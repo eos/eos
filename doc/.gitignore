@@ -25,6 +25,7 @@ reference/python.rst
 reference/signal-pdfs.rst
 physics/conventions.rst
 user-guide/analysis-organisation-base/
+user-guide/detector-level-base/
 user-guide/figures/
 user-guide/inference-base/
 user-guide/inference.md
