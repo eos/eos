@@ -68,6 +68,7 @@ API_BASIC_CLASSES = {
     'rnpYear':            False,
     'References':         True,
     'SignalPDF':          True,
+    'DetectorLevelPDF':   False,
     'SignalPDFEntry':     False,
     'SignalPDFs':         True,
     'Unit':               False,
