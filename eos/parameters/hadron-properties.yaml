@@ -62,6 +62,13 @@ groups:
           latex:   '$m_{D^\pm}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::D_d,0' :
+          central: +2.343
+          min:     +2.343
+          max:     +2.343
+          latex:   '$m_{D_{d,0}}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], September 2026'
       'mass::D^+' :
           central: +1.86965
           min:     +1.86960
@@ -206,6 +213,13 @@ groups:
           latex:   '$m_{D_s^*}$'
           unit:     'GeV'
           comments: 'cf. [PDG-Live], December 2020'
+      'mass::D_d,1' :
+          central: +2.422
+          min:     +2.422
+          max:     +2.422
+          latex:   '$m_{D_{d,1}}^\mathrm{BSZ}$'
+          unit:     'GeV'
+          comments: 'cf. [PDG-Live], September 2026'
       'mass::D_s,1' :
           central: +2.460
           min:     +2.460
@@ -578,6 +592,27 @@ groups:
           min:     +0.2
           max:     +0.3
           latex:    '$f_{\bar{D}_s^{*,T}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::D_d,0' :
+          central: +0.30
+          min:     +0.25
+          max:     +0.35
+          latex:    '$f_{\bar{D}_{d,0}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::D_d,1' :
+          central: +0.30
+          min:     +0.25
+          max:     +0.35
+          latex:    '$f_{\bar{D}_{d,1}}$'
+          unit:     'GeV'
+          comments: 'Naive estimate'
+      'decay-constant::D_d,1^T' :
+          central: +0.30
+          min:     +0.25
+          max:     +0.35
+          latex:    '$f_{\bar{D}_{d,1}^T}$'
           unit:     'GeV'
           comments: 'Naive estimate'
       'decay-constant::D_s,0' :
