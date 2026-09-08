@@ -129,9 +129,11 @@ Likelihoods
 The ``likelihoods`` key contains a list of *named* likelihoods. Each likelihood has two mandatory keys:
 
   - ``name`` (**mandatory**) --- The unique name of this likelihood.
-  - ``constraints`` or ``manual_constraints`` or ``pyhf`` (**mandatory**) --- The ordered list of EOS objects that comprise this likelihood.
+  - ``constraints`` or ``manual_constraints`` or ``pyhf`` (**mandatory**, unless ``type: 'unbinned'`` is given) --- The ordered list of EOS objects that comprise this likelihood.
 
-The likelihoods can be of three types:
+A likelihood may also carry an explicit ``type`` key. It is presently only required for ``type: 'unbinned'``; otherwise the kind is inferred from which of ``constraints``, ``manual_constraints``, or ``pyhf`` is present.
+
+The likelihoods can be of four types:
 
   - ``constraints`` The following example illustrates the organisation of a likelihood for a simple constraint. Each such constraint is described by a :py:class:`~eos.analysis_file_description.ConstraintLikelihoodDescription`.
 
@@ -189,6 +191,28 @@ The likelihoods can be of three types:
           file: workspace_corr.json
           parameter_map:
             mu: { 'name': 'B->pilnu::mu', 'kinematics': { 'q2_min': 1.0e-7, 'q2_max': 25.0 } }
+
+  - ``type: 'unbinned'`` A likelihood can be an *unbinned* likelihood over individually observed events, rather than over binned or integrated observables. The truth-level :py:class:`~eos.SignalPDF` is convolved with a detector resolution and evaluated at each observed event; see :py:class:`~eos.DetectorLevelPDF`.
+
+    Such a component is mutually exclusive with ``constraints``, ``manual_constraints`` and ``pyhf``. The observed events and the resolution live in a :py:class:`~eos.data.UnbinnedLikelihood` directory, referenced by the ``data`` key; the ``pdf`` key names the truth-level signal PDF fitted to them.
+
+    .. code-block:: yaml
+
+      - name: EXP-unbinned
+        type: 'unbinned'
+        pdf: 'B->Dlnu::P(q2,cos(theta_l))'
+        options: { 'l': 'mu', 'q': 'd' }
+        data: './data/observed-events'
+
+    The data object declares the *native* sampling grid. The optional ``axes`` key crops it to a window, one entry per axis; the node spacing is never changed, so the point count follows from the data object and the two cannot disagree. An axis omitted here keeps its full native range.
+
+    .. code-block:: yaml
+
+        axes:
+          - { 'variable': 'q2',           'min': 1.0,  'max': 9.0 }
+          - { 'variable': 'cos(theta_l)', 'min': -1.0, 'max': 1.0 }
+
+    Because the underlying convolution uses a real discrete Fourier transform, every axis must end up with an **even** number of points; a crop that yields an odd count is rejected rather than silently adjusted. For a resolution supplied as numerical samples, the optional ``tolerance`` key (default ``1.0e-9``) sets the tolerance used when checking that the samples' declared offset grid matches the grid the fit requires.
 
 
 .. _analysis-file-posteriors:

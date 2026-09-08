@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020 Danny van Dyk
+# Copyright (c) 2020-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -25,3 +25,4 @@ from .nabu_likelihood import NabuLikelihood
 from .pmc_sampler import PMCSampler
 from .prediction import Prediction
 from .sample_mask import SampleMask
+from .unbinned_likelihood import UnbinnedLikelihood

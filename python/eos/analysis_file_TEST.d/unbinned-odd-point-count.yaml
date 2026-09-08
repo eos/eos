@@ -1,0 +1,21 @@
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data'
+    axes:
+      # native axis is [0.0, 3.0] with spacing 1.0; this window snaps onto 3 native nodes (0, 1, 2),
+      # an odd count, which must be rejected rather than silently grown or shrunk (A21 i)
+      - { variable: 'z', min: 0.0, max: 2.0 }
+
+posteriors:
+  - name: posterior
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test

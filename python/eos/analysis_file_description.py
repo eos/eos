@@ -486,11 +486,37 @@ class PyHFConstraintDescription(_AnalysisFileDeserializable):
     parameter_map:dict=field(default_factory=dict)
 
 @dataclass
+class UnbinnedAxisComponent(_AnalysisFileDeserializable):
+    r"""Describes the crop applied to one axis of an unbinned likelihood's native grid.
+
+    This gives the window only, never the spacing: the point count is derived from the data object's
+    native spacing, so the analysis file and the data object cannot disagree.
+
+    :param variable: The kinematic variable cropped by this entry.
+    :type variable: str
+    :param min: The lower bound of the crop window.
+    :type min: float
+    :param max: The upper bound of the crop window.
+    :type max: float
+    """
+    variable:str
+    min:float
+    max:float
+
+
+# The recognised values of a likelihood component's 'type' discriminator. Only 'unbinned' changes
+# behaviour; the others name the kinds that are still inferred from which key is present.
+_LIKELIHOOD_COMPONENT_TYPES = frozenset({ 'constraints', 'manual_constraints', 'pyhf', 'unbinned' })
+
+
+@dataclass
 class LikelihoodComponent(_AnalysisFileDeserializable):
     r"""Describes a single named likelihood, i.e. one entry of an analysis file's ``likelihoods`` list.
 
-    A named likelihood may combine any number of built-in constraints, inline (manual) constraints, and
-    pyhf-based contributions; at least one of the three must be present.
+    A named likelihood is either a combination of any number of built-in constraints, inline (manual)
+    constraints, and pyhf-based contributions (at least one of the three must be present), or, with
+    ``type: 'unbinned'``, a single unbinned likelihood built from a :class:`eos.data.UnbinnedLikelihood`
+    data object; the two forms are mutually exclusive.
 
     :param name: The unique name of the likelihood, by which posteriors refer to it.
     :type name: str
@@ -500,6 +526,25 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     :type manual_constraints: list[ManualConstraintDescription]
     :param pyhf: The pyhf-based contribution to the likelihood, or None if there is none. Optional.
     :type pyhf: PyHFConstraintDescription | None
+    :param type: The discriminator selecting the kind of likelihood component. Only ``'unbinned'`` is
+        currently enforced; when absent, the kind is inferred from which of ``constraints``,
+        ``manual_constraints``, or ``pyhf`` is present. Optional.
+    :type type: str | None
+    :param pdf: For ``type: 'unbinned'``, the qualified name of the truth-level SignalPDF fitted to the
+        data. Mandatory for that type, unused otherwise.
+    :type pdf: str
+    :param data: For ``type: 'unbinned'``, the path to the :class:`eos.data.UnbinnedLikelihood`
+        directory holding the observed events and the resolution. Mandatory for that type, unused
+        otherwise.
+    :type data: str
+    :param options: For ``type: 'unbinned'``, the options forwarded to the signal PDF. Optional.
+    :type options: dict
+    :param axes: For ``type: 'unbinned'``, the per-axis crop of the data object's native grid.
+        Optional; an axis (or the whole list) omitted uses the native range for that axis.
+    :type axes: list[UnbinnedAxisComponent]
+    :param tolerance: For ``type: 'unbinned'`` with a sampled resolution, the tolerance used when
+        checking the resolution's declared offset grid against the grid the fit requires.
+    :type tolerance: float
     """
     name:str
     constraints:list=field(default_factory=list)
@@ -507,10 +552,36 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     # unlike 'constraints' and 'manual_constraints', a likelihood carries at most one pyhf
     # contribution; from_dict deserializes it into a single PyHFConstraintDescription
     pyhf:PyHFConstraintDescription|None=None
+    type:str|None=None
+    pdf:str=''
+    data:str=''
+    options:dict=field(default_factory=dict)
+    axes:list=field(default_factory=list)
+    tolerance:float=1.0e-9
 
     def _diagnostics(self):
         yield from _check_file_local_name(self.name, 'likelihood name', ('name',))
-        if not (self.constraints or self.manual_constraints or self.pyhf):
+
+        if self.type is not None and self.type not in _LIKELIHOOD_COMPONENT_TYPES:
+            yield Diagnostic(
+                ('type',),
+                Severity.ERROR,
+                f"Likelihood component '{self.name}' has unknown type '{self.type}'; expected one of "
+                + ', '.join(sorted(_LIKELIHOOD_COMPONENT_TYPES)),
+            )
+        elif self.type == 'unbinned':
+            for key in ('constraints', 'manual_constraints', 'pyhf'):
+                if getattr(self, key):
+                    yield Diagnostic(
+                        (key,),
+                        Severity.ERROR,
+                        f"Likelihood component '{self.name}' has 'type: unbinned' and must not also declare '{key}'",
+                    )
+            if not self.pdf:
+                yield Diagnostic(('pdf',), Severity.ERROR, f"Likelihood component '{self.name}' has 'type: unbinned' but no 'pdf'")
+            if not self.data:
+                yield Diagnostic(('data',), Severity.ERROR, f"Likelihood component '{self.name}' has 'type: unbinned' but no 'data'")
+        elif not (self.constraints or self.manual_constraints or self.pyhf):
             yield Diagnostic(
                 (),
                 Severity.ERROR,
@@ -533,6 +604,8 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         )
         if self.pyhf:
             yield from (diagnostic.prefixed('pyhf') for diagnostic in self.pyhf.validate_structure())
+        axis_segments = getattr(self, '_axis_segments', list(range(len(self.axes))))
+        yield from _validate_children(self.axes, axis_segments, 'axes')
 
     def validate_semantics(self, context):
         constraint_segments = getattr(self, '_constraint_segments', list(range(len(self.constraints))))
@@ -614,9 +687,15 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             manual_constraint_segments = []
         if 'pyhf' in kwargs:
             _kwargs['pyhf'] = PyHFConstraintDescription.from_dict(**kwargs['pyhf'])
+        if 'axes' in kwargs:
+            axis_segments = _segments(kwargs['axes'])
+            _kwargs['axes'] = [UnbinnedAxisComponent.from_dict(**a) for a in kwargs['axes']]
+        else:
+            axis_segments = []
         result = cls(**_kwargs)
         result._constraint_segments = constraint_segments
         result._manual_constraint_segments = manual_constraint_segments
+        result._axis_segments = axis_segments
         return result
 
 
