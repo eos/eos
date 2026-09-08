@@ -21,6 +21,7 @@
 #include <eos/utils/log.hh>
 
 #include <test/test-observables.hh>
+#include <test/test-pdfs.hh>
 #include <test/test.hh>
 
 #include <cstdlib>
@@ -107,6 +108,7 @@ main(int, char ** argv)
     try
     {
         eos::test::register_test_observables();
+        eos::test::register_test_pdfs();
     }
     catch (eos::Exception & e)
     {
