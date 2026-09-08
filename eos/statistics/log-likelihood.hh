@@ -26,6 +26,7 @@
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood-fwd.hh>
 #include <eos/statistics/test-statistic.hh>
+#include <eos/utils/detector-level-pdf.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern.hh>
@@ -294,37 +295,28 @@ namespace eos
             /*!
              * Create a new LogLikelihoodBlock for an unbinned likelihood with a resolution function.
              *
-             * The signal PDF is evaluated on the supplied grid and convolved with the resolution function
-             * via a discrete Fourier transform, yielding the resolution-smeared PDF sampled on the grid.
-             * The log-likelihood is then the sum over the observed events of the logarithm of the smeared
-             * PDF, evaluated at each observation by linear interpolation from the surrounding grid points.
+             * The DetectorLevelPDF owns the resolution-smeared grid (see eos::DetectorLevelPDF and
+             * eos::ResolutionConvolution); the block recomputes it once per evaluation and evaluates the
+             * log-likelihood as the sum over the observed events of the logarithm of the smeared,
+             * normalized density, obtained by multilinear interpolation from the grid.
              *
-             * @param cache        The observable cache used by the total log-likelihood.
-             * @param pdf_name     The name of the SignalPDF to evaluate at each grid point.
-             * @param kinematics   One Kinematics object per grid point, fixing the observable.
-             *                     Must describe a uniform grid in the relevant kinematic variable.
-             * @param options      Options forwarded to SignalPDF::make.
-             * @param resolution   Discretised resolution function on the same grid. Must have the same size
-             *                     as @p kinematics.
-             *
-             *                     The convolution is carried out as a circular (cyclic) convolution via the
-             *                     discrete Fourier transform. The resolution function must therefore be supplied
-             *                     in wrap-around ("FFT-native") order, *not* centred in the array:
-             *                       - index 0 holds the value at zero offset (the peak of a symmetric kernel);
-             *                       - ascending indices 1, 2, ... hold increasing positive offsets;
-             *                       - the highest indices N-1, N-2, ... hold the negative offsets -1, -2, ... .
-             *                     Storing the kernel centred in the array instead shifts the convolved result by
-             *                     N/2 grid points and yields incorrect likelihoods.
-             *
-             *                     Because the convolution is circular, the kernel that runs off one end of the
-             *                     grid re-enters at the other end. The grid must therefore be padded with a
-             *                     sufficiently large region in which both the PDF and the resolution function are
-             *                     negligible, so that no appreciable density wraps across the boundary.
+             * @param cache        The observable cache used by the total log-likelihood. Must be the same
+             *                     cache @p pdf is tied to.
+             * @param pdf          The detector-level PDF whose grid is evaluated and interpolated. Its rank
+             *                     (the number of grid axes) must match this factory's dimensionality.
              * @param observations The observed events, expressed as kinematic variables. Each must lie
-             *                     within the range spanned by @p kinematics.
+             *                     within the range spanned by the PDF's grid.
              */
-            static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache, const QualifiedName & pdf_name, const std::vector<Kinematics> & kinematics, const Options & options,
-                                                    const std::vector<double> & resolution, const std::vector<Kinematics> & observations);
+            static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<Kinematics> & observations);
+
+            /// \see Unbinned1D
+            static LogLikelihoodBlockPtr Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<Kinematics> & observations);
+
+            /// \see Unbinned1D
+            static LogLikelihoodBlockPtr Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<Kinematics> & observations);
+
+            /// \see Unbinned1D
+            static LogLikelihoodBlockPtr Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<Kinematics> & observations);
     };
 
     /*!
