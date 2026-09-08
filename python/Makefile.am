@@ -61,7 +61,6 @@ EXTRA_DIST = \
 	eos/deserializable.py \
 	eos/serializable.py \
 	eos/ipython.py \
-	eos/log_likelihood.py \
 	eos/observable.py \
 	eos/parameter.py \
 	eos/reference.py \
@@ -139,7 +138,6 @@ eos_SCRIPTS = \
 	eos/diagnostic.py \
 	eos/serializable.py \
 	eos/ipython.py \
-	eos/log_likelihood.py \
 	eos/observable.py \
 	eos/parameter.py \
 	eos/reference.py \
