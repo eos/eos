@@ -1,0 +1,19 @@
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    # 'unbinned-data-misaligned' declares its resolution offsets shifted by 0.3 relative to the
+    # grid the (uncropped, native) signal axis requires
+    data: './unbinned-data-misaligned'
+    pdf: 'TestLegendre1D::P(z)'
+
+posteriors:
+  - name: posterior
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test
