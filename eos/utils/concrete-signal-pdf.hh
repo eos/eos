@@ -167,17 +167,17 @@ namespace eos
             return result;
         }
 
-        template <typename Result_, unsigned n_> struct Evaluator
+        template <typename Result_, unsigned n_> struct KinematicVariablesEvaluator
         {
                 template <typename Variables_, typename... TempArgs_>
                 static Result_
                 evaluate(const Variables_ & v, TempArgs_... args)
                 {
-                    return Evaluator<Result_, n_ - 1>::evaluate(v, v[n_ - 1].evaluate(), args...);
+                    return KinematicVariablesEvaluator<Result_, n_ - 1>::evaluate(v, v[n_ - 1].evaluate(), args...);
                 }
         };
 
-        template <typename Result_> struct Evaluator<Result_, 0>
+        template <typename Result_> struct KinematicVariablesEvaluator<Result_, 0>
         {
                 template <typename Variables_, typename... TempArgs_>
                 static Result_
@@ -191,7 +191,7 @@ namespace eos
         auto
         evaluate(const std::array<KinematicVariable, n_> & kinematic_variables) -> std::array<double, n_>
         {
-            return Evaluator<std::array<double, n_>, n_>::evaluate(kinematic_variables);
+            return KinematicVariablesEvaluator<std::array<double, n_>, n_>::evaluate(kinematic_variables);
         }
 
         // convert std::tuple to std::array
