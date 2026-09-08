@@ -21,6 +21,7 @@
 #include <eos/utils/log.hh>
 
 #include <test/test-observables.hh>
+#include <test/test-pdfs.hh>
 #include <test/test.hh>
 
 #include <cstdlib>
@@ -105,6 +106,7 @@ main(int, char ** argv)
 
     // Set up the test environment shared by every test case
     eos::test::register_test_observables();
+    eos::test::register_test_pdfs();
 
     for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()), i_end(test::TestCasesHolder::instance()->test_cases.end());
          i != i_end;
