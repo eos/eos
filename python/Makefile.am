@@ -10,6 +10,9 @@ EXTRA_DIST = \
 	eos/analysis_file.py \
 	eos/analysis_file_TEST.d \
 	eos/analysis_file_TEST.d/invalid \
+	eos/analysis_file_TEST.d/unbinned-data \
+	eos/analysis_file_TEST.d/unbinned-data-expression \
+	eos/analysis_file_TEST.d/unbinned-data-misaligned \
 	eos/analysis_file_TEST.py \
 	eos/analysis_file_context.py \
 	eos/analysis_file_context_TEST.py \
@@ -94,6 +97,8 @@ EXTRA_DIST = \
 	eos/data/prediction_TEST.d/predictions \
 	eos/data/prediction_TEST.d/predictions-binned \
 	eos/data/sample_mask.py \
+	eos/data/unbinned_likelihood.py \
+	eos/data/unbinned_likelihood_TEST.d \
 	eos/figure/__init__.py \
 	eos/figure/common.py \
 	eos/figure/config.py \
@@ -177,7 +182,8 @@ eosdata_SCRIPTS = \
 	eos/data/nabu_likelihood.py \
 	eos/data/pmc_sampler.py \
 	eos/data/prediction.py \
-	eos/data/sample_mask.py
+	eos/data/sample_mask.py \
+	eos/data/unbinned_likelihood.py
 
 eosfiguredir = $(pkgpythondir)/figure
 eosfigure_SCRIPTS = \
@@ -248,6 +254,7 @@ TESTS = \
 	eos/data/sample_mask_TEST.py \
 	eos/data/pmc_sampler_TEST.py \
 	eos/data/prediction_TEST.py \
+	eos/data/unbinned_likelihood_TEST.py \
 	eos/_api_TEST.py \
 	eos/constraint_TEST.py \
 	eos/ipython_TEST.py \

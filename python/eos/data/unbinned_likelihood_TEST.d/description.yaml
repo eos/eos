@@ -1,0 +1,14 @@
+axes:
+- max: 7.0
+  min: 0.0
+  points: 8
+  variable: q2
+resolution:
+  kind: samples
+  offsets:
+  - min: -5.0
+    points: 10
+    spacing: 1.0
+    variable: q2
+type: UnbinnedLikelihood
+version: '1.0'
