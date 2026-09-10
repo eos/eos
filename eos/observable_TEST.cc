@@ -214,6 +214,8 @@ class ObservableTest : public TestCase
                                                   "phi",
                                                   "phi_min",
                                                   "phi_max",
+                                                  "Re{psi}",
+                                                  "Im{psi}",
                                                   "E",
                                                   "E_min",
                                                   "E_max",
