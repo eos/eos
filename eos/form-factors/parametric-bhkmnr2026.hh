@@ -67,9 +67,6 @@ namespace eos
             std::array<bool, 2> _switch_I;
             IsospinOption       _opt_I;
 
-            // integration config
-            cubature::Config _cub_conf;
-
             // matrices and vectors needed for the linear system of equations to determine the constrained coefficients
             gsl_matrix *                 _M;
             gsl_matrix *                 _init_M;

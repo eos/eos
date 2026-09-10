@@ -71,7 +71,6 @@ namespace eos
         _s_in(p["0->pipi::s_in@BHKMNR2026"], *this),
         _hbar(p["QM::hbar"], *this),
         _opt_I(o, option_specifications, "I"_ok),
-        _cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
         _M(gsl_matrix_alloc(4, 4)),
         _init_M(gsl_matrix_alloc(4, 4)),
         _L(gsl_vector_alloc(4)),
@@ -519,7 +518,7 @@ namespace eos
     BHKMNR2026FormFactors<VacuumToPiPi>::saturation(const FormFactors<VacuumToPP>::IntermediateResult * _ir) const
     {
         std::function<double(const double &)> f = [this, _ir](const double & x) -> double { return this->dispersive_integrand(_ir, x); };
-        return integrate<1, 1>(f, 0, 1, _cub_conf);
+        return integrate<1, 1>(f, 0, 1, this->_cub_conf);
     }
 
     // This function is used to compute the rho-pipi and rho-gamma couplings
