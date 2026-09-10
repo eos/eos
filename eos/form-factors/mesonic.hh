@@ -28,6 +28,7 @@
 
 #include <eos/form-factors/form-factors-fwd.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/utils/intermediate-result.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -375,6 +376,7 @@ namespace eos
                     virtual ~IntermediateResult();
             };
 
+            FormFactors();
             virtual ~FormFactors();
 
             virtual const IntermediateResult * prepare() const;
@@ -382,10 +384,12 @@ namespace eos
             // vector form factor
             virtual complex<double> f_p(const double & q2) const = 0;
             virtual double          abs2_f_p(const double & q2) const;
+            virtual double          abs2_f_p_average(const double & q2_min, const double & q2_max) const;
             virtual double          arg_f_p(const double & q2) const;
 
             virtual complex<double> f_p(const IntermediateResult *, const double & q2) const;
             virtual double          abs2_f_p(const IntermediateResult *, const double & q2) const;
+            virtual double          abs2_f_p_average(const IntermediateResult *, const double & q2_min, const double & q2_max) const;
             virtual double          arg_f_p(const IntermediateResult *, const double & q2) const;
 
             virtual complex<double> f_p(const complex<double> & q2) const = 0;
@@ -432,6 +436,10 @@ namespace eos
 
         private:
             mutable IntermediateResult _intermediate_result;
+
+        protected:
+            // integration config
+            cubature::Config _cub_conf;
     };
 
     template <> class FormFactorFactory<VacuumToPP>
