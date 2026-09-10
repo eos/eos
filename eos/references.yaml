@@ -455,6 +455,13 @@ BGS:2017A:
     id: oai:arXiv.org:1707.09509
   inspire-id: Bigi:2017jbd
   title: $R(D^*)$, $|V_{cb}|$, and the Heavy Quark Symmetry relations between form factors
+BHKMR:2025A:
+  authors: Balz, Nienke C. and Herren, Florian and Kubis, Bastian and Mutke, Simon and Reboud, Meril
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2510.25584
+  inspire-id: Balz:2025auk
+  title: Advanced parametrisations for hadronic form factors
 BHP:2007A:
   authors: Bobeth, Christoph and Hiller, Gudrun and Piranishvili, Giorgi
   eprint:
