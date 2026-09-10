@@ -22,6 +22,7 @@
 #ifndef EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH
 #define EOS_GUARD_EOS_FORM_FACTORS_MESONIC_PROCESSES_HH 1
 
+#include <eos/form-factors/mesonic.hh>
 #include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/transitions.hh>
 
