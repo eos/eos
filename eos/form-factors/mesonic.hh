@@ -368,10 +368,12 @@ namespace eos
             // vector form factor
             virtual complex<double> f_p(const double & q2) const = 0;
             virtual double          abs2_f_p(const double & q2) const;
+            virtual double          abs2_f_p_average(const double & q2_min, const double & q2_max) const;
             virtual double          arg_f_p(const double & q2) const;
 
             virtual complex<double> f_p(const IntermediateResult *, const double & q2) const;
             virtual double          abs2_f_p(const IntermediateResult *, const double & q2) const;
+            virtual double          abs2_f_p_average(const IntermediateResult *, const double & q2_min, const double & q2_max) const;
             virtual double          arg_f_p(const IntermediateResult *, const double & q2) const;
 
             virtual complex<double> f_p(const complex<double> & q2) const = 0;
