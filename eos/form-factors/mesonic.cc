@@ -667,6 +667,16 @@ namespace eos
     }
 
     double
+    FormFactors<VacuumToPP>::abs2_f_p_average(const IntermediateResult * ir, const double & q2_min, const double & q2_max) const
+    {
+        std::function<double(const double &)> integrand = [this, ir](const double & q2) -> double { return this->abs2_f_p(ir, q2); };
+
+        const double integral = integrate<1, 1>(integrand, q2_min, q2_max, cubature::Config().epsrel(1.0e-5));
+
+        return integral / (q2_max - q2_min);
+    }
+
+    double
     FormFactors<VacuumToPP>::arg_f_p(const IntermediateResult * ir, const double & q2) const
     {
         const double arg = std::arg(this->f_p(ir, q2));
@@ -681,6 +691,12 @@ namespace eos
     FormFactors<VacuumToPP>::abs2_f_p(const double & q2) const
     {
         return this->abs2_f_p(this->prepare(), q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::abs2_f_p_average(const double & q2_min, const double & q2_max) const
+    {
+        return this->abs2_f_p_average(this->prepare(), q2_min, q2_max);
     }
 
     double
