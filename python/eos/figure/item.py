@@ -3401,6 +3401,8 @@ class ComplexPlaneItem(Item):
     :type resolution: int
     :param variables: The names of the variables to be used as x and y coordinates.
     :type variables: tuple[str, str]
+    :param colormap: The name of the colormap to be used for the plot. Defaults to 'viridis'.
+    :type colormap: str
     """
     fixed_kinematics:dict[str,float]|None=None
     fixed_parameters:dict[eos.QualifiedName,float]|None=None
@@ -3410,6 +3412,7 @@ class ComplexPlaneItem(Item):
     variables:tuple[str,str]
     ranges:tuple[tuple[float,float],tuple[float,float]]=field(default=((-1.0, +1.0), (-1.0, +1.0)))
     resolution:int=100
+    colormap:str='viridis'
 
     def __post_init__(self):
         eos.debug(f'Handling item to plot {self.observable} in the complex plane')
@@ -3520,7 +3523,7 @@ class ComplexPlaneItem(Item):
         :param ax: The matplotlib axes onto which the observable is drawn.
         :type ax: matplotlib.axes.Axes
         """
-        ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap='viridis', rasterized=True)
+        ax.pcolor(self._xvalues, self._yvalues, self._ovalues, cmap=self.colormap, rasterized=True)
 
     def legend(self):
         # a pseudocolor plot has no faithful single-swatch representation,
