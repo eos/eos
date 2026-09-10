@@ -185,6 +185,8 @@ class ParametricBHKMNR2026Test : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(ff.im_residue_rho(), 0.35450739, eps);
 
                     TEST_CHECK_NEARLY_EQUAL(ff.root_penalty(), 1.00000000, eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.abs2_f_p_average(0.5, 0.8), 23.63575498, eps);
                 }
 
 
@@ -292,6 +294,8 @@ class ParametricBHKMNR2026Test : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(ff.arg_f_p_of_psi(ir, 0.7, 0.3), -1.22693782, eps);
                     TEST_CHECK_NEARLY_EQUAL(ff.arg_f_p_of_psi(ir, 0.0, 0.0), 0.00000000, eps);
                     TEST_CHECK_NEARLY_EQUAL(ff.arg_f_p_of_psi(ir, -1.0, 0.0), 0.00000000, eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.abs2_f_p_average(ir, 0.5, 0.8), 7667.31373180, eps);
                 }
             }
         }
