@@ -40,7 +40,7 @@ repos:
       - id: rst-inline-touching-normal
 
   - repo: https://github.com/eos/pre-commit-hooks
-    rev: b5c3b192c7f406ea9391069fc65bd634089dbbd0
+    rev: 5b0afab275eb52e92915aadaa66ff0554a11ee5b
     hooks:
       - id: eos-test-check-argument-order
         exclude: '^test/test_TEST.cc$'
@@ -50,6 +50,7 @@ repos:
         additional_dependencies: ['pyyaml']
       - id: eos-constraints-format
         files: ^eos/constraints/.*\.yaml$
+      - id: eos-notebooks-no-output
 
   - repo: https://github.com/jackdewinter/pymarkdown
     rev: v0.9.35
