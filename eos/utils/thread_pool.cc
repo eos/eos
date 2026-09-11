@@ -105,10 +105,13 @@ namespace eos
                     if (have_job)
                     {
                         job();
-                        ticket.mark();
 
-                        // Release the job (and any state it captured) promptly.
+                        // Release the job's captured state before marking the ticket: the
+                        // enqueueing thread still waits and still holds its own references, so
+                        // no destructor of that state can run on this thread.
                         job = nullptr;
+
+                        ticket.mark();
                     }
 
                     {
