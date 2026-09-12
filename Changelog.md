@@ -74,6 +74,7 @@
 - Fix a segfault when a callback registered with the native log outlives the caller's last reference to it: the ``Log`` singleton recorded the Python callable as a borrowed reference, and now holds one of its own until ``atexit`` (D. van Dyk)
 - Fix ``eos.Parameters.declare`` appending a second entry for a name it has already declared, which grew the process-wide set of default parameters by one entry for every ``eos.AnalysisFile`` that declares parameters of its own and left two ``eos.Parameters`` objects created at different times disagreeing on which id a name denotes (D. van Dyk)
 - Fix the double-checked locking in ``InstantiationPolicy<T_, Singleton>::instance()``, which read the instance pointer outside its lock without synchronisation and could therefore hand a thread a pointer to an object whose construction it cannot yet observe (D. van Dyk)
+- Fix the order of marking a ``Ticket`` and releasing the job associated with it, curing a race condition leading to a rare segfault on the Python side (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
