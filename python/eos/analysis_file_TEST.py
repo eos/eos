@@ -4,6 +4,7 @@
 # Copyright (c) 2024-2026 Danny van Dyk
 # Copyright (c) 2025 Matthew Kirk
 # Copyright (c) 2026 Mark E Smith
+# Copyright (c) 2026 Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -232,7 +233,7 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
             eos.AnalysisFile(_TESTD / 'invalid' / 'bad-component-name.yaml')
 
         self.assertIn(
-            "likelihoods[1]/name: Invalid character '/' in likelihood name 'a/b'",
+            "line 10: likelihoods[1]/name: Invalid character '/' in likelihood name 'a/b'",
             str(context.exception),
         )
 
@@ -273,14 +274,15 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
 
         message = str(context.exception)
         for fragment in (
-            'priors/incomplete-prior/descriptions[0]/max',
-            'likelihoods/empty-likelihood',
-            'posteriors/broken-posterior/prior[0]',
-            'posteriors/broken-posterior/likelihood[0]',
-            'steps[0]/id',
-            'steps[0]/tasks[0]/task',
-            'masks/broken-mask/logical_combination',
-            'masks/broken-mask/description[0]/mask_name',
+            # descriptions[0] has no 'max' key; falls back to the enclosing mapping's own line (4)
+            'line 4: priors/incomplete-prior/descriptions[0]/max',
+            'line 9: likelihoods/empty-likelihood',
+            'line 14: posteriors/broken-posterior/prior[0]',
+            'line 16: posteriors/broken-posterior/likelihood[0]',
+            'line 20: steps[0]/id',
+            'line 22: steps[0]/tasks[0]/task',
+            'line 26: masks/broken-mask/logical_combination',
+            'line 28: masks/broken-mask/description[0]/mask_name',
         ):
             self.assertIn(fragment, message)
 
@@ -643,6 +645,14 @@ class TestAnalysisFileValidation(unittest.TestCase):
                 Severity.ERROR,
             ),
             semantic_locations,
+        )
+        # validate() resolves a source line for every diagnostic it returns, including those from
+        # the semantic and deep phases (the structural phase is covered by
+        # TestAnalysisFileConstructionErrors); removing that step would leave 'line' as None here.
+        self.assertTrue(all(diagnostic.line is not None for diagnostic in messages))
+        self.assertIn(
+            (('priors', 'BAD-PARAM', 'descriptions', 0, 'parameter'), Severity.ERROR, 16),
+            {(d.path, d.severity, d.line) for d in messages},
         )
         self.assertIn(
             (('steps', 'bad-step', 'depends_on'), Severity.ERROR),

@@ -4,6 +4,7 @@
 # Copyright (c) 2020-2026 Danny van Dyk
 # Copyright (c) 2023 Lorenz Gärtner
 # Copyright (c) 2026 Mark E Smith
+# Copyright (c) 2023, 2026 Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,7 +28,7 @@ from eos.analysis_file_description import AnalysisFileDescription, PriorDescript
                                        MaskExpressionComponent, MaskNamedComponent
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import InvalidComponent
-from eos.diagnostic import Diagnostic, Severity
+from eos.diagnostic import Diagnostic, Severity, attach_line_numbers
 from eos.validation_context import ValidationContext
 
 # The highest analysis file format version understood by this version of EOS. Increment this
@@ -88,6 +89,7 @@ class AnalysisFile:
         self._description = AnalysisFileDescription.from_dict(**self.input_data)
         structural_diagnostics = list(self._description.validate_structure())
         if any(diagnostic.severity is Severity.ERROR for diagnostic in structural_diagnostics):
+            structural_diagnostics = attach_line_numbers(structural_diagnostics, analysis_file)
             rendered_diagnostics = '\n'.join(str(diagnostic) for diagnostic in structural_diagnostics)
             raise RuntimeError(f'Cannot load analysis file:\n{rendered_diagnostics}')
 
@@ -418,6 +420,7 @@ class AnalysisFile:
                         ('posteriors', posterior), Severity.ERROR,
                         f'cannot be created: {e}'
                     ))
+        diagnostics = attach_line_numbers(diagnostics, self.analysis_file)
         for diagnostic in diagnostics:
             print(diagnostic)
         return diagnostics
