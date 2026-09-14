@@ -276,32 +276,6 @@ In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTE
     parser_sample_nested.set_defaults(cmd = cmd_sample_nested)
 
 
-    # plot-samples
-    parser_plot_samples = subparsers.add_parser('plot-samples',
-        parents = [common_subparser],
-        description = '''
-Plots all samples obtained for a named posterior.
-
-The results of either the sample-mcmc or the sample-pmc command are expected in
-EOS_BASE_DIRECTORY/POSTERIOR/mcmc-* or EOS_BASE_DIRECTORY/POSTERIOR/pmc, respectively.
-The plots will be stored as PDF files within the respective sample inputs.
-''',
-        help = 'Plots samples for a named posterior.'
-    )
-    parser_plot_samples.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'The name of the posterior PDF from which to draw the samples.'
-    )
-    parser_plot_samples.add_argument('-B', '--bins',
-        help = 'The number of bins per histogram.',
-        dest = 'bins', action = 'store', type = int, default = 50
-    )
-    parser_plot_samples.add_argument('-b', '--base-directory',
-        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
-        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
-    )
-    parser_plot_samples.set_defaults(cmd = cmd_plot_samples)
-
-
     # find-mode
     parser_find_mode = subparsers.add_parser('find-mode',
         parents = [common_subparser],
@@ -777,51 +751,6 @@ def args_to_dict(args):
 # Find mode
 def cmd_find_mode(args):
     return eos.tasks.find_mode(**args_to_dict(args))
-
-
-# Plot samples
-def cmd_plot_samples(args):
-    import pathlib
-    input_path = pathlib.Path(os.path.join(args.base_directory, args.posterior))
-    inputs  = [str(d) for d in input_path.glob('mcmc-*')]
-    inputs += [str(d) for d in input_path.glob('samples')]
-    for input in inputs:
-        info(f'plotting samples in \'{input}\'')
-        basename = os.path.basename(os.path.normpath(input))
-        if basename.startswith('mcmc-'):
-            data = eos.data.MarkovChain(input)
-        elif basename.startswith('samples'):
-            data = eos.data.ImportanceSamples(input)
-        else:
-            raise RuntimeError(f'unsupported data set: {input}')
-
-        parameters = eos.Parameters()
-        for idx, p in enumerate(data.varied_parameters):
-            info('plotting histogram for {}'.format(p['name']))
-            if data.type in ['Prediction']:
-                label = eos.Observables()[p['name']]
-            elif data.type in ['MarkovChain', 'ImportanceSamples']:
-                pp = parameters[p['name']]
-                label = pp.latex()
-            else:
-                label = r'\verb+{}+'.format(p['name'])
-
-            description = {
-                'plot': {
-                    'x': { 'label': label, 'range': [p['min'], p['max']] },
-                    'y': { 'label': 'prob. density' }
-                },
-                'contents': [
-                    {
-                        'type': 'histogram', 'bins': args.bins,
-                        'data': {
-                            'samples': data.samples[:, idx],
-                        }
-                    }
-                ]
-            }
-            plotter = eos.plot.Plotter(description, os.path.join(input, f'{idx}.pdf'))
-            plotter.plot()
 
 
 # Sample MCMC
