@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Added the eos-analysis task ``create-constraint``. This fits a multi-variate Gaussian to the samples and assesses the goodness-of-fit. The constraint can then be used in subseqeunt tasks. #1240(M. Smith)
+
 ### Changed
 
 - **Breaking:** Rename the ``BFW2010``, ``BMRvD2022`` and ``ABR2022`` form factor parametrizations to ``SE`` (D. van Dyk)
