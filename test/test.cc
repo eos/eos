@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -105,15 +105,36 @@ main(int, char ** argv)
     eos::Log::instance()->set_log_level(eos::ll_debug);
 
     // Set up the observable test environment
-    auto test_function = [](const eos::Parameters & p, const std::vector<eos::KinematicVariable> & kv, const eos::Options & o)
+    try
     {
-        using namespace eos;
-        return p["mass::c"] * std::stoi(o.get("multiplier"_ok, "1"_ov).str()) * (kv[1] - kv[0]);
-    };
+        auto test_function = [](const eos::Parameters & p, const std::vector<eos::KinematicVariable> & kv, const eos::Options & o)
+        {
+            using namespace eos;
+            return p["mass::c"] * std::stoi(o.get("multiplier"_ok, "1"_ov).str()) * (kv[1] - kv[0]);
+        };
 
-    std::shared_ptr<const eos::TestObservableEntry> obs_entry =
-            std::make_shared<const eos::TestObservableEntry>("test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{ "q2_min", "q2_max" });
-    eos::ObservableEntries::instance()->insert_or_assign("test::obs1", obs_entry);
+        std::shared_ptr<const eos::TestObservableEntry> obs_entry =
+                std::make_shared<const eos::TestObservableEntry>("test::obs1", "", eos::Unit::Undefined(), test_function, std::vector<std::string>{ "q2_min", "q2_max" });
+        eos::ObservableEntries::instance()->insert_or_assign("test::obs1", obs_entry);
+    }
+    catch (eos::Exception & e)
+    {
+        std::cout << "Setting up the test environment threw exception: " << std::endl << e.backtrace("\n") << e.what() << std::endl;
+
+        return EXIT_FAILURE;
+    }
+    catch (std::exception & e)
+    {
+        std::cout << "Setting up the test environment threw std::exception: " << e.what() << std::endl;
+
+        return EXIT_FAILURE;
+    }
+    catch (...)
+    {
+        std::cout << "Setting up the test environment threw unrecognized exception: " << abi::__cxa_current_exception_type()->name() << std::endl;
+
+        return EXIT_FAILURE;
+    }
 
 
     for (std::list<const test::TestCase *>::const_iterator i(test::TestCasesHolder::instance()->test_cases.begin()), i_end(test::TestCasesHolder::instance()->test_cases.end());
