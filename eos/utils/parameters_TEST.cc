@@ -215,7 +215,7 @@ class ParametersTest : public TestCase
                 // 'B->pi::a^%1%_%2%@G2026' is templated over the cartesian product of
                 //   - %1% in { "f+", "f0", "fT" }
                 //   - %2% in { 0, 1, 2, 3, 4 }
-                // with the latex template '$a_%2%^{%1%,B \to \pi,\mathrm{G2026}}$' and the
+                // with the latex template 'a_%2%^{%1%,B \to \pi,\mathrm{G2026}}' and the
                 // latex substitutions { "f+" -> "f_+", "f0" -> "f_0", "fT" -> "f_T" }.
 
                 // all instances of the cartesian product must be present, ...
@@ -238,14 +238,14 @@ class ParametersTest : public TestCase
                 // and the latex map must be applied correctly.
                 Parameter a_fp_0 = p["B->pi::a^f+_0@G2026"];
                 TEST_CHECK_EQUAL(a_fp_0.name(), "B->pi::a^f+_0@G2026");
-                TEST_CHECK_EQUAL(a_fp_0.latex(), R"($a_0^{f_+,B \to \pi,\mathrm{G2026}}$)");
+                TEST_CHECK_EQUAL(a_fp_0.latex(), R"(a_0^{f_+,B \to \pi,\mathrm{G2026}})");
                 TEST_CHECK_NEARLY_EQUAL(a_fp_0.central(), 0.0, 1e-12);
                 TEST_CHECK_NEARLY_EQUAL(a_fp_0.min(), -1.0, 1e-12);
                 TEST_CHECK_NEARLY_EQUAL(a_fp_0.max(), +1.0, 1e-12);
 
                 Parameter a_fT_2 = p["B->pi::a^fT_2@G2026"];
                 TEST_CHECK_EQUAL(a_fT_2.name(), "B->pi::a^fT_2@G2026");
-                TEST_CHECK_EQUAL(a_fT_2.latex(), R"($a_2^{f_T,B \to \pi,\mathrm{G2026}}$)");
+                TEST_CHECK_EQUAL(a_fT_2.latex(), R"(a_2^{f_T,B \to \pi,\mathrm{G2026}})");
             }
 
             // A: Parameters::override_from_file (override existing, add new, error paths)
