@@ -207,6 +207,13 @@ namespace eos
              * @param name  The name to be checked against the default parameters.
              */
             static bool has_default(const QualifiedName & name);
+
+            /*!
+             * Ensure that the default set of parameters has been loaded.
+             *
+             * Loading is otherwise deferred to the first access from within unrelated code.
+             */
+            static void load_defaults();
             ///@}
 
             ///@name Parameter access
