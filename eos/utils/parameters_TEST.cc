@@ -287,6 +287,9 @@ class ParametersTest : public TestCase
 
                 // a malformed entry (missing 'central') is rethrown as a ParameterInputFileParseError
                 TEST_CHECK_THROWS(ParameterInputFileParseError, Parameters::Defaults().override_from_file(fixture_dir + "/missing-central.yaml"));
+
+                // a malformed entry (incorrect node) is rethrown as a ParameterInputFileParseError
+                TEST_CHECK_THROWS(ParameterInputFileParseError, Parameters::Defaults().override_from_file(fixture_dir + "/bad-node.yaml"));
             }
 
             // B: iteration over sections and groups (ParameterSection / ParameterGroup accessors)
