@@ -928,6 +928,14 @@ namespace eos
         return ParameterDefaults::instance()->declare(name, Parameter::Template{ name, min, value, max, latex, unit });
     }
 
+    bool
+    Parameters::has_default(const QualifiedName & name)
+    {
+        const auto & names = ParameterDefaults::instance()->map();
+
+        return names.cend() != names.find(name);
+    }
+
     Parameter
     Parameters::declare_and_insert(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
