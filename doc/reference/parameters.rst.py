@@ -32,7 +32,7 @@ def make_doc_parameters(group):
 
         parameters.append({
             'qualified_name': qn,
-            'latex'         : latex_to_rst(f'{param.latex()}'),
+            'latex'         : latex_to_rst(f'${param.latex()}$'),
             'unit'          : latex_to_rst(f'${param.unit().latex()}$'),
             'value'         : param.evaluate(),
             'link_key'      : qn.translate(qn_to_link_map).lower(),
