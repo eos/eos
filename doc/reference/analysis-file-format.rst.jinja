@@ -375,7 +375,7 @@ The ``steps`` key contains a list of pre-defined tasks that allow an analysis to
   - ``default_arguments`` (**optional**) --- A dictionary of tasks and default arguments, for any of the tasks in this step.
   - ``tasks`` (**mandatory**) --- The list of tasks that are part of this step.
 
-The following example illustrates the description of two nested sampling steps, followed by plotting of the results.
+The following example illustrates the description of two nested sampling steps, followed by drawing figures of the results.
 
 .. code-block:: yaml
 
@@ -402,19 +402,19 @@ The following example illustrates the description of two nested sampling steps, 
             dlogz: 9.0
             maxiter: 4000
 
-    - title: 'Create corner plot for CKM-all posterior'
-      id: 'CKM-all.corner-plot'
+    - title: 'Draw the corner figures'
+      id: 'CKM-all,WET-all.draw-figure'
       depends_on: ['CKM-all.sample', 'WET-all.sample']
       default_arguments:
-        corner-plot:
+        draw-figure:
           format: ['pdf', 'png']
       tasks:
-        - task: 'corner-plot'
+        - task: 'draw-figure'
           arguments:
-            posterior: 'CKM-all'
-        - task: 'corner-plot'
+            figure_name: 'CKM-all-corner'
+        - task: 'draw-figure'
           arguments:
-            posterior: 'WET-all'
+            figure_name: 'WET-all-corner'
 
 The ``depends_on`` key orders the steps into a dependency graph, so that an analysis can be reproduced by executing its steps in a well-defined order, while ``default_arguments`` supplies arguments shared by a step's tasks.
 A step is described by a :py:class:`~eos.analysis_file_description.StepComponent`, and each of its tasks by a :py:class:`~eos.analysis_file_description.TaskComponent`.

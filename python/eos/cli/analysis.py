@@ -421,43 +421,6 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
 
 
-    # corner-plot
-    parser_corner_plot = subparsers.add_parser('corner-plot',
-        parents = [common_subparser],
-        description = '''
-Generate a corner plot of the 1-D and 2-D marginalized posteriors.
-
-The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
-The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
-''',
-        help = 'Generate a corner plot of the 1-D and 2-D marginalized posteriors.'
-    )
-    parser_corner_plot.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'The name of the posterior PDF from which the samples were drawn.'
-    )
-    parser_corner_plot.add_argument('-B', '--begin-parameter',
-        help = 'The index of the first parameter to plot.',
-        dest = 'begin', action = 'store', type = int, default = 0
-    )
-    parser_corner_plot.add_argument('-E', '--end-parameter',
-        help = 'The index beyond the last parameter to plot.',
-        dest = 'end', action = 'store', type = int, default = None
-    )
-    parser_corner_plot.add_argument('-F', '--format',
-        help = 'The plot output format. Can be a comma separated list of formats.',
-        dest = 'format', action = 'store', type = lambda s: s.split(','), default = 'pdf'
-    )
-    parser_corner_plot.add_argument('-M', '--mask-name', metavar = 'MASK-NAME',
-        help = 'The name of the mask to apply to the samples.',
-        dest = 'mask_name', action = 'store', type = str
-    )
-    parser_corner_plot.add_argument('-b', '--base-directory',
-        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
-        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
-    )
-    parser_corner_plot.set_defaults(cmd = cmd_corner_plot)
-
-
     # validate
     parser_validate = subparsers.add_parser('validate',
         parents = [common_subparser],
@@ -771,11 +734,6 @@ def cmd_sample_pmc(args):
 # Nested sampling
 def cmd_sample_nested(args):
     return eos.sample_nested(**args_to_dict(args))
-
-
-# Corner plot
-def cmd_corner_plot(args):
-    return eos.corner_plot(**args_to_dict(args))
 
 
 # Cartesian product

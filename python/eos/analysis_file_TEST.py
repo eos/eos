@@ -130,8 +130,8 @@ class TestAnalysisFile(unittest.TestCase):
     def test_task_defaults_are_warning_diagnostics_without_logging(self):
         with self.assertNoLogs('EOS', level='WARNING'):
             task = eos.analysis_file_description.TaskComponent.from_dict(
-                task='corner-plot',
-                arguments={'posterior': 'posterior'},
+                task='draw-figure',
+                arguments={'figure_name': 'figure'},
             )
 
         warnings = [

@@ -244,3 +244,11 @@ predictions:
         kinematics: { q2:  26.0 }
       - name: B->pilnu::dBR/dq2
         kinematics: { q2:  27.0 }
+
+figures:
+  - name: CKM-all-corner
+    type: 'corner'
+    contents:
+      - path: 'data/CKM-all/samples'
+        label: 'CKM-all'
+    variables: [ 'CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008' ]

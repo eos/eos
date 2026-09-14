@@ -952,10 +952,6 @@ _task_argument_map = {
     ('predict-obserables', 'PREDICTION'): 'prediction',
     ('predict-observables', 'B'): 'begin', ('predict-observables', 'begin-index'): 'begin', ('predict-observables', 'BEGIN'): 'begin',
     ('predict-observables', 'E'): 'end', ('predict-observables', 'end-index'): 'end', ('predict-observables', 'END'): 'end',
-    # corner-plot
-    ('corner-plot', 'B'): 'begin', ('corner-plot', 'begin-parameter'): 'begin', ('corner-plot', 'BEGIN'): 'begin',
-    ('corner-plot', 'E'): 'end', ('corner-plot', 'end-parameter'): 'end', ('corner-plot', 'END'): 'end',
-    ('corner-plot', 'F'): 'format', ('corner-plot', 'FORMAT'): 'format',
     # list-step-dependencies
     ('list-step-dependencies', 'ID'): 'id',
     # report
@@ -969,7 +965,6 @@ _task_argument_map = {
 _mask_task_arguments = frozenset({
     ('find-mode', 'mask_name'),
     ('predict-observables', 'mask_name'),
-    ('corner-plot', 'mask_name'),
     ('create-mask', 'mask_name'),
 })
 

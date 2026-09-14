@@ -20,7 +20,7 @@ class ClassMethodTests(unittest.TestCase):
 
     def test_list_steps_task(self):
         steps = eos.tasks.list_steps(self._analysis_file)
-        self.assertEqual(steps, {'CKM-all,WET-all.sample', 'CKM-all.corner-plot', 'WET-all.mode,corner-plot'})
+        self.assertEqual(steps, {'CKM-all,WET-all.sample', 'CKM-all.draw-figure', 'WET-all.mode,draw-figure'})
 
 
 class ReportTaskTests(unittest.TestCase):
