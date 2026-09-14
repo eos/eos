@@ -150,11 +150,11 @@ figures:
         label: 'Posterior Density'
       items:
       - type: 'histogram1D'
-        datafile: 'CKM+FF/samples'
+        datafile: 'data/CKM-all/samples'
         variable: 'CKM::abs(V_ub)'
         color: 'eos:C0'
       - type: 'kde1D'
-        datafile: 'CKM+FF/samples'
+        datafile: 'data/CKM-all/samples'
         variable: 'CKM::abs(V_ub)'
         color: 'eos:C1'
 
@@ -169,7 +169,7 @@ figures:
         label: '$f_+(0)^{B\to \pi}$'
       items:
       - type: 'kde2D'
-        datafile: 'CKM+FF/samples'
+        datafile: 'data/CKM-all/samples'
         variables: [ 'CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008' ]
         color: 'eos:C0'
 
@@ -193,25 +193,25 @@ steps:
           evidence-tolerance: 9.0
           max-number-iterations: 4000
 
-  - title: 'Create corner plot for CKM-all posterior'
-    id: 'CKM-all.corner-plot'
+  - title: 'Draw the CKM-Vub figure'
+    id: 'CKM-all.draw-figure'
     depends_on: ['CKM-all,WET-all.sample']
     tasks:
-      - task: 'corner-plot'
+      - task: 'draw-figure'
         arguments:
-          posterior: 'CKM-all'
+          figure_name: 'CKM-Vub'
           format: ['pdf', 'png']
 
-  - title: 'Find mode and corner plot for WET-all posterior'
-    id: 'WET-all.mode,corner-plot'
+  - title: 'Find mode and draw figure for WET-all posterior'
+    id: 'WET-all.mode,draw-figure'
     depends_on: ['CKM-all,WET-all.sample']
     default_arguments:
       find-mode:
         from-samples: True
     tasks:
-      - task: 'corner-plot'
+      - task: 'draw-figure'
         arguments:
-          posterior: 'CKM-all'
+          figure: 'Vub-v-FF'
           format: ['pdf']
       - task: 'find-mode'
         arguments:

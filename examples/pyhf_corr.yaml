@@ -85,3 +85,16 @@ predictions:
       - name: B_u->lnu::BR;l=e
       - name: B_u->lnu::BR;l=mu
       - name: B_u->lnu::BR;l=tau
+
+figures:
+  - name: EXP-pyhf-corner
+    type: 'corner'
+    contents:
+      - path: 'data/EXP-pyhf/samples'
+        label: 'EXP-pyhf'
+
+  - name: WET-pyhf-corner
+    type: 'corner'
+    contents:
+      - path: 'data/WET-pyhf/samples'
+        label: 'WET-pyhf'

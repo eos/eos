@@ -139,6 +139,20 @@ predictions:
           q2_tau_min: 3.3
           q2_max: 25.0
 
+figures:
+  - name: CKM-all-corner
+    type: 'corner'
+    contents:
+      - path: 'data/CKM-all/samples'
+        label: 'CKM-all'
+
+  - name: WET-all-corner
+    type: 'corner'
+    contents:
+      - path: 'data/WET-all/samples'
+        label: 'WET-all'
+    variables: [ 'ublnul::Re{cVL}', 'ublnul::Re{cVR}' ]
+
 steps:
   - title: 'Sample from CKM-all posterior'
     id: 'CKM-all.sample'
@@ -162,19 +176,19 @@ steps:
           dlogz: 9.0
           maxiter: 4000
 
-  - title: 'Create corner plot for CKM-all posterior'
-    id: 'CKM-all.corner-plot'
+  - title: 'Draw the corner figures'
+    id: 'CKM-all,WET-all.draw-figure'
     depends_on: ['CKM-all.sample', 'WET-all.sample']
     default_arguments:
-      corner-plot:
+      draw-figure:
         format: ['pdf', 'png']
     tasks:
-      - task: 'corner-plot'
+      - task: 'draw-figure'
         arguments:
-          posterior: 'CKM-all'
-      - task: 'corner-plot'
+          figure_name: 'CKM-all-corner'
+      - task: 'draw-figure'
         arguments:
-          posterior: 'WET-all'
+          figure_name: 'WET-all-corner'
 
   - title: 'Find mode of CKM-all posterior'
     id: 'CKM-all.find-mode'
