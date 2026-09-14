@@ -654,17 +654,11 @@ namespace eos::exp
             return;
         }
 
-        // otherwise check if 'e' matches the name of a parameter
-        if (kinematic_set.empty())
+        // otherwise check if 'e' matches the name of a parameter;
+        // a name carrying options never matches, since parameter names carry none
+        if (kinematic_set.empty() && Parameters::has_default(e.observable_name))
         {
-            auto parameters = eos::Parameters::Defaults();
-
-            // observable_name.full() is used below because if the observable has options, it cannot be a parameter
-            auto i = std::find_if(parameters.begin(), parameters.end(), [&](const Parameter & p) { return p.name() == e.observable_name.full(); });
-            if (parameters.end() != i)
-            {
-                return;
-            }
+            return;
         }
 
         throw UnknownObservableError("Expression '" + e.observable_name.full() + "' is neither a known Observable nor a Parameter");
