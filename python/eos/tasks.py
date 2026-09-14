@@ -3,6 +3,7 @@
 # Copyright (c) 2020-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lüghausen
 # Copyright (c) 2026      Mark E Smith
+# Copyright (c) 2026      Lorenz Gärtner
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,7 +35,7 @@ import yaml
 
 from dataclasses import asdict, dataclass
 from .analysis_file_description import AnalysisFileDescription
-from .diagnostic import Severity
+from .diagnostic import Severity, attach_line_numbers
 from .ipython import __ipython__
 from .validation_context import ValidationContext
 
@@ -1091,6 +1092,7 @@ def validate(analysis_file:str, deep:bool=True):
     description = AnalysisFileDescription.from_yaml_file(analysis_file)
     structural_diagnostics = list(description.validate_structure())
     if any(diagnostic.severity is Severity.ERROR for diagnostic in structural_diagnostics):
+        structural_diagnostics = attach_line_numbers(structural_diagnostics, analysis_file)
         for diagnostic in structural_diagnostics:
             print(diagnostic)
         return structural_diagnostics
@@ -1103,12 +1105,14 @@ def validate(analysis_file:str, deep:bool=True):
     # into the process-wide EOS registries, which cannot be undone. Running it for a file whose
     # semantics do not hold contaminates the process and yields only cascading errors.
     if not deep or any(diagnostic.severity is Severity.ERROR for diagnostic in semantic_diagnostics):
+        diagnostics = attach_line_numbers(diagnostics, analysis_file)
         for diagnostic in diagnostics:
             print(diagnostic)
         return diagnostics
 
     # Only warnings remain at this point. Print them here, since eos.AnalysisFile.validate() reports
     # the semantic and deep phases but knows nothing about the structural one.
+    structural_diagnostics = attach_line_numbers(structural_diagnostics, analysis_file)
     for diagnostic in structural_diagnostics:
         print(diagnostic)
 

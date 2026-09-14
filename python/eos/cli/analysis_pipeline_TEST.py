@@ -113,7 +113,7 @@ class ValidateTests(unittest.TestCase):
         status, stdout, _ = run('validate', analysis_file=str(_FIXTURES / 'invalid-structure.yaml'))
 
         self.assertEqual(stdout.splitlines(), [
-            "priors/FF/descriptions[0]/max: Missing mandatory key 'max'",
+            "line 9: priors/FF/descriptions[0]/max: Missing mandatory key 'max'",
         ])
 
     def test_semantic_error(self):
@@ -122,7 +122,7 @@ class ValidateTests(unittest.TestCase):
         status, stdout, _ = run('validate', analysis_file=str(_FIXTURES / 'invalid-semantics.yaml'))
 
         self.assertEqual(stdout.splitlines(), [
-            "posteriors/FF/prior[0]: Posterior 'FF' references prior 'NONEXISTENT' which is not defined",
+            "line 19: posteriors/FF/prior[0]: Posterior 'FF' references prior 'NONEXISTENT' which is not defined",
         ])
 
     def test_unused_entities(self):
@@ -131,8 +131,8 @@ class ValidateTests(unittest.TestCase):
         status, stdout, _ = run('validate', analysis_file=str(_FIXTURES / 'unused-entities.yaml'))
 
         self.assertEqual(stdout.splitlines(), [
-            "priors/unused-prior: Prior 'unused-prior' is unused",
-            "likelihoods/unused-likelihood: Likelihood 'unused-likelihood' is unused",
+            "line 16: priors/unused-prior: Prior 'unused-prior' is unused",
+            "line 5: likelihoods/unused-likelihood: Likelihood 'unused-likelihood' is unused",
         ])
 
     def test_no_deep_reports_the_same_errors(self):
