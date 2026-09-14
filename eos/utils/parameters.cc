@@ -931,6 +931,12 @@ namespace eos
         return names.cend() != names.find(name);
     }
 
+    void
+    Parameters::load_defaults()
+    {
+        ParameterDefaults::instance();
+    }
+
     Parameter
     Parameters::declare_and_insert(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
