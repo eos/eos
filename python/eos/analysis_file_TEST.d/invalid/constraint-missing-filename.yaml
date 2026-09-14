@@ -1,0 +1,22 @@
+format_version: 2
+
+# An 'external' constraint declaration missing its mandatory 'filename' key.
+
+constraints:
+  - name: 'test::bad-external-constraint@Test:2026A'
+    type: external
+
+priors:
+  - name: prior
+    descriptions:
+      - { parameter: 'mass::e', type: uniform, min: 0.0, max: 1.0 }
+
+likelihoods:
+  - name: likelihood
+    constraints:
+      - 'B->D::f_++f_0@HPQCD:2015A'
+
+posteriors:
+  - name: posterior
+    prior: [ prior ]
+    likelihood: [ likelihood ]

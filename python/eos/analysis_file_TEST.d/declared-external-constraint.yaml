@@ -1,0 +1,26 @@
+format_version: 2
+
+# A minimal analysis file exercising a 'constraints:' entry (type: external) whose
+# referenced file does not need to exist on disk for shallow validation: a 'type: constraint'
+# prior may reference a name declared here even though it will only be produced later in the
+# workflow (by the 'create-constraint' task).
+
+constraints:
+  - name: 'test::declared-constraint@Test:2026A'
+    type: external
+    filename: 'constraints/declared-constraint/constraint.yaml'
+
+priors:
+  - name: constrained-prior
+    descriptions:
+      - { type: constraint, constraint: 'test::declared-constraint@Test:2026A' }
+
+likelihoods:
+  - name: likelihood
+    constraints:
+      - 'B->D::f_++f_0@HPQCD:2015A'
+
+posteriors:
+  - name: posterior
+    prior: [ constrained-prior ]
+    likelihood: [ likelihood ]

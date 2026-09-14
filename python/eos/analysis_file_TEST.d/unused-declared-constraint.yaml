@@ -1,0 +1,25 @@
+format_version: 2
+
+# A minimal analysis file whose 'constraints:' entry is never referenced by any prior, so that
+# the generic 'declared but never referenced' warning loop (already used for priors/likelihoods/
+# masks/observables/parameters) is exercised for the 'constraints' section too.
+
+constraints:
+  - name: 'test::unused-declared-constraint@Test:2026A'
+    type: external
+    filename: 'constraints/unused-declared-constraint/constraint.yaml'
+
+priors:
+  - name: prior
+    descriptions:
+      - { parameter: 'mass::e', type: uniform, min: 0.0, max: 1.0 }
+
+likelihoods:
+  - name: likelihood
+    constraints:
+      - 'B->D::f_++f_0@HPQCD:2015A'
+
+posteriors:
+  - name: posterior
+    prior: [ prior ]
+    likelihood: [ likelihood ]
