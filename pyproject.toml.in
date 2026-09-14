@@ -24,7 +24,7 @@ classifiers = [
 ]
 dependencies = [
     "argcomplete",
-    "dynesty",
+    "dynesty>=3.0.0",
     "matplotlib",
     "numpy>=1.13",
     "pypandoc",
