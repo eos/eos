@@ -929,9 +929,6 @@ _task_argument_map = {
     ('sample-nested', 'min-number-iterations'): 'miniter', ('sample-nested', 'MINITER'): 'miniter',
     ('sample-nested', 's'): 'seed', ('sample-nested', 'use-random-seed'): 'seed', ('sample-nested', 'SEED'): 'seed',
     ('sample-nested', 'M'): 'sample', ('sample-nested', 'sampling-method'): 'sample', ('sample-nested', 'SAMPLE'): 'sample',
-    # plot-samples
-    ('plot-samples', 'POSTERIOR'): 'posterior',
-    ('plot-samples', 'B'): 'bins', ('plot-samples', 'BINS'): 'bins',
     # find-mode
     ('find-mode', 'POSTERIOR'): 'posterior',
     ('find-mode', 'o'): 'optimizations', ('find-mode', 'OPTIMIZATIONS'): 'optimizations',
