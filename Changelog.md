@@ -12,7 +12,7 @@
 - Report problems in an analysis file as located ``eos.diagnostic.Diagnostic`` objects in lieu of raising on the first one: loading now enforces a structural validation phase, while a separate and side-effect-free semantic phase resolves the file's own custom parameters, observables and constraints through a per-file validation context, checks expressions through the C++ expression parser without registering them, reports unused priors, likelihoods, masks, and custom entities, and reports parameters that a posterior fixes while one of its own priors varies them or that neither its likelihood nor any of its predictions uses (D. van Dyk)
 - Restrict file-local names in analysis files to exclude `/` and whitespace (D. van Dyk)
 - Replace the hand-rolled ``eoshep-before`` wheel-preparation recipe with a PEP 517 build driven by ``pyproject.toml`` and ``setup.py``: ``setuptools`` now compiles the ``_eos`` extension from source against a staged installation prefix, and ``auditwheel``/``delocate`` perform all library bundling and ``RPATH``/install-name rewriting, in lieu of a hand-maintained shared-object regex, manual ``chrpath`` calls, and an ``_eos_libs`` package that duplicated the libraries the repair tools bundle anyway; the ``cp312`` Linux wheel shrinks from 88 MB to 21 MB as a result (D. van Dyk)
-- Ship all twelve command-line scripts in the wheel, up from the six that were previously listed by hand (D. van Dyk)
+- Ship all nine command-line scripts in the wheel, up from the six that were previously listed by hand (D. van Dyk)
 - Determine ``eos.is_wheel`` at runtime from the presence of the ``_eos_data`` package, in lieu of appending a line to a copy of ``eos/config.py`` while building the wheel; the file in the source tree and the file in the wheel are now identical (D. van Dyk)
 - Split ``Figure.draw()`` into ``Figure.draw()`` and ``Figure.save()`` (D. van Dyk)
 - Update the documentation to discuss the ``SE`` and ``SSE`` form factor parametrizations, reflect that ``SSE`` is now the default choice (D. van Dyk)
@@ -50,6 +50,10 @@
 
 ### Removed
 
+- Remove the ``eos.plot`` Python package, deprecated for removal in version 1.1; use the ``eos.figure`` package instead (D. van Dyk)
+- Remove the ``corner-plot`` task and the ``eos-analysis corner-plot`` command, deprecated for removal in version 1.1; declare a figure of type ``corner`` (``eos.figure.CornerFigure``) in the analysis file and draw it with the ``draw-figure`` task instead (D. van Dyk)
+- Remove the ``eos-plot``, ``eos-plot-1d``, and ``eos-plot-2d`` scripts, which were mere drivers for the removed ``eos.plot`` package; use the ``eos-figure draw`` command instead (D. van Dyk)
+- Remove the ``eos-analysis plot-samples`` command, whose sole output was produced by the removed ``eos.plot`` package; declare a figure in the analysis file and draw it with the ``draw-figure`` task instead (D. van Dyk)
 - Remove the ``eos.Mutable`` and ``eos.ParameterDescription`` classes, which no exported function or member could produce and which therefore could not be reached from Python (D. van Dyk)
 
 ### Fixed
