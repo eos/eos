@@ -322,14 +322,15 @@ namespace eos
         // Soft contribution
         // cf. [BBJW:2018A], Eq. (4.10)
         // switch_nll drops the O(alpha_s) hard-collinear matching correction, cf. F_leading_power().
-        const double C_NLO         = switch_nll * model->alpha_s(mu) * C_F / (4.0 * pi);
-        const double omega_cut     = s_0 / (2.0 * Egamma);
-        const double sigma         = 2.0 * Egamma / M2;
-        const auto [C, K_inv, U]   = C_K_inv_U(Egamma);
-        const double term_soft_nlo = prefactor * C * K_inv * U
-                                     * ((2.0 * Egamma / (m_rho * m_rho) * std::exp(m_rho * m_rho / M2))
-                                                * (lapltr_incomplete(omega_cut, sigma) + C_NLO * lapltr_incomplete_effective(Egamma, omega_cut, sigma))
-                                        - (L0_incomplete(omega_cut) + C_NLO * L0_incomplete_effective(Egamma, omega_cut)));
+        const double C_NLO       = switch_nll * model->alpha_s(mu) * C_F / (4.0 * pi);
+        const double omega_cut   = s_0 / (2.0 * Egamma);
+        const double sigma       = 2.0 * Egamma / M2;
+        const double exp_rho     = std::exp(m_rho * m_rho / M2);
+        const auto [C, K_inv, U] = C_K_inv_U(Egamma);
+        const double term_soft_nlo =
+                prefactor * C * K_inv * U
+                * ((2.0 * Egamma / (m_rho * m_rho) * exp_rho) * (lapltr_incomplete(omega_cut, sigma) + C_NLO * lapltr_incomplete_effective(Egamma, omega_cut, sigma))
+                   - (L0_incomplete(omega_cut) + C_NLO * L0_incomplete_effective(Egamma, omega_cut)));
 
         // cf. [BBJW:2018A], Eq. (4.13), with Xi1 and Xi2 from Eqs. (4.15), (4.16).
         const auto duality_weight = [this, Egamma](const double & omega)
@@ -342,7 +343,6 @@ namespace eos
                                                           + e_spectator * m_B * f_B / (4.0 * m_heavy * Egamma) * integrate<GSL::QAGS>(integrand_Xi2, 0.0, omega_cut);
 
         const double condensate_coupling  = higher_twist_condensate_coupling();
-        const double exp_rho              = std::exp(m_rho * m_rho / M2);
         const auto   integrand_tw_5_6_low = [&](const double & omega)
         {
             if (omega == 0.0)
@@ -389,18 +389,19 @@ namespace eos
         // cf. [BBJW:2018A], Eq. (4.14)
         const double omega_cut = s_0 / (2.0 * Egamma);
         const double sigma     = 2.0 * Egamma / M2;
+        const double exp_rho   = std::exp(m_rho * m_rho / M2);
 
-        const double term_soft_tw_3_4 = switch_soft_tw_3_4 == 0.0
-                                                ? 0.0
-                                                : e_spectator * m_B * f_B / (4.0 * Egamma * Egamma)
-                                                          * (2.0 * Egamma / (m_rho * m_rho) * std::exp(m_rho * m_rho / M2) * lapltr_incomplete_dsigma(omega_cut, sigma) / (-sigma)
-                                                             - norm_incomplete(omega_cut));
+        const double term_soft_tw_3_4 =
+                switch_soft_tw_3_4 == 0.0
+                        ? 0.0
+                        : e_spectator * m_B * f_B / (4.0 * Egamma * Egamma)
+                                  * (2.0 * Egamma / (m_rho * m_rho) * exp_rho * lapltr_incomplete_dsigma(omega_cut, sigma) / (-sigma) - norm_incomplete(omega_cut));
 
         // cf. [BBJW:2018A], Eq. (4.19)
         const double condensate_coupling = higher_twist_condensate_coupling();
         const double term_soft_tw_5_6    = switch_soft_tw_5_6 == 0.0 ? 0.0
-                                                                     : -e_spectator * condensate_coupling * C_F * f_B * m_B / (48.0 * Egamma * Egamma * m_rho * m_rho)
-                                                                            * std::exp(m_rho * m_rho / M2) * traits.blcdas->inverse_lambda_plus();
+                                                                     : -e_spectator * condensate_coupling * C_F * f_B * m_B / (48.0 * Egamma * Egamma * m_rho * m_rho) * exp_rho
+                                                                            * traits.blcdas->inverse_lambda_plus();
 
         return switch_ht * term_ht + switch_soft * term_soft_nlo + term_soft_tw_3_4 + term_soft_tw_5_6;
     }
