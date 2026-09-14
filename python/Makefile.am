@@ -86,10 +86,7 @@ EXTRA_DIST = \
 	eos/figure/item_TEST.d \
 	eos/figure/item_TEST.d/pred-uniq \
 	eos/figure/item_TEST.d/pred-dup \
-	eos/figure/plot.py \
-	eos/plot/__init__.py \
-	eos/plot/config.py \
-	eos/plot/plotter.py
+	eos/figure/plot.py
 
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(abs_top_srcdir)/eos/constraints"; \
@@ -156,12 +153,6 @@ eosdata_SCRIPTS = \
 	eos/data/pmc_sampler.py \
 	eos/data/prediction.py \
 	eos/data/sample_mask.py
-
-eosplotdir = $(pkgpythondir)/plot
-eosplot_SCRIPTS = \
-	eos/plot/__init__.py \
-	eos/plot/config.py \
-	eos/plot/plotter.py
 
 eosfiguredir = $(pkgpythondir)/figure
 eosfigure_SCRIPTS = \
@@ -233,8 +224,7 @@ TESTS = \
 	eos/figure/data_TEST.py \
 	eos/figure/figure_TEST.py \
 	eos/figure/item_TEST.py \
-	eos/figure/plot_TEST.py \
-	eos/plot/plotter_TEST.py
+	eos/figure/plot_TEST.py
 
 EXTRA_DIST += $(TESTS)
 

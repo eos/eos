@@ -8,9 +8,7 @@ LINUX_EXAMPLES = \
     btopilnu-find-mode.bash \
     btopilnu-find-clusters.bash \
     btopilnu-sample-pmc.bash \
-    btopilnu-plot-samples.bash \
     btopilnu-predict-observables.bash \
-    btopilnu-plot.bash \
     btopilnu-draw-figure.bash
 
 MACOSX_EXAMPLES = \
