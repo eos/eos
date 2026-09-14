@@ -43,6 +43,7 @@
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_stub.hh>
+#include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -107,6 +108,9 @@ namespace eos
     ObservableEntries::ObservableEntries() :
         _entries(&impl::observable_entries)
     {
+        // registering expression observables resolves names against the default parameters
+        Parameters::load_defaults();
+
         std::vector<std::function<ObservableSection()>> section_makers = {
             make_form_factors_section,  make_nonlocal_form_factors_section, make_nonleptonic_amplitudes_section, make_b_decays_section,   make_c_decays_section,
             make_rare_b_decays_section, make_rare_c_decays_section,         make_meson_mixing_section,           make_scattering_section, make_s_decays_section,
