@@ -24,6 +24,7 @@
 - Deliver a native log message to the Python logger synchronously and in order, in lieu of deferring it to the main thread through ``Py_AddPendingCall``; messages emitted after ``atexit`` no longer reach Python, since that is where the callbacks' references are released (D. van Dyk)
 - Bounds-check the id that a parameter name maps to in ``Parameters::operator[]``, matching the check that its ``Parameter::Id`` overload already performs, so that an id outliving its parameter is reported in lieu of read out of bounds (D. van Dyk)
 - Enforce dynesty>=3.0.0 on installation (C. Bolognani)
+- **Breaking:** Removes and forbids the $ signs in the latex representation of parameters (M. Reboud)
 
 ### Added
 
