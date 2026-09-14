@@ -2,6 +2,7 @@
 # vim: set sw=4 sts=4 et tw=120 :
 
 # Copyright (c) 2026 Danny van Dyk
+# Copyright (c) 2026 Mark E Smith
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -19,7 +20,7 @@
 from collections import Counter
 from types import MappingProxyType
 
-from .analysis_file_description import MaskExpressionComponent
+from .analysis_file_description import InvalidComponent, MaskExpressionComponent
 
 
 class ValidationContext:
@@ -62,6 +63,11 @@ class ValidationContext:
             constraints.update(names)
             if names:
                 likelihood_constraints[likelihood.name] = names
+
+        constraints.update(
+            str(decl.name) for decl in description.constraints
+            if not isinstance(decl, InvalidComponent)
+        )
 
         self._shadow = MappingProxyType({
             'observable': frozenset(observables),

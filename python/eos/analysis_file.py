@@ -3,6 +3,7 @@
 
 # Copyright (c) 2020-2026 Danny van Dyk
 # Copyright (c) 2023 Lorenz Gärtner
+# Copyright (c) 2026 Mark E Smith
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,13 +25,19 @@ import yaml
 from dataclasses import asdict
 from eos.analysis_file_description import AnalysisFileDescription, PriorDescription, \
                                        MaskExpressionComponent, MaskNamedComponent
+from eos.analysis_file_context import AnalysisFileContext
+from eos.deserializable import InvalidComponent
 from eos.diagnostic import Diagnostic, Severity
 from eos.validation_context import ValidationContext
 
 # The highest analysis file format version understood by this version of EOS. Increment this
 # whenever a change to the schema alters how existing files are interpreted. Files that omit the
 # top-level 'format_version' key predate format versioning and are treated as version 1.
-SUPPORTED_FORMAT_VERSION = 1
+#
+# Version log:
+#   2: adds the top-level 'constraints' section (forward-declared, possibly not-yet-produced
+#      constraints; see ConstraintDeclarationDescription).
+SUPPORTED_FORMAT_VERSION = 2
 
 class AnalysisFile:
     """Represents a collection of statistical analyses and their building blocks.
@@ -137,8 +144,42 @@ class AnalysisFile:
                         eos.info(f'Inserted observable: {d.name}')
 
 
-    def analysis(self, _posterior):
-        """Create an eos.Analysis object for the named posterior."""
+    def _load_declared_constraints(self, base_directory):
+        """Registers every declared 'constraints:' entry (type: external) whose file already exists.
+
+        Entries whose file does not exist yet are silently skipped here -- the pipeline may
+        simply not have reached the producing task. A genuine attempt to use such a constraint
+        (e.g. building a posterior whose prior references it) then fails with a clear
+        UnknownConstraintError from eos.Constraints() itself, rather than from here.
+        """
+        context = AnalysisFileContext(base_directory=base_directory)
+        for decl in self._description.constraints:
+            if isinstance(decl, InvalidComponent) or decl.type != 'external':
+                continue
+            path = context.data_path(decl.filename)
+            if not os.path.exists(path):
+                continue
+            with open(path) as f:
+                body_by_name = yaml.safe_load(f)
+            name = str(decl.name)
+            if name not in body_by_name:
+                raise ValueError(
+                    f"Constraint '{decl.name}' declared with filename '{decl.filename}' "
+                    f"was not found in that file"
+                )
+            eos.Constraints().insert(eos.QualifiedName(name), yaml.safe_dump(body_by_name[name]))
+
+
+    def analysis(self, _posterior, base_directory='./'):
+        """Create an eos.Analysis object for the named posterior.
+
+        :param base_directory: The base directory against which declared constraints' relative
+            filenames (see the 'constraints' top-level section) are resolved. Defaults to the
+            current working directory.
+        :type base_directory: str
+        """
+        self._load_declared_constraints(base_directory)
+
         if _posterior not in self._posteriors:
             raise RuntimeError(f'Cannot create analysis for unknown posterior: \'{_posterior}\'')
 
@@ -298,7 +339,7 @@ class AnalysisFile:
         return observable
 
 
-    def validate(self, deep:bool=True):
+    def validate(self, deep:bool=True, base_directory:str='./'):
         """Validates the analysis file semantically and, by default, deeply.
 
         The deep phase instantiates every posterior and every prediction set, which catches errors
@@ -307,6 +348,9 @@ class AnalysisFile:
 
         :param deep: If True, additionally instantiate all posteriors and prediction sets. Defaults to True.
         :type deep: bool
+        :param base_directory: The base directory against which declared constraints' relative
+            filenames are resolved during the deep phase. Defaults to the current working directory.
+        :type base_directory: str
         :returns: The diagnostics found, most-structural first.
         :rtype: list[eos.diagnostic.Diagnostic]
         """
@@ -316,9 +360,26 @@ class AnalysisFile:
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file
         # This will (hopefully) act as a catch all for any errors not spotted above
         if deep:
+            file_context = AnalysisFileContext(base_directory=base_directory)
+            # mirrors the existing tracked_sections idiom (analysis_file_description.py's
+            # validate_semantics): _constraint_segments holds each entry's own 'name' where it's a
+            # clean diagnostic-path segment, falling back to its positional index otherwise.
+            constraint_segments = getattr(
+                self._description, '_constraint_segments', list(range(len(self._description.constraints)))
+            )
+            for decl, segment in zip(self._description.constraints, constraint_segments):
+                if isinstance(decl, InvalidComponent) or decl.type != 'external':
+                    continue
+                if not os.path.exists(file_context.data_path(decl.filename)):
+                    diagnostics.append(Diagnostic(
+                        ('constraints', segment), Severity.WARNING,
+                        f"Constraint '{decl.name}' has not been produced yet "
+                        f"(file '{decl.filename}' does not exist)"
+                    ))
+
             for posterior in self._posteriors:
                 try:
-                    analysis = self.analysis(posterior)
+                    analysis = self.analysis(posterior, base_directory=base_directory)
                     eos.info(f'Successfully created analysis for posterior \'{posterior}\'')
                     used_parameters = set(analysis.used_parameter_names)
 

@@ -2,6 +2,7 @@
 
 # Copyright (c) 2020-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lüghausen
+# Copyright (c) 2026      Mark E Smith
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -29,8 +30,9 @@ import scipy
 import copy as _copy
 import warnings
 import dynesty as _dynesty
+import yaml
 
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 from .analysis_file_description import AnalysisFileDescription
 from .diagnostic import Severity
 from .ipython import __ipython__
@@ -168,6 +170,84 @@ def _check_varied_parameters_match(analysis: eos.Analysis, data):
         raise ValueError("Parameters varied in the analysis file don't match those from the loaded sample")
 
 
+@dataclass
+class GoodnessOfFitResult:
+    r"""The result of a named goodness-of-fit test, as run by :func:`create_constraint` or
+    called directly to diagnose why a fit failed one.
+
+    :ivar name: The name of the test that produced this result.
+    :ivar pvalue: The p-value; a fit is judged to fail the test if this is below the caller's threshold.
+    :ivar statistic: The test's own statistic (e.g. the Kolmogorov-Smirnov distance for 'KS-test').
+    :ivar squared_distances: The per-sample squared Mahalanobis distances against the fit, sorted ascending.
+    """
+    name:str
+    pvalue:float
+    statistic:float
+    squared_distances:_np.ndarray
+
+
+goodness_of_fit_tests = {}
+
+def _goodness_of_fit_test(name):
+    """Registers a goodness-of-fit test function under `name` in `goodness_of_fit_tests`.
+
+    Private: this is registration machinery, not something a user calls; `goodness_of_fit_tests`
+    itself (the registry it populates) and every test function in it are the public surface.
+    """
+    def _register(func):
+        goodness_of_fit_tests[name] = func
+        return func
+    return _register
+
+def _weighted_ecdf(values, weights):
+    order = _np.argsort(values)
+    sorted_values = values[order]
+    cumulative_weights = _np.cumsum(weights[order])
+    cumulative_weights = cumulative_weights / cumulative_weights[-1]
+    return sorted_values, cumulative_weights
+
+@_goodness_of_fit_test('KS-test')
+def ks_test(samples, weights, mean, covariance):
+    r"""
+    Kolmogorov-Smirnov test of a multivariate Gaussian fit's squared Mahalanobis distances.
+
+    For each sample x_i, the squared Mahalanobis distance to the fit,
+    d_i^2 = (x_i - mean)^T covariance^-1 (x_i - mean), is expected to follow a chi2(nu)
+    distribution (nu = the number of fitted dimensions) if the fit is a good description of
+    the samples. This test compares the weighted empirical distribution of the d_i^2 against
+    that expectation via a one-sample Kolmogorov-Smirnov statistic, converting the importance
+    weights into an effective sample size (Kish's approximation) to obtain a p-value.
+
+    Call this directly -- with the same samples/weights `create_constraint` used, and the
+    mean/covariance it fitted -- to diagnose why a fit failed this test; the returned
+    `squared_distances` can be compared against `scipy.stats.chi2(nu)` (nu = samples.shape[-1])
+    to reproduce the diagnostic this test is based on, e.g. as a QQ-plot.
+
+    :param samples: The samples to test, as a 2D array of shape (N, P).
+    :type samples: 2D numpy array
+    :param weights: The importance weights of the samples, as a 1D array of shape (N, ).
+    :type weights: 1D numpy array
+    :param mean: The fitted mean, as a 1D array of shape (P, ).
+    :type mean: 1D numpy array
+    :param covariance: The fitted covariance, as a 2D array of shape (P, P).
+    :type covariance: 2D numpy array
+    :returns: The test's result, including its p-value and the detail needed to diagnose a failure.
+    :rtype: GoodnessOfFitResult
+    """
+    nu = samples.shape[-1]
+    diffs = samples - mean
+    inverse_covariance = _np.linalg.inv(covariance)
+    squared_distances = _np.einsum('ij,jk,ik->i', diffs, inverse_covariance, diffs)
+
+    sorted_distances, empirical_cdf = _weighted_ecdf(squared_distances, weights)
+    theoretical_cdf = scipy.stats.chi2(nu).cdf(sorted_distances)
+    ks_statistic = _np.max(_np.abs(empirical_cdf - theoretical_cdf))
+
+    effective_sample_size = _np.sum(weights)**2 / _np.sum(weights**2)
+    pvalue = scipy.stats.kstwo.sf(ks_statistic, max(1, round(effective_sample_size)))
+    return GoodnessOfFitResult(name='KS-test', pvalue=pvalue, statistic=ks_statistic, squared_distances=sorted_distances)
+
+
 @task('find-mode', 'data/{posterior}/mode-{label}')
 def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimizations:int=3, start_point:list=None, chain:int=None,
               importance_samples:bool=None, seed:int=None, label:str='default', mask_name:str=None):
@@ -229,7 +309,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
     else:
         mask = slice(None) # Equivalent to mask = : but allowed
 
-    analysis = analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
 
     eos.inprogress(f'Beginning minimization in {optimizations} points')
     if not start_point is None:
@@ -353,7 +433,7 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
 
     eos.inprogress('Beginning sampling...')
 
-    analysis = analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
         samples, usamples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point, return_uspace=True)
@@ -384,7 +464,7 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
     :type seed: int, optional
     """
 
-    analysis = analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
     rng = _np.random.mtrand.RandomState(seed)
     eos.inprogress('Beginning prior sampling...')
     samples = analysis.sample_prior(N=N, rng=rng)
@@ -499,7 +579,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     :type pmc_lookback: int >= 0, optional
     """
 
-    analysis = analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
     rng = _np.random.mtrand.RandomState(1701)
     eos.inprogress('Beginning sampling...')
     if initial_proposal == 'clusters':
@@ -552,7 +632,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     :param mask_name: The label of the mask to apply to the observables. Defaults to None.
     :type mask_name: str, optional
     '''
-    _analysis      = analysis_file.analysis(posterior)
+    _analysis      = analysis_file.analysis(posterior, base_directory=base_directory)
     _parameters    = _analysis.parameters
     cache          = eos.ObservableCache(_parameters)
     observables    = analysis_file.observables(posterior, prediction, _parameters)
@@ -707,7 +787,7 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     :type sample: str, optional
     """
     eos.inprogress('Beginning sampling...')
-    analysis = analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
     logger = DynestyResultLogger()
     results = analysis.sample_nested(bound=bound, nlive=nlive, dlogz=dlogz, maxiter=maxiter, miniter=miniter, min_ess=min_ess, print_function=logger.print_function, seed=seed, sample=sample)
     samples = results.samples
@@ -907,7 +987,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     """
     import matplotlib.pyplot as _plt
 
-    analysis = analysis_file.analysis(posterior)
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
 
     if mask_name is not None and (begin != 0 or end is not None):
         raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
@@ -1078,7 +1158,7 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
     :returns: The combined boolean mask, with one entry per posterior sample.
     :rtype: numpy.ndarray
     """
-    _analysis = analysis_file.analysis(posterior)
+    _analysis = analysis_file.analysis(posterior, base_directory=base_directory)
     _parameters = _analysis.parameters
     data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
     _check_varied_parameters_match(_analysis, data)
@@ -1102,6 +1182,128 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
     mask = mask_combination_function(_np.stack(masks), axis=0)
     eos.data.SampleMask.create(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}'), mask, observables)
     return mask
+
+
+@task('create-constraint', 'constraints/{constraint_name}')
+def create_constraint(analysis_file:str, posterior:str, constraint_name:str, base_directory:str='./',
+                       source:str='samples', parameters:list=None, tests:list=None,
+                       goodness_of_fit_threshold:float=0.03, strict:bool=True):
+    """
+    Creates a MultivariateGaussian(Covariance) constraint from previously computed samples of a named posterior.
+
+    The fit is the closed-form weighted maximum-likelihood estimate: the weighted sample mean and
+    weighted sample covariance of the selected columns. One or more named goodness-of-fit tests
+    are then run on the fit; see `tests` and `strict` below for how a failing test is handled.
+
+    The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/SOURCE.
+    The output file will be stored in EOS_BASE_DIRECTORY/constraints/CONSTRAINT_NAME/constraint.yaml.
+
+    :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posterior: The name of the posterior PDF from which to draw the samples.
+    :type posterior: str
+    :param constraint_name: The qualified name under which the constraint is registered; also used verbatim as the output subdirectory name.
+    :type constraint_name: str
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param source: The name of the data file inside the posterior's data directory to fit. Defaults to 'samples'
+        (the posterior's own importance samples). A value starting with 'pred-' selects the posterior-predictive
+        importance samples of that name, previously written by the predict-observables task.
+    :type source: str, optional
+    :param parameters: The list of column names to constrain, matched against the loaded data's lookup table
+        (bare parameter names for source='samples'; composite observable identifiers for a 'pred-' source).
+        If None, every column of the loaded data is used.
+    :type parameters: list of str, optional
+    :param tests: The names of the goodness-of-fit tests that must be run before the constraint is accepted. Defaults to ['KS-test'].
+        Each name must be a key of `goodness_of_fit_tests`; call one of those functions directly (e.g. `eos.ks_test`)
+        on your own reloaded samples to diagnose why a test failed.
+    :type tests: list of str, optional
+    :param goodness_of_fit_threshold: The p-value threshold below which a test counts as failed. Either a single
+        float applied to every test in `tests`, or a dict mapping each test name in `tests` to its own threshold.
+    :type goodness_of_fit_threshold: float or dict[str, float], optional
+    :param strict: If True (the default), a failed test logs an error and aborts the task -- no constraint file is written.
+        If False, a failed test only logs a warning, and the constraint is written regardless.
+    :type strict: bool, optional
+    """
+    # Validate tests/thresholds before touching any data, so a typo'd test name or a
+    # threshold dict missing an entry fails immediately -- before any file access, fit, or
+    # (for strict=True) before any earlier-in-the-list test has already run.
+    _tests = tests if tests is not None else ['KS-test']
+    unknown_tests = [t for t in _tests if t not in goodness_of_fit_tests]
+    if unknown_tests:
+        raise ValueError(
+            f"Unknown goodness-of-fit test(s) {unknown_tests}; supported: {sorted(goodness_of_fit_tests)}"
+        )
+    if isinstance(goodness_of_fit_threshold, dict):
+        missing_thresholds = [t for t in _tests if t not in goodness_of_fit_threshold]
+        if missing_thresholds:
+            raise ValueError(f"No goodness_of_fit_threshold given for test(s) {missing_thresholds}")
+        thresholds = goodness_of_fit_threshold
+    else:
+        thresholds = {t: goodness_of_fit_threshold for t in _tests}
+
+    analysis = analysis_file.analysis(posterior, base_directory=base_directory)
+
+    path = os.path.join(base_directory, 'data', posterior, source)
+    if source == 'samples':
+        data = eos.data.ImportanceSamples(path)
+        _check_varied_parameters_match(analysis, data)
+    elif source.startswith('pred-'):
+        data = eos.data.Prediction(path)
+    else:
+        raise ValueError(f"Unsupported source '{source}'; expected 'samples' or a 'pred-<name>' prediction directory")
+
+    selected = parameters if parameters is not None else list(data.lookup_table.keys())
+    columns = [data.lookup_table[name] for name in selected]
+    samples = data.samples[:, columns]
+    weights = data.weights
+
+    eos.inprogress(f"Fitting a multivariate Gaussian to {len(selected)} column(s) of '{source}' from posterior '{posterior}'")
+    mean = _np.average(samples, axis=0, weights=weights)
+    covariance = _np.atleast_2d(_np.cov(samples.T, aweights=weights))
+
+    for test_name in _tests:
+        result = goodness_of_fit_tests[test_name](samples, weights, mean, covariance)
+        threshold = thresholds[test_name]
+        eos.info(
+            f"Goodness-of-fit test '{test_name}' for constraint '{constraint_name}': "
+            f"p-value = {result.pvalue:.3g}, statistic = {result.statistic:.3g}"
+        )
+        if result.pvalue < threshold:
+            message = (
+                f"Goodness-of-fit test '{test_name}' for constraint '{constraint_name}' failed "
+                f"(p-value {result.pvalue:.3g} below threshold {threshold}); call "
+                f"eos.goodness_of_fit_tests['{test_name}'](samples, weights, mean, covariance) "
+                f"directly on these inputs to diagnose further"
+            )
+            if strict:
+                eos.error(message)
+                raise RuntimeError(message)
+            eos.warn(message)
+
+    if source == 'samples':
+        names = list(selected)
+        kinematics_list = [{} for _ in selected]
+        options_list = [{} for _ in selected]
+    else:
+        names = [data.varied_parameters[i]['name'] for i in columns]
+        kinematics_list = [data.varied_parameters[i]['kinematics'] for i in columns]
+        options_list = [data.varied_parameters[i]['options'] for i in columns]
+
+    body = {
+        'type': 'MultivariateGaussian(Covariance)',
+        'observables': names,
+        'kinematics': kinematics_list,
+        'options': options_list,
+        'means': mean.tolist(),
+        'covariance': covariance.tolist(),
+    }
+    output_path = os.path.join(base_directory, 'constraints', constraint_name, 'constraint.yaml')
+    with open(output_path, 'w') as f:
+        yaml.safe_dump({constraint_name: body}, f, sort_keys=False, default_flow_style=False)
+
+    eos.success(f"Wrote constraint '{constraint_name}' to '{output_path}'")
+    return body
 
 
 @task('list-figures', '', logfile=False)

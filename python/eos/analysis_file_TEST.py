@@ -3,6 +3,7 @@
 
 # Copyright (c) 2024-2026 Danny van Dyk
 # Copyright (c) 2025 Matthew Kirk
+# Copyright (c) 2026 Mark E Smith
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +24,8 @@ import contextlib
 import io
 import eos
 import os
+import shutil
+import tempfile
 from pathlib import Path
 
 from eos.diagnostic import Diagnostic, Severity
@@ -212,6 +215,17 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
     def test_unknown_mask_reference(self):
         with self.assertRaises(RuntimeError):
             eos.AnalysisFile(_TESTD / 'invalid' / 'unknown-mask-ref.yaml')
+
+    def test_constraint_declaration_missing_filename(self):
+        # an 'external' constraint declaration without its mandatory 'filename' key is a
+        # structural error, exactly like any other missing mandatory key in this file
+        with self.assertRaises(RuntimeError):
+            eos.AnalysisFile(_TESTD / 'invalid' / 'constraint-missing-filename.yaml')
+
+    def test_constraint_declaration_unknown_type(self):
+        # only 'external' is a recognized constraint-declaration type today
+        with self.assertRaises(RuntimeError):
+            eos.AnalysisFile(_TESTD / 'invalid' / 'constraint-unknown-type.yaml')
 
     def test_invalid_file_local_component_name(self):
         with self.assertRaises(RuntimeError) as context:
@@ -465,6 +479,120 @@ class TestAnalysisFileValidation(unittest.TestCase):
             ('observables', 'test::figure-only-observable'),
         ):
             self.assertNotIn(path, warned_paths)
+
+    def test_declared_external_constraint_is_known(self):
+        # a 'type: constraint' prior may reference a name declared under 'constraints:' (type:
+        # external) even though the referenced file does not exist yet -- the shadow registry
+        # widening is what makes this a non-error at the shallow structural/semantic layer;
+        # loading the actual file happens elsewhere (AnalysisFile.analysis()), not here
+        af = eos.AnalysisFile(_TESTD / 'declared-external-constraint.yaml')
+        # the 'constraints:' section requires format_version 2: an EOS that only understood
+        # version 1 would reject the top-level 'constraints' key outright
+        self.assertEqual(af.format_version, 2)
+        description = af._description
+
+        structure = list(description.validate_structure())
+        semantics = list(description.validate_semantics(ValidationContext(description)))
+        self.assertFalse(any(diagnostic.severity is Severity.ERROR for diagnostic in structure))
+        self.assertFalse(any(diagnostic.severity is Severity.ERROR for diagnostic in semantics))
+
+    def test_unused_declared_constraint_is_warning(self):
+        # a 'constraints:' entry that no prior references produces the same generic 'unused'
+        # warning already produced for priors/likelihoods/masks/observables/parameters
+        af = eos.AnalysisFile(_TESTD / 'unused-declared-constraint.yaml')
+        description = af._description
+        semantics = list(description.validate_semantics(ValidationContext(description)))
+
+        warnings = [
+            (diagnostic.path, diagnostic.message)
+            for diagnostic in semantics
+            if diagnostic.severity is Severity.WARNING
+        ]
+        self.assertIn(
+            (
+                ('constraints', 'test::unused-declared-constraint@Test:2026A'),
+                "Constraint 'test::unused-declared-constraint@Test:2026A' is unused",
+            ),
+            warnings,
+        )
+
+    # A minimal, valid constraint body for 'test::loader-declared-constraint@Test:2026A' (the name
+    # declared by declared-constraint-loader.yaml), in the on-disk shape of a hand-written EOS
+    # constraint file: a mapping from the qualified name to its body. 'mass::c' is a bare parameter
+    # name, not a registered observable; Observable::make's ObservableStub fallback (see DESIGN.md)
+    # is what makes this work as a prior. 'MultivariateGaussian(Covariance)' (rather than a plain
+    # 'Gaussian') is used because it is the constraint type whose make_prior() is exercised
+    # elsewhere in this codebase (see DESIGN.md, Step 4); 'Gaussian' has no make_prior() at all.
+    _declared_constraint_body = (
+        "test::loader-declared-constraint@Test:2026A:\n"
+        "    type: MultivariateGaussian(Covariance)\n"
+        "    observables: [mass::c]\n"
+        "    kinematics: [{}]\n"
+        "    options: [{}]\n"
+        "    means: [1.27]\n"
+        "    covariance: [[0.0004]]\n"
+    )
+
+    def _write_declared_constraint_file(self, base_directory):
+        # matches the 'filename:' given in declared-constraint-loader.yaml's 'constraints:' entry
+        constraint_dir = os.path.join(base_directory, 'constraints', 'loader-declared-constraint')
+        os.makedirs(constraint_dir)
+        with open(os.path.join(constraint_dir, 'constraint.yaml'), 'w') as f:
+            f.write(self._declared_constraint_body)
+
+    def test_declared_constraint_loader_picks_up_existing_file(self):
+        # AnalysisFile.analysis() registers a declared 'constraints:' entry once its file exists on
+        # disk, resolved against base_directory -- proving the insert actually happened, not just that
+        # nothing raised
+        workdir = tempfile.mkdtemp(prefix='eos-declared-constraint-')
+        self.addCleanup(shutil.rmtree, workdir, ignore_errors=True)
+        self._write_declared_constraint_file(workdir)
+
+        af = eos.AnalysisFile(_TESTD / 'declared-constraint-loader.yaml')
+        analysis = af.analysis('posterior', base_directory=workdir)
+        self.assertIsNotNone(analysis)
+        self.assertIsNotNone(eos.Constraints()['test::loader-declared-constraint@Test:2026A'])
+
+    def test_declared_constraint_loader_is_noop_when_file_absent(self):
+        # no file written: the loader is a silent no-op at this stage, and the pre-existing
+        # constraint-as-prior resolution in Analysis.__init__ then raises its own clear
+        # UnknownConstraintError-derived message -- not something opaque from the loader itself
+        workdir = tempfile.mkdtemp(prefix='eos-declared-constraint-')
+        self.addCleanup(shutil.rmtree, workdir, ignore_errors=True)
+
+        af = eos.AnalysisFile(_TESTD / 'declared-constraint-loader.yaml')
+        with self.assertRaises(RuntimeError) as ctx:
+            af.analysis('posterior', base_directory=workdir)
+        self.assertIn("Constraint 'test::loader-declared-constraint@Test:2026A' is unknown", str(ctx.exception))
+
+    def test_validate_deep_warns_on_undelivered_declared_constraint(self):
+        # the 'has not been produced yet' WARNING lives strictly inside validate()'s deep branch:
+        # present for deep=True, absent for deep=False, which stays filesystem-free
+        workdir = tempfile.mkdtemp(prefix='eos-declared-constraint-')
+        self.addCleanup(shutil.rmtree, workdir, ignore_errors=True)
+
+        af = eos.AnalysisFile(_TESTD / 'declared-constraint-loader.yaml')
+        deep_diagnostics = af.validate(deep=True, base_directory=workdir)
+        matching = [
+            d for d in deep_diagnostics
+            if d.path == ('constraints', 'test::loader-declared-constraint@Test:2026A')
+            and d.severity is Severity.WARNING
+            and 'has not been produced yet' in d.message
+        ]
+        self.assertEqual(len(matching), 1)
+
+        shallow_diagnostics = af.validate(deep=False)
+        self.assertFalse(any('has not been produced yet' in d.message for d in shallow_diagnostics))
+
+    def test_validate_deep_clean_once_declared_constraint_exists(self):
+        workdir = tempfile.mkdtemp(prefix='eos-declared-constraint-')
+        self.addCleanup(shutil.rmtree, workdir, ignore_errors=True)
+        self._write_declared_constraint_file(workdir)
+
+        af = eos.AnalysisFile(_TESTD / 'declared-constraint-loader.yaml')
+        diagnostics = af.validate(deep=True, base_directory=workdir)
+        self.assertFalse(any(d.severity is Severity.ERROR for d in diagnostics))
+        self.assertFalse(any('has not been produced yet' in d.message for d in diagnostics))
 
     def test_observables_aggregates_unknown_names(self):
         # observables() reports every unknown observable in a prediction, not just the first

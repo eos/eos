@@ -5,6 +5,7 @@
 # Copyright (c) 2024-2025 Matthew Kirk
 # Copyright (c) 2024      Carolina Bolognani
 # Copyright (c) 2024      Méril Reboud
+# Copyright (c) 2026      Mark E Smith
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -451,6 +452,65 @@ class PriorComponent(_AnalysisFileDeserializable):
         return result
 
 
+
+class ConstraintDeclarationDescription:
+    r"""Polymorphic description of a single entry of an analysis file's ``constraints`` list.
+
+    This is a dispatcher rather than a concrete description: :meth:`from_dict` selects the concrete type
+    from the ``type`` key. The only recognized type is ``external``
+    (:class:`ExternalConstraintDeclarationDescription`).
+    """
+
+    @staticmethod
+    def from_dict(**kwargs):
+        """Create the concrete constraint declaration matching the given keyword description.
+
+        :returns: An instance of the concrete :class:`ConstraintDeclarationDescription` subtype
+            selected from ``type``.
+        """
+        if 'type' in kwargs:
+            _kwargs = _copy.deepcopy(kwargs)
+            _kwargs.pop('type')
+            if kwargs['type'] in ("external",):
+                return Deserializable.make_with_diagnostics(ExternalConstraintDeclarationDescription, **_kwargs)
+
+        return InvalidComponent([
+            Diagnostic(
+                ('type',),
+                Severity.ERROR,
+                'Unknown or missing type of constraint declaration; only \'external\' is currently supported',
+            ),
+        ])
+
+@dataclass
+class ExternalConstraintDeclarationDescription(_AnalysisFileDeserializable):
+    r"""Forward-declares a constraint whose YAML entry lives in an external file.
+
+    The constraint is expected to be produced later in the workflow (e.g. by the
+    ``create-constraint`` task) rather than known at analysis-file authoring time. Before a
+    posterior referencing this name is built, :class:`eos.AnalysisFile` looks for the constraint's
+    entry in ``filename`` and, if present, registers it with :class:`eos.Constraints`.
+
+    :param name: The qualified name under which the constraint will be registered.
+    :type name: str
+    :param filename: The path to the file containing this constraint's YAML entry (a mapping from
+        ``name`` to the entry body, i.e. the same shape as a built-in EOS constraint file), resolved
+        relative to the analysis's base directory. By convention this lives under ``constraints/``,
+        but any path may be given.
+    :type filename: str
+    """
+    name:str
+    filename:str
+    type:str=field(repr=False, init=False, default="external")
+
+# Maps the YAML selector of a constraint declaration to the corresponding concrete description
+# class. The canonical dispatch logic lives in ConstraintDeclarationDescription.from_dict; this
+# mapping mirrors it and is used to generate the reference documentation of the recognized
+# constraint-declaration types. It is assigned here, rather than in the class body, because the
+# concrete class is only defined above.
+ConstraintDeclarationDescription.registry = {
+    'external': ExternalConstraintDeclarationDescription,
+}
 
 @dataclass
 class ConstraintLikelihoodDescription(_AnalysisFileDeserializable):
@@ -1276,6 +1336,8 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
     :type priors: list[PriorComponent]
     :param likelihoods: The named likelihoods.
     :type likelihoods: list[LikelihoodComponent]
+    :param constraints: The forward-declared constraints.
+    :type constraints: list[ConstraintDeclarationDescription]
     :param posteriors: The named posteriors.
     :type posteriors: list[PosteriorDescription]
     :param predictions: The named predictions.
@@ -1295,6 +1357,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
     metadata:MetadataDescription = field(default_factory=MetadataDescription)
     priors:list                  = field(default_factory=list)
     likelihoods:list             = field(default_factory=list)
+    constraints:list             = field(default_factory=list)
     posteriors:list              = field(default_factory=list)
     predictions:list             = field(default_factory=list)
     figures:list                 = field(default_factory=list)
@@ -1311,6 +1374,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         child_sections = (
             ('priors', self.priors, '_prior_segments'),
             ('likelihoods', self.likelihoods, '_likelihood_segments'),
+            ('constraints', self.constraints, '_constraint_segments'),
             ('posteriors', self.posteriors, '_posterior_segments'),
             ('predictions', self.predictions, '_prediction_segments'),
             ('figures', self.figures, '_figure_segments'),
@@ -1527,6 +1591,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         tracked_sections = (
             ('prior', 'priors', self.priors, '_prior_segments'),
             ('likelihood', 'likelihoods', self.likelihoods, '_likelihood_segments'),
+            ('constraint', 'constraints', self.constraints, '_constraint_segments'),
             ('mask', 'masks', self.masks, '_mask_segments'),
             ('observable', 'observables', self.observables, '_observable_segments'),
             ('parameter', 'parameters', self.parameters, '_parameter_segments'),
@@ -1614,6 +1679,11 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             _kwargs['likelihoods'] = [LikelihoodComponent.from_dict(**ll) for ll in kwargs['likelihoods']]
         else:
             likelihood_segments = []
+        if 'constraints' in kwargs:
+            constraint_segments = _segments(kwargs['constraints'])
+            _kwargs['constraints'] = [ConstraintDeclarationDescription.from_dict(**c) for c in kwargs['constraints']]
+        else:
+            constraint_segments = []
         if 'posteriors' in kwargs:
             posterior_segments = _segments(kwargs['posteriors'])
             _kwargs['posteriors'] = [PosteriorDescription.from_dict(**p) for p in kwargs['posteriors']]
@@ -1660,6 +1730,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         result = cls(**_kwargs)
         result._prior_segments = prior_segments
         result._likelihood_segments = likelihood_segments
+        result._constraint_segments = constraint_segments
         result._posterior_segments = posterior_segments
         result._prediction_segments = prediction_segments
         result._figure_segments = figure_segments
@@ -1679,6 +1750,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
 #   metadata (optional)
 #   priors (mandatory)
 #   likelihoods (mandatory)
+#   constraints (optional)
 #   posteriors (mandatory)
 #   figures (optional)
 #   observables (optional)
@@ -1720,6 +1792,13 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         #  file (mandatory): string
         #  parameter_map (optional): dict
         #  ???????
+
+
+# constraints schema:
+# list of dicts, each with keys:
+#   name (mandatory): string
+#   type (mandatory): string; only 'external' is currently supported
+#   filename (mandatory if type is 'external'): string
 
 
 # posteriors schema:

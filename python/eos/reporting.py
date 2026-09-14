@@ -1,4 +1,5 @@
 # Copyright (c) 2026 Danny van Dyk
+# Copyright (c) 2026 Mark E Smith
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -155,7 +156,7 @@ class PosteriorData:
         """
         if self._analysis_file is None or self.name not in self._analysis_file.posteriors:
             return None
-        return self._analysis_file.analysis(self.name)
+        return self._analysis_file.analysis(self.name, base_directory=self.base_directory)
 
     # -- figures ----------------------------------------------------------------------------------
 

@@ -557,6 +557,50 @@ Create a mask that can be applied to samples from a named posterior based on a s
     parser_create_mask.set_defaults(cmd = cmd_create_mask)
 
 
+    # create-constraint
+    parser_create_constraint = subparsers.add_parser('create-constraint',
+        parents = [common_subparser],
+        description = 'Creates a constraint from the importance samples of a named posterior, by fitting a '
+                      'multivariate Gaussian to a (sub)set of its varied parameters.',
+        help = 'Creates a constraint from a posterior\'s importance samples.'
+    )
+    parser_create_constraint.add_argument('posterior', metavar = 'POSTERIOR',
+        help = 'The name of the posterior PDF from which to draw the samples.'
+    )
+    parser_create_constraint.add_argument('constraint_name', metavar = 'CONSTRAINT-NAME',
+        help = 'The name of the constraint to create.',
+        action = 'store', type = str
+    )
+    parser_create_constraint.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_create_constraint.add_argument('--source',
+        help = 'The name of the data file inside the posterior\'s data directory to fit. Defaults to "samples" '
+               '(the posterior\'s importance samples); "pred-<name>" selects previously computed posterior-predictive samples.',
+        dest = 'source', action = 'store', type = str, default = 'samples'
+    )
+    parser_create_constraint.add_argument('--parameters',
+        help = 'A comma-separated list of column names to constrain, matched against the loaded data\'s lookup table. '
+               'Defaults to every column of the loaded data.',
+        dest = 'parameters', action = 'store', type = lambda s: s.split(','), default = None
+    )
+    parser_create_constraint.add_argument('--tests',
+        help = 'A comma-separated list of goodness-of-fit tests to run before accepting the fit. Defaults to KS-test.',
+        dest = 'tests', action = 'store', type = lambda s: s.split(','), default = None
+    )
+    parser_create_constraint.add_argument('--goodness-of-fit-threshold',
+        help = 'The p-value threshold below which a goodness-of-fit test counts as failed. Defaults to 0.03. '
+               'Applies uniformly to every test in --tests; per-test thresholds are only available via the Python API.',
+        dest = 'goodness_of_fit_threshold', action = 'store', type = float, default = 0.03
+    )
+    parser_create_constraint.add_argument('--no-strict',
+        help = 'If given, a failing goodness-of-fit test only warns instead of aborting the task.',
+        dest = 'strict', action = 'store_false', default = True
+    )
+    parser_create_constraint.set_defaults(cmd = cmd_create_constraint)
+
+
     # report
     parser_report = subparsers.add_parser('report',
         parents = [common_subparser],
@@ -845,6 +889,11 @@ def cmd_list_step_dependencies(args):
 # Filter samples
 def cmd_create_mask(args):
     return eos.create_mask(**args_to_dict(args))
+
+
+# Create constraint
+def cmd_create_constraint(args):
+    return eos.create_constraint(**args_to_dict(args))
 
 
 # Report
