@@ -830,22 +830,24 @@ namespace eos
                             Log::instance()->message("[parameters.override]", ll_informational)
                                     << "Overriding existing parameter '" << name << "' with central value '" << central << "'";
 
-                            parameters_data->data[i->second].value = central;
+                            auto & datum = parameters_data->data[i->second];
+
+                            datum.value = central;
                             if (has_min)
                             {
-                                parameters_data->data[i->second].min = min;
+                                datum.min = min;
                             }
                             if (has_max)
                             {
-                                parameters_data->data[i->second].max = max;
+                                datum.max = max;
                             }
                             if (has_latex)
                             {
-                                parameters_data->data[i->second].latex = latex;
+                                datum.latex = latex;
                             }
                             if (has_unit)
                             {
-                                parameters_data->data[i->second].unit = unit;
+                                datum.unit = unit;
                             }
                         }
                         else
