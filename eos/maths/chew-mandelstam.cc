@@ -19,8 +19,6 @@
  */
 
 #include <eos/maths/chew-mandelstam.hh>
-#include <eos/maths/power-of.hh>
-#include <eos/utils/exception.hh>
 
 #include <cmath>
 
@@ -90,6 +88,20 @@ namespace eos
                           - mp * mm / s * std::log(m1 / m2));
             }
 
+            // One pole of the partial-fraction decomposition of n_L(s)^2, regular at s = pole.
+            complex<double>
+            L_wave_pole(const complex<double> & S, const complex<double> & pole, const double & m1, const double & m2)
+            {
+                const double mp = m1 + m2;
+
+                // The difference quotient degenerates at the pole; use its limit there.
+                if (std::abs(S - pole) < 1e-7)
+                {
+                    return s_wave(pole, m1, m2) / (mp * mp - pole) + s_wave_prime(pole, m1, m2);
+                }
+
+                return (s_wave(S, m1, m2) + (S - mp * mp) / (mp * mp - pole) * s_wave(pole, m1, m2)) / (S - pole);
+            }
         } // namespace impl
 
         complex<double>
@@ -125,38 +137,38 @@ namespace eos
         }
 
         complex<double>
-        p_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        p_wave(const complex<double> & S, const double & m, const double & q0)
         {
-            if (m1 != m2)
-            {
-                throw InternalError("chew_mandelstam::p_wave: only equal masses (m1 == m2) are currently implemented");
-            }
-
-            static const double pi = M_PI;
-
-            const double          mp    = m1 + m2;
-            // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s     = S + complex<double>(0.0, 1e-15);
+            const double          mp    = 2.0 * m;
             const complex<double> delta = mp * mp - 4.0 * q0 * q0;
 
-            // Squared Blatt-Weisskopf form factor for l = 1, cf. PDG's resonance review, eq. (50.26):
-            // F(z)^2 = 1 / (z^2 + 1), with z = sqrt(s - mp^2) / (2 q0)
-            const complex<double> Fsq = 1.0 / ((s - mp * mp) / (4.0 * q0 * q0) + 1.0);
-
-            complex<double> leading_term;
-            // Fix the behavior near threshold by Taylor expanding to second order
-            if (std::abs(s - mp * mp) < 1e-7)
+            // Partial fractions leave a single difference quotient of s_wave, singular only at s = delta.
+            if (std::abs(S - delta) < 1e-7)
             {
-                leading_term = Fsq * (mp * mp - s) / 16.0 / mp / mp / pi / pi * (-2.0 * (mp * mp - s) + mp * pi * std::sqrt(mp * mp - s));
-            }
-            else
-            {
-                leading_term = Fsq * power_of<3>(std::sqrt(mp * mp - s)) * impl::atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / 8.0 / pi / pi / std::sqrt(s);
+                return -4.0 * q0 * q0 * impl::s_wave_prime(delta, m);
             }
 
-            const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) * std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi / std::sqrt(delta) / (s - delta);
-
-            return (leading_term + loop_correction) / 4.0 / q0 / q0;
+            return (S - mp * mp) / (S - delta) * (s_wave(S, m) - s_wave(delta, m));
         }
+
+        complex<double>
+        p_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            if (m1 == m2)
+            {
+                return p_wave(S, m1, q0);
+            }
+
+            const double          mp      = m1 + m2;
+            const double          mm      = m1 - m2;
+            const double          q0sq    = q0 * q0;
+            const complex<double> a       = m1 * m1 + m2 * m2 - 2.0 * q0sq;
+            const complex<double> b       = std::sqrt(a * a - mp * mp * mm * mm);
+            const complex<double> s1plus  = a + b;
+            const complex<double> s1minus = a - b;
+
+            return s_wave(S, m1, m2) + 2.0 * q0sq / b * (s1minus * impl::L_wave_pole(S, s1minus, m1, m2) - s1plus * impl::L_wave_pole(S, s1plus, m1, m2));
+        }
+
     } // namespace chew_mandelstam
 } // namespace eos

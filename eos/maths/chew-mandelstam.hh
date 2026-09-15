@@ -56,19 +56,19 @@ namespace eos
          *
          * This is the P-wave (l_orbital = 1) analytic continuation of
          * i * rho(s), including the squared Blatt-Weisskopf form factor
-         * for l = 1 (cf. the PDG's resonance review, eq. (50.26)) and the
-         * loop-correction term that keeps the amplitude finite at the
-         * pseudo-threshold s = mp^2 - 4 q0^2.
-         *
-         * Only equal masses (m1 == m2) are currently supported, and an
-         * InternalError is raised otherwise.
+         * for l = 1 (cf. the PDG's resonance review, eq. (50.26)). The
+         * form factor's poles cancel in the partial-fraction decomposition,
+         * so the function stays regular there.
          *
          * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel.
          * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
          */
+        complex<double> p_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> p_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
     } // namespace chew_mandelstam
 } // namespace eos
 
