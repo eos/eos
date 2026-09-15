@@ -407,6 +407,17 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("self"));
 
+    // Parameters::Generation
+    class_<Parameters::Generation>("_ParametersGeneration", R"(
+            Identifies the state of a set of parameters.
+
+            Two instances compare equal if and only if they have been obtained from the same
+            set of parameters without an intervening write to any of its parameters.
+        )",
+                                   no_init)
+            .def(self == self)
+            .def(self != self);
+
     // Parameters
     class_<Parameters>("_Parameters", R"(
             Represents the set of parameters known to EOS.
@@ -525,7 +536,15 @@ BOOST_PYTHON_MODULE(_eos)
             :param file: The path to the YAML file with the parameter values.
             :type file: str
             )",
-                 args("self", "file"));
+                 args("self", "file"))
+            .add_property("generation", &Parameters::generation, R"(
+            The current generation of this set of parameters.
+
+            The generation changes whenever any of the parameters is written to. It is
+            invariant under reading any of the parameters.
+
+            :rtype: eos._ParametersGeneration
+        )");
 
     // Parameter
     class_<Parameter>("Parameter", R"(
