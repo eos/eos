@@ -205,6 +205,7 @@ jobs:
   ubuntu-examples:
     needs: ubuntu-build
     strategy:
+      fail-fast: false
       matrix:
         cfg:
           - { os: resolute, cxx: g++, cxxflags: '-O2 -g -march=x86-64' }
