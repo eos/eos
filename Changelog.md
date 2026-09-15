@@ -27,6 +27,7 @@
 
 ### Added
 
+- Add ``eos-mcp-server``, an optional local MCP (Model Context Protocol) server exposing ``eos.Observables``, ``eos.Parameters``, ``eos.Constraints``, and ``eos.References`` as read-only lookup tools for an LLM coding agent, shipped as ``eos.mcp`` behind the new ``mcp`` extra (L. Gärtner)
 - Add ``height_ratios`` and ``width_ratios`` to ``eos.figure.GridFigure``, for sizing a grid's rows and columns unevenly (D. van Dyk)
 - Add a ``mode_file`` key to ``eos.figure.ConstraintResidueItem``, reading the best-fit parameter values directly from a stored ``eos.data.Mode`` (e.g. as written by ``eos.tasks.find_mode``) in lieu of an explicit ``parameters`` dictionary (D. van Dyk)
 - Add a ``locations`` key to ``eos.figure.plot.XTicks`` and ``YTicks`` for pinning explicit major-tick positions, since automatic tick placement chooses its step from the axes' rendered size and can otherwise label a small panel differently than intended (D. van Dyk)
