@@ -29,6 +29,7 @@
 #include <eos/utils/units.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <cstdint>
 #include <limits>
 #include <set>
 
@@ -106,6 +107,38 @@ namespace eos
             friend class ParameterDefaults;
             friend struct Implementation<Parameter>;
             friend struct Implementation<Parameters>;
+
+            /*!
+             * Generation identifies the state of a set of parameters.
+             *
+             * Two instances compare equal if and only if they have been obtained from the
+             * same set of parameters without an intervening write to any of its parameters.
+             */
+            class Generation
+            {
+                private:
+                    uint64_t _instance;
+
+                    uint64_t _counter;
+
+                    Generation(const uint64_t & instance, const uint64_t & counter) :
+                        _instance(instance),
+                        _counter(counter)
+                    {
+                    }
+
+                    friend class Parameters;
+
+                public:
+                    /// Create a generation that compares unequal to any generation of any set of parameters.
+                    Generation() :
+                        _instance(0u),
+                        _counter(0u)
+                    {
+                    }
+
+                    bool operator== (const Generation &) const = default;
+            };
 
             ///@name Basic Functions
             ///@{
@@ -233,6 +266,17 @@ namespace eos
              * @param file  The name of the YAML fie.
              */
             void override_from_file(const std::string & file);
+            ///@}
+
+            ///@name Generation
+            ///@{
+            /*!
+             * Retrieve the current generation of this set of parameters.
+             *
+             * The generation changes whenever any of the parameters is written to. It is
+             * invariant under reading any of the parameters.
+             */
+            Generation generation() const;
             ///@}
 
             /*!
