@@ -7,7 +7,9 @@ on:
 name: Build/Check on MacOS
 
 concurrency:
-  group: MacOS, ${{ github.head_ref }}
+  # ``github.head_ref`` is empty for push events, which would lump every push to
+  # 'master' and 'testing' into one group and have them cancel each other.
+  group: MacOS, ${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
