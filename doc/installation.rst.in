@@ -138,13 +138,32 @@ Installing the dependencies on Linux
    As an alternative to installing the dependencies listed below yourself, you can use the Docker
    image provided by the `eos/docker.io <https://github.com/eos/docker.io>`_ repository and
    published on Docker Hub as ``eoshep/ubuntu-resolute``. This image has all of EOS's build
-   dependencies pre-installed; after starting a container from it, e.g. with
+   dependencies pre-installed; and can be used as the base for a devcontainer in e.g.
+   `VS Code <https://code.visualstudio.com/docs/devcontainers/containers>`_ by using the following
+   as the contents of a `.devcontainer.json` file:
 
    ::
 
-     docker run -it --rm eoshep/ubuntu-resolute bash
+     {
+        "image": "eoshep/ubuntu-resolute:latest",
+        "customizations": {
+          "vscode": {
+            "extensions": [
+              "ms-python.debugpy",
+              "ms-python.python",
+              "ms-python.vscode-pylance",
+              "ms-python.vscode-python-envs",
+              "ms-toolsai.jupyter",
+              "ms-toolsai.jupyter-renderers",
+              "ms-toolsai.vscode-jupyter-cell-tags",
+              "ms-toolsai.vscode-jupyter-slideshow"
+            ]
+          }
+        }
+      }
 
-   you can skip ahead to `Installing EOS`_.
+
+   Inside the container you can skip ahead to `Installing EOS`_.
 
 The dependencies can be roughly categorized as either system software, Python-related software, or scientific software.
 
