@@ -98,151 +98,6 @@ EOS provides access to save and load the various (intermediate) results of analy
    :members:
 
 
-********
-Plotting
-********
-
-.. deprecated:: 1.0.21
-   The ``eos.plot`` subpackage will be removed in version 1.1.
-   Use the ``eos.figure`` subpackage instead.
-
-EOS provides a plotting framework based on `Matplotlib <https://matplotlib.org/>`_.
-Plots can readily be created from a Python script, from within a Jupyter notebook,
-or in the command line using the ``eos-plot`` script.
-For all of these cases a description of the plot is required in the format described below.
-For the command-line script ``eos-plot``, the Python dictionary describing the plots must be provided as a YAML file.
-
-.. note::
-
-   Import ``eos.plot`` before you do something like ``import matplotlib.pyplot as plt``,
-   because the ``eos.plot`` module sets its default plot style and a matplotlib backend.
-   All options (except the backend) can be overwritten by updating ``matplotlib.rcParams[...]``;
-   see also the ``matplotlib`` documentation.
-   Note that the default settings use LaTeX to create labels and math expressions,
-   so for this to work latex needs to be available on your system.
-
-.. autoclass:: eos.plot.Plotter
-   :members:
-
-Plot description format
-=======================
-
-The input must be formatted as a dictionary containing the keys ``plot`` and ``contents``.
-The ``plot`` key must be mapped to a dictionary; it describes the layout of the plot,
-including axis labels, positioning of the key, and similar settings.
-The ``contents`` key must be mapped to a list; it describes the contents of the plot,
-expressed in terms of independent plot items.
-
-.. code-block::
-
-   plot_desc = {
-       'plot': {
-           'x': { ... },       # description of the x axis
-           'y': { ... },       # description of the y axis
-           'legend': { ... },  # description of the legend
-           ...                 # further layouting options
-       },
-       'contents': [
-           { ... }, # first plot item
-           { ... }, # second plot item
-       ]
-   }
-   eos.plot.Plotter(plot_desc, FILENAME).plot()
-
-In the above, ``FILENAME`` is an optional argument naming the file into which the plot shall be placed.
-The format is automatically determined based on the file name extension.
-
-Plot Layouting
---------------
-
-By default plots lack any axis labels and units, and any legend.
-
-An axis' description is provided through the following key/value pairs, which can apply equally to the x and y axis:
-
- * ``label`` (*str*, may contain LaTeX commands) -- The axis' label.
- * ``unit``  (*str*, may contain LaTeX commands) -- The axis' unit, which will be appended to the axis' label in square brackets.
- * ``range`` (*list* or *tuple* of two *float*) -- The tuple of [minimal, maximal] values, which will be displayed along the axis.
- * ``scale`` (*str*) -- Can be either ``linear`` or ``log``.
- * ``scaling_factor`` (*number*) -- The axis' scale by which all tick coordinates will be divided. The scale will *not* be appended to
-   the axis' label automatically. Using this argument is not recommended as it prevents automatic axis tick formatting and providing
-   the argument below is required.
- * ``format`` (*str*, Python 3 format string) -- The axis' tick label format can be provided and is only in use when ``scale`` is used, to
-   avoid a bad string representation of the axis ticks. For example, the user might need to determine the necessary number of digits
-   manually. Due to a Matplotlib peculiarity, the format string must always format the variable ``x``. See Matplotlib format strings for
-   details.
-
-The legend description presently only includes options for its location:
-
- * ``location`` (*str*, valid Matplotlib legend location) -- The legend's location within the plot.
-
-Further layouting options are:
-
- * ``title`` (*str*) -- The plot's title.
- * ``size`` (*tuple of two numbers*) -- The plot's size in x and y directions provided in centimeters.
- * ``axes`` (*str*, ``equal``) -- Enforces equal scaling of the plot's x and y axes, if set.
- * ``grid`` (*str*, either ``major``, ``minor``, or ``both``) -- Enables the plot's gridline, if set.
-
-An example illustrating plot layouting follows:
-
-.. code-block::
-
-   plot_args = {
-       'plot': {
-           'x': { 'label': r'$q^2$', 'unit': r'$\textnormal{GeV}^2$', 'range': [0.0, 11.60] },
-           'y': { 'label': r'$d\mathcal{B}/dq^2$',                    'range': [0.0,  5e-3] },
-           'legend': { 'location': 'upper center' },
-           'size': [10, 5]
-       },
-       'contents': [
-           ...
-       ]
-   }
-
-Plot Contents
--------------
-
-Each item in a plot's contents is represented by a dictionary.
-Each features the mandatory ``type`` key and more type-specific (mandatory or optional) keys.
-
- * ``type`` (*str*, mandatory) -- The type of the plot item, from one of the following recognized item types:
-
-   .. list-table::
-      :widths: auto
-      :header-rows: 1
-
-      * - value
-        - description
-      {% for key, value in plot_types.items() %}
-      * - ``{{ key }}``
-        - {{ value.oneline }}
-      {% endfor %}
-
-
-All item types recognize the following optional keys:
-
- * ``name`` (*str*, optional) -- The name of the plot item, for convenience when reporting warnings and errors.
-
- * ``alpha`` (*float*, between 0.0 and 1.0) -- The opacity of the plot item expressed as an alpha value. 0.0 means completely transparent,
-   1.0 means completely opaque.
-
- * ``color`` (*str*, containing any valid Matplotlib color specification) -- The color of the plot item.
-   Defaults to one of the colors in the Matplotlib default color cycler.
-
- * ``label`` (*str*, may contain LaTeX commands) -- The label that appears in the plot's legend for this plot item.
-
- * ``style`` (*str*, containing any valid Matplotlib style specification) -- The style of the plot item.
-
-
-{% for key, value in plot_types.items() %}
-{% if value.content | length %}
-.. _{{ key }}:
-
-{{ value.content }}
-
-{% endif %}
-{% endfor %}
-
-
 ****************
 Plotting Classes
 ****************
@@ -302,13 +157,13 @@ the colors of elements with an opacity < 1.
       * - figure type
         - Python class
         - description
-      {% for key, class, description in figure_figure_types %}
+      {% for key, class, description in figure_types %}
       * - ``{{ key }}``
         - :py:class:`eos.figure.{{ class }}`
         - {{ description }}
       {% endfor %}
 
-{% for _, class, _ in figure_figure_types %}
+{% for _, class, _ in figure_types %}
 .. autoclass:: eos.figure.{{ class }}
    :members:
 
@@ -345,14 +200,15 @@ the colors of elements with an opacity < 1.
       * - plot type
         - Python class
         - description
-      {% for key, class, description in figure_plot_types %}
+      {% for key, class, description in plot_types %}
       * - ``{{ key }}``
         - :py:class:`eos.figure.{{ class }}`
         - {{ description }}
       {% endfor %}
 
 
-{% for _, class, _ in figure_plot_types %}
+
+{% for _, class, _ in plot_types %}
 .. autoclass:: eos.figure.{{ class }}
    :members:
 
@@ -408,14 +264,14 @@ the colors of elements with an opacity < 1.
       * - item type
         - Python class
         - description
-      {% for key, class, description in figure_item_types %}
+      {% for key, class, description in item_types %}
       * - ``{{ key }}``
         - :py:class:`{{ class }}`
         - {{ description }}
       {% endfor %}
 
 
-{% for _, class, _ in figure_item_types %}
+{% for _, class, _ in item_types %}
 .. autoclass:: eos.figure.item.{{ class }}
    :members:
 

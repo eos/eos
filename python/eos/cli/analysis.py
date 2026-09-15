@@ -276,32 +276,6 @@ In addition, an ImportanceSamples object is exported to EOS_BASE_DIRECTORY/POSTE
     parser_sample_nested.set_defaults(cmd = cmd_sample_nested)
 
 
-    # plot-samples
-    parser_plot_samples = subparsers.add_parser('plot-samples',
-        parents = [common_subparser],
-        description = '''
-Plots all samples obtained for a named posterior.
-
-The results of either the sample-mcmc or the sample-pmc command are expected in
-EOS_BASE_DIRECTORY/POSTERIOR/mcmc-* or EOS_BASE_DIRECTORY/POSTERIOR/pmc, respectively.
-The plots will be stored as PDF files within the respective sample inputs.
-''',
-        help = 'Plots samples for a named posterior.'
-    )
-    parser_plot_samples.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'The name of the posterior PDF from which to draw the samples.'
-    )
-    parser_plot_samples.add_argument('-B', '--bins',
-        help = 'The number of bins per histogram.',
-        dest = 'bins', action = 'store', type = int, default = 50
-    )
-    parser_plot_samples.add_argument('-b', '--base-directory',
-        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
-        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
-    )
-    parser_plot_samples.set_defaults(cmd = cmd_plot_samples)
-
-
     # find-mode
     parser_find_mode = subparsers.add_parser('find-mode',
         parents = [common_subparser],
@@ -445,43 +419,6 @@ The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/pred-PREDICTION.
         dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
     )
     parser_predict_observables.set_defaults(cmd = cmd_predict_observables)
-
-
-    # corner-plot
-    parser_corner_plot = subparsers.add_parser('corner-plot',
-        parents = [common_subparser],
-        description = '''
-Generate a corner plot of the 1-D and 2-D marginalized posteriors.
-
-The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/samples.
-The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/plots.
-''',
-        help = 'Generate a corner plot of the 1-D and 2-D marginalized posteriors.'
-    )
-    parser_corner_plot.add_argument('posterior', metavar = 'POSTERIOR',
-        help = 'The name of the posterior PDF from which the samples were drawn.'
-    )
-    parser_corner_plot.add_argument('-B', '--begin-parameter',
-        help = 'The index of the first parameter to plot.',
-        dest = 'begin', action = 'store', type = int, default = 0
-    )
-    parser_corner_plot.add_argument('-E', '--end-parameter',
-        help = 'The index beyond the last parameter to plot.',
-        dest = 'end', action = 'store', type = int, default = None
-    )
-    parser_corner_plot.add_argument('-F', '--format',
-        help = 'The plot output format. Can be a comma separated list of formats.',
-        dest = 'format', action = 'store', type = lambda s: s.split(','), default = 'pdf'
-    )
-    parser_corner_plot.add_argument('-M', '--mask-name', metavar = 'MASK-NAME',
-        help = 'The name of the mask to apply to the samples.',
-        dest = 'mask_name', action = 'store', type = str
-    )
-    parser_corner_plot.add_argument('-b', '--base-directory',
-        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
-        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
-    )
-    parser_corner_plot.set_defaults(cmd = cmd_corner_plot)
 
 
     # validate
@@ -779,51 +716,6 @@ def cmd_find_mode(args):
     return eos.tasks.find_mode(**args_to_dict(args))
 
 
-# Plot samples
-def cmd_plot_samples(args):
-    import pathlib
-    input_path = pathlib.Path(os.path.join(args.base_directory, args.posterior))
-    inputs  = [str(d) for d in input_path.glob('mcmc-*')]
-    inputs += [str(d) for d in input_path.glob('samples')]
-    for input in inputs:
-        info(f'plotting samples in \'{input}\'')
-        basename = os.path.basename(os.path.normpath(input))
-        if basename.startswith('mcmc-'):
-            data = eos.data.MarkovChain(input)
-        elif basename.startswith('samples'):
-            data = eos.data.ImportanceSamples(input)
-        else:
-            raise RuntimeError(f'unsupported data set: {input}')
-
-        parameters = eos.Parameters()
-        for idx, p in enumerate(data.varied_parameters):
-            info('plotting histogram for {}'.format(p['name']))
-            if data.type in ['Prediction']:
-                label = eos.Observables()[p['name']]
-            elif data.type in ['MarkovChain', 'ImportanceSamples']:
-                pp = parameters[p['name']]
-                label = pp.latex()
-            else:
-                label = r'\verb+{}+'.format(p['name'])
-
-            description = {
-                'plot': {
-                    'x': { 'label': label, 'range': [p['min'], p['max']] },
-                    'y': { 'label': 'prob. density' }
-                },
-                'contents': [
-                    {
-                        'type': 'histogram', 'bins': args.bins,
-                        'data': {
-                            'samples': data.samples[:, idx],
-                        }
-                    }
-                ]
-            }
-            plotter = eos.plot.Plotter(description, os.path.join(input, f'{idx}.pdf'))
-            plotter.plot()
-
-
 # Sample MCMC
 def cmd_sample_mcmc(args):
     return eos.sample_mcmc(**args_to_dict(args))
@@ -842,11 +734,6 @@ def cmd_sample_pmc(args):
 # Nested sampling
 def cmd_sample_nested(args):
     return eos.sample_nested(**args_to_dict(args))
-
-
-# Corner plot
-def cmd_corner_plot(args):
-    return eos.corner_plot(**args_to_dict(args))
 
 
 # Cartesian product

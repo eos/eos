@@ -31,6 +31,7 @@ from _eos import __version__, __pkg_data_dir__
 # make sure that EOS_HOME points to the location of the wheel supplied data
 # if unset.
 import os as _os
+import sys as _sys
 if is_wheel:
     if not 'EOS_HOME' in _os.environ:
         _os.environ['EOS_HOME'] = _os.path.normpath(_os.path.join(_os.path.dirname(__file__), '..', '_eos_data/'))
@@ -40,7 +41,6 @@ else:
 
 from . import log_likelihood # patches LogLikelihoodBlock.Unbinned1D to accept the resolution in natural order
 from .data import *
-from .plot import *
 from .datasets import DataSets
 from .analysis import Analysis, BestFitPoint
 from .analysis_file import AnalysisFile
@@ -64,7 +64,7 @@ logger = logging.getLogger('EOS')
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
 # log to stderr by default
-stderr_handler = logging.StreamHandler(stream=sys.stderr)
+stderr_handler = logging.StreamHandler(stream=_sys.stderr)
 stderr_handler.setLevel(logging.INFO)
 logger.addHandler(stderr_handler)
 

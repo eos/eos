@@ -64,19 +64,6 @@ echo running NS tests ... >&2
         -f ${SOURCE_DIR}/eos-analysis_TEST.d/analysis.yaml
 echo ... success >&2
 
-###############################
-## Plotting MCMC+PMC samples ##
-###############################
-if [[ "Linux" == $(uname) ]] ; then
-echo running MCMC plotting tests ... >&2
-    $PYTHON ${SOURCE_DIR}/eos-analysis \
-        plot-samples \
-        CKM+FF
-echo ... success >&2
-else
-echo skipping MCMC plotting tests >&2
-fi
-
 #########################################
 ## Posterior prediction of observables ##
 #########################################

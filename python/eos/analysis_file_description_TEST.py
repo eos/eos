@@ -442,13 +442,13 @@ class ParameterComponentTests(unittest.TestCase):
 class TaskComponentTests(unittest.TestCase):
 
     def test_from_dict(self):
-        comp = TaskComponent.from_dict(task='corner-plot', arguments={'posterior': 'CKM-all', 'format': ['pdf']})
-        self.assertEqual(comp.task, 'corner-plot')
-        self.assertIn('posterior', comp.arguments)
+        comp = TaskComponent.from_dict(task='draw-figure', arguments={'figure_name': 'CKM-Vub', 'format': ['pdf']})
+        self.assertEqual(comp.task, 'draw-figure')
+        self.assertIn('figure_name', comp.arguments)
 
     def test_argument_alias_mapping(self):
         "Check that CLI argument aliases are mapped to their internal names."
-        comp = TaskComponent.from_dict(task='corner-plot', arguments={'posterior': 'CKM-all', 'F': ['pdf']})
+        comp = TaskComponent.from_dict(task='draw-figure', arguments={'figure_name': 'CKM-Vub', 'F': ['pdf']})
         # the alias 'F' is mapped to 'format'
         self.assertIn('format', comp.arguments)
         self.assertNotIn('F', comp.arguments)
@@ -462,8 +462,8 @@ class TaskComponentTests(unittest.TestCase):
 
     def test_unknown_argument(self):
         comp = TaskComponent.from_dict(
-            task='corner-plot',
-            arguments={'posterior': 'CKM-all', 'not_an_argument': 1},
+            task='draw-figure',
+            arguments={'figure_name': 'CKM-Vub', 'not_an_argument': 1},
         )
         diagnostics = list(comp._diagnostics())
         self.assertTrue(any(
@@ -472,10 +472,10 @@ class TaskComponentTests(unittest.TestCase):
         ))
 
     def test_missing_required_argument(self):
-        comp = TaskComponent.from_dict(task='corner-plot', arguments={})
+        comp = TaskComponent.from_dict(task='draw-figure', arguments={})
         diagnostics = list(comp._diagnostics())
         self.assertTrue(any(
-            d.path == ('arguments', 'posterior') and d.severity == Severity.ERROR
+            d.path == ('arguments', 'figure_name') and d.severity == Severity.ERROR
             for d in diagnostics
         ))
 
@@ -483,12 +483,12 @@ class TaskComponentTests(unittest.TestCase):
 class StepComponentTests(unittest.TestCase):
 
     def _tasks(self):
-        return [{'task': 'corner-plot', 'arguments': {'posterior': 'CKM-all', 'format': ['pdf']}}]
+        return [{'task': 'draw-figure', 'arguments': {'figure_name': 'CKM-Vub', 'format': ['pdf']}}]
 
     def test_from_dict(self):
-        comp = StepComponent.from_dict(title='Corner plot', id='ckm.corner-plot', tasks=self._tasks())
-        self.assertEqual(comp.title, 'Corner plot')
-        self.assertEqual(comp.id, 'ckm.corner-plot')
+        comp = StepComponent.from_dict(title='Draw figure', id='ckm.draw-figure', tasks=self._tasks())
+        self.assertEqual(comp.title, 'Draw figure')
+        self.assertEqual(comp.id, 'ckm.draw-figure')
         self.assertEqual(len(comp.tasks), 1)
         self.assertIsInstance(comp.tasks[0], TaskComponent)
 
@@ -509,14 +509,14 @@ class StepComponentTests(unittest.TestCase):
             title='t',
             id='separate-argument-checks',
             tasks=[{
-                'task': 'corner-plot',
+                'task': 'draw-figure',
                 'arguments': {
-                    'posterior': 'CKM-all',
+                    'figure_name': 'CKM-Vub',
                     'not_a_task_argument': 1,
                 },
             }],
             default_arguments={
-                'corner-plot': {
+                'draw-figure': {
                     'not_a_default_argument': 2,
                 },
             },
@@ -619,8 +619,8 @@ class AnalysisFileDescriptionTests(unittest.TestCase):
             observables={'B->pilnu::R_pi': {'latex': '$R_\\pi$', 'unit': '1',
                                             'expression': '<<B->pilnu::BR;l=tau>> / <<B->pilnu::BR;l=e>>'}},
             parameters={'my::parameter': {'latex': 'x', 'unit': '1', 'central': 0.0, 'min': -1.0, 'max': 1.0}},
-            steps=[{'title': 'Corner', 'id': 'ckm.corner', 'tasks': [
-                {'task': 'corner-plot', 'arguments': {'posterior': 'CKM-all', 'format': ['pdf']}}]}],
+            steps=[{'title': 'Figure', 'id': 'fig-A.draw', 'tasks': [
+                {'task': 'draw-figure', 'arguments': {'figure_name': 'fig-A', 'format': ['pdf']}}]}],
             masks=[{'name': 'mask-A', 'description': [{'name': 'B->pilnu::BR'}]}],
         )
         self.assertEqual(desc.format_version, 1)
