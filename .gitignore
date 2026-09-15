@@ -61,6 +61,10 @@ eos-*.t*
 # Jupyter/iPython
 .ipynb_checkpoints
 
+# Agent scratch space for issues/PRs (see AGENTS.md)
+/issues/
+/prs/
+
 # Environments
 .env
 .envrc

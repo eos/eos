@@ -89,7 +89,9 @@ EXTRA_DIST = \
 	eos/figure/plot.py \
 	eos/plot/__init__.py \
 	eos/plot/config.py \
-	eos/plot/plotter.py
+	eos/plot/plotter.py \
+	eos/mcp/__init__.py \
+	eos/mcp/server.py
 
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(abs_top_srcdir)/eos/constraints"; \
@@ -173,6 +175,11 @@ eosfigure_SCRIPTS = \
 	eos/figure/item.py \
 	eos/figure/plot.py
 
+eosmcpdir = $(pkgpythondir)/mcp
+eosmcp_SCRIPTS = \
+	eos/mcp/__init__.py \
+	eos/mcp/server.py
+
 _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = \
@@ -234,7 +241,8 @@ TESTS = \
 	eos/figure/figure_TEST.py \
 	eos/figure/item_TEST.py \
 	eos/figure/plot_TEST.py \
-	eos/plot/plotter_TEST.py
+	eos/plot/plotter_TEST.py \
+	eos/mcp/server_TEST.py
 
 EXTRA_DIST += $(TESTS)
 
