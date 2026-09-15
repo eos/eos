@@ -16,10 +16,12 @@ class DocTests(unittest.TestCase):
         for section in eos.Parameters.Defaults().sections():
             for group in section:
                 for parameter in group:
-                    try:
-                        texmanager.get_text_width_height_descent(parameter.latex(), fontsize=12)
-                    except Exception as e:
-                        self.fail(f"Cannot compile latex representation of parameter {parameter.name()}, caucht exception of type {type(e).__name__}: {e}")
+                    latex_string = parameter.latex()
+                    if latex_string:
+                        try:
+                            texmanager.get_text_width_height_descent('$' + latex_string + '$', fontsize=12)
+                        except Exception as e:
+                            self.fail(f"Cannot compile latex representation of parameter {parameter.name()}, caucht exception of type {type(e).__name__}: {e}")
 
 
 # Run new tests

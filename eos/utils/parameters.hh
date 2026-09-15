@@ -167,6 +167,20 @@ namespace eos
              * @param id    The id of the parameter to which the name shall be redirected.
              */
             static void redirect(const QualifiedName & name, const unsigned & id);
+
+            /*!
+             * Verify if a parameter with a given name exists in the default set of parameters.
+             *
+             * @param name  The name to be checked against the default parameters.
+             */
+            static bool has_default(const QualifiedName & name);
+
+            /*!
+             * Ensure that the default set of parameters has been loaded.
+             *
+             * Loading is otherwise deferred to the first access from within unrelated code.
+             */
+            static void load_defaults();
             ///@}
 
             ///@name Parameter access

@@ -7,14 +7,14 @@ parameters:
       min:      -2.0
       max:       2.0
       unit:     '1'
-      latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_L}$'
+      latex:    '\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_L}'
   'ublnul::Re{cVR}' :
       alias_of: [ 'ubenue::Re{cVR}', 'ubmunumu::Re{cVR}', 'ubtaunutau::Re{cVR}' ]
       central:   0.0
       min:      -2.0
       max:       2.0
       unit:     '1'
-      latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_R}$'
+      latex:    '\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_R}'
 
 likelihoods:
   - name: TH-pi
@@ -89,7 +89,7 @@ posteriors:
 
 observables:
   "B->pilnu::R_pi":
-    latex: "$R_{\\pi}$"
+    latex: "R_{\\pi}"
     unit: '1'
     options: {}
     expression: "<<B->pilnu::BR;l=tau>>[q2_min=>q2_tau_min] / <<B->pilnu::BR;l=e>>[q2_min=>q2_e_min]"

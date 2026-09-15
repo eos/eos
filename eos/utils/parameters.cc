@@ -544,6 +544,11 @@ namespace eos
                                         }
 
                                         latex = latex_node.as<std::string>();
+
+                                        if (latex.find("$") != std::string::npos)
+                                        {
+                                            throw ParameterInputFileNodeError(file, name + ".latex", "should not contain '$'");
+                                        }
                                     }
 
                                     _data->data.push_back(Parameter::Data(Parameter::Template{ QualifiedName(name), min, central, max, latex, unit }, idx));
@@ -921,6 +926,20 @@ namespace eos
     Parameters::declare(const QualifiedName & name, const std::string & latex, Unit unit, const double & value, const double & min, const double & max)
     {
         return ParameterDefaults::instance()->declare(name, Parameter::Template{ name, min, value, max, latex, unit });
+    }
+
+    bool
+    Parameters::has_default(const QualifiedName & name)
+    {
+        const auto & names = ParameterDefaults::instance()->map();
+
+        return names.cend() != names.find(name);
+    }
+
+    void
+    Parameters::load_defaults()
+    {
+        ParameterDefaults::instance();
     }
 
     Parameter

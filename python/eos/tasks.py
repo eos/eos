@@ -998,7 +998,7 @@ def corner_plot(analysis_file:str, posterior:str, base_directory:str='./', forma
     if distribution == 'posterior':
         f = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
         _check_varied_parameters_match(analysis, f)
-        labels = [p.latex() for p in analysis.varied_parameters]
+        labels = ["$" + p.latex() + "$" for p in analysis.varied_parameters]
 
     elif isinstance(distribution, str):
         try:

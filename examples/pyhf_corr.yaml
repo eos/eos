@@ -5,7 +5,7 @@ parameters:
       min:      -2.0
       max:       2.0
       unit:     '1'
-      latex:    '$\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_L}$'
+      latex:    '\mathrm{Re}\, \mathcal{C}^{\bar{u}b\bar{\nu}_\ell\ell}_{V_L}'
 
 likelihoods:
   - name: EXP-pyhf
@@ -72,7 +72,7 @@ posteriors:
 
 observables:
   "B->pilnu::mu":
-    latex: "$\\mu$"
+    latex: "\\mu"
     unit: '1'
     options: {}
     expression: "<<B->pilnu::BR;model=WET>> / <<B->pilnu::BR;model=SM>>"
