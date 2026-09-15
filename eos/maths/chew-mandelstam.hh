@@ -47,6 +47,7 @@ namespace eos
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel.
          */
+        complex<double> s_wave(const complex<double> & s, const double & m);
         complex<double> s_wave(const complex<double> & s, const double & m1, const double & m2);
 
         /*!
