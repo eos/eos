@@ -12,6 +12,7 @@ bin_SCRIPTS = \
 	eos-list-observables \
 	eos-list-references \
 	eos-make-constraint \
+	eos-mcp-server \
 	eos-merge-mcmc \
 	eos-plot \
 	eos-plot-1d \
@@ -39,6 +40,7 @@ EXTRA_DIST = \
 	eos-list-observables \
 	eos-list-references \
 	eos-make-constraint \
+	eos-mcp-server \
 	eos-merge-mcmc \
 	eos-plot \
 	eos-plot-1d \
