@@ -86,16 +86,11 @@ namespace eos
         }
 
         complex<double>
-        p_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        p_wave(const complex<double> & S, const double & m, const double & q0)
         {
-            if (m1 != m2)
-            {
-                throw InternalError("chew_mandelstam::p_wave: only equal masses (m1 == m2) are currently implemented");
-            }
-
             static const double pi = M_PI;
 
-            const double          mp    = m1 + m2;
+            const double          mp    = 2.0 * m;
             // Adapt s to match Mathematica's behaviour on the branch cut
             const complex<double> s     = S + complex<double>(0.0, 1e-15);
             const complex<double> delta = mp * mp - 4.0 * q0 * q0;
@@ -118,6 +113,25 @@ namespace eos
             const complex<double> loop_correction = -power_of<3>(q0) * (mp * mp - s) * std::atan(std::sqrt(delta) / 2.0 / q0) / pi / pi / std::sqrt(delta) / (s - delta);
 
             return (leading_term + loop_correction) / 4.0 / q0 / q0;
+        }
+
+        complex<double>
+        p_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            if (m1 == m2)
+            {
+                return p_wave(S, m1, q0);
+            }
+
+            const double          mp    = m1 + m2;
+            const double          mm    = m1 - m2;
+            const double          q0sq  = q0 * q0;
+            const double          a     = m1 * m1 + m2 * m2 - 2.0 * q0sq;
+            const double          b     = std::sqrt(a * a - mp * mp * mm * mm);
+            const double          s1plus = a + b;
+            const double          s1minus = a - b;
+            const complex<double> zsq = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+            return s_wave(S, m1, m2) * zsq / (1.0 + zsq) + 2.0 * q0sq / b * (S - mp * mp) * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus));
         }
     } // namespace chew_mandelstam
 } // namespace eos

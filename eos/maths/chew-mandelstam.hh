@@ -69,6 +69,7 @@ namespace eos
          * @param m2    Mass of the second particle in the two-body channel.
          * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
          */
+        complex<double> p_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> p_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
     } // namespace chew_mandelstam
 } // namespace eos

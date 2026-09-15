@@ -151,6 +151,8 @@ class ChewMandelstamPWaveTest : public TestCase
 
             // D^+ mass and effective momentum scale, cf. eos/scattering/ee-to-ccbar, PWavePPChannel
             constexpr double mD = 1.86965;
+            constexpr double m1 = 1.86;
+            constexpr double m2 = 2.01;
             constexpr double q0 = 0.5;
 
             // real s, below threshold: the function is real-valued
@@ -166,6 +168,18 @@ class ChewMandelstamPWaveTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(real(result), -0.0081324, eps);
                 TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
             }
+            {
+                const complex<double> result = chew_mandelstam::p_wave(-20.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.012448605, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::p_wave(2.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.008264793, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
 
             // real s, above threshold
             {
@@ -173,6 +187,12 @@ class ChewMandelstamPWaveTest : public TestCase
 
                 TEST_CHECK_RELATIVE_ERROR(real(result), 0.00024738, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0093576, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::p_wave(20.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.0007870605, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0083085871, eps);
             }
 
             // effective channel mass, cf. eos/scattering/ee-to-ccbar, EffChannel
@@ -212,10 +232,23 @@ class ChewMandelstamPWaveTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(real(result), -0.0099493, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0000658867, eps);
             }
-
-            // only equal masses are implemented
             {
-                TEST_CHECK_THROWS(InternalError, chew_mandelstam::p_wave(20.0, mD, 2.0 * mD, q0));
+                const complex<double> result = chew_mandelstam::p_wave(complex<double>(20.0, 5.0), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00304153, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00740049, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::p_wave(complex<double>(2.0, -1.0), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00827295, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), -0.000288635, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::p_wave(complex<double>(-5.0, 0.3), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0099739, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0000625791, eps);
             }
         }
 } chew_mandelstam_p_wave_test;
