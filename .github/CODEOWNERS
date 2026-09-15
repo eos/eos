@@ -8,9 +8,14 @@ eos/utils           @dvandyk
 python/_eos/        @dvandyk
 python/_eos.cc      @dvandyk
 
+# @mjkirk should review commits to:
+python/eos/         @mjkirk
+python/eos_TEST.py  @mjkirk
+
 # @mreboud should review commits to:
-eos/rare-b-decays   @mreboud
-eos/scattering      @mreboud
+eos/rare-b-decays           @mreboud
+eos/scattering              @mreboud
+eos/nonlocal-form-factors   @mreboud
 
 # @lorenzennio should review commits to pyhf code
 python/eos/*pyhf*   @lorenzennio
@@ -20,5 +25,11 @@ eos/b-decays        @Herren
 eos/form-factors    @Herren
 eos/scattering      @Herren
 
+# @cbolognani should review commits to:
+eos/c-decays        @cbolognani
+
 # @DominikSue should review commits to:
 eos/rare-c-decays   @DominikSue
+
+# @martabm99 should review commits to:
+eos/nonleptonic-amplitudes  @martabm99
