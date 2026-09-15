@@ -10,8 +10,10 @@ on:
 name: Build/Check/Deploy on Ubuntu
 
 concurrency:
-  group: Ubuntu, ${{ github.head_ref }}
-  cancel-in-progress: true
+  # ``github.head_ref`` is empty for push events, which would lump every push to
+  # 'release', 'master' and 'testing' into one group and have them cancel each other.
+  group: Ubuntu, ${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'release' && github.ref != 'refs/heads/release' }}
 
 jobs:
   ubuntu-build:
