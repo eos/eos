@@ -171,7 +171,7 @@ BOOST
   the BOOST C++ library ``boost-python`` for interfacing Python and C++;
 
 dynesty
-  The Python Dynamic Nested Sampling package for estimating Bayesian posteriors and evidences (needed for some functionality);
+  The Python Dynamic Nested Sampling package for estimating Bayesian posteriors and evidences (needed for some functionality) in version 3.0.0 or higher;
 
 ipykernel
   the IPython kernel for Jupyter notebooks (needed for some functionality);
