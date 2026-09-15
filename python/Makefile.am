@@ -36,6 +36,7 @@ EXTRA_DIST = \
 	eos/cli/data_release_TEST.py \
 	eos/cli/data_checks_TEST.d \
 	eos/cli/data_checks_TEST.d/valid \
+	eos/cli/mcp.py \
 	eos/datasets.py \
 	eos/datasets_TEST.d \
 	eos/datasets_file_description.py \
@@ -86,7 +87,9 @@ EXTRA_DIST = \
 	eos/figure/item_TEST.d \
 	eos/figure/item_TEST.d/pred-uniq \
 	eos/figure/item_TEST.d/pred-dup \
-	eos/figure/plot.py
+	eos/figure/plot.py \
+	eos/mcp/__init__.py \
+	eos/mcp/server.py
 
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(abs_top_srcdir)/eos/constraints"; \
@@ -138,7 +141,8 @@ eoscli_SCRIPTS = \
 	eos/cli/data_github.py \
 	eos/cli/data_register.py \
 	eos/cli/data_release.py \
-	eos/cli/data_release_execution.py
+	eos/cli/data_release_execution.py \
+	eos/cli/mcp.py
 
 eosdatadir = $(pkgpythondir)/data
 eosdata_SCRIPTS = \
@@ -163,6 +167,11 @@ eosfigure_SCRIPTS = \
 	eos/figure/figure.py \
 	eos/figure/item.py \
 	eos/figure/plot.py
+
+eosmcpdir = $(pkgpythondir)/mcp
+eosmcp_SCRIPTS = \
+	eos/mcp/__init__.py \
+	eos/mcp/server.py
 
 _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la
@@ -224,7 +233,8 @@ TESTS = \
 	eos/figure/data_TEST.py \
 	eos/figure/figure_TEST.py \
 	eos/figure/item_TEST.py \
-	eos/figure/plot_TEST.py
+	eos/figure/plot_TEST.py \
+	eos/mcp/server_TEST.py
 
 EXTRA_DIST += $(TESTS)
 
