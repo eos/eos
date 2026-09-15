@@ -239,24 +239,31 @@ namespace test
     }                                                                                                                                             \
     while (false)
 
-#define TEST_CHECK_THROWS(exception, expression)                                                                                                 \
-    do                                                                                                                                           \
-    {                                                                                                                                            \
-        try                                                                                                                                      \
-        {                                                                                                                                        \
-            expression;                                                                                                                          \
-        }                                                                                                                                        \
-        catch (exception & e)                                                                                                                    \
-        {                                                                                                                                        \
-            break;                                                                                                                               \
-        }                                                                                                                                        \
-        catch (...)                                                                                                                              \
-        {                                                                                                                                        \
-            throw TestCaseFailedException(__LINE__, __FILE__, "Caught unexpected exception when expecting " #exception " in '" #expression "'"); \
-        }                                                                                                                                        \
-                                                                                                                                                 \
-        throw TestCaseFailedException(__LINE__, __FILE__, "Caught no exception in " #expression " when expecting '" #exception "'");             \
-    }                                                                                                                                            \
+#define TEST_CHECK_THROWS(_exception, expression)                                                                                                 \
+    do                                                                                                                                            \
+    {                                                                                                                                             \
+        try                                                                                                                                       \
+        {                                                                                                                                         \
+            expression;                                                                                                                           \
+        }                                                                                                                                         \
+        catch (_exception & e)                                                                                                                    \
+        {                                                                                                                                         \
+            break;                                                                                                                                \
+        }                                                                                                                                         \
+        catch (std::exception & e)                                                                                                                \
+        {                                                                                                                                         \
+            throw TestCaseFailedException(__LINE__,                                                                                               \
+                                          __FILE__,                                                                                               \
+                                          "Caught unexpected exception (" + std::string(typeid(*(&e)).name()) + ";" + std::string(e.what())       \
+                                                  + ") when expecting " #_exception " in '" #expression "'");                                     \
+        }                                                                                                                                         \
+        catch (...)                                                                                                                               \
+        {                                                                                                                                         \
+            throw TestCaseFailedException(__LINE__, __FILE__, "Caught unexpected exception when expecting " #_exception " in '" #expression "'"); \
+        }                                                                                                                                         \
+                                                                                                                                                  \
+        throw TestCaseFailedException(__LINE__, __FILE__, "Caught no exception in " #expression " when expecting '" #_exception "'");             \
+    }                                                                                                                                             \
     while (false)
 
 #define TEST_CHECK_DIAGNOSTICS(diagnostics, reference)                                                                                                                \
