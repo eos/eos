@@ -170,5 +170,34 @@ namespace eos
             return s_wave(S, m1, m2) + 2.0 * q0sq / b * (s1minus * impl::L_wave_pole(S, s1minus, m1, m2) - s1plus * impl::L_wave_pole(S, s1plus, m1, m2));
         }
 
+        complex<double>
+        d_wave(const complex<double> & S, const double & m, const double & q0)
+        {
+            return d_wave(S, m, m, q0);
+        }
+
+        complex<double>
+        d_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            const double          mp      = m1 + m2;
+            const double          mm      = m1 - m2;
+            const double          q0sq    = q0 * q0;
+            const complex<double> u1      = 3.0 / 2.0 * complex<double>(-1, std::sqrt(3.0));
+            const complex<double> u2      = -3.0 / 2.0 * complex<double>(1, std::sqrt(3.0));
+            const complex<double> a1      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
+            const complex<double> b1      = std::sqrt(a1 * a1 - mp * mp * mm * mm);
+            const complex<double> a2      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
+            const complex<double> b2      = std::sqrt(a2 * a2 - mp * mp * mm * mm);
+            const complex<double> s1plus  = a1 + b1;
+            const complex<double> s1minus = a1 - b1;
+            const complex<double> s2plus  = a2 + b2;
+            const complex<double> s2minus = a2 - b2;
+
+            return s_wave(S, m1, m2)
+                   + 2.0 * q0sq
+                             * (u1 * u1 / (2.0 * u1 + 3.0) / b1 * (s1plus * impl::L_wave_pole(S, s1plus, m1, m2) - s1minus * impl::L_wave_pole(S, s1minus, m1, m2))
+                                + u2 * u2 / (2.0 * u2 + 3.0) / b2 * (s2plus * impl::L_wave_pole(S, s2plus, m1, m2) - s2minus * impl::L_wave_pole(S, s2minus, m1, m2)));
+        }
+
     } // namespace chew_mandelstam
 } // namespace eos
