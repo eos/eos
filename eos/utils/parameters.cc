@@ -28,9 +28,11 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <atomic>
 #include <cctype>
 #include <cmath>
 #include <config.h>
+#include <cstdint>
 #include <filesystem>
 #include <format>
 #include <iostream>
@@ -280,6 +282,46 @@ namespace eos
     struct Parameters::Data
     {
             std::vector<Parameter::Data> data;
+
+            uint64_t instance, counter;
+
+            Data() :
+                instance(_next_instance()),
+                counter(0u)
+            {
+            }
+
+            // a copy is a set of parameters in its own right, and receives its own identity
+            Data(const Data & other) :
+                data(other.data),
+                instance(_next_instance()),
+                counter(0u)
+            {
+            }
+
+            // Every write to a parameter datum goes through here.
+            Parameter::Data &
+            write(const unsigned & index)
+            {
+                ++counter;
+
+                return data[index];
+            }
+
+            // Record a change to the composition of the set, e.g. an added parameter.
+            void
+            bump()
+            {
+                ++counter;
+            }
+
+            static uint64_t
+            _next_instance()
+            {
+                static std::atomic<uint64_t> next(1u);
+
+                return next.fetch_add(1u, std::memory_order_relaxed);
+            }
     };
 
     template <> struct WrappedForwardIteratorTraits<Parameters::IteratorTag>
@@ -830,22 +872,24 @@ namespace eos
                             Log::instance()->message("[parameters.override]", ll_informational)
                                     << "Overriding existing parameter '" << name << "' with central value '" << central << "'";
 
-                            parameters_data->data[i->second].value = central;
+                            auto & datum = parameters_data->write(i->second);
+
+                            datum.value = central;
                             if (has_min)
                             {
-                                parameters_data->data[i->second].min = min;
+                                datum.min = min;
                             }
                             if (has_max)
                             {
-                                parameters_data->data[i->second].max = max;
+                                datum.max = max;
                             }
                             if (has_latex)
                             {
-                                parameters_data->data[i->second].latex = latex;
+                                datum.latex = latex;
                             }
                             if (has_unit)
                             {
-                                parameters_data->data[i->second].unit = unit;
+                                datum.unit = unit;
                             }
                         }
                         else
@@ -863,6 +907,7 @@ namespace eos
 
                             auto idx = parameters_data->data.size();
                             parameters_data->data.push_back(Parameter::Data(Parameter::Template{ QualifiedName(name), min, central, max, latex, unit }, idx));
+                            parameters_data->bump();
                             parameters_map[name] = idx;
                             parameters.push_back(Parameter(parameters_data, idx));
                         }
@@ -942,6 +987,7 @@ namespace eos
         // ... and insert it into this parameter set ...
         unsigned idx = _imp->parameters.size();
         _imp->parameters_data->data.push_back(Parameter::Data(Parameter::Template{ name, min, value, max, latex, unit }, idx));
+        _imp->parameters_data->bump();
         _imp->parameters_map[name] = idx;
         _imp->parameters.push_back(Parameter(_imp->parameters_data, idx));
 
@@ -969,6 +1015,7 @@ namespace eos
         }
 
         i->second = id;
+        _imp->parameters_data->bump();
     }
 
     void
@@ -981,7 +1028,7 @@ namespace eos
             throw UnknownParameterError(name);
         }
 
-        _imp->parameters_data->data[i->second].value = value;
+        _imp->parameters_data->write(i->second).value = value;
     }
 
     bool
@@ -1034,6 +1081,12 @@ namespace eos
         _imp->override_from_file(file);
     }
 
+    Parameters::Generation
+    Parameters::generation() const
+    {
+        return Generation(_imp->parameters_data->instance, _imp->parameters_data->counter);
+    }
+
     Parameter::Parameter(const std::shared_ptr<Parameters::Data> & parameters_data, unsigned index) :
         _parameters_data(parameters_data),
         _index(index)
@@ -1080,7 +1133,7 @@ namespace eos
     const Parameter &
     Parameter::operator= (const double & value)
     {
-        _parameters_data->data[_index].value = value;
+        _parameters_data->write(_index).value = value;
 
         return *this;
     }
@@ -1088,13 +1141,13 @@ namespace eos
     void
     Parameter::set(const double & value)
     {
-        _parameters_data->data[_index].value = value;
+        _parameters_data->write(_index).value = value;
     }
 
     void
     Parameter::set_generator(const double & value)
     {
-        _parameters_data->data[_index].generator_value = value;
+        _parameters_data->write(_index).generator_value = value;
     }
 
     const double &
@@ -1112,7 +1165,7 @@ namespace eos
     void
     Parameter::set_max(const double & value)
     {
-        _parameters_data->data[_index].max = value;
+        _parameters_data->write(_index).max = value;
     }
 
     const double &
@@ -1124,7 +1177,7 @@ namespace eos
     void
     Parameter::set_min(const double & value)
     {
-        _parameters_data->data[_index].min = value;
+        _parameters_data->write(_index).min = value;
     }
 
     const std::string &
