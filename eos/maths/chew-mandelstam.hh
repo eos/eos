@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -40,10 +41,8 @@ namespace eos
          * used e.g. within the K-matrix formalism to unitarize scattering
          * amplitudes below and above threshold, and onto other Riemann sheets.
          *
-         * Only equal masses (m1 == m2) are currently supported, and an
-         * InternalError is raised otherwise.
-         *
          * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel.
          */
@@ -61,16 +60,34 @@ namespace eos
          * loop-correction term that keeps the amplitude finite at the
          * pseudo-threshold s = mp^2 - 4 q0^2.
          *
-         * Only equal masses (m1 == m2) are currently supported, and an
-         * InternalError is raised otherwise.
-         *
          * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel.
          * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
          */
         complex<double> p_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> p_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
+        /*!
+         * The D-wave Chew-Mandelstam function for a two-body channel of two
+         * particles with masses m1 and m2, evaluated at the Mandelstam
+         * variable s.
+         *
+         * This is the D-wave (l_orbital = 2) analytic continuation of
+         * i * rho(s), including the squared Blatt-Weisskopf form factor
+         * for l = 2 (cf. the PDG's resonance review, eq. (50.26)) and the
+         * loop-correction term that keeps the amplitude finite at the
+         * pseudo-threshold s = mp^2 - 4 q0^2.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         */
+        complex<double> d_wave(const complex<double> & s, const double & m, const double & q0);
+        complex<double> d_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
     } // namespace chew_mandelstam
 } // namespace eos
 

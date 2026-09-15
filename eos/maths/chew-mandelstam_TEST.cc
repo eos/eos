@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -252,3 +253,102 @@ class ChewMandelstamPWaveTest : public TestCase
             }
         }
 } chew_mandelstam_p_wave_test;
+
+class ChewMandelstamDWaveTest : public TestCase
+{
+    public:
+        ChewMandelstamDWaveTest() :
+            TestCase("chew_mandelstam_d_wave_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            constexpr double eps = 1e-5;
+
+            // D^+ mass and effective momentum scale, cf. eos/scattering/ee-to-ccbar, PWavePPChannel
+            constexpr double mD = 1.86965;
+            constexpr double m1 = 1.86;
+            constexpr double m2 = 2.01;
+            constexpr double q0 = 0.5;
+
+            // real s, below threshold: the function is real-valued
+            {
+                const complex<double> result = chew_mandelstam::d_wave(-20.0, mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.009340026, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(2.0, mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0054647, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(-20.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.009333018, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(2.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0056257, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+
+            // real s, above threshold
+            {
+                const complex<double> result = chew_mandelstam::d_wave(20.0, mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.00336492, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00624622, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(20.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.00344569, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00509587, eps);
+            }
+
+            // genuinely complex s, e.g. as used to move onto another Riemann sheet
+            {
+                const complex<double> result = chew_mandelstam::d_wave(complex<double>(20.0, 5.0), mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0003150954, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0062365592, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(complex<double>(2.0, -1.0), mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0054716, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), -0.000261292, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(complex<double>(-5.0, 0.3), mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00702802, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0000577958, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(complex<double>(20.0, 5.0), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0003740028, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0055794287, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(complex<double>(2.0, -1.0), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00563175, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), -0.000245385, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::d_wave(complex<double>(-5.0, 0.3), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.0071068, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0000551838, eps);
+            }
+        }
+} chew_mandelstam_d_wave_test;

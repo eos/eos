@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -131,7 +132,35 @@ namespace eos
             const double          s1plus = a + b;
             const double          s1minus = a - b;
             const complex<double> zsq = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+
             return s_wave(S, m1, m2) * zsq / (1.0 + zsq) + 2.0 * q0sq / b * (S - mp * mp) * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus));
+        }
+
+        complex<double>
+        d_wave(const complex<double> & S, const double & m, const double & q0)
+        {         
+            return d_wave(S, m, m, q0);
+        }
+
+        complex<double>
+        d_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            const double          mp    = m1 + m2;
+            const double          mm    = m1 - m2;
+            const double          q0sq  = q0 * q0;
+            const complex<double> u1     = 3.0 / 2.0 * complex<double>(-1, std::sqrt(3));
+            const complex<double> u2     = -3.0 / 2.0 * complex<double>(1, std::sqrt(3));
+            const complex<double> a1     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
+            const complex<double> b1     = std::sqrt(a1 * a1 - mp * mp * mm * mm);
+            const complex<double> a2     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
+            const complex<double> b2     = std::sqrt(a2 * a2 - mp * mp * mm * mm);
+            const complex<double> s1plus = a1 + b1;
+            const complex<double> s1minus = a1 - b1;
+            const complex<double> s2plus = a2 + b2;
+            const complex<double> s2minus = a2 - b2;
+            const complex<double> zsq = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+            
+            return s_wave(S, m1, m2) * zsq * zsq / (9.0 + 3.0 * zsq + zsq * zsq) - 2.0 * q0sq * (S - mp * mp) * (u1 * u1 / (2.0 * u1 + 3.0) / b1 * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus)) + u2 * u2 / (2.0 * u2 + 3.0) / b2 * (s_wave(s2minus, m1, m2) * s2minus / (mp * mp - s2minus) / (S - s2minus) - s_wave(s2plus, m1, m2) * s2plus / (mp * mp - s2plus) / (S - s2plus)));
         }
     } // namespace chew_mandelstam
 } // namespace eos
