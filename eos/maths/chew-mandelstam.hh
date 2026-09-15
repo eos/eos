@@ -88,6 +88,25 @@ namespace eos
          */
         complex<double> d_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> d_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
+        /*!
+         * The F-wave Chew-Mandelstam function for a two-body channel of two
+         * particles with masses m1 and m2, evaluated at the Mandelstam
+         * variable s.
+         *
+         * This is the F-wave (l_orbital = 3) analytic continuation of
+         * i * rho(s), including the squared Blatt-Weisskopf form factor
+         * for l = 3 and the loop-correction term that keeps the amplitude 
+         * finite at the pseudo-threshold s = mp^2 - 4 q0^2.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         */
+        complex<double> f_wave(const complex<double> & s, const double & m, const double & q0);
+        complex<double> f_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
     } // namespace chew_mandelstam
 } // namespace eos
 

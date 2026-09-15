@@ -352,3 +352,102 @@ class ChewMandelstamDWaveTest : public TestCase
             }
         }
 } chew_mandelstam_d_wave_test;
+
+class ChewMandelstamFWaveTest : public TestCase
+{
+    public:
+        ChewMandelstamFWaveTest() :
+            TestCase("chew_mandelstam_f_wave_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            constexpr double eps = 1e-5;
+
+            // D^+ mass and effective momentum scale, cf. eos/scattering/ee-to-ccbar, PWavePPChannel
+            constexpr double mD = 1.86965;
+            constexpr double m1 = 1.86;
+            constexpr double m2 = 2.01;
+            constexpr double q0 = 0.5;
+
+            // real s, below threshold: the function is real-valued
+            {
+                const complex<double> result = chew_mandelstam::f_wave(-20.0, mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00698812, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(2.0, mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00371294, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(-20.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00701956, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(2.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00386655, eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(result), 0.0, eps);
+            }
+
+            // real s, above threshold
+            {
+                const complex<double> result = chew_mandelstam::f_wave(20.0, mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.00394589, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00255427, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(20.0, m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.00343814, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00172857, eps);
+            }
+
+            // genuinely complex s, e.g. as used to move onto another Riemann sheet
+            {
+                const complex<double> result = chew_mandelstam::f_wave(complex<double>(20.0, 5.0), mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.00110454, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00406132, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(complex<double>(2.0, -1.0), mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00371747, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), -0.000209013, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(complex<double>(-5.0, 0.3), mD, mD, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00499524, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0000485, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(complex<double>(20.0, 5.0), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), 0.000861406, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.00359757, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(complex<double>(2.0, -1.0), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00387061, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), -0.0001984, eps);
+            }
+            {
+                const complex<double> result = chew_mandelstam::f_wave(complex<double>(-5.0, 0.3), m1, m2, q0);
+
+                TEST_CHECK_RELATIVE_ERROR(real(result), -0.00509165, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(result), 0.0000466051, eps);
+            }
+        }
+} chew_mandelstam_f_wave_test;
