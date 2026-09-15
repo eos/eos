@@ -10,8 +10,10 @@ on:
 name: Build/Check/Deploy for PyPI
 
 concurrency:
-  group: pypi, ${{ github.head_ref }}
-  cancel-in-progress: true
+  # ``github.head_ref`` is empty for push events, which would lump every push to
+  # 'release', 'master' and 'testing' into one group and have them cancel each other.
+  group: pypi, ${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name != 'release' && github.ref != 'refs/heads/release' }}
 
 jobs:
   build_wheels:
@@ -226,6 +228,11 @@ jobs:
   upload_pypi:
     needs: [build_wheels]
     if: ${{ github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/release') }}
+    # Both the push to 'release' and the published release reach this job; they
+    # must never upload to PyPI at the same time.
+    concurrency:
+      group: pypi-upload
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     name: Deploy EOS wheels to PyPI
     steps:

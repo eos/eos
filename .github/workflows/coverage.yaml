@@ -14,8 +14,10 @@ on:
 name: Determine Code Coverage
 
 concurrency:
+  # The publishing steps push to the 'eos/coverage' repository without rebasing,
+  # so every run has to queue rather than cancel its predecessor.
   group: Coverage
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   coverage:
