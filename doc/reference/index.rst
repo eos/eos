@@ -9,6 +9,7 @@ This section
 
    python
    command-line-interface
+   mcp-server
    defining-observables
    analysis-file-format
    figure-format
