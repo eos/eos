@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -51,23 +52,76 @@ namespace eos
 
                 return std::atan(z);
             }
+
+            // The derivative of s_wave with respect to s.
+            complex<double>
+            s_wave_prime(const complex<double> & S, const double & m)
+            {
+                static const double pi = M_PI;
+
+                // Adapt s to match Mathematica's behaviour on the branch cut
+                const complex<double> s = S + complex<double>(0.0, 1e-15);
+
+                const complex<double> sqkallen = std::sqrt(s * (4.0 * m * m - s));
+
+                return -1.0 / 16.0 / pi / pi / s * (1.0 - 4.0 * m * m / sqkallen * atan_near_branch_point(s / sqkallen, s));
+            }
+
+            complex<double>
+            s_wave_prime(const complex<double> & S, const double & m1, const double & m2)
+            {
+                if (m1 == m2)
+                {
+                    return s_wave_prime(S, m1);
+                }
+
+                static const double pi = M_PI;
+
+                const double mp = m1 + m2;
+                const double mm = m1 - m2;
+
+                // Adapt s to match Mathematica's behaviour on the branch cut
+                const complex<double> s = S + complex<double>(0.0, 1e-15);
+
+                const complex<double> sqkallen = std::sqrt((s - mp * mp) * (s - mm * mm));
+
+                return -1.0 / 16.0 / pi / pi / s
+                       * (1.0 + (sqkallen / s + (m1 * m1 + m2 * m2 - s) / sqkallen) * std::log((m1 * m1 + m2 * m2 - s + sqkallen) / 2.0 / m1 / m2)
+                          - mp * mm / s * std::log(m1 / m2));
+            }
+
         } // namespace impl
+
+        complex<double>
+        s_wave(const complex<double> & S, const double & m)
+        {
+            static const double pi = M_PI;
+
+            // Adapt s to match Mathematica's behaviour on the branch cut
+            const complex<double> s = S + complex<double>(0.0, 1e-15);
+
+            return -1.0 / 8.0 / pi / pi * std::sqrt(4.0 * m * m - s) * impl::atan_near_branch_point(s / std::sqrt(s * (4.0 * m * m - s)), s) / std::sqrt(s);
+        }
 
         complex<double>
         s_wave(const complex<double> & S, const double & m1, const double & m2)
         {
-            if (m1 != m2)
+            if (m1 == m2)
             {
-                throw InternalError("chew_mandelstam::s_wave: only equal masses (m1 == m2) are currently implemented");
+                return s_wave(S, m1);
             }
 
             static const double pi = M_PI;
 
-            const double          mp = m1 + m2;
-            // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s  = S + complex<double>(0.0, 1e-15);
+            const double mp = m1 + m2;
+            const double mm = m1 - m2;
 
-            return -1.0 / 8.0 / pi / pi * std::sqrt(mp * mp - s) * impl::atan_near_branch_point(s / std::sqrt(s * (mp * mp - s)), s) / std::sqrt(s);
+            // Adapt s to match Mathematica's behaviour on the branch cut
+            const complex<double> s = S + complex<double>(0.0, 1e-15);
+
+            const complex<double> sqkallen = std::sqrt((s - mp * mp) * (s - mm * mm));
+
+            return 1.0 / 16.0 / pi / pi * (sqkallen / s * std::log((m1 * m1 + m2 * m2 - s + sqkallen) / 2.0 / m1 / m2) - mp * mm / s * (1.0 - s / mp / mp) * std::log(m1 / m2));
         }
 
         complex<double>

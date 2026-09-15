@@ -2,6 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -34,19 +35,18 @@ namespace eos
          * The Chew-Mandelstam function is the once-subtracted dispersive
          * integral of the two-body phase space
          *
-         *   rho(s) = sqrt((s - (m1 + m2)^2) * s) / (16 pi s),
+         *   rho(s) = sqrt((s - (m1 + m2)^2) * (s - (m1 - m2)^2)) / (16 pi s),
          *
          * and is the S-wave (l_orbital = 0) analytic continuation of i * rho(s)
          * used e.g. within the K-matrix formalism to unitarize scattering
          * amplitudes below and above threshold, and onto other Riemann sheets.
          *
-         * Only equal masses (m1 == m2) are currently supported, and an
-         * InternalError is raised otherwise.
-         *
          * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel.
          */
+        complex<double> s_wave(const complex<double> & s, const double & m);
         complex<double> s_wave(const complex<double> & s, const double & m1, const double & m2);
 
         /*!
