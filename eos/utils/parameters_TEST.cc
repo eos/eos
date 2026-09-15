@@ -405,5 +405,114 @@ class ParametersTest : public TestCase
                 TEST_CHECK(! (a == ParameterDescription{ mut, 0.0, 9.0, false })); // max differs
                 TEST_CHECK(! (a == ParameterDescription{ mut, 0.0, 1.0, true }));  // nuisance differs
             }
+
+            // H: Parameters::generation
+            {
+                Parameters p   = Parameters::Defaults();
+                Parameter  m_c = p["mass::c"];
+
+                // reading leaves the generation invariant
+                {
+                    const auto initial = p.generation();
+
+                    double sum  = m_c.evaluate() + m_c() + static_cast<double>(m_c) + m_c.evaluate_generator();
+                    sum        += m_c.min() + m_c.max() + m_c.central() + m_c.id();
+                    sum        += m_c.name().size() + m_c.latex().size() + (m_c.unit() == Unit::GeV());
+                    sum        += p.has("mass::c") + p["mass::c"].id() + p[m_c.id()].id();
+
+                    unsigned count = 0;
+                    for (auto i = p.begin(), i_end = p.end(); i != i_end; ++i)
+                    {
+                        ++count;
+                    }
+
+                    TEST_CHECK(count > 0);
+                    TEST_CHECK(sum > 0.0);
+                    TEST_CHECK(initial == p.generation());
+                }
+
+                // a default-constructed generation never matches the generation of a set of parameters
+                TEST_CHECK(Parameters::Generation() != p.generation());
+
+                // every write changes the generation, and never reproduces an earlier one
+                std::vector<Parameters::Generation> generations{ p.generation() };
+
+                auto check_write = [&](const std::string & what)
+                {
+                    const auto current = p.generation();
+
+                    for (const auto & previous : generations)
+                    {
+                        TEST_CHECK_MSG(current != previous, "generation unchanged after " + what);
+                    }
+
+                    generations.push_back(current);
+                };
+
+                m_c = 1.27;
+                check_write("Parameter::operator=");
+
+                m_c.set(1.27);
+                check_write("Parameter::set");
+
+                m_c.set_generator(1.27);
+                check_write("Parameter::set_generator");
+
+                m_c.set_min(0.5);
+                check_write("Parameter::set_min");
+
+                m_c.set_max(5.0);
+                check_write("Parameter::set_max");
+
+                p.set("mass::c", 1.27);
+                check_write("Parameters::set");
+
+                p.declare_and_insert("mass::boeing787", R"(\text{Boeing 787})", Unit::Undefined(), 1.0, 0.0, 2.0);
+                check_write("Parameters::declare_and_insert");
+
+                p.redirect_and_apply("mass::boeing787", m_c.id());
+                check_write("Parameters::redirect_and_apply");
+
+                // declaring an already declared parameter writes nothing
+                {
+                    const auto before = p.generation();
+                    p.declare_and_insert("mass::boeing787", R"(\text{Boeing 787})", Unit::Undefined(), 1.0, 0.0, 2.0);
+                    TEST_CHECK(before == p.generation());
+                }
+
+                // override_from_file writes
+                {
+                    const char * env         = std::getenv("EOS_TESTS_PARAMETERS_FIXTURES");
+                    std::string  fixture_dir = env ? env : "parameters_TEST.d";
+
+                    p.override_from_file(fixture_dir + "/override.yaml");
+                    check_write("Parameters::override_from_file");
+                }
+
+                // a clone and an independent set of defaults never share a generation, not even
+                // after the same sequence of writes
+                {
+                    Parameters q = p.clone();
+                    Parameters r = Parameters::Defaults();
+
+                    TEST_CHECK(p.generation() != q.generation());
+                    TEST_CHECK(p.generation() != r.generation());
+                    TEST_CHECK(q.generation() != r.generation());
+
+                    q.set("mass::c", 1.27);
+                    r.set("mass::c", 1.27);
+                    TEST_CHECK(q.generation() != r.generation());
+                }
+
+                // a write through one Parameter is seen by the whole set
+                {
+                    Parameters q     = Parameters::Defaults();
+                    Parameter  q_m_c = q["mass::c"];
+
+                    const auto before = q.generation();
+                    q_m_c             = 1.27;
+                    TEST_CHECK(before != q.generation());
+                }
+            }
         }
 } parameters_test;
