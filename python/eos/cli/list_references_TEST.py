@@ -23,7 +23,8 @@ from eos.cli import list_references
 
 _FIXTURES = Path(os.environ.get('SOURCE_DIR', Path(__file__).parents[2])) / 'eos/cli/list_references_TEST.d'
 
-KNOWN_REFERENCE = 'BGJvD:2019A'
+KNOWN_REFERENCE  = 'BGJvD:2019A'
+LEGACY_REFERENCE = 'BFS:2001A'
 
 
 def run(*argv):
@@ -66,6 +67,14 @@ class ListReferencesTests(unittest.TestCase):
 
         self.assertEqual(status, 0)
         self.assertEqual(stdout.rstrip('\n').splitlines(), fixture('bgjvd-2019a.txt'))
+
+    def test_legacy_eprint_id(self):
+        "A pre-2007 eprint id keeps its archive prefix in the arXiv identifier."
+
+        status, stdout, _ = run(LEGACY_REFERENCE)
+
+        self.assertEqual(status, 0)
+        self.assertEqual(stdout.rstrip('\n').splitlines(), fixture('bfs-2001a.txt'))
 
     def test_without_filter(self):
         "Without a filter every reference is listed, among them the known one."

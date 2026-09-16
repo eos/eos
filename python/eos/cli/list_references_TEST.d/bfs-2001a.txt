@@ -1,0 +1,3 @@
+[BFS:2001A] : Beneke, M. and Feldmann, T. and Seidel, D.
+    Systematic approach to exclusive $B \to  V \ell^+ \ell^-$, $V \gamma$ decays
+    arXiv:hep-ph/0106067

@@ -69,8 +69,7 @@ def list_references(args):
 
         eprint = None
         if r.eprint_archive() == 'arXiv':
-            pos = r.eprint_id()[::-1].find(':')
-            eprint = 'arXiv:' + r.eprint_id()[pos:]
+            eprint = 'arXiv:' + r.eprint_id().rsplit(':', 1)[-1]
 
         print(f'[{rn}] : {r.authors()}')
         print(f'    {r.title()}')
