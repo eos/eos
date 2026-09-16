@@ -25,6 +25,7 @@
 #include <eos/reference.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/instantiation_policy.hh>
+#include <eos/utils/intermediate-result.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
@@ -83,8 +84,7 @@ namespace eos
     class CacheableObservable : public Observable
     {
         public:
-            struct IntermediateResult
-            {};
+            using IntermediateResult = eos::IntermediateResult;
 
             virtual const IntermediateResult * prepare() const = 0;
 
