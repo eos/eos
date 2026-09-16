@@ -17,7 +17,6 @@ libcli_a_SOURCES = \
 
 bin_PROGRAMS = \
 	eos-evaluate \
-	eos-list-parameters \
 	eos-print-polynomial
 
 LDADD = \
@@ -37,7 +36,5 @@ LDADD = \
 	$(YAMLCPP_LDFLAGS)
 
 eos_evaluate_SOURCES = eos-evaluate.cc
-
-eos_list_parameters_SOURCES = eos-list-parameters.cc
 
 eos_print_polynomial_SOURCES = eos-print-polynomial.cc
