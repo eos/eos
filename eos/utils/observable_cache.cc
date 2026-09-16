@@ -175,11 +175,11 @@ namespace eos
                             continue;
                         }
 
-                        // yes! cache it...
+                        // yes! attempt to cache it...
                         ObservablePtr cached_observable = cacheable_observable->make_cached_observable(std::get<0>(c->second));
                         if (! cached_observable)
                         {
-                            throw InternalError("make_cached_observable() failed");
+                            continue;
                         }
 
                         // add the newly created cached observable

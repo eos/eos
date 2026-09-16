@@ -252,6 +252,12 @@ namespace eos
                     return { nullptr };
                 }
 
+                // the intermediate result is only shared between observables that obtain it in the same way
+                if (other->_prepare_fn != this->_prepare_fn)
+                {
+                    return { nullptr };
+                }
+
                 if (other->_parameters != this->_parameters)
                 {
                     return { nullptr };
