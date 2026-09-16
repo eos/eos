@@ -126,8 +126,9 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS_FIXTURES="$(abs_srcdir)/parameters_TEST.d";
 
 EXTRA_DIST = \
-	parameters_TEST.d/override.yaml \
-	parameters_TEST.d/missing-central.yaml
+	parameters_TEST.d/bad-node.yaml \
+	parameters_TEST.d/missing-central.yaml \
+	parameters_TEST.d/override.yaml
 
 TESTS = \
 	cacheable-observable_TEST \

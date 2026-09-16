@@ -1,0 +1,8 @@
+# Fixture for ParametersTest: an incorrect parameter node.
+# Parameters::override_from_file() rethrows the resulting node error as a
+# ParameterInputFileNodeError.
+test::bad:
+    min: 1.0
+    max: 2.0
+    central: 1.5
+    latex: ["e^{i\\pi}"]
