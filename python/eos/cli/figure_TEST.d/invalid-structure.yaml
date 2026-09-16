@@ -1,0 +1,11 @@
+type: 'single'
+plot:
+  xaxis:
+    label: '$q^2$'
+  items:
+  - type: 'observable'
+    observable: 'B->Dlnu::dBR/dq2'
+    variable: 'q2'
+    range: [1.0, 2.0]
+    resolution: 3
+    no_such_key: 42
