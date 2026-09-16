@@ -65,6 +65,7 @@ namespace eos
             double evaluate1(const IntermediateResult *) const;
             double evaluate2(const IntermediateResult *) const;
             double evaluate3(const AlternativeResult *) const;
+            double evaluate4(const IntermediateResult *, const double & k2) const;
 
             /*!
              * References used in the computation of our observables.
@@ -133,6 +134,12 @@ namespace eos
             {
                 return alternative_result->c;
             }
+
+            double
+            evaluate4(const IntermediateResult * intermediate_result, const double & k2)
+            {
+                return intermediate_result->b - intermediate_result->a * intermediate_result->q2 * k2;
+            }
     };
 
     TestCacheableObservableProvider::TestCacheableObservableProvider(const Parameters & parameters, const Options & options) :
@@ -176,6 +183,12 @@ namespace eos
     TestCacheableObservableProvider::evaluate3(const TestCacheableObservableProvider::AlternativeResult * ir) const
     {
         return _imp->evaluate3(ir);
+    }
+
+    double
+    TestCacheableObservableProvider::evaluate4(const TestCacheableObservableProvider::IntermediateResult * ir, const double & k2) const
+    {
+        return _imp->evaluate4(ir, k2);
     }
 
     /*!
@@ -271,7 +284,8 @@ class CacheableObservableTest : public TestCase
 
 
                 // Try to create a cacheable observable
-                using TestCacheableObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::IntermediateResult, double>;
+                using TestCacheableObservable =
+                        class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::IntermediateResult, std::tuple<double>, std::tuple<>>;
 
                 ObservablePtr cacheable_observable(new TestCacheableObservable("test::cacheable_observable1(q2)",
                                                                                p,
@@ -281,7 +295,8 @@ class CacheableObservableTest : public TestCase
                                                                                Options(),
                                                                                &TestCacheableObservableProvider::prepare,
                                                                                &TestCacheableObservableProvider::evaluate1,
-                                                                               std::make_tuple("q2")));
+                                                                               std::make_tuple("q2"),
+                                                                               std::make_tuple()));
 
                 TEST_CHECK_NEARLY_EQUAL(cacheable_observable->evaluate(), 5.27934 - 2.0 * 2.0, 1.e-5);
 
@@ -303,11 +318,27 @@ class CacheableObservableTest : public TestCase
                                                                                 Options(),
                                                                                 &TestCacheableObservableProvider::prepare,
                                                                                 &TestCacheableObservableProvider::evaluate1,
-                                                                                std::make_tuple("q2")));
+                                                                                std::make_tuple("q2"),
+                                                                                std::make_tuple()));
                 ObservableCache::ObservableId cacheable_observable2_id;
                 unsigned                      cache_size = cache.size();
 
                 TEST_CHECK_NO_THROW(cacheable_observable2_id = cache.add(cacheable_observable2));
+                TEST_CHECK_EQUAL(cache.size(), cache_size + 1);
+
+                // Adding an identical observable once more must find the cached observable that now stands in for it
+                ObservablePtr cacheable_observable2_copy(new TestCacheableObservable("test::cacheable_observable2(q2)",
+                                                                                     p,
+                                                                                     Kinematics({
+                                                                                         { "q2", 2.0 }
+                }),
+                                                                                     Options(),
+                                                                                     &TestCacheableObservableProvider::prepare,
+                                                                                     &TestCacheableObservableProvider::evaluate1,
+                                                                                     std::make_tuple("q2"),
+                                                                                     std::make_tuple()));
+
+                TEST_CHECK_EQUAL(cacheable_observable2_id, cache.add(cacheable_observable2_copy));
                 TEST_CHECK_EQUAL(cache.size(), cache_size + 1);
 
 
@@ -336,7 +367,8 @@ class CacheableObservableTest : public TestCase
                                                                                 Options(),
                                                                                 &TestCacheableObservableProvider::prepare,
                                                                                 &TestCacheableObservableProvider::evaluate2,
-                                                                                std::make_tuple("q2")));
+                                                                                std::make_tuple("q2"),
+                                                                                std::make_tuple()));
                 ObservableCache::ObservableId cacheable_observable3_id [[maybe_unused]];
 
                 TEST_CHECK_NO_THROW(cacheable_observable3_id = cache.add(cacheable_observable3));
@@ -352,14 +384,16 @@ class CacheableObservableTest : public TestCase
                                                                              Options(),
                                                                              &TestCacheableObservableProvider::prepare_shifted,
                                                                              &TestCacheableObservableProvider::evaluate1,
-                                                                             std::make_tuple("q2")));
+                                                                             std::make_tuple("q2"),
+                                                                             std::make_tuple()));
                 ObservableCache::ObservableId shifted_observable_id;
 
                 TEST_CHECK_NO_THROW(shifted_observable_id = cache.add(shifted_observable));
 
 
                 // Add a cacheable observable that uses a second intermediate result type
-                using TestAlternativeObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::AlternativeResult, double>;
+                using TestAlternativeObservable =
+                        class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::AlternativeResult, std::tuple<double>, std::tuple<>>;
 
                 ObservablePtr                 alternative_observable(new TestAlternativeObservable("test::alternative_observable(q2)",
                                                                                    p,
@@ -369,10 +403,34 @@ class CacheableObservableTest : public TestCase
                                                                                    Options(),
                                                                                    &TestCacheableObservableProvider::prepare_alternative,
                                                                                    &TestCacheableObservableProvider::evaluate3,
-                                                                                   std::make_tuple("q2")));
+                                                                                   std::make_tuple("q2"),
+                                                                                   std::make_tuple()));
                 ObservableCache::ObservableId alternative_observable_id;
 
                 TEST_CHECK_NO_THROW(alternative_observable_id = cache.add(alternative_observable));
+
+
+                // Add a cacheable observable that shares the intermediate result of the first one, but
+                // consumes an additional kinematic variable in its evaluation
+                using TestPartiallyCachedObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider,
+                                                                                        TestCacheableObservableProvider::IntermediateResult,
+                                                                                        std::tuple<double>,
+                                                                                        std::tuple<double>>;
+
+                ObservablePtr                 partially_cached_observable(new TestPartiallyCachedObservable("test::partially_cached_observable(q2,k2)",
+                                                                                            p,
+                                                                                            Kinematics({
+                                                                                                { "q2", 2.0 },
+                                                                                                { "k2", 3.0 }
+                }),
+                                                                                            Options(),
+                                                                                            &TestCacheableObservableProvider::prepare,
+                                                                                            &TestCacheableObservableProvider::evaluate4,
+                                                                                            std::make_tuple("q2"),
+                                                                                            std::make_tuple("k2")));
+                ObservableCache::ObservableId partially_cached_observable_id;
+
+                TEST_CHECK_NO_THROW(partially_cached_observable_id = cache.add(partially_cached_observable));
 
 
                 // Test cache evaluation
@@ -380,6 +438,7 @@ class CacheableObservableTest : public TestCase
                 TEST_CHECK_EQUAL(cache[cacheable_observable_id], cache[cacheable_observable2_id]);
                 TEST_CHECK_NEARLY_EQUAL(cache[shifted_observable_id], 5.27934 - 2.0 * 3.0, 1.e-5);
                 TEST_CHECK_NEARLY_EQUAL(cache[alternative_observable_id], 5.27934 * 2.0, 1.e-5);
+                TEST_CHECK_NEARLY_EQUAL(cache[partially_cached_observable_id], 5.27934 - 2.0 * 2.0 * 3.0, 1.e-5);
 
                 // Test cache cloning
                 ObservableCache cache2(p);

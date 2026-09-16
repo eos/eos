@@ -33,6 +33,7 @@
 
 #include <map>
 #include <string>
+#include <typeindex>
 #include <vector>
 
 namespace eos
@@ -90,6 +91,13 @@ namespace eos
             virtual double evaluate(const IntermediateResult *) const = 0;
 
             virtual double evaluate() const = 0;
+
+            /*!
+             * Identify how the intermediate result is obtained, i.e. the provider, the type of the
+             * intermediate result, and the kinematic variables entering its computation. Observables
+             * that disagree here can never share an intermediate result.
+             */
+            virtual std::type_index prepare_type_index() const = 0;
 
             virtual ObservablePtr make_cached_observable(const CacheableObservable *) const = 0;
     };

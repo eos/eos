@@ -148,34 +148,13 @@ namespace eos
                 }
                 else if (nullptr != cacheable_observable) // is the new observable cacheable?
                 {
-                    std::type_index type_index(typeid(*cacheable_observable));
+                    std::type_index type_index(cacheable_observable->prepare_type_index());
 
-                    // have we encountered this type of cacheable observable before?
+                    // have we encountered a cacheable observable with a compatible intermediate result before?
                     auto range = cacheable_observables.equal_range(type_index);
                     for (auto c = range.first, c_end = range.second; c != c_end; ++c)
                     {
-                        // have we encountered this cacheable observable with the same properties before?
-                        if (std::get<0>(c->second)->kinematics() != cacheable_observable->kinematics())
-                        {
-                            continue;
-                        }
-
-                        if (std::get<0>(c->second)->options() != cacheable_observable->options())
-                        {
-                            continue;
-                        }
-                        const KinematicUser &                     kinematic_user_cacheable_obs = static_cast<const KinematicUser &>(*cacheable_observable);
-                        const KinematicUser &                     kinematic_user_cached_obs    = static_cast<const KinematicUser &>(*std::get<0>(c->second));
-                        std::unordered_set<KinematicVariable::Id> kinematic_ids_cacheable_obs(kinematic_user_cacheable_obs.begin_kinematics(),
-                                                                                              kinematic_user_cacheable_obs.end_kinematics());
-                        std::unordered_set<KinematicVariable::Id> kinematic_ids_cached_obs(kinematic_user_cached_obs.begin_kinematics(),
-                                                                                           kinematic_user_cached_obs.end_kinematics());
-                        if (kinematic_ids_cacheable_obs != kinematic_ids_cached_obs)
-                        {
-                            continue;
-                        }
-
-                        // yes! attempt to cache it...
+                        // attempt to adopt its intermediate result...
                         ObservablePtr cached_observable = cacheable_observable->make_cached_observable(std::get<0>(c->second));
                         if (! cached_observable)
                         {
