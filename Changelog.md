@@ -9,6 +9,7 @@
 - **Breaking:** Rename the ``BFW2010``, ``BMRvD2022`` and ``ABR2022`` form factor parametrizations to ``SE`` (D. van Dyk)
 - **Breaking:** Rename the hadronic-matrix-element mass parameters shared by the ``BSZ2015``, ``SE``, ``SSE``, ``BGL1997``, and ``HKVT2025`` form factor parametrizations from an ``@BSZ2015``/``@SE`` suffix to ``@HME``, since these are shared parametrization inputs rather than parametrization-specific fit outputs or physical masses; any saved parameter samples or analysis files that name a ``mass::...@BSZ2015`` or ``mass::...@SE`` parameter explicitly must be updated to ``@HME`` (D. van Dyk)
 - **Breaking:** Default ``eos.figure.ConstraintResidueItem`` to a new ``style: 'pull'``, drawing each residue as a bar in units of standard deviations; the previous error-bar drawing of the absolute deviation is still available via ``style: 'delta'`` (D. van Dyk)
+- **Breaking:** Removes and forbids the $ signs in the latex representation of parameters (M. Reboud)
 - Report problems in an analysis file as located ``eos.diagnostic.Diagnostic`` objects in lieu of raising on the first one: loading now enforces a structural validation phase, while a separate and side-effect-free semantic phase resolves the file's own custom parameters, observables and constraints through a per-file validation context, checks expressions through the C++ expression parser without registering them, reports unused priors, likelihoods, masks, and custom entities, and reports parameters that a posterior fixes while one of its own priors varies them or that neither its likelihood nor any of its predictions uses (D. van Dyk)
 - Attach the source YAML line number to each ``eos.diagnostic.Diagnostic`` reported for an analysis file, resolved by walking the file's raw YAML parse tree rather than the already-parsed structure, since the latter has discarded that information by the time a diagnostic is created (L. Gärtner)
 - Restrict file-local names in analysis files to exclude `/` and whitespace (D. van Dyk)
@@ -24,7 +25,7 @@
 - Deliver a native log message to the Python logger synchronously and in order, in lieu of deferring it to the main thread through ``Py_AddPendingCall``; messages emitted after ``atexit`` no longer reach Python, since that is where the callbacks' references are released (D. van Dyk)
 - Bounds-check the id that a parameter name maps to in ``Parameters::operator[]``, matching the check that its ``Parameter::Id`` overload already performs, so that an id outliving its parameter is reported in lieu of read out of bounds (D. van Dyk)
 - Enforce dynesty>=3.0.0 on installation (C. Bolognani)
-- **Breaking:** Removes and forbids the $ signs in the latex representation of parameters (M. Reboud)
+- Fix the integration routines to avoid anticipated termination of the range subdivision (M. Reboud)
 
 ### Added
 
