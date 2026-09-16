@@ -1,0 +1,4 @@
+B->D^(*)lnu::R_D^(*)@HFLAV:2019A
+    type: MultivariateGaussian(Covariance)
+    observable: B->Dlnu::R_D
+    observable: B->D^*lnu::R_D^*
