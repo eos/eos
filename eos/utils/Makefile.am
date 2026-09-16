@@ -31,6 +31,7 @@ libeosutils_la_SOURCES = \
 	gsl-hacks.cc \
 	indirect-iterator.hh indirect-iterator-fwd.hh indirect-iterator-impl.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
+	intermediate-result.hh \
 	iterator-range.hh \
 	join.hh \
 	kinematic.cc kinematic.hh \
@@ -91,6 +92,7 @@ include_eos_utils_HEADERS = \
 	expression-parser.hh expression-parser-impl.hh \
 	indirect-iterator.hh indirect-iterator-fwd.hh \
 	instantiation_policy.hh instantiation_policy-impl.hh \
+	intermediate-result.hh \
 	iterator-range.hh \
 	join.hh \
 	kinematic.hh \
