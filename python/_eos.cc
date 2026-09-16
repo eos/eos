@@ -2114,7 +2114,13 @@ BOOST_PYTHON_MODULE(_eos)
 
             :rtype: str
         )",
-                 args("self"));
+                 args("self"))
+            .def("numerator_kinematic_variables", range(&SignalPDFEntry::begin_numerator_kinematic_variables, &SignalPDFEntry::end_numerator_kinematic_variables), R"(
+            Returns an iterator over the names of the kinematic variables in the PDF's numerator.
+        )")
+            .def("denominator_kinematic_variables", range(&SignalPDFEntry::begin_denominator_kinematic_variables, &SignalPDFEntry::end_denominator_kinematic_variables), R"(
+            Returns an iterator over the names of the kinematic variables in the PDF's denominator.
+        )");
 
     // SignalPDFGroup
     register_ptr_to_python<std::shared_ptr<SignalPDFGroup>>();
