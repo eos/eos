@@ -18,12 +18,125 @@
  */
 
 #include <eos/observable-impl.hh>
+#include <eos/rare-c-decays/d-to-psd-l-l.hh>
 #include <eos/rare-c-decays/lambda-c-to-proton-l-l.hh>
 #include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
 {
+    // D -> P(seudoscalar) decays
+    // {{{
+
+    // D -> pi l l
+    // {{{
+    ObservableGroup
+    make_d_to_pi_l_l_group()
+    {
+        auto imp = new Implementation<ObservableGroup>(R"(Observables in $D \to \pi \ell^+ \ell^-$ decays)",
+                                                       R"(The option "l" selects the charged lepton flavor. The option "q" selects the spectator quark flavour.
+            The option "cp-conjugate" selects between the decay and its CP-conjugate. The option "model" selects
+            the model for the Wilson coefficients. The option "form-factors" selects the form factor parameterization.)",
+                                                       {
+                                                           make_observable("D->pill::Gamma",
+                                                                           R"(\Gamma(D \to \pi \ell^+ \ell^-))",
+                                                                           Unit::GeV(),
+                                                                           &DToPseudoscalarLeptonLepton::integrated_decay_width,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::BR",
+                                                                           R"(\mathcal{B}(D \to \pi \ell^+ \ell^-))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonLepton::integrated_branching_ratio,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::dBR/dq2",
+                                                                           R"(d\mathcal{B}(D \to \pi \ell^+ \ell^-)/dq^2)",
+                                                                           Unit::InverseGeV2(),
+                                                                           &DToPseudoscalarLeptonLepton::differential_branching_ratio,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::d^2Gamma/dq2/dcos(theta_l)",
+                                                                           R"(d^2\Gamma(D \to \pi \ell^+ \ell^-)/dq^2 d\cos(\theta_\ell))",
+                                                                           Unit::InverseGeV(),
+                                                                           &DToPseudoscalarLeptonLepton::double_differential_decay_width,
+                                                                           std::make_tuple("q2", "cos(theta_l)"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::F_H(q2)",
+                                                                           R"(F_{\mathrm{L}}(q^2)(D \to \pi \ell^+ \ell^-))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonLepton::differential_flat_term,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::A_FB^l(q2)",
+                                                                           R"(A_{\mathrm{FB}}^\ell(q^2)(D \to \pi \ell^+ \ell^-))",
+                                                                           Unit::None(),
+                                                                           &DToPseudoscalarLeptonLepton::differential_forward_backward_asymmetry,
+                                                                           std::make_tuple("q2"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::F_H_numerator",
+                                                                           R"(\Gamma \cdot \langle F_{\mathrm{L}}(D \to \pi \ell^+ \ell^-)\rangle)",
+                                                                           Unit::GeV(),
+                                                                           &DToPseudoscalarLeptonLepton::integrated_flat_term_numerator,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("D->pill::A_FB^l_numerator",
+                                                                           R"(\Gamma \cdot \langle A_{\mathrm{FB}}^\ell(D \to \pi \ell^+ \ell^-)\rangle)",
+                                                                           Unit::GeV(),
+                                                                           &DToPseudoscalarLeptonLepton::integrated_forward_backward_asymmetry_numerator,
+                                                                           std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_expression_observable("D->pill::F_L",
+                                                                                      R"(\langle F_{\mathrm{L}}(D \to \pi \ell^+ \ell^-)\rangle)",
+                                                                                      Unit::None(),
+                                                                                      R"(
+                                             <<D->pill::F_H_numerator>> / <<D->pill::Gamma>>
+                                           )"),
+
+                                                           make_expression_observable("D->pill::A_FB^l",
+                                                                                      R"(\langle A_{\mathrm{FB}}^\ell(D \to \pi \ell^+ \ell^-)\rangle)",
+                                                                                      Unit::None(),
+                                                                                      R"(
+                                            <<D->pill::A_FB^l_numerator>> / <<D->pill::Gamma>>
+                                           )"),
+
+                                                           make_expression_observable("D->pill::Sigma_A_FB^l",
+                                                                                      R"(\Sigma\langle A_{\mathrm{FB}}^\ell(D \to \pi \ell^+ \ell^-)\rangle)",
+                                                                                      Unit::None(),
+                                                                                      R"(
+                                            0.5 * (<<D->pill::A_FB^l;cp-conjugate=false>> + <<D->pill::A_FB^l;cp-conjugate=true>>)
+                                           )"),
+
+                                                           make_expression_observable("D->pill::Delta_A_FB^l",
+                                                                                      R"(\Delta\langle A_{\mathrm{FB}}^\ell(D \to \pi \ell^+ \ell^-)\rangle)",
+                                                                                      Unit::None(),
+                                                                                      R"(
+                                            0.5 * (<<D->pill::A_FB^l;cp-conjugate=false>> - <<D->pill::A_FB^l;cp-conjugate=true>>)
+                                           )"),
+        });
+
+        return ObservableGroup(imp);
+    }
+
+    // }}}
+    //}}}
+
     // Lambda_c -> p l l decays
     // {{{
     ObservableGroup
@@ -131,7 +244,9 @@ namespace eos
         auto imp = new Implementation<ObservableSection>("Observables in rare $c$-hadron decays",
                                                          "",
                                                          { // Lc -> proton l^+ l^-
-                                                           make_lambdac_to_proton_l_l_group() });
+                                                           make_lambdac_to_proton_l_l_group(),
+                                                           // D -> pi l^+ l^-
+                                                           make_d_to_pi_l_l_group() });
 
         return ObservableSection(imp);
     }
