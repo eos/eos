@@ -26,6 +26,10 @@
 - Bounds-check the id that a parameter name maps to in ``Parameters::operator[]``, matching the check that its ``Parameter::Id`` overload already performs, so that an id outliving its parameter is reported in lieu of read out of bounds (D. van Dyk)
 - Enforce dynesty>=3.0.0 on installation (C. Bolognani)
 - Fix the integration routines to avoid anticipated termination of the range subdivision (M. Reboud)
+- Templatise the cacheable observable machinery on the type of the intermediate result, so that one provider can offer several of them (D. van Dyk)
+- Declare a cacheable observable through the new ``cache()`` and ``evaluate()`` helpers, which pair each half of it with the kinematic variables that half consumes: an observable's kinematic variables no longer all enter its intermediate result, and observables that differ only in the variables their evaluation consumes now share one (D. van Dyk)
+- Obtain a cacheable observable's provider, its option specifications, and its references through the new ``impl::ProviderTraits`` class template, so that a provider which a factory selects -- as a form factor parametrization is selected from the observable's prefix -- can back a cacheable observable, in lieu of only one constructed from a set of parameters and a set of options (D. van Dyk)
+- Move the base of all intermediate results out of ``CacheableObservable`` into ``eos::IntermediateResult``, declared in the new header ``eos/utils/intermediate-result.hh``, so that a provider below the observable layer, such as a form factor, can derive from it without depending on the observable interface (D. van Dyk)
 
 ### Added
 
@@ -51,6 +55,8 @@
 - Add a test case that races sixteen threads for a singleton's first ``instance()`` call and checks that exactly one instance is constructed (D. van Dyk)
 - Add a generation index to ``Parameters``, exported to Python as the ``eos.Parameters.generation`` property: it changes whenever any of the parameters is written to and is invariant under reading them, so that a consumer can reuse a costly parameter-dependent result across observables that differ only in their kinematics (D. van Dyk)
 - Add ``eos-mcp-server``, an optional local MCP (Model Context Protocol) server exposing ``eos.Observables``, ``eos.Parameters``, ``eos.Constraints``, and ``eos.References`` as read-only lookup tools for an LLM coding agent, shipped as ``eos.mcp`` behind the new ``mcp`` extra (L. Gärtner)
+- Add an opaque intermediate result to the ``FormFactors<VacuumToPP>`` interface: it depends on the parameters only, is obtained from ``prepare()``, and is passed to every accessor alongside that accessor's own kinematic variables, so that a parametrization can hoist an expensive parameter-dependent step out of its per-``q^2`` work (D. van Dyk)
+- Register the twelve ``0->pipi`` and ``0->Kpi`` form factor observables as cacheable observables, so that they share one intermediate result across all values of ``q^2`` within one update of an observable cache (D. van Dyk)
 
 ### Deprecated
 
@@ -87,6 +93,7 @@
 - Fix ``eos.Parameters.declare`` appending a second entry for a name it has already declared, which grew the process-wide set of default parameters by one entry for every ``eos.AnalysisFile`` that declares parameters of its own and left two ``eos.Parameters`` objects created at different times disagreeing on which id a name denotes (D. van Dyk)
 - Fix the double-checked locking in ``InstantiationPolicy<T_, Singleton>::instance()``, which read the instance pointer outside its lock without synchronisation and could therefore hand a thread a pointer to an object whose construction it cannot yet observe (D. van Dyk)
 - Fix the order of marking a ``Ticket`` and releasing the job associated with it, curing a race condition leading to a rare segfault on the Python side (D. van Dyk)
+- Share an intermediate result only between cacheable observables that agree on the function preparing it and on the implementation behind their provider interface: two observables of one provider whose prepare functions have the same signature were grouped together, and the second silently evaluated the first's intermediate result (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
