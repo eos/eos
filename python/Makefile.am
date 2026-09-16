@@ -47,6 +47,9 @@ EXTRA_DIST = \
 	eos/cli/list_references.py \
 	eos/cli/list_references_TEST.d \
 	eos/cli/list_references_TEST.py \
+	eos/cli/list_signal_pdfs.py \
+	eos/cli/list_signal_pdfs_TEST.d \
+	eos/cli/list_signal_pdfs_TEST.py \
 	eos/cli/mcp.py \
 	eos/datasets.py \
 	eos/datasets_TEST.d \
@@ -157,6 +160,7 @@ eoscli_SCRIPTS = \
 	eos/cli/list_constraints.py \
 	eos/cli/list_observables.py \
 	eos/cli/list_references.py \
+	eos/cli/list_signal_pdfs.py \
 	eos/cli/mcp.py
 
 eosdatadir = $(pkgpythondir)/data
@@ -224,6 +228,7 @@ TESTS = \
 	eos/cli/list_constraints_TEST.py \
 	eos/cli/list_observables_TEST.py \
 	eos/cli/list_references_TEST.py \
+	eos/cli/list_signal_pdfs_TEST.py \
 	eos/validation_context_TEST.py \
 	eos/datasets_TEST.py \
 	eos/datasets_file_description_TEST.py \
