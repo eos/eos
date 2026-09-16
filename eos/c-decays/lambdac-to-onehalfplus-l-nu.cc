@@ -350,6 +350,8 @@ namespace eos
             std::function<complex<double>()>                                      v_cQ;
             std::function<WilsonCoefficients<ChargedCurrent>(LeptonFlavor, bool)> wc;
 
+            cubature::Config cub_conf;
+
             BooleanOption opt_cp_conjugate;
 
             // { B } -> { process, Q, B_name }
@@ -415,6 +417,7 @@ namespace eos
                 alpha(p[_B() + "::alpha"], u),
                 mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
                 form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(_process() + "::" + o.get("form-factors"_ok, "SE"_ov).str(), p, o)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok)
             {
                 Context ctx("When constructing Lambda_c->Baryon(1/2+)lnu observable");
@@ -526,7 +529,7 @@ namespace eos
                 std::function<std::array<double, 10>(const double &)> integrand = [this](const double & q2) -> std::array<double, 10>
                 { return this->_differential_angular_observables(q2); };
 
-                return integrate<1, 10>(integrand, q2_min, q2_max, cubature::Config().epsrel(1e-5));
+                return integrate<1, 10>(integrand, q2_min, q2_max, cub_conf);
                 ;
             }
 
