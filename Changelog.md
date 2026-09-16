@@ -31,6 +31,9 @@
 - Declare a cacheable observable through the new ``cache()`` and ``evaluate()`` helpers, which pair each half of it with the kinematic variables that half consumes: an observable's kinematic variables no longer all enter its intermediate result, and observables that differ only in the variables their evaluation consumes now share one (D. van Dyk)
 - Obtain a cacheable observable's provider, its option specifications, and its references through the new ``impl::ProviderTraits`` class template, so that a provider which a factory selects -- as a form factor parametrization is selected from the observable's prefix -- can back a cacheable observable, in lieu of only one constructed from a set of parameters and a set of options (D. van Dyk)
 - Move the base of all intermediate results out of ``CacheableObservable`` into ``eos::IntermediateResult``, declared in the new header ``eos/utils/intermediate-result.hh``, so that a provider below the observable layer, such as a form factor, can derive from it without depending on the observable interface (D. van Dyk)
+- Move the implementation of the ``eos-figure`` command into the new module ``eos.cli.figure``, leaving the script as a shim, so that its subcommands can be tested and called from Python (D. van Dyk)
+- Move the implementations of the ``eos-list-observables`` and ``eos-list-references`` commands into the new modules ``eos.cli.list_observables`` and ``eos.cli.list_references``, leaving the scripts as shims (D. van Dyk)
+- Reimplement the ``eos-list-constraints``, ``eos-list-parameters``, and ``eos-list-signal-pdfs`` commands in Python, as the new modules ``eos.cli.list_constraints``, ``eos.cli.list_parameters``, and ``eos.cli.list_signal_pdfs``, in lieu of the C++ clients of the same names; their output is unchanged, except that ``eos-list-parameters`` now sorts the parameter sections by name, since the order in which EOS reads their files is arbitrary (D. van Dyk)
 
 ### Added
 
@@ -59,6 +62,7 @@
 - Add an opaque intermediate result to the ``FormFactors<VacuumToPP>`` interface: it depends on the parameters only, is obtained from ``prepare()``, and is passed to every accessor alongside that accessor's own kinematic variables, so that a parametrization can hoist an expensive parameter-dependent step out of its per-``q^2`` work (D. van Dyk)
 - Register the twelve ``0->pipi`` and ``0->Kpi`` form factor observables as cacheable observables, so that they share one intermediate result across all values of ``q^2`` within one update of an observable cache (D. van Dyk)
 - Export ``MemoisationControl`` to Python, so that ``eos.MemoisationControl.instance().clear()`` frees the memory held by all memoisation caches (L. Gärtner)
+- Expose the ``numerator_kinematic_variables()`` and ``denominator_kinematic_variables()`` accessors of ``eos.SignalPDFEntry`` to Python, which listing a signal PDF's kinematic variables requires (D. van Dyk)
 
 ### Deprecated
 
@@ -69,6 +73,9 @@
 - Remove the ``eos-plot``, ``eos-plot-1d``, and ``eos-plot-2d`` scripts, which were mere drivers for the removed ``eos.plot`` package; use the ``eos-figure draw`` command instead (D. van Dyk)
 - Remove the ``eos-analysis plot-samples`` command, whose sole output was produced by the removed ``eos.plot`` package; declare a figure in the analysis file and draw it with the ``draw-figure`` task instead (D. van Dyk)
 - Remove the ``eos.Mutable`` and ``eos.ParameterDescription`` classes, which no exported function or member could produce and which therefore could not be reached from Python (D. van Dyk)
+- Remove the ``eos-make-constraint``, ``eos-merge-mcmc``, ``eos-prepare-home``, ``eos-print-modes``, and ``eos-print-uncertainty`` scripts, none of which could be run any longer: all but one referred to the HDF5-based data-file classes that ``eos.data`` no longer provides, and ``eos-prepare-home`` imported a module that no longer exists; use ``eos-analysis create-constraint`` in lieu of ``eos-make-constraint`` (D. van Dyk)
+- Remove the ``--base-directory`` option of the ``eos-figure draw`` command, which the command never read; the base directory addresses the data files of an analysis and therefore belongs to ``eos-analysis`` (D. van Dyk)
+- Remove the ``eos-evaluate``, ``eos-print-polynomial``, and ``eos-scan`` command-line clients together with the ``libcli`` library that supported them, leaving EOS without C++ clients; polynomials in the Wilson coefficients are now created from Python, and ``eos-scan`` had not been part of the build for years. The ``btopilnu-evaluate.bash`` CLI example is removed along with ``eos-evaluate`` (D. van Dyk)
 
 ### Fixed
 
@@ -96,6 +103,8 @@
 - Fix the double-checked locking in ``InstantiationPolicy<T_, Singleton>::instance()``, which read the instance pointer outside its lock without synchronisation and could therefore hand a thread a pointer to an object whose construction it cannot yet observe (D. van Dyk)
 - Fix the order of marking a ``Ticket`` and releasing the job associated with it, curing a race condition leading to a rare segfault on the Python side (D. van Dyk)
 - Share an intermediate result only between cacheable observables that agree on the function preparing it and on the implementation behind their provider interface: two observables of one provider whose prepare functions have the same signature were grouped together, and the second silently evaluated the first's intermediate result (D. van Dyk)
+- Fix the arXiv identifier that ``eos-list-references`` prints: it searched the reversed eprint id for a colon and then sliced the unreversed id at that index, so that ``oai:arXiv.org:1912.09335`` was reported as ``arXiv:org:1912.09335`` (D. van Dyk)
+- Fix ``eos-list-constraints --dump-as-yaml``, which emitted each constraint nested inside the one before it, so that the dump of all 741 constraints parsed as a mapping of 7 entries and the remainder was unreachable (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
