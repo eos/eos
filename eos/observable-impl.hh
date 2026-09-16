@@ -198,25 +198,6 @@ namespace eos
         return result;
     }
 
-    /* Deprecated: every kinematic variable enters the intermediate result */
-    template <typename Decay_, typename IntermediateResult_, typename Tuple_, typename... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr>
-    make_cacheable_observable(const char * name, const Unit & unit, const IntermediateResult_ * (Decay_::*prepare_fn)(const Args_ &...) const,
-                              double (Decay_::*evaluate_fn)(const IntermediateResult_ *) const, const Tuple_ & kinematics_names, const Options & forced_options = Options{})
-    {
-        return std::apply([&](auto... names) { return make_cacheable_observable(name, unit, cache(prepare_fn, names...), evaluate(evaluate_fn), forced_options); },
-                          kinematics_names);
-    }
-
-    template <typename Decay_, typename IntermediateResult_, typename Tuple_, typename... Args_>
-    std::pair<QualifiedName, ObservableEntryPtr>
-    make_cacheable_observable(const char * name, const char * latex, const Unit & unit, const IntermediateResult_ * (Decay_::*prepare_fn)(const Args_ &...) const,
-                              double (Decay_::*evaluate_fn)(const IntermediateResult_ *) const, const Tuple_ & kinematics_names, const Options & forced_options = Options{})
-    {
-        return std::apply([&](auto... names) { return make_cacheable_observable(name, latex, unit, cache(prepare_fn, names...), evaluate(evaluate_fn), forced_options); },
-                          kinematics_names);
-    }
-
     /* expressions involving observables */
 
     std::pair<QualifiedName, ObservableEntryPtr> make_expression_observable(const char * name, const char * latex, const Unit & unit, const char * _expression);
