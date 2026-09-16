@@ -40,6 +40,7 @@ TESTS = \
 LDADD = \
     $(top_builddir)/test/libeostest.la \
     libeosscattering.la \
+    $(top_builddir)/eos/maths/libeosmaths.la \
     $(top_builddir)/eos/utils/libeosutils.la \
     $(top_builddir)/eos/libeos.la
 
