@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/form-factors.hh>
+#include <eos/maths/integrate-impl.hh>
 #include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/models/model.hh>
@@ -67,7 +68,7 @@ namespace eos
 
             UsedParameter mu;
 
-            GSL::QAGS::Config int_config;
+            cubature::Config cub_conf;
 
             static const std::vector<OptionSpecification> options;
 
@@ -86,7 +87,7 @@ namespace eos
                 tau_tau(p["life_time::tau"], u),
                 isospin_factor(opt_K.value() == "K_L" ? +1.0 : -1.0), // K_L -> pi+ vs K_S -> pi+ and K- -> pi^0
                 mu(p["ustaunutau::mu"], u),
-                int_config(GSL::QAGS::Config().epsrel(0.5e-3))
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0))
             {
                 Context ctx("When constructing tau^+ -> [K pi]^+ nubar observable");
 
@@ -150,7 +151,7 @@ namespace eos
                 const double                          q2_min = power_of<2>(m_K() + m_pi());
                 const double                          q2_max = power_of<2>(m_tau());
                 std::function<double(const double &)> f      = std::bind(&Implementation<TauToKPiNeutrino>::differential_branching_ratio, this, std::placeholders::_1);
-                return integrate<GSL::QAGS>(f, q2_min, q2_max, int_config);
+                return integrate<1, 1>(f, q2_min, q2_max, cub_conf);
             }
 
             double
@@ -165,7 +166,7 @@ namespace eos
             integrated_pdf_q2(const double & q2_min, const double & q2_max) const
             {
                 std::function<double(const double &)> f     = std::bind(&Implementation<TauToKPiNeutrino>::differential_branching_ratio, this, std::placeholders::_1);
-                const double                          num   = integrate<GSL::QAGS>(f, q2_min, q2_max, int_config);
+                const double                          num   = integrate<1, 1>(f, q2_min, q2_max, cub_conf);
                 const double                          denom = total_branching_ratio();
                 return num / denom / (q2_max - q2_min);
             }
@@ -201,7 +202,7 @@ namespace eos
         // Integrate the differential decay width over the specified kinematic range
         std::function<double(const double &)> f = std::bind(&Implementation<TauToKPiNeutrino>::differential_decay_width, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
+        return integrate<1, 1>(f, q2_min, q2_max, _imp->cub_conf);
     }
 
     double
