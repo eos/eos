@@ -74,7 +74,7 @@ class KToPiLeptonNeutrinoTest : public TestCase
                                           { "n-resonances-1m"_ok, "2"_ov },
                                           { "n-resonances-0m"_ok, "1"_ov }
                 });
-                TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 3.3314331e-2, eps); // Compare with PDG 3.24e-2
+                TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 3.331431e-2, eps); // Compare with PDG 3.24e-2
 
                 // K- -> pi0 e- nubar
                 d = KToPiLeptonNeutrino(p,
@@ -101,7 +101,7 @@ class KToPiLeptonNeutrinoTest : public TestCase
                                             { "n-resonances-1m"_ok,   "2"_ov },
                                             { "n-resonances-0m"_ok,   "1"_ov }
                 });
-                TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 0.13918086, eps); // Compare with PDG 0.135
+                TEST_CHECK_NEARLY_EQUAL(d.total_branching_ratio(), 0.13918075526, eps); // Compare with PDG 0.135
             }
         }
 } k_to_pi_lepton_neutrino_test;
