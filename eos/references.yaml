@@ -1040,6 +1040,13 @@ BG:2016A:
     id: oai:arXiv.org:1606.08030
   inspire-id: Bigi:2016mdz
   title: Revisiting $B\to D \ell \nu$
+BGHT:2019A:
+  authors: Bause, Rigo and Golz, Marcel and Hiller, Gudrun and Tayduganov, Andrey
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1909.11108
+  inspire-id: Bause:2019vpr
+  title: The new physics reach of null tests with $D \rightarrow \pi \ell \ell $ and $D_s \rightarrow K \ell \ell $ decays
 BGMT:2025A:
   authors: Biswas, Aritra and Gubernari, Nico and Matias, Joaquim and Tetlalmatzi-Xolocotzi, Gilberto
   eprint:
