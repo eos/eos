@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2019, 2021, 2022 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -125,11 +125,10 @@ namespace eos
     }
 
     /* Helper functions to create ObservableEntry for a cacheable observable */
-    template <typename Decay_, typename Tuple_, typename... Args_>
+    template <typename Decay_, typename IntermediateResult_, typename Tuple_, typename... Args_>
     std::pair<QualifiedName, ObservableEntryPtr>
-    make_cacheable_observable(const char * name, const Unit & unit, const typename Decay_::IntermediateResult * (Decay_::*prepare_fn)(const Args_ &...) const,
-                              double (Decay_::*evaluate_fn)(const typename Decay_::IntermediateResult *) const, const Tuple_ & kinematics_names,
-                              const Options & forced_options = Options{})
+    make_cacheable_observable(const char * name, const Unit & unit, const IntermediateResult_ * (Decay_::*prepare_fn)(const Args_ &...) const,
+                              double (Decay_::*evaluate_fn)(const IntermediateResult_ *) const, const Tuple_ & kinematics_names, const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 
@@ -140,11 +139,10 @@ namespace eos
         return result;
     }
 
-    template <typename Decay_, typename Tuple_, typename... Args_>
+    template <typename Decay_, typename IntermediateResult_, typename Tuple_, typename... Args_>
     std::pair<QualifiedName, ObservableEntryPtr>
-    make_cacheable_observable(const char * name, const char * latex, const Unit & unit, const typename Decay_::IntermediateResult * (Decay_::*prepare_fn)(const Args_ &...) const,
-                              double (Decay_::*evaluate_fn)(const typename Decay_::IntermediateResult *) const, const Tuple_ & kinematics_names,
-                              const Options & forced_options = Options{})
+    make_cacheable_observable(const char * name, const char * latex, const Unit & unit, const IntermediateResult_ * (Decay_::*prepare_fn)(const Args_ &...) const,
+                              double (Decay_::*evaluate_fn)(const IntermediateResult_ *) const, const Tuple_ & kinematics_names, const Options & forced_options = Options{})
     {
         QualifiedName qn(name);
 

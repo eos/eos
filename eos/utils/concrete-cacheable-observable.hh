@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,10 +33,14 @@
 
 namespace eos
 {
-    template <typename Decay_, typename... Args_> class ConcreteCacheableObservable;
+    template <typename Decay_, typename IntermediateResult_, typename... Args_> class ConcreteCacheableObservable;
 
-    template <typename Decay_, typename... Args_> class ConcreteCachedObservable : public Observable
+    template <typename Decay_, typename IntermediateResult_, typename... Args_> class ConcreteCachedObservable : public Observable
     {
+        public:
+            using PrepareFunction  = const IntermediateResult_ * (Decay_::*) (const Args_ &...) const;
+            using EvaluateFunction = double (Decay_::*)(const IntermediateResult_ *) const;
+
         private:
             QualifiedName _name;
 
@@ -48,11 +52,11 @@ namespace eos
 
             std::shared_ptr<Decay_> _decay;
 
-            const typename Decay_::IntermediateResult * _intermediate_result;
+            const IntermediateResult_ * _intermediate_result;
 
-            std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)> _prepare_fn;
+            PrepareFunction _prepare_fn;
 
-            std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)> _evaluate_fn;
+            EvaluateFunction _evaluate_fn;
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
@@ -60,10 +64,8 @@ namespace eos
 
         public:
             ConcreteCachedObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
-                                     const std::shared_ptr<Decay_> & decay, const typename Decay_::IntermediateResult * intermediate_result,
-                                     const std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)> & prepare_fn,
-                                     const std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)> &           evaluate_fn,
-                                     const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> &                           kinematics_names) :
+                                     const std::shared_ptr<Decay_> & decay, const IntermediateResult_ * intermediate_result, PrepareFunction prepare_fn,
+                                     EvaluateFunction evaluate_fn, const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names) :
                 _name(name),
                 _parameters(parameters),
                 _kinematics(kinematics),
@@ -99,7 +101,7 @@ namespace eos
             virtual double
             evaluate() const
             {
-                return _evaluate_fn(_decay.get(), _intermediate_result);
+                return (_decay.get()->*_evaluate_fn)(_intermediate_result);
             }
 
             virtual Parameters
@@ -123,20 +125,34 @@ namespace eos
             virtual ObservablePtr
             clone() const
             {
-                return ObservablePtr(
-                        new ConcreteCacheableObservable<Decay_, Args_...>(_name, _parameters.clone(), _kinematics.clone(), _options, _prepare_fn, _evaluate_fn, _kinematics_names));
+                return ObservablePtr(new ConcreteCacheableObservable<Decay_, IntermediateResult_, Args_...>(_name,
+                                                                                                            _parameters.clone(),
+                                                                                                            _kinematics.clone(),
+                                                                                                            _options,
+                                                                                                            _prepare_fn,
+                                                                                                            _evaluate_fn,
+                                                                                                            _kinematics_names));
             }
 
             virtual ObservablePtr
             clone(const Parameters & parameters) const
             {
-                return ObservablePtr(
-                        new ConcreteCacheableObservable<Decay_, Args_...>(_name, parameters, _kinematics.clone(), _options, _prepare_fn, _evaluate_fn, _kinematics_names));
+                return ObservablePtr(new ConcreteCacheableObservable<Decay_, IntermediateResult_, Args_...>(_name,
+                                                                                                            parameters,
+                                                                                                            _kinematics.clone(),
+                                                                                                            _options,
+                                                                                                            _prepare_fn,
+                                                                                                            _evaluate_fn,
+                                                                                                            _kinematics_names));
             }
     };
 
-    template <typename Decay_, typename... Args_> class ConcreteCacheableObservable : public CacheableObservable
+    template <typename Decay_, typename IntermediateResult_, typename... Args_> class ConcreteCacheableObservable : public CacheableObservable
     {
+        public:
+            using PrepareFunction  = const IntermediateResult_ * (Decay_::*) (const Args_ &...) const;
+            using EvaluateFunction = double (Decay_::*)(const IntermediateResult_ *) const;
+
         private:
             QualifiedName _name;
 
@@ -148,9 +164,9 @@ namespace eos
 
             std::shared_ptr<Decay_> _decay;
 
-            std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)> _prepare_fn;
+            PrepareFunction _prepare_fn;
 
-            std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)> _evaluate_fn;
+            EvaluateFunction _evaluate_fn;
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
@@ -158,9 +174,8 @@ namespace eos
 
         public:
             ConcreteCacheableObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
-                                        const std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)> & prepare_fn,
-                                        const std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)> &           evaluate_fn,
-                                        const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> &                           kinematics_names) :
+                                        PrepareFunction prepare_fn, EvaluateFunction evaluate_fn,
+                                        const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names) :
                 _name(name),
                 _parameters(parameters),
                 _kinematics(kinematics),
@@ -195,25 +210,19 @@ namespace eos
             virtual double
             evaluate() const
             {
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type...> values = _argument_tuple;
-
-                const typename Decay_::IntermediateResult * intermediate_result = std::apply(_prepare_fn, values);
-
-                return _evaluate_fn(_decay.get(), intermediate_result);
+                return (_decay.get()->*_evaluate_fn)(this->_prepare());
             }
 
             virtual const CacheableObservable::IntermediateResult *
             prepare() const
             {
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type...> values = _argument_tuple;
-
-                return std::apply(_prepare_fn, values);
+                return this->_prepare();
             }
 
             virtual double
             evaluate(const CacheableObservable::IntermediateResult * intermediate_result) const
             {
-                return _evaluate_fn(_decay.get(), static_cast<const typename Decay_::IntermediateResult *>(intermediate_result));
+                return (_decay.get()->*_evaluate_fn)(static_cast<const IntermediateResult_ *>(intermediate_result));
             }
 
             virtual Parameters
@@ -263,17 +272,15 @@ namespace eos
                  * to the intermediate result. We make sure to use _other->_argument tuples, to ensure that
                  * the correct pointer to the intermediate result is used.
                  */
-                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type...> values = other->_argument_tuple;
-
-                return ObservablePtr(new ConcreteCachedObservable<Decay_, Args_...>(_name,
-                                                                                    _parameters,
-                                                                                    _kinematics,
-                                                                                    _options,
-                                                                                    other->_decay,
-                                                                                    std::apply(other->_prepare_fn, values),
-                                                                                    _prepare_fn,
-                                                                                    _evaluate_fn,
-                                                                                    _kinematics_names));
+                return ObservablePtr(new ConcreteCachedObservable<Decay_, IntermediateResult_, Args_...>(_name,
+                                                                                                         _parameters,
+                                                                                                         _kinematics,
+                                                                                                         _options,
+                                                                                                         other->_decay,
+                                                                                                         other->_prepare(),
+                                                                                                         _prepare_fn,
+                                                                                                         _evaluate_fn,
+                                                                                                         _kinematics_names));
             }
 
             virtual ObservablePtr
@@ -287,10 +294,23 @@ namespace eos
             {
                 return ObservablePtr(new ConcreteCacheableObservable(_name, parameters, _kinematics.clone(), _options, _prepare_fn, _evaluate_fn, _kinematics_names));
             }
+
+        private:
+            const IntermediateResult_ *
+            _prepare() const
+            {
+                std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, double>::Type...> values = _argument_tuple;
+
+                return std::apply(std::mem_fn(_prepare_fn), values);
+            }
     };
 
-    template <typename Decay_, typename... Args_> class ConcreteCacheableObservableEntry : public ObservableEntry
+    template <typename Decay_, typename IntermediateResult_, typename... Args_> class ConcreteCacheableObservableEntry : public ObservableEntry
     {
+        public:
+            using PrepareFunction  = const IntermediateResult_ * (Decay_::*) (const Args_ &...) const;
+            using EvaluateFunction = double (Decay_::*)(const IntermediateResult_ *) const;
+
         private:
             QualifiedName _name;
 
@@ -298,9 +318,9 @@ namespace eos
 
             Unit _unit;
 
-            std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)> _prepare_fn;
+            PrepareFunction _prepare_fn;
 
-            std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)> _evaluate_fn;
+            EvaluateFunction _evaluate_fn;
 
             std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
 
@@ -309,9 +329,7 @@ namespace eos
             Options _forced_options;
 
         public:
-            ConcreteCacheableObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit,
-                                             const std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)> & prepare_fn,
-                                             const std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)> &           evaluate_fn,
+            ConcreteCacheableObservableEntry(const QualifiedName & name, const std::string & latex, const Unit & unit, PrepareFunction prepare_fn, EvaluateFunction evaluate_fn,
                                              const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names, const Options & forced_options) :
                 _name(name),
                 _latex(latex),
@@ -381,8 +399,13 @@ namespace eos
                                 << options[key] << "'";
                     }
                 }
-                return ObservablePtr(
-                        new ConcreteCacheableObservable<Decay_, Args_...>(_name, parameters, kinematics, options + _forced_options, _prepare_fn, _evaluate_fn, _kinematics_names));
+                return ObservablePtr(new ConcreteCacheableObservable<Decay_, IntermediateResult_, Args_...>(_name,
+                                                                                                            parameters,
+                                                                                                            kinematics,
+                                                                                                            options + _forced_options,
+                                                                                                            _prepare_fn,
+                                                                                                            _evaluate_fn,
+                                                                                                            _kinematics_names));
             }
 
             virtual std::ostream &
@@ -399,23 +422,21 @@ namespace eos
             }
     };
 
-    template <typename Decay_, typename Tuple_, typename... Args_>
+    template <typename Decay_, typename IntermediateResult_, typename Tuple_, typename... Args_>
     ObservableEntryPtr
     make_concrete_cacheable_observable_entry(const QualifiedName & name, const std::string & latex, const Unit & unit,
-                                             const typename Decay_::IntermediateResult * (Decay_::*prepare_fn)(const Args_ &...) const,
-                                             double (Decay_::*evaluate_fn)(const typename Decay_::IntermediateResult *) const, const Tuple_ & kinematics_names,
-                                             const Options & forced_options)
+                                             const IntermediateResult_ * (Decay_::*prepare_fn)(const Args_ &...) const,
+                                             double (Decay_::*evaluate_fn)(const IntermediateResult_ *) const, const Tuple_ & kinematics_names, const Options & forced_options)
     {
         static_assert(sizeof...(Args_) == impl::TupleSize<Tuple_>::size, "Need as many function arguments as kinematics names!");
 
-        return std::make_shared<ConcreteCacheableObservableEntry<Decay_, Args_...>>(
-                name,
-                latex,
-                unit,
-                std::function<const typename Decay_::IntermediateResult *(const Decay_ *, const Args_ &...)>(std::mem_fn(prepare_fn)),
-                std::function<double(const Decay_ *, const typename Decay_::IntermediateResult *)>(std::mem_fn(evaluate_fn)),
-                kinematics_names,
-                forced_options);
+        return std::make_shared<ConcreteCacheableObservableEntry<Decay_, IntermediateResult_, Args_...>>(name,
+                                                                                                         latex,
+                                                                                                         unit,
+                                                                                                         prepare_fn,
+                                                                                                         evaluate_fn,
+                                                                                                         kinematics_names,
+                                                                                                         forced_options);
     }
 } // namespace eos
 
