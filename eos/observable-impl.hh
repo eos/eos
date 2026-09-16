@@ -30,7 +30,10 @@
 
 #include <array>
 #include <map>
+#include <memory>
+#include <set>
 #include <tuple>
+#include <vector>
 
 namespace eos
 {
@@ -128,6 +131,34 @@ namespace eos
 
     namespace impl
     {
+        /*!
+         * Describes how a cacheable observable obtains its provider, and which options and
+         * references the provider brings with it.
+         *
+         * Specialise this template for a provider that is not constructed from a set of
+         * parameters and a set of options alone.
+         */
+        template <typename Provider_> struct ProviderTraits
+        {
+                static std::shared_ptr<Provider_>
+                make(const QualifiedName &, const Parameters & parameters, const Options & options)
+                {
+                    return std::make_shared<Provider_>(parameters, options);
+                }
+
+                static std::vector<OptionSpecification>
+                option_specifications(const QualifiedName &)
+                {
+                    return std::vector<OptionSpecification>(Provider_::begin_options(), Provider_::end_options());
+                }
+
+                static const std::set<ReferenceName> &
+                references()
+                {
+                    return Provider_::references;
+                }
+        };
+
         /* A provider's prepare function, together with the kinematic variables it consumes */
         template <typename Decay_, typename IntermediateResult_, typename... Args_> struct Preparer
         {
