@@ -227,6 +227,9 @@ jobs:
 
   upload_pypi:
     needs: [build_wheels]
+    permissions:
+      contents: read
+      actions: write # Needed to trigger the EOS container build workflow below
     if: ${{ github.event_name == 'release' || (github.event_name == 'push' && github.ref == 'refs/heads/release') }}
     # Both the push to 'release' and the published release reach this job; they
     # must never upload to PyPI at the same time.
@@ -247,3 +250,19 @@ jobs:
           user: ${{ secrets.TWINE_USERNAME }}
           password: ${{ secrets.TWINE_PASSWORD }}
           skip_existing: true
+
+      - name: Dispatch EOS container build
+        if: github.event_name == 'release' && !github.event.release.prerelease
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          eos_version="${RELEASE_TAG#v}"
+          image_tag="$eos_version"
+
+          gh workflow run "eos-container-build+deploy.yaml" \
+              --ref "$GITHUB_REF_NAME" \
+              -f eosversion="$eos_version" \
+              -f image_tag="$image_tag" \
+              -f update_latest=true
