@@ -9,6 +9,10 @@ on:
 
 name: Build/Check/Deploy for PyPI
 
+permissions:
+  contents: read
+  actions: write
+
 concurrency:
   # ``github.head_ref`` is empty for push events, which would lump every push to
   # 'release', 'master' and 'testing' into one group and have them cancel each other.
@@ -242,8 +246,47 @@ jobs:
           merge-multiple: true
           path: dist
 
+      - name: Check for new PyPI wheels
+        id: pypi_state
+        run: |
+          pypi_files="$(curl --fail --silent https://pypi.org/pypi/eoshep/json)"
+          new_upload=false
+          for wheel in dist/*.whl; do
+              filename="$(basename "$wheel")"
+              if ! jq -e --arg filename "$filename" \
+                  '[.releases[][]? | select(.filename == $filename)] | length > 0' \
+                  <<< "$pypi_files" > /dev/null; then
+                  new_upload=true
+                  break
+              fi
+          done
+          echo "new_upload=$new_upload" >> "$GITHUB_OUTPUT"
+
       - uses: pypa/gh-action-pypi-publish@v1.14.1
         with:
           user: ${{ secrets.TWINE_USERNAME }}
           password: ${{ secrets.TWINE_PASSWORD }}
           skip_existing: true
+
+      - name: Dispatch EOS container build
+        if: steps.pypi_state.outputs.new_upload == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "$GITHUB_EVENT_NAME" == "release" ]] ; then
+              eos_version="${{ github.event.release.tag_name }}"
+              eos_version="${eos_version#v}"
+              image_tag="$eos_version"
+              update_latest=true
+          else
+              wheel="$(find dist -maxdepth 1 -name 'eoshep-*.whl' | head -n 1)"
+              eos_version="$(basename "$wheel" | sed -E 's/^eoshep-([^-]+)-.*$/\1/')"
+              image_tag="${GITHUB_SHA:0:7}"
+              update_latest=false
+          fi
+
+          gh workflow run ".github/workflows/eos-container-build+deploy.yaml" \
+              --ref "$GITHUB_REF_NAME" \
+              -f eosversion="$eos_version" \
+              -f image_tag="$image_tag" \
+              -f update_latest="$update_latest"
