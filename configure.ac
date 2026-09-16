@@ -489,7 +489,6 @@ AC_CONFIG_FILES([Makefile
 	eos/statistics/Makefile
 	eos/utils/Makefile
 	src/Makefile
-	src/clients/Makefile
 	src/scripts/Makefile
 	test/Makefile
 	python/Makefile
