@@ -158,6 +158,12 @@ namespace eos
                     return false;
                 }
 
+                // Decay_ may be an interface with several implementations
+                if (typeid(*_decay) != typeid(*other._decay))
+                {
+                    return false;
+                }
+
                 if (_parameters != other._parameters)
                 {
                     return false;
