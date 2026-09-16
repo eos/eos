@@ -49,14 +49,21 @@ namespace eos
                     double q2;
             };
 
+            struct AlternativeResult : public CacheableObservable::IntermediateResult
+            {
+                    double c;
+            };
+
             TestCacheableObservableProvider(const Parameters & parameters, const Options & options);
             ~TestCacheableObservableProvider();
 
             // Observables
             const IntermediateResult * prepare(const double & q2) const;
+            const AlternativeResult *  prepare_alternative(const double & q2) const;
 
             double evaluate1(const IntermediateResult *) const;
             double evaluate2(const IntermediateResult *) const;
+            double evaluate3(const AlternativeResult *) const;
 
             /*!
              * References used in the computation of our observables.
@@ -71,8 +78,11 @@ namespace eos
             UsedParameter m_B;
 
             using IntermediateResult = TestCacheableObservableProvider::IntermediateResult;
+            using AlternativeResult  = TestCacheableObservableProvider::AlternativeResult;
 
             IntermediateResult _intermediate_result;
+
+            AlternativeResult _alternative_result;
 
             Implementation(const Parameters & p, const Options & /* o */, ParameterUser & u) :
                 m_B(p["mass::B_u"], u)
@@ -90,6 +100,14 @@ namespace eos
                 return &_intermediate_result;
             }
 
+            const AlternativeResult *
+            prepare_alternative(const double & q2)
+            {
+                _alternative_result.c = m_B * q2;
+
+                return &_alternative_result;
+            }
+
             double
             evaluate1(const IntermediateResult * intermediate_result)
             {
@@ -100,6 +118,12 @@ namespace eos
             evaluate2(const IntermediateResult * intermediate_result)
             {
                 return pow(intermediate_result->q2, 2);
+            }
+
+            double
+            evaluate3(const AlternativeResult * alternative_result)
+            {
+                return alternative_result->c;
             }
     };
 
@@ -116,6 +140,12 @@ namespace eos
         return _imp->prepare(q2);
     }
 
+    const TestCacheableObservableProvider::AlternativeResult *
+    TestCacheableObservableProvider::prepare_alternative(const double & q2) const
+    {
+        return _imp->prepare_alternative(q2);
+    }
+
     double
     TestCacheableObservableProvider::evaluate1(const TestCacheableObservableProvider::IntermediateResult * ir) const
     {
@@ -126,6 +156,12 @@ namespace eos
     TestCacheableObservableProvider::evaluate2(const TestCacheableObservableProvider::IntermediateResult * ir) const
     {
         return _imp->evaluate2(ir);
+    }
+
+    double
+    TestCacheableObservableProvider::evaluate3(const TestCacheableObservableProvider::AlternativeResult * ir) const
+    {
+        return _imp->evaluate3(ir);
     }
 
     /*!
@@ -221,7 +257,7 @@ class CacheableObservableTest : public TestCase
 
 
                 // Try to create a cacheable observable
-                using TestCacheableObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider, double>;
+                using TestCacheableObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::IntermediateResult, double>;
 
                 ObservablePtr cacheable_observable(new TestCacheableObservable("test::cacheable_observable1(q2)",
                                                                                p,
@@ -292,9 +328,27 @@ class CacheableObservableTest : public TestCase
                 TEST_CHECK_NO_THROW(cacheable_observable3_id = cache.add(cacheable_observable3));
 
 
+                // Add a cacheable observable that uses a second intermediate result type
+                using TestAlternativeObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::AlternativeResult, double>;
+
+                ObservablePtr                 alternative_observable(new TestAlternativeObservable("test::alternative_observable(q2)",
+                                                                                   p,
+                                                                                   Kinematics({
+                                                                                       { "q2", 2.0 }
+                }),
+                                                                                   Options(),
+                                                                                   &TestCacheableObservableProvider::prepare_alternative,
+                                                                                   &TestCacheableObservableProvider::evaluate3,
+                                                                                   std::make_tuple("q2")));
+                ObservableCache::ObservableId alternative_observable_id;
+
+                TEST_CHECK_NO_THROW(alternative_observable_id = cache.add(alternative_observable));
+
+
                 // Test cache evaluation
                 TEST_CHECK_NO_THROW(cache.update());
                 TEST_CHECK_EQUAL(cache[cacheable_observable_id], cache[cacheable_observable2_id]);
+                TEST_CHECK_NEARLY_EQUAL(cache[alternative_observable_id], 5.27934 * 2.0, 1.e-5);
 
                 // Test cache cloning
                 ObservableCache cache2(p);
