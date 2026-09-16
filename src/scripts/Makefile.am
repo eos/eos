@@ -12,6 +12,7 @@ bin_SCRIPTS = \
 	eos-list-constraints \
 	eos-list-observables \
 	eos-list-references \
+	eos-list-signal-pdfs \
 	eos-mcp-server
 
 AM_TESTS_ENVIRONMENT = \
@@ -34,6 +35,7 @@ EXTRA_DIST = \
 	eos-list-constraints \
 	eos-list-observables \
 	eos-list-references \
+	eos-list-signal-pdfs \
 	eos-mcp-server \
 	eos-analysis_TEST \
 	eos-analysis_TEST.d/analysis.yaml

@@ -1,0 +1,12 @@
+B->Dlnu::P(q2)
+    PDF for the decay $\bar{B}\to D \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$.
+
+    Numerator kinematic variables:q2
+    Denominator kinematic variables:q2_min, q2_max
+
+B->Dlnu::P(q2,cos(theta_l))
+    PDF for the decay $\bar{B}\to D \ell^-\bar\nu$ as a function of the invariant dilepton mass squared $q^2$
+                    and the cosine of the angle $\theta_\ell$ between the charged lepton and the negative $\bar{B}$ flight direction in the $\ell^-\bar\nu$ rest frame.
+
+    Numerator kinematic variables:q2, cos(theta_l)
+    Denominator kinematic variables:q2_min, q2_max
