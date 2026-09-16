@@ -1,0 +1,3 @@
+[BGJvD:2019A] : Bordone, M. and Gubernari, N. and van Dyk, D. and Jung, M.
+    Heavy-Quark expansion for ${{\bar{B}}_s\rightarrow D^{(*)}_s}$ form factors and unitarity bounds beyond the ${SU(3)_F}$ limit
+    arXiv:org:1912.09335
