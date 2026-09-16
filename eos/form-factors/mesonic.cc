@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2015      Christoph Bobeth
  * Copyright (c) 2018      Ahmet Kokulu
  * Copyright (c) 2019-2026 Nico Gubernari
@@ -643,76 +643,162 @@ namespace eos
 
     /* Vacuum -> P P Processes */
 
+    FormFactors<VacuumToPP>::IntermediateResult::~IntermediateResult() {}
+
     FormFactors<VacuumToPP>::~FormFactors() {}
+
+    const FormFactors<VacuumToPP>::IntermediateResult *
+    FormFactors<VacuumToPP>::prepare() const
+    {
+        return &_intermediate_result;
+    }
+
+    complex<double>
+    FormFactors<VacuumToPP>::f_p(const IntermediateResult *, const double & q2) const
+    {
+        return this->f_p(q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::abs2_f_p(const IntermediateResult * ir, const double & q2) const
+    {
+        return std::norm(this->f_p(ir, q2));
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_p(const IntermediateResult * ir, const double & q2) const
+    {
+        const double arg = std::arg(this->f_p(ir, q2));
+        if (arg < 0.0)
+        {
+            return arg + 2.0 * M_PI;
+        }
+        return arg;
+    }
 
     double
     FormFactors<VacuumToPP>::abs2_f_p(const double & q2) const
     {
-        return std::norm(this->f_p(q2));
+        return this->abs2_f_p(this->prepare(), q2);
     }
 
     double
     FormFactors<VacuumToPP>::arg_f_p(const double & q2) const
     {
-        const double arg = std::arg(this->f_p(q2));
-        if (arg < 0.0)
-        {
-            return arg + 2.0 * M_PI;
-        }
-        return arg;
+        return this->arg_f_p(this->prepare(), q2);
+    }
+
+    complex<double>
+    FormFactors<VacuumToPP>::f_p(const IntermediateResult *, const complex<double> & q2) const
+    {
+        return this->f_p(q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::re_f_p(const IntermediateResult * ir, const double & re_q2, const double & im_q2) const
+    {
+        return std::real(this->f_p(ir, complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::im_f_p(const IntermediateResult * ir, const double & re_q2, const double & im_q2) const
+    {
+        return std::imag(this->f_p(ir, complex<double>(re_q2, im_q2)));
     }
 
     double
     FormFactors<VacuumToPP>::re_f_p(const double & re_q2, const double & im_q2) const
     {
-        return std::real(this->f_p(complex<double>(re_q2, im_q2)));
+        return this->re_f_p(this->prepare(), re_q2, im_q2);
     }
 
     double
     FormFactors<VacuumToPP>::im_f_p(const double & re_q2, const double & im_q2) const
     {
-        return std::imag(this->f_p(complex<double>(re_q2, im_q2)));
+        return this->im_f_p(this->prepare(), re_q2, im_q2);
+    }
+
+    complex<double>
+    FormFactors<VacuumToPP>::f_0(const IntermediateResult *, const double & q2) const
+    {
+        return this->f_0(q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::abs2_f_0(const IntermediateResult * ir, const double & q2) const
+    {
+        return std::norm(this->f_0(ir, q2));
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_0(const IntermediateResult * ir, const double & q2) const
+    {
+        const double arg = std::arg(this->f_0(ir, q2));
+        if (arg < 0.0)
+        {
+            return arg + 2.0 * M_PI;
+        }
+        return arg;
     }
 
     double
     FormFactors<VacuumToPP>::abs2_f_0(const double & q2) const
     {
-        return std::norm(this->f_0(q2));
+        return this->abs2_f_0(this->prepare(), q2);
     }
 
     double
     FormFactors<VacuumToPP>::arg_f_0(const double & q2) const
     {
-        const double arg = std::arg(this->f_0(q2));
-        if (arg < 0.0)
-        {
-            return arg + 2.0 * M_PI;
-        }
-        return arg;
+        return this->arg_f_0(this->prepare(), q2);
+    }
+
+    complex<double>
+    FormFactors<VacuumToPP>::f_0(const IntermediateResult *, const complex<double> & q2) const
+    {
+        return this->f_0(q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::re_f_0(const IntermediateResult * ir, const double & re_q2, const double & im_q2) const
+    {
+        return std::real(this->f_0(ir, complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::im_f_0(const IntermediateResult * ir, const double & re_q2, const double & im_q2) const
+    {
+        return std::imag(this->f_0(ir, complex<double>(re_q2, im_q2)));
     }
 
     double
     FormFactors<VacuumToPP>::re_f_0(const double & re_q2, const double & im_q2) const
     {
-        return std::real(this->f_0(complex<double>(re_q2, im_q2)));
+        return this->re_f_0(this->prepare(), re_q2, im_q2);
     }
 
     double
     FormFactors<VacuumToPP>::im_f_0(const double & re_q2, const double & im_q2) const
     {
-        return std::imag(this->f_0(complex<double>(re_q2, im_q2)));
+        return this->im_f_0(this->prepare(), re_q2, im_q2);
+    }
+
+    complex<double>
+    FormFactors<VacuumToPP>::f_t(const IntermediateResult *, const double & q2) const
+    {
+        return this->f_t(q2);
     }
 
     double
-    FormFactors<VacuumToPP>::abs2_f_t(const double & q2) const
+    FormFactors<VacuumToPP>::abs2_f_t(const IntermediateResult * ir, const double & q2) const
     {
-        return std::norm(this->f_t(q2));
+        return std::norm(this->f_t(ir, q2));
     }
 
     double
-    FormFactors<VacuumToPP>::arg_f_t(const double & q2) const
+    FormFactors<VacuumToPP>::arg_f_t(const IntermediateResult * ir, const double & q2) const
     {
-        const double arg = std::arg(this->f_t(q2));
+        const double arg = std::arg(this->f_t(ir, q2));
         if (arg < 0.0)
         {
             return arg + 2.0 * M_PI;
@@ -721,15 +807,45 @@ namespace eos
     }
 
     double
+    FormFactors<VacuumToPP>::abs2_f_t(const double & q2) const
+    {
+        return this->abs2_f_t(this->prepare(), q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::arg_f_t(const double & q2) const
+    {
+        return this->arg_f_t(this->prepare(), q2);
+    }
+
+    complex<double>
+    FormFactors<VacuumToPP>::f_t(const IntermediateResult *, const complex<double> & q2) const
+    {
+        return this->f_t(q2);
+    }
+
+    double
+    FormFactors<VacuumToPP>::re_f_t(const IntermediateResult * ir, const double & re_q2, const double & im_q2) const
+    {
+        return std::real(this->f_t(ir, complex<double>(re_q2, im_q2)));
+    }
+
+    double
+    FormFactors<VacuumToPP>::im_f_t(const IntermediateResult * ir, const double & re_q2, const double & im_q2) const
+    {
+        return std::imag(this->f_t(ir, complex<double>(re_q2, im_q2)));
+    }
+
+    double
     FormFactors<VacuumToPP>::re_f_t(const double & re_q2, const double & im_q2) const
     {
-        return std::real(this->f_t(complex<double>(re_q2, im_q2)));
+        return this->re_f_t(this->prepare(), re_q2, im_q2);
     }
 
     double
     FormFactors<VacuumToPP>::im_f_t(const double & re_q2, const double & im_q2) const
     {
-        return std::imag(this->f_t(complex<double>(re_q2, im_q2)));
+        return this->im_f_t(this->prepare(), re_q2, im_q2);
     }
 
     const std::map<FormFactorFactory<VacuumToPP>::KeyType, FormFactorFactory<VacuumToPP>::ValueType> FormFactorFactory<VacuumToPP>::form_factors{
