@@ -1,0 +1,18 @@
+B->D^(*)lnu::R_D^(*)@HFLAV:2019A:
+    type: MultivariateGaussian(Covariance)
+    observables:
+      - B->Dlnu::R_D
+      - B->D^*lnu::R_D^*
+    kinematics:
+      - {q2_mu_max: 11.62, q2_mu_min: 0.01, q2_tau_max: 11.62, q2_tau_min: 3.15}
+      - {q2_mu_max: 11.62, q2_mu_min: 0.01, q2_tau_max: 11.62, q2_tau_min: 3.15}
+    options:
+      - {}
+      - {}
+    means: [0.34, 0.295]
+    covariance:
+      - [0.000898, -0.000154884]
+      - [-0.000154884, 0.000185]
+    references:
+      []
+    dof: 2
