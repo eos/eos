@@ -32,6 +32,7 @@
 #include <tuple>
 #include <typeindex>
 #include <utility>
+#include <vector>
 
 namespace eos
 {
@@ -77,7 +78,7 @@ namespace eos
                 _parameters(parameters),
                 _kinematics(kinematics),
                 _options(options),
-                _decay(new Decay_(parameters, options)),
+                _decay(impl::ProviderTraits<Decay_>::make(name, parameters, options)),
                 _prepare_fn(prepare_fn),
                 _prepare_kinematics_names(prepare_kinematics_names),
                 _prepare_argument_tuple(impl::TupleMaker<sizeof...(PrepareArgs_)>::make(_kinematics, _prepare_kinematics_names, _decay.get()))
@@ -92,7 +93,7 @@ namespace eos
                     }
                 };
                 std::apply(_register_kinematics, _prepare_argument_tuple);
-                uses(Decay_::references);
+                uses(impl::ProviderTraits<Decay_>::references());
             }
 
         public:
@@ -235,7 +236,7 @@ namespace eos
                 // register them all the same, so that we compare equal to an identical uncached observable
                 std::apply(_register_kinematics, impl::TupleMaker<sizeof...(PrepareArgs_)>::make(_kinematics, _prepare_kinematics_names, _decay.get()));
                 std::apply(_register_kinematics, _evaluate_argument_tuple);
-                uses(Decay_::references);
+                uses(impl::ProviderTraits<Decay_>::references());
             }
 
             ~ConcreteCachedObservable() = default;
@@ -461,6 +462,8 @@ namespace eos
 
             std::array<const std::string, sizeof...(PrepareArgs_) + sizeof...(EvaluateArgs_)> _kinematics_names_array;
 
+            std::vector<OptionSpecification> _option_specifications;
+
             Options _forced_options;
 
         public:
@@ -477,6 +480,7 @@ namespace eos
                 _prepare_kinematics_names_array(impl::make_array<const std::string>(prepare_kinematics_names)),
                 _evaluate_kinematics_names_array(impl::make_array<const std::string>(evaluate_kinematics_names)),
                 _kinematics_names_array(impl::make_array<const std::string>(std::tuple_cat(prepare_kinematics_names, evaluate_kinematics_names))),
+                _option_specifications(impl::ProviderTraits<Decay_>::option_specifications(name)),
                 _forced_options(forced_options)
             {
                 for (const auto & prepare_name : _prepare_kinematics_names_array)
@@ -527,13 +531,13 @@ namespace eos
             virtual ObservableEntry::OptionIterator
             begin_options() const
             {
-                return Decay_::begin_options();
+                return _option_specifications.begin();
             }
 
             virtual ObservableEntry::OptionIterator
             end_options() const
             {
-                return Decay_::end_options();
+                return _option_specifications.end();
             }
 
             virtual ObservablePtr
