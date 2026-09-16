@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=120 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2024 Danny van Dyk
+ * Copyright (c) 2020-2026 Danny van Dyk
  * Copyright (c) 2024 Matthew J. Kirk
  *
  * This file is part of the EOS project. EOS is free software;
@@ -100,6 +100,11 @@ namespace eos
             complex<double> phitildeprime_p(const complex<double> & z, const double & chi) const;
             complex<double> series_m(const complex<double> & z, const std::array<double, 10u> & c) const;
             double          dFdq2_q2eq0() const;
+
+            // do not hide the overloads that take an intermediate result
+            using FormFactors<VacuumToPP>::f_0;
+            using FormFactors<VacuumToPP>::f_p;
+            using FormFactors<VacuumToPP>::f_t;
 
             /* form factors on the real axis */
             virtual complex<double> f_p(const double & q2) const override;

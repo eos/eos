@@ -105,6 +105,25 @@ class ParametricKKRvD2024Test : public TestCase
 
                     TEST_CHECK_NEARLY_EQUAL(ff.saturation(), 0.444609294, eps);
                 }
+
+                /* the intermediate result yields the same form factors */
+                {
+                    KKRvD2024FormFactors<VacuumToPiPi> ff(p, Options{});
+
+                    const auto ir = ff.prepare();
+
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(ir, +0.5)), 3.60167333, eps);
+                    TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p(ir, +0.5)), 3.76175784, eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.abs2_f_p(ir, +0.5), ff.abs2_f_p(+0.5), eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.arg_f_p(ir, +0.5), ff.arg_f_p(+0.5), eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.abs2_f_p(ir, +0.1), ff.abs2_f_p(+0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.abs2_f_0(ir, +0.5), ff.abs2_f_0(+0.5), eps);
+
+                    TEST_CHECK_NEARLY_EQUAL(ff.re_f_p(ir, +0.5, +0.1), ff.re_f_p(+0.5, +0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.im_f_p(ir, +0.5, +0.1), ff.im_f_p(+0.5, +0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.re_f_0(ir, +0.5, +0.1), ff.re_f_0(+0.5, +0.1), eps);
+                    TEST_CHECK_NEARLY_EQUAL(ff.im_f_0(ir, +0.5, +0.1), ff.im_f_0(+0.5, +0.1), eps);
+                }
             }
         }
 } parametric_KKRvD2024_test;

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=120 foldmethod=syntax : */
 
 /*
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  * Copyright (c) 2025 Matthew Kirk
  *
  * This file is part of the EOS project. EOS is free software;
@@ -124,6 +124,11 @@ namespace eos
             complex<double> phitilde_z(const complex<double> & z) const;
             complex<double> phitildeprime_z(const complex<double> & z) const;
             complex<double> resonance_product_z(const complex<double> & z) const;
+
+            // do not hide the overloads that take an intermediate result
+            using FormFactors<VacuumToPP>::f_0;
+            using FormFactors<VacuumToPP>::f_p;
+            using FormFactors<VacuumToPP>::f_t;
 
             /* form factors on the real axis */
             virtual complex<double> f_p(const double & q2) const override;

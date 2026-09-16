@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2022 Stephan Kuerten
- * Copyright (c) 2010-2024 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  * Copyright (c) 2015 Christoph Bobeth
  * Copyright (c) 2022 Philip Lüghausen
  * Copyright (c) 2010 Christian Wacker
@@ -347,34 +347,76 @@ namespace eos
     template <> class FormFactors<VacuumToPP> : public virtual ParameterUser
     {
         public:
+            /*!
+             * Opaque result of the computation that all form factors of this transition share.
+             *
+             * It depends on the parameters only, never on the kinematics. A parametrisation with
+             * an expensive parameter dependent step derives from this class, returns its own
+             * result from prepare(), and casts back to it in its accessors.
+             */
+            class IntermediateResult
+            {
+                public:
+                    virtual ~IntermediateResult();
+            };
+
             virtual ~FormFactors();
+
+            virtual const IntermediateResult * prepare() const;
 
             // vector form factor
             virtual complex<double> f_p(const double & q2) const = 0;
             virtual double          abs2_f_p(const double & q2) const;
             virtual double          arg_f_p(const double & q2) const;
 
+            virtual complex<double> f_p(const IntermediateResult *, const double & q2) const;
+            virtual double          abs2_f_p(const IntermediateResult *, const double & q2) const;
+            virtual double          arg_f_p(const IntermediateResult *, const double & q2) const;
+
             virtual complex<double> f_p(const complex<double> & q2) const = 0;
             virtual double          re_f_p(const double & re_q2, const double & im_q2) const;
             virtual double          im_f_p(const double & re_q2, const double & im_q2) const;
+
+            virtual complex<double> f_p(const IntermediateResult *, const complex<double> & q2) const;
+            virtual double          re_f_p(const IntermediateResult *, const double & re_q2, const double & im_q2) const;
+            virtual double          im_f_p(const IntermediateResult *, const double & re_q2, const double & im_q2) const;
 
             // scalar form factor
             virtual complex<double> f_0(const double & q2) const = 0;
             virtual double          abs2_f_0(const double & q2) const;
             virtual double          arg_f_0(const double & q2) const;
 
+            virtual complex<double> f_0(const IntermediateResult *, const double & q2) const;
+            virtual double          abs2_f_0(const IntermediateResult *, const double & q2) const;
+            virtual double          arg_f_0(const IntermediateResult *, const double & q2) const;
+
             virtual complex<double> f_0(const complex<double> & q2) const = 0;
             virtual double          re_f_0(const double & re_q2, const double & im_q2) const;
             virtual double          im_f_0(const double & re_q2, const double & im_q2) const;
+
+            virtual complex<double> f_0(const IntermediateResult *, const complex<double> & q2) const;
+            virtual double          re_f_0(const IntermediateResult *, const double & re_q2, const double & im_q2) const;
+            virtual double          im_f_0(const IntermediateResult *, const double & re_q2, const double & im_q2) const;
 
             // tensor form factor
             virtual complex<double> f_t(const double & q2) const = 0;
             virtual double          abs2_f_t(const double & q2) const;
             virtual double          arg_f_t(const double & q2) const;
 
+            virtual complex<double> f_t(const IntermediateResult *, const double & q2) const;
+            virtual double          abs2_f_t(const IntermediateResult *, const double & q2) const;
+            virtual double          arg_f_t(const IntermediateResult *, const double & q2) const;
+
             virtual complex<double> f_t(const complex<double> & q2) const = 0;
             virtual double          re_f_t(const double & re_q2, const double & im_q2) const;
             virtual double          im_f_t(const double & re_q2, const double & im_q2) const;
+
+            virtual complex<double> f_t(const IntermediateResult *, const complex<double> & q2) const;
+            virtual double          re_f_t(const IntermediateResult *, const double & re_q2, const double & im_q2) const;
+            virtual double          im_f_t(const IntermediateResult *, const double & re_q2, const double & im_q2) const;
+
+        private:
+            mutable IntermediateResult _intermediate_result;
     };
 
     template <> class FormFactorFactory<VacuumToPP>
