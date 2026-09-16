@@ -338,8 +338,10 @@ BINDINGS_TESTS = {
 
     ('ReferenceUser', 'references'):             lambda u: list(u.references()),
 
+    ('SignalPDFEntry', 'denominator_kinematic_variables'): (),
     ('SignalPDFEntry', 'description'):           (),
     ('SignalPDFEntry', 'name'):                  (),
+    ('SignalPDFEntry', 'numerator_kinematic_variables'):   (),
 
     ('SignalPDFGroup', '__iter__'):              lambda g: list(g),
     ('SignalPDFGroup', 'description'):           (),
