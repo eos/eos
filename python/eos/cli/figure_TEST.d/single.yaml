@@ -1,0 +1,13 @@
+type: 'single'
+plot:
+  xaxis:
+    label: '$q^2$'
+  yaxis:
+    label: '$d\mathcal{B}/dq^2$'
+  items:
+  - type: 'observable'
+    observable: 'B->Dlnu::dBR/dq2'
+    options: { 'l': 'mu' }
+    variable: 'q2'
+    range: [1.0, 2.0]
+    resolution: 3

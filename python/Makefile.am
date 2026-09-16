@@ -36,6 +36,9 @@ EXTRA_DIST = \
 	eos/cli/data_release_TEST.py \
 	eos/cli/data_checks_TEST.d \
 	eos/cli/data_checks_TEST.d/valid \
+	eos/cli/figure.py \
+	eos/cli/figure_TEST.d \
+	eos/cli/figure_TEST.py \
 	eos/cli/mcp.py \
 	eos/datasets.py \
 	eos/datasets_TEST.d \
@@ -142,6 +145,7 @@ eoscli_SCRIPTS = \
 	eos/cli/data_register.py \
 	eos/cli/data_release.py \
 	eos/cli/data_release_execution.py \
+	eos/cli/figure.py \
 	eos/cli/mcp.py
 
 eosdatadir = $(pkgpythondir)/data
@@ -205,6 +209,7 @@ TESTS = \
 	eos/cli/data_release_TEST.py \
 	eos/cli/data_release_execution_TEST.py \
 	eos/cli/data_TEST.py \
+	eos/cli/figure_TEST.py \
 	eos/validation_context_TEST.py \
 	eos/datasets_TEST.py \
 	eos/datasets_file_description_TEST.py \
