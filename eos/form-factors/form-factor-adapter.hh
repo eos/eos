@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2013-2025 Danny van Dyk
+ * Copyright (c) 2013-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,14 +21,54 @@
 #define EOS_GUARD_EOS_FORM_FACTORS_FORM_FACTOR_ADAPTER_HH 1
 
 #include <eos/form-factors/form-factors.hh>
+#include <eos/observable-impl.hh>
 #include <eos/observable.hh>
 #include <eos/utils/tuple-maker.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <memory>
+#include <set>
 #include <tuple>
+#include <vector>
 
 namespace eos
 {
+    namespace impl
+    {
+        /* A form factor provider is selected by the observable's prefix as well as by its options */
+        template <typename Transition_> struct ProviderTraits<FormFactors<Transition_>>
+        {
+                static std::shared_ptr<FormFactors<Transition_>>
+                make(const QualifiedName & name, const Parameters & parameters, const Options & options)
+                {
+                    const qnp::Prefix     process = name.prefix_part();
+                    const SpecifiedOption opt_form_factors(options, FormFactorFactory<Transition_>::option_specification(process));
+
+                    auto result = FormFactorFactory<Transition_>::create(process.str() + "::" + opt_form_factors.value(), parameters, options);
+                    if (! result)
+                    {
+                        throw NoSuchFormFactorError(process.str(), options["form-factors"_ok].str());
+                    }
+
+                    return result;
+                }
+
+                static std::vector<OptionSpecification>
+                option_specifications(const QualifiedName & name)
+                {
+                    return { FormFactorFactory<Transition_>::option_specification(name.prefix_part()) };
+                }
+
+                static const std::set<ReferenceName> &
+                references()
+                {
+                    static const std::set<ReferenceName> result{};
+
+                    return result;
+                }
+        };
+    } // namespace impl
+
     /* Form factor adapter class for interfacing Observable */
     template <typename Transition_, typename... Args_> class FormFactorAdapter : public Observable
     {

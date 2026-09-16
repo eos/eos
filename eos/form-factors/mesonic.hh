@@ -28,6 +28,7 @@
 
 #include <eos/form-factors/form-factors-fwd.hh>
 #include <eos/maths/complex.hh>
+#include <eos/utils/intermediate-result.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
@@ -354,7 +355,7 @@ namespace eos
              * an expensive parameter dependent step derives from this class, returns its own
              * result from prepare(), and casts back to it in its accessors.
              */
-            class IntermediateResult
+            class IntermediateResult : public eos::IntermediateResult
             {
                 public:
                     virtual ~IntermediateResult();

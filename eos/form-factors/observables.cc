@@ -37,6 +37,7 @@
 #include <eos/form-factors/unitarity-bounds.hh>
 #include <eos/form-factors/zero-recoil-sum-rule.hh>
 #include <eos/observable-impl.hh>
+#include <eos/utils/concrete-cacheable-observable.hh>
 #include <eos/utils/concrete_observable.hh>
 
 namespace eos
@@ -2755,17 +2756,25 @@ namespace eos
             R"(Form factors for $0 \to \pi \pi$ transitions)",
             R"(Pseudo observables representing the full basis of $0 \to \pi \pi$ form factors. )"
             R"(The specific parametrization can be chosen via the "form-factors" option.)",
-            { make_form_factor_adapter("0->pipi::Abs{f_+}^2(q2)", R"(|f_+^{0\to \pi\pi}(q^2)|^2)", &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
+            { make_cacheable_observable("0->pipi::Abs{f_+}^2(q2)",
+              R"(|f_+^{0\to \pi\pi}(q^2)|^2)", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::abs2_f_p, "q2")),
 
-              make_form_factor_adapter("0->pipi::Arg{f_+}(q2)", R"(\textrm{arg}(f_+^{0\to\pi\pi}(q^2)))", &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2")),
+              make_cacheable_observable("0->pipi::Arg{f_+}(q2)",
+              R"(\textrm{arg}(f_+^{0\to\pi\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::arg_f_p, "q2")),
 
-              make_form_factor_adapter("0->pipi::Re{f_+}(Re{q2},Im{q2})",
-              R"(\textrm{Re}(f_+^{0\to\pi\pi}(q^2)))", &FormFactors<VacuumToPP>::re_f_p,
-              std::make_tuple("Re{q2}", "Im{q2}")),
+              make_cacheable_observable("0->pipi::Re{f_+}(Re{q2},Im{q2})",
+              R"(\textrm{Re}(f_+^{0\to\pi\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::re_f_p, "Re{q2}", "Im{q2}")),
 
-              make_form_factor_adapter("0->pipi::Im{f_+}(Re{q2},Im{q2})",
-              R"(\textrm{Im}(f_+^{0\to\pi\pi}(q^2)))", &FormFactors<VacuumToPP>::im_f_p,
-              std::make_tuple("Re{q2}", "Im{q2}")),
+              make_cacheable_observable("0->pipi::Im{f_+}(Re{q2},Im{q2})",
+              R"(\textrm{Im}(f_+^{0\to\pi\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::im_f_p, "Re{q2}", "Im{q2}")),
 
               make_observable("0->pipi::b_0@KKRvD2024", R"(b_0^{0 \to \pi\pi})", Unit::None(), &KKRvD2024FormFactors<VacuumToPiPi>::b_0),
 
@@ -2806,17 +2815,25 @@ namespace eos
             R"(Form factors for $0 \to K \pi$ transitions)",
             R"(Pseudo observables representing the full basis of $0 \to K \pi$ form factors. )"
             R"(The specific parametrization can be chosen via the "form-factors" option.)",
-            { make_form_factor_adapter("0->Kpi::Abs{f_+}^2(q2)", R"(|f_+^{0\to K\pi}(q^2)|^2)", &FormFactors<VacuumToPP>::abs2_f_p, std::make_tuple("q2")),
+            { make_cacheable_observable("0->Kpi::Abs{f_+}^2(q2)",
+              R"(|f_+^{0\to K\pi}(q^2)|^2)", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::abs2_f_p, "q2")),
 
-              make_form_factor_adapter("0->Kpi::Arg{f_+}(q2)", R"(\textrm{arg}(f_+^{0\to K\pi}(q^2)))", &FormFactors<VacuumToPP>::arg_f_p, std::make_tuple("q2")),
+              make_cacheable_observable("0->Kpi::Arg{f_+}(q2)",
+              R"(\textrm{arg}(f_+^{0\to K\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::arg_f_p, "q2")),
 
-              make_form_factor_adapter("0->Kpi::Re{f_+}(Re{q2},Im{q2})",
-              R"(\textrm{Re}(f_+^{0\to K\pi}(q^2)))", &FormFactors<VacuumToPP>::re_f_p,
-              std::make_tuple("Re{q2}", "Im{q2}")),
+              make_cacheable_observable("0->Kpi::Re{f_+}(Re{q2},Im{q2})",
+              R"(\textrm{Re}(f_+^{0\to K\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::re_f_p, "Re{q2}", "Im{q2}")),
 
-              make_form_factor_adapter("0->Kpi::Im{f_+}(Re{q2},Im{q2})",
-              R"(\textrm{Im}(f_+^{0\to K\pi}(q^2)))", &FormFactors<VacuumToPP>::im_f_p,
-              std::make_tuple("Re{q2}", "Im{q2}")),
+              make_cacheable_observable("0->Kpi::Im{f_+}(Re{q2},Im{q2})",
+              R"(\textrm{Im}(f_+^{0\to K\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::im_f_p, "Re{q2}", "Im{q2}")),
 
               make_observable("0->Kpi::f_+(0)", R"(f_+^{0 \to K\pi}(0))", Unit::None(), &KSvD2025FormFactors<VacuumToKPi>::fp_at_0),
 
@@ -2828,17 +2845,25 @@ namespace eos
 
               make_observable("0->Kpi::Saturation_f+@KSvD2025", R"(\textrm{Saturation}[1^-])", Unit::None(), &KSvD2025FormFactors<VacuumToKPi>::saturation_p),
 
-              make_form_factor_adapter("0->Kpi::Abs{f_0}^2(q2)", R"(|f_0^{0\to K\pi}(q^2)|^2)", &FormFactors<VacuumToPP>::abs2_f_0, std::make_tuple("q2")),
+              make_cacheable_observable("0->Kpi::Abs{f_0}^2(q2)",
+              R"(|f_0^{0\to K\pi}(q^2)|^2)", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::abs2_f_0, "q2")),
 
-              make_form_factor_adapter("0->Kpi::Arg{f_0}(q2)", R"(\textrm{arg}(f_0^{0\to K\pi}(q^2)))", &FormFactors<VacuumToPP>::arg_f_0, std::make_tuple("q2")),
+              make_cacheable_observable("0->Kpi::Arg{f_0}(q2)",
+              R"(\textrm{arg}(f_0^{0\to K\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::arg_f_0, "q2")),
 
-              make_form_factor_adapter("0->Kpi::Re{f_0}(Re{q2},Im{q2})",
-              R"(\textrm{Re}(f_0^{0\to K\pi}(q^2)))", &FormFactors<VacuumToPP>::re_f_0,
-              std::make_tuple("Re{q2}", "Im{q2}")),
+              make_cacheable_observable("0->Kpi::Re{f_0}(Re{q2},Im{q2})",
+              R"(\textrm{Re}(f_0^{0\to K\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::re_f_0, "Re{q2}", "Im{q2}")),
 
-              make_form_factor_adapter("0->Kpi::Im{f_0}(Re{q2},Im{q2})",
-              R"(\textrm{Im}(f_0^{0\to K\pi}(q^2)))", &FormFactors<VacuumToPP>::im_f_0,
-              std::make_tuple("Re{q2}", "Im{q2}")),
+              make_cacheable_observable("0->Kpi::Im{f_0}(Re{q2},Im{q2})",
+              R"(\textrm{Im}(f_0^{0\to K\pi}(q^2)))", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::im_f_0, "Re{q2}", "Im{q2}")),
 
               make_observable("0->Kpi::lambda_prime_0", R"(\lambda_0^{(\prime), K \to \pi})", Unit::None(), &KSvD2025FormFactors<VacuumToKPi>::lambda_prime_zero),
 
