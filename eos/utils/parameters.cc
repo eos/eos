@@ -586,6 +586,11 @@ namespace eos
                                         }
 
                                         latex = latex_node.as<std::string>();
+
+                                        if (latex.find("$") != std::string::npos)
+                                        {
+                                            throw ParameterInputFileNodeError(file, name + ".latex", "should not contain '$'");
+                                        }
                                     }
 
                                     _data->data.push_back(Parameter::Data(Parameter::Template{ QualifiedName(name), min, central, max, latex, unit }, idx));
