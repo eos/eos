@@ -11,11 +11,7 @@ bin_SCRIPTS = \
 	eos-figure \
 	eos-list-observables \
 	eos-list-references \
-	eos-make-constraint \
-	eos-mcp-server \
-	eos-merge-mcmc \
-	eos-print-modes \
-	eos-print-uncertainty
+	eos-mcp-server
 
 AM_TESTS_ENVIRONMENT = \
 			 export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
@@ -36,10 +32,6 @@ EXTRA_DIST = \
 	eos-figure \
 	eos-list-observables \
 	eos-list-references \
-	eos-make-constraint \
 	eos-mcp-server \
-	eos-merge-mcmc \
-	eos-print-modes \
-	eos-print-uncertainty \
 	eos-analysis_TEST \
 	eos-analysis_TEST.d/analysis.yaml
