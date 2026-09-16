@@ -69,7 +69,7 @@ namespace eos
             std::function<WilsonCoefficients<wc::SBNuNu>()> wc;
             std::function<double()>                         m_D;
 
-            GSL::QAGS::Config int_config;
+            cubature::Config cub_conf;
 
             BooleanOption opt_cp_conjugate;
 
@@ -165,7 +165,7 @@ namespace eos
                 hbar(p["QM::hbar"], u),
                 isospin_factor(_isospin_factor()),
                 mu(p[opt_D.str() + "b" + "nunu::mu"], u),
-                int_config(GSL::QAGS::Config().epsrel(0.5e-3)),
+                cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 cp_conjugate(opt_cp_conjugate.value()),
                 form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
@@ -312,7 +312,7 @@ namespace eos
     {
         std::function<double(const double &)> f = std::bind(&Implementation<BToVectorDineutrino>::differential_branching_ratio, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(f, q2_min, q2_max, _imp->int_config);
+        return integrate<1, 1>(f, q2_min, q2_max, _imp->cub_conf);
     }
 
     double
@@ -322,7 +322,7 @@ namespace eos
                 std::bind(&Implementation<BToVectorDineutrino>::differential_longitudinal_width, _imp.get(), std::placeholders::_1);
         std::function<double(const double &)> decay_width = std::bind(&Implementation<BToVectorDineutrino>::differential_decay_width, _imp.get(), std::placeholders::_1);
 
-        return integrate<GSL::QAGS>(longitudinal_width, q2_min, q2_max, _imp->int_config) / integrate<GSL::QAGS>(decay_width, q2_min, q2_max, _imp->int_config);
+        return integrate<1, 1>(longitudinal_width, q2_min, q2_max, _imp->cub_conf) / integrate<1, 1>(decay_width, q2_min, q2_max, _imp->cub_conf);
     }
 
     const std::string BToVectorDineutrino::description = "\
