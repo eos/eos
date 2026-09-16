@@ -59,6 +59,7 @@ namespace eos
 
             // Observables
             const IntermediateResult * prepare(const double & q2) const;
+            const IntermediateResult * prepare_shifted(const double & q2) const;
             const AlternativeResult *  prepare_alternative(const double & q2) const;
 
             double evaluate1(const IntermediateResult *) const;
@@ -100,6 +101,13 @@ namespace eos
                 return &_intermediate_result;
             }
 
+            // shares its result type and its arity with prepare(), but is a different function
+            const IntermediateResult *
+            prepare_shifted(const double & q2)
+            {
+                return prepare(q2 + 1.0);
+            }
+
             const AlternativeResult *
             prepare_alternative(const double & q2)
             {
@@ -138,6 +146,12 @@ namespace eos
     TestCacheableObservableProvider::prepare(const double & q2) const
     {
         return _imp->prepare(q2);
+    }
+
+    const TestCacheableObservableProvider::IntermediateResult *
+    TestCacheableObservableProvider::prepare_shifted(const double & q2) const
+    {
+        return _imp->prepare_shifted(q2);
     }
 
     const TestCacheableObservableProvider::AlternativeResult *
@@ -328,6 +342,22 @@ class CacheableObservableTest : public TestCase
                 TEST_CHECK_NO_THROW(cacheable_observable3_id = cache.add(cacheable_observable3));
 
 
+                // Add a cacheable observable that shares its result type and its kinematics with the
+                // first one, but obtains the intermediate result from a different prepare function
+                ObservablePtr                 shifted_observable(new TestCacheableObservable("test::shifted_observable(q2)",
+                                                                             p,
+                                                                             Kinematics({
+                                                                                 { "q2", 2.0 }
+                }),
+                                                                             Options(),
+                                                                             &TestCacheableObservableProvider::prepare_shifted,
+                                                                             &TestCacheableObservableProvider::evaluate1,
+                                                                             std::make_tuple("q2")));
+                ObservableCache::ObservableId shifted_observable_id;
+
+                TEST_CHECK_NO_THROW(shifted_observable_id = cache.add(shifted_observable));
+
+
                 // Add a cacheable observable that uses a second intermediate result type
                 using TestAlternativeObservable = class ConcreteCacheableObservable<TestCacheableObservableProvider, TestCacheableObservableProvider::AlternativeResult, double>;
 
@@ -348,6 +378,7 @@ class CacheableObservableTest : public TestCase
                 // Test cache evaluation
                 TEST_CHECK_NO_THROW(cache.update());
                 TEST_CHECK_EQUAL(cache[cacheable_observable_id], cache[cacheable_observable2_id]);
+                TEST_CHECK_NEARLY_EQUAL(cache[shifted_observable_id], 5.27934 - 2.0 * 3.0, 1.e-5);
                 TEST_CHECK_NEARLY_EQUAL(cache[alternative_observable_id], 5.27934 * 2.0, 1.e-5);
 
                 // Test cache cloning
