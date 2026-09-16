@@ -44,6 +44,9 @@ EXTRA_DIST = \
 	eos/cli/list_constraints_TEST.py \
 	eos/cli/list_observables.py \
 	eos/cli/list_observables_TEST.py \
+	eos/cli/list_parameters.py \
+	eos/cli/list_parameters_TEST.d \
+	eos/cli/list_parameters_TEST.py \
 	eos/cli/list_references.py \
 	eos/cli/list_references_TEST.d \
 	eos/cli/list_references_TEST.py \
@@ -159,6 +162,7 @@ eoscli_SCRIPTS = \
 	eos/cli/figure.py \
 	eos/cli/list_constraints.py \
 	eos/cli/list_observables.py \
+	eos/cli/list_parameters.py \
 	eos/cli/list_references.py \
 	eos/cli/list_signal_pdfs.py \
 	eos/cli/mcp.py
@@ -227,6 +231,7 @@ TESTS = \
 	eos/cli/figure_TEST.py \
 	eos/cli/list_constraints_TEST.py \
 	eos/cli/list_observables_TEST.py \
+	eos/cli/list_parameters_TEST.py \
 	eos/cli/list_references_TEST.py \
 	eos/cli/list_signal_pdfs_TEST.py \
 	eos/validation_context_TEST.py \

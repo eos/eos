@@ -1,0 +1,291 @@
+==========================
+Hadron Property Parameters
+==========================
+
+Pseudoscalar Meson Masses
+-------------------------
+
+               mass::B_d	+5.2795e+00	+5.2797e+00	+5.2798e+00
+               mass::D_d	+1.8696e+00	+1.8697e+00	+1.8697e+00
+
+Vector Meson Masses
+-------------------
+
+
+Baryon Masses
+-------------
+
+
+Decay Constants
+---------------
+
+
+Fragmentation Fraction Ratios
+-----------------------------
+
+
+Mean Meson Lifetimes
+--------------------
+
+          life_time::B_d	+1.5120e-12	+1.5190e-12	+1.5260e-12
+
+Mean Baryon Lifetimes
+---------------------
+
+
+Parameters for Miscellanous Meson Properties
+--------------------------------------------
+
+
+Parameters for Miscellaneous Baryon Properties
+----------------------------------------------
+
+
+Parameters in Light-Cone Distribution Amplitudes
+------------------------------------------------
+
+
+Parameters in the Heavy Quark Expansion
+---------------------------------------
+
+
+Parameters of the ee -> ccbar scattering processes
+--------------------------------------------------
+
+
+==================================
+Hadronic Matrix Element Parameters
+==================================
+
+Parameters in B_q \leftrightarrow \bar{B}_q Meson Mixing
+--------------------------------------------------------
+
+
+Masses used in BSZ-like Form Factor Parametrizations
+----------------------------------------------------
+
+
+Pair-production thresholds for the SSE Form Factor Parametrization
+------------------------------------------------------------------
+
+
+Masses used in the G2026 form factor parametrization
+----------------------------------------------------
+
+
+Parameters in B\to P Form Factor Parametrizations
+-------------------------------------------------
+
+B->D::alpha^f+_0@BSZ2015	+6.8088e-01	+6.8088e-01	+6.8088e-01
+B->D::alpha^f+_1@BSZ2015	-2.2218e+00	-2.2218e+00	-2.2218e+00
+B->D::alpha^f+_2@BSZ2015	+6.5410e-01	+6.5410e-01	+6.5410e-01
+B->D::alpha^f0_1@BSZ2015	+5.7791e-01	+5.7791e-01	+5.7791e-01
+B->D::alpha^f0_2@BSZ2015	+1.3271e+00	+1.3271e+00	+1.3271e+00
+B->D::alpha^fT_0@BSZ2015	+5.6482e-01	+5.6482e-01	+5.6482e-01
+B->D::alpha^fT_1@BSZ2015	-2.5028e+00	-2.5028e+00	-2.5028e+00
+B->D::alpha^fT_2@BSZ2015	+1.0592e+01	+1.0592e+01	+1.0592e+01
+
+Parameters in B\to V Form Factor Parametrizations
+-------------------------------------------------
+
+
+Parameters in B_c \to V Form Factor Parametrizations
+----------------------------------------------------
+
+
+Parameters in B_s\to V Form Factor Parametrizations
+---------------------------------------------------
+
+
+Parameters in B\to \gamma Form Factor Parametrizations
+------------------------------------------------------
+
+
+Parameters in B\to PP Form Factor Parametrizations
+--------------------------------------------------
+
+
+Parameters in LCSR Calculations with Light-Meson LCDAs
+------------------------------------------------------
+
+
+Parameters in LCSR Calculations with B-meson LCDAs
+--------------------------------------------------
+
+
+Dispersive bounds in the OPE for b -> s currents
+------------------------------------------------
+
+
+Dispersive bounds in the OPE for b -> u currents
+------------------------------------------------
+
+
+Dispersive bounds in the OPE for b -> c currents
+------------------------------------------------
+
+
+Dispersive bounds in the OPE for c -> s currents
+------------------------------------------------
+
+
+Parameters in D\to P Form Factor Parametrizations
+-------------------------------------------------
+
+
+Parameters in {}^1/_2{}^+ \to {}^1/_2{}^+ Form Factor Parametrizations
+----------------------------------------------------------------------
+
+
+Parameters in 1/2^+ -> 1/2^+ Form Factor Parametrizations (SSE)
+---------------------------------------------------------------
+
+
+Parameters of the Heavy Quark Expansion of Heavy-to-Heavy Form Factors
+----------------------------------------------------------------------
+
+
+Parameters in {}^1/_2{}^+ \to {}^3/_2{}^+ Form Factor Parametrizations
+----------------------------------------------------------------------
+
+
+Parameters in Non-Local Matrix Elements for B\to P and B\to V transitions
+-------------------------------------------------------------------------
+
+
+Parameters for form factor values appearing in non-leptonic class-I B decays
+----------------------------------------------------------------------------
+
+
+Parameters parametrizing power corrections in non-leptonic class-I B decays
+---------------------------------------------------------------------------
+
+
+Miscellaneous Form Factor Parameters
+------------------------------------
+
+
+Parameters in 2->2 scattering amplitudes
+----------------------------------------
+
+
+Parameters in 0\to PP Form Factor Parametrizations
+--------------------------------------------------
+
+
+Nonleptonic Amplitudes Parameters
+---------------------------------
+
+
+Parameters in P->PP form-factor parametrization
+-----------------------------------------------
+
+
+==========================
+Lepton Property Parameters
+==========================
+
+Lepton Lifetimes
+----------------
+
+
+Lepton Masses
+-------------
+
+                mass::mu	+1.0566e-01	+1.0566e-01	+1.0566e-01
+
+====================================================
+Standard Model and Effective Field Theory Parameters
+====================================================
+
+Standard Model Parameters
+-------------------------
+
+                  CKM::A	+8.1400e-01	+8.2700e-01	+8.4000e-01
+             CKM::etabar	+3.3600e-01	+3.5000e-01	+3.6400e-01
+             CKM::lambda	+2.2470e-01	+2.2535e-01	+2.2600e-01
+             CKM::rhobar	+1.1100e-01	+1.3200e-01	+1.5300e-01
+       GSW::sin^2(theta)	+2.3104e-01	+2.3116e-01	+2.3128e-01
+             QCD::Lambda	+5.0000e-01	+5.0000e-01	+5.0000e-01
+        QCD::alpha_s(MZ)	+1.1910e-01	+1.1840e-01	+1.1770e-01
+               QCD::mu_b	+4.2000e+00	+4.2000e+00	+4.2000e+00
+               QCD::mu_c	+1.0000e+00	+1.0000e+00	+1.0000e+00
+               QCD::mu_t	+1.7000e+02	+1.7000e+02	+1.7000e+02
+       QED::alpha_e(m_c)	+7.6064e-03	+7.6064e-03	+7.6064e-03
+                QM::hbar	+6.5821e-25	+6.5821e-25	+6.5821e-25
+            WET::G_Fermi	+1.1664e-05	+1.1664e-05	+1.1664e-05
+             b->s::mu_0c	+8.0000e+01	+8.0000e+01	+8.0000e+01
+             b->s::mu_0t	+1.2000e+02	+1.2000e+02	+1.2000e+02
+                 mass::W	+8.0370e+01	+8.0385e+01	+8.0400e+01
+                 mass::Z	+9.1186e+01	+9.1188e+01	+9.1190e+01
+          mass::b(MSbar)	+4.1500e+00	+4.1800e+00	+4.2100e+00
+                 mass::c	+1.2500e+00	+1.2750e+00	+1.3000e+00
+           mass::d(2GeV)	+4.5000e-03	+4.8000e-03	+5.5000e-03
+           mass::s(2GeV)	+9.0000e-02	+9.5000e-02	+1.0000e-01
+           mass::t(pole)	+1.7250e+02	+1.7350e+02	+1.7450e+02
+           mass::u(2GeV)	+2.5000e-03	+3.2000e-03	+3.5000e-03
+                uc::mu_0	+8.0000e+01	+8.0000e+01	+8.0000e+01
+                uc::mu_b	+4.1800e+00	+4.1800e+00	+4.1800e+00
+
+CKM Parameters w/o the Assumption of CKM Unitarity
+--------------------------------------------------
+
+
+\bar{s}b\bar{s}b WET Parameters
+-------------------------------
+
+                sbsb::mu	+8.4000e+00	+4.2000e+00	+2.1000e+00
+              sbsb::mu_0	+8.0000e+01	+1.2000e+02	+1.6000e+02
+
+c\to u\left\lbrace \bar{q}q,\, \gamma,\, \ell^+\ell^-\right\rbrace WET Parameters
+---------------------------------------------------------------------------------
+
+                  uc::mu	+1.3000e+00	+1.3000e+00	+1.3000e+00
+
+b\to s\left\lbrace \bar{q}q,\, \gamma,\, \ell^+\ell^-\right\rbrace WET Parameters
+---------------------------------------------------------------------------------
+
+
+\bar{u}s\bar{\ell}\nu WET Parameters
+------------------------------------
+
+
+\bar{c}b\bar{\ell}\nu WET Parameters
+------------------------------------
+
+            cbmunumu::mu	+4.2000e+00	+4.2000e+00	+4.2000e+00
+
+\bar{u}b\bar{\ell}\nu WET Parameters
+------------------------------------
+
+
+\bar{s}b\bar{\nu}\nu WET Parameters
+-----------------------------------
+
+            sbnunu::mu_0	+1.2000e+02	+1.2000e+02	+1.2000e+02
+
+\bar{s}b\bar{c}u WET Parameters
+-------------------------------
+
+                sbcu::mu	+4.2000e+00	+4.2000e+00	+4.2000e+00
+              sbcu::mu_0	+8.0000e+01	+8.0000e+01	+8.0000e+01
+
+\bar{d}b\bar{c}u WET Parameters
+-------------------------------
+
+                dbcu::mu	+4.2000e+00	+4.2000e+00	+4.2000e+00
+              dbcu::mu_0	+8.0000e+01	+8.0000e+01	+8.0000e+01
+
+\bar{s}c\bar{\nu}\ell WET Parameters
+------------------------------------
+
+              scnuee::mu	+1.2750e+00	+1.2750e+00	+1.2750e+00
+            scnumumu::mu	+1.2750e+00	+1.2750e+00	+1.2750e+00
+          scnutautau::mu	+1.2750e+00	+1.2750e+00	+1.2750e+00
+
+\bar{d}c\bar{\nu}\ell WET Parameters
+------------------------------------
+
+              dcnuee::mu	+1.2750e+00	+1.2750e+00	+1.2750e+00
+            dcnumumu::mu	+1.2750e+00	+1.2750e+00	+1.2750e+00
+          dcnutautau::mu	+1.2750e+00	+1.2750e+00	+1.2750e+00

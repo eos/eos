@@ -11,6 +11,7 @@ bin_SCRIPTS = \
 	eos-figure \
 	eos-list-constraints \
 	eos-list-observables \
+	eos-list-parameters \
 	eos-list-references \
 	eos-list-signal-pdfs \
 	eos-mcp-server
@@ -34,6 +35,7 @@ EXTRA_DIST = \
 	eos-figure \
 	eos-list-constraints \
 	eos-list-observables \
+	eos-list-parameters \
 	eos-list-references \
 	eos-list-signal-pdfs \
 	eos-mcp-server \
