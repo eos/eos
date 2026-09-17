@@ -37,6 +37,7 @@
 - Move the implementation of the ``eos-figure`` command into the new module ``eos.cli.figure``, leaving the script as a shim, so that its subcommands can be tested and called from Python (D. van Dyk)
 - Move the implementations of the ``eos-list-observables`` and ``eos-list-references`` commands into the new modules ``eos.cli.list_observables`` and ``eos.cli.list_references``, leaving the scripts as shims (D. van Dyk)
 - Reimplement the ``eos-list-constraints``, ``eos-list-parameters``, and ``eos-list-signal-pdfs`` commands in Python, as the new modules ``eos.cli.list_constraints``, ``eos.cli.list_parameters``, and ``eos.cli.list_signal_pdfs``, in lieu of the C++ clients of the same names; their output is unchanged, except that ``eos-list-parameters`` now sorts the parameter sections by name, since the order in which EOS reads their files is arbitrary (D. van Dyk)
+- Recommend ``make -j4`` over ``make -j`` when building EOS, and warn that an unbounded parallel build can exhaust the available memory (D. van Dyk)
 
 ### Added
 
@@ -67,6 +68,11 @@
 - Export ``MemoisationControl`` to Python, so that ``eos.MemoisationControl.instance().clear()`` frees the memory held by all memoisation caches (L. Gärtner)
 - Expose the ``numerator_kinematic_variables()`` and ``denominator_kinematic_variables()`` accessors of ``eos.SignalPDFEntry`` to Python, which listing a signal PDF's kinematic variables requires (D. van Dyk)
 - Add double-differential rates ``tau->K_Spinu::d^2Gamma/dq^2/dcos(theta_K)`` and similar based on [EPPRR:2026A] (D. van Dyk)
+- Link every bibliography entry that carries an INSPIRE id to its INSPIRE record, so that an entry without an eprint is no longer listed without any link at all (D. van Dyk)
+- Link every bibliography entry that carries a URL but not INSPIRE id or arXiv eprint to said URL, so that an entry is no longer listed without any link at all (M. Kirk)
+- Check the LaTeX representation of every observable in ``doc/doc_TEST.py``, mirroring the existing check of the parameters (D. van Dyk)
+- Declare the ``ipywidgets`` dependency, which ``eos.tasks`` imports whenever a task runs under IPython (D. van Dyk)
+- Expose ``url()`` property of ``eos.Reference`` to Python, so that the URL of a reference can be retrieved (M. Kirk)
 
 ### Deprecated
 
@@ -111,6 +117,14 @@
 - Fix the arXiv identifier that ``eos-list-references`` prints: it searched the reversed eprint id for a colon and then sliced the unreversed id at that index, so that ``oai:arXiv.org:1912.09335`` was reported as ``arXiv:org:1912.09335`` (D. van Dyk)
 - Fix ``eos-list-constraints --dump-as-yaml``, which emitted each constraint nested inside the one before it, so that the dump of all 741 constraints parsed as a mapping of 7 entries and the remainder was unreachable (D. van Dyk)
 - Fix bug in scalar contributions to ``tau->K_spinu::dBR/dq2`` and ``tau->K^-pinu::dBR/dq2`` (issue #1203) (D. van Dyk)
+- Fix the LaTeX descriptions of the ``B->K^*ll::P'_{4,5,6}(q2)`` and ``B->K^*ll::P'_{4,5,6,8}@LHCb`` observables, the former naming the kinematic variable ``q2`` in lieu of ``q^2``, the latter placing a second superscript on a symbol that already carries a prime, which LaTeX rejects (D. van Dyk)
+- List FFTW3 among the prerequisites and add it to the ``apt`` and ``brew`` commands, since ``configure`` refuses to build EOS without it (D. van Dyk)
+- Describe ``--with-boost-python-suffix`` as encoding the Python version that BOOST.Python was built against, in lieu of leaving it to be read as the minimal Python version EOS requires, and refresh its stale ``libboost_python39`` and ``python3.8`` examples (D. van Dyk)
+- Sort the list of units in the conventions page, which was built from a set and therefore ordered differently in every build (D. van Dyk)
+- Let a display equation that exceeds the page width scroll horizontally in lieu of running off the page, and split the baryonic vector and axialvector matrix elements over more lines (D. van Dyk)
+- Fix a stray space in the ``basics`` example notebook, and an invalid ``\p`` escape sequence in the ``analysis-organisation`` example notebook that emitted a ``SyntaxWarning`` into the rendered documentation (D. van Dyk)
+- Rename the custom observable of the ``b-to-u-l-nu`` example analysis file to ``B->pilnu::R_pi_e``, since it shadowed the built-in ``B->pilnu::R_pi``, which is a ratio of tau and muon modes rather than of tau and electron modes (D. van Dyk)
+- Emit ``eos.figure``'s per-item progress message at debug level in lieu of info level, so that drawing a figure no longer writes one line per item to ``stderr`` (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
