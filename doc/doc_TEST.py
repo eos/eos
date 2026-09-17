@@ -25,7 +25,7 @@ class DocTests(unittest.TestCase):
                         try:
                             texmanager.get_text_width_height_descent('$' + latex_string + '$', fontsize=12)
                         except Exception as e:
-                            self.fail(f"Cannot compile latex representation of parameter {parameter.name()}, caucht exception of type {type(e).__name__}: {e}")
+                            self.fail(f"Cannot compile latex representation of parameter {parameter.name()}, caught exception of type {type(e).__name__}: {e}")
 
     def test_001_Observables(self):
         """Check the latex representation of all the observables"""
