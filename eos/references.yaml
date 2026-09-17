@@ -431,6 +431,13 @@ BGJvD:2019A:
     id: oai:arXiv.org:1912.09335
   inspire-id: Bordone:2019guc
   title: Heavy-Quark expansion for ${{\bar{B}}_s\rightarrow D^{(*)}_s}$ form factors and unitarity bounds beyond the ${SU(3)_F}$ limit
+BGJvD:2025A:
+  authors: Bordone, M. and Gubernari, N. and Jung, M. and van Dyk, D.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2507.03569
+  inspire-id: Bordone:2025jur
+  title: Challenging ${\bar{B}_{(s)} \to D^{(*)}_{(s)}}$ form factors with the heavy quark expansion
 BGL:1997A:
   authors: Boyd, C.G. and Grinstein, B. and Lebed, R.F.
   eprint:
