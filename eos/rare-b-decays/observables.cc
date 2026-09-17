@@ -471,7 +471,7 @@ namespace eos
                     make_observable("B->K^*ll::J_9(q2)", R"(J_9(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))", Unit::None(), &BToKstarDilepton::differential_j_9, std::make_tuple("q2")),
 
                     make_expression_observable("B->K^*ll::P'_4(q2)",
-                                               R"(P'_4(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q2))",
+                                               R"(P'_4(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
                                                Unit::None(),
                                                R"(
                         (<<B->K^*ll::J_4(q2);cp-conjugate=false>> + <<B->K^*ll::J_4(q2);cp-conjugate=true>>)
@@ -483,7 +483,7 @@ namespace eos
                         )"),
 
                     make_expression_observable("B->K^*ll::P'_5(q2)",
-                                               R"(P'_5(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q2))",
+                                               R"(P'_5(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
                                                Unit::None(),
                                                R"(
                         0.5 * (<<B->K^*ll::J_5(q2);cp-conjugate=false>> + <<B->K^*ll::J_5(q2);cp-conjugate=true>>)
@@ -495,7 +495,7 @@ namespace eos
                         )"),
 
                     make_expression_observable("B->K^*ll::P'_6(q2)",
-                                               R"(P'_6(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q2))",
+                                               R"(P'_6(\bar{B}\to \bar{K}^*\ell^+\ell^-)(q^2))",
                                                Unit::None(),
                                                R"(
                         -0.5 * (<<B->K^*ll::J_7(q2);cp-conjugate=false>> + <<B->K^*ll::J_7(q2);cp-conjugate=true>>)
@@ -1253,13 +1253,13 @@ namespace eos
 
                     make_expression_observable("B->K^*ll::P_3@LHCb", R"(P_3^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( -1.0 * <<B->K^*ll::P_3>> )"),
 
-                    make_expression_observable("B->K^*ll::P'_4@LHCb", R"(P'_4^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( -0.5 * <<B->K^*ll::P'_4>> )"),
+                    make_expression_observable("B->K^*ll::P'_4@LHCb", R"({P'_4}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( -0.5 * <<B->K^*ll::P'_4>> )"),
 
-                    make_expression_observable("B->K^*ll::P'_5@LHCb", R"(P'_5^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( <<B->K^*ll::P'_5>> )"),
+                    make_expression_observable("B->K^*ll::P'_5@LHCb", R"({P'_5}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( <<B->K^*ll::P'_5>> )"),
 
-                    make_expression_observable("B->K^*ll::P'_6@LHCb", R"(P'_6^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( <<B->K^*ll::P'_6>> )"),
+                    make_expression_observable("B->K^*ll::P'_6@LHCb", R"({P'_6}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( <<B->K^*ll::P'_6>> )"),
 
-                    make_expression_observable("B->K^*ll::P'_8@LHCb", R"(P'_8^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( -0.5 * <<B->K^*ll::P'_8>> )"),
+                    make_expression_observable("B->K^*ll::P'_8@LHCb", R"({P'_8}^\mathrm{LHCb}(\bar{B}\to \bar{K}^*\ell^+\ell^-))", Unit::None(), R"( -0.5 * <<B->K^*ll::P'_8>> )"),
 
 
                     make_expression_observable("B->K^*ll::R_K^*",
