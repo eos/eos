@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2023 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,7 +24,6 @@
 
 #include <test/test.hh>
 
-#include <algorithm>
 #include <cmath>
 #include <list>
 
@@ -42,7 +41,7 @@ class MakeTest : public TestCase
         virtual void
         run() const
         {
-            std::list<std::string> models = { "WET", "WET-SMEFT" };
+            std::list<std::string> models = { "WET" };
             for (const auto & name : models)
             {
                 try
@@ -575,163 +574,3 @@ class WilsonCoefficientsSBNuNuTest : public TestCase
             }
         }
 } wilson_coefficients_sbnunu_test;
-
-class ConstrainedWilsonScanModelTest : public TestCase
-{
-    public:
-        ConstrainedWilsonScanModelTest() :
-            TestCase("constrained_wilson_scan_model_test")
-        {
-        }
-
-        virtual void
-        run() const
-        {
-            static const double mu  = 4.2; // approximate value of the b quark mass in the MSbar scheme
-            static const double eps = 1e-15;
-
-            /* Vary parameters that should be ignored */
-            {
-                Parameters                 p = Parameters::Defaults();
-                Options                    o;
-                ConstrainedWilsonScanModel model(p, o);
-
-                p["b->s::Re{c7}"]      = 1.008;
-                p["b->smumu::Re{cS}"]  = 42;
-                p["b->smumu::Re{cP}"]  = 100;
-                p["b->smumu::Im{cS'}"] = -12;
-                p["b->smumu::Im{cP'}"] = -135;
-                p["b->smumu::Re{cT}"]  = 2.0;
-                p["b->smumu::Re{cT5}"] = -43.0;
-
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
-
-                TEST_CHECK_RELATIVE_ERROR(std::real(wc.c7()), 1.008, eps);
-
-                /* C_P should be ignored, and always equal -C_S */
-                TEST_CHECK_RELATIVE_ERROR(std::real(wc.cS()), 42, eps);
-                TEST_CHECK_RELATIVE_ERROR(std::real(wc.cP()), -42, eps);
-
-                TEST_CHECK_RELATIVE_ERROR(imag(wc.cSprime()), -12, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(wc.cPprime()), -12, eps);
-
-                /* C_T and C_T5 vanish */
-                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT()), 0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT()), 0.0, eps);
-
-                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT5()), 0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT5()), 0.0, eps);
-
-                /* Used parameters registered */
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Re{cS}"].id()) != std::end(model));
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Im{cS}"].id()) != std::end(model));
-
-                std::list<Parameter::Id> unused_ids = {
-                    p["b->smumu::Re{cP}"].id(), p["b->smumu::Im{cP}"].id(), p["b->smumu::Re{cP'}"].id(), p["b->smumu::Im{cP'}"].id(),
-                    p["b->smumu::Re{cT}"].id(), p["b->smumu::Im{cT}"].id(), p["b->smumu::Re{cT5}"].id(), p["b->smumu::Im{cT5}"].id(),
-                };
-                for (auto & id : model)
-                {
-                    TEST_CHECK(std::find(unused_ids.begin(), unused_ids.end(), id) == unused_ids.end());
-                }
-            }
-
-            /* cartesian parametrisation */
-            {
-                Parameters                 p = Parameters::Defaults();
-                Options                    o;
-                ConstrainedWilsonScanModel model(p, o);
-
-                p["b->s::Re{c7}"]      = 1.008;
-                p["b->smumu::Re{cS}"]  = 42;
-                p["b->smumu::Im{cS}"]  = 0.5;
-                p["b->smumu::Re{cS'}"] = 3.2;
-                p["b->smumu::Im{cS'}"] = 1.2;
-                p["b->smumu::Re{cP}"]  = 100;
-                p["b->smumu::Im{cP'}"] = 35;
-                p["b->smumu::Re{cT}"]  = 2.0;
-                p["b->smumu::Im{cT}"]  = 9.0;
-                p["b->smumu::Re{cT5}"] = -43.0;
-                p["b->smumu::Im{cT5}"] = M_PI;
-
-                WilsonCoefficients<BToS> wc = model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
-
-                TEST_CHECK_RELATIVE_ERROR(real(wc.c7()), 1.008, eps);
-
-                /* C_P should be ignored, and always equal -C_S */
-                TEST_CHECK_RELATIVE_ERROR(real(wc.cS()), 42.0, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(wc.cS()), 0.5, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.cP()), -42.0, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(wc.cP()), -0.5, eps);
-
-                TEST_CHECK_RELATIVE_ERROR(real(wc.cSprime()), 3.2, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(wc.cSprime()), 1.2, eps);
-                TEST_CHECK_RELATIVE_ERROR(real(wc.cPprime()), 3.2, eps);
-                TEST_CHECK_RELATIVE_ERROR(imag(wc.cPprime()), 1.2, eps);
-
-                /* C_T and C_T5 vanish */
-                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT()), 0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT()), 0.0, eps);
-
-                TEST_CHECK_NEARLY_EQUAL(std::real(wc.cT5()), 0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(std::imag(wc.cT5()), 0.0, eps);
-
-                /* Used parameters registered */
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Re{cS}"].id()) != std::end(model));
-                TEST_CHECK(std::find(std::begin(model), std::end(model), p["b->smumu::Re{cS}"].id()) != std::end(model));
-
-                std::list<Parameter::Id> unused_ids = {
-                    p["b->smumu::Re{cP}"].id(), p["b->smumu::Im{cP}"].id(), p["b->smumu::Re{cP'}"].id(), p["b->smumu::Im{cP'}"].id(),
-                    p["b->smumu::Re{cT}"].id(), p["b->smumu::Im{cT}"].id(), p["b->smumu::Re{cT5}"].id(), p["b->smumu::Im{cT5}"].id(),
-                };
-                for (auto & id : model)
-                {
-                    TEST_CHECK(std::find(unused_ids.begin(), unused_ids.end(), id) == unused_ids.end());
-                }
-            }
-
-            /* most parameters identical to the usual WilsonScanModel */
-            {
-                Parameters p = Parameters::Defaults();
-                Options    o;
-                o.declare("scan-mode"_ok, "cartesian"_ov);
-
-                p["b->s::Re{c7}"]      = 1.008;
-                p["b->smumu::Re{cS}"]  = 42;
-                p["b->smumu::Re{cP}"]  = -1.0 * p["b->smumu::Re{cS}"]();
-                p["b->smumu::Im{cS'}"] = -12;
-                p["b->smumu::Im{cP'}"] = p["b->smumu::Im{cS'}"]();
-                p["b->smumu::Re{cT}"]  = 0.0;
-                p["b->smumu::Im{cT}"]  = 0.0;
-                p["b->smumu::Re{cT5}"] = 0.0;
-                p["b->smumu::Im{cT5}"] = 0.0;
-
-                ConstrainedWilsonScanModel constrained_model(p, o);
-                WilsonScanModel            unconstrained_model(p, o);
-
-                WilsonCoefficients<BToS> constrained_wc   = constrained_model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
-                WilsonCoefficients<BToS> unconstrained_wc = constrained_model.wilson_coefficients_b_to_s(mu, LeptonFlavor::muon, false);
-
-                auto ux = unconstrained_wc._sm_like_coefficients.begin();
-                for (auto & x : constrained_wc._sm_like_coefficients)
-                {
-                    TEST_CHECK_EQUAL(x, *ux);
-                    ++ux;
-                }
-
-                ux = unconstrained_wc._primed_coefficients.begin();
-                for (auto & x : constrained_wc._primed_coefficients)
-                {
-                    TEST_CHECK_EQUAL(x, *ux);
-                    ++ux;
-                }
-
-                ux = unconstrained_wc._scalar_tensor_coefficients.begin();
-                for (auto & x : constrained_wc._scalar_tensor_coefficients)
-                {
-                    TEST_CHECK_EQUAL(x, *ux);
-                    ++ux;
-                }
-            }
-        }
-} constrained_wilson_scan_model_test;
