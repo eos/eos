@@ -23,7 +23,7 @@ def ref_to_eprint(reference):
     eprint_id = reference.eprint_id()
     eprint_archive = reference.eprint_archive()
     if eprint_id.startswith('oai:arXiv.org:'):
-        id = eprint_id.lstrip('oai:arXiv.org:')
+        id = eprint_id.removeprefix('oai:arXiv.org:')
         result = {
                 'id': id,
                 'url': f'https://arxiv.org/abs/{id}',
@@ -44,27 +44,42 @@ def ref_to_eprint(reference):
     return None
 
 
+def ref_to_inspire(reference):
+    inspire_id = reference.inspire_id()
+    if not inspire_id:
+        return None
+
+    return {
+            'id':    inspire_id,
+            'url':   f'https://inspirehep.net/literature?q=texkey:{inspire_id}',
+            'badge': f'https://img.shields.io/badge/INSPIRE-{ inspire_id.replace("-", "--") }-yellow.svg',
+            'alt':   f'INSPIRE:{inspire_id}'
+        }
+
+
 def make_references():
     result = []
     for handle, reference in eos.References():
         title = latex_to_rst(reference.title())
         eprint = ref_to_eprint(reference)
+        inspire = ref_to_inspire(reference)
         data = {
             'authors': reference.authors(),
             'title':   title,
-            'eprint':  eprint
+            'eprint':  eprint,
+            'inspire': inspire
         }
         result.append((handle, data))
     return result
 
 
-def make_eprints(references):
-    # several references may cite the same eprint, while each substitution may only be defined once
+def make_links(references):
+    # several references may cite the same link, while each substitution may only be defined once
     result = {}
     for _, reference in references:
-        eprint = reference['eprint']
-        if eprint:
-            result.setdefault(eprint['id'], eprint)
+        for link in (reference['eprint'], reference['inspire']):
+            if link:
+                result.setdefault(link['id'], link)
     return list(result.values())
 
 
@@ -75,6 +90,6 @@ if __name__ == '__main__':
     print_template(__file__,
         version = eos.__version__,
         references = references,
-        eprints = make_eprints(references),
+        links = make_links(references),
         len = len,
     )
