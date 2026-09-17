@@ -11,3 +11,8 @@
 .wy-table-responsive {
     overflow: visible !important;
 }
+
+div.math {
+    overflow-x: auto;
+    overflow-y: hidden;
+}

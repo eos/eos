@@ -83,14 +83,14 @@ the vector and axialvector matrix elements are defined as:
    \begin{align*}
       \braket{\mathcal{B}_2(k, s') | \bar{q}_1 \gamma^\mu q_2 | \mathcal{B}_1(p, s)}
          & = \bar{u}(k, s') \bigg[
-              f_t^V(q^2)\, (M_{\mathcal{B}_1} - M_{\mathcal{B}_2}) \frac{q^\mu}{q^2}
-            + f_0^V(q^2)\, \frac{M_{\mathcal{B}_1} + M_{\mathcal{B}_2}}{s_+} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
+              f_t^V(q^2)\, (M_{\mathcal{B}_1} - M_{\mathcal{B}_2}) \frac{q^\mu}{q^2} \\
+         & \qquad\qquad + f_0^V(q^2)\, \frac{M_{\mathcal{B}_1} + M_{\mathcal{B}_2}}{s_+} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
          & \qquad\qquad + f_\perp^V(q^2) \left( \gamma^\mu - \frac{2 M_{\mathcal{B}_2}}{s_+} p^\mu - \frac{2 M_{\mathcal{B}_1}}{s_+} k^\mu \right)
               \bigg] u(p, s)\,, \\
       \braket{\mathcal{B}_2(k, s') | \bar{q}_1 \gamma^\mu \gamma_5 q_2 | \mathcal{B}_1(p, s)}
          & = -\bar{u}(k, s')\, \gamma_5 \bigg[
-              f_t^A(q^2)\, (M_{\mathcal{B}_1} + M_{\mathcal{B}_2}) \frac{q^\mu}{q^2}
-            + f_0^A(q^2)\, \frac{M_{\mathcal{B}_1} - M_{\mathcal{B}_2}}{s_-} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
+              f_t^A(q^2)\, (M_{\mathcal{B}_1} + M_{\mathcal{B}_2}) \frac{q^\mu}{q^2} \\
+         & \qquad\qquad + f_0^A(q^2)\, \frac{M_{\mathcal{B}_1} - M_{\mathcal{B}_2}}{s_-} \left( (p + k)^\mu - \frac{M_{\mathcal{B}_1}^2 - M_{\mathcal{B}_2}^2}{q^2} q^\mu \right) \\
          & \qquad\qquad + f_\perp^A(q^2) \left( \gamma^\mu + \frac{2 M_{\mathcal{B}_2}}{s_-} p^\mu - \frac{2 M_{\mathcal{B}_1}}{s_-} k^\mu \right)
               \bigg] u(p, s)\,,
    \end{align*}

@@ -211,6 +211,9 @@ EOS requires the following scientific software:
 GSL
   the GNU Scientific Library GSL, in version 1.15 or higher;
 
+FFTW3
+  the Fastest Fourier Transform in the West library, in version 3 or higher;
+
 
 If you have administrator access to the computers on which you use EOS,
 we recommend you install the above packages via your system's software management system.
@@ -225,16 +228,16 @@ by running the following commands:
   # for the 'Python Software'
   sudo apt-get install python3-dev libboost-python-dev python3-argcomplete python3-matplotlib python3-pypandoc python3-scipy python3-yaml python3-pip
   # for the 'Scientific Software'
-  sudo apt-get install libgsl0-dev
+  sudo apt-get install libgsl0-dev libfftw3-dev
 
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
-the ``argcomplete``, ``dynesty``, ``gitlint``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
+the ``argcomplete``, ``dynesty``, ``gitlint``, ``ipykernel``, ``ipywidgets``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
 
 
 ::
 
   # Make sure to activate your virtual environment first
-  pip install argcomplete dynesty gitlint matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
+  pip install argcomplete dynesty gitlint ipykernel ipywidgets matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
 
 Optionally, to use the Population Monte Carlo code for MCMC-based and PMC-based sampling tasks (such as ``sample-mcmc``, ``sample-pmc``, ``find-clusters``, ``mixture-product``),
 also install the ``pypmc`` package:
@@ -275,7 +278,7 @@ To install the packages, run the following commands in a shell:
   # for the 'Python Software'
   brew install python3 boost-python3
   # for the 'Scientific Software'
-  brew install gsl
+  brew install gsl fftw
 
 You can now use the ``pip3`` command to install the remaining packages from the PyPi package index.
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments)
@@ -289,7 +292,7 @@ To install the remaining packages, run the following command in a shell
 
 ::
 
-  pip3 install argcomplete dynesty gitlint matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
+  pip3 install argcomplete dynesty gitlint ipykernel ipywidgets matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
 
 
 Installing EOS
@@ -334,26 +337,31 @@ The recommended configuration is achieved by running the following command:
 If the ``configure`` script finds any problems with your system, it will complain loudly.
 
 The flag ``with-boost-python-suffix`` might be necessary, depending on the installation of Python and BOOST.
+The suffix encodes the Python version against which BOOST.Python was built, and is unrelated to the minimal Python version required by EOS.
 For example, when ``boost-python3`` is installed on macOS via ``brew``, you can find the suffix by inspecting the installed libraries:
 ``ls /usr/local/lib/libboost_python*``
 might yield
-``/usr/local/lib/libboost_python39.a``.
-Here, the flag ``--with-boost-python-suffix=39`` is required.
+``/usr/local/lib/libboost_python312.a``, i.e. a BOOST.Python built against Python 3.12.
+Here, the flag ``--with-boost-python-suffix=312`` is required.
 
-After successful configuration, build EOS by running the following command:
+After successful configuration, build EOS by running the following command, where ``4`` is the number of
+processor cores to use:
 
 ::
 
-  make -j all
+  make -j4 all
 
-The ``-j`` option instructs the ``make`` program to use all available processors to parallelize the build process.
-(Depending on the amount of RAM in your machine, you might have to use a smaller number of cores when running make,
-e.g. doing ``-j4`` will only use four cores).
+.. warning::
+    Passing ``-j`` without a number lets ``make`` start an unlimited number of parallel jobs.
+    Compiling EOS requires a substantial amount of memory per job, and an unlimited build can therefore
+    exhaust the available memory. Always pass a number, and choose it such that your machine has roughly
+    2 GB of RAM per job.
+
 We strongly recommend testing the build by running the command
 
 ::
 
-  make -j check VERBOSE=1
+  make -j4 check VERBOSE=1
 
 within the build directory.
 Please contact the authors if any test fails by opening an issue in the official `EOS Github repository <https://github.com/eos/eos>`_.
@@ -371,9 +379,9 @@ For ``BASH``, which is the default Debian/Ubuntu shell, add the following lines 
 ::
 
   export PATH+=":$PREFIX/bin"
-  export PYTHONPATH+=":$PREFIX/lib/python3.8/site-packages"
+  export PYTHONPATH+=":$PREFIX/lib/python3.12/site-packages"
 
-Note that in the above the ``python3.8`` piece must be replaced by the appropriate Python version with which EOS was built.
+Note that in the above the ``python3.12`` piece must be replaced by the appropriate Python version with which EOS was built.
 You can determine the correct value by running the following command:
 
 ::
