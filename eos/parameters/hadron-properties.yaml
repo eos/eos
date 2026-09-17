@@ -690,6 +690,20 @@ groups:
           latex:   '$\tau_{\phi}$'
           unit:     's'
           comments: 'Extracted from width = 4.249+-0.013 MeV, cf. [PDG-Live], May 2026'
+      'life_time::eta' :
+          central: +5.0245e-19
+          min:     +4.8327e-19
+          max:     +5.2163e-19
+          latex:   '$\tau_{\eta}$'
+          unit:     's'
+          comments: 'Extracted from width = 1.31+-0.05 keV, cf. [PDG-Live], September 2026'
+      'life_time::eta_prime' :
+          central: +3.5011e-21
+          min:     +3.3894e-21
+          max:     +3.6129e-21
+          latex:   '$\tau_{\eta^\prime}$'
+          unit:     's'
+          comments: 'Extracted from width = 0.188+-0.006 MeV, cf. [PDG-Live], September 2026'
       'life_time::D_d' :
           central: +1.033e-12
           min:     +1.028e-12
