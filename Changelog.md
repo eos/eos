@@ -51,6 +51,7 @@
 - Add a test case that races sixteen threads for a singleton's first ``instance()`` call and checks that exactly one instance is constructed (D. van Dyk)
 - Add a generation index to ``Parameters``, exported to Python as the ``eos.Parameters.generation`` property: it changes whenever any of the parameters is written to and is invariant under reading them, so that a consumer can reuse a costly parameter-dependent result across observables that differ only in their kinematics (D. van Dyk)
 - Add ``eos-mcp-server``, an optional local MCP (Model Context Protocol) server exposing ``eos.Observables``, ``eos.Parameters``, ``eos.Constraints``, and ``eos.References`` as read-only lookup tools for an LLM coding agent, shipped as ``eos.mcp`` behind the new ``mcp`` extra (L. Gärtner)
+- Add ``OverviewFigure`` type based on user defined observables, and their specified LaTex label; requires as source prediction paths and accepts EOS constraints; includes option to normalize observables to a given source; Carolina plot (C. Bolognani)
 
 ### Deprecated
 

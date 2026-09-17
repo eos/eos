@@ -1,3 +1,4 @@
+# Copyright (c) 2026      Carolina Bolognani
 # Copyright (c) 2023-2026 Danny van Dyk
 # Copyright (c) 2023      Philip Lueghausen
 #
@@ -19,6 +20,7 @@ from dataclasses import dataclass, field
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
 from eos.diagnostic import Diagnostic, Severity
+import eos.data
 
 from .plot import Plot, PlotFactory
 from .common import Watermark
@@ -29,6 +31,7 @@ import inspect
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml as _yaml
+import re
 
 @dataclass(kw_only=True)
 class Figure(ABC, Deserializable):
@@ -670,6 +673,489 @@ class CornerFigure(Figure):
             _kwargs['contents'] = [DataFile.from_dict(**c) for c in _kwargs['contents']]
         return Deserializable.make(cls, **_kwargs)
 
+@dataclass(kw_only=True)
+class OverviewSource(Deserializable):
+    type: str
+    label: str
+    color: str = None
+    markerstyle: str = None
+    linewidth: float = None
+    linestyle: str = None
+    alpha: float = None
+
+    datafiles: list[str] = None
+    names: list[str] = None
+
+@dataclass(kw_only=True)
+class OverviewFigure(Figure):
+    """Produces a figure with a single plot, giving an overview of 1D predictions.
+       Prints as eos.info the summary of overview data.
+
+    :param legend: As in :class:`Plot <eos.figure.plot.Plot>`, position of the legend, always drawn
+        outside of the main plot.
+    :type legend: dict
+    :param xaxis: Similar to :class:`Plot <eos.figure.plot.Plot>`, xaxis definition. May contain an
+        optional ``normalize`` key (``None``, ``'constraint'``, or ``'posterior'``) and, if
+        ``normalize == 'posterior'``, a ``normalize-source`` key naming the source label to normalize to.
+    :type xaxis: dict
+    :param yaxis: Optional yaxis spacing. Recognized keys are ``observable-offset`` (space between rows
+        for different observables, default 1.0) and ``source-offset`` (space between sources within one
+        row, default 0.05).
+    :type yaxis: dict
+    :param observables: List of named observables to plot; nesting into a list of lists causes a
+        horizontal separator line to be drawn between the groups.
+    :type observables: list[str] | list[list[str]]
+    :param sources: Sources to compare. Each is either a prediction (``type: 'prediction'``, with a list
+        of sample-file paths under ``datafiles``) or a set of named EOS database constraints
+        (``type: 'constraint'``, with a list of constraint names under ``names``), plus optional
+        ``label``, ``color``, ``markerstyle``, ``linewidth``, ``linestyle``, ``alpha``.
+    :type sources: list[dict]
+    :param size: The size of the figure in inches. Defaults to an automatic calculation based on the
+        number of observables and sources.
+    :type size: tuple[float, float]
+    :param watermark: The optional specification of the EOS watermark. See
+        :class:`Watermark <eos.figure.Watermark>`.
+    :type watermark: :class:`Watermark <eos.figure.Watermark>`
+    """
+
+    type: str = field(repr=False, init=False, default='overview')
+
+    legend: dict = field(default_factory=lambda: {'position': 'upper center'})
+    xaxis: dict = None
+    yaxis: dict = field(default_factory=dict)
+    observables: list = None
+    sources: list = None
+
+    size: tuple[float, float] = None
+    watermark: Watermark = field(default_factory=Watermark)
+
+    _NORMALIZE_MODES = (None, 'constraint', 'posterior')
+    _DEFAULT_MARKERS = ('o', 's', '^', 'D', 'v', 'P', 'X')
+
+    _api_doc = inspect.cleandoc("""
+    Producing a Figure with a single Plot
+    -------------------------------------
+
+    This figure's type is ``overview``. It produces a single plot containing an overview comparison of
+    predictions and/or measurements for a set of observables.
+
+    The following keys are mandatory:
+       * ``xaxis`` (*dict*) -- The x-axis label and range, and optionally ``normalize``.
+       * ``observables`` (*list[str]* or *list[list[str]]*) -- The observables entering the overview plot.
+       * ``sources`` (*list* of :class:`DataFile <eos.figure.data.DataFile>`) -- The predictions/constraints
+         to be drawn.
+
+    The following keys are optional:
+        * ``legend`` (*dict*) -- Position and number of columns of the legend. Defaults to ``{'position': 'upper center', 'ncol': 1}``.
+        * ``yaxis`` (*dict*) -- ``observable-offset`` and ``source-offset`` spacing. Defaults to 1.0 and 0.05.
+        * ``size`` (*tuple[float, float]*) -- Defaults to an automatic size.
+    """)
+
+    def __post_init__(self):
+        if not self.xaxis:
+            raise ValueError("xaxis must be defined.")
+        if not self.observables:
+            raise ValueError("observables must include at least one item to be plotted.")
+        if not self.sources:
+            raise ValueError("sources must include at least one item to be plotted.")
+
+        self._normalize = self.xaxis.get('normalize', None)
+        if self._normalize not in self._NORMALIZE_MODES:
+            raise ValueError(f"xaxis['normalize'] must be one of {self._NORMALIZE_MODES}, got {self._normalize!r}.")
+
+        self._normalize_source = self.xaxis.get('normalize-source', None)
+        if self._normalize == 'posterior' and not self._normalize_source:
+            raise ValueError("xaxis['normalize'] == 'posterior' requires xaxis['normalize-source'] "
+                              "(the label of the source to normalize to).")
+
+    @staticmethod
+    def _group(entries:list):
+        #if not any(isinstance(entry, list) for entry in entries):
+        #    groups = [[entry] for entry in entries]
+        #else:
+        #    groups = [entry if isinstance(entry, list) else [entry] for entry in entries]
+        groups = [group if isinstance(group, list) else [group] for group in entries]
+        flat, group_ids, labels = [], [], []
+        for group_id, group in enumerate(groups):
+            for entry in group:
+                if not isinstance(entry, dict):
+                    raise TypeError("Each observable entry must be a dictionary of the form {observable name: latex label}.")
+                if len(entry) != 1:
+                    raise ValueError("Each observable entry must contain exactly one key-value pair.")
+                observable, label = next(iter(entry.items()))
+                flat.append(observable)
+                group_ids.append(group_id)
+                labels.append(label)
+
+        return flat, group_ids, labels
+
+    #@staticmethod
+    #def _observable_label(observable):
+    #    name, _, options = observable.partition(';')
+    #    base_latex = Observables()[name].latex()
+    #    if not (base_latex.startswith('$') and base_latex.endswith('$')):
+    #        base_latex = f'${base_latex}$'
+    #    return f'{base_latex} | {options}' if options else base_latex
+
+    @staticmethod
+    def _prediction_quantiles(samples, weights, level=68.27e-2):
+        """Weighted median and asymmetric 1-sigma uncertainty widths as for `uncertainty` items."""
+        half = level / 2.0
+        interval = [0.5 - half, 0.5, 0.5 + half]
+        lower, central, higher = np.quantile(samples, q = interval, weights = weights, method='inverted_cdf', axis=0)
+        err_low = central - lower
+        err_high = higher - central
+        return central, err_low, err_high
+
+    @staticmethod
+    def _observable_matches(query, candidate):
+        query_name, _, query_options = query.partition(';')
+
+        candidate_no_kin = candidate.split('[', 1)[0]
+        candidate_name, _, candidate_options = candidate_no_kin.partition(';')
+
+        if query_name != candidate_name:
+            return False
+
+        query_options = set(query_options.split(',')) if query_options else set()
+        candidate_options = set(candidate_options.split(',')) if candidate_options else set()
+
+        return query_options.issubset(candidate_options)
+
+    @staticmethod
+    def _prediction_observable_index(prediction, observable):
+        for key, index in prediction.lookup_table.items():
+            if OverviewFigure._observable_matches(observable, key):
+                return index
+        return None
+
+    def _prediction_entries_for_source(self, source, flat_obs):
+        results = {}
+        datafiles = source.datafiles or []
+        if isinstance(datafiles, str):
+            datafiles = [datafiles]
+
+        for obs in flat_obs:
+            found = False
+            for path in datafiles:
+                prediction = eos.data.Prediction(path)
+                idx = self._prediction_observable_index(prediction, obs)
+                if idx is None:
+                    continue
+
+                if obs in results:
+                    raise ValueError(
+                        f"source '{source.label}' provides observable '{obs}' "
+                        f"from more than one data file."
+                    )
+
+                central, err_low, err_high = self._prediction_quantiles(
+                    prediction.samples[:, idx],
+                    prediction.weights
+                )
+
+                results[obs] = (central, err_low, err_high)
+                found = True
+                break
+        if not found:
+            raise KeyError(f"No matching observable found for {obs} in source '{source.label}'")
+        return results
+
+    @staticmethod
+    def _constraint_entry(name):
+        constraints = eos.Constraints()
+        if name not in constraints:
+            raise KeyError(f"Constraint '{name}' not found in EOS database.")
+
+        entry = constraints[name]
+        kind = entry.type() if callable(getattr(entry, 'type', None)) else getattr(entry, 'type', 'Gaussian')
+        if kind != 'Gaussian':
+            raise NotImplementedError(
+                f"Constraint '{name}' has type '{kind}'; only Gaussian constraints are "
+                "currently supported in OverviewFigure."
+            )
+
+        return entry
+
+    def _constraint_entries_for_source(self, source, flat_obs):
+        results = {}
+        matched_constraints = {}
+
+        for name in source.names:
+            entry = self._constraint_entry(name)
+            const = _yaml.safe_load(entry.serialize())
+            raw_observables = const.get('observable', [])
+            nameobs, _, optionsobs = raw_observables.partition(';')
+            if optionsobs == '':
+                optionsobs = const.get('options', {})
+                option_suffix =  ';' + ','.join(f'{k}={v}' for k, v in optionsobs.items()) if optionsobs else ''
+            else:
+                option_suffix = ';' + optionsobs
+            mean = const['mean']
+            sigma_stat = const['sigma-stat']
+            sigma_sys = (const['sigma-sys'] if 'sigma-sys' in const else {'hi': 0.0, 'lo': 0.0})
+            err_high = np.sqrt(sigma_stat['hi'] ** 2 + sigma_sys['hi'] ** 2)
+            err_low = np.sqrt(sigma_stat['lo'] ** 2 + sigma_sys['lo'] ** 2)
+
+            obsfull = nameobs + option_suffix
+
+            for obs in flat_obs:
+                if not self._observable_matches(obs, obsfull):
+                    continue
+                if obs in results:
+                    raise ValueError(
+                        f"observable '{obs}' is constrained by both '{matched_constraints[obs]}' and '{name}'; "
+                        "only one named constraint per observable is allowed."
+                    )
+                results[obs] = (mean, err_low, err_high)
+                matched_constraints[obs] = name
+
+        return results
+
+    def info_summary(self, context: AnalysisFileContext = None):
+        """Print each observable's raw (un-normalized) central value and uncertainty for every
+        source, as a sanity check before drawing (e.g. to catch an inverted or mismatched entry)."""
+        context = AnalysisFileContext() if context is None else context
+        flat_obs, _, _ = self._group(self.observables)
+
+        per_source_entries = {}
+        for source in self.sources:
+            if source.type == 'prediction':
+                per_source_entries[source.label] = self._prediction_entries_for_source(source, flat_obs)
+            elif source.type == 'constraint':
+                per_source_entries[source.label] = self._constraint_entries_for_source(source, flat_obs)
+            else:
+                raise ValueError(f"unknown source type '{source.type}' for source '{source.label}'.")
+
+        headers = ['observable'] + [source.label for source in self.sources]
+        rows = []
+        for obs in flat_obs:
+            row = [obs]
+            for source in self.sources:
+                entry = per_source_entries[source.label].get(obs)
+                if entry is None:
+                    row.append('--')
+                else:
+                    central, err_low, err_high = entry
+                    row.append(f'{central:.4g} (+{err_high:.2g}/-{err_low:.2g})')
+            rows.append(row)
+
+        widths = [max(len(str(row[i])) for row in ([headers] + rows)) for i in range(len(headers))]
+        def fmt_row(row):
+            return '  '.join(str(cell).ljust(w) for cell, w in zip(row, widths))
+
+        eos.info(fmt_row(headers))
+        eos.info('  '.join('-' * w for w in widths))
+        for row in rows:
+            eos.info(fmt_row(row))
+
+    def prepare(self, context: AnalysisFileContext = None):
+        """Prepare the overview figure for drawing.
+
+        :param context: The analysis file context, which contains the paths to the data files and other
+            relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
+        """
+        context = AnalysisFileContext() if context is None else context
+        flat_obs, obs_group_ids, obs_labels = self._group(self.observables)
+        n_obs = len(flat_obs)
+        n_sources = len(self.sources)
+
+        self._obs_offset = self.yaxis.get('observable-offset', 1.0)
+        if self._obs_offset < 1.0:
+            raise ValueError("observable-offset must be at least 1.0")
+        self._source_offset = self.yaxis.get('source-offset', 0.05)
+
+
+        self._yvals = [1.0 + i * self._obs_offset for i in range(n_obs)]
+        self._yvals.reverse()
+        self._ylabels = obs_labels #[self._observable_label(obs) for obs in flat_obs]
+
+        self._sourced_entries = self._build_sourced_entries(flat_obs, self._yvals, n_sources)
+
+        # horizontal separators between observable groups, at the midpoint
+        # between the last row of one group and the first row of the next
+        separator_ys = [
+            (self._yvals[i - 1] + self._yvals[i]) / 2.0
+            for i in range(1, n_obs)
+            if obs_group_ids[i] != obs_group_ids[i - 1]
+        ]
+        items = []
+        if self._normalize:
+            items.append({'type': 'vertical', 'x': 1.0, 'color': 'lightgray'})
+
+        items += [
+            {
+                'type': 'errorbars',
+                'positions': entry['positions'],
+                'xerrors': entry['xerrors'],
+                'yerrors': [0.0] * len(entry['positions']),
+                'color': entry['color'],
+                'alpha': entry['alpha'],
+                'marker': entry['marker'],
+                'linestyle': entry['linestyle'],
+                'linewidth': entry['linewidth'],
+                'label': entry['label'],
+            }
+            for entry in self._sourced_entries
+        ]
+        items += [{'type': 'expression', 'expression': f'{y}', 'color': 'lightgray', 'range': self.xaxis['range']} for y in separator_ys]
+        plot = PlotFactory.from_dict(**{
+            'legend': {'position': self.legend.get('position', 'upper center')},
+            'xaxis': {
+                'ticks': {'visible': True, 'position': 'bottom'},
+                'label': self.xaxis['label'],
+                'range': self.xaxis['range'],
+            },
+            'yaxis': {
+                'ticks': {'visible': True},
+                'range': [1.5 - self._obs_offset, n_obs * self._obs_offset + self._obs_offset],
+            },
+            'items': items,
+        })
+
+        size = self.size if self.size is not None else (6.4, 0.6 * (n_obs * self._obs_offset) + 1.2)
+        self._figure = SingleFigure(size=size, plot=plot)
+        self._ax = self._figure._ax
+        self._ax.yaxis.set_ticks(self._yvals)
+        self._ax.yaxis.set_ticklabels(self._ylabels)
+
+    def _build_sourced_entries(self, flat_obs, yvals, n_sources):
+        """Build one drawable entry per source, aggregating across every observable it covers."""
+        default_colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
+
+        # each source's per-observable (central, err_low, err_high), computed once
+        per_source_entries = {}
+        for source in self.sources:
+            if source.type == 'prediction':
+                per_source_entries[id(source)] = self._prediction_entries_for_source(source, flat_obs)
+            elif source.type == 'constraint':
+                per_source_entries[id(source)] = self._constraint_entries_for_source(source, flat_obs)
+            else:
+                raise ValueError(f"unknown source type '{source.type}' for source '{source.label}'.")
+
+        # resolve the normalization reference, if any
+        reference = {}
+        if self._normalize == 'constraint':
+            claimed_by = {}
+            for source in self.sources:
+                if source.type != 'constraint':
+                    continue
+                for obs, value in per_source_entries[id(source)].items():
+                    if obs in reference:
+                        raise ValueError(
+                            f"observable '{obs}' is constrained by more than one constraint source "
+                            f"('{claimed_by[obs]}' and '{source.label}'); cannot normalize unambiguously."
+                        )
+                    reference[obs] = value
+                    claimed_by[obs] = source.label
+        elif self._normalize == 'posterior':
+            ref_source = next((s for s in self.sources if s.label == self._normalize_source), None)
+            if ref_source is None:
+                raise ValueError(f"normalize-source '{self._normalize_source}' matches no source label.")
+            reference = per_source_entries[id(ref_source)]
+
+        # symmetric stagger of sources around each observable's row
+        stagger = [(-(n_sources - 1) / 2.0 + i) * self._source_offset for i in range(n_sources)]
+
+        entries = []
+        for source_index, source in enumerate(self.sources):
+            source_data = per_source_entries[id(source)]
+            positions, xerrors = [], []
+
+            for obs_index, obs in enumerate(flat_obs):
+                if obs not in source_data:
+                    continue
+
+                central, err_low, err_high = source_data[obs]
+
+                if self._normalize and obs in reference:
+                    ref_central = reference[obs][0]
+                    err_low, err_high = err_low / ref_central, err_high / ref_central
+                    central = central / ref_central
+
+                y = yvals[obs_index] + stagger[source_index]
+                positions.append([central, y])
+                xerrors.append([err_low, err_high])
+
+            if not positions:
+                continue
+
+            entries.append({
+                'positions': positions,
+                'xerrors': xerrors,
+                'color': getattr(source, 'color', None) or default_colors[source_index % len(default_colors)],
+                'marker': getattr(source, 'markerstyle', None) or self._DEFAULT_MARKERS[source_index % len(self._DEFAULT_MARKERS)],
+                'linestyle': getattr(source, 'linestyle', None) or 'none',
+                'alpha': getattr(source, 'alpha', None) or 1.0,
+                'linewidth': getattr(source, 'linewidth', None) or 1.5,
+                'label': source.label,
+            })
+
+        return entries
+
+    _LEGEND_OUTSIDE = {
+        'upper center': ('lower center', (0.5, 1.02)),
+        'lower center': ('upper center', (0.5, -0.02)),
+        'upper left':   ('lower left',   (0.0, 1.02)),
+        'upper right':  ('lower right',  (1.0, 1.02)),
+        'lower left':   ('upper left',   (0.0, -0.02)),
+        'lower right':  ('upper right',  (1.0, -0.02)),
+        'center left':  ('center right', (-0.02, 0.5)),
+        'center right': ('center left',  (1.02, 0.5)),
+    }
+
+    def _place_legend_outside(self, ax):
+        handles = [
+            ax.errorbar(
+                [], [], xerr=[],
+                fmt=entry['marker'], color=entry['color'],
+                linestyle=entry['linestyle'], linewidth=entry['linewidth'],
+                label=entry['label'],
+            )
+            for entry in self._sourced_entries
+        ]
+        position = self.legend.get('position', 'upper center')
+        loc, anchor = self._LEGEND_OUTSIDE.get(position, ('lower center', (0.5, 1.02)))
+        ax.legend(handles=handles, loc=loc, bbox_to_anchor=anchor,
+                  ncol=self.legend.get('ncol', 1),
+                  frameon=self.legend.get('frameon', True))
+
+    def draw(self, context: AnalysisFileContext = None):
+        """Draw the single-plot overview figure.
+
+        :param context: The analysis file context, which contains the paths to the data files and other
+            relevant information.
+        :type context: :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`
+        """
+        context = AnalysisFileContext() if context is None else context
+        if not hasattr(self, '_figure'):
+            self.prepare(context)
+        self._figure.draw(context)
+        self._ax.yaxis.set_ticks(self._yvals)
+        self._ax.yaxis.set_ticklabels(self._ylabels)
+        self._place_legend_outside(self._ax)
+        self.watermark.draw(self._ax)
+        self.info_summary(context)
+
+    def save(self, output: str | list[str]):
+        """Save the overview figure to one or more output files.
+
+        :param output: The path(s) to the output file(s) where the figure is saved.
+        :type output: str | list[str]
+        """
+        self._figure.save(output)
+
+    @classmethod
+    def from_dict(cls, **kwargs):
+        _kwargs = _copy.deepcopy(kwargs)
+        _kwargs['sources'] = [
+            OverviewSource.from_dict(**source)
+            for source in _kwargs['sources']
+        ]
+        if 'watermark' in _kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**_kwargs['watermark'])
+        return Deserializable.make(cls, **_kwargs)
 
 class FigureFactory:
     r"""Factory class to create figures from a dictionary description.
@@ -686,10 +1172,11 @@ class FigureFactory:
     # Also build the documentation based on ordered registry
     # Initializer is well-defined for python version >= 3.6
     registry = {
-        'single': SingleFigure, # default
-        'inset':  InsetFigure,
-        'grid':   GridFigure,
-        'corner': CornerFigure,
+        'single':   SingleFigure, # default
+        'inset':    InsetFigure,
+        'grid':     GridFigure,
+        'corner':   CornerFigure,
+        'overview': OverviewFigure
     }
 
     @staticmethod
