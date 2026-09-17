@@ -176,7 +176,7 @@ The optional keys configure the appearance of the axes:
     Each axis accepts a ``label``, a ``range`` as a ``(min, max)`` tuple, a ``unit``, a ``scale`` (``linear`` or ``log``), and a ``ticks`` sub-key.
     The ``ticks`` (an :py:class:`~eos.figure.XTicks` or :py:class:`~eos.figure.YTicks`) control the ``visible``\ ility, ``position``, ``minor`` ticks, printf-style ``format``, and an optional ``scaling_factor``.
   - ``grid`` --- The grid properties, described by a :py:class:`~eos.figure.Grid` (its ``visible``\ ility and the ``axis`` it is drawn on).
-  - ``legend`` --- The legend properties, described by a :py:class:`~eos.figure.Legend` (its ``position``).
+  - ``legend`` --- The legend properties, described by a :py:class:`~eos.figure.Legend` (its ``position``, its number of columns ``ncol``, and whether it is drawn ``outside`` of the axes).
     A legend is only drawn if this key is present.
 
 The ``type: empty`` plot draws nothing and takes no further keys.
@@ -192,6 +192,37 @@ It is useful as a placeholder in a :py:class:`~eos.figure.GridFigure`, where a g
    yaxis:  { label: '$d\mathcal{B}/dq^2$', scale: 'log' }
    items:
      - { type: 'observable', observable: 'B->Dlnu::dBR/dq2', options: { 'l': 'mu' }, variable: 'q2', range: [0.1, 11.6] }
+
+The ``type: overview`` plot compares predictions and measurements for a set of observables, drawing one row per observable.
+Its mandatory keys are:
+
+  - ``observables`` --- The observables entering the plot, each a single-entry mapping from the observable's name to the label of its row.
+    Nesting them into a list of lists draws a horizontal separator between the groups.
+  - ``sources`` --- The predictions and measurements to compare, each described by an :py:class:`~eos.figure.OverviewSource`.
+    A source of ``type: 'prediction'`` reads its values from the ``datafiles`` produced by the ``predict-observables`` task; one of ``type: 'constraint'`` takes them from the EOS database of constraints ``names``\ d in it.
+  - ``xaxis`` --- As for the ``2D`` plot, except that its ``range`` is mandatory, since the separators between the groups span it.
+
+Its optional keys are ``legend`` and ``yaxis`` as above --- although the y axis range and ticks are determined by the observables and cannot be set --- as well as:
+
+  - ``normalize`` --- Divides each observable's values by a reference value: ``constraint`` normalizes to the constraint source constraining that observable, ``posterior`` to the source named by ``normalize_source``.
+  - ``observable_offset`` / ``source_offset`` --- The spacing between the rows of two observables (at least 1.0, the default) and between two sources within one row (0.05 by default).
+
+Since a plot does not size its own canvas, choose the enclosing figure's ``size`` to suit the number of rows; as a rule of thumb, allow 0.6 inches per observable plus 1.2 inches for the axes and the legend.
+
+.. code-block:: yaml
+
+   type: 'single'
+   size: [6.4, 2.4]
+   plot:
+     type: 'overview'
+     legend: { position: 'upper center', outside: true }
+     xaxis:  { label: '$\mathcal{B}$', range: [0.0, 2.0e-3] }
+     observables:
+       - { 'B->Kpsi::BR;psi=J/psi,q=u':   '$B^-\to K^- J/\psi$' }
+       - { 'B->K^*psi::BR;psi=J/psi,q=u': '$B^-\to K^{*-} J/\psi$' }
+     sources:
+       - { type: 'prediction', label: 'this work', datafiles: ['predictions/BR'] }
+       - { type: 'constraint', label: 'PDG 2020',  names: ['B->KJpsi::BR@PDG:2020A', 'B->K^*Jpsi::BR@PDG:2020A'] }
 
 
 .. _figure-format-items:
