@@ -13,7 +13,7 @@ help:
 	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 doc-check:
-	python3 doc_TEST.py
+	BUILDDIR="$(BUILDDIR)" python3 doc_TEST.py
 
 .PHONY: help Makefile
 

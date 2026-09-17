@@ -57,6 +57,29 @@ class DocTests(unittest.TestCase):
                 except Exception as e:
                     self.fail(f"Cannot compile latex representation of reference {ref_id} title, caught exception of type {type(e).__name__}: {e}")
 
+    def test_003_math_conversion(self):
+        """Check for any lingering ':math:' in the generated html documentation"""
+        html_directory = os.path.join(os.environ.get("BUILDDIR"), 'html')
+        unconverted_math = []
+        checked_files = []
+        for root, _, files in os.walk(html_directory):
+            for filename in files:
+                if not filename.endswith('.html'):
+                    continue
+                checked_files.append(filename)
+
+                path = os.path.join(root, filename)
+                with open(path, encoding='utf-8') as html_file:
+                    for line_number, line in enumerate(html_file, start=1):
+                        if ':math:' in line:
+                            unconverted_math.append(f'{os.path.abspath(path)}:{line_number}')
+
+        if not checked_files:
+            self.fail('Found no HTML files in the documentation build')
+
+        if unconverted_math:
+            self.fail('Found unconverted :math: markup in the following HTML files:\n' + '\n'.join(unconverted_math))
+
 
 # Run new tests
 if __name__ == '__main__':
