@@ -57,6 +57,7 @@
 - Add ``eos-mcp-server``, an optional local MCP (Model Context Protocol) server exposing ``eos.Observables``, ``eos.Parameters``, ``eos.Constraints``, and ``eos.References`` as read-only lookup tools for an LLM coding agent, shipped as ``eos.mcp`` behind the new ``mcp`` extra (L. Gärtner)
 - Add an opaque intermediate result to the ``FormFactors<VacuumToPP>`` interface: it depends on the parameters only, is obtained from ``prepare()``, and is passed to every accessor alongside that accessor's own kinematic variables, so that a parametrization can hoist an expensive parameter-dependent step out of its per-``q^2`` work (D. van Dyk)
 - Register the twelve ``0->pipi`` and ``0->Kpi`` form factor observables as cacheable observables, so that they share one intermediate result across all values of ``q^2`` within one update of an observable cache (D. van Dyk)
+- Export ``MemoisationControl`` to Python, so that ``eos.MemoisationControl.instance().clear()`` frees the memory held by all memoisation caches (L. Gärtner)
 
 ### Deprecated
 
