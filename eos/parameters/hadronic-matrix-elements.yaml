@@ -6037,6 +6037,65 @@ groups:
           unit:     '1'
           matrix:
             - ["1", "2"]
+      # data-driven parameters for long-distance contributions to D -> pi l l decays according to
+      # [BGHT:2019A]
+      'D_%1%->pi::res_a_%2%@BGHT2019':
+        central: 0.0
+        min: 0.0
+        max: 0.0
+        latex:
+            template: '$a_{\%2%}^{D%1% \to \pi%1% \ell\ell}$'
+            map:
+                "eta_prime": 'eta^\prime'
+                "u": '^0'
+                "d": '^+'
+        unit: 'GeV^2'
+        comments: ''
+        matrix:
+          - ["u", "d"]
+          - ["rho", "omega", "phi", "eta", "eta_prime"]
+      'D_%1%->pi::res_delta_%2%_m_rho@BGHT2019':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex:
+            template: '$\delta_{\%2%}^{D%1% \to \pi%1% \ell\ell} - \delta_{\rho}^{D%1% \to \pi%1% \ell\ell}$'
+            map:
+                "u": '^0'
+                "d": '^+'
+        unit: '1'
+        comments: ''
+        matrix:
+          - ["u", "d"]
+          - ["rho", "omega", "phi"]
+      'D_%1%->pi::res_delta_eta_prime_m_eta@BGHT2019':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex:
+            template: '$\delta_{\eta^\prime}^{D%1% \to \pi%1% \ell\ell} - \delta_{\eta}^{D%1% \to \pi%1% \ell\ell}$'
+            map:
+                "u": '^0'
+                "d": '^+'
+        unit: '1'
+        comments: ''
+        matrix:
+          - ["u", "d"]
+      'D_%1%->pi::res_delta_%2%@BGHT2019':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex:
+            template: '$\delta_{\%2%}^{D%1% \to \pi%1% \ell\ell}$'
+            map:
+                "eta_prime": 'eta^\prime'
+                "u": '^0'
+                "d": '^+'
+        unit: '1'
+        comments: ''
+        matrix:
+          - ["u", "d"]
+          - ["eta", "rho"]
       # form factor parameters for D_s->K inspired by [BSZ:2015A]
       'D_s->K::alpha^%1%_%2%@BSZ2015' :
           central:  0.0
@@ -6064,6 +6123,45 @@ groups:
           unit:     '1'
           matrix:
             - ["1", "2"]
+      # data-driven parameters for long-distance contributions to D_s -> K l l decays according to
+      # [BGHT:2019A]
+      'D_s->K::res_a_%1%@BGHT2019':
+        central: 0.0
+        min: 0.0
+        max: 0.0
+        latex:
+            template: '$a_{\%1%}^{D_s \to K \ell\ell}$'
+            map:
+                "eta_prime": 'eta^\prime'
+        unit: 'GeV^2'
+        comments: ''
+        matrix:
+          - ["rho", "omega", "phi", "eta", "eta_prime"]
+      'D_s->K::res_delta_%1%_m_rho@BGHT2019':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex: '$\delta_{\%1%}^{D_s \to K \ell\ell} - \delta_{\rho}^{D_s \to K \ell\ell}$'
+        unit: '1'
+        comments: ''
+        matrix:
+          - ["rho", "omega", "phi"]
+      'D_s->K::res_delta_eta_prime_m_eta@BGHT2019':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex: '$\delta_{\eta^\prime}^{D_s \to K \ell\ell} - \delta_{\eta}^{D_s \to K \ell\ell}$'
+        unit: '1'
+        comments: ''
+      'D_s->K::res_delta_%1%@BGHT2019':
+        central: +3.14
+        min: -3.14
+        max: +3.14
+        latex: '$\delta_{\%1%}^{D_s \to K \ell\ell}$'
+        unit: '1'
+        comments: ''
+        matrix:
+          - ["eta", "rho"]
       # form factor parameters for D->K for [BFW:2010A] parametrization
       'D->K::a^%1%_%2%@SE' :
           central:  0.
