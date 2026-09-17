@@ -27,6 +27,7 @@
 #include <eos/form-factors/observables.hh>
 #include <eos/form-factors/parametric-bgjvd2019.hh>
 #include <eos/form-factors/parametric-bgl1997.hh>
+#include <eos/form-factors/parametric-bhkmnr2026.hh>
 #include <eos/form-factors/parametric-fvdv2018.hh>
 #include <eos/form-factors/parametric-g2026.hh>
 #include <eos/form-factors/parametric-hkvt2025.hh>
@@ -2661,10 +2662,16 @@ namespace eos
             R"(Form factors for $0 \to \pi \pi$ transitions)",
             R"(Pseudo observables representing the full basis of $0 \to \pi \pi$ form factors. )"
             R"(The specific parametrization can be chosen via the "form-factors" option.)",
-            { make_cacheable_observable("0->pipi::Abs{f_+}^2(q2)",
+            {
+              make_cacheable_observable("0->pipi::Abs{f_+}^2(q2)",
               R"(|f_+^{0\to \pi\pi}(q^2)|^2)", Unit::None(),
               cache(&FormFactors<VacuumToPP>::prepare),
               evaluate(&FormFactors<VacuumToPP>::abs2_f_p, "q2")),
+
+              make_cacheable_observable("0->pipi::Abs{f_+}^2(q2_min,q2_max)",
+              R"(|f_+^{0\to \pi\pi}(q^2)|^2)", Unit::None(),
+              cache(&FormFactors<VacuumToPP>::prepare),
+              evaluate(&FormFactors<VacuumToPP>::abs2_f_p_average, "q2_min", "q2_max")),
 
               make_cacheable_observable("0->pipi::Arg{f_+}(q2)",
               R"(\textrm{arg}(f_+^{0\to\pi\pi}(q^2)))", Unit::None(),
@@ -2680,6 +2687,10 @@ namespace eos
               R"(\textrm{Im}(f_+^{0\to\pi\pi}(q^2)))", Unit::None(),
               cache(&FormFactors<VacuumToPP>::prepare),
               evaluate(&FormFactors<VacuumToPP>::im_f_p, "Re{q2}", "Im{q2}")),
+
+              make_form_factor_adapter("0->pipi::Im{f_+}(Re{q2},Im{q2})",
+              R"(\textrm{Im}(f_+^{0\to\pi\pi}(q^2)))", &FormFactors<VacuumToPP>::im_f_p,
+              std::make_tuple("Re{q2}", "Im{q2}")),
 
               make_observable("0->pipi::b_0@KKRvD2024", R"(b_0^{0 \to \pi\pi})", Unit::None(), &KKRvD2024FormFactors<VacuumToPiPi>::b_0),
 
@@ -2703,7 +2714,76 @@ namespace eos
 
               make_observable("0->pipi::r_pi^2@KKRvD2024", R"(\langle r_\pi^2 \rangle)", Unit::Femtometer2(), &KKRvD2024FormFactors<VacuumToPiPi>::r_pi_squared),
 
-              make_observable("0->pipi::Saturation@KKRvD2024", R"(\textrm{Saturation})", Unit::None(), &KKRvD2024FormFactors<VacuumToPiPi>::saturation) }
+              make_observable("0->pipi::Saturation@KKRvD2024", R"(\textrm{Saturation})", Unit::None(), &KKRvD2024FormFactors<VacuumToPiPi>::saturation),
+
+              make_cacheable_observable("0->pipi::Abs{f_+}^2(Re{psi},Im{psi})@BHKMNR2026",
+              R"(|f_+^{0\to\pi\pi}(\psi)|^2)", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::abs2_f_p_of_psi, "Re{psi}", "Im{psi}")),
+
+              make_cacheable_observable("0->pipi::Arg{f_+}(Re{psi},Im{psi})@BHKMNR2026",
+              R"(\textrm{Arg}(f_+^{0\to\pi\pi}(\psi)))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::arg_f_p_of_psi, "Re{psi}", "Im{psi}")),
+
+              make_cacheable_observable("0->pipi::Re{t_1^1}(q2)@BHKMNR2026",
+              R"(\textrm{Re}(t_1^{1, 0\to \pi\pi}(q^2)))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::re_partial_wave, "q2")),
+
+              make_cacheable_observable("0->pipi::Im{t_1^1}(q2)@BHKMNR2026",
+              R"(\textrm{Im}(t_1^{1, 0\to \pi\pi}(q^2)))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::im_partial_wave, "q2")),
+
+              make_cacheable_observable("0->pipi::d2fdpsi2_over_f@BHKMNR2026",
+              R"(f^{(2)}(s_+)/f(s_+))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::d2fdpsi2_over_f)),
+
+              make_cacheable_observable("0->pipi::d3fdpsi3_over_f@BHKMNR2026",
+              R"(f^{(3)}(s_+)/f(s_+))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::d3fdpsi3_over_f)),
+
+              make_cacheable_observable("0->pipi::d4fdpsi4_over_f@BHKMNR2026",
+              R"(f^{(2)}(s_+)/f(s_+))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::d4fdpsi4_over_f)),
+
+              make_cacheable_observable("0->pipi::d5fdpsi5_over_f@BHKMNR2026",
+              R"(f^{(3)}(s_+)/f(s_+))", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::d5fdpsi5_over_f)),
+
+              make_cacheable_observable("0->pipi::d{f_+}_dpsi_at_0@BHKMNR2026",
+              R"(df_+/d\psi)", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::dfdpsi_11_at_0)),
+
+              make_cacheable_observable("0->pipi::Saturation@BHKMNR2026",
+              R"(\textrm{Saturation})", Unit::None(),
+              cache(&BHKMNR2026FormFactors<VacuumToPiPi>::prepare),
+              evaluate(&BHKMNR2026FormFactors<VacuumToPiPi>::saturation)),
+
+              make_observable("0->pipi::Re{Res_psi{f_+}}@BHKMNR2026",
+              R"(\textrm{Re}\,\textrm{Res}_{\psi} (s_\rho^2)\,f_+^{0\to\pi\pi})", Unit::None(),
+              &BHKMNR2026FormFactors<VacuumToPiPi>::re_residue_rho),
+
+              make_observable("0->pipi::Im{Res_psi{f_+}}@BHKMNR2026",
+              R"(\textrm{Im}\,\textrm{Res}_{\psi} (s_\rho^2)\,f_+^{0\to\pi\pi})", Unit::None(),
+              &BHKMNR2026FormFactors<VacuumToPiPi>::im_residue_rho),
+
+              make_observable("0->pipi::root_penalty@BHKMNR2026", R"(\textrm{roots on} (11))", Unit::None(), &BHKMNR2026FormFactors<VacuumToPiPi>::root_penalty),
+
+              make_observable("0->pipi::a_(+,1)^0@BHKMNR2026", R"(a_0^{0 \to \pi\pi})", Unit::None(), &BHKMNR2026FormFactors<VacuumToPiPi>::a_0),
+
+              make_observable("0->pipi::a_(+,1)^1@BHKMNR2026", R"(a_1^{0 \to \pi\pi})", Unit::None(), &BHKMNR2026FormFactors<VacuumToPiPi>::a_1),
+
+              make_observable("0->pipi::a_(+,1)^2@BHKMNR2026", R"(a_2^{0 \to \pi\pi})", Unit::None(), &BHKMNR2026FormFactors<VacuumToPiPi>::a_2),
+
+              make_observable("0->pipi::a_(+,1)^3@BHKMNR2026", R"(a_3^{0 \to \pi\pi})", Unit::None(), &BHKMNR2026FormFactors<VacuumToPiPi>::a_3),
+              }
         };
 
         return ObservableGroup(imp);
