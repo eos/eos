@@ -26,6 +26,13 @@ We follow the conventions of the WCxf format for the Wilson coefficients of the 
 Each sector of the effective Hamiltonian is defined by a unique name, corresponding to the flavour quantum numbers
 of the fermion fields.
 
+Within each sector, EOS uses the most general basis of dimension-six operators, and treats the associated Wilson coefficients
+as mutually independent parameters.
+Matching the Standard Model Effective Field Theory onto the WET at the electroweak scale implies relations among these
+Wilson coefficients, which reduce the number of independent parameters.
+EOS does not impose any such relation.
+Imposing them is left to the user, who must fix or otherwise correlate the affected parameters when specifying an analysis.
+
 Semileptonic Charged-Current Operators
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
