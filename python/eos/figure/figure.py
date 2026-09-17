@@ -19,7 +19,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
-from eos.diagnostic import Diagnostic, Severity
+from eos.diagnostic import Diagnostic, Severity, _check_qualified
 import eos.data
 
 from .plot import Plot, PlotFactory
@@ -31,7 +31,6 @@ import inspect
 import matplotlib.pyplot as plt
 import numpy as np
 import yaml as _yaml
-import re
 
 @dataclass(kw_only=True)
 class Figure(ABC, Deserializable):
@@ -686,10 +685,23 @@ class OverviewSource(Deserializable):
     datafiles: list[str] = None
     names: list[str] = None
 
+    _TYPES = ('prediction', 'constraint')
+
+    def __post_init__(self):
+        if self.type not in self._TYPES:
+            raise ValueError(f"source '{self.label}' has unknown type '{self.type}'; must be one of {self._TYPES}.")
+
+        # a prediction is read from sample files, a constraint from the EOS database; providing the
+        # other type's key means the source would be read from somewhere it does not describe
+        required, forbidden = ('datafiles', 'names') if self.type == 'prediction' else ('names', 'datafiles')
+        if not getattr(self, required):
+            raise ValueError(f"source '{self.label}' of type '{self.type}' requires a non-empty '{required}'.")
+        if getattr(self, forbidden):
+            raise ValueError(f"source '{self.label}' of type '{self.type}' must not provide '{forbidden}'.")
+
 @dataclass(kw_only=True)
 class OverviewFigure(Figure):
     """Produces a figure with a single plot, giving an overview of 1D predictions.
-       Prints as eos.info the summary of overview data.
 
     :param legend: As in :class:`Plot <eos.figure.plot.Plot>`, position of the legend, always drawn
         outside of the main plot.
@@ -768,12 +780,30 @@ class OverviewFigure(Figure):
             raise ValueError("xaxis['normalize'] == 'posterior' requires xaxis['normalize-source'] "
                               "(the label of the source to normalize to).")
 
+        self._per_source_entries = None
+
+    def validate_semantics(self, context):
+        try:
+            flat_obs, _, _ = self._group(self.observables)
+        except (TypeError, ValueError) as error:
+            yield Diagnostic(('observables',), Severity.ERROR, str(error))
+            return
+
+        for index, observable in enumerate(flat_obs):
+            yield from _check_qualified(context, observable, 'observable', ('observables', index))
+
+        for index, source in enumerate(self.sources):
+            for name in source.names or []:
+                yield from _check_qualified(context, name, 'constraint', ('sources', index, 'names'))
+
+        if self._normalize == 'posterior' and not any(source.label == self._normalize_source for source in self.sources):
+            yield Diagnostic(
+                ('xaxis', 'normalize-source'), Severity.ERROR,
+                f"normalize-source '{self._normalize_source}' matches no source label"
+            )
+
     @staticmethod
     def _group(entries:list):
-        #if not any(isinstance(entry, list) for entry in entries):
-        #    groups = [[entry] for entry in entries]
-        #else:
-        #    groups = [entry if isinstance(entry, list) else [entry] for entry in entries]
         groups = [group if isinstance(group, list) else [group] for group in entries]
         flat, group_ids, labels = [], [], []
         for group_id, group in enumerate(groups):
@@ -788,14 +818,6 @@ class OverviewFigure(Figure):
                 labels.append(label)
 
         return flat, group_ids, labels
-
-    #@staticmethod
-    #def _observable_label(observable):
-    #    name, _, options = observable.partition(';')
-    #    base_latex = Observables()[name].latex()
-    #    if not (base_latex.startswith('$') and base_latex.endswith('$')):
-    #        base_latex = f'${base_latex}$'
-    #    return f'{base_latex} | {options}' if options else base_latex
 
     @staticmethod
     def _prediction_quantiles(samples, weights, level=68.27e-2):
@@ -835,10 +857,10 @@ class OverviewFigure(Figure):
         if isinstance(datafiles, str):
             datafiles = [datafiles]
 
+        predictions = [eos.data.Prediction(path) for path in datafiles]
+
         for obs in flat_obs:
-            found = False
-            for path in datafiles:
-                prediction = eos.data.Prediction(path)
+            for prediction in predictions:
                 idx = self._prediction_observable_index(prediction, obs)
                 if idx is None:
                     continue
@@ -849,16 +871,14 @@ class OverviewFigure(Figure):
                         f"from more than one data file."
                     )
 
-                central, err_low, err_high = self._prediction_quantiles(
+                results[obs] = self._prediction_quantiles(
                     prediction.samples[:, idx],
                     prediction.weights
                 )
 
-                results[obs] = (central, err_low, err_high)
-                found = True
-                break
-        if not found:
-            raise KeyError(f"No matching observable found for {obs} in source '{source.label}'")
+            if obs not in results:
+                raise KeyError(f"No matching observable found for {obs} in source '{source.label}'")
+
         return results
 
     @staticmethod
@@ -884,18 +904,22 @@ class OverviewFigure(Figure):
         for name in source.names:
             entry = self._constraint_entry(name)
             const = _yaml.safe_load(entry.serialize())
-            raw_observables = const.get('observable', [])
-            nameobs, _, optionsobs = raw_observables.partition(';')
+            raw_observable = const.get('observable', None)
+            if not isinstance(raw_observable, str):
+                raise ValueError(f"Constraint '{name}' does not provide a single observable.")
+            nameobs, _, optionsobs = raw_observable.partition(';')
             if optionsobs == '':
                 optionsobs = const.get('options', {})
                 option_suffix =  ';' + ','.join(f'{k}={v}' for k, v in optionsobs.items()) if optionsobs else ''
             else:
                 option_suffix = ';' + optionsobs
-            mean = const['mean']
+            # a serialized value such as '8e-05' carries no decimal point and so is a str, not a
+            # float, under the YAML 1.1 resolver that safe_load applies
+            mean = float(const['mean'])
             sigma_stat = const['sigma-stat']
-            sigma_sys = (const['sigma-sys'] if 'sigma-sys' in const else {'hi': 0.0, 'lo': 0.0})
-            err_high = np.sqrt(sigma_stat['hi'] ** 2 + sigma_sys['hi'] ** 2)
-            err_low = np.sqrt(sigma_stat['lo'] ** 2 + sigma_sys['lo'] ** 2)
+            sigma_sys = const.get('sigma-sys', {'hi': 0.0, 'lo': 0.0})
+            err_high = np.sqrt(float(sigma_stat['hi']) ** 2 + float(sigma_sys['hi']) ** 2)
+            err_low = np.sqrt(float(sigma_stat['lo']) ** 2 + float(sigma_sys['lo']) ** 2)
 
             obsfull = nameobs + option_suffix
 
@@ -912,27 +936,35 @@ class OverviewFigure(Figure):
 
         return results
 
+    def _entries_per_source(self, flat_obs):
+        """Each source's per-observable (central, err_low, err_high), read from disk only once."""
+        if self._per_source_entries is None:
+            entries = {}
+            for source in self.sources:
+                if source.type == 'prediction':
+                    entries[id(source)] = self._prediction_entries_for_source(source, flat_obs)
+                elif source.type == 'constraint':
+                    entries[id(source)] = self._constraint_entries_for_source(source, flat_obs)
+                else:
+                    raise ValueError(f"unknown source type '{source.type}' for source '{source.label}'.")
+            self._per_source_entries = entries
+
+        return self._per_source_entries
+
     def info_summary(self, context: AnalysisFileContext = None):
         """Print each observable's raw (un-normalized) central value and uncertainty for every
         source, as a sanity check before drawing (e.g. to catch an inverted or mismatched entry)."""
         context = AnalysisFileContext() if context is None else context
         flat_obs, _, _ = self._group(self.observables)
 
-        per_source_entries = {}
-        for source in self.sources:
-            if source.type == 'prediction':
-                per_source_entries[source.label] = self._prediction_entries_for_source(source, flat_obs)
-            elif source.type == 'constraint':
-                per_source_entries[source.label] = self._constraint_entries_for_source(source, flat_obs)
-            else:
-                raise ValueError(f"unknown source type '{source.type}' for source '{source.label}'.")
+        per_source_entries = self._entries_per_source(flat_obs)
 
         headers = ['observable'] + [source.label for source in self.sources]
         rows = []
         for obs in flat_obs:
             row = [obs]
             for source in self.sources:
-                entry = per_source_entries[source.label].get(obs)
+                entry = per_source_entries[id(source)].get(obs)
                 if entry is None:
                     row.append('--')
                 else:
@@ -969,7 +1001,7 @@ class OverviewFigure(Figure):
 
         self._yvals = [1.0 + i * self._obs_offset for i in range(n_obs)]
         self._yvals.reverse()
-        self._ylabels = obs_labels #[self._observable_label(obs) for obs in flat_obs]
+        self._ylabels = obs_labels
 
         self._sourced_entries = self._build_sourced_entries(flat_obs, self._yvals, n_sources)
 
@@ -1024,15 +1056,7 @@ class OverviewFigure(Figure):
         """Build one drawable entry per source, aggregating across every observable it covers."""
         default_colors = plt.rcParams['axes.prop_cycle'].by_key()['color']
 
-        # each source's per-observable (central, err_low, err_high), computed once
-        per_source_entries = {}
-        for source in self.sources:
-            if source.type == 'prediction':
-                per_source_entries[id(source)] = self._prediction_entries_for_source(source, flat_obs)
-            elif source.type == 'constraint':
-                per_source_entries[id(source)] = self._constraint_entries_for_source(source, flat_obs)
-            else:
-                raise ValueError(f"unknown source type '{source.type}' for source '{source.label}'.")
+        per_source_entries = self._entries_per_source(flat_obs)
 
         # resolve the normalization reference, if any
         reference = {}
