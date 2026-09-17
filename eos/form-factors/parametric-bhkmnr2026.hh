@@ -76,6 +76,21 @@ namespace eos
             gsl_vector *                 _constrained_coefficents;
             gsl_poly_complex_workspace * _poly_workspace;
 
+            // Tracker that allows updating the IntermediateResult only when parameters change
+            mutable ParametersGenerationTracker _tracker;
+
+            mutable class IntermediateResult : public FormFactors<VacuumToPP>::IntermediateResult
+            {
+                private:
+                    std::array<double, 13> _a_I1;
+                    std::array<double, 13> _a_I0;
+
+                public:
+                    virtual ~IntermediateResult();
+
+                    friend class BHKMNR2026FormFactors;
+            } _intermediate_result;
+
             inline std::string
             _par_name(const std::string & ff, const std::string & isospin, const std::string & index) const
             {
@@ -664,20 +679,9 @@ namespace eos
              */
 
             inline FormFactorDerivatives
-            _f_p_derivatives(const complex<double> & psi) const
+            _f_p_derivatives(const IntermediateResult * _ir, const complex<double> & psi) const
             {
-                // Prepare I = 1 expansion coefficients
-                std::array<double, 13u> a_I1{};
-
-                const auto constrained_a_I1 = constrained_a_fp_I1();
-                std::copy(constrained_a_I1.cbegin(), constrained_a_I1.cend(), a_I1.begin());
-
-                for (auto i = 0u; i < _a_fp_I1.size(); ++i)
-                {
-                    a_I1[i + 4u] = _a_fp_I1[i]();
-                }
-
-                const FormFactorDerivatives f_I1 = _f_I1_derivatives(psi, a_I1);
+                const FormFactorDerivatives f_I1 = _f_I1_derivatives(psi, _ir->_a_I1);
 
                 /*
                  * Derivatives of the second factor:
@@ -691,19 +695,7 @@ namespace eos
 
                 if (_switch_I[0])
                 {
-                    // Prepare I = 0 expansion coefficients
-                    std::array<double, 13u> a_I0{};
-
-                    const auto constrained_a_I0 = constrained_a_fp_I0();
-
-                    std::copy(constrained_a_I0.cbegin(), constrained_a_I0.cend(), a_I0.begin());
-
-                    for (auto i = 0u; i < _a_fp_I0.size(); ++i)
-                    {
-                        a_I0[i + 4u] = _a_fp_I0[i]();
-                    }
-
-                    const FormFactorDerivatives f_I0 = _f_I0_derivatives(psi, a_I0);
+                    const FormFactorDerivatives f_I0 = _f_I0_derivatives(psi, _ir->_a_I0);
 
                     multiplier.F0 += f_I0.F0;
                     multiplier.F1  = f_I0.F1;
@@ -719,9 +711,11 @@ namespace eos
 
         public:
             BHKMNR2026FormFactors(const Parameters & p, const Options & o);
-            ~BHKMNR2026FormFactors();
+            ~BHKMNR2026FormFactors() noexcept;
 
             static FormFactors<VacuumToPP> * make(const Parameters & p, const Options & o);
+
+            virtual const FormFactors<VacuumToPP>::IntermediateResult * prepare() const override;
 
             /* auxiliary functions */
             std::array<double, 4u> constrained_a_fp_I1() const;
@@ -761,18 +755,18 @@ namespace eos
             complex<double> dfdpsi_terms_I1(const unsigned k, const complex<double> & psi) const;
             complex<double> dfdpsi_terms_I0(const unsigned k, const complex<double> & psi) const;
             complex<double> series(const complex<double> & psi, const std::array<double, 13> & a) const;
-            complex<double> f_p_of_psi(const complex<double> & psi) const;
+            complex<double> f_p_of_psi(const FormFactors<VacuumToPP>::IntermediateResult *, const complex<double> & psi) const;
 
             double
-            abs2_f_p_of_psi(const double & re_psi, const double & im_psi) const
+            abs2_f_p_of_psi(const FormFactors<VacuumToPP>::IntermediateResult * ir, const double & re_psi, const double & im_psi) const
             {
-                return std::norm(f_p_of_psi(complex<double>(re_psi, im_psi)));
+                return std::norm(f_p_of_psi(ir, complex<double>(re_psi, im_psi)));
             }
 
             double
-            arg_f_p_of_psi(const double & re_psi, const double & im_psi) const
+            arg_f_p_of_psi(const FormFactors<VacuumToPP>::IntermediateResult * ir, const double & re_psi, const double & im_psi) const
             {
-                return std::arg(f_p_of_psi(complex<double>(re_psi, im_psi)));
+                return std::arg(f_p_of_psi(ir, complex<double>(re_psi, im_psi)));
             }
 
             /* form factors on the real axis */
@@ -780,67 +774,71 @@ namespace eos
             virtual complex<double> f_0(const double & s) const override;
             virtual complex<double> f_t(const double & s) const override;
 
+            virtual complex<double> f_p(const FormFactors<VacuumToPP>::IntermediateResult *, const double & s) const override;
+
             /* form factor in the complex s plane */
             virtual complex<double> f_p(const complex<double> & s) const override;
             virtual complex<double> f_0(const complex<double> & s) const override;
             virtual complex<double> f_t(const complex<double> & s) const override;
 
+            virtual complex<double> f_p(const FormFactors<VacuumToPP>::IntermediateResult *, const complex<double> & s) const override;
+
             /* form factors on the 21 Rieman sheet */
-            complex<double> f_p_21(const double & s) const;
-            complex<double> f_p_21(const complex<double> & s) const;
+            complex<double> f_p_21(const FormFactors<VacuumToPP>::IntermediateResult *, const double & s) const;
+            complex<double> f_p_21(const FormFactors<VacuumToPP>::IntermediateResult *, const complex<double> & s) const;
 
             /* Isospin 1, P-wave partial wave */
-            complex<double> partial_wave(const double & s) const;
-            complex<double> partial_wave(const complex<double> & s) const;
+            complex<double> partial_wave(const FormFactors<VacuumToPP>::IntermediateResult *, const double & s) const;
+            complex<double> partial_wave(const FormFactors<VacuumToPP>::IntermediateResult *, const complex<double> & s) const;
 
             double
-            re_partial_wave(const double & s) const
+            re_partial_wave(const FormFactors<VacuumToPP>::IntermediateResult * ir, const double & s) const
             {
-                return std::real(partial_wave(s));
+                return std::real(partial_wave(ir, s));
             }
 
             double
-            im_partial_wave(const double & s) const
+            im_partial_wave(const FormFactors<VacuumToPP>::IntermediateResult * ir, const double & s) const
             {
-                return std::imag(partial_wave(s));
+                return std::imag(partial_wave(ir, s));
             }
 
-            std::array<complex<double>, 4u> scattering_length_parameters() const;
+            std::array<complex<double>, 4u> scattering_length_parameters(const FormFactors<VacuumToPP>::IntermediateResult *) const;
 
             double
-            d2fdpsi2_over_f() const
+            d2fdpsi2_over_f(const FormFactors<VacuumToPP>::IntermediateResult * ir) const
             {
-                return std::real(scattering_length_parameters()[0]);
-            }
-
-            double
-            d3fdpsi3_over_f() const
-            {
-                return std::real(scattering_length_parameters()[1]);
+                return std::real(scattering_length_parameters(ir)[0]);
             }
 
             double
-            d4fdpsi4_over_f() const
+            d3fdpsi3_over_f(const FormFactors<VacuumToPP>::IntermediateResult * ir) const
             {
-                return std::real(scattering_length_parameters()[2]);
+                return std::real(scattering_length_parameters(ir)[1]);
             }
 
             double
-            d5fdpsi5_over_f() const
+            d4fdpsi4_over_f(const FormFactors<VacuumToPP>::IntermediateResult * ir) const
             {
-                return std::real(scattering_length_parameters()[3]);
+                return std::real(scattering_length_parameters(ir)[2]);
             }
-
-            complex<double> dfdpsi_11(const complex<double> & s) const;
 
             double
-            dfdpsi_11_at_0() const
+            d5fdpsi5_over_f(const FormFactors<VacuumToPP>::IntermediateResult * ir) const
             {
-                return std::real(dfdpsi_11(0.0));
+                return std::real(scattering_length_parameters(ir)[3]);
             }
 
-            double dispersive_integrand(const double & s) const;
-            double saturation() const;
+            complex<double> dfdpsi_11(const FormFactors<VacuumToPP>::IntermediateResult * _ir, const complex<double> & s) const;
+
+            double
+            dfdpsi_11_at_0(const FormFactors<VacuumToPP>::IntermediateResult * _ir) const
+            {
+                return std::real(dfdpsi_11(_ir, 0.0));
+            }
+
+            double dispersive_integrand(const FormFactors<VacuumToPP>::IntermediateResult * _ir, const double & s) const;
+            double saturation(const FormFactors<VacuumToPP>::IntermediateResult * _ir) const;
 
             // residue functions
             complex<double> residue_I1(const unsigned & k) const;
