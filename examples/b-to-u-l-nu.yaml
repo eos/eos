@@ -97,7 +97,7 @@ posteriors:
       - EXP-leptonic
 
 observables:
-  "B->pilnu::R_pi":
+  "B->pilnu::R_pi_e":
     latex: "$R_{\\pi}$"
     unit: '1'
     options: {}
@@ -133,7 +133,7 @@ predictions:
     global_options:
       model: WET
     observables:
-      - name: B->pilnu::R_pi
+      - name: B->pilnu::R_pi_e
         kinematics:
           q2_e_min: 1.0e-7
           q2_tau_min: 3.3
