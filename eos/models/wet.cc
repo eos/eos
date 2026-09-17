@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2024 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
@@ -47,24 +47,6 @@ namespace eos
         cartesian(const Parameter & re, const Parameter & im)
         {
             return complex<double>(re(), im());
-        }
-
-        complex<double>
-        polar_negative(const Parameter & abs, const Parameter & arg)
-        {
-            return std::polar(abs(), arg() + M_PI);
-        }
-
-        complex<double>
-        cartesian_negative(const Parameter & re, const Parameter & im)
-        {
-            return complex<double>(-re(), -im());
-        }
-
-        complex<double>
-        zero()
-        {
-            return complex<double>(0.0, 0.0);
         }
     } // namespace wcimplementation
 
@@ -1160,40 +1142,6 @@ namespace eos
         return result;
     }
 
-    ConstrainedWilsonScanComponent::ConstrainedWilsonScanComponent(const Parameters & p, const Options & o, ParameterUser & u) :
-        WilsonScanComponent<components::DeltaBS1>(p, o, u)
-    {
-        /* b->smee */
-        _e_cT      = std::bind(&wcimplementation::zero);
-        _e_cT5     = std::bind(&wcimplementation::zero);
-        _e_cP      = std::bind(&wcimplementation::cartesian_negative, _e_re_cS, _e_im_cS);
-        _e_cPprime = std::bind(&wcimplementation::cartesian, _e_re_cSprime, _e_im_cSprime);
-
-        u.drop(_e_re_cP.id());
-        u.drop(_e_im_cP.id());
-        u.drop(_e_re_cPprime.id());
-        u.drop(_e_im_cPprime.id());
-        u.drop(_e_re_cT.id());
-        u.drop(_e_im_cT.id());
-        u.drop(_e_re_cT5.id());
-        u.drop(_e_im_cT5.id());
-
-        /* b->smumu */
-        _mu_cT      = std::bind(&wcimplementation::zero);
-        _mu_cT5     = std::bind(&wcimplementation::zero);
-        _mu_cP      = std::bind(&wcimplementation::cartesian_negative, _mu_re_cS, _mu_im_cS);
-        _mu_cPprime = std::bind(&wcimplementation::cartesian, _mu_re_cSprime, _mu_im_cSprime);
-
-        u.drop(_mu_re_cP.id());
-        u.drop(_mu_im_cP.id());
-        u.drop(_mu_re_cPprime.id());
-        u.drop(_mu_im_cPprime.id());
-        u.drop(_mu_re_cT.id());
-        u.drop(_mu_im_cT.id());
-        u.drop(_mu_re_cT5.id());
-        u.drop(_mu_im_cT5.id());
-    }
-
     WilsonScanModel::WilsonScanModel(const Parameters & parameters, const Options & options) :
         CKMScanComponent(parameters, options, *this),
         SMComponent<components::QCD>(parameters, *this),
@@ -1225,38 +1173,5 @@ namespace eos
     WilsonScanModel::make(const Parameters & parameters, const Options & options)
     {
         return std::shared_ptr<Model>(new WilsonScanModel(parameters, options));
-    }
-
-    ConstrainedWilsonScanModel::ConstrainedWilsonScanModel(const Parameters & parameters, const Options & options) :
-        CKMScanComponent(parameters, options, *this),
-        SMComponent<components::QCD>(parameters, *this),
-        // Charged-current semileptonic sectors (Delta S = 1)
-        WilsonScanComponent<components::WET::USLNu>(parameters, options, *this),
-        // Charged-current semileptonic sectors (Delta C = 1)
-        WilsonScanComponent<components::WET::DCNuL>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SCNuL>(parameters, options, *this),
-        // Charged-current semileptonic sectors (Delta B = 1)
-        WilsonScanComponent<components::WET::UBLNu>(parameters, options, *this),
-        WilsonScanComponent<components::WET::CBLNu>(parameters, options, *this),
-        // Neutral-current semileptonic sectors (Delta B = 1)
-        WilsonScanComponent<components::WET::SBNuNu>(parameters, options, *this),
-        // Hadronic sectors (Delta B = 1)
-        WilsonScanComponent<components::WET::DBCU>(parameters, options, *this),
-        WilsonScanComponent<components::WET::SBCU>(parameters, options, *this),
-        // Hadronic sectors (Delta B = 2)
-        WilsonScanComponent<components::WET::SBSB>(parameters, options, *this),
-        // Neutral-current semileptonic sectors (Delta C = 1)
-        WilsonScanComponent<components::WET::UC>(parameters, options, *this),
-        // Old-style WET sectors
-        ConstrainedWilsonScanComponent(parameters, options, *this)
-    {
-    }
-
-    ConstrainedWilsonScanModel::~ConstrainedWilsonScanModel() {}
-
-    std::shared_ptr<Model>
-    ConstrainedWilsonScanModel::make(const Parameters & parameters, const Options & options)
-    {
-        return std::shared_ptr<Model>(new ConstrainedWilsonScanModel(parameters, options));
     }
 } // namespace eos

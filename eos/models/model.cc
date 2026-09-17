@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2014 Danny van Dyk
+ * Copyright (c) 2010, 2011, 2014-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -32,7 +32,6 @@ namespace eos
         std::make_pair("CKM"_ov, &CKMScanModel::make),
         std::make_pair("SM"_ov, &StandardModel::make),
         std::make_pair("WET"_ov, &WilsonScanModel::make),
-        std::make_pair("WET-SMEFT"_ov, &ConstrainedWilsonScanModel::make),
     };
 
     std::shared_ptr<Model>

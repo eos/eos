@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2011-2025 Danny van Dyk
+ * Copyright (c) 2011-2026 Danny van Dyk
  * Copyright (c) 2014 Frederik Beaujean
  * Copyright (c) 2014, 2018 Christoph Bobeth
  * Copyright (c) 2018 Ahmet Kokulu
@@ -581,50 +581,6 @@ namespace eos
         public:
             WilsonScanModel(const Parameters &, const Options &);
             virtual ~WilsonScanModel();
-
-            static std::shared_ptr<Model> make(const Parameters &, const Options &);
-    };
-
-    class ConstrainedWilsonScanComponent : public WilsonScanComponent<components::DeltaBS1>
-    {
-        public:
-            ConstrainedWilsonScanComponent(const Parameters &, const Options &, ParameterUser &);
-    };
-
-    /*!
-     * Special case of @see WilsonScanModel with C_S = - C_P, C'_S = C'_P, and C_T = C_T5 = 0.
-     *
-     * As shown in arXiv:1407.7044 eq. (8), the Wilson coefficients are not
-     * independent if new physics is well above the electro-weak scale,
-     * respects the SM gauge symmetry, and only dim. 6 operators contribute.
-     */
-    class ConstrainedWilsonScanModel :
-        public Model,
-        public CKMScanComponent,
-        public SMComponent<components::QCD>,
-        // Charged-current semileptonic sectors (Delta S = 1)
-        public WilsonScanComponent<components::WET::USLNu>,
-        // Charged-current semileptonic sectors (Delta C = 1)
-        public WilsonScanComponent<components::WET::DCNuL>,
-        public WilsonScanComponent<components::WET::SCNuL>,
-        // Charged-current semileptonic sectors (Delta B = 1)
-        public WilsonScanComponent<components::WET::UBLNu>,
-        public WilsonScanComponent<components::WET::CBLNu>,
-        // Neutral-current semileptonic sectors (Delta B = 1)
-        public WilsonScanComponent<components::WET::SBNuNu>,
-        // Hadronic sectors (Delta B = 1)
-        public WilsonScanComponent<components::WET::DBCU>,
-        public WilsonScanComponent<components::WET::SBCU>,
-        // Hadronic sectors (Delta B = 2)
-        public WilsonScanComponent<components::WET::SBSB>,
-        // Neutral-current semileptonic sectors (Delta C = 1)
-        public WilsonScanComponent<components::WET::UC>,
-        // Old-style WET sectors
-        public ConstrainedWilsonScanComponent
-    {
-        public:
-            ConstrainedWilsonScanModel(const Parameters &, const Options &);
-            virtual ~ConstrainedWilsonScanModel();
 
             static std::shared_ptr<Model> make(const Parameters &, const Options &);
     };
