@@ -107,7 +107,7 @@ A figure of type ``grid`` contains a rectangular grid of individual plots.
 The shape of the grid is given as a ``(rows, columns)`` tuple in the mandatory ``shape`` key.
 The individual plots are described by the elements of the mandatory ``plots`` list, in row-major order, i.e., the first plot occupies the first row and first column, the second plot the first row and second column, and so on.
 
-The optional keys are ``size`` (the figure size in inches), ``watermark`` and ``watermark_plot`` (which plot carries the watermark, as a flattened index or a ``(row, col)`` address; by default every plot is stamped), ``tight_layout`` and ``padding`` (the layout of the grid), and ``shared_axes`` (which axes the panels share, one of ``x``, ``y``, or ``both``).
+The optional keys are ``size`` (the figure size in inches), ``watermark`` and ``watermark_plot`` (which plot carries the watermark, as a flattened index, a ``(row, col)`` address, or ``all`` to stamp every plot; by default only the bottom-right plot that is not empty is stamped), ``tight_layout`` and ``padding`` (the layout of the grid), and ``shared_axes`` (which axes the panels share, one of ``x``, ``y``, or ``both``).
 
 .. code-block:: yaml
 
