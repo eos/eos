@@ -20,7 +20,7 @@ from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
 from eos.diagnostic import Diagnostic, Severity
 
-from .plot import Plot, PlotFactory
+from .plot import EmptyPlot, Plot, PlotFactory
 from .common import Watermark
 from .data import DataFile
 
@@ -315,8 +315,8 @@ class GridFigure(Figure):
     :type shape: tuple[int, int]
     :param size: The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
     :type size: tuple[float, float]
-    :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index or a 2D ``(row, col)`` address. If None, every plot is stamped.
-    :type watermark_plot: int | tuple[int, int] | None
+    :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index, a 2D ``(row, col)`` address, or ``'all'`` to stamp every plot. Defaults to None (the bottom-right plot that is not empty).
+    :type watermark_plot: int | tuple[int, int] | str | None
     :param tight_layout: If True (default), the grid spec is laid out with ``tight_layout``. Set to False to keep an explicit ``padding``, e.g. ``(0, 0)`` for abutting panels.
     :type tight_layout: bool
     :param shared_axes: Which axes the panels share, one of ``None``, ``'x'``, ``'y'``, or ``'both'``. ``'x'`` shares the x-axis per column (``sharex='col'``), ``'y'`` shares the y-axis per row (``sharey='row'``), and ``'both'`` shares both; a shared axis gives one common range per group and tick labels only on the outer edge. Defaults to None (independent axes).
@@ -334,7 +334,7 @@ class GridFigure(Figure):
     shape:tuple[int, int]
     size:tuple[float, float]|None=field(default=None)
     watermark:Watermark=field(default_factory=Watermark)
-    watermark_plot:int|tuple[int, int]|None=field(default=None)
+    watermark_plot:int|tuple[int, int]|str|None=field(default=None)
     tight_layout:bool=field(default=True)
     shared_axes:str|None=field(default=None)
     height_ratios:list[float]|None=field(default=None)
@@ -358,8 +358,9 @@ class GridFigure(Figure):
 
         * ``size`` (*tuple[float, float]*) -- The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
 
-        * ``watermark_plot`` (*int* or *tuple[int, int]*) -- The plot that carries the watermark, given either as a flattened
-            (row-major) index or as a 2D ``(row, col)`` address. If omitted, every plot is stamped.
+        * ``watermark_plot`` (*int* or *tuple[int, int]* or *str*) -- The plot that carries the watermark, given either as a flattened
+            (row-major) index, as a 2D ``(row, col)`` address, or as ``'all'`` to stamp every plot. If omitted, the bottom-right plot
+            that is not an ``empty`` plot carries the watermark.
 
         * ``tight_layout`` (*bool*) -- Whether to lay out the grid with ``tight_layout``. Defaults to True. Set to False to keep an
             explicit ``padding`` (e.g. ``(0, 0)`` for abutting panels), which ``tight_layout`` would otherwise undo.
@@ -406,19 +407,25 @@ class GridFigure(Figure):
     def _resolve_watermark_plot(self, nrow, ncol):
         "Resolve the watermark_plot field to a single flattened (row-major) index, or None for all plots."
         wp = self.watermark_plot
+        nplots = len(self.plots)
         if wp is None:
+            # the last occupied panel, skipping the empty plots commonly used to pad a grid
+            return next((idx for idx in reversed(range(nplots)) if not isinstance(self.plots[idx], EmptyPlot)), None)
+
+        if isinstance(wp, str):
+            if wp != 'all':
+                raise ValueError(f"'watermark_plot' must be an int, a (row, col) pair, or 'all', got {wp!r}")
             return None
 
-        nplots = len(self.plots)
         if isinstance(wp, bool):
             # bool is a subclass of int; reject it so that e.g. 'watermark_plot: true'
             # does not silently select plot index 1
-            raise ValueError(f"'watermark_plot' must be an int or a (row, col) pair, got {wp!r}")
+            raise ValueError(f"'watermark_plot' must be an int, a (row, col) pair, or 'all', got {wp!r}")
         elif isinstance(wp, int):
             idx = wp
         else: # 2D (row, col) address; a YAML list arrives here as well
             if len(wp) != 2:
-                raise ValueError(f"'watermark_plot' must be an int or a (row, col) pair, got {wp}")
+                raise ValueError(f"'watermark_plot' must be an int, a (row, col) pair, or 'all', got {wp}")
             row, col = wp
             if not (0 <= row < nrow and 0 <= col < ncol):
                 raise ValueError(f"'watermark_plot' {tuple(wp)} is outside the {nrow}x{ncol} grid")

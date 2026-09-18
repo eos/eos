@@ -265,8 +265,26 @@ class GridFigureTests(unittest.TestCase):
 
     def test_watermark_plot_default(self):
 
-        # Without 'watermark_plot', every panel is stamped (backward-compatible).
+        # Without 'watermark_plot', only the bottom-right panel is stamped.
         input = self._grid_yaml('[1, 2]', 2)
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        self.assertFalse(self._has_watermark(figure._axes[0]))
+        self.assertTrue(self._has_watermark(figure._axes[1]))
+
+    def test_watermark_plot_default_skips_empty(self):
+
+        # The default skips the empty plots used to pad out the grid.
+        input = self._grid_yaml('[2, 2]', 3) + "  - type: 'empty'"
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        for idx in range(4):
+            self.assertEqual(self._has_watermark(figure._axes[idx]), idx == 2)
+
+    def test_watermark_plot_all(self):
+
+        # 'all' restores the stamp on every panel.
+        input = self._grid_yaml('[1, 2]', 2, extra="watermark_plot: 'all'")
         figure = eos.figure.FigureFactory.from_yaml(input)
         figure.draw()
         self.assertTrue(self._has_watermark(figure._axes[0]))
@@ -285,6 +303,10 @@ class GridFigureTests(unittest.TestCase):
         # A boolean is rejected rather than silently treated as the int 0/1.
         with self.assertRaises(Exception):
             eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra='watermark_plot: true'))
+
+        # A string other than 'all' is rejected.
+        with self.assertRaises(Exception):
+            eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra="watermark_plot: 'none'"))
 
     @staticmethod
     def _two_range_grid(extra=''):
