@@ -20,6 +20,7 @@ or parameter values within EOS v{{ version }}.
      - {{ reference.title }}
      - {%- if reference.eprint %} |badge-{{ reference.eprint.id }}| |br|{% endif %}
        {%- if reference.inspire %} |badge-{{ reference.inspire.id }}| |br|{% endif %}
+       {%- if not reference.eprint and not reference.inspire and reference.url %} |badge-{{ reference.url.id }}| |br|{% endif %}
 
 
    {% endfor %}
