@@ -121,6 +121,9 @@ B:1998A:
   title: A Quark mass definition adequate for threshold problems
 BB:1999A:
   authors: Buchalla, Gerhard and Buras, Andrzej J.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/9901288
   inspire-id: Buchalla:1998ba
   title: 'The rare decays $K\to \pi \nu\bar\nu$, $B \to X \nu\bar\nu$ and $B \to \ell^+
     \ell^-$: An Update'
@@ -647,12 +650,18 @@ BZ:2004C:
 BaBar:2004A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0404006
   inspire-id: Aubert:2004it
   title: Measurement of the $B \to X_s \ell^+ \ell^-$ branching fraction with a sum
     over exclusive modes
 BaBar:2007A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0704.0522
   inspire-id: BaBar:2007rbr
   title: Measurement of decay amplitudes of $B \to J/\psi K^{*}, \psi(2S) K^{*}$,
     and $\chi_{c1} K^{*}$ with an angular analysis
@@ -667,6 +676,9 @@ BaBar:2007B:
 BaBar:2008A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
+  print:
+    archive: arXiv
+    id: oai:arXiv.org:0807.3103
   inspire-id: Aubert:2008gy
   title: Measurement of Time-Dependent CP Asymmetry in $B^0 \to K^0_{S} \pi^0 \gamma$
     Decays
@@ -682,17 +694,26 @@ BaBar:2008B:
 BaBar:2009A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0906.2177
   inspire-id: Aubert:2009ak
   title: Measurement of Branching Fractions and CP and Isospin Asymmetries in $B \to  K^*(892)\gamma$
     Decays
 BaBar:2009B:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:0907.1743
   inspire-id: BaBar:2009cun
   title: $B$ meson decays to charmless meson pairs containing $\eta$ or $\eta^\prime$ mesons
 BaBar:2010A:
   authors: del Amo Sanchez, P. et al.
   collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1005.3288
   inspire-id: delAmoSanchez:2010af
   title: Study of $B \to \pi \ell \nu$ and $B \to \rho \ell \nu$ Decays and Determination
     of $|V_{ub}|$
@@ -1079,6 +1100,9 @@ CCH:2017A:
 CDF:2011A:
   authors: Aaltonen, T. et al.
   collaboration: CDF
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1107.3753
   inspire-id: Aaltonen:2011qs
   title: Observation of the Baryonic Flavor-Changing Neutral Current Decay $\Lambda_{b}
     \to \Lambda \mu^{+} \mu^{-}$
@@ -1110,6 +1134,9 @@ CDF:2012A:
   url: http://www-cdf.fnal.gov/physics/new/bottom/120628.blessed-b2smumu_96/public_b2smumu.pdf
 CERN:2003A:
   authors: Abbaneo, D. et al.
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ph/0304132
   inspire-id: Battaglia:2003in
   title: 'The CKM matrix and the unitarity triangle. Workshop, CERN, Geneva, Switzerland,
     13-16 Feb 2002: Proceedings'
@@ -1232,6 +1259,7 @@ CMS:2019A:
   eprint:
     archive: CDS
     id: 2684828
+  inspire-id: CMS:2019qnb
   title: Measurement of properties of $B_s^0 \to \mu^+\mu^-$ decays and search for $B^0
     \to \mu^+\mu^-$ with the CMS experiment
 CMS:2020A:
@@ -1240,6 +1268,7 @@ CMS:2020A:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:2010.13968
+  inspire-id: CMS:2020oqb
   title: Angular analysis of the decay $B^+ \to K^*(892)^+ \mu^+\mu^-$ in
     proton-proton collisions at $\sqrt{s} = 8$ TeV
 CMS:2020B:
@@ -1315,7 +1344,7 @@ DDS:2014A:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1405.3719
-  inpire-id: Duraisamy:2014sna
+  inspire-id: Duraisamy:2014sna
   title: Azimuthal $B \to D^{*} \tau^{-} \bar{\nu_\tau}$ angular distribution with tensor operators
 DGHKM:2020A:
   authors: Du, Meng-Lin and Guo, Feng-Kun and Hanhart, Christoph and Kubis, Bastian and Meissner, Ulf-G.
@@ -1653,8 +1682,8 @@ G:2026A:
   authors: Gubernari, Nico
   eprint:
     archive: arXiv
-    id: In preparation
-  inspire-id: Gubernari:2026xxx
+    id: oai:arXiv.org:2605.26213
+  inspire-id: Gubernari:2026sqc
   title: Unitarity bounds and form factor predictions for $B$-meson decays
 GHM:2021A:
   authors: Golz, Marcel and Hiller, Gudrun and Magorsch, Tom
@@ -1716,6 +1745,7 @@ GP:2004A:
     the long-distance effects'
 GR:1992A:
   authors: Gelman, A. and Rubin, D.B.
+  inspire-id: Gelman:1992zz
   journal: Statistical Science, Vol. 7, No. 4 (Nov. 1992), pp. 457-472
   title: Inference from Iterative Simulation Using Multiple Sequences
 GR:2004A:
@@ -1932,6 +1962,10 @@ JS:2018A:
   title: Constraining new physics in $b\to c\ell\nu$ transitions
 KKRvD:2024A:
   authors: Kirk, Matthew and Kubis, Bastian and Reboud, Meril and van Dyk, Danny
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2410.13764
+  inspire-id: Kirk:2024oyl
   title: 'A Simple Parametrisation of the Pion Form Factor'
 KKvDZ:2022A:
   authors: Kürten, Stephan and Zanke, Marvin and Kubis, Bastian and van Dyk, Danny
@@ -2035,10 +2069,14 @@ LHCb:2011A:
   eprint:
     archive: CDS
     id: 1374913
+  inspire-id: CMS:2011wpa
   title: Search for the rare decay $B^0_s \to \mu^+ \mu^-$ with the CMS and LHCb experiments
 LHCb:2011B:
   authors: Aaij, R et al.
   collaboration: LHCb
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1112.3515
   inspire-id: Aaij:2011aa
   title: Differential branching fraction and angular analysis of the decay $B^{0}
     \to K^{*0} \mu^+ \mu^-$
@@ -2200,6 +2238,7 @@ LHCb:2015D:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1503.07483
+  inspire-id: LHCb:2015zut
   title: Observation of the $B_s^0 \to \eta' \eta'$ decay
 LHCb:2016A:
   authors: Aaij, Roel et al.
@@ -2322,7 +2361,7 @@ LHCb:2021E:
   eprint:
     archive: arXiv
     id: oai:arxiv.org:2103.06810
-    inspire-id: LHCb:2021qbv
+  inspire-id: LHCb:2021qbv
   title: Precise measurement of the $f_s/f_d$ ratio of fragmentation fractions and of $B^0_s$ decay branching fractions
 LMNRvD:2023A:
   authors: Leljak, Domagoj and Meli{\'c}, Bla{\v{z}}enka and Novak, Filip and Reboud, M{\'e}ril and van Dyk, Danny
@@ -2385,6 +2424,7 @@ M:2017A:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1712.05783
+  inspire-id: Meinel:2017ggx
   title: $\Lambda_c \to N$ form factors from lattice QCD and phenomenology of $\Lambda_c \to n \ell^+ \nu_\ell$
     and $\Lambda_c \to p \mu^+ \mu^-$ decays
 MR:2021A:
@@ -2509,6 +2549,7 @@ PDG:2024A:
   url: http://pdg.lbl.gov
 PS:1997A:
   authors: Peskin, M. and Schroeder, D.
+  inspire-id: Peskin:1995ev
   title: An Introduction to Quantum Field Theory
 PS:2023A:
   authors: Plakias, I. and Sumensari, O.
@@ -2532,6 +2573,7 @@ RBC+UKQCD:2015A:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1501.05373
+  inspire-id: Flynn:2015mha
   journal: Phys. Rev. D 91 074510 (2015)
 RBC+UKQCD:2023A:
   authors: Flynn, J. M. and Hill, R. C. and J\"uttner, A. and Soni, A. and Tsang, J. T. and Witzel, O.
@@ -2551,6 +2593,7 @@ RHK:2018A:
   title: A new parametrization for the scalar pion form factors
 S:1982A:
   authors: Sirlin, A.
+  inspire-id: Sirlin:1981ie
   journal: Nucl.Phys. B196 (1982) 83-92
   title: Large $M_W$ and $M_Z$ behaviour of the order alpha corrections to semileptonic
     processes mediated by W
@@ -2572,6 +2615,7 @@ S:2010A:
   collaboration:
   - Fermilab Lattice
   - MILC Collaborations
+  inspire-id: FermilabLattice:2010jbw
   journal: PoS LATTICE2010 (2010) 317
   title: The decay constants $f_{D_s}$, $f_{D^+}$, $f_{B_s}$ and $f_B$ from lattice QCD
 S:2025A:
