@@ -62,6 +62,13 @@ AGV:2019A:
     id: oai:arXiv.org:1912.09099
   inspire-id: Asatrian:2019kbk
   title: Exact NLO matching and analyticity in $b\to s\ell\ell$
+ALEPH:2013A:
+  authors: Davier, Michel and H{\"o}cker, Andreas and Malaescu, Bogdan and Yuan, Chang-Zheng and Zhang, Zhiqing
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1312.1501
+  inspire-id: Davier:2013sfa
+  title: Update of the ALEPH non-strange spectral functions from hadronic $\tau$ decays
 ALGH:2001A:
   authors: Ali, A. and Lunghi, E. and Greub, C. and Hiller, G.
   eprint:
@@ -258,6 +265,11 @@ BES:2008A:
   inspire-id: BES:2008rkr
   title: Measurements of the line shapes of D anti-D production and the ratio of the production rates of D+ D- and
     D0 anti-D0 in e+ e- annihilation at psi(3770) resonance
+BES:2015A:
+  authors: Ablikim, M. et al.
+  collaboration: BES
+  inspire-id: BESIII:2015equ
+  title: Measurement of the $e^+ e^- \to \pi^+ \pi^-$ cross section between 600 and 900 MeV using initial state radiation
 BES:2017A:
   authors: Julin, Andy Jarod
   collaboration: BES
@@ -452,6 +464,13 @@ BGS:2017A:
     id: oai:arXiv.org:1707.09509
   inspire-id: Bigi:2017jbd
   title: $R(D^*)$, $|V_{cb}|$, and the Heavy Quark Symmetry relations between form factors
+BHKMR:2025A:
+  authors: Balz, Nienke C. and Herren, Florian and Kubis, Bastian and Mutke, Simon and Reboud, Meril
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2510.25584
+  inspire-id: Balz:2025auk
+  title: Advanced parametrisations for hadronic form factors
 BHP:2007A:
   authors: Bobeth, Christoph and Hiller, Gudrun and Piranishvili, Giorgi
   eprint:
@@ -749,6 +768,14 @@ BaBar:2012D:
   inspire-id: BaBar:2012thb
   title: Branching fraction and form-factor shape measurements of exclusive charmless
     semileptonic B decays, and determination of $|V_{ub}|$
+BaBar:2012E:
+  authors: Lees, J.P. et al.
+  collaboration: BaBar
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1205.2228
+  inspire-id: BaBar:2012bdw
+  title: Precise Measurement of the $e^+ e^- \to \pi^+\pi^- (\gamma)$ Cross Section with the Initial-State Radiation Method at BABAR
 BaBar:2013A:
   authors: Lees, J.P. et al.
   collaboration: BaBar
@@ -1169,6 +1196,38 @@ CLEO:2008A:
     id: oai:arXiv.org:0801.3418
   inspire-id: CLEO:2008ojp
   title: Measurement of Charm Production Cross Sections in $e^+ e^-$ Annihilation at Energies between 3.97 and 4.26-GeV
+CLEO:2018A:
+  authors: Xiao, T. and Dobbs, S. and Tomaradze, A. and Seth, Kamal K. and Bonvicini, G.
+  collaboration: CLEO
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1712.04530
+  inspire-id: Xiao:2017dqv
+  title: Precision measurement of the hadronic contribution to the muon anomalous magnetic moment
+CMD2:2003A:
+  authors: Akhmetshin, R. R. et al.
+  collaboration: CMD-2
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0308008
+  inspire-id: CMD-2:2003gqi
+  title: Reanalysis of hadronic cross-section measurements at CMD-2
+CMD2:2006A:
+  authors: Aulchenko, V. M.  et al.
+  collaboration: CMD-2
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0610016
+  inspire-id: Aulchenko:2006dxz
+  title: Measurement of the $e^+ e^- \to \pi^+ \pi^-$ cross section with the CMD-2 detector in the 370 - 520-MeV c.m. energy range
+CMD2:2007A:
+  authors: Akhmetshin, R. R. et al.
+  collaboration: CMD-2
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0610021
+  inspire-id: CMD-2:2006gxt
+  title: High-statistics measurement of the pion form factor in the rho-meson energy range with the CMD-2 detector
 CMD3:2023A:
   authors: Ignatov, F. V. et al.
   eprint:
@@ -1955,6 +2014,14 @@ KLOE:2008A:
     id: oai:arXiv.org:0712.3841
   inspire-id: KLOE:2007jte
   title: Measurement of the absolute branching ratios for semileptonic $K^\pm$ decays with the KLOE detector
+KLOE-2:2018A:
+  authors: Anastasi, A. and others
+  collaboration: KLOE-2
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:1711.03085
+  inspire-id: KLOE-2:2017fda
+  title: Combination of KLOE $\sigma\big(e^+e^-\rightarrow\pi^+\pi^-\gamma(\gamma)\big)$ measurements and determination of $a_{\mu}^{\pi^+\pi^-}$ in the energy range $0.10 < s < 0.95$ GeV$^2$
 KLOE-2:2020A:
   authors: Babusci, D. and others
   collaboration: KLOE-2
@@ -2449,6 +2516,13 @@ NT:2011A:
     id: oai:arXiv.org:1109.6786
   inspire-id: Nishikawa:2011qk
   title: QCD Sum Rules for Quark-Gluon Three-Body Components in the B Meson
+OPAL:1999A:
+  authors: Ackerstaff, K. and others
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:9808019
+  inspire-id: OPAL:1998rrm
+  title: Measurement of the strong coupling constant alpha(s) and the vector and axial vector spectral functions in hadronic tau decays
 PDG:2008A:
   authors: Amsler, C. et al.
   collaboration: Particle Data Group
@@ -2572,6 +2646,22 @@ S:2025A:
     id: oai:arXiv.org:2504.21732
   inspire-id: Rodriguez-Sanchez:2025nsm
   title: Hadronic tau decays
+SND:2006A:
+  authors: Achasov, M. N. et al.
+  collaboration: SND
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:hep-ex/0605013
+  inspire-id: Achasov:2006vp
+  title: Update of the $e^+ e^- \to \pi^+ \pi^-$ cross-section measured by SND detector in the energy region 400 MeV $< \sqrt{s}<$ 1000 MeV
+SND:2020A:
+  authors: Achasov, M. N. et al.
+  collaboration: SND
+  eprint:
+    archive: arXiv
+    id: oai:arXiv.org:2004.00263
+  inspire-id: SND:2020nwa
+  title: Measurement of the $e^+e^- \to \pi^+\pi^- $ process cross section with the SND detector at the VEPP-2000 collider in the energy region $0.525<\sqrt{s}<0.883$ GeV
 STTW:2013A:
   authors: Sakaki, Yasuhito and Tanaka, Minoru and Tayduganov, Andrey and Watanabe,
     Ryoutaro

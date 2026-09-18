@@ -1106,6 +1106,10 @@ namespace eos
         return Generation(_imp->parameters_data->instance, _imp->parameters_data->counter);
     }
 
+    GenerationTracker::~GenerationTracker()                         = default;
+    GenerationTracker::GenerationTracker(const GenerationTracker &) = default;
+    GenerationTracker::GenerationTracker(GenerationTracker &&)      = default;
+
     Parameter::Parameter(const std::shared_ptr<Parameters::Data> & parameters_data, unsigned index) :
         _parameters_data(parameters_data),
         _index(index)
