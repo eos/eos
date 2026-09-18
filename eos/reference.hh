@@ -73,6 +73,9 @@ namespace eos
 
             /// Return the reference's inspire id
             const std::string & inspire_id() const;
+
+            /// Return the reference's URL
+            const std::string & url() const;
     };
 
     using ReferencePtr = std::shared_ptr<const Reference>;

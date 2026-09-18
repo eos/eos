@@ -120,5 +120,25 @@ class ReferencesTest : public TestCase
                 TEST_CHECK(nullptr != references["ATLAS:2013A"].get());
                 TEST_CHECK(nullptr == references["Nobody:2000A"].get());
             }
+
+            /* Test all reference have either an eprint, an INSPIRE id, or a URL (except vD:2011A) */
+            {
+                auto references = References();
+
+                for (const auto & r : references)
+                {
+                    const ReferenceName & name       = r.first;
+                    const std::string &   inspire_id = r.second->inspire_id();
+                    const std::string &   eprint     = r.second->eprint_id();
+                    const std::string &   url        = r.second->url();
+
+                    if (name.str() == "vD:2011A")
+                    {
+                        continue;
+                    }
+
+                    TEST_CHECK_MSG(! inspire_id.empty() || ! eprint.empty() || ! url.empty(), "reference '" + name.str() + "' has no link");
+                }
+            }
         }
 } references_test;

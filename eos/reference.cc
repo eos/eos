@@ -39,6 +39,7 @@ namespace eos
             std::string   eprint_archive;
             std::string   eprint_id;
             std::string   inspire_id;
+            std::string   url;
     };
 
     Reference::Reference(Implementation<Reference> * imp) :
@@ -82,6 +83,12 @@ namespace eos
     Reference::inspire_id() const
     {
         return _imp->inspire_id;
+    }
+
+    const std::string &
+    Reference::url() const
+    {
+        return _imp->url;
     }
 
     template <> struct Implementation<References>
@@ -214,9 +221,20 @@ namespace eos
                         {
                             throw ReferencesInputDuplicateError(file, name.str());
                         }
+                        auto        url_node = r.second["url"];
+                        std::string url;
+                        if (url_node)
+                        {
+                            if (YAML::NodeType::Scalar != url_node.Type())
+                            {
+                                throw ReferencesInputFileNodeError(file, name.str() + ".url", "is not a scalar");
+                            }
+
+                            url = url_node.as<std::string>();
+                        }
 
                         reference_map[name] =
-                                std::shared_ptr<const Reference>(new Reference(new Implementation<Reference>{ name, authors, title, eprint_archive, eprint_id, inspire_id }));
+                                std::shared_ptr<const Reference>(new Reference(new Implementation<Reference>{ name, authors, title, eprint_archive, eprint_id, inspire_id, url }));
                     }
                 }
                 catch (ReferenceNameSyntaxError & e)
