@@ -302,6 +302,32 @@ namespace eos
             bool operator!= (const Parameters & rhs) const;
     };
 
+    class ParametersGenerationTracker
+    {
+        private:
+            Parameters             _parameters;
+            Parameters::Generation _generation;
+
+        public:
+            ParametersGenerationTracker(const Parameters & parameters) :
+                _parameters(parameters)
+            {
+            }
+
+            ~ParametersGenerationTracker() noexcept;
+            ParametersGenerationTracker(const ParametersGenerationTracker &);
+            ParametersGenerationTracker(ParametersGenerationTracker &&);
+
+            inline bool
+            needs_update()
+            {
+                auto result = (_generation != _parameters.generation());
+                _generation = _parameters.generation();
+                return result;
+            }
+    };
+
+
     extern template class WrappedForwardIterator<Parameters::IteratorTag, Parameter>;
 
     /*!
