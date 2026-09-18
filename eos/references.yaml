@@ -173,14 +173,14 @@ BBL:2006A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0603063
   inspire-id: Ball:2006wn
-  title: Higher-twist distribution amplitudes of the K meson in QCD
+  title: Higher-twist distribution amplitudes of the $K$ meson in QCD
 BBL:2007A:
   authors: Ball, Patricia and Braun, V.M. and Lenz, A.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0707.1201
   inspire-id: Ball:2007zt
-  title: Twist-4 distribution amplitudes of the K* and phi mesons in QCD
+  title: Twist-4 distribution amplitudes of the $K^*$ and $\phi$ mesons in QCD
 BBMU:2003A:
   authors: Benson, D and Bigi, I.I. and Mannel, T. and Uraltsev, N.
   eprint:
@@ -195,7 +195,7 @@ BBNS:2000A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0006124
   inspire-id: Beneke:2000ry
-  title: 'QCD factorization for exclusive, nonleptonic B meson decays: General arguments and the case of heavy light final states'
+  title: 'QCD factorization for exclusive, nonleptonic $B$ meson decays: General arguments and the case of heavy light final states'
 BCL:2008A:
   authors: Bourrely, Claude and Caprini, Irinel and Lellouch, Laurent
   eprint:
@@ -256,13 +256,13 @@ BES:2008A:
   authors: Ablikim, M. et al.
   collaboration: BES
   inspire-id: BES:2008rkr
-  title: Measurements of the line shapes of D anti-D production and the ratio of the production rates of D+ D- and
-    D0 anti-D0 in e+ e- annihilation at psi(3770) resonance
+  title: Measurements of the line shapes of $D \bar{D}$ production and the ratio of the production rates of $D^+ D^-$ and
+    $D^0 \bar{D}^0$ in $e^+ e^-$ annihilation at $\psi(3770)$ resonance
 BES:2017A:
   authors: Julin, Andy Jarod
   collaboration: BES
   inspire-id: Julin:2017jcl
-  title: Measurement of $D\overline{D}$ Decays from the psi(3770) Resonance
+  title: Measurement of $D\overline{D}$ Decays from the $\psi(3770)$ Resonance
 BES:2017B:
   authors: Ablikim, M. and others
   collaboration: BESIII
@@ -474,14 +474,14 @@ BHvD:2010A:
     archive: arXiv
     id: oai:arXiv.org:1006.5013
   inspire-id: Bobeth:2010wg
-  title: The Benefits of $\bar{B} \to \bar{K}^* l^+ l^-$ Decays at Low Recoil
+  title: The Benefits of $\bar{B} \to \bar{K}^* \ell^+ \ell^-$ Decays at Low Recoil
 BHvD:2011A:
   authors: Bobeth, Christoph and Hiller, Gudrun and van Dyk, Danny
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1105.0376
   inspire-id: Bobeth:2011gi
-  title: 'More Benefits of Semileptonic Rare B Decays at Low Recoil: CP Violation'
+  title: 'More Benefits of Semileptonic Rare $B$ Decays at Low Recoil: CP Violation'
 BHvD:2012A:
   authors: Bobeth, Christoph and Hiller, Gudrun and van Dyk, Danny
   eprint:
@@ -512,7 +512,7 @@ BKMS:2012A:
     archive: arXiv
     id: oai:arXiv.org:1205.5811
   inspire-id: Becirevic:2012fy
-  title: Complementarity of the constraints on New Physics from $B_s \to  \mu^+ \mu^-$ and from $B \to  K l^+l^-$ decays
+  title: Complementarity of the constraints on New Physics from $B_s \to  \mu^+ \mu^-$ and from $B \to  K \ell^+\ell^-$ decays
 BKTvD:2019A:
   authors: B{\"o}er, Philipp and Kokulu, Ahmet and Toelstede, Jan-Niklas and van Dyk, Danny
   eprint:
@@ -578,7 +578,7 @@ BR:2011A:
     archive: arXiv
     id: oai:arXiv.org:1110.3228
   inspire-id: Beneke:2011nf
-  title: B meson distribution amplitude from $B\to\gamma\ell\nu$
+  title: $B$ meson distribution amplitude from $B\to\gamma\ell\nu$
 BRV:2024A:
   authors: Burgos Marcos, M. and Reboud, M. and Vos, K. K.
   eprint:
@@ -663,7 +663,7 @@ BaBar:2007B:
     archive: arXiv
     id: oai:arXiv.org:0710.1371
   inspire-id: BaBar:2008drv
-  title: Study of the Exclusive Initial-State-Radiation Production of the D anti-D System
+  title: Study of the Exclusive Initial-State-Radiation Production of the $D \bar{D}$ System
 BaBar:2008A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
@@ -678,7 +678,7 @@ BaBar:2008B:
     id: oai:arXiv.org:0804.2422
   inspire-id: Aubert:2008gpt
   title: Observation of $B^{+} \to \eta \rho^{+}$ and search for $B^0$ decays to
-    $\eta^\prime \eta$, $\eta \pi^0$, $\eta$ ' $\pi^0$, and $\omega \pi^0$
+    $\eta^\prime \eta$, $\eta \pi^0$, $\eta^\prime\pi^0$, and $\omega \pi^0$
 BaBar:2009A:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
@@ -689,7 +689,7 @@ BaBar:2009B:
   authors: Aubert, Bernard et al.
   collaboration: BaBar
   inspire-id: BaBar:2009cun
-  title: B meson decays to charmless meson pairs containing eta or eta' mesons
+  title: $B$ meson decays to charmless meson pairs containing $\eta$ or $\eta^\prime$ mesons
 BaBar:2010A:
   authors: del Amo Sanchez, P. et al.
   collaboration: BaBar
@@ -722,7 +722,7 @@ BaBar:2012A:
     id: oai:arXiv.org:1204.3933
   inspire-id: Lees:2012tva
   title: Measurement of Branching Fractions and Rate Asymmetries in the Rare Decays
-    $B \to K^{(*)} l^+ l^-$
+    $B \to K^{(*)} \ell^+ \ell^-$
 BaBar:2012B:
   authors: Ritchie, Jack L.
   collaboration: BaBar
@@ -738,7 +738,7 @@ BaBar:2012C:
     archive: arXiv
     id: oai:arXiv.org:1207.5772
   inspire-id: Lees:2012ufa
-  title: Measurement of B($B\to X_s \gamma$), the $B\to X_s \gamma$ photon energy
+  title: Measurement of $\mathcal{B}(B\to X_s \gamma)$, the $B\to X_s \gamma$ photon energy
     spectrum, and the direct CP asymmetry in $B\to X_{s+d} \gamma$ decays
 BaBar:2012D:
   authors: Lees, J.P. et al.
@@ -789,7 +789,7 @@ Belle:2006B:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/0608049
   inspire-id: Ushiroda:2006uzg
-  title: Observation of B decays to two kaons
+  title: Observation of $B$ decays to two kaons
 Belle:2007A:
   authors: Epifanov, D. and others
   collaboration: Belle
@@ -839,8 +839,8 @@ Belle:2009B:
     archive: arXiv
     id: oai:arXiv.org:0907.1384
   inspire-id: Limosani:2009qg
-  title: Measurement of Inclusive Radiative B-meson Decays with a Photon Energy Threshold
-    of 1.7-GeV
+  title: Measurement of Inclusive Radiative $B$-meson Decays with a Photon Energy Threshold
+    of 1.7 GeV
 Belle:2010A:
   authors: Ha, H. et al.
   collaboration: Belle
@@ -983,7 +983,7 @@ Belle:2020A:
     archive: arXiv
     id: oai:arXiv.org:2005.07766
   inspire-id: Belle:2020xgu
-  title: Measurement of the branching fraction of the decay $\boldsymbol{B^{+}\to\pi^{+}\pi^{-}\ell^{+}\nu_\ell}$
+  title: Measurement of the branching fraction of the decay $B^{+}\to\pi^{+}\pi^{-}\ell^{+}\nu_\ell$
     in fully reconstructed events at Belle
 Belle:2021A:
   authors: Bhuyan, B. et. al.
@@ -1068,14 +1068,14 @@ CBHKSS:1995A:
   authors: Chung, S.U. and Brose, J. and Hackmann, R. and Klempt, E. and Spanier, S. and Strassburger, C.
   inspire-id: Chung:1995dx
   journal: Ann.Physik 4 (1995) 404-430
-  title: Partial wave analysis in K-matrix formalism
+  title: Partial wave analysis in $K$-matrix formalism
 CCH:2017A:
   authors: Cirigliano, V. and Crivellin, A. and Hoferichter, M.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:1712.06595
   inspire-id: Cirigliano:2017tqn
-  title: No go theorem for nonstandard explanations of the $\tau \to K \pi \nu_\tau$ CP asymmetry
+  title: No go theorem for nonstandard explanations of the $\tau \to K \pi \nu_\tau$ $CP$ asymmetry
 CDF:2011A:
   authors: Aaltonen, T. et al.
   collaboration: CDF
@@ -1126,7 +1126,7 @@ CJLP:2012A:
     archive: arXiv
     id: oai:arXiv.org:1210.8443
   inspire-id: Celis:2012dk
-  title: Sensitivity to charged scalars in $\boldsymbol{B\to D^{(*)}\tau\nu_\tau}$ and $\boldsymbol{B\to\tau\nu_\tau}$ decays
+  title: Sensitivity to charged scalars in $B\to D^{(*)}\tau\nu_\tau$ and $B\to\tau\nu_\tau$ decays
 CKMfitter:2004A:
   authors: Charles, J. and Hocker, Andreas and Lacker, H. and Laplace, S. and Le Diberder,
     F.R. and Malcles, J. and Ocariz, J. and Pivk, M. and Roos, L.
@@ -1152,7 +1152,7 @@ CLEO:2000A:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/9912057
   inspire-id: Coan:1999kh
-  title: Study of exclusive radiative B meson decays
+  title: Study of exclusive radiative $B$ meson decays
 CLEO:2000B:
   authors: Anderson, S. and others
   collaboration: CLEO
@@ -1168,21 +1168,21 @@ CLEO:2008A:
     archive: arXiv
     id: oai:arXiv.org:0801.3418
   inspire-id: CLEO:2008ojp
-  title: Measurement of Charm Production Cross Sections in $e^+ e^-$ Annihilation at Energies between 3.97 and 4.26-GeV
+  title: Measurement of Charm Production Cross Sections in $e^+ e^-$ Annihilation at Energies between 3.97 and 4.26 GeV
 CMD3:2023A:
   authors: Ignatov, F. V. et al.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:2302.08834
   inspire-id: CMD-3:2023alj
-  title: Measurement of the $e^+e^-\to\pi^+\pi^-$ cross section from threshold to 1.2~GeV with the CMD-3 detector
+  title: Measurement of the $e^+e^-\to\pi^+\pi^-$ cross section from threshold to 1.2 GeV with the CMD-3 detector
 CMM:1996A:
   authors: Chetyrkin, Konstantin G. and Misiak, Mikolaj and Munz, Manfred
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9612313
   inspire-id: Chetyrkin:1996vx
-  title: Weak radiative B meson decay beyond leading logarithms
+  title: Weak radiative $B$ meson decay beyond leading logarithms
 CMM:1997A:
   authors: Chetyrkin, Konstantin G. and Misiak, Mikolaj and Munz, Manfred
   eprint:
@@ -1240,7 +1240,7 @@ CMS:2020A:
   eprint:
     archive: arXiv
     id: oai:arXiv.org:2010.13968
-  title: Angular analysis of the decay B$^+$ $\to$ K$^*$(892)$^+\mu^+\mu^-$ in
+  title: Angular analysis of the decay $B^+ \to K^*(892)^+ \mu^+\mu^-$ in
     proton-proton collisions at $\sqrt{s} = 8$ TeV
 CMS:2020B:
   authors: Sirunyan, Albert M. et al.
@@ -1250,7 +1250,7 @@ CMS:2020B:
     id: oai:arXiv.org:2007.02434
   inspire-id: CMS:2020efq
   title: Measurement of the $CP$-violating phase $\phi_\mathrm{s}$ in the
-    B$^0_\mathrm{s}\to$ J$/\psi\, \phi$(1020) $\to \mu^+\mu^-$K$^+$K$^-$ channel
+    $B^0_s \to J/\psi\, \phi(1020) \to \mu^+\mu^- K^+K^-$ channel
     in proton-proton collisions at $\sqrt{s} =$ 13 TeV
 CMS+LHCb:2014A:
   authors: Khachatryan, V. et al. [CMS and LHCb]
@@ -1267,7 +1267,7 @@ D0:2011A:
     id: oai:arXiv.org:1109.3166
   inspire-id: Abazov:2011ry
   title: Measurement of the CP-violating phase $\phi_s^{J/\psi \phi}$ using the flavor-tagged
-    decay $B_s^0 \rightarrow J/\psi \phi$ in 8 fb$^{-1}$ of $p \bar p$ collisions
+    decay $B_s^0 \rightarrow J/\psi \phi$ in 8 $\mathrm{fb}^{-1}$ of $p \bar p$ collisions
 dB:2017A:
   authors: de Boer, Stefan
   inspire-id: deBoer:2017dgn
@@ -1301,7 +1301,7 @@ DDHLMSW:2019A:
     archive: arXiv
     id: oai:arXiv.org:1907.01025
   inspire-id: Dowdall:2019bea
-  title: Neutral B-meson mixing from full lattice QCD at the physical point
+  title: Neutral $B$-meson mixing from full lattice QCD at the physical point
 DDKL:2013A:
   authors: Donald, G.C. and Davies, C.T.H. and Koponen, J. and Lepage, G.P.
   collaboration: HPQCD
@@ -1396,7 +1396,7 @@ DMRV:2012A:
     archive: arXiv
     id: oai:arXiv.org:1207.2753
   inspire-id: DescotesGenon:2012zf
-  title: Implications from clean observables for the binned analysis of $B \to K*\mu^+\mu^-$
+  title: Implications from clean observables for the binned analysis of $B \to K^*\mu^+\mu^-$
     at large recoil
 DN:2019A:
   authors: Descotes-Genon, S. and Novoa-Brunet, M.
@@ -1627,7 +1627,7 @@ FNALMILC:2022A:
     archive: arXiv
     id: oai:arXiv.org:2212.12648
   inspire-id: FermilabLattice:2022gku
-  title: D-meson semileptonic decays to pseudoscalars from four-flavor lattice QCD
+  title: $D$-meson semileptonic decays to pseudoscalars from four-flavor lattice QCD
 FTW:2016A:
   authors: Frellesvig, Hjalte and Tommasini, Damiano and Wever, Christopher
   eprint:
@@ -1750,7 +1750,7 @@ HFAG:2011A:
     archive: arXiv
     id: oai:arXiv.org:1207.1158
   inspire-id: HFLAV:2012imy
-  title: Averages of B-Hadron, C-Hadron, and $\tau$-Lepton Properties as of early 2012
+  title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of early 2012
 HFLAV:2019A:
   authors: Amhis, Yasmine Sara et al.
   eprint:
@@ -1765,7 +1765,7 @@ HFLAV:2021A:
     archive: arXiv
     id: oai:arXiv.org:2206.07501
   inspire-id: HFLAV:2022esi
-  title: Averages of b-hadron, c-hadron, and $\tau$-lepton properties as of 2021
+  title: Averages of $b$-hadron, $c$-hadron, and $\tau$-lepton properties as of 2021
 HFLAV:2024A:
   authors: Banerjee, Swagato and others
   collaboration: Heavy Flavor Averaging Group (HFLAV)
@@ -1906,7 +1906,7 @@ IKKR:2007A:
     archive: arXiv
     id: oai:arXiv.org:nucl-th/0703094
   inspire-id: Ivanov:2007cw
-  title: B- to light-meson transition form-factors
+  title: $B$- to light-meson transition form-factors
 IKMvD:2014A:
   authors: Sentitemsu Imsong, I. and Khodjamirian, Alexander and Mannel, Thomas and
     van Dyk, Danny
@@ -1947,7 +1947,7 @@ KLOE:2002A:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/0203232
   inspire-id: KLOE:2002lao
-  title: Measurement of the branching fraction for the decay $K(S) \to \pi e \nu$
+  title: Measurement of the branching fraction for the decay $K_S \to \pi e \nu$
 KLOE:2006A:
   authors: Ambrosino, F. and others
   collaboration: KLOE
@@ -1985,14 +1985,14 @@ KMO:2005A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0504091
   inspire-id: Khodjamirian:2005ea
-  title: B-meson distribution amplitude from the $B \to \pi$ form-factor
+  title: $B$-meson distribution amplitude from the $B \to \pi$ form-factor
 KMO:2006A:
   authors: Khodjamirian, A. and Mannel, Th. and Offen, N.
   eprint:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0611193
   inspire-id: Khodjamirian:2006st
-  title: Form-factors from light-cone sum rules with B-meson distribution amplitudes
+  title: Form-factors from light-cone sum rules with $B$-meson distribution amplitudes
 KMPW:2010A:
   authors: Khodjamirian, A. and Mannel, Th. and Pivovarov, A.A. and Wang, Y.-M.
   eprint:
@@ -2021,7 +2021,7 @@ KTEV:2004A:
     archive: arXiv
     id: oai:arXiv.org:hep-ex/0406002
   inspire-id: KTeV:2004hpx
-  title: Measurements of $K_L$ Branching Fractions and the CP Violation Parameter $|\eta_{\pm}|$
+  title: Measurements of $K_L$ Branching Fractions and the $CP$ Violation Parameter $|\eta_{\pm}|$
 LATAVG:2011A:
   authors: Laiho, Jack and Lunghi, Enrico and Van de Water, Ruth S.
   eprint:
@@ -2176,7 +2176,7 @@ LHCb:2015A:
     id: oai:arXiv.org:1512.04442
   inspire-id: Aaij:2015oid
   title: Angular analysis of the $B^{0} \to K^{*0} \mu^{+} \mu^{-}$ decay using 3
-    fb$^{-1}$ of integrated luminosity
+    $\mathrm{fb}^{-1}$ of integrated luminosity
 LHCb:2015B:
   authors: Aaij, Roel et al.
   collaboration: LHCb
@@ -2323,7 +2323,7 @@ LHCb:2021E:
     archive: arXiv
     id: oai:arxiv.org:2103.06810
     inspire-id: LHCb:2021qbv
-  title: Precise measurement of the~$f_s/f_d$ ratio of fragmentation fractions and of $B^0_s$ decay branching fractions
+  title: Precise measurement of the $f_s/f_d$ ratio of fragmentation fractions and of $B^0_s$ decay branching fractions
 LMNRvD:2023A:
   authors: Leljak, Domagoj and Meli{\'c}, Bla{\v{z}}enka and Novak, Filip and Reboud, M{\'e}ril and van Dyk, Danny
   eprint:
@@ -2401,7 +2401,7 @@ MR:2025A:
     archive: arXiv
     id: oai:arXiv.org:2507.13734
   inspire-id: Melic:2025uha
-  title: Form factors and phenomenology of B$_{(s)}$ and D$_{(s)}$ semileptonic decays to $\eta$ and $\eta'$
+  title: Form factors and phenomenology of $B_{(s)}$ and $D_{(s)}$ semileptonic decays to $\eta$ and $\eta'$
 MvD:2015A:
   authors: Mannel, Thomas and van Dyk, Danny
   eprint:
@@ -2444,7 +2444,7 @@ N:1997A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/9702375
   inspire-id: Neubert:1997gu
-  title: B decays and the heavy quark expansion
+  title: $B$ decays and the heavy quark expansion
 NA7:1986A:
   authors: Amendolia, S.R. and others
   collaboration: NA7
@@ -2457,7 +2457,7 @@ NT:2011A:
     archive: arXiv
     id: oai:arXiv.org:1109.6786
   inspire-id: Nishikawa:2011qk
-  title: QCD Sum Rules for Quark-Gluon Three-Body Components in the B Meson
+  title: QCD Sum Rules for Quark-Gluon Three-Body Components in the $B$ Meson
 PDG:2008A:
   authors: Amsler, C. et al.
   collaboration: Particle Data Group
@@ -2552,7 +2552,7 @@ RHK:2018A:
 S:1982A:
   authors: Sirlin, A.
   journal: Nucl.Phys. B196 (1982) 83-92
-  title: Large M_W and M_Z behaviour of the order alpha corrections to semileptonic
+  title: Large $M_W$ and $M_Z$ behaviour of the order alpha corrections to semileptonic
     processes mediated by W
 S:2004A:
   authors: Seidel, Dirk
@@ -2592,7 +2592,7 @@ STTW:2013A:
 T:2002A:
   authors: T'Jampens, Stephane
   inspire-id: TJampens:2002cok
-  title: Study of CP symmetry violation in the charmonium-K*(892) channel by a complete time dependent angular analysis (BaBar experiment)
+  title: Study of CP symmetry violation in the charmonium-$K^*(892)$ channel by a complete time dependent angular analysis (BaBar experiment)
 TEWWG:2010A:
   authors: Group, The Tevatron Electroweak Working
   collaboration: D0
@@ -2616,7 +2616,7 @@ U:2003A:
     archive: arXiv
     id: oai:arXiv.org:hep-ph/0312001
   inspire-id: Uraltsev:2003ye
-  title: A 'BPS' expansion for B and D mesons
+  title: A 'BPS' expansion for $B$ and $D$ mesons
 UTFIT:2013A:
   authors: Bona, M. et al.
   collaboration: UTfit
