@@ -315,7 +315,7 @@ class GridFigure(Figure):
     :type shape: tuple[int, int]
     :param size: The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
     :type size: tuple[float, float]
-    :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index, a 2D ``(row, col)`` address, or ``'all'`` to stamp every plot. Defaults to None (the bottom-right plot that is not empty).
+    :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index, a 2D ``(row, col)`` address, or ``'all'`` to stamp every plot that is not empty. An explicitly selected plot is stamped even if it is empty. Defaults to None (the bottom-right plot that is not empty).
     :type watermark_plot: int | tuple[int, int] | str | None
     :param tight_layout: If True (default), the grid spec is laid out with ``tight_layout``. Set to False to keep an explicit ``padding``, e.g. ``(0, 0)`` for abutting panels.
     :type tight_layout: bool
@@ -359,8 +359,8 @@ class GridFigure(Figure):
         * ``size`` (*tuple[float, float]*) -- The size of the figure in inches. Defaults to (3.0 * ncol, 3.0 * nrow).
 
         * ``watermark_plot`` (*int* or *tuple[int, int]* or *str*) -- The plot that carries the watermark, given either as a flattened
-            (row-major) index, as a 2D ``(row, col)`` address, or as ``'all'`` to stamp every plot. If omitted, the bottom-right plot
-            that is not an ``empty`` plot carries the watermark.
+            (row-major) index, as a 2D ``(row, col)`` address, or as ``'all'`` to stamp every plot that is not ``empty``. An explicitly
+            selected plot is stamped even if it is ``empty``. If omitted, the bottom-right plot that is not ``empty`` carries the watermark.
 
         * ``tight_layout`` (*bool*) -- Whether to lay out the grid with ``tight_layout``. Defaults to True. Set to False to keep an
             explicit ``padding`` (e.g. ``(0, 0)`` for abutting panels), which ``tight_layout`` would otherwise undo.
@@ -405,12 +405,12 @@ class GridFigure(Figure):
             )
 
     def _resolve_watermark_plot(self, nrow, ncol):
-        "Resolve the watermark_plot field to a single flattened (row-major) index, or None for all plots."
+        "Resolve the watermark_plot field to a single flattened (row-major) index, or None for all non-empty plots."
         wp = self.watermark_plot
         nplots = len(self.plots)
         if wp is None:
             # the last occupied panel, skipping the empty plots commonly used to pad a grid
-            return next((idx for idx in reversed(range(nplots)) if not isinstance(self.plots[idx], EmptyPlot)), None)
+            return next((idx for idx in reversed(range(nplots)) if not isinstance(self.plots[idx], EmptyPlot)), nplots - 1)
 
         if isinstance(wp, str):
             if wp != 'all':
@@ -448,7 +448,7 @@ class GridFigure(Figure):
         for idx, plot in enumerate(self.plots):
             plot.prepare(context)
             plot.draw(self._axes[idx])
-            if self._watermark_idx is None or self._watermark_idx == idx:
+            if self._watermark_idx == idx or (self._watermark_idx is None and not isinstance(plot, EmptyPlot)):
                 plot.draw_watermark(self._axes[idx], self.watermark)
 
         if self.tight_layout:
@@ -482,6 +482,10 @@ class CornerFigure(Figure):
     :type contents: list[:class:`DataFile <eos.figure.DataFile>`]
     :param variables: The list of variable names to be shown. If not provided, all variables contained in the first data file are shown.
     :type variables: list[str] | None
+    :param watermark: The optional specification where and how to draw the EOS watermark. For the default specification, see :class:`Watermark <eos.figure.Watermark>`.
+    :type watermark: :class:`Watermark <eos.figure.Watermark>`
+    :param watermark_plot: The plot that carries the watermark, as a flattened (row-major) index, a 2D ``(row, col)`` address, or ``'all'`` to stamp every plot that is not empty. An explicitly selected plot is stamped even if it is empty. Defaults to None (the plot in the bottom-left corner).
+    :type watermark_plot: int | tuple[int, int] | str | None
     """
 
     type:str=field(repr=False, init=False, default='corner')
@@ -489,6 +493,8 @@ class CornerFigure(Figure):
     contents:list[DataFile]
     variables:list[str]=None
     kde:bool=False
+    watermark:Watermark=field(default_factory=Watermark)
+    watermark_plot:int|tuple[int, int]|str|None=field(default=None)
 
     _api_doc = inspect.cleandoc("""
     Producing a Corner Figure
@@ -502,6 +508,13 @@ class CornerFigure(Figure):
 
     The following keys are optional:
         * ``variables`` (*list[str]*) -- The list of variable names to be considered. Defaults to None, in which case all variables contained in the first data file are shown.
+
+        * ``watermark`` (:class:`Watermark <eos.figure.common.Watermark>`) -- The specification where and how to draw the EOS watermark.
+
+        * ``watermark_plot`` (*int* or *tuple[int, int]* or *str*) -- The plot that carries the watermark, given either as a flattened
+            (row-major) index, as a 2D ``(row, col)`` address, or as ``'all'`` to stamp every plot that is not ``empty``. An explicitly
+            selected plot is stamped even if it is ``empty``, e.g. one of those filling the upper-right triangle. If omitted, the plot
+            in the bottom-left corner carries the watermark.
 
     """)
 
@@ -630,7 +643,12 @@ class CornerFigure(Figure):
                         for content in self.contents]
                     }))
 
-        self._figure = GridFigure(shape=(size, size), plots=plots, padding=(0.0, 0.0))
+        watermark_plot = self.watermark_plot
+        if watermark_plot is None:
+            watermark_plot = size * (size - 1) # the plot in the bottom-left corner
+
+        self._figure = GridFigure(shape=(size, size), plots=plots, padding=(0.0, 0.0),
+                                  watermark=self.watermark, watermark_plot=watermark_plot)
 
 
     def draw(self, context:AnalysisFileContext=None):
@@ -666,7 +684,7 @@ class CornerFigure(Figure):
         """Create a :class:`CornerFigure` from its keyword description.
 
         Recursively deserializes each entry of the ``contents`` list into a
-        :class:`DataFile <eos.figure.data.DataFile>` instance.
+        :class:`DataFile <eos.figure.data.DataFile>` instance, as well as the optional ``watermark`` description.
 
         :param kwargs: The figure description. Must contain a ``contents`` key.
         :returns: The instantiated figure.
@@ -675,6 +693,8 @@ class CornerFigure(Figure):
         _kwargs = _copy.deepcopy(kwargs)
         if 'contents' in _kwargs:
             _kwargs['contents'] = [DataFile.from_dict(**c) for c in _kwargs['contents']]
+        if 'watermark' in _kwargs:
+            _kwargs['watermark'] = Watermark.from_dict(**_kwargs['watermark'])
         return Deserializable.make(cls, **_kwargs)
 
 

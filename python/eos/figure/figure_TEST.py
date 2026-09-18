@@ -17,8 +17,10 @@ import unittest
 
 import eos
 import eos.figure
+import os
 import yaml
 
+from eos.analysis_file_context import AnalysisFileContext
 from matplotlib import pyplot as plt
 
 class SingleFigureTests(unittest.TestCase):
@@ -308,6 +310,24 @@ class GridFigureTests(unittest.TestCase):
         with self.assertRaises(Exception):
             eos.figure.FigureFactory.from_yaml(self._grid_yaml('[1, 2]', 2, extra="watermark_plot: 'none'"))
 
+    def test_watermark_plot_all_skips_empty(self):
+
+        # 'all' stamps every panel but the empty ones.
+        input = self._grid_yaml('[2, 2]', 3, extra="watermark_plot: 'all'") + "  - type: 'empty'"
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        for idx in range(4):
+            self.assertEqual(self._has_watermark(figure._axes[idx]), idx != 3)
+
+    def test_watermark_plot_explicit_empty(self):
+
+        # An explicitly selected panel is stamped even if it is empty.
+        input = self._grid_yaml('[1, 2]', 1, extra='watermark_plot: 1') + "  - type: 'empty'"
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw()
+        self.assertFalse(self._has_watermark(figure._axes[0]))
+        self.assertTrue(self._has_watermark(figure._axes[1]))
+
     @staticmethod
     def _two_range_grid(extra=''):
         # a single column with two panels carrying different x-ranges
@@ -407,6 +427,48 @@ class GridFigureTests(unittest.TestCase):
 
 
 class CornerFigureTests(unittest.TestCase):
+
+    _DATAFILE = 'eos/data/importance_samples_TEST.d/samples'
+
+    @staticmethod
+    def _has_watermark(ax):
+        return any('EOS' in t.get_text() for t in ax.texts)
+
+    def _drawn_grid(self, extra=''):
+        # a 2x2 corner figure drawn against the checked-in importance samples fixture
+        input = f"""
+        type: 'corner'
+        contents:
+          - path: '{self._DATAFILE}'
+            label: 'label'
+            color: 'red'
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        {extra}
+        """
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.draw(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
+        return figure._figure
+
+    def test_watermark_plot_default(self):
+
+        # Without 'watermark_plot', the panel in the bottom-left corner is stamped.
+        grid = self._drawn_grid()
+        for idx in range(4):
+            self.assertEqual(self._has_watermark(grid._axes[idx]), idx == 2)
+
+    def test_watermark_plot_explicit(self):
+
+        # An explicit 'watermark_plot' selects a panel as it does for a grid figure,
+        # including one of the empty panels filling the upper-right triangle.
+        grid = self._drawn_grid(extra='watermark_plot: [0, 1]')
+        for idx in range(4):
+            self.assertEqual(self._has_watermark(grid._axes[idx]), idx == 1)
+
+    def test_watermark(self):
+
+        # The 'watermark' description is forwarded to the underlying grid figure.
+        grid = self._drawn_grid(extra='watermark: { preliminary: true }')
+        self.assertTrue(any('Preliminary' in t.get_text() for t in grid._axes[2].texts))
 
     def test_full(self):
 
