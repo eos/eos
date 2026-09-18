@@ -57,17 +57,32 @@ def ref_to_inspire(reference):
         }
 
 
+def ref_to_url(reference, handle):
+    url = reference.url()
+    if not url:
+        return None
+
+    return {
+            'id':    handle,
+            'url':   url,
+            'badge': f'https://img.shields.io/badge/LINK-blue.svg',
+            'alt':   f'URL:{url}'
+        }
+
+
 def make_references():
     result = []
     for handle, reference in eos.References():
         title = latex_to_rst(reference.title())
         eprint = ref_to_eprint(reference)
         inspire = ref_to_inspire(reference)
+        url = ref_to_url(reference, handle)
         data = {
             'authors': reference.authors(),
             'title':   title,
             'eprint':  eprint,
-            'inspire': inspire
+            'inspire': inspire,
+            'url': url,
         }
         result.append((handle, data))
     return result
@@ -77,7 +92,7 @@ def make_links(references):
     # several references may cite the same link, while each substitution may only be defined once
     result = {}
     for _, reference in references:
-        for link in (reference['eprint'], reference['inspire']):
+        for link in (reference['eprint'], reference['inspire'], reference['url']):
             if link:
                 result.setdefault(link['id'], link)
     return list(result.values())
