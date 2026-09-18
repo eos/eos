@@ -1713,8 +1713,8 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Reference>("Reference", R"(
             Represents a single bibliographic reference known to EOS.
 
-            A reference records the bibliographic details (authors, title, e-print, and INSPIRE
-            identifier) of a publication underlying part of EOS, be it an experimental constraint or
+            A reference records the bibliographic details (authors, title, e-print, INSPIRE
+            identifier, and URL) of a publication underlying part of EOS, be it an experimental constraint or
             a theoretical work such as the implementation of an observable, a form factor
             parametrization, or a theory prediction. References are obtained by iterating or indexing
             :class:`eos.References`.
@@ -1750,6 +1750,11 @@ BOOST_PYTHON_MODULE(_eos)
                  args("self"))
             .def("inspire_id", &Reference::inspire_id, return_value_policy<copy_const_reference>(), R"(
             Returns the INSPIRE identifier of the reference.
+            :rtype: str
+        )",
+                 args("self"))
+            .def("url", &Reference::url, return_value_policy<copy_const_reference>(), R"(
+            Returns the URL of the reference.
 
             :rtype: str
         )",

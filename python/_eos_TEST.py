@@ -327,6 +327,7 @@ BINDINGS_TESTS = {
     ('Reference', 'inspire_id'):                 (),
     ('Reference', 'name'):                       (),
     ('Reference', 'title'):                      (),
+    ('Reference', 'url'):                        (),
 
     ('ReferenceName', '__eq__'):                 lambda r: r == r,
     ('ReferenceName', '__lt__'):                 lambda r: r < r,
