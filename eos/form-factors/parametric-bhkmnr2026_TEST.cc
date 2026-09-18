@@ -19,6 +19,7 @@
  */
 
 #include <eos/form-factors/parametric-bhkmnr2026.hh>
+#include <eos/observable.hh>
 
 #include <test/test.hh>
 
@@ -165,7 +166,6 @@ class ParametricBHKMNR2026Test : public TestCase
 
                     TEST_CHECK_RELATIVE_ERROR(ff.saturation(ir), 0.398058745, eps);
 
-
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_p_of_psi(ir, complex<double>(0.5, 0.5))), -0.15313783, eps);
                     TEST_CHECK_NEARLY_EQUAL(imag(ff.f_p_of_psi(ir, complex<double>(0.5, 0.5))), -0.31712693, eps);
                     TEST_CHECK_NEARLY_EQUAL(real(ff.f_p_of_psi(ir, complex<double>(0.7, 0.3))), 0.00458081, eps);
@@ -187,6 +187,18 @@ class ParametricBHKMNR2026Test : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(ff.root_penalty(), 1.00000000, eps);
 
                     TEST_CHECK_NEARLY_EQUAL(ff.abs2_f_p_average(0.5, 0.8), 23.63575498, eps);
+
+                    Kinematics k = Kinematics({
+                        { "q2", 1.0 }
+                    });
+                    TEST_CHECK_NEARLY_EQUAL(Observable::make("0->pipi::Re{t_1^1}(q2)@BHKMNR2026", p, k, o)->evaluate(), real(ff.partial_wave(ir, 1.0)), eps);
+                    TEST_CHECK_NEARLY_EQUAL(Observable::make("0->pipi::Im{t_1^1}(q2)@BHKMNR2026", p, k, o)->evaluate(), imag(ff.partial_wave(ir, 1.0)), eps);
+
+                    p["0->pipi::a_(+,1)^4@BHKMNR2026"] = 0.15;
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(ir, 1.0)), -1.45888696, eps);
+                    ir = ff.prepare();
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(ir, 1.0)), -1.45888696, eps);
+                    TEST_CHECK_NEARLY_EQUAL(real(ff.f_p(1.0)), -1.45888696, eps);
                 }
 
 

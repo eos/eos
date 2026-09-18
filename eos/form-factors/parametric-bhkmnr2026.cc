@@ -67,7 +67,7 @@ namespace eos
         _n_resonances_I0(o, option_specifications, "n-resonances-I0"_ok), _m_pi(p["mass::pi^+"], *this), _s_0(p["0->pipi::s_0@BHKMNR2026"], *this),
         _s_in(p["0->pipi::s_in@BHKMNR2026"], *this), _hbar(p["QM::hbar"], *this), _opt_I(o, option_specifications, "I"_ok), _M(gsl_matrix_alloc(4, 4)),
         _inv_M(gsl_matrix_alloc(4, 4)), _L(gsl_vector_alloc(4)), _perm(gsl_permutation_calloc(4)), _constrained_coefficents(gsl_vector_alloc(4)),
-        _poly_workspace(gsl_poly_complex_workspace_alloc(13))
+        _poly_workspace(gsl_poly_complex_workspace_alloc(13)), _tracker(p)
     {
         // Perform pointer checks
         if (_M == nullptr)
@@ -97,6 +97,7 @@ namespace eos
 
         _switch_I[0] = (_opt_I.value() && Isospin::zero);
         _switch_I[1] = (_opt_I.value() && Isospin::one);
+        prepare();
     }
 
     BHKMNR2026FormFactors<VacuumToPiPi>::~BHKMNR2026FormFactors()
@@ -142,23 +143,26 @@ namespace eos
     const FormFactors<VacuumToPP>::IntermediateResult *
     BHKMNR2026FormFactors<VacuumToPiPi>::prepare() const
     {
-        std::array<double, 13> & a_I1 = _intermediate_result._a_I1;
-        std::array<double, 13> & a_I0 = _intermediate_result._a_I0;
-
-        a_I1.fill(0.0);
-        a_I0.fill(0.0);
-
-        // prepare I=1 expansion coefficients
-        const auto constrained_a_I1 = this->constrained_a_fp_I1();
-        std::copy(constrained_a_I1.cbegin(), constrained_a_I1.cend(), a_I1.begin()); // copy constrained coefficients
-        std::copy(_a_fp_I1.cbegin(), _a_fp_I1.cend(), a_I1.begin() + 4);             // copy unconstrained coefficients
-
-        if (_switch_I[0])
+        if (this->_tracker.needs_update())
         {
+            std::array<double, 13> & a_I1 = _intermediate_result._a_I1;
+            std::array<double, 13> & a_I0 = _intermediate_result._a_I0;
+
+            a_I1.fill(0.0);
+            a_I0.fill(0.0);
+
             // prepare I=1 expansion coefficients
-            const auto constrained_a_I0 = this->constrained_a_fp_I0();
-            std::copy(constrained_a_I0.cbegin(), constrained_a_I0.cend(), a_I0.begin()); // copy constrained coefficients
-            std::copy(_a_fp_I0.cbegin(), _a_fp_I0.cend(), a_I0.begin() + 4);             // copy unconstrained coefficients
+            const auto constrained_a_I1 = this->constrained_a_fp_I1();
+            std::copy(constrained_a_I1.cbegin(), constrained_a_I1.cend(), a_I1.begin()); // copy constrained coefficients
+            std::copy(_a_fp_I1.cbegin(), _a_fp_I1.cend(), a_I1.begin() + 4);             // copy unconstrained coefficients
+
+            if (_switch_I[0])
+            {
+                // prepare I=0 expansion coefficients
+                const auto constrained_a_I0 = this->constrained_a_fp_I0();
+                std::copy(constrained_a_I0.cbegin(), constrained_a_I0.cend(), a_I0.begin()); // copy constrained coefficients
+                std::copy(_a_fp_I0.cbegin(), _a_fp_I0.cend(), a_I0.begin() + 4);             // copy unconstrained coefficients
+            }
         }
 
         return &_intermediate_result;

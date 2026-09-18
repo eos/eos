@@ -75,6 +75,8 @@ namespace eos
             gsl_vector *                 _constrained_coefficents;
             gsl_poly_complex_workspace * _poly_workspace;
 
+            mutable GenerationTracker _tracker;
+
             mutable class IntermediateResult : public FormFactors<VacuumToPP>::IntermediateResult
             {
                 private:
