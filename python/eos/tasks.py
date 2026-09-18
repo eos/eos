@@ -495,10 +495,13 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
 
     import pathlib
     input_paths = [str(p) for p in pathlib.Path(os.path.join(base_directory, 'data', posterior)).glob('mcmc-*')]
-    chains    = [eos.data.MarkovChain(path).usamples for path in input_paths]
+    inputs    = [eos.data.MarkovChain(path) for path in input_paths]
+    chains    = [mcmc.usamples for mcmc in inputs]
+    parameters = inputs[0].varied_parameters
     n = len(chains[0])
-    for chain in chains:
+    for mcmc, chain in zip(inputs, chains):
         assert len(chain) == n, 'Every chains must contain the same number of samples'
+        assert mcmc.varied_parameters == parameters, 'Every chain must vary the same parameters, in the same order'
 
     groups = pypmc.mix_adapt.r_value.r_group([_np.mean(chain.T, axis=1) for chain in chains],
                            [_np.var (chain.T, axis=1, ddof=1) for chain in chains],
@@ -506,7 +509,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     eos.info(f'Found {len(groups)} groups using an R value threshold of {threshold}')
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
     eos.success(f'Created mixture density with {len(density.components)} components')
-    eos.data.MixtureDensity.create(os.path.join(base_directory, 'data', posterior, 'clusters'), density)
+    eos.data.MixtureDensity.create(os.path.join(base_directory, 'data', posterior, 'clusters'), density, parameters)
 
 
 @task('mixture-product', 'data/{posterior}/product', modules=['pypmc'])
@@ -526,9 +529,12 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     """
 
     eos.inprogress('Beginning computation.')
-    densities = [eos.data.PMCSampler(os.path.join(base_directory, 'data', p, 'pmc')).density() for p in posteriors]
+    samplers = [eos.data.PMCSampler(os.path.join(base_directory, 'data', p, 'pmc')) for p in posteriors]
+    densities = [sampler.density() for sampler in samplers]
+    # the cartesian product concatenates the components in the order of the input densities
+    parameters = [p for sampler in samplers for p in sampler.varied_parameters]
     output_path = os.path.join(base_directory, 'data', posterior, 'product')
-    eos.data.MixtureDensity.create(output_path, eos.data.MixtureDensity.cartesian_product(densities))
+    eos.data.MixtureDensity.create(output_path, eos.data.MixtureDensity.cartesian_product(densities), parameters)
     eos.completed('...finished!')
 
 # Sample PMC

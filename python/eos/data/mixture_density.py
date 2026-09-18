@@ -14,8 +14,8 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from dataclasses import dataclass, field
-from eos.data._common import GaussianComponentDescription
+from dataclasses import dataclass, field, asdict
+from eos.data._common import GaussianComponentDescription, ParameterDescription, make_parameter_descriptions
 from eos.deserializable import Deserializable
 from eos.serializable import Serializable
 
@@ -27,6 +27,12 @@ from scipy.special import erf
 from scipy.linalg import block_diag
 
 
+# The current on-disk format version written by :meth:`MixtureDensity.create`. Files without an
+# explicit 'format_version' key predate this versioning and are treated as format v1, which records
+# the varied parameters as a list of qualified names under 'varied_parameters' (or not at all).
+_MIXTURE_DENSITY_FORMAT_VERSION = 2
+
+
 @dataclass(kw_only=True)
 class MixtureDensityDescription(Serializable, Deserializable):
     r"""Schema of the ``description.yaml`` written for a :class:`MixtureDensity`.
@@ -35,22 +41,31 @@ class MixtureDensityDescription(Serializable, Deserializable):
     the read path (:meth:`from_yaml_file`) and the write path (:meth:`to_yaml_file`). The ``type``
     discriminator is validated on deserialization and is not part of the constructor.
 
+    The ``format_version`` key versions the on-disk layout. Files without it predate the versioning and
+    are read as format v1, which records the varied parameters as a list of qualified names under
+    ``varied_parameters`` (or omits them entirely); these are upgraded to :class:`ParameterDescription`
+    entries with unbounded ranges. New files are always written as format
+    :data:`_MIXTURE_DENSITY_FORMAT_VERSION`, which records the varied parameters under ``parameters``,
+    as for the other :mod:`eos.data` objects.
+
     :param version: The version of EOS that wrote the data object.
     :type version: str
     :param components: The Gaussian components of the mixture.
     :type components: list[GaussianComponentDescription]
     :param weights: The component weights of the mixture.
     :type weights: list
-    :param varied_parameters: The qualified names of the varied parameters, or ``None`` if not stored.
-    :type varied_parameters: list | None
+    :param parameters: The descriptions of the varied parameters, or ``None`` for a format-v1 file that
+        does not record them.
+    :type parameters: list[ParameterDescription] | None
     :param test_statistics: The precomputed test statistics, or ``None`` if not stored.
     :type test_statistics: dict | None
     """
     version:str
     components:list[GaussianComponentDescription]
     weights:list
-    varied_parameters:list|None = field(default=None)
+    parameters:list[ParameterDescription]|None = field(default=None)
     test_statistics:dict|None = field(default=None)
+    format_version:int = field(default=_MIXTURE_DENSITY_FORMAT_VERSION)
     type:str = field(init=False, default='MixtureDensity')
 
     @classmethod
@@ -58,16 +73,20 @@ class MixtureDensityDescription(Serializable, Deserializable):
         """Create a :class:`MixtureDensityDescription` from its on-disk keyword description.
 
         Validates the ``type`` discriminator and deserializes each Gaussian component (which carries a
-        ``type: 'gauss'`` marker on disk).
+        ``type: 'gauss'`` marker on disk) and each varied parameter. Format-v1 descriptions are
+        upgraded: their ``varied_parameters`` list of qualified names becomes a list of
+        :class:`ParameterDescription` entries with unbounded ranges.
 
-        :raises ValueError: If the description does not identify a mixture density, or a component has
-            an unsupported type.
+        :raises ValueError: If the description does not identify a mixture density, a component has an
+            unsupported type, or a format-v2 description does not list its varied parameters.
         """
         _kwargs = _copy.deepcopy(kwargs)
 
         _type = _kwargs.pop('type', None)
         if _type != 'MixtureDensity':
             raise ValueError(f'Expected a description of type \'MixtureDensity\', got \'{_type}\'')
+
+        _format = _kwargs.pop('format_version', 1)
 
         if 'components' in _kwargs:
             components = []
@@ -79,38 +98,61 @@ class MixtureDensityDescription(Serializable, Deserializable):
                 components.append(GaussianComponentDescription.from_dict(**_c))
             _kwargs['components'] = components
 
+        if _format >= 2:
+            if 'parameters' not in _kwargs:
+                raise ValueError('A format-v2 MixtureDensity description must contain \'parameters\'')
+            _kwargs['parameters'] = [ParameterDescription.from_dict(**p) for p in _kwargs['parameters']]
+        else:
+            varied_parameters = _kwargs.pop('varied_parameters', None)
+            if varied_parameters is not None:
+                _kwargs['parameters'] = [ParameterDescription(name=name) for name in varied_parameters]
+
+        # Record the format the description was read from; freshly created descriptions default to
+        # the current format.
+        _kwargs['format_version'] = _format
+
         return Deserializable.make(cls, **_kwargs)
 
     def to_dict(self):
         """Serialize this description into the on-disk mapping written to ``description.yaml``.
 
-        Re-emits the ``type: 'gauss'`` marker on each component, inverting :meth:`from_dict`.
+        Re-emits the ``type: 'gauss'`` marker on each component, inverting :meth:`from_dict`. Always
+        emits the current on-disk format (:data:`_MIXTURE_DENSITY_FORMAT_VERSION`), independent of
+        :attr:`format_version` (which records the format a read description came from): the in-memory
+        structure is always the current one, so any file we write is a current-format file.
+
+        :raises ValueError: If the varied parameters are not known, as for an upgraded format-v1
+            description that did not record them.
         """
-        result = {
-            'version':    self.version,
-            'type':       self.type,
-            'components': [{'type': 'gauss', 'mu': c.mu, 'sigma': c.sigma} for c in self.components],
-            'weights':    self.weights,
+        if self.parameters is None:
+            raise ValueError('Cannot write a MixtureDensity description that does not list its varied parameters')
+
+        return {
+            'version':         self.version,
+            'type':            self.type,
+            'format_version':  _MIXTURE_DENSITY_FORMAT_VERSION,
+            'components':      [{'type': 'gauss', 'mu': c.mu, 'sigma': c.sigma} for c in self.components],
+            'weights':         self.weights,
+            'parameters':      [asdict(p) for p in self.parameters],
+            'test_statistics': self.test_statistics if self.test_statistics is not None else {'sigma': [], 'densities': []},
         }
-        if self.varied_parameters is not None:
-            result['varied_parameters'] = self.varied_parameters
-        result['test_statistics'] = self.test_statistics if self.test_statistics is not None else {'sigma': [], 'densities': []}
-        return result
 
 
 class MixtureDensity:
     r"""Represents a mixture density (e.g. a PMC proposal or a fit to a posterior) stored on disk.
 
-    Stores the components and weights of a mixture of (Gaussian) densities, optionally together with the
-    qualified names of the varied parameters and precomputed test statistics. Instances are created
-    either by reading an existing density from disk (passing its ``path`` to the constructor) or by
-    writing a new density with :meth:`create`. Use :meth:`density` to obtain the corresponding
+    Stores the components and weights of a mixture of (Gaussian) densities together with the descriptions
+    of the varied parameters and, optionally, precomputed test statistics. Instances are created either
+    by reading an existing density from disk (passing its ``path`` to the constructor) or by writing a
+    new density with :meth:`create`. Use :meth:`density` to obtain the corresponding
     :class:`pypmc.density.mixture.MixtureDensity`.
 
     :ivar type: The type identifier of the data object, always ``'MixtureDensity'``.
+    :ivar format_version: The on-disk format version the density was read from (1 for legacy files).
     :ivar components: The descriptions of the mixture components.
     :ivar weights: The component weights of the mixture.
-    :ivar varied_parameters: The qualified names of the varied parameters, or ``None`` if not stored.
+    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters, or ``None`` for a legacy file that does not record them.
+    :ivar lookup_table: A mapping from each parameter name to its index in :attr:`varied_parameters`.
     :ivar test_statistics: The precomputed test statistics, or ``None`` if not stored.
     """
 
@@ -133,9 +175,12 @@ class MixtureDensity:
         description = MixtureDensityDescription.from_yaml_file(f)
 
         self.type = description.type
+        self.format_version = description.format_version
         self.components = [{'type': 'gauss', 'mu': c.mu, 'sigma': c.sigma} for c in description.components]
         self.weights    = description.weights
-        self.varied_parameters = description.varied_parameters
+        parameters      = description.parameters
+        self.varied_parameters = [asdict(p) for p in parameters] if parameters is not None else None
+        self.lookup_table = { p.name: idx for idx, p in enumerate(parameters) } if parameters is not None else {}
         self.test_statistics = description.test_statistics
 
     def density(self):
@@ -154,15 +199,15 @@ class MixtureDensity:
 
 
     @staticmethod
-    def create(path, density, varied_parameters=None, sigma_test_stat=None, samples=None, weights=None):
+    def create(path, density, parameters, sigma_test_stat=None, samples=None, weights=None):
         """ Write a new MixtureDensity object to disk.
 
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param density: Mixture density.
         :type density: pypmc.density.MixtureDensity
-        :param varied_parameters: List of the qualified names of varied parameters.
-        :type varied_parameters: ``numpy.array`` of str, optional
+        :param parameters: Parameter descriptions as a 1D array of shape (P, ).
+        :type parameters: list or iterable of eos.Parameter or of parameter descriptions
         :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
         :type sigma_test_stat: list or iterable
         :param samples: Samples as a 2D array of shape (N, P). Needed to generate the test statistic.
@@ -183,7 +228,10 @@ class MixtureDensity:
             else:
                 raise RuntimeError(f'Unsupported type of MixtureDensity component: {type(c)}')
 
-        varied_parameters = list(varied_parameters) if varied_parameters is not None else None
+        parameter_descriptions = make_parameter_descriptions(parameters)
+        for c in components:
+            if not len(c.mu) == len(parameter_descriptions):
+                raise RuntimeError(f'Dimension of mixture component {len(c.mu)} incompatible with number of parameters {len(parameter_descriptions)}')
 
         # The test statistics defaults to two empty lists
         test_statistics = { "sigma": [], "densities": [] }
@@ -203,11 +251,11 @@ class MixtureDensity:
             }
 
         description = MixtureDensityDescription(
-            version           = eos.__version__,
-            components        = components,
-            weights           = density.weights.tolist(),
-            varied_parameters = varied_parameters,
-            test_statistics   = test_statistics,
+            version         = eos.__version__,
+            components      = components,
+            weights         = density.weights.tolist(),
+            parameters      = parameter_descriptions,
+            test_statistics = test_statistics,
         )
 
         os.makedirs(path, exist_ok=True)

@@ -37,6 +37,29 @@ class ParameterDescription(Serializable, Deserializable):
     max:float = field(default=+_np.inf)
 
 
+def make_parameter_descriptions(parameters):
+    r"""Normalize varied parameters into :class:`ParameterDescription` entries.
+
+    Accepts :class:`eos.Parameter` objects, the on-disk mappings that a data object exposes as its
+    ``varied_parameters``, or :class:`ParameterDescription` instances, so that a data object can be
+    written either from a live analysis or from the parameters of another data object.
+
+    :param parameters: The varied parameters in any of the accepted forms.
+    :type parameters: iterable
+    :rtype: list[ParameterDescription]
+    """
+    result = []
+    for p in parameters:
+        if isinstance(p, ParameterDescription):
+            result.append(p)
+        elif isinstance(p, dict):
+            result.append(ParameterDescription.from_dict(**p))
+        else:
+            result.append(ParameterDescription(name=p.name(), min=p.min(), max=p.max()))
+
+    return result
+
+
 @dataclass(kw_only=True)
 class GaussianComponentDescription(Serializable, Deserializable):
     r"""Describes a single Gaussian component of a mixture density.
