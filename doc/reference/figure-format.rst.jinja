@@ -107,7 +107,7 @@ A figure of type ``grid`` contains a rectangular grid of individual plots.
 The shape of the grid is given as a ``(rows, columns)`` tuple in the mandatory ``shape`` key.
 The individual plots are described by the elements of the mandatory ``plots`` list, in row-major order, i.e., the first plot occupies the first row and first column, the second plot the first row and second column, and so on.
 
-The optional keys are ``size`` (the figure size in inches), ``watermark`` and ``watermark_plot`` (which plot carries the watermark, as a flattened index, a ``(row, col)`` address, or ``all`` to stamp every plot; by default only the bottom-right plot that is not empty is stamped), ``tight_layout`` and ``padding`` (the layout of the grid), and ``shared_axes`` (which axes the panels share, one of ``x``, ``y``, or ``both``).
+The optional keys are ``size`` (the figure size in inches), ``watermark`` and ``watermark_plot`` (which plot carries the watermark, as a flattened index, a ``(row, col)`` address, or ``all`` to stamp every plot that is not empty; by default only the bottom-right plot that is not empty is stamped, and an explicitly selected plot is stamped even if it is empty), ``tight_layout`` and ``padding`` (the layout of the grid), and ``shared_axes`` (which axes the panels share, one of ``x``, ``y``, or ``both``).
 
 .. code-block:: yaml
 
@@ -131,9 +131,10 @@ Corner figure
 
 A figure of type ``corner`` shows the one- and two-dimensional marginal distributions of a set of variables in a triangular arrangement: the one-dimensional marginals lie on the diagonal, while the two-dimensional marginals (the pairwise correlations) fill the lower-left triangle.
 
-It accepts a mandatory ``contents`` key and an optional ``variables`` key.
+It accepts a mandatory ``contents`` key and the optional keys ``variables``, ``watermark`` and ``watermark_plot``.
 Each element of ``contents`` is a :py:class:`~eos.figure.DataFile`, described by the :ref:`data file keys <figure-format-datafiles>` below, and refers to a data file produced by the `common tasks framework <./python.html#common-tasks>`_.
 The optional ``variables`` key selects the subset of variables to be shown; if omitted, all variables contained in the first data file are used.
+The optional ``watermark`` and ``watermark_plot`` keys behave as for a grid figure; by default the watermark is placed in the plot in the bottom-left corner, and ``watermark_plot`` can select any plot, including one of the empty ones filling the upper-right triangle.
 
 .. code-block:: yaml
 

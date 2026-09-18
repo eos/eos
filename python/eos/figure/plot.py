@@ -406,7 +406,6 @@ class Plot(ABC, Deserializable):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def draw_watermark(self, ax, watermark):
         """Draw the watermark on the provided axes.
 
@@ -525,16 +524,6 @@ class TwoDimensionalPlot(Plot):
         if self.legend is not None:
             self.legend.draw(ax=ax, entries=legend_entries)
 
-    def draw_watermark(self, ax, watermark):
-        """Draw the watermark on the provided axes.
-
-        :param ax: The matplotlib axes onto which the watermark is drawn.
-        :type ax: matplotlib.axes.Axes
-        :param watermark: The watermark to draw.
-        :type watermark: eos.figure.common.Watermark
-        """
-        watermark.draw(ax)
-
     @classmethod
     def from_dict(cls, **kwargs):
         """Create a :class:`TwoDimensionalPlot` from its keyword description.
@@ -571,6 +560,7 @@ class EmptyPlot(Plot):
     ---------------------
 
     This plot's type is ``empty``. It produces an empty plot, which can be used in a grid as empty space.
+    It carries the figure's watermark if a grid's ``watermark_plot`` selects it.
 
     """)
 
@@ -594,18 +584,6 @@ class EmptyPlot(Plot):
         :type ax: matplotlib.axes.Axes
         """
         ax.set_axis_off()
-
-    def draw_watermark(self, ax, watermark):
-        """Draw the watermark on the provided axes.
-
-        Empty plots carry no watermark, so this is a no-op.
-
-        :param ax: The matplotlib axes onto which the watermark would be drawn.
-        :type ax: matplotlib.axes.Axes
-        :param watermark: The watermark to draw.
-        :type watermark: eos.figure.common.Watermark
-        """
-        pass
 
 class PlotFactory:
     """Factory that creates :class:`Plot` instances from their YAML or dictionary description.
