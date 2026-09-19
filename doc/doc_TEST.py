@@ -43,6 +43,20 @@ class DocTests(unittest.TestCase):
                         except Exception as e:
                             self.fail(f"Cannot compile latex representation of observable {qn}, caught exception of type {type(e).__name__}: {e}")
 
+    def test_002_References(self):
+        """Check the latex representation of all reference titles"""
+        from matplotlib.texmanager import TexManager
+
+        texmanager = TexManager()
+
+        for ref_id, ref in eos.References():
+            latex_string = ref.title()
+            if latex_string:
+                try:
+                    texmanager.get_text_width_height_descent(latex_string, fontsize=12)
+                except Exception as e:
+                    self.fail(f"Cannot compile latex representation of reference {ref_id} title, caught exception of type {type(e).__name__}: {e}")
+
 
 # Run new tests
 if __name__ == '__main__':
