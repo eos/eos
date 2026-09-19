@@ -14,7 +14,6 @@ class DocTests(unittest.TestCase):
         """Check the latex representation of all the parameters"""
         from matplotlib.texmanager import TexManager
 
-        parameters = eos.Parameters.Defaults()
         texmanager = TexManager()
 
         for section in eos.Parameters.Defaults().sections():
