@@ -1,0 +1,68 @@
+on:
+  workflow_dispatch:
+    inputs:
+      eosversion:
+        description: EOS version to install
+        required: true
+        type: string
+      image_tag:
+        description: Image tag suffix identifying the source
+        required: true
+        type: string
+      update_latest:
+        description: Also update the latest tag
+        required: true
+        type: boolean
+
+name: Build and Deploy Docker container for EOS analyses
+
+concurrency:
+  group: eos-container, ${{ inputs.image_tag }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build & deploy ``eoshep/eos`` images
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { platform: linux/amd64, arch: x86_64, tag_prefix: amd64 }
+    steps:
+      # The Dockerfile alone is all the build needs, so there is no
+      # repository checkout: the version and image tag are supplied by the
+      # successful PyPI publishing workflow.
+      - name: Determine the EOS version to install and the image tag
+        id: vars
+        run: |
+          EOSVERSION="${{ inputs.eosversion }}"
+          IMAGE_TAG="${{ inputs.image_tag }}"
+          echo "eosversion=${EOSVERSION}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_TAG}-${{ matrix.tag_prefix }}" >> $GITHUB_OUTPUT
+          echo "image_tags<<EOF" >> $GITHUB_OUTPUT
+          echo "eoshep/eos:${EOSVERSION}" >> $GITHUB_OUTPUT
+          if [[ "${{ inputs.update_latest }}" == "true" ]] ; then
+            echo "eoshep/eos:latest" >> $GITHUB_OUTPUT
+          fi
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push the ``eoshep/eos:${{ steps.vars.outputs.eosversion }}`` image
+        uses: docker/build-push-action@v6
+        with:
+          context: .github/Dockerfiles
+          file: .github/Dockerfiles/eos.dockerfile
+          platforms: ${{ matrix.platform }}
+          build-args: |
+            EOSVERSION=${{ steps.vars.outputs.eosversion }}
+          push: true
+          tags: ${{ steps.vars.outputs.image_tags }}
