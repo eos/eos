@@ -51,7 +51,8 @@ TESTS = \
 	hard-scattering_TEST \
 	long-distance_TEST \
 	nonlocal-formfactors-p-to-p_TEST \
-	nonlocal-formfactors-p-to-v_TEST
+	nonlocal-formfactors-p-to-v_TEST \
+	observables_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -72,3 +73,5 @@ long_distance_TEST_SOURCES = long-distance_TEST.cc
 nonlocal_formfactors_p_to_p_TEST_SOURCES = nonlocal-formfactors-p-to-p_TEST.cc
 
 nonlocal_formfactors_p_to_v_TEST_SOURCES = nonlocal-formfactors-p-to-v_TEST.cc
+
+observables_TEST_SOURCES = observables_TEST.cc
