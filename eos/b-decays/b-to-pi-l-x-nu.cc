@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -54,7 +54,7 @@ namespace eos
             static const std::vector<OptionSpecification> options;
 
             Implementation(const Parameters & p, const Options & o, ParameterUser & u) :
-                form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors"_ok, "BCL2008"_ov).str(), p, o)),
+                form_factors(FormFactorFactory<PToP>::create("B->pi::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o)),
                 cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_q(o, options, "q"_ok),
                 m_B(p["mass::B_" + opt_q.str()], u),
