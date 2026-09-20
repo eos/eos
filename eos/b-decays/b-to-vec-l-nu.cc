@@ -189,7 +189,7 @@ namespace eos
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 mu(p[stringify(_U()) + "b" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
                 cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
-                form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
+                form_factors(FormFactorFactory<PToV>::create(_process() + "::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o))
             {
                 Context ctx("When constructing B->Vlnu observable");
 

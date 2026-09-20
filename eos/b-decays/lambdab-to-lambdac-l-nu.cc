@@ -354,7 +354,7 @@ namespace eos
                 m_Lambda_c(p["mass::Lambda_c"], u),
                 alpha(p["Lambda_c::alpha"], u),
                 mu(p["cb" + opt_l.str() + "nu" + opt_l.str() + "::mu"], u),
-                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors"_ok, "DKMR2017"_ov).str(), p, o))
+                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o))
             {
                 Context ctx("When constructing L_b->L_c lnu observable");
 
