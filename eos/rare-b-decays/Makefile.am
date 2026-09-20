@@ -106,6 +106,7 @@ TESTS = \
 	lambda-b-to-lambda-dilepton_TEST \
 	lambda-b-to-lambda1520-gamma-naive_TEST \
 	lambda-b-to-lambda1520-ll-naive_TEST \
+	observables_TEST \
 	qcdf-integrals_TEST
 
 LDADD = \
@@ -162,5 +163,7 @@ lambda_b_to_lambda_dilepton_TEST_SOURCES = lambda-b-to-lambda-dilepton_TEST.cc
 lambda_b_to_lambda1520_gamma_naive_TEST_SOURCES = lambda-b-to-lambda1520-gamma-naive_TEST.cc
 
 lambda_b_to_lambda1520_ll_naive_TEST_SOURCES = lambda-b-to-lambda1520-ll-naive_TEST.cc
+
+observables_TEST_SOURCES = observables_TEST.cc
 
 qcdf_integrals_TEST_SOURCES = qcdf-integrals_TEST.cc
