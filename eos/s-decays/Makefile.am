@@ -31,7 +31,8 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	k-to-l-nu_TEST \
-	k-to-pi-l-nu_TEST
+	k-to-pi-l-nu_TEST \
+	observables_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -45,3 +46,4 @@ LDADD = \
 check_PROGRAMS = $(TESTS)
 k_to_l_nu_TEST_SOURCES = k-to-l-nu_TEST.cc
 k_to_pi_l_nu_TEST_SOURCES = k-to-pi-l-nu_TEST.cc
+observables_TEST_SOURCES = observables_TEST.cc
