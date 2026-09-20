@@ -38,9 +38,14 @@
 - Move the implementations of the ``eos-list-observables`` and ``eos-list-references`` commands into the new modules ``eos.cli.list_observables`` and ``eos.cli.list_references``, leaving the scripts as shims (D. van Dyk)
 - Reimplement the ``eos-list-constraints``, ``eos-list-parameters``, and ``eos-list-signal-pdfs`` commands in Python, as the new modules ``eos.cli.list_constraints``, ``eos.cli.list_parameters``, and ``eos.cli.list_signal_pdfs``, in lieu of the C++ clients of the same names; their output is unchanged, except that ``eos-list-parameters`` now sorts the parameter sections by name, since the order in which EOS reads their files is arbitrary (D. van Dyk)
 - Recommend ``make -j4`` over ``make -j`` when building EOS, and warn that an unbounded parallel build can exhaust the available memory (D. van Dyk)
+- **Breaking:** Default the form factor option of the semileptonic, rare, and nonlocal form factor observables to the ``SSE`` parametrization, in lieu of the previously process-dependent choices ``BSZ2015``, ``BCL2008``, ``BFvD2014``, ``DM2016``, ``SE``, and ``DKMR2017``; predictions made with the default form factors change accordingly, and an analysis that relies on a previous default has to name it explicitly through the ``form-factors`` option (D. van Dyk)
+- Force the ``V`` option of the ``B_s->K^*lnu`` and ``B_s->D_s^*lnu`` observables, which could not be constructed from their names alone because the option carries no default (D. van Dyk)
+- Fix the value of the ``B`` option of the ``Lambda_c->Neutronlnu`` observables, which named the final state ``Neutron`` in lieu of the ``neutron`` that the form factors and the option's allowed values use (D. van Dyk)
 
 ### Added
 
+- Add the ``SSE`` parametrization of the ``Lambda_b->Lambda_c`` form factors, whose coefficients default to a description of the ``DKMR2017`` results (D. van Dyk)
+- Test that every observable of the ``b-decays``, ``c-decays``, ``nonlocal-form-factors``, ``rare-b-decays``, ``rare-c-decays``, ``s-decays``, and ``tau-decays`` sections can be constructed with its default options, through a new ``observables_TEST`` in each of these directories (D. van Dyk)
 - Add ``height_ratios`` and ``width_ratios`` to ``eos.figure.GridFigure``, for sizing a grid's rows and columns unevenly (D. van Dyk)
 - Add a ``mode_file`` key to ``eos.figure.ConstraintResidueItem``, reading the best-fit parameter values directly from a stored ``eos.data.Mode`` (e.g. as written by ``eos.tasks.find_mode``) in lieu of an explicit ``parameters`` dictionary (D. van Dyk)
 - Add a ``locations`` key to ``eos.figure.plot.XTicks`` and ``YTicks`` for pinning explicit major-tick positions, since automatic tick placement chooses its step from the axes' rendered size and can otherwise label a small panel differently than intended (D. van Dyk)
