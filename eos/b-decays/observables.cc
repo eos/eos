@@ -2101,7 +2101,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::normalized_decay_width,
                                                                            std::make_tuple("q2_min", "q2_max"),
-                                                                           Options{ { "U"_ok, "c"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "0"_ov } }
+                                                                           Options{ { "V"_ok, "D_s^*"_ov }, { "U"_ok, "c"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "0"_ov } }
                                                                            ),
 
                                                            make_expression_observable("B_s->D_s^*lnu::normGamma",
@@ -2486,7 +2486,7 @@ namespace eos
                                                                            Unit::InverseGeV2(),
                                                                            &BToVectorLeptonNeutrino::differential_branching_ratio,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::normdBR/dq2",
@@ -2494,7 +2494,7 @@ namespace eos
                                                                            Unit::InverseGeV2(),
                                                                            &BToVectorLeptonNeutrino::normalized_differential_branching_ratio,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::A_FB(q2)",
@@ -2502,7 +2502,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_a_fb_leptonic,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_1c(q2)",
@@ -2510,7 +2510,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J1c,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_1s(q2)",
@@ -2518,7 +2518,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J1s,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_2c(q2)",
@@ -2526,7 +2526,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J2c,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_2s(q2)",
@@ -2534,7 +2534,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J2s,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_3(q2)",
@@ -2542,7 +2542,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J3,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_4(q2)",
@@ -2550,7 +2550,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J4,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_5(q2)",
@@ -2558,7 +2558,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J5,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_6c(q2)",
@@ -2566,7 +2566,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J6c,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_6s(q2)",
@@ -2574,7 +2574,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J6s,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_7(q2)",
@@ -2582,7 +2582,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J7,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_8(q2)",
@@ -2590,7 +2590,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J8,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::J_9(q2)",
@@ -2598,7 +2598,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::differential_J9,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::BR",
@@ -2606,14 +2606,14 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::normBR",
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::normalized_integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_FB",
@@ -2621,7 +2621,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_fb_leptonic),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_L",
@@ -2629,7 +2629,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_amplitude_polarization_L),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_T",
@@ -2637,7 +2637,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_amplitude_polarization_T),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::F_L",
@@ -2645,7 +2645,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_f_L),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_C^1",
@@ -2653,7 +2653,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_c_1),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_C^2",
@@ -2661,7 +2661,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_c_2),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_C^3",
@@ -2669,7 +2669,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_c_3),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_T^1",
@@ -2677,7 +2677,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_t_1),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_T^2",
@@ -2685,7 +2685,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_t_2),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::A_T^3",
@@ -2693,7 +2693,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_a_t_3),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_1c",
@@ -2701,7 +2701,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J1c),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_1s",
@@ -2709,7 +2709,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J1s),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_2c",
@@ -2717,7 +2717,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J2c),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_2s",
@@ -2725,7 +2725,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J2s),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_3",
@@ -2733,7 +2733,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J3),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_4",
@@ -2741,7 +2741,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J4),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_5",
@@ -2749,7 +2749,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J5),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_6c",
@@ -2757,7 +2757,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J6c),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_6s",
@@ -2765,7 +2765,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J6s),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_7",
@@ -2773,7 +2773,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J7),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_8",
@@ -2781,7 +2781,7 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J8),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_cacheable_observable("B_s->K^*lnu::J_9",
@@ -2789,14 +2789,14 @@ namespace eos
                                                                                      Unit::None(),
                                                                                      cache(&BToVectorLeptonNeutrino::prepare, "q2_min", "q2_max"),
                                                                                      evaluate(&BToVectorLeptonNeutrino::integrated_J9),
-                                                                                     { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                                     { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::P(w_min,w_max)",
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::integrated_pdf_w,
                                                                            std::make_tuple("w_min", "w_max"),
-                                                                           { { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           { { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            // PDF
@@ -2804,14 +2804,14 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::normalized_four_differential_decay_width,
                                                                            std::make_tuple("q2", "cos(theta_l)", "cos(theta_K)", "phi"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
                                                            make_observable("B_s->K^*lnu::NormalizationPDF(q2,cos(theta_l),cos(theta_K),phi)",
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
-                                                                           Options{ { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
         });
 
