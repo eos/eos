@@ -416,7 +416,7 @@ namespace eos
                 m_B(p["mass::" + _B()], u),
                 alpha(p[_B() + "::alpha"], u),
                 mu(p[stringify(_Q()) + "cnu" + opt_l.str() + opt_l.str() + "::mu"], u),
-                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(_process() + "::" + o.get("form-factors"_ok, "SE"_ov).str(), p, o)),
+                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create(_process() + "::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o)),
                 cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok)
             {
