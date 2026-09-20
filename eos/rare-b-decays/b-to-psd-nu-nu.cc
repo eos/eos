@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -170,7 +170,7 @@ namespace eos
                 cub_conf(cubature::Config().epsrel(1e-5).epsabs(0.0)),
                 opt_cp_conjugate(o, options, "cp-conjugate"_ok),
                 cp_conjugate(opt_cp_conjugate.value()),
-                form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p, o))
+                form_factors(FormFactorFactory<PToP>::create(_process() + "::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o))
             {
                 Context ctx("When constructing B->Pnunu observables");
 

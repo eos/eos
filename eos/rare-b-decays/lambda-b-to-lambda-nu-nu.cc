@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2023 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -76,7 +76,7 @@ namespace eos
             {
                 Context ctx("When constructing Lb->Lnunu observables");
 
-                form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"_ov).str(), p, o);
+                form_factors = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o);
 
                 lambda_t = [*this]() { return model->ckm_tb() * std::conj(model->ckm_ts()); };
                 wc       = [*this]() { return model->wet_sbnunu(cp_conjugate); };

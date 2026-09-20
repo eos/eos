@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2014-2025 Danny van Dyk
+ * Copyright (c) 2014-2026 Danny van Dyk
  * Copyright (c) 2017      Thomas Blake
  *
  * This file is part of the EOS project. EOS is free software;
@@ -511,7 +511,7 @@ namespace eos
                 alpha_e(p["QED::alpha_e(m_b)"], u),
                 opt_l(o, options, "l"_ok),
                 mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], u),
-                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "BFvD2014"_ov).str(), p, o))
+                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o))
             {
                 Context ctx("When constructing L_b->Lll observables");
 
@@ -1047,7 +1047,7 @@ namespace eos
                 r_perp_1(p["Lambda_b->Lambdall::r_perp_1@MvD2016"], u),
                 r_para_0(p["Lambda_b->Lambdall::r_para_0@MvD2016"], u),
                 r_para_1(p["Lambda_b->Lambdall::r_para_1@MvD2016"], u),
-                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "DM2016"_ov).str(), p, o))
+                form_factors(FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda::" + o.get("form-factors"_ok, "SSE"_ov).str(), p, o))
             {
                 u.uses(*form_factors);
                 u.uses(*model);

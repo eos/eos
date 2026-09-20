@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -56,7 +56,7 @@ namespace eos
         a_2_perp(p["K^*::a_2_perp@1GeV"], *this),
         uncertainty_para(p["B->K^*ll::A_para_uncertainty@LargeRecoil"], *this),
         uncertainty_perp(p["B->K^*ll::A_perp_uncertainty@LargeRecoil"], *this),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "SSE"_ov).str(), p)),
         mu(p["sb::mu"], *this)
     {
         Context ctx("When constructing B->K^*gamma BFS2004 amplitudes");
