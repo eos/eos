@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2019 Nico Gubernari
  * Copyright (c) 2021 Méril Reboud
  *
@@ -331,7 +331,7 @@ namespace eos
 
             public:
                 GvDV2020(const Parameters & p, const Options & o) :
-                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p)),
+                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors"_ok, "SSE"_ov).str(), p)),
                     opt_q(o, "q"_ok, { "u"_ov, "d"_ov, "s"_ov }),
 
                     re_alpha_0_perp(p[stringify(Process_::label) + "ccbar::Re{alpha_0^perp}@GvDV2020"], *this),
@@ -961,7 +961,7 @@ namespace eos
 
             public:
                 GRvDV2022order5(const Parameters & p, const Options & o) :
-                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p)),
+                    form_factors(FormFactorFactory<PToV>::create(stringify(Process_::label) + "::" + o.get("form-factors"_ok, "SSE"_ov).str(), p)),
                     opt_q(o, "q"_ok, { "u"_ov, "d"_ov, "s"_ov }),
 
                     re_at_m7_perp(p[stringify(Process_::label) + "ccbar::Re_Hhat_at_m7_perp@GRvDV2022"], *this),
