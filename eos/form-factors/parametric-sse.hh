@@ -396,6 +396,7 @@ namespace eos
     };
 
     extern template class SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>;
+    extern template class SSEFormFactors<LambdaBToLambdaC, OneHalfPlusToOneHalfPlus>;
     extern template class SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>;
     extern template class SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>;
     extern template class SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>;
