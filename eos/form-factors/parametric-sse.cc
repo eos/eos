@@ -24,6 +24,7 @@
 namespace eos
 {
     template class SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>;
+    template class SSEFormFactors<LambdaBToLambdaC, OneHalfPlusToOneHalfPlus>;
     template class SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>;
     template class SSEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>;
     template class SSEFormFactors<LambdaCToProton, OneHalfPlusToOneHalfPlus>;

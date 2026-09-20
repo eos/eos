@@ -43,6 +43,7 @@ namespace eos
                 { "Lambda_b->Lambda::SE", &SEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make },
                 { "Lambda_b->Lambda::SSE", &SSEFormFactors<LambdaBToLambda, OneHalfPlusToOneHalfPlus>::make },
                 { "Lambda_b->Lambda_c::DKMR2017", &DKMR2017FormFactors<LambdaBToLambdaC>::make },
+                { "Lambda_b->Lambda_c::SSE", &SSEFormFactors<LambdaBToLambdaC, OneHalfPlusToOneHalfPlus>::make },
                 { "Lambda_c->Lambda::SE", &SEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make },
                 { "Lambda_c->Lambda::SSE", &SSEFormFactors<LambdaCToLambda, OneHalfPlusToOneHalfPlus>::make },
                 { "Lambda_c->neutron::SE", &SEFormFactors<LambdaCToNeutron, OneHalfPlusToOneHalfPlus>::make },

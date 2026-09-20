@@ -7459,6 +7459,171 @@ groups:
           max:     4.33502
           unit:     '1'
           latex:    '\alpha_{0,2}^{T5,\Lambda_b \to \Lambda,\mathrm{SSE}}'
+      # form factor parameters for Lambda_b->Lambda_c in the SSE parametrization
+      'Lambda_b->Lambda_c::tp_v@SSE' :
+          central:  51.065316
+          min:      51.065316
+          max:      51.065316
+          latex:    't_+^{V, \Lambda_b \to \Lambda_c}'
+          comment:  '(mB + mD)^2 [b->c]'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda_c::tp_a@SSE' :
+          central:  42.838334
+          min:      42.838334
+          max:      42.838334
+          latex:    't_+^{A, \Lambda_b \to \Lambda_c}'
+          comment:  '(mBc + 2 mpi)^2 [b->c]'
+          unit:     'GeV^2'
+      'Lambda_b->Lambda_c::alpha^(0,V)_0@SSE' :
+          central: 0.61639
+          min:     0.53599
+          max:     0.69679
+          unit:     '1'
+          latex:    '\alpha_{0,0}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,V)_1@SSE' :
+          central: -6.38334
+          min:     -9.84006
+          max:     -2.92662
+          unit:     '1'
+          latex:    '\alpha_{0,1}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,V)_2@SSE' :
+          central: 0.00000
+          min:     -5.90000
+          max:     5.90000
+          unit:     '1'
+          latex:    '\alpha_{0,2}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,V)_0@SSE' :
+          central: 0.81906
+          min:     0.69373
+          max:     0.94440
+          unit:     '1'
+          latex:    '\alpha_{\perp,0}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,V)_1@SSE' :
+          central: -8.33141
+          min:     -13.68271
+          max:     -2.98011
+          unit:     '1'
+          latex:    '\alpha_{\perp,1}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,V)_2@SSE' :
+          central: 0.00000
+          min:     -8.40000
+          max:     8.40000
+          unit:     '1'
+          latex:    '\alpha_{\perp,2}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,A)_0@SSE' :
+          central: 0.53156
+          min:     0.48942
+          max:     0.57369
+          unit:     '1'
+          latex:    '\alpha_{0,0}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,A)_1@SSE' :
+          central: -4.08371
+          min:     -5.72900
+          max:     -2.43842
+          unit:     '1'
+          latex:    '\alpha_{0,1}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,A)_2@SSE' :
+          central: 0.00000
+          min:     -4.70000
+          max:     4.70000
+          unit:     '1'
+          latex:    '\alpha_{0,2}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,T)_0@SSE' :
+          central: 0.75670
+          min:     0.59998
+          max:     0.91343
+          unit:     '1'
+          latex:    '\alpha_{0,0}^{T,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,T)_1@SSE' :
+          central: -6.98640
+          min:     -13.90890
+          max:     -0.06391
+          unit:     '1'
+          latex:    '\alpha_{0,1}^{T,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,T)_2@SSE' :
+          central: 0.00000
+          min:     -8.40000
+          max:     8.40000
+          unit:     '1'
+          latex:    '\alpha_{0,2}^{T,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,T5)_0@SSE' :
+          central: 0.51698
+          min:     0.47688
+          max:     0.55708
+          unit:     '1'
+          latex:    '\alpha_{\perp,0}^{T5,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,T5)_1@SSE' :
+          central: -4.16932
+          min:     -5.81142
+          max:     -2.52722
+          unit:     '1'
+          latex:    '\alpha_{\perp,1}^{T5,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,T5)_2@SSE' :
+          central: 0.00000
+          min:     -3.90000
+          max:     3.90000
+          unit:     '1'
+          latex:    '\alpha_{\perp,2}^{T5,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(t,V)_1@SSE' :
+          central: -4.89186
+          min:     -8.25679
+          max:     -1.52692
+          unit:     '1'
+          latex:    '\alpha_{t,1}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(t,V)_2@SSE' :
+          central: 0.00000
+          min:     -6.00000
+          max:     6.00000
+          unit:     '1'
+          latex:    '\alpha_{t,2}^{V,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(t,A)_1@SSE' :
+          central: -4.80606
+          min:     -6.55123
+          max:     -3.06089
+          unit:     '1'
+          latex:    '\alpha_{t,1}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(t,A)_2@SSE' :
+          central: 0.00000
+          min:     -4.30000
+          max:     4.30000
+          unit:     '1'
+          latex:    '\alpha_{t,2}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,A)_1@SSE' :
+          central: -4.11652
+          min:     -5.78022
+          max:     -2.45282
+          unit:     '1'
+          latex:    '\alpha_{\perp,1}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,A)_2@SSE' :
+          central: 0.00000
+          min:     -6.10000
+          max:     6.10000
+          unit:     '1'
+          latex:    '\alpha_{\perp,2}^{A,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,T)_1@SSE' :
+          central: -5.57231
+          min:     -7.69957
+          max:     -3.44506
+          unit:     '1'
+          latex:    '\alpha_{\perp,1}^{T,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(perp,T)_2@SSE' :
+          central: 0.00000
+          min:     -4.90000
+          max:     4.90000
+          unit:     '1'
+          latex:    '\alpha_{\perp,2}^{T,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,T5)_1@SSE' :
+          central: -4.11011
+          min:     -5.89551
+          max:     -2.32470
+          unit:     '1'
+          latex:    '\alpha_{0,1}^{T5,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
+      'Lambda_b->Lambda_c::alpha^(0,T5)_2@SSE' :
+          central: 0.00000
+          min:     -4.40000
+          max:     4.40000
+          unit:     '1'
+          latex:    '\alpha_{0,2}^{T5,\Lambda_b \to \Lambda_c,\mathrm{SSE}}'
       # form factor parameters for Lambda_c->Lambda in the SSE parametrization
       'Lambda_c->Lambda::tp_v@SSE' :
           central:  5.564881

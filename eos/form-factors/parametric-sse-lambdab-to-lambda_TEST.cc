@@ -111,6 +111,75 @@ class SSEOneHalfPlusToOneHalfPlusFormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff->f_perp_t5(10.0), 0.17406378901236480, eps);
             }
 
+            /* Lambda_b -> Lambda_c */
+            {
+                Parameters                                             p  = Parameters::Defaults();
+                std::shared_ptr<FormFactors<OneHalfPlusToOneHalfPlus>> ff = FormFactorFactory<OneHalfPlusToOneHalfPlus>::create("Lambda_b->Lambda_c::SSE", p, Options{});
+                TEST_CHECK(ff.get() != nullptr);
+
+                p["Lambda_b->Lambda_c::alpha^(0,V)_0@SSE"]    = 0.10;
+                p["Lambda_b->Lambda_c::alpha^(0,V)_1@SSE"]    = -0.20;
+                p["Lambda_b->Lambda_c::alpha^(0,V)_2@SSE"]    = 0.30;
+                p["Lambda_b->Lambda_c::alpha^(perp,V)_0@SSE"] = 0.15;
+                p["Lambda_b->Lambda_c::alpha^(perp,V)_1@SSE"] = -0.25;
+                p["Lambda_b->Lambda_c::alpha^(perp,V)_2@SSE"] = 0.35;
+                p["Lambda_b->Lambda_c::alpha^(t,V)_1@SSE"]    = 0.40;
+                p["Lambda_b->Lambda_c::alpha^(t,V)_2@SSE"]    = -0.45;
+
+                p["Lambda_b->Lambda_c::alpha^(0,A)_0@SSE"]    = 0.12;
+                p["Lambda_b->Lambda_c::alpha^(0,A)_1@SSE"]    = -0.22;
+                p["Lambda_b->Lambda_c::alpha^(0,A)_2@SSE"]    = 0.32;
+                p["Lambda_b->Lambda_c::alpha^(t,A)_1@SSE"]    = 0.42;
+                p["Lambda_b->Lambda_c::alpha^(t,A)_2@SSE"]    = -0.47;
+                p["Lambda_b->Lambda_c::alpha^(perp,A)_1@SSE"] = 0.52;
+                p["Lambda_b->Lambda_c::alpha^(perp,A)_2@SSE"] = -0.14;
+
+                p["Lambda_b->Lambda_c::alpha^(0,T)_0@SSE"]    = 0.11;
+                p["Lambda_b->Lambda_c::alpha^(0,T)_1@SSE"]    = -0.21;
+                p["Lambda_b->Lambda_c::alpha^(0,T)_2@SSE"]    = 0.31;
+                p["Lambda_b->Lambda_c::alpha^(perp,T)_1@SSE"] = 0.41;
+                p["Lambda_b->Lambda_c::alpha^(perp,T)_2@SSE"] = -0.16;
+
+                p["Lambda_b->Lambda_c::alpha^(perp,T5)_0@SSE"] = 0.13;
+                p["Lambda_b->Lambda_c::alpha^(perp,T5)_1@SSE"] = -0.23;
+                p["Lambda_b->Lambda_c::alpha^(perp,T5)_2@SSE"] = 0.33;
+                p["Lambda_b->Lambda_c::alpha^(0,T5)_1@SSE"]    = 0.43;
+                p["Lambda_b->Lambda_c::alpha^(0,T5)_2@SSE"]    = -0.18;
+
+                const double m_1 = p["mass::Lambda_b@HME"].evaluate();
+                const double m_2 = p["mass::Lambda_c@HME"].evaluate();
+                const double tm  = power_of<2>(m_1 - m_2);
+
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_v(0.0), ff->f_long_v(0.0), 1.0e-12);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_a(0.0), ff->f_long_a(0.0), 1.0e-12);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_a(tm), ff->f_long_a(tm), 1.0e-12);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_t(0.0), ff->f_perp_t5(0.0), 1.0e-12);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_t5(tm), ff->f_perp_t5(tm), 1.0e-12);
+
+                static const double eps = 1.0e-6;
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_v(0.0), 0.094150900811140734, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_v(0.0), 0.094150900811140747, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_v(0.0), 0.14266513263725666, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_a(0.0), 0.11219878654718897, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_a(0.0), 0.11219878654718897, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_a(0.0), 0.16770794944674797, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_t(0.0), 0.10385374717636393, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_t(0.0), 0.12183779177945003, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_t5(0.0), 0.17134596409527295, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_t5(0.0), 0.12183779177945003, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_v(10.0), 0.095764603925464389, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_v(10.0), 0.13981490019556886, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_v(10.0), 0.20806012033326124, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_time_a(10.0), 0.11335066582734182, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_a(10.0), 0.16201007697283623, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_a(10.0), 0.1704674366550436, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_t(10.0), 0.15346394422310736, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_t(10.0), 0.13266084029507766, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_long_t5(10.0), 0.18280043355297398, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff->f_perp_t5(10.0), 0.17518466524522314, eps);
+            }
+
             /* Lambda_c -> neutron */
             {
                 Parameters                                             p  = Parameters::Defaults();
