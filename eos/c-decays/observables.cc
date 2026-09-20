@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et tw=150 foldmethod=marker : */
 
 /*
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  * Copyright (c) 2026 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -287,7 +287,7 @@ namespace eos
                                                                            Unit::None(),
                                                                            &LambdaCToOneHalfPlusLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
-                                                                           Options{ { "B"_ok, "Neutron"_ov } }
+                                                                           Options{ { "B"_ok, "neutron"_ov } }
                                                                            ),
 
                                                            make_observable("Lambda_c->Neutronlnu::dBR/dq2",
@@ -295,7 +295,7 @@ namespace eos
                                                                            Unit::InverseGeV2(),
                                                                            &LambdaCToOneHalfPlusLeptonNeutrino::differential_branching_ratio,
                                                                            std::make_tuple("q2"),
-                                                                           Options{ { "B"_ok, "Neutron"_ov } }
+                                                                           Options{ { "B"_ok, "neutron"_ov } }
                                                                            ),
         });
 
