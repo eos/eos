@@ -29,7 +29,8 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters";
 
 TESTS = \
-	lambda-c-to-proton-l-l_TEST
+	lambda-c-to-proton-l-l_TEST \
+	observables_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -42,3 +43,5 @@ LDADD = \
 
 check_PROGRAMS = $(TESTS)
 lambda_c_to_proton_l_l_TEST_SOURCES = lambda-c-to-proton-l-l_TEST.cc
+
+observables_TEST_SOURCES = observables_TEST.cc
