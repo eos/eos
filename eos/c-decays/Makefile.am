@@ -36,7 +36,8 @@ AM_TESTS_ENVIRONMENT = \
 TESTS = \
 	dq-to-l-nu_TEST \
 	d-to-k-l-nu_TEST \
-	lambdac-to-lambda-l-nu_TEST
+	lambdac-to-lambda-l-nu_TEST \
+	observables_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -53,3 +54,5 @@ dq_to_l_nu_TEST_SOURCES = dq-to-l-nu_TEST.cc
 d_to_k_l_nu_TEST_SOURCES = d-to-k-l-nu_TEST.cc
 
 lambdac_to_lambda_l_nu_TEST_SOURCES = lambdac-to-lambda-l-nu_TEST.cc
+
+observables_TEST_SOURCES = observables_TEST.cc
