@@ -32,7 +32,8 @@ AM_TESTS_ENVIRONMENT = \
 
 TESTS = \
 	tau-to-k-nu_TEST \
-	tau-to-k-pi-nu_TEST
+	tau-to-k-pi-nu_TEST \
+	observables_TEST
 
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
@@ -46,3 +47,4 @@ LDADD = \
 check_PROGRAMS = $(TESTS)
 tau_to_k_nu_TEST_SOURCES = tau-to-k-nu_TEST.cc
 tau_to_k_pi_nu_TEST_SOURCES = tau-to-k-pi-nu_TEST.cc
+observables_TEST_SOURCES = observables_TEST.cc
