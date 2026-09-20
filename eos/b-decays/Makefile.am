@@ -85,6 +85,7 @@ TESTS = \
 	lambdab-to-lambdac-l-nu_TEST \
 	lambdab-to-lambdac2595-l-nu_TEST \
 	lambdab-to-lambdac2625-l-nu_TEST \
+	observables_TEST \
 	properties_TEST
 
 LDADD = \
@@ -133,5 +134,7 @@ lambdab_to_lambdac_l_nu_TEST_SOURCES = lambdab-to-lambdac-l-nu_TEST.cc
 lambdab_to_lambdac2595_l_nu_TEST_SOURCES = lambdab-to-lambdac2595-l-nu_TEST.cc
 
 lambdab_to_lambdac2625_l_nu_TEST_SOURCES = lambdab-to-lambdac2625-l-nu_TEST.cc
+
+observables_TEST_SOURCES = observables_TEST.cc
 
 properties_TEST_SOURCES = properties_TEST.cc
