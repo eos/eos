@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2025 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  * Copyright (c) 2021      Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -27,7 +27,7 @@ namespace eos
 
     BToKstarDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p)),
+        form_factors(FormFactorFactory<PToV>::create("B->K^*::" + o.get("form-factors"_ok, "SSE"_ov).str(), p)),
         opt_l(o, options, "l"_ok),
         opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),

@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -27,7 +27,7 @@ namespace eos
 
     BsToPhiDilepton::AmplitudeGenerator::AmplitudeGenerator(const Parameters & p, const Options & o) :
         model(Model::make(o.get("model"_ok, "SM"_ov), p, o)),
-        form_factors(FormFactorFactory<PToV>::create("B_s->phi::" + o.get("form-factors"_ok, "BSZ2015"_ov).str(), p)),
+        form_factors(FormFactorFactory<PToV>::create("B_s->phi::" + o.get("form-factors"_ok, "SSE"_ov).str(), p)),
         opt_l(o, options, "l"_ok),
         opt_cp_conjugate(o, options, "cp-conjugate"_ok),
         mu(p["sb" + opt_l.str() + opt_l.str() + "::mu"], *this),

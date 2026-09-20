@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2017      Thomas Blake
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -49,6 +49,7 @@ class LambdaBToLambdaDileptonLowRecoilTest : public TestCase
                     oo.declare("q"_ok, "d"_ov);
                     oo.declare("l"_ok, "mu"_ov);
                     oo.declare("production-polarisation"_ok, "unpolarised"_ov);
+                    oo.declare("form-factors"_ok, "DM2016"_ov);
 
                     Parameters p        = Parameters::Defaults();
                     p["mass::Lambda_b"] = 5.6194;
@@ -109,10 +110,11 @@ class LambdaBToLambdaDileptonLowRecoilTest : public TestCase
                 // LHCb-polarised SM
                 {
                     Options oo{
-                        {                   "model"_ok,  "WET"_ov },
-                        {                       "q"_ok,    "d"_ov },
-                        {                       "l"_ok,   "mu"_ov },
-                        { "production-polarisation"_ok, "LHCb"_ov }
+                        {                   "model"_ok,    "WET"_ov },
+                        {                       "q"_ok,      "d"_ov },
+                        {                       "l"_ok,     "mu"_ov },
+                        { "production-polarisation"_ok,   "LHCb"_ov },
+                        {            "form-factors"_ok, "DM2016"_ov }
                     };
 
                     Parameters p        = Parameters::Defaults();
@@ -176,7 +178,8 @@ class LambdaBToLambdaDileptonLowRecoilTest : public TestCase
                         {                   "model"_ok,         "WET"_ov },
                         {                       "q"_ok,           "d"_ov },
                         {                       "l"_ok,          "mu"_ov },
-                        { "production-polarisation"_ok, "unpolarised"_ov }
+                        { "production-polarisation"_ok, "unpolarised"_ov },
+                        {            "form-factors"_ok,      "DM2016"_ov }
                     };
 
                     Parameters p           = Parameters::Defaults();
@@ -242,10 +245,11 @@ class LambdaBToLambdaDileptonLowRecoilTest : public TestCase
                 // LHCb-polarised BMP
                 {
                     Options oo{
-                        {                   "model"_ok,  "WET"_ov },
-                        {                       "q"_ok,    "d"_ov },
-                        {                       "l"_ok,   "mu"_ov },
-                        { "production-polarisation"_ok, "LHCb"_ov }
+                        {                   "model"_ok,    "WET"_ov },
+                        {                       "q"_ok,      "d"_ov },
+                        {                       "l"_ok,     "mu"_ov },
+                        { "production-polarisation"_ok,   "LHCb"_ov },
+                        {            "form-factors"_ok, "DM2016"_ov }
                     };
 
                     Parameters p           = Parameters::Defaults();
