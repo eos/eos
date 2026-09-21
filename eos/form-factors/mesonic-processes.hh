@@ -187,13 +187,18 @@ namespace eos
             using Transition                                                                     = PToP;
             static const constexpr char *                               label                    = "D->pi";
             static const constexpr char *                               name_B                   = "mass::D_u";
-            static const constexpr char *                               name_P                   = "mass::pi^0";
-            static const constexpr std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition      = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::up);
+            static const constexpr char *                               name_P                   = "mass::pi^+";
+            static const constexpr std::tuple<QuarkFlavor, QuarkFlavor> partonic_transition      = std::make_tuple(QuarkFlavor::charm, QuarkFlavor::down);
             static const constexpr double                               m_B                      = 1.867;
-            static const constexpr double                               m_P                      = 0.135;
-            static const constexpr double                               mR2_1m                   = 2.007 * 2.007; // D^*0
+            static const constexpr double                               m_P                      = 0.13957;
+            static const constexpr double                               mR2_1m                   = 2.007 * 2.007; // D^*+
             static const constexpr double                               mR2_0p                   = 2.300 * 2.300; // D^*0 scalar
             static const constexpr bool                                 uses_tensor_form_factors = true;
+            // zero of the conformal mapping: z(t0, t0) = 0.0
+            // This optimal value follows from z(0, t0) = - z(tm, t0)
+            static constexpr double                                     t0                       = 1.98;
+            // Isospin-degeneracy factor
+            static constexpr double                                     eta                      = 1.0;
     };
 
     struct DToK
