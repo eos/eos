@@ -30,6 +30,7 @@
 - **Breaking:** Stamp the EOS watermark on a single plot of an ``eos.figure.GridFigure`` by default -- the bottom-right one that is not an ``empty`` plot -- in lieu of every plot; ``watermark_plot: 'all'`` restores the previous behaviour, and an explicitly selected plot is now stamped even if it is ``empty`` (issue #1255) (D. van Dyk)
 - Accept the ``watermark`` and ``watermark_plot`` keys in an ``eos.figure.CornerFigure``, whose watermark is placed by default in the plot in the bottom-left corner (issue #1255) (D. van Dyk)
 - **Breaking:** Record the varied parameters of an ``eos.data.MixtureDensity`` as full parameter descriptions (name, min, max) under a ``parameters`` key, as the other ``eos.data`` objects do, and bump its on-disk format to v2; ``eos.data.MixtureDensity.create`` now requires them, its ``varied_parameters`` attribute yields those descriptions in lieu of bare qualified names, and the ``find-clusters`` and ``mixture-product`` tasks record them. Format-v1 files remain readable (issue #848) (D. van Dyk)
+- **Breaking** Correct the pion form factor datasets (F. Nouri)
 - Report problems in an analysis file as located ``eos.diagnostic.Diagnostic`` objects in lieu of raising on the first one: loading now enforces a structural validation phase, while a separate and side-effect-free semantic phase resolves the file's own custom parameters, observables and constraints through a per-file validation context, checks expressions through the C++ expression parser without registering them, reports unused priors, likelihoods, masks, and custom entities, and reports parameters that a posterior fixes while one of its own priors varies them or that neither its likelihood nor any of its predictions uses (D. van Dyk)
 - Attach the source YAML line number to each ``eos.diagnostic.Diagnostic`` reported for an analysis file, resolved by walking the file's raw YAML parse tree rather than the already-parsed structure, since the latter has discarded that information by the time a diagnostic is created (L. Gärtner)
 - Restrict file-local names in analysis files to exclude `/` and whitespace (D. van Dyk)
@@ -109,6 +110,8 @@
 - Add the ``k_\perp``-dependent branching ratio observables ``dBR/dkperp`` and ``BR(kperp_min,kperp_max)`` to all ``B->Plnu`` and ``B->Vlnu`` decays, which so far were only available for ``B_s->D_slnu``; this also adds the ``k_\perp``-differential branching ratio to ``BToVectorLeptonNeutrino``, which previously offered only the integrated one. For ``B->D^*lnu`` the two new observables follow the naming of that decay's other observables: ``BR_CP_specific(kperp_min,kperp_max)`` and ``dBR_CP_specific/dkperp`` evaluate a single CP conjugate, while the unqualified ``BR(kperp_min,kperp_max)`` and ``dBR/dkperp`` are the corresponding CP averages (D. van Dyk)
 - Document the ``eoshep/ubuntu-resolute`` Docker image, which ships all of EOS's build dependencies pre-installed, as an alternative to installing them by hand (D. van Dyk, M. Kirk)
 - Add a workflow to generate Docker images with each released version of EOS preinstalled, and document them (M. Kirk)
+- Implement isospin 0 and 1 pion vector form factor using BHKMNR parametrerisation (F. Nouri & M. Reboud)
+- Implement a generation tracker for Parameters (M. Reboud)
 
 ### Deprecated
 
