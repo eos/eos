@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010-2025 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@
 #include <eos/models/model.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-base.hh>
 #include <eos/rare-b-decays/b-to-kstar-gamma-bfs2004.hh>
+#include <eos/rare-b-decays/b-to-kstar-gamma-naive.hh>
 #include <eos/utils/options-impl.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -58,13 +59,17 @@ namespace eos
                 hbar(p["QM::hbar"], u),
                 q(o, options, "q"_ok),
                 tau(p["life_time::B_" + q.str()], u),
-                tag(o, "tag"_ok, { "BFS2004"_ov })
+                tag(o, "tag"_ok, { "BFS2004"_ov, "Naive"_ov })
             {
                 Context ctx("When constructing B->K^*gamma observables");
 
                 if ("BFS2004" == tag.value())
                 {
                     amplitude_generator.reset(new BToKstarGammaAmplitudes<tag::BFS2004>(p, o));
+                }
+                else if ("Naive" == tag.value())
+                {
+                    amplitude_generator.reset(new BToKstarGammaAmplitudes<tag::Naive>(p, o));
                 }
                 else
                 {
