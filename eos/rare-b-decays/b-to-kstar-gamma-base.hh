@@ -47,7 +47,8 @@ namespace eos
     namespace tag
     {
         struct BFS2004;
-    }
+        struct Naive;
+    } // namespace tag
 } // namespace eos
 
 #endif
