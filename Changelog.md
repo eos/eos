@@ -41,6 +41,7 @@
 - **Breaking:** Default the form factor option of the semileptonic, rare, and nonlocal form factor observables to the ``SSE`` parametrization, in lieu of the previously process-dependent choices ``BSZ2015``, ``BCL2008``, ``BFvD2014``, ``DM2016``, ``SE``, and ``DKMR2017``; predictions made with the default form factors change accordingly, and an analysis that relies on a previous default has to name it explicitly through the ``form-factors`` option (D. van Dyk)
 - Force the ``V`` option of the ``B_s->K^*lnu`` and ``B_s->D_s^*lnu`` observables, which could not be constructed from their names alone because the option carries no default (D. van Dyk)
 - Fix the value of the ``B`` option of the ``Lambda_c->Neutronlnu`` observables, which named the final state ``Neutron`` in lieu of the ``neutron`` that the form factors and the option's allowed values use (D. van Dyk)
+- Report all LaTeX errors in `Parameter`s, `Observable`s and `Reference`s rather than just the first one (M. Kirk)
 
 ### Added
 
@@ -78,6 +79,7 @@
 - Check the LaTeX representation of every observable in ``doc/doc_TEST.py``, mirroring the existing check of the parameters (D. van Dyk)
 - Declare the ``ipywidgets`` dependency, which ``eos.tasks`` imports whenever a task runs under IPython (D. van Dyk)
 - Expose ``url()`` property of ``eos.Reference`` to Python, so that the URL of a reference can be retrieved (M. Kirk)
+- Add final check on generated documentation to look for LaTeX -> HTML conversion errors (M. Kirk)
 
 ### Deprecated
 
