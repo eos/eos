@@ -1,8 +1,10 @@
-#########
-Reference
-#########
+################
+Reference Manual
+################
 
-This section
+This section documents the EOS Python and command-line interfaces, the formats of the
+files read by EOS, and the complete lists of the constraints, observables, parameters,
+and signal PDFs built into EOS.
 
 .. toctree::
    :maxdepth: 3
