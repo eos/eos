@@ -360,7 +360,7 @@ EOS_BASE_DIRECTORY/posterior/mode-LABEL.
 Finds clusters among posterior MCMC samples, grouped by Gelman-Rubin R value, and creates a Gaussian mixture density.
 
 Finding clusters and creating a Gaussian mixture density is a necessary intermediate step before using the sample-pmc subcommand.
-The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR/mcmc-*. All MCMC input files present will be used in the clustering.
+The input files are expected in EOS_BASE_DIRECTORY/POSTERIOR, in files whose names begin with 'mcmc-'. All MCMC input files present will be used in the clustering.
 The output files will be stored in EOS_BASE_DIRECTORY/POSTERIOR/clusters.
 ''',
         help = 'Finds clusters within MCMC samples of a named posterior.'
