@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  * Copyright (c) 2023      Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
@@ -160,6 +160,7 @@ namespace eos
                 }
 
                 u.uses(*model);
+                u.uses(*lcdas);
             }
 
             // auxiliary functions for hard-scattering kernels
