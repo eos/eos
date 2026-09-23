@@ -31,6 +31,7 @@ class AnalysisFileContext:
     :type base_directory: str
     """
     base_directory:str='./'
+    """The base directory against which relative paths are resolved."""
 
     def __post_init__(self):
         if not os.path.exists(self.base_directory):

@@ -164,11 +164,13 @@ class Mode:
     :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
     :ivar mode: The location of the mode in parameter space.
     :ivar pvalue: The global p-value at the mode.
-    :ivar test_statistics: The per-element test statistics at the mode (name, type, value, local p-value).
     :ivar local_pvalues: A mapping from each element's name to its local p-value, derived from :attr:`test_statistics`.
     :ivar global_chi2: The global :math:`\chi^2` value at the mode, or ``None`` if not stored.
     :ivar dof: The number of degrees of freedom, or ``None`` if not stored.
     """
+
+    test_statistics: list
+    """The per-element test statistics at the mode (name, type, value, local p-value)."""
 
     def __init__(self, path):
         """ Read a posterior's (local) mode from a file.

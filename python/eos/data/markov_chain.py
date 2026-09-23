@@ -94,10 +94,12 @@ class MarkovChain:
     :ivar type: The type identifier of the data object, always ``'MarkovChain'``.
     :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
     :ivar lookup_table: A mapping from each parameter name to its column index in :attr:`samples`.
-    :ivar samples: The samples in parameter space as a 2D array of shape (N, P).
     :ivar usamples: The samples in unit-hypercube ``u`` space as a 2D array of shape (N, P).
     :ivar weights: The importance weights on a linear scale as a 1D array of shape (N, ), or ``None`` if the chain is unweighted.
     """
+
+    samples: _np.ndarray
+    """The samples in parameter space as a 2D array of shape (N, P)."""
 
     def __init__(self, path):
         """ Read a MarkovChain object from disk.

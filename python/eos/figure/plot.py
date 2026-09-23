@@ -599,6 +599,7 @@ class PlotFactory:
         '2D':    TwoDimensionalPlot, # default
         'empty': EmptyPlot
     }
+    """Maps each supported ``type`` string to the :class:`Plot` subclass that implements it."""
 
     @staticmethod
     def from_yaml(yaml_data:str):

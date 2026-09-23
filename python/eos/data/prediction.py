@@ -167,11 +167,15 @@ class Prediction:
 
     :ivar type: The type identifier of the data object, always ``'Prediction'``.
     :ivar format: The on-disk format version the prediction was read from (1 for legacy files).
-    :ivar varied_parameters: The descriptions (name, kind, kinematics, options) of the predicted columns.
     :ivar lookup_table: A mapping from each column's qualified name (including options and kinematics) to its column index in :attr:`samples`.
-    :ivar samples: The predictive samples as a 2D array of shape (N, O).
     :ivar weights: The importance weights on a linear scale as a 1D array of shape (N, ).
     """
+
+    varied_parameters: list
+    """The descriptions (name, kind, kinematics, options) of the predicted columns."""
+
+    samples: _np.ndarray
+    """The predictive samples as a 2D array of shape (N, O)."""
 
     def __init__(self, path):
         """ Read a Prediction object from disk.
