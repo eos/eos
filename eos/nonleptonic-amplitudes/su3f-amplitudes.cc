@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2024 Marta Burgos
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -90,6 +90,8 @@ namespace eos
         im_DP3(p["nonleptonic::Im{DP3}@SU3F"], *this)
     {
         Context ctx("When constructing B->PP SU3 amplitudes");
+
+        this->uses(*model);
 
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {

@@ -103,6 +103,8 @@ namespace eos
     {
         Context ctx("When constructing B->PP QCD amplitudes");
 
+        this->uses(*model);
+
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
             lamdu = [this]() { return model->ckm_ub() * conj(model->ckm_ud()); };
