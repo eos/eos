@@ -231,13 +231,13 @@ by running the following commands:
   sudo apt-get install libgsl0-dev libfftw3-dev
 
 We strongly recommend the use of a python virtual environment (see :ref:`this FAQ answer <faq-virtualenv>` for more information about virtual environments) to install
-the ``argcomplete``, ``dynesty``, ``gitlint``, ``ipykernel``, ``ipywidgets``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
+the ``argcomplete``, ``dynesty``, ``gitlint``, ``ipykernel``, ``ipywidgets``, ``matplotlib``,  ``scipy``, ``pre-commit``, ``pypandoc``, ``pyyaml``, ``pyhf``, ``tqdm``, and ``wilson`` packages:
 
 
 ::
 
   # Make sure to activate your virtual environment first
-  pip install argcomplete dynesty gitlint ipykernel ipywidgets matplotlib scipy pre-commit pyyaml pyhf tqdm wilson
+  pip install argcomplete dynesty gitlint ipykernel ipywidgets matplotlib scipy pre-commit pypandoc pyyaml pyhf tqdm wilson
 
 Optionally, to use the Population Monte Carlo code for MCMC-based and PMC-based sampling tasks (such as ``sample-mcmc``, ``sample-pmc``, ``find-clusters``, ``mixture-product``),
 also install the ``pypmc`` package:
@@ -254,10 +254,12 @@ If you intend to build the EOS documentation, you will also need the following s
   # for the 'Documentation Software'
   sudo apt-get install python3-sphinx python3-sphinx-rtd-theme python3-sphinx-argparse python3-sphinxcontrib-contentui python3-nbsphinx pandoc
   # or using pip
-  pip install sphinx sphinx_rtd_theme sphinx-argparse sphinxcontrib-contentui nbsphinx pandoc
+  pip install sphinx sphinx_rtd_theme sphinx-argparse sphinxcontrib-contentui nbsphinx
 
 
-Be advised that the ``pandoc`` python package requires a system installation of ``pandoc``.
+Be advised that the ``pypandoc`` python package requires a system installation of ``pandoc``.
+Some functionality -- the PDF output of the ``report`` task and the labels drawn by ``eos.figure`` --
+further requires a working (Xe)LaTeX installation.
 
 Installing the dependencies on macOS with Homebrew and PyPi
 ===========================================================
