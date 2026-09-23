@@ -156,7 +156,7 @@ jobs:
           tar fx _build.tar
           pushd _build
           make install
-          make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O=-a
+          make -C ../_src/doc/ html BUILDDIR=$(pwd)/doc O="-a -W"
           make -C ../_src/doc/ doc-check BUILDDIR=$(pwd)/doc
           if [[ -n ${EOS_RELEASE} ]] ; then
               mv $(pwd)/doc/html $(pwd)/doc/${EOS_RELEASE}
