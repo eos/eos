@@ -58,6 +58,7 @@ intersphinx_mapping = {
     'numpy':      ('https://numpy.org/doc/stable',           '_inventories/numpy.inv'),
     'scipy':      ('https://docs.scipy.org/doc/scipy',       '_inventories/scipy.inv'),
     'matplotlib': ('https://matplotlib.org/stable',          '_inventories/matplotlib.inv'),
+    'pyhf':       ('https://pyhf.readthedocs.io/en/stable',  '_inventories/pyhf.inv'),
 }
 
 # These projects do not publish an inventory that intersphinx could resolve.
@@ -65,6 +66,9 @@ nitpick_ignore = [
     ('py:class', 'pypmc.density.MixtureDensity'),
     ('py:class', 'pypmc.density.mixture.MixtureDensity'),
     ('py:class', 'wilson.Wilson'),
+    # A bound class that is returned but never constructed from Python, and whose
+    # methods carry neither a docstring nor named arguments.
+    ('py:class', 'BToSWilsonCoefficients'),
 ]
 
 # Docstrings mark an argument as optional by appending ', optional' to its type,

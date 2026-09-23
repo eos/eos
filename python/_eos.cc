@@ -559,7 +559,7 @@ BOOST_PYTHON_MODULE(_eos)
             The generation changes whenever any of the parameters is written to. It is
             invariant under reading any of the parameters.
 
-            :rtype: eos._ParametersGeneration
+            :rtype: _eos._ParametersGeneration
         )");
 
     // Parameter
