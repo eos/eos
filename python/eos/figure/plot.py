@@ -425,7 +425,7 @@ class TwoDimensionalPlot(Plot):
     :param grid: The grid properties of the plot. For the default properties, see :class:`Grid <eos.figure.Grid>`.
     :type grid: :class:`Grid <eos.figure.Grid>`
     :param items: A list of items to be drawn in the plot.
-    :type items: list[:class:`Item <eos.figure.Item>`]
+    :type items: list[:class:`Item <eos.figure.item.Item>`]
     :param legend: The legend properties of the plot. For the default properties, see :class:`Legend <eos.figure.Legend>`.
     :type legend: :class:`Legend <eos.figure.Legend>`
     :param title: The title of the plot. Defaults to None, which means no title is displayed.

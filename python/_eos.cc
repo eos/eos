@@ -519,7 +519,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param name: The name of the parameter to be redirected.
             :type name: eos.QualifiedName
             :param id: The id of the parameter to which the name shall be redirected.
-            :type id: eos.Parameter::Id
+            :type id: int
             )",
                  args("name", "id"))
             .staticmethod("redirect")
@@ -678,7 +678,7 @@ BOOST_PYTHON_MODULE(_eos)
 
     // Kinematics
     class_<Kinematics>("Kinematics", R"(
-            Represents the set of kinematic variables relevant to an :class:`observable <eos.Obserable>`.
+            Represents the set of kinematic variables relevant to an :class:`observable <eos.Observable>`.
 
             Initialize a new set of kinematic variables. The inital set of variables and their initial
             set of values can be provided through keyword arguments, e.g. using
