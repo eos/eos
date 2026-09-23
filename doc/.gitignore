@@ -24,6 +24,8 @@ reference/python.rst
 reference/signal-pdfs.rst
 physics/conventions.rst
 user-guide/CKM-pi/*
+user-guide/analysis-organisation-base/
+user-guide/figures/
 user-guide/inference-base/
 user-guide/inference.md
 user-guide/inference.pdf
