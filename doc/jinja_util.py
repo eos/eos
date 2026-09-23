@@ -54,3 +54,29 @@ qn_to_link_map = {
     ord(']'): 'sc', ord('{'): 'bo', ord('}'): 'bc', ord('\''): 'pr',
     ord(','): 'cm'
 }
+
+
+def make_parameter_link_keys():
+    """Map the qualified name of every parameter to its link target on the parameters page.
+
+    RST target names are matched without regard to case, so parameters whose names differ
+    only in case need disambiguation.
+    """
+    import eos
+
+    keys, used = {}, set()
+    for section in eos.Parameters().sections():
+        for group in section:
+            for parameter in group:
+                qn  = str(parameter.name())
+                key = qn.translate(qn_to_link_map).lower()
+
+                candidate, index = key, 0
+                while candidate in used:
+                    index    += 1
+                    candidate = f'{key}-{index}'
+
+                used.add(candidate)
+                keys[qn] = candidate
+
+    return keys
