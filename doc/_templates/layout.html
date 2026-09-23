@@ -1,0 +1,28 @@
+{% extends "!layout.html" %}
+
+{% block extrahead %}
+  <script>
+    window.EOS_DOC = {
+        release: "{{ eos_release }}",
+        root:    "{{ pathto('', 1) }}{{ eos_doc_root }}"
+    };
+  </script>
+{% endblock %}
+
+{% block sidebartitle %}
+  {{ super() }}
+  <div id="eos-version-selector" class="eos-version-selector" hidden></div>
+{% endblock %}
+
+{% block document %}
+  {%- if eos_release %}
+  <div id="eos-version-banner" class="admonition warning">
+    <p class="admonition-title">{{ eos_release }}</p>
+    <p>
+      <span class="eos-version-banner-text">You are reading the documentation for EOS {{ eos_release }}, which is not necessarily the latest release.</span>
+      <a href="{{ pathto('', 1) }}{{ eos_doc_root }}index.html">Go to the documentation for the latest release.</a>
+    </p>
+  </div>
+  {%- endif %}
+  {{ super() }}
+{% endblock %}
