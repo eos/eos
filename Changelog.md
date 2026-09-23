@@ -132,6 +132,7 @@
 - Fix a stray space in the ``basics`` example notebook, and an invalid ``\p`` escape sequence in the ``analysis-organisation`` example notebook that emitted a ``SyntaxWarning`` into the rendered documentation (D. van Dyk)
 - Rename the custom observable of the ``b-to-u-l-nu`` example analysis file to ``B->pilnu::R_pi_e``, since it shadowed the built-in ``B->pilnu::R_pi``, which is a ratio of tau and muon modes rather than of tau and electron modes (D. van Dyk)
 - Emit ``eos.figure``'s per-item progress message at debug level in lieu of info level, so that drawing a figure no longer writes one line per item to ``stderr`` (D. van Dyk)
+- Forward the parameters used by the ``ParameterUser`` members that a ``ParameterUser`` owns, so that the set of ``used_parameter_ids`` an observable reports is complete. The ``SE``, ``SSE``, ``BSZ2015``, ``BGL1997``, ``DM2016``, ``DKMR2017``, and ``HKVT2025`` form factors now cover their traits objects; the ``B->gamma`` QCDF form factors cover the B-meson LCDAs and the model; ``HQETUnitarityBounds`` covers the BGL coefficients; the ``Lambda_b->Lambda_c`` zero-recoil sum rules cover the ``Lambda_c(2595)`` form factors; the ``Bq->D(*)q P`` amplitudes cover the light-meson LCDAs; ``BsToPhiDileptonAndConjugate`` covers both of its ``B_s->phill`` members; and a further set of classes cover the model (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
