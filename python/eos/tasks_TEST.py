@@ -53,6 +53,9 @@ class ReportTaskTests(unittest.TestCase):
         self.assertIn('**total**', rendered)
         # 'FF' has no mode, hence the goodness-of-fit fallback.
         self.assertIn('No goodness-of-fit information has been recorded', rendered)
+        # Parameter names are typeset as math; emitting the raw LaTeX as text breaks the PDF.
+        self.assertIn('- `CKM::abs(V_ub)` ($|V_{ub}|$)', rendered)
+        self.assertIn('- `B->pi::f_+(0)@BCL2008` ($f_+^{B\\to \\pi}(0)$)', rendered)
         # A corner figure is produced for 'CKM' and referenced from the report.
         self.assertIn('figures/corner-CKM.pdf', rendered)
         self.assertTrue(os.path.isfile(os.path.join(base, 'figures', 'corner-CKM.pdf')))
