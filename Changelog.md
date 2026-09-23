@@ -42,6 +42,10 @@
 - Force the ``V`` option of the ``B_s->K^*lnu`` and ``B_s->D_s^*lnu`` observables, which could not be constructed from their names alone because the option carries no default (D. van Dyk)
 - Fix the value of the ``B`` option of the ``Lambda_c->Neutronlnu`` observables, which named the final state ``Neutron`` in lieu of the ``neutron`` that the form factors and the option's allowed values use (D. van Dyk)
 - Report all LaTeX errors in `Parameter`s, `Observable`s and `Reference`s rather than just the first one (M. Kirk)
+- Rename the "Reference" section of the documentation to "Reference Manual" (issue #1281) (D. van Dyk)
+- Name the base directory of an example notebook after the notebook: ``simulation.ipynb`` writes below ``simulation-base`` in lieu of ``simulation-data``, and ``analysis-organisation.ipynb`` below ``analysis-organisation-base`` in lieu of its own directory (D. van Dyk)
+- Name a type in the ``:type:`` fields of the docstrings, in lieu of prose such as ``iterable``, ``2D numpy array``, or ``int > 0``; the admissible range of a value is now stated in the description of the parameter (issue #779) (D. van Dyk)
+- Build the documentation in Sphinx' ``nitpicky`` mode and treat its warnings as errors, so that a reference which does not resolve fails the build (issue #779) (D. van Dyk)
 
 ### Added
 
@@ -80,6 +84,10 @@
 - Declare the ``ipywidgets`` dependency, which ``eos.tasks`` imports whenever a task runs under IPython (D. van Dyk)
 - Expose ``url()`` property of ``eos.Reference`` to Python, so that the URL of a reference can be retrieved (M. Kirk)
 - Add final check on generated documentation to look for LaTeX -> HTML conversion errors (M. Kirk)
+- Document the format of the constraint files in the new "Constraint Format" section of the reference manual (D. van Dyk)
+- Document that a working (Xe)LaTeX installation is required for some functionality, such as the PDF output of the ``report`` task and the labels drawn by ``eos.figure`` (D. van Dyk)
+- Document ``eos.analysis_file_context.AnalysisFileContext``, ``eos.data.SampleMask``, ``eos.diagnostic.Diagnostic``, ``eos.diagnostic.Severity``, ``eos.PyhfLogLikelihood``, and the bound classes ``eos.KinematicVariable``, ``eos.ObservableId``, ``eos.ReferenceName``, and the parts of a qualified name and of a reference name (issue #779) (D. van Dyk)
+- Resolve references to the types documented by Python, NumPy, SciPy, matplotlib, and pyhf through intersphinx, whose inventories are pinned in ``doc/_inventories/`` so that the documentation builds without network access (issue #779) (D. van Dyk)
 
 ### Deprecated
 
@@ -133,6 +141,11 @@
 - Rename the custom observable of the ``b-to-u-l-nu`` example analysis file to ``B->pilnu::R_pi_e``, since it shadowed the built-in ``B->pilnu::R_pi``, which is a ratio of tau and muon modes rather than of tau and electron modes (D. van Dyk)
 - Emit ``eos.figure``'s per-item progress message at debug level in lieu of info level, so that drawing a figure no longer writes one line per item to ``stderr`` (D. van Dyk)
 - Forward the parameters used by the ``ParameterUser`` members that a ``ParameterUser`` owns, so that the set of ``used_parameter_ids`` an observable reports is complete. The ``SE``, ``SSE``, ``BSZ2015``, ``BGL1997``, ``DM2016``, ``DKMR2017``, and ``HKVT2025`` form factors now cover their traits objects; the ``B->gamma`` QCDF form factors cover the B-meson LCDAs and the model; ``HQETUnitarityBounds`` covers the BGL coefficients; the ``Lambda_b->Lambda_c`` zero-recoil sum rules cover the ``Lambda_c(2595)`` form factors; the ``Bq->D(*)q P`` amplitudes cover the light-meson LCDAs; ``BsToPhiDileptonAndConjugate`` covers both of its ``B_s->phill`` members; and a further set of classes cover the model (D. van Dyk)
+- Re-raise the exception of a failing task once the ``ipywidgets`` output widget has displayed it: the widget suppresses whatever is raised within it, so a task that failed inside a notebook was reported and then ignored, and a failing example produced a successful documentation build (D. van Dyk)
+- Typeset the parameter names of the ``inference`` report template as math, so that ``eos.tasks.report`` produces its PDF in lieu of failing in XeLaTeX (D. van Dyk)
+- Name ``pypandoc`` in the installation instructions, in lieu of the unrelated ``pandoc`` package on PyPI, and list it among the packages to install into a virtual environment (D. van Dyk)
+- Define ``\pandocbounded`` in the report template, which pandoc 3 wraps around every image and which only its own template provides, so that ``eos.tasks.report`` produces its PDF with a current pandoc (D. van Dyk)
+- Drop the dollar signs from the latex representations declared in the ``b-to-u-l-nu`` and ``x-parameters`` example analysis files, which the latex representation of a parameter no longer accepts (D. van Dyk)
 
 
 ## [v1.0.21] - 2026-08-05
