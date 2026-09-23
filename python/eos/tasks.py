@@ -575,7 +575,7 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     :param perplexity_threshold: The threshold for the perplexity in the last step after which further adaptation steps are to be skipped. Defaults to 1.0.
     :type perplexity_threshold: 0.0 < float <= 1.0, optional
     :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
-    :type weight_threshold: 0.0 < float <= 1.0, optional.
+    :type weight_threshold: 0.0 < float <= 1.0, optional
     :param sigma_test_stat: If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
     :type sigma_test_stat: list or iterable
     :param initial_proposal: Specify where the initial proposal should be taken from:
