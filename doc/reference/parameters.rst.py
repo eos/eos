@@ -1,6 +1,6 @@
 import eos
 import re
-from jinja_util import print_template, qn_to_link_map
+from jinja_util import print_template, make_parameter_link_keys, qn_to_link_map
 
 def latex_to_rst(s):
     s = re.sub(r'\$([^\$]*)\$', r':math:`\1`', s) # inline math
@@ -25,6 +25,8 @@ def make_doc_groups(section):
         'parameters' : make_doc_parameters(group),
         } for group in section]
 
+link_keys = make_parameter_link_keys()
+
 def make_doc_parameters(group):
     parameters = []
     for param in group:
@@ -35,7 +37,7 @@ def make_doc_parameters(group):
             'latex'         : latex_to_rst(f'${param.latex()}$') if param.latex() else '',
             'unit'          : latex_to_rst(f'${param.unit().latex()}$'),
             'value'         : param.evaluate(),
-            'link_key'      : qn.translate(qn_to_link_map).lower(),
+            'link_key'      : link_keys[qn],
         })
 
     return parameters
