@@ -94,7 +94,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     :type output: str
     :param mode: A callable that, given the task's arguments as keyword arguments, returns the file mode
         for the log file (e.g. ``'w'`` or ``'a'``). Defaults to always returning ``'w'``.
-    :type mode: callable
+    :type mode: collections.abc.Callable
     :param modules: The names of optional Python modules to import before the task runs. Defaults to none.
     :type modules: list[str] | None
     :param logfile: Whether to capture the task's log output into a log file in the output directory. Defaults to True.
@@ -236,13 +236,13 @@ def ks_test(samples, weights, mean, covariance):
     to reproduce the diagnostic this test is based on, e.g. as a QQ-plot.
 
     :param samples: The samples to test, as a 2D array of shape (N, P).
-    :type samples: 2D numpy array
+    :type samples: numpy.ndarray
     :param weights: The importance weights of the samples, as a 1D array of shape (N, ).
-    :type weights: 1D numpy array
+    :type weights: numpy.ndarray
     :param mean: The fitted mean, as a 1D array of shape (P, ).
-    :type mean: 1D numpy array
+    :type mean: numpy.ndarray
     :param covariance: The fitted covariance, as a 2D array of shape (P, P).
-    :type covariance: 2D numpy array
+    :type covariance: numpy.ndarray
     :returns: The test's result, including its p-value and the detail needed to diagnose a failure.
     :rtype: GoodnessOfFitResult
     """
@@ -425,8 +425,8 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     :type analysis_file: str or `eos.AnalysisFile`
     :param posterior: The name of the posterior PDF from which to draw the samples.
     :type posterior: str
-    :param chain: The index assigned to the Markov chain. This value is used to seed the RNG for a reproducible analysis.
-    :type chain: int >= 0
+    :param chain: The index assigned to the Markov chain, which must be non-negative. This value is used to seed the RNG for a reproducible analysis.
+    :type chain: int
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     :param pre_N: The number of samples to be used for an adaptation in each prerun steps. These samples will be discarded.
@@ -440,7 +440,7 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     :param cov_scale: Scale factor for the initial guess of the covariance matrix.
     :type cov_scale: float, optional
     :param start_point: Optional starting point for the chain
-    :type start_point: list-like, optional
+    :type start_point: collections.abc.Sequence, optional
     """
 
     eos.inprogress('Beginning sampling...')
@@ -498,10 +498,10 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     :type posterior: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param threshold: The R value threshold. If two sample subsets have an R value larger than this threshold, they will be treated as two distinct clusters. Defaults to 2.0.
-    :type threshold: float > 1.0, optional
-    :param K_g: The number of mixture components per cluster. Default to 1.
-    :type K_g: int >= 1, optional
+    :param threshold: The R value threshold, which must be larger than 1.0. If two sample subsets have an R value larger than this threshold, they will be treated as two distinct clusters. Defaults to 2.0.
+    :type threshold: float, optional
+    :param K_g: The number of mixture components per cluster, which must be at least 1. Default to 1.
+    :type K_g: int, optional
     """
 
     import pathlib
@@ -534,7 +534,7 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     :param posterior: The name of the posterior.
     :type posterior: str
     :param posteriors: The list of names of the posteriors whose mixture densities will be concatenated.
-    :type posteriors: iterable of str
+    :type posteriors: collections.abc.Iterable of str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
     """
@@ -566,18 +566,18 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     :type posterior: str
     :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
     :type base_directory: str, optional
-    :param step_N: The number of samples to be used in each adaptation step. These samples will be discarded. Defaults to 500.
-    :type step_N: int > 0, optional
-    :param steps: The number of adaptation steps, which are used to adapt the PMC proposal to the posterior. Defaults to 10.
-    :type steps: int > 0, optional
-    :param final_N: The number of samples to be stored in the output file. Defaults to 5000,
-    :type final_N: int > 0, optional
-    :param perplexity_threshold: The threshold for the perplexity in the last step after which further adaptation steps are to be skipped. Defaults to 1.0.
-    :type perplexity_threshold: 0.0 < float <= 1.0, optional
-    :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned.
-    :type weight_threshold: 0.0 < float <= 1.0, optional
+    :param step_N: The number of samples to be used in each adaptation step, which must be positive. These samples will be discarded. Defaults to 500.
+    :type step_N: int, optional
+    :param steps: The number of adaptation steps, which must be positive, and which are used to adapt the PMC proposal to the posterior. Defaults to 10.
+    :type steps: int, optional
+    :param final_N: The number of samples to be stored in the output file, which must be positive. Defaults to 5000,
+    :type final_N: int, optional
+    :param perplexity_threshold: The threshold for the perplexity in the last step after which further adaptation steps are to be skipped. Must be larger than 0.0 and at most 1.0. Defaults to 1.0.
+    :type perplexity_threshold: float, optional
+    :param weight_threshold: Mixture components with a weight smaller than this threshold are pruned. Must be larger than 0.0 and at most 1.0.
+    :type weight_threshold: float, optional
     :param sigma_test_stat: If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
-    :type sigma_test_stat: list or iterable
+    :type sigma_test_stat: list or collections.abc.Iterable
     :param initial_proposal: Specify where the initial proposal should be taken from:
 
      * ``clusters``: use the proposal obtained using `find-clusters` (default)
@@ -587,14 +587,14 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
      * ``pmc``: continue sampling from the previous `sample-pmc` results.
 
     :type initial_proposal: str, optional
-    :param pmc_iterations: Maximum number of update of the PMC, changing this value may make the update unstable.
-    :type pmc_iterations: int > 0, optional, advanced
-    :param pmc_rel_tol: Relative tolerance of the PMC. If two consecutive values of the current density log-likelihood are relatively smaller than this value, the convergence is declared.
-    :type pmc_rel_tol: float > 0.0, optional, advanced
-    :param pmc_abs_tol: Absolute tolerance of the PMC. If two consecutive values of the current density log-likelihood are smaller than this value, the convergence is declared.
-    :type pmc_abs_tol: float > 0.0, optional, advanced
-    :param pmc_lookback: Use reweighted samples from the previous update steps when adjusting the mixture density. The parameter determines the number of update steps to "look back". The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
-    :type pmc_lookback: int >= 0, optional
+    :param pmc_iterations: Maximum number of update of the PMC, which must be positive. This is an advanced option; changing this value may make the update unstable.
+    :type pmc_iterations: int, optional
+    :param pmc_rel_tol: Relative tolerance of the PMC, which must be positive. This is an advanced option. If two consecutive values of the current density log-likelihood are relatively smaller than this value, the convergence is declared.
+    :type pmc_rel_tol: float, optional
+    :param pmc_abs_tol: Absolute tolerance of the PMC, which must be positive. This is an advanced option. If two consecutive values of the current density log-likelihood are smaller than this value, the convergence is declared.
+    :type pmc_abs_tol: float, optional
+    :param pmc_lookback: Use reweighted samples from the previous update steps when adjusting the mixture density. The parameter determines the number of update steps to "look back", and must be non-negative. The default value of 1 disables this feature, a value of 0 means that all previous steps are used.
+    :type pmc_lookback: int, optional
     """
 
     analysis = analysis_file.analysis(posterior, base_directory=base_directory)

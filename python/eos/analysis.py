@@ -33,7 +33,7 @@ class BestFitPoint:
     :type analysis: eos.Analysis
     :param point: The values of the varied parameters at the best-fit point, in the same order as
         :attr:`eos.Analysis.varied_parameters`.
-    :type point: iterable of float
+    :type point: collections.abc.Iterable of float
 
     :ivar analysis: The analysis whose best-fit point is represented.
     :ivar point: The values of the varied parameters at the best-fit point.
@@ -65,11 +65,11 @@ class Analysis:
     :param global_options: The options as (key, value) pairs that shall be forwarded to all theory predictions.
     :type global_options: dict, optional
     :param priors: The priors for this analysis as a list of prior descriptions. See :ref:`below <eos-Analysis-prior-descriptions>` for what consitutes a valid prior description.
-    :type priors: iterable
+    :type priors: collections.abc.Sequence
     :param likelihood: The likelihood as a list of individual constraints from the internal data base of experimental and theoretical constraints; cf. `the complete list of constraints <../reference/constraints.html>`_.
-    :type likelihood: iterable
+    :type likelihood: collections.abc.Sequence
     :param external_likelihood: The external likelihood blocks as a list or iterable of objects returned by :py:meth:`eos.LogLikelihoodBlock.External`.
-    :type external_likelihood: list or iterable of :py:class:`eos.LogLikelihoodBlock`.
+    :type external_likelihood: collections.abc.Sequence of :py:class:`eos.LogLikelihoodBlock`.
     :param manual_constraints: Additional manually-specified constraints that shall be added to the log(likelihood).
     :type manual_constraints: dict, optional
     :param fixed_parameters: Values of parameters that are set when the analysis is defined.
@@ -393,7 +393,7 @@ class Analysis:
         :param start_point: Parameter point from which to start the optimization, with the elements in the same order as in eos.Analysis.varied_parameters.
                             If set to "random", optimization starts at the random point in the space of the priors.
                             If not specified, optimization starts at the current parameter point.
-        :type start_point: iterable, optional
+        :type start_point: collections.abc.Iterable, optional
         :param rng: Optional random number generator
         :param \**kwargs: Are passed to `scipy.optimize.minimize`
 
@@ -454,7 +454,7 @@ class Analysis:
         Adapter for use with external optimization software (e.g. pypmc) to aid when optimizing the log(posterior).
 
         :param u: Parameter point in u space, with the elements in the same order as in eos.Analysis.varied_parameters.
-        :type u: iterable
+        :type u: collections.abc.Iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
@@ -474,7 +474,7 @@ class Analysis:
         Adapter for use with external optimization software (e.g. scipy.optimize.minimize) to aid when optimizing the log(posterior).
 
         :param u: Parameter point in u space, with the elements in the same order as in eos.Analysis.varied_parameters.
-        :type u: iterable
+        :type u: collections.abc.Iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
@@ -517,9 +517,9 @@ class Analysis:
         :param preruns: Number of preruns.
         :param cov_scale: Scale factor for the initial guess of the covariance matrix.
         :param observables: Observables for which posterior-predictive samples shall be obtained.
-        :type observables: list-like, optional
+        :type observables: collections.abc.Sequence, optional
         :param start_point: Optional starting point for the chain
-        :type start_point: list-like, optional
+        :type start_point: collections.abc.Sequence, optional
         :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.markov_chain.MarkovChain)
 
         :return: A tuple of the parameters as array of size N, the logarithmic weights as array of size N, and optionally the posterior-predictive samples of the observables as array of size N x len(observables).
@@ -757,7 +757,7 @@ class Analysis:
         Adapter for use with external sampling software (e.g. dynesty) to aid when sampling from the log(likelihood).
 
         :param p: Parameter point, with the elements in the same order as in eos.Analysis.varied_parameters.
-        :type p: iterable
+        :type p: collections.abc.Iterable
         :param args: Dummy parameter (ignored)
         :type args: optional
         """
@@ -778,7 +778,7 @@ class Analysis:
         Adapter for use with external sampling software to aid when sampling from the log(prior).
 
         :param u: The input probability point on the hypercube [0, 1)^D
-        :type u: iterable
+        :type u: collections.abc.Iterable
         """
         return self._u_to_par(u)
 
@@ -804,9 +804,9 @@ class Analysis:
         :param print_progress: Whether to print progress messages during sampling. Defaults to True.
         :type print_progress: bool, optional
         :param print_function: The function used to print progress messages. Defaults to using a dynesty-based function.
-        :type print_function: callable, optional
+        :type print_function: collections.abc.Callable, optional
         :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
-        :type seed: None or int or numpy.typing.ArrayLike or numpy.random.SeedSequence, optional
+        :type seed: None or int or collections.abc.Sequence of int or numpy.random.SeedSequence, optional
         :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
         :type sample: str, optional
 

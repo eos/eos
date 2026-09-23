@@ -25,7 +25,7 @@ class SignalPDF(_SignalPDF):
         Adapter for use with external optimization software (e.g. pypmc) to aid when sampling from the log(PDF).
 
         :param x: Phase space point, with the elements corresponding to the sorted list of variables in lexicographical order; inspect `self.variables`.
-        :type x: iterable of float
+        :type x: collections.abc.Iterable of float
         """
         for kv, v in zip(self.variables, x):
             kv.set(v)
@@ -45,7 +45,7 @@ class SignalPDF(_SignalPDF):
         :param preruns: Number of preruns.
         :param cov_scale: Scale factor for the initial guess of the covariance matrix.
         :param start_point: Optional starting point for the chain
-        :type start_point: list-like, optional
+        :type start_point: collections.abc.Sequence, optional
         :param rng: Optional random number generator (must be compatible with the requirements of pypmc.sampler.markov_chain.MarkovChain)
 
         :return: A tuple of the kinematic variables as array of size N and the log(PDF) as array of size N.
