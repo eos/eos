@@ -160,8 +160,8 @@ jobs:
           make -C ../_src/doc/ doc-check BUILDDIR=$(pwd)/doc
           if [[ -n ${EOS_RELEASE} ]] ; then
               mv $(pwd)/doc/html $(pwd)/doc/${EOS_RELEASE}
-              mkdir $(pwd)/doc/html
-              mv $(pwd)/doc/${EOS_RELEASE} $(pwd)/doc/html/
+              mkdir -p $(pwd)/doc/html/releases
+              mv $(pwd)/doc/${EOS_RELEASE} $(pwd)/doc/html/releases/
           fi
           popd
           tar caf doc.tar _build/doc/html
