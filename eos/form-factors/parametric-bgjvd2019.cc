@@ -86,6 +86,8 @@ namespace eos
         _l6pone(p[_sslp_prefix(prefix) + "::l_6'(1)@HQET"], *this),
         _l6ppone(p[_sslp_prefix(prefix) + "::l_6''(1)@HQET"], *this)
     {
+        this->uses(*_model);
+
         if (_opt_lp_model.value() == "exponential")
         {
             _xi = [=, this](const double & q2) -> double { return _xi_exponential(q2); };

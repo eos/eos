@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2024 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  * Copyright (c) 2022 Carolina Bolognani
  *
  * This file is part of the EOS project. EOS is free software;
@@ -68,6 +68,7 @@ namespace eos
                 _mu_b(p["QCD::mu_b"], u),
                 _mu_t(p["QCD::mu_t"], u)
             {
+                u.uses(*model);
             }
 
             inline double
@@ -702,6 +703,7 @@ namespace eos
                 _mu_b(p["QCD::mu_b"], u),
                 _mu_t(p["QCD::mu_t"], u)
             {
+                u.uses(*model);
             }
 
             inline double

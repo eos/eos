@@ -85,6 +85,7 @@ namespace eos
         _a_A12{ { UsedParameter(p[_par_name("A12_1")], *this), UsedParameter(p[_par_name("A12_2")], *this) } },
         _a_T2{ { UsedParameter(p[_par_name("T2_1")], *this), UsedParameter(p[_par_name("T2_2")], *this) } }, _traits(p), _mB(_traits.m_B), _mV(_traits.m_V)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> BSZ2015FormFactors<Process_, PToV>::~BSZ2015FormFactors() {}
@@ -334,6 +335,7 @@ namespace eos
         _a_ft{ { UsedParameter(p[_par_name("fT_0")], *this), UsedParameter(p[_par_name("fT_1")], *this), UsedParameter(p[_par_name("fT_2")], *this) } },
         _a_fz{ { UsedParameter(p[_par_name("f0_1")], *this), UsedParameter(p[_par_name("f0_2")], *this) } }, _traits(p), _mB(_traits.m_B), _mP(_traits.m_P)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> BSZ2015FormFactors<Process_, PToP>::~BSZ2015FormFactors() {}

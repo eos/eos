@@ -143,6 +143,7 @@ namespace eos
         // traits
         _traits(new DKMR2017FormFactorTraits<Process_>(p))
     {
+        this->uses(*_traits);
     }
 
     template <typename Process_>

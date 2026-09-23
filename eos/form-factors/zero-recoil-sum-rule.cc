@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2015-2025 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -73,6 +73,7 @@ namespace eos
                 m_Lambda_c_2625(p["mass::Lambda_c(2625)"], u)
             {
                 u.uses(*model);
+                u.uses(*ff_2595);
                 u.uses(*ff_2625);
             }
 

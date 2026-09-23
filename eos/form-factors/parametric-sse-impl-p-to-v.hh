@@ -86,6 +86,7 @@ namespace eos
         _a_T2{ { UsedParameter(p[_par_name("T2_1")], *this), UsedParameter(p[_par_name("T2_2")], *this) } },
         _a_T23{ { UsedParameter(p[_par_name("T23_1")], *this), UsedParameter(p[_par_name("T23_2")], *this) } }, _traits(p), _mB(_traits.m_B), _mV(_traits.m_V)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> SSEFormFactors<Process_, PToV>::~SSEFormFactors() {}

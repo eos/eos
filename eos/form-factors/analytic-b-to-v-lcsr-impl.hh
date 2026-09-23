@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=marker foldmarker={{{,}}} : */
 
 /*
- * Copyright (c) 2018-2025 Danny van Dyk
+ * Copyright (c) 2018-2026 Danny van Dyk
  * Copyright (c) 2018      Nico Gubernari
  * Copyright (c) 2018      Ahmet Kokulu
  *
@@ -138,6 +138,7 @@ namespace eos
             opt_method(o, "method"_ok, { "borel"_ov, "dispersive"_ov }, "borel"_ov),
             switch_borel(opt_method.value() == "borel")
             {
+                u.uses(*model);
                 u.uses(*b_lcdas);
 
                 const QuarkFlavor q_v = std::get<1>(Traits::partonic_transition);

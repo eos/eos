@@ -67,6 +67,7 @@ namespace eos
         _mB(_traits.m_B),
         _mP(_traits.m_P)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> SEFormFactors<Process_, PToP>::~SEFormFactors() = default;

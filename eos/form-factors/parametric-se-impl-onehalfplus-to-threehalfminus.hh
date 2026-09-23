@@ -93,6 +93,7 @@ namespace eos
                       UsedParameter(p[_par_name("perp32", "T5", 3)], *this),
                       UsedParameter(p[_par_name("perp32", "T5", 4)], *this) }
     {
+        this->uses(_traits);
     }
 
     template <typename Process_>

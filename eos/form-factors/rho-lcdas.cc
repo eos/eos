@@ -80,6 +80,7 @@ namespace eos
                 _mu_b(p["QCD::mu_b"], u),
                 _mu_t(p["QCD::mu_t"], u)
             {
+                u.uses(*model);
             }
 
             inline double

@@ -58,6 +58,8 @@ namespace eos
                 UsedParameter(p[parameter("a^phi+_7")], *this),
                 UsedParameter(p[parameter("a^phi+_8")], *this) })
         {
+            this->uses(*model);
+
             // Verify the size of Weights used internally
             Weights weights;
             if (weights.size() < a.size())

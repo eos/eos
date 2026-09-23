@@ -160,6 +160,7 @@ namespace eos
         // traits
         _traits(new DM2016FormFactorTraits<Process_>(p))
     {
+        this->uses(*_traits);
     }
 
     template <typename Process_>
