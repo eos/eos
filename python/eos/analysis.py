@@ -806,7 +806,7 @@ class Analysis:
         :param print_function: The function used to print progress messages. Defaults to using a dynesty-based function.
         :type print_function: callable, optional
         :param seed: The seed used to initialize the Mersenne Twister pseudo-random number generator.
-        :type seed: {None, int, array_like[ints], SeedSequence}, optional
+        :type seed: None or int or numpy.typing.ArrayLike or numpy.random.SeedSequence, optional
         :param sample: The method used for sampling within the likelihood constraints. For valid values, see dynesty documentation. Defaults to 'auto'.
         :type sample: str, optional
 

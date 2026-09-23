@@ -112,13 +112,19 @@ html_logo = '_static/github-eos-logo.png'
 logo_only = True
 
 
+# The classes that the bindings expose under a private name, mapped to the names
+# under which they are documented.
+documented_names = {
+    '_Parameters': 'eos.Parameters',
+}
+
 # Boost.Python ends the signature it generates with a colon, which autodoc then
 # reads as part of the return annotation.
 def strip_signature_colon(app, what, name, obj, options, signature, return_annotation):
     if return_annotation and return_annotation.endswith(' :'):
-        return (signature, return_annotation[:-2])
+        return_annotation = return_annotation[:-2]
 
-    return (signature, return_annotation)
+    return (signature, documented_names.get(return_annotation, return_annotation))
 
 
 def setup(app):
