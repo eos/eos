@@ -127,12 +127,14 @@ class PMCSampler:
     requires the optional PyPMC module.
 
     :ivar type: The type identifier of the data object, always ``'PMCSampler'``.
-    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
     :ivar lookup_table: A mapping from each parameter name to its index in :attr:`varied_parameters`.
     :ivar components: The Gaussian components of the proposal mixture.
     :ivar component_weights: The weights of the proposal mixture components.
     :ivar test_statistics: The precomputed test statistics.
     """
+
+    varied_parameters: list
+    """The descriptions (name, min, max) of the varied parameters."""
 
     def __init__(self, path):
         """ Read a PMCSampler object from disk.

@@ -78,6 +78,9 @@ class Analysis:
     :type parameters: :class:`eos.Parameters` or None, optional
     """
 
+    varied_parameters: list
+    """The parameters varied by this analysis, as a list of :class:`eos.Parameter` objects."""
+
     def __init__(self, priors, likelihood, external_likelihood=None, global_options=None, manual_constraints=None, fixed_parameters=None, parameters=None):
         """Constructor."""
         if external_likelihood is None:

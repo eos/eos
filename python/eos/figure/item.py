@@ -3576,6 +3576,7 @@ class ItemFactory:
         'errorbars': ErrorBarsItem,
         'point': PointItem,
     }
+    """Maps each supported ``type`` string to the :class:`Item` subclass that implements it."""
 
     @staticmethod
     def from_yaml(yaml_data:str):

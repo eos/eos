@@ -151,10 +151,12 @@ class MixtureDensity:
     :ivar format_version: The on-disk format version the density was read from (1 for legacy files).
     :ivar components: The descriptions of the mixture components.
     :ivar weights: The component weights of the mixture.
-    :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters, or ``None`` for a legacy file that does not record them.
     :ivar lookup_table: A mapping from each parameter name to its index in :attr:`varied_parameters`.
     :ivar test_statistics: The precomputed test statistics, or ``None`` if not stored.
     """
+
+    varied_parameters: list | None
+    """The descriptions (name, min, max) of the varied parameters, or ``None`` for a legacy file that does not record them."""
 
     def __init__(self, path):
         """ Read a MixtureDensity object from disk.
