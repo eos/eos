@@ -5,8 +5,11 @@ os.environ.setdefault('MPLBACKEND', 'Agg')
 
 import numpy as np
 import shutil
+import sys
 import tempfile
+import types
 import unittest
+import unittest.mock
 import eos
 import yaml
 from pathlib import Path
@@ -335,6 +338,56 @@ class CreateConstraintTaskTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             eos.tasks.run(self.analysis_file, 'restricted-bad.create-constraint', base_directory=self.base)
         self.assertFalse(os.path.exists(self._constraint_path('test-run-threshold-dict-fail')))
+
+
+class _SuppressingOutput:
+    "Stands in for ipywidgets.Output, which displays and then suppresses what is raised within it."
+
+    def __init__(self, **kwargs):
+        pass
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, etype, evalue, tb):
+        return True
+
+
+class _Accordion:
+    "Stands in for ipywidgets.Accordion."
+
+    def __init__(self, children=None):
+        self.selected_index = 0
+
+    def set_title(self, index, title):
+        pass
+
+
+class TaskFailureTests(unittest.TestCase):
+
+    def test_failure_escapes_the_output_widget(self):
+        "A task that raises under IPython fails its caller, although the output widget suppresses."
+        widgets         = types.ModuleType('ipywidgets')
+        widgets.Output  = _SuppressingOutput
+        widgets.Accordion = _Accordion
+
+        ipython         = types.ModuleType('IPython')
+        ipython.display = types.ModuleType('IPython.display')
+        ipython.display.display = lambda *args, **kwargs: None
+
+        modules = { 'ipywidgets': widgets, 'IPython': ipython, 'IPython.display': ipython.display }
+
+        @eos.tasks.task('test-failure', '', logfile=False)
+        def failing_task():
+            raise RuntimeError('the task failed')
+
+        self.addCleanup(eos.tasks._tasks.pop, 'test-failure', None)
+        self.addCleanup(eos.tasks._task_outputs.pop, 'test-failure', None)
+
+        with unittest.mock.patch.dict(sys.modules, modules), \
+             unittest.mock.patch.object(eos.tasks, '__ipython__', True):
+            with self.assertRaises(RuntimeError):
+                failing_task()
 
 
 if __name__ == '__main__':

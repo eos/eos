@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     container:
-      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:9795141116d16e7790e00b37646070741234266c
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v7
@@ -133,7 +133,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     container:
-      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:9795141116d16e7790e00b37646070741234266c
     steps:
       - name: Download configured source as artifact
         uses: actions/download-artifact@v8
@@ -183,7 +183,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     container:
-      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:9795141116d16e7790e00b37646070741234266c
     steps:
       - name: Download configured source as artifact
         uses: actions/download-artifact@v8
@@ -216,7 +216,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     container:
-      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:9795141116d16e7790e00b37646070741234266c
     steps:
       - name: Download configured source as artifact
         uses: actions/download-artifact@v8
@@ -258,7 +258,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     container:
-      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:9795141116d16e7790e00b37646070741234266c
     steps:
       - name: Checkout git repository
         uses: actions/checkout@v7
@@ -351,7 +351,7 @@ jobs:
     name: Deploy documentation on ${{ matrix.cfg.os }}
     runs-on: ubuntu-24.04
     container:
-      image: eoshep/ubuntu-${{ matrix.cfg.os }}:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-${{ matrix.cfg.os }}:9795141116d16e7790e00b37646070741234266c
     steps:
       - name: Create repository
         shell: bash
