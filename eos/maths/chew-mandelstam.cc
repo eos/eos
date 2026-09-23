@@ -92,9 +92,16 @@ namespace eos
             static const double pi = M_PI;
 
             const double          mp    = 2.0 * m;
-            // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s     = S + complex<double>(0.0, 1e-15);
             const complex<double> delta = mp * mp - 4.0 * q0 * q0;
+
+            // Fix the behavior near delta by Taylor expanding to first order
+            if (std::abs(S - delta) < 1e-5)
+            {
+                return s_wave(S, m) - s_wave(delta, m) - 4.0 * q0 * q0 * (s_wave(delta + 1e-8, m) - s_wave(delta - 1e-8, m)) / 2e-8;
+            }
+
+            // Adapt s to match Mathematica's behaviour on the branch cut
+            const complex<double> s = S + complex<double>(0.0, 1e-15);
 
             // Squared Blatt-Weisskopf form factor for l = 1, cf. PDG's resonance review, eq. (50.26):
             // F(z)^2 = 1 / (z^2 + 1), with z = sqrt(s - mp^2) / (2 q0)
@@ -132,6 +139,24 @@ namespace eos
             const complex<double> s1plus  = a + b;
             const complex<double> s1minus = a - b;
             const complex<double> zsq     = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+
+            // Fix the behavior near s1plus by Taylor expanding to first order
+            if (std::abs(S - s1plus) < 1e-5)
+            {
+                return s_wave(S, m1, m2) * (1.0 + 2.0 * q0sq / b * s1minus / (S - s1minus))
+                       + 2.0 * q0sq / b
+                                 * (s1minus / (mp * mp - s1minus) / (S - s1minus) * (S - mp * mp) * s_wave(s1minus, m1, m2)
+                                    - s1plus * (s_wave(s1plus, m1, m2) / (mp * mp - s1plus) + (s_wave(s1plus + 1e-8, m1, m2) - s_wave(s1plus - 1e-8, m1, m2)) / 2e-8));
+            }
+
+            // Fix the behavior near s1minus by Taylor expanding to first order
+            if (std::abs(S - s1minus) < 1e-5)
+            {
+                return s_wave(S, m1, m2) * (1.0 - 2.0 * q0sq / b * s1plus / (S - s1plus))
+                       - 2.0 * q0sq / b
+                                 * (s1plus / (mp * mp - s1plus) / (S - s1plus) * (S - mp * mp) * s_wave(s1plus, m1, m2)
+                                    - s1minus * (s_wave(s1minus, m1, m2) / (mp * mp - s1minus) + (s_wave(s1minus + 1e-8, m1, m2) - s_wave(s1minus - 1e-8, m1, m2)) / 2e-8));
+            }
 
             return s_wave(S, m1, m2) * zsq / (1.0 + zsq)
                    + 2.0 * q0sq / b * (S - mp * mp)
