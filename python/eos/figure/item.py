@@ -86,7 +86,7 @@ class CompositeRegionHandle:
     :class:`CompositeRegionHandler`, which is registered as the default legend handler for this
     class.
 
-    :param facecolors: The fill colors of the swatches, in the order in which they appear from left to right. Each must be a color that matplotlib can resolve, including its opacity. Callers that build the shades by compositing nested regions, such as :meth:`Item._legend_composite_patch`, pass the innermost region's shade first, so that opacity decreases towards the right.
+    :param facecolors: The fill colors of the swatches, in the order in which they appear from left to right. Each must be a color that matplotlib can resolve, including its opacity. Callers that build the shades by compositing nested regions, such as ``Item._legend_composite_patch``, pass the innermost region's shade first, so that opacity decreases towards the right.
     :type facecolors: list
     :param edgecolor: The color of the boundary drawn around the composite key.
     :type edgecolor: object
@@ -175,7 +175,7 @@ class BandHandle:
     Items such as :class:`UncertaintyBandItem` draw only those parts of a band that their ``band``
     option requests: the area between the band's outer bounds, the outer bounds themselves, and the
     band's median. A key that always shows a filled and bounded swatch (as produced by
-    :meth:`Item._legend_patch` or :meth:`Item._legend_composite_patch`) therefore matches the drawn
+    :meth:`Item._legend_patch` or ``Item._legend_composite_patch``) therefore matches the drawn
     item only when every part is drawn.
 
     This handle instead shows exactly the parts that the item draws: the filled area as the abutting
@@ -991,7 +991,7 @@ class UncertaintyBandItem(Item):
         area, the outer lines as the key's boundary, and the median line across its middle. Since
         this item draws one nested region per requested credibility level, the filled area is
         subdivided into one swatch per region, each carrying the shade that region shows in the
-        plot; see :meth:`Item._legend_band`.
+        plot; see ``Item._legend_band``.
         """
         return self._legend_band(self.band, self._alphas)
 
@@ -1141,7 +1141,7 @@ class BinnedUncertaintyItem(Item):
         area, the outer lines as the key's boundary, and the median line across its middle. Since
         this item draws one nested region per requested credibility level, the filled area is
         subdivided into one swatch per region, each carrying the shade that region shows in the
-        plot; see :meth:`Item._legend_band`.
+        plot; see ``Item._legend_band``.
         """
         return self._legend_band(self.band, self._alphas)
 
@@ -2529,7 +2529,7 @@ class TwoDimensionalConstraintItem(Item):
 
         Since this item draws one nested region per requested confidence level, the key is
         subdivided into one swatch per region, each carrying the shade that region shows in the
-        plot; see :meth:`Item._legend_composite_patch`.
+        plot; see ``Item._legend_composite_patch``.
         """
         return self._legend_composite_patch(self._alphas)
 
