@@ -64,10 +64,15 @@ Parameters in B_q \leftrightarrow \bar{B}_q Meson Mixing
 Masses used in BSZ-like Form Factor Parametrizations
 ----------------------------------------------------
 
+     mass::B_c,0@HME	+6.4200e+00	+6.4200e+00	+6.4200e+00
+     mass::B_c^*@HME	+6.3311e+00	+6.3311e+00	+6.3311e+00
+       mass::B_d@HME	+5.2790e+00	+5.2790e+00	+5.2790e+00
+       mass::D_u@HME	+1.8670e+00	+1.8670e+00	+1.8670e+00
 
 Pair-production thresholds for the SSE Form Factor Parametrization
 ------------------------------------------------------------------
 
+        B->D::tp@SSE	+5.1065e+01	+5.1065e+01	+5.1065e+01
 
 Masses used in the G2026 form factor parametrization
 ----------------------------------------------------

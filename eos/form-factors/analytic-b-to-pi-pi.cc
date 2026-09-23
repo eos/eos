@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2025 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2018      Keri Vos
  * Copyright (c) 2025      Florian Herren
  *
@@ -83,6 +83,10 @@ namespace eos
                 _F_switch(opt_L.value() && PartialWave::F),
                 cub_conf(cubature::Config().epsrel(5e-3))
             {
+                u.uses(*model);
+                u.uses(*b_to_pi_ff);
+                u.uses(pi);
+
                 std::string scale = o.get("scale"_ok, "fixed"_ov).str();
 
                 if ("fixed" == scale)
@@ -631,6 +635,8 @@ namespace eos
                 g_BstBpi(p["decay-constant::g_{B^*Bpi}"], u),
                 opt_L(o, options, "L"_ok)
             {
+                u.uses(*model);
+                u.uses(*b_to_pi_ff);
             }
 
             inline double

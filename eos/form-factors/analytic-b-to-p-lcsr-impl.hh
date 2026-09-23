@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2017-2025 Danny van Dyk
+ * Copyright (c) 2017-2026 Danny van Dyk
  * Copyright (c) 2018      Nico Gubernari
  * Copyright (c) 2018      Ahmet Kokulu
  *
@@ -119,6 +119,7 @@ namespace eos
             {
                 Context ctx("When creating a B->P LCSR form factor with B-meson LCDAs");
 
+                u.uses(*model);
                 u.uses(*b_lcdas);
 
                 // quark masses for the propagating quark

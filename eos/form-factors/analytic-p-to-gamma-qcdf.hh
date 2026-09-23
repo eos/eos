@@ -39,7 +39,7 @@ namespace eos
 {
     template <typename Process_> struct AnalyticFormFactorPToGammaQCDFTraits;
 
-    template <> struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma>
+    template <> struct AnalyticFormFactorPToGammaQCDFTraits<BToGamma> : public virtual ParameterUser
     {
             // Selects the model of the B-meson LCDAs. Leading-twist functionals access the LCDAs through
             // HeavyMesonLCDAs::coefficient_range(mu), i.e. through the coefficients a_k of the expansion

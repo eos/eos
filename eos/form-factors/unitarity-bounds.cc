@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 tw=140 et foldmethod=marker : */
 
 /*
- * Copyright (c) 2019-2025 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2019-2024 Nico Gubernari
  *
  * This file is part of the EOS project. EOS is free software;
@@ -4790,6 +4790,8 @@ namespace eos
             ns(p["B_s(*)->D_s(*)::n_s@HQET"], u),
             bgl(new BGLCoefficients(p, o))
         {
+            u.uses(*bgl);
+
             if ("1" == opt_zorder_bound.value())
             {
                 zorder_bound = 1;

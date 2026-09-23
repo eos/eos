@@ -91,6 +91,7 @@ namespace eos
         _a_perp_t{ { UsedParameter(p[_par_name("perp", "T", 1)], *this), UsedParameter(p[_par_name("perp", "T", 2)], *this) } },
         _a_long_t5{ { UsedParameter(p[_par_name("0", "T5", 1)], *this), UsedParameter(p[_par_name("0", "T5", 2)], *this) } }, _traits(p), _m_1(_traits.m_1), _m_2(_traits.m_2)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> SSEFormFactors<Process_, OneHalfPlusToOneHalfPlus>::~SSEFormFactors() {}

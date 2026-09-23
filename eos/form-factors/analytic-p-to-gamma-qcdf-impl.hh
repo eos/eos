@@ -53,6 +53,8 @@ namespace eos
                        "FLvD2022"_ov),
         blcdas(HeavyMesonLCDAs::make(opt_lcda_model.value(), p, o + Options{ { "lambda-b-source"_ok, "FLvD2022"_ov } })), model(Model::make("SM"_ov, p, o))
     {
+        this->uses(*blcdas);
+        this->uses(*model);
     }
 
     inline double
@@ -102,6 +104,9 @@ namespace eos
         opt_evolution_order(o, "evolution-order"_ok, { "LL"_ov, "NLL"_ov }, "NLL"_ov),
         switch_nll(0.0)
     {
+        this->uses(traits);
+        this->uses(*model);
+
         // Verify once that BMesonLCDAs is compatible with this implementation
         Weights weights;
         auto [coeff_begin, coeff_end] = traits.blcdas->coefficient_range(mu);

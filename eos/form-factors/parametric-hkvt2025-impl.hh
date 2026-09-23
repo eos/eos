@@ -168,6 +168,7 @@ namespace eos
         switch_I[0] = (opt_I.value() && Isospin::zero) | (opt_I.value() && Isospin::onehalf);
         switch_I[1] = (opt_I.value() && Isospin::one) | (opt_I.value() && Isospin::threehalves);
 
+        this->uses(traits);
         this->uses(*scattering_amplitudes);
     }
 

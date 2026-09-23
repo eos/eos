@@ -142,6 +142,7 @@ namespace eos
         _m_1(_traits.m_1),
         _m_2(_traits.m_2)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_>

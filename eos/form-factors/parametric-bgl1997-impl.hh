@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2020-2025 Danny van Dyk
+ * Copyright (c) 2020-2026 Danny van Dyk
  * Copyright (c) 2020      Nico Gubernari
  * Copyright (c) 2020      Christoph Bobeth
  * Copyright (c) 2025      Maximilian Hoverath
@@ -76,6 +76,7 @@ namespace eos
                   UsedParameter(p[_par_name("T23_3")], *this) } },
         _traits(BGL1997FormFactorTraits<Process_, PToV>(p, o, _options)), _mB(_traits.m_B), _mV(_traits.m_V), t_0(_traits.t_0)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> BGL1997FormFactors<Process_, PToV>::~BGL1997FormFactors() = default;
@@ -458,6 +459,7 @@ namespace eos
                   UsedParameter(p[_par_name("fT_3")], *this) } },
         _traits(BGL1997FormFactorTraits<Process_, PToP>(p, o, _options)), _mB(_traits.m_B), _mP(_traits.m_P), t_0(_traits.t_0)
     {
+        this->uses(_traits);
     }
 
     template <typename Process_> BGL1997FormFactors<Process_, PToP>::~BGL1997FormFactors() = default;
