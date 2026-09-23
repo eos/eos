@@ -43,6 +43,11 @@ extensions = [
     'nbsphinx'
 ]
 
+# Without these, the sections that sphinxarg generates per subcommand all claim
+# the same label, and equally named sections collide across documents.
+autosectionlabel_prefix_document = True
+autosectionlabel_maxdepth = 2
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
