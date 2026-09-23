@@ -154,7 +154,7 @@ class Parameters(_Parameters):
         Converts an eos.Parameters object to a YAML representation.
 
         :param names: Names of the parameters that shall be converted.
-        :type name: iterable of str (optional)
+        :type names: collections.abc.Collection of str, optional
         """
 
         import yaml
@@ -190,7 +190,7 @@ class Parameters(_Parameters):
         :param file: Name of the file to which the parameters shall be written.
         :type file: str
         :param names: Names of the parameters that shall be converted.
-        :type names: iterable of str (optional)
+        :type names: collections.abc.Collection of str, optional
         """
         with open(file, 'w') as f:
             f.write(self.to_yaml(**kwargs))

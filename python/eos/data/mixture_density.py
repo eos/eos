@@ -207,13 +207,13 @@ class MixtureDensity:
         :param density: Mixture density.
         :type density: pypmc.density.MixtureDensity
         :param parameters: Parameter descriptions as a 1D array of shape (P, ).
-        :type parameters: list or iterable of eos.Parameter or of parameter descriptions
+        :type parameters: list or collections.abc.Iterable of eos.Parameter
         :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
-        :type sigma_test_stat: list or iterable
+        :type sigma_test_stat: list or collections.abc.Iterable
         :param samples: Samples as a 2D array of shape (N, P). Needed to generate the test statistic.
-        :type samples: 2D numpy array, optional
+        :type samples: numpy.ndarray, optional
         :param weights: Weights on a linear scale as a 2D array of shape (N, 1). Needed to generate the test statistic.
-        :type weights: 1D numpy array, optional
+        :type weights: numpy.ndarray, optional
 
         """
         try:
@@ -301,7 +301,7 @@ class MixtureDensity:
         in the output density. Only Gaussian mixtures are supported.
 
         :param densities: List of mixture densities.
-        :type densities: iterable of pypmc.density.MixtureDensity
+        :type densities: collections.abc.Sequence of pypmc.density.MixtureDensity
         """
 
         product_density = densities[0]

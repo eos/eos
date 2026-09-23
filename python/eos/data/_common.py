@@ -45,7 +45,7 @@ def make_parameter_descriptions(parameters):
     written either from a live analysis or from the parameters of another data object.
 
     :param parameters: The varied parameters in any of the accepted forms.
-    :type parameters: iterable
+    :type parameters: collections.abc.Iterable
     :rtype: list[ParameterDescription]
     """
     result = []

@@ -217,11 +217,11 @@ class Prediction:
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param observables: Observables as a 1D array of shape (O, ).
-        :type observables: list or iterable of eos.Observable
+        :type observables: collections.abc.Sequence of eos.Observable
         :param samples: Samples as a 2D array of shape (N, O).
-        :type samples: 2D numpy array
+        :type samples: numpy.ndarray
         :param weights: Weights on a linear scale as a 1D array of shape (N, ).
-        :type weights: 1D numpy array
+        :type weights: numpy.ndarray
         """
         if not samples.shape[1] == len(observables):
             raise RuntimeError(f'Shape of samples {samples.shape} incompatible with number of observables {len(observables)}')

@@ -1259,7 +1259,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param cache: The observable cache used by the total log-likelihood.
             :type cache: eos.ObservableCache
             :param factory: The factory method used to initialize the external log-likelihood block.
-            :type factory: callable
+            :type factory: collections.abc.Callable
 
             :returns: The new block.
             :rtype: eos.LogLikelihoodBlock
@@ -1528,10 +1528,10 @@ BOOST_PYTHON_MODULE(_eos)
             :type min: float
             :param max: The maximum value that the parameter is allowed to take.
             :type max: float
-            :param mu_0: The central value of the parameter.
-            :type mu_0: float, strictly positive
-            :param scale: The scale factor.
-            :type scale: float, strictly positive
+            :param mu_0: The central value of the parameter, which must be strictly positive.
+            :type mu_0: float
+            :param scale: The scale factor, which must be strictly positive.
+            :type scale: float
         )",
                  args("parameters", "name", "min", "max", "mu_0", "scale"))
             .staticmethod("Scale")
@@ -1547,8 +1547,8 @@ BOOST_PYTHON_MODULE(_eos)
             :type name: str
             :param mu: The mode of the prior.
             :type mu: float
-            :param sigma: The standard deviation of the prior.
-            :type sigma: float, strictly positive
+            :param sigma: The standard deviation of the prior, which must be strictly positive.
+            :type sigma: float
         )",
                  args("parameters", "name", "mu", "sigma"))
             .staticmethod("Gaussian")
@@ -1561,8 +1561,8 @@ BOOST_PYTHON_MODULE(_eos)
             :type parameters: eos.Parameters
             :param name: The name of the parameter for which the LogPrior is defined.
             :type name: str
-            :param k: The mode of the prior.
-            :type k: float, strictly positive
+            :param k: The mode of the prior, which must be strictly positive.
+            :type k: float
         )",
                  args("parameters", "name", "k"))
             .staticmethod("Poisson")
@@ -1576,13 +1576,13 @@ BOOST_PYTHON_MODULE(_eos)
             :param name: The name of the parameters for which the LogPrior is defined.
             :type name: str
             :param shift: The shift vector to the original set of parameters
-            :type shift: vector
+            :type shift: collections.abc.Sequence of float
             :param transform: The matrix that transforms the original set of parameters
-            :type transform: matrix
+            :type transform: numpy.ndarray
             :param min: The vector of minimum values that the parameters are allowed to take.
-            :type min: vector
+            :type min: collections.abc.Sequence of float
             :param max: The vector of maximum values that the parameters are allowed to take.
-            :type max: vector
+            :type max: collections.abc.Sequence of float
         )",
                  args("parameters", "name", "shift", "transform", "min", "max"))
             .staticmethod("Transform")
@@ -1602,7 +1602,7 @@ BOOST_PYTHON_MODULE(_eos)
             :param parameters: The parameters to which this LogPrior is bound.
             :type parameters: eos.Parameters
             :param factory: The factory callable used to initialize the external prior.
-            :type factory: callable
+            :type factory: collections.abc.Callable
         )",
                  args("parameters", "factory"))
             .staticmethod("External")

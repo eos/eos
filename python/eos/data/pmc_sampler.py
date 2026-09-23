@@ -198,13 +198,13 @@ class PMCSampler:
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param parameters: Parameter descriptions as a 1D array of shape (P, ).
-        :type parameters: list or iterable of eos.Parameter
+        :type parameters: list or collections.abc.Iterable of eos.Parameter
         :param sigma_test_stat: (optional) If provided, the inverse CDF of -2*log(PDF) will be evaluated, using the provided values as the respective significance.
-        :type sigma_test_stat: list or iterable
+        :type sigma_test_stat: list or collections.abc.Iterable
         :param samples: Samples as a 2D array of shape (N, P). Needed to generate the test statistic.
-        :type samples: 2D numpy array, optional
+        :type samples: numpy.ndarray, optional
         :param weights: Weights on a linear scale as a 1D array of shape (N, ). Needed to generate the test statistic.
-        :type weights: 1D numpy array, optional
+        :type weights: numpy.ndarray, optional
         """
         # Don't write components that have a 0 weight
         purged_components = []

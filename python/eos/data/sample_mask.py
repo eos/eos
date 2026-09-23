@@ -110,7 +110,7 @@ class SampleMask:
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param mask: Mask as a 1D boolean array
-        :type mask: list or iterable of bool
+        :type mask: collections.abc.Sequence of bool
         :param observables: Observables as a 1D array
         """
         description = SampleMaskDescription(version=eos.__version__, observables=observables)

@@ -116,7 +116,7 @@ class NabuLikelihood:
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param parameters: Parameter descriptions as a 1D array of shape (N, ).
-        :type parameters: list or iterable of eos.Parameter
+        :type parameters: list or collections.abc.Iterable of eos.Parameter
         :param likelihood: The likelihood object created by nabu.
         :type likelihood: nabu.Likelihood or descendant
         """

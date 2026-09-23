@@ -202,7 +202,7 @@ class Mode:
         :param path: Path to the storage location, which will be created as a directory.
         :type path: str
         :param parameters: Parameter descriptions as a 1D array of shape (N, ).
-        :type parameters: list or iterable of eos.Parameter
+        :type parameters: list or collections.abc.Iterable of eos.Parameter
         :param mode: The mode to be stored.
         :type mode: numpy.ndarray
         :param pvalue: The global p-value of the mode.
