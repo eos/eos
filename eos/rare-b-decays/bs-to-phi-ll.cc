@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -861,6 +861,8 @@ The azimuthal angle between the Kbar-K plane and the l^+l^- plane.";
         bstophidilepton(parameters, options + Options{{"cp-conjugate"_ok, "true"_ov}}),
         bstophidilepton_conjugate(parameters, options + Options{{"cp-conjugate"_ok, "false"_ov}})
     {
+        this->uses(bstophidilepton);
+        this->uses(bstophidilepton_conjugate);
     }
 
     BsToPhiDileptonAndConjugate::~BsToPhiDileptonAndConjugate() = default;
