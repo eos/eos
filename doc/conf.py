@@ -60,6 +60,13 @@ intersphinx_mapping = {
     'matplotlib': ('https://matplotlib.org/stable',          '_inventories/matplotlib.inv'),
 }
 
+# These projects do not publish an inventory that intersphinx could resolve.
+nitpick_ignore = [
+    ('py:class', 'pypmc.density.MixtureDensity'),
+    ('py:class', 'pypmc.density.mixture.MixtureDensity'),
+    ('py:class', 'wilson.Wilson'),
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
