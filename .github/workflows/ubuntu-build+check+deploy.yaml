@@ -391,6 +391,21 @@ jobs:
               # Merging to master (or building the 'release' branch / a versioned tag):
               # deploy the documentation into the root of the 'doc' repository.
               tar xf doc.tar
+              # refresh the list of releases that drives the version selector
+              python3 - <<'PY'
+          import glob, json, os, re
+
+          root = '_build/doc/html'
+          releases = sorted(
+              (os.path.basename(d) for d in glob.glob(f'{root}/releases/v*')
+               if re.fullmatch(r'v\d+(\.\d+)*', os.path.basename(d))),
+              key=lambda d: [int(p) for p in d[1:].split('.')],
+              reverse=True,
+          )
+          if releases:
+              with open(f'{root}/versions.json', 'w') as f:
+                  json.dump({'latest': releases[0], 'releases': releases}, f, indent=2)
+          PY
               COMMIT_MSG="Updating documentation based on EOS revision ${{ github.sha }}"
               # only push if running for the release branch or for a versioned release
               if [[ ${GITHUB_REF#refs/heads/} == "release" || ${GITHUB_REF#refs/tags/v} != ${GITHUB_REF} ]] ; then
