@@ -76,6 +76,7 @@ namespace eos
             {
                 Context ctx("When constructing B->DlX observable");
 
+                u.uses(*model);
                 u.uses(*form_factors);
             }
 
