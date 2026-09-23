@@ -61,6 +61,9 @@ intersphinx_mapping = {
     'pyhf':       ('https://pyhf.readthedocs.io/en/stable',  '_inventories/pyhf.inv'),
 }
 
+# Every reference must resolve; the exceptions are listed below.
+nitpicky = True
+
 # These projects do not publish an inventory that intersphinx could resolve.
 nitpick_ignore = [
     ('py:class', 'pypmc.density.MixtureDensity'),
