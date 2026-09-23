@@ -38,6 +38,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
     'sphinx.ext.autosectionlabel',
+    'sphinx.ext.intersphinx',
     'sphinxarg.ext',
     'sphinxcontrib.contentui',
     'nbsphinx'
@@ -47,6 +48,17 @@ extensions = [
 # the same label, and equally named sections collide across documents.
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 2
+
+# Resolve references to the types that EOS' API exposes from these projects. The
+# inventories are pinned in '_inventories/', so that the build needs no network
+# access and does not change when one of these projects publishes new documentation.
+# Refresh an inventory by downloading '<url>/objects.inv' over the pinned file.
+intersphinx_mapping = {
+    'python':     ('https://docs.python.org/3',             '_inventories/python.inv'),
+    'numpy':      ('https://numpy.org/doc/stable',           '_inventories/numpy.inv'),
+    'scipy':      ('https://docs.scipy.org/doc/scipy',       '_inventories/scipy.inv'),
+    'matplotlib': ('https://matplotlib.org/stable',          '_inventories/matplotlib.inv'),
+}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
