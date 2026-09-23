@@ -120,7 +120,7 @@ and managing the `matplotlib <https://matplotlib.org/>`_ figure object. It also 
 plot or plots that are contained in the figure as objects of classes descended from
 :py:class:`eos.figure.plot.Plot`. These objects manage the axes of the figure and
 the individual plot items that are contained in the plot. The actual contents are created using
-the :py:class:`eos.figure.ItemFactory` class, which returns an object of a class descended from
+the :py:class:`eos.figure.item.ItemFactory` class, which returns an object of a class descended from
 :py:class:`eos.figure.items.Item`. The item is responsible for creating the actual
 plot item, such as the curve of an EOS observable, a scatter plot of parameters, a histogram
 or a kernel density estimate, to name some of the options.
@@ -248,7 +248,7 @@ the colors of elements with an opacity < 1.
    .. note::
 
       The :py:class:`eos.figure.item.Item` class is the base class for all plot items.
-      It is not intended to be used directly. To create a a concrete plot item, use the :class:`ItemFactory <eos.figure.ItemFactory>` class.
+      It is not intended to be used directly. To create a a concrete plot item, use the :class:`ItemFactory <eos.figure.item.ItemFactory>` class.
 
 
 .. autoclass:: eos.figure.item.ItemFactory
