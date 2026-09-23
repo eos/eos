@@ -152,11 +152,22 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
                     iaccordion.set_title(0, output.format(**_args))
                     display(iaccordion)
                 # use invocation-specific ipython output widget (if available)
+                failure = None
+                # ipywidgets.Output suppresses whatever is raised within it, so the
+                # failure is recorded here and re-raised once it has been displayed.
                 with ioutput:
-                    result = func(**_args)
+                    try:
+                        result = func(**_args)
+                    except BaseException as exception:
+                        failure = exception
+                        raise
                     if iaccordion:
                         iaccordion.selected_index = None
-                    return result
+
+                if failure is not None:
+                    raise failure
+
+                return result
         _tasks[name] = task_wrapper
         _task_outputs[name] = output
         return task_wrapper

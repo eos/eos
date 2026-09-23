@@ -28,7 +28,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     container:
-      image: eoshep/ubuntu-resolute:13b778882bb6b4129bf7622adab216921bb5d3b9
+      image: eoshep/ubuntu-resolute:9795141116d16e7790e00b37646070741234266c
     env:
       CXX: g++
       # Disable optimisation/LTO and enable gcov instrumentation so that
