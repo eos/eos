@@ -15,6 +15,7 @@ and signal PDFs built into EOS.
    defining-observables
    analysis-file-format
    figure-format
+   constraint-format
    constraints
    observables
    parameters
