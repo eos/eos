@@ -18,7 +18,7 @@ This posterior involves {{ posterior.samples.varied_parameters | length }} varie
 
 {% if posterior.analysis %}
 {% for parameter in posterior.analysis.varied_parameters %}
-- `{{ parameter.name() }}`{{ (' (' ~ parameter.latex() ~ ')') if parameter.latex() else '' }}
+- `{{ parameter.name() }}`{{ (' ($' ~ parameter.latex() ~ '$)') if parameter.latex() else '' }}
 {% endfor %}
 {% else %}
 {% for parameter in posterior.samples.varied_parameters %}
