@@ -16,3 +16,15 @@ div.math {
     overflow-x: auto;
     overflow-y: hidden;
 }
+
+.eos-version-selector {
+    padding: 0 1em 1em;
+    color: #fcfcfc;
+}
+.eos-version-selector label {
+    display: block;
+    font-size: 90%;
+}
+.eos-version-selector select {
+    width: 100%;
+}

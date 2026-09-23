@@ -17,6 +17,7 @@
 # -- Project information -----------------------------------------------------
 
 import eos
+import os
 
 project = 'EOS'
 copyright = '2019-2026, The EOS Authors'
@@ -75,7 +76,18 @@ html_static_path = ['_static']
 html_css_files = [
     'css/custom.css',
 ]
+html_js_files = [
+    'js/version-banner.js',
+]
 html_baseurl = 'https://eos.github.io/doc/'
+
+# Release builds are archived below 'releases/' in the documentation repository,
+# two levels below the root of the documentation site.
+eos_release = os.environ.get('EOS_RELEASE', '')
+html_context = {
+    'eos_release':  eos_release,
+    'eos_doc_root': '../../' if eos_release else '',
+}
 
 html_show_sourcelink = False
 
