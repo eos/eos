@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -90,6 +90,8 @@ namespace eos
         im_PES(p["nonleptonic::Im{PES}@Topological"], *this)
     {
         Context ctx("When constructing B->PP topological amplitudes");
+
+        this->uses(*model);
 
         if (opt_cp_conjugate.value() != opt_B_bar.value())
         {
