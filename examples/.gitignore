@@ -6,7 +6,7 @@ predictions-base/
 inference-base/
 inference.md
 inference.pdf
-simulation-data/
+simulation-base/
 
 # ignore generated miscellaneous files
 log
