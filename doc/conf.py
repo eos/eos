@@ -110,3 +110,16 @@ html_show_sourcelink = False
 
 html_logo = '_static/github-eos-logo.png'
 logo_only = True
+
+
+# Boost.Python ends the signature it generates with a colon, which autodoc then
+# reads as part of the return annotation.
+def strip_signature_colon(app, what, name, obj, options, signature, return_annotation):
+    if return_annotation and return_annotation.endswith(' :'):
+        return (signature, return_annotation[:-2])
+
+    return (signature, return_annotation)
+
+
+def setup(app):
+    app.connect('autodoc-process-signature', strip_signature_colon)
