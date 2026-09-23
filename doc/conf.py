@@ -67,6 +67,15 @@ nitpick_ignore = [
     ('py:class', 'wilson.Wilson'),
 ]
 
+# Docstrings mark an argument as optional by appending ', optional' to its type,
+# which Sphinx reads as a type of its own. An annotation that carries a comma
+# within brackets, such as 'tuple[float, float]', is likewise read as two types,
+# which leaves the first of them with an unclosed bracket.
+nitpick_ignore_regex = [
+    ('py:class', r'optional'),
+    ('py:class', r'.*\[[^\]]*'),
+]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
