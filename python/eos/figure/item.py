@@ -766,11 +766,11 @@ class UncertaintyBandItem(Item):
           items:
             - { type: 'uncertainty', label: r'$\\ell=\\mu$',
                 variable: 'q2', range: [0.02, 11.63],
-                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu'
+                datafile: './predictions-base/FF-LQCD-SSE/pred-B-to-D-mu-nu'
               }
             - { type: 'uncertainty', label: r'$\\ell=\\tau$',
                 variable: 'q2', range: [3.17, 11.63], resolution: 1000,
-                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-tau-nu'
+                datafile: './predictions-base/FF-LQCD-SSE/pred-B-to-D-tau-nu'
               }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
@@ -824,11 +824,11 @@ class UncertaintyBandItem(Item):
           items:
             - { type: 'uncertainty', label: r'$\\ell=\\mu$',
                 variable: 'q2', range: [0.02, 11.63],
-                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu'
+                datafile: './predictions-base/FF-LQCD-SSE/pred-B-to-D-mu-nu'
               }
             - { type: 'uncertainty', label: r'$\\ell=\\tau$',
                 variable: 'q2', range: [3.17, 11.63], resolution: 1000,
-                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-tau-nu'
+                datafile: './predictions-base/FF-LQCD-SSE/pred-B-to-D-tau-nu'
               }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
@@ -1030,7 +1030,7 @@ class BinnedUncertaintyItem(Item):
         items:
             - { type: 'uncertainty-binned', label: r'$\\ell=\\mu$',
                 variable: 'q2', range: [0.00, 11.63],
-                datafile: './predictions-data/FF-LQCD-SSE/pred-B-to-D-mu-nu-binned'
+                datafile: './predictions-base/FF-LQCD-SSE/pred-B-to-D-mu-nu-binned'
             }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
@@ -1168,7 +1168,7 @@ class OneDimensionalHistogramItem(Item):
           xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
           legend: { position: 'upper left' }
           items:
-            - { type: 'histogram1D', variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0' }
+            - { type: 'histogram1D', variable: 'CKM::abs(V_cb)', datafile: './inference-base/CKM/samples', color: 'C0' }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
         figure.draw()
@@ -1204,7 +1204,7 @@ class OneDimensionalHistogramItem(Item):
           xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
           legend: { position: 'upper left' }
           items:
-            - { type: 'histogram1D', variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0' }
+            - { type: 'histogram1D', variable: 'CKM::abs(V_cb)', datafile: './inference-base/CKM/samples', color: 'C0' }
         '''
         figure = eos.figure.FigureFactory.from_yaml(figure_args)
         figure.draw()
@@ -1394,7 +1394,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
           xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
           legend: { position: 'upper left' }
           items:
-            - { type: 'kde1D',       variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0',
+            - { type: 'kde1D',       variable: 'CKM::abs(V_cb)', datafile: './inference-base/CKM/samples', color: 'C0',
                 label: 'posterior'
               }
         '''
@@ -1437,7 +1437,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
           xaxis: { label: '$|V_{cb}|$', range: [38.e-3, 47.e-3] }
           legend: { position: 'upper left' }
           items:
-            - { type: 'kde1D',       variable: 'CKM::abs(V_cb)', datafile: './inference-data/CKM/samples', color: 'C0',
+            - { type: 'kde1D',       variable: 'CKM::abs(V_cb)', datafile: './inference-base/CKM/samples', color: 'C0',
                 label: 'posterior'
               }
         '''
@@ -1569,7 +1569,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
           items:
             - { type: 'kde2D', label: 'posterior', color: 'C1',
                 levels: [68, 95], contours: ['lines', 'areas'], bandwidth: 3.0,
-                datafile: './inference-data/CKM/samples',
+                datafile: './inference-base/CKM/samples',
                 variables: ['CKM::abs(V_cb)', 'B->D::alpha^f+_0@BSZ2015']
               }
         '''
@@ -1812,7 +1812,7 @@ class TwoDimensionalContoursItem(Item):
           items:
             - { type: 'contours2D', label: 'posterior', color: 'C1',
                 levels: [68, 95, 99], contours: ['lines', 'labels'],
-                datafile: './inference-data/CKM/samples',
+                datafile: './inference-base/CKM/samples',
                 variables: ['CKM::abs(V_cb)', 'B->D::alpha^f+_0@BSZ2015']
               }
         '''
