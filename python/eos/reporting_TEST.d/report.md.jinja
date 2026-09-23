@@ -13,6 +13,14 @@ This analysis records {{ analysis | length }} posterior{{ 's' if analysis | leng
 {% for posterior in analysis %}
 ## Posterior `{{ posterior.name }}`
 
+{% if posterior.analysis %}
+This posterior involves {{ posterior.analysis.varied_parameters | length }} varied parameter{{ 's' if posterior.analysis.varied_parameters | length != 1 }}:
+
+{% for parameter in posterior.analysis.varied_parameters %}
+- `{{ parameter.name() }}`{{ (' ($' ~ parameter.latex() ~ '$)') if parameter.latex() else '' }}
+{% endfor %}
+{% endif %}
+
 ### Goodness of fit
 
 {% if posterior.has_mode %}
