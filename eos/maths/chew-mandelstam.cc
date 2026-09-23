@@ -60,7 +60,7 @@ namespace eos
             static const double pi = M_PI;
 
             // Adapt s to match Mathematica's behaviour on the branch cut
-            const complex<double> s  = S + complex<double>(0.0, 1e-15);
+            const complex<double> s = S + complex<double>(0.0, 1e-15);
 
             return -1.0 / 8.0 / pi / pi * std::sqrt(4.0 * m * m - s) * impl::atan_near_branch_point(s / std::sqrt(s * (4.0 * m * m - s)), s) / std::sqrt(s);
         }
@@ -124,76 +124,95 @@ namespace eos
                 return p_wave(S, m1, q0);
             }
 
-            const double          mp    = m1 + m2;
-            const double          mm    = m1 - m2;
-            const double          q0sq  = q0 * q0;
-            const double          a     = m1 * m1 + m2 * m2 - 2.0 * q0sq;
-            const double          b     = std::sqrt(a * a - mp * mp * mm * mm);
-            const double          s1plus = a + b;
-            const double          s1minus = a - b;
-            const complex<double> zsq = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+            const double          mp      = m1 + m2;
+            const double          mm      = m1 - m2;
+            const double          q0sq    = q0 * q0;
+            const complex<double> a       = m1 * m1 + m2 * m2 - 2.0 * q0sq;
+            const complex<double> b       = std::sqrt(a * a - mp * mp * mm * mm);
+            const complex<double> s1plus  = a + b;
+            const complex<double> s1minus = a - b;
+            const complex<double> zsq     = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
 
-            return s_wave(S, m1, m2) * zsq / (1.0 + zsq) + 2.0 * q0sq / b * (S - mp * mp) * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus));
+            return s_wave(S, m1, m2) * zsq / (1.0 + zsq)
+                   + 2.0 * q0sq / b * (S - mp * mp)
+                             * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus));
         }
 
         complex<double>
         d_wave(const complex<double> & S, const double & m, const double & q0)
-        {         
+        {
             return d_wave(S, m, m, q0);
         }
 
         complex<double>
         d_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
         {
-            const double          mp    = m1 + m2;
-            const double          mm    = m1 - m2;
-            const double          q0sq  = q0 * q0;
-            const complex<double> u1     = 3.0 / 2.0 * complex<double>(-1, std::sqrt(3));
-            const complex<double> u2     = -3.0 / 2.0 * complex<double>(1, std::sqrt(3));
-            const complex<double> a1     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
-            const complex<double> b1     = std::sqrt(a1 * a1 - mp * mp * mm * mm);
-            const complex<double> a2     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
-            const complex<double> b2     = std::sqrt(a2 * a2 - mp * mp * mm * mm);
-            const complex<double> s1plus = a1 + b1;
+            const double          mp      = m1 + m2;
+            const double          mm      = m1 - m2;
+            const double          q0sq    = q0 * q0;
+            const complex<double> u1      = 3.0 / 2.0 * complex<double>(-1, std::sqrt(3.0));
+            const complex<double> u2      = -3.0 / 2.0 * complex<double>(1, std::sqrt(3.0));
+            const complex<double> a1      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
+            const complex<double> b1      = std::sqrt(a1 * a1 - mp * mp * mm * mm);
+            const complex<double> a2      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
+            const complex<double> b2      = std::sqrt(a2 * a2 - mp * mp * mm * mm);
+            const complex<double> s1plus  = a1 + b1;
             const complex<double> s1minus = a1 - b1;
-            const complex<double> s2plus = a2 + b2;
+            const complex<double> s2plus  = a2 + b2;
             const complex<double> s2minus = a2 - b2;
-            const complex<double> zsq = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
-            
-            return s_wave(S, m1, m2) * zsq * zsq / (9.0 + 3.0 * zsq + zsq * zsq) - 2.0 * q0sq * (S - mp * mp) * (u1 * u1 / (2.0 * u1 + 3.0) / b1 * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus)) + u2 * u2 / (2.0 * u2 + 3.0) / b2 * (s_wave(s2minus, m1, m2) * s2minus / (mp * mp - s2minus) / (S - s2minus) - s_wave(s2plus, m1, m2) * s2plus / (mp * mp - s2plus) / (S - s2plus)));
+            const complex<double> zsq     = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+
+            return s_wave(S, m1, m2) * zsq * zsq / (9.0 + 3.0 * zsq + zsq * zsq)
+                   - 2.0 * q0sq * (S - mp * mp)
+                             * (u1 * u1 / (2.0 * u1 + 3.0) / b1
+                                        * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus)
+                                           - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus))
+                                + u2 * u2 / (2.0 * u2 + 3.0) / b2
+                                          * (s_wave(s2minus, m1, m2) * s2minus / (mp * mp - s2minus) / (S - s2minus)
+                                             - s_wave(s2plus, m1, m2) * s2plus / (mp * mp - s2plus) / (S - s2plus)));
         }
 
         complex<double>
         f_wave(const complex<double> & S, const double & m, const double & q0)
-        {         
+        {
             return f_wave(S, m, m, q0);
         }
 
         complex<double>
         f_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
         {
-            const double          mp    = m1 + m2;
-            const double          mm    = m1 - m2;
-            const double          q0sq  = q0 * q0;
-            const double          acbr   = std::cbrt((75.0 * std::sqrt(5.0) - 151.0) / 2.0);
-            const double          u1     = -2.0 + acbr - 11.0 / acbr;
-            const complex<double> u2     = -2.0 + acbr * complex<double>(-1, std::sqrt(3)) / 2.0 + 5.5 / acbr * complex<double>(1, std::sqrt(3));
-            const complex<double> u3     = -2.0 - acbr * complex<double>(1, std::sqrt(3)) / 2.0 - 5.5 / acbr * complex<double>(-1, std::sqrt(3));
-            const complex<double> a1     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
-            const complex<double> b1     = std::sqrt(a1 * a1 - mp * mp * mm * mm);
-            const complex<double> a2     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
-            const complex<double> b2     = std::sqrt(a2 * a2 - mp * mp * mm * mm);
-            const complex<double> a3     = m1 * m1 + m2 * m2 + 2.0 * q0sq * u3;
-            const complex<double> b3     = std::sqrt(a3 * a3 - mp * mp * mm * mm);
-            const complex<double> s1plus = a1 + b1;
+            const double          mp      = m1 + m2;
+            const double          mm      = m1 - m2;
+            const double          q0sq    = q0 * q0;
+            const double          acbr    = std::cbrt((75.0 * std::sqrt(5.0) - 151.0) / 2.0);
+            const double          u1      = -2.0 + acbr - 11.0 / acbr;
+            const complex<double> u2      = -2.0 + acbr * complex<double>(-1, std::sqrt(3.0)) / 2.0 + 5.5 / acbr * complex<double>(1, std::sqrt(3.0));
+            const complex<double> u3      = -2.0 - acbr * complex<double>(1, std::sqrt(3.0)) / 2.0 - 5.5 / acbr * complex<double>(-1, std::sqrt(3.0));
+            const complex<double> a1      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
+            const complex<double> b1      = std::sqrt(a1 * a1 - mp * mp * mm * mm);
+            const complex<double> a2      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
+            const complex<double> b2      = std::sqrt(a2 * a2 - mp * mp * mm * mm);
+            const complex<double> a3      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u3;
+            const complex<double> b3      = std::sqrt(a3 * a3 - mp * mp * mm * mm);
+            const complex<double> s1plus  = a1 + b1;
             const complex<double> s1minus = a1 - b1;
-            const complex<double> s2plus = a2 + b2;
+            const complex<double> s2plus  = a2 + b2;
             const complex<double> s2minus = a2 - b2;
-            const complex<double> s3plus = a3 + b3;
+            const complex<double> s3plus  = a3 + b3;
             const complex<double> s3minus = a3 - b3;
-            const complex<double> zsq = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
-            
-            return s_wave(S, m1, m2) * zsq * zsq * zsq / (225.0 + 45.0 * zsq + 6.0 * zsq * zsq + zsq * zsq * zsq) - 2.0 * q0sq * (S - mp * mp) * (u1 * u1 * u1 / (3.0 * u1 * u1 + 12.0 * u1 + 45.0) / b1 * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus) - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus)) + u2 * u2 * u2 / (3.0 * u2 * u2 + 12.0 * u2 + 45.0) / b2 * (s_wave(s2minus, m1, m2) * s2minus / (mp * mp - s2minus) / (S - s2minus) - s_wave(s2plus, m1, m2) * s2plus / (mp * mp - s2plus) / (S - s2plus)) + u3 * u3 * u3 / (3.0 * u3 * u3 + 12.0 * u3 + 45.0) / b3 * (s_wave(s3minus, m1, m2) * s3minus / (mp * mp - s3minus) / (S - s3minus) - s_wave(s3plus, m1, m2) * s3plus / (mp * mp - s3plus) / (S - s3plus)));
+            const complex<double> zsq     = (S - mp * mp) * (S - mm * mm) / 4.0 / q0sq / S;
+
+            return s_wave(S, m1, m2) * zsq * zsq * zsq / (225.0 + 45.0 * zsq + 6.0 * zsq * zsq + zsq * zsq * zsq)
+                   - 2.0 * q0sq * (S - mp * mp)
+                             * (u1 * u1 * u1 / (3.0 * u1 * u1 + 12.0 * u1 + 45.0) / b1
+                                        * (s_wave(s1minus, m1, m2) * s1minus / (mp * mp - s1minus) / (S - s1minus)
+                                           - s_wave(s1plus, m1, m2) * s1plus / (mp * mp - s1plus) / (S - s1plus))
+                                + u2 * u2 * u2 / (3.0 * u2 * u2 + 12.0 * u2 + 45.0) / b2
+                                          * (s_wave(s2minus, m1, m2) * s2minus / (mp * mp - s2minus) / (S - s2minus)
+                                             - s_wave(s2plus, m1, m2) * s2plus / (mp * mp - s2plus) / (S - s2plus))
+                                + u3 * u3 * u3 / (3.0 * u3 * u3 + 12.0 * u3 + 45.0) / b3
+                                          * (s_wave(s3minus, m1, m2) * s3minus / (mp * mp - s3minus) / (S - s3minus)
+                                             - s_wave(s3plus, m1, m2) * s3plus / (mp * mp - s3plus) / (S - s3plus)));
         }
     } // namespace chew_mandelstam
 } // namespace eos

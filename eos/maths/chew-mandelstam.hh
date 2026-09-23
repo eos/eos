@@ -96,7 +96,7 @@ namespace eos
          *
          * This is the F-wave (l_orbital = 3) analytic continuation of
          * i * rho(s), including the squared Blatt-Weisskopf form factor
-         * for l = 3 and the loop-correction term that keeps the amplitude 
+         * for l = 3 and the loop-correction term that keeps the amplitude
          * finite at the pseudo-threshold s = mp^2 - 4 q0^2.
          *
          * @param s     Mandelstam variable at which to evaluate the function.
