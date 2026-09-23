@@ -2,8 +2,10 @@
 *.nbconvert.ipynb
 
 # ignore generated data directories and other artifacts
+analysis-organisation-base/
 predictions-base/
 inference-base/
+figures/
 inference.md
 inference.pdf
 simulation-base/
