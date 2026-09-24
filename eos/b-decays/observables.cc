@@ -666,7 +666,7 @@ namespace eos
 
                                                            make_observable("B_s->D_slnu::BR(kperp_min,kperp_max)",
                                                                            R"(\mathcal{B}(\bar{B}_s\to D_s\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
-                                                                           Unit::InverseGeV(),
+                                                                           Unit::None(),
                                                                            &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
                                                                            std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "P"_ok, "D_s"_ov }, { "q"_ok, "s"_ov } }
