@@ -88,6 +88,8 @@ class ImportanceSamples:
     :ivar posterior_values: The posterior density values at each sample as a 1D array of shape (N, ), or ``None`` if not stored.
     """
 
+    _REQUIRED_FILES = ('samples.npy', 'weights.npy')
+
     samples: _np.ndarray
     """The samples in parameter space as a 2D array of shape (N, P)."""
 

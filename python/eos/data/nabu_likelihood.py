@@ -86,6 +86,8 @@ class NabuLikelihood:
     :ivar likelihood: The underlying :class:`nabu.Likelihood` object.
     """
 
+    _REQUIRED_FILES = ('likelihood.nabu',)
+
     def __init__(self, path):
         """ Read a nabu serialized likelihood from disk.
 

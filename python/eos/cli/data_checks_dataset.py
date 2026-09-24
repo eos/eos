@@ -41,10 +41,8 @@ MAX_DATASET_SIZE = 1024 * 1024 * 1024
 _ORCID = re.compile(r'^(\d{4})-(\d{4})-(\d{4})-(\d{3}[\dX])$')
 _MARKDOWN_TARGET = re.compile(r'!?\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+[^)]*)?\)')
 _HTML_TARGET = re.compile(r'''(?:href|src)\s*=\s*["']([^"']+)["']''', re.IGNORECASE)
-_RECOGNIZED_OUTPUT_TYPES = frozenset({
-    'DynestyResults', 'ImportanceSamples', 'MarkovChain', 'MixtureDensity', 'Mode',
-    'NabuLikelihood', 'PMCSampler', 'Prediction', 'SampleMask',
-})
+# Deterministic and cheap functions of the importance samples, which must remain in the dataset.
+_REGENERABLE_TASKS = frozenset({'create-mask', 'predict-observables'})
 
 
 @dataclass(frozen=True)
@@ -365,9 +363,38 @@ def _output_template_patterns(templates: Mapping[str, tuple[str, ...]]) -> tuple
     return tuple(patterns)
 
 
+def _output_classes() -> dict[str, type]:
+    from .. import data
+
+    # The type recorded in an output's description.yaml is the name of its eos.data class.
+    return {
+        name: value for name, value in vars(data).items()
+        if isinstance(value, type) and hasattr(value, '_REQUIRED_FILES')
+    }
+
+
+def _missing_output_files(
+    context: CheckContext,
+    output: PurePosixPath,
+    names: set[str],
+    output_classes: Mapping[str, type],
+) -> tuple[str, ...]:
+    if 'description.yaml' not in names:
+        return ('description.yaml',) if names - {'log'} else ()
+    try:
+        document = yaml.safe_load((context.dataset_root / output / 'description.yaml').read_text(encoding='utf-8'))
+    except (OSError, UnicodeError, yaml.YAMLError):
+        return ()
+    output_type = document.get('type') if isinstance(document, Mapping) else None
+    output_class = output_classes.get(output_type) if isinstance(output_type, str) else None
+    required = output_class._REQUIRED_FILES if output_class is not None else ()
+    return tuple(name for name in required if name not in names)
+
+
 def _recognized_outputs(
     context: CheckContext,
     templates: Mapping[str, tuple[str, ...]],
+    output_classes: Mapping[str, type],
 ) -> tuple[PurePosixPath, ...]:
     results: list[PurePosixPath] = []
     layout_patterns = _output_template_patterns(templates)
@@ -382,7 +409,7 @@ def _recognized_outputs(
             continue
         output = PurePosixPath(entry.path.parent.as_posix())
         if (
-            document.get('type') in _RECOGNIZED_OUTPUT_TYPES
+            document.get('type') in output_classes
             or any(pattern.fullmatch(output.as_posix()) for pattern in layout_patterns)
         ):
             results.append(output)
@@ -408,12 +435,16 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
     from ..analysis_file_description import InvalidComponent, TaskComponent
 
     templates = task_registry.task_output_templates()
+    output_classes = _output_classes()
     available_files = {entry.path.as_posix() for entry in _inventory(context)}
     available_directories = {
         PurePosixPath(*PurePosixPath(path).parts[:index]).as_posix()
         for path in available_files
         for index in range(1, len(PurePosixPath(path).parts))
     }
+    directory_files: dict[PurePosixPath, set[str]] = defaultdict(set)
+    for path in available_files:
+        directory_files[PurePosixPath(path).parent].add(PurePosixPath(path).name)
     claims: dict[PurePosixPath, list[dict[str, str]]] = defaultdict(list)
     for analysis_path in context.analysis_paths:
         document = documents[analysis_path]
@@ -538,9 +569,26 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                     output_details = {**details, 'output_path': output.as_posix()}
                     claims[output].append(output_details)
                     if output.as_posix() not in available_directories and output.as_posix() not in available_files:
+                        if task_name in _REGENERABLE_TASKS:
+                            yield _finding(
+                                check_id, Severity.WARNING,
+                                'Expected task output is absent; it can be regenerated from the remaining data.',
+                                path=Path(output.as_posix()), details=output_details,
+                            )
+                        else:
+                            yield _finding(
+                                check_id, Severity.ERROR, 'Expected task output is absent.',
+                                path=Path(output.as_posix()), details=output_details,
+                            )
+                        continue
+                    missing = _missing_output_files(
+                        context, output, directory_files.get(output, set()), output_classes,
+                    )
+                    if missing:
                         yield _finding(
-                            check_id, Severity.ERROR, 'Expected task output is absent.',
-                            path=Path(output.as_posix()), details=output_details,
+                            check_id, Severity.ERROR, 'Task output is incomplete.',
+                            path=Path(output.as_posix()),
+                            details={**output_details, 'missing_files': missing},
                         )
 
     for output, output_claims in sorted(claims.items(), key=lambda item: item[0].as_posix()):
@@ -552,7 +600,7 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                 details={'output_path': output.as_posix(), 'claims': tuple(output_claims)},
             )
     claimed = set(claims)
-    for output in _recognized_outputs(context, templates):
+    for output in _recognized_outputs(context, templates, output_classes):
         if output not in claimed:
             yield _finding(
                 check_id, Severity.ERROR,

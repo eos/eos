@@ -98,6 +98,8 @@ class MarkovChain:
     :ivar weights: The importance weights on a linear scale as a 1D array of shape (N, ), or ``None`` if the chain is unweighted.
     """
 
+    _REQUIRED_FILES = ('samples.npy', 'usamples.npy')
+
     samples: _np.ndarray
     """The samples in parameter space as a 2D array of shape (N, P)."""
 

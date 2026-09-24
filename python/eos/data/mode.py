@@ -169,6 +169,8 @@ class Mode:
     :ivar dof: The number of degrees of freedom, or ``None`` if not stored.
     """
 
+    _REQUIRED_FILES = ()
+
     test_statistics: list
     """The per-element test statistics at the mode (name, type, value, local p-value)."""
 

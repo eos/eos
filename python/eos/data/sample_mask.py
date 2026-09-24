@@ -88,6 +88,8 @@ class SampleMask:
     :ivar mask: The boolean mask as a 1D array.
     """
 
+    _REQUIRED_FILES = ('mask.npy',)
+
     def __init__(self, path):
         """ Read a mask from a file.
 

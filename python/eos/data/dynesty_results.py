@@ -90,6 +90,8 @@ class DynestyResults:
     :ivar weights: The importance weights on a linear scale, derived from the nested-sampling log-weights.
     """
 
+    _REQUIRED_FILES = ('dynesty_results.npy',)
+
     def __init__(self, path):
         """ Read Results object (in the dynesty.results module) from disk.
 
