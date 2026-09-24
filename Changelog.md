@@ -88,6 +88,7 @@
 - Document that a working (Xe)LaTeX installation is required for some functionality, such as the PDF output of the ``report`` task and the labels drawn by ``eos.figure`` (D. van Dyk)
 - Document ``eos.analysis_file_context.AnalysisFileContext``, ``eos.data.SampleMask``, ``eos.diagnostic.Diagnostic``, ``eos.diagnostic.Severity``, ``eos.PyhfLogLikelihood``, and the bound classes ``eos.KinematicVariable``, ``eos.ObservableId``, ``eos.ReferenceName``, and the parts of a qualified name and of a reference name (issue #779) (D. van Dyk)
 - Resolve references to the types documented by Python, NumPy, SciPy, matplotlib, and pyhf through intersphinx, whose inventories are pinned in ``doc/_inventories/`` so that the documentation builds without network access (issue #779) (D. van Dyk)
+- Add the ``k_\perp``-dependent branching ratio observables ``dBR/dkperp`` and ``BR(kperp_min,kperp_max)`` to all ``B->Plnu`` and ``B->Vlnu`` decays, which so far were only available for ``B_s->D_slnu``; this also adds the ``k_\perp``-differential branching ratio to ``BToVectorLeptonNeutrino``, which previously offered only the integrated one. For ``B->D^*lnu`` the two new observables follow the naming of that decay's other observables: ``BR_CP_specific(kperp_min,kperp_max)`` and ``dBR_CP_specific/dkperp`` evaluate a single CP conjugate, while the unqualified ``BR(kperp_min,kperp_max)`` and ``dBR/dkperp`` are the corresponding CP averages (D. van Dyk)
 
 ### Deprecated
 
@@ -105,6 +106,7 @@
 
 ### Fixed
 
+- Declare ``B_s->D_slnu::BR(kperp_min,kperp_max)`` dimensionless in lieu of ``GeV^-1``: integrating ``dBR/dkperp`` over ``k_\perp`` yields a branching ratio, so the advertised unit made a client apply a spurious unit conversion (D. van Dyk)
 - Correct the ``Lambda_c`` mass entering the ``Lambda_b->Lambda_c``, ``Lambda_c->Lambda``, ``Lambda_c->proton``, and ``Lambda_c->neutron`` unitarity-bound thresholds to match the canonical ``mass::Lambda_c`` parameter (D. van Dyk)
 - Convert the ``Lambda_b->Lambda_c::DKMR2017``, ``Lambda_b->Lambda::DM2016``, ``Lambda_b->Lambda_c(2595)::HQET``, ``Lambda_b->Lambda_c(2625)::HQET``, and ``Lambda_b->Lambda(1520)::SE`` form factors to read their initial- and final-state masses from ``Parameters`` in lieu of hardcoded compile-time constants that could silently drift from the corresponding ``@HME`` parameter values (D. van Dyk)
 - Fix displaying ``eos.Constraints`` in a notebook, which raised for the 20 constraints whose qualified name has no suffix part and therefore no associated reference (D. van Dyk)
