@@ -499,6 +499,25 @@ namespace eos
     }
 
     double
+    BToVectorLeptonNeutrino::differential_branching_ratio_perp(const double & kperp) const
+    {
+        std::function<double(const double &)> integrand = [this, &kperp](const double & z_B) -> double
+        {
+            const double m_B = this->_imp->m_B(), m_V = this->_imp->m_V();
+            const double kvec2 = kperp * kperp / (1.0 - z_B * z_B);
+            const double q2    = m_B * m_B + m_V * m_V - 2 * m_B * sqrt(m_V * m_V + kvec2);
+
+            const double jacobian1 = m_B / ((1 - z_B * z_B) * sqrt(m_V * m_V + kvec2));
+            const double jacobian2 = 2.0 * kperp;
+            const double jacobian  = jacobian1 * jacobian2;
+
+            return this->differential_branching_ratio(q2) * jacobian / 2.0;
+        };
+
+        return integrate<1, 1>(integrand, -1.0, +1.0, _imp->cub_conf);
+    }
+
+    double
     BToVectorLeptonNeutrino::differential_a_fb_leptonic(const double & q2) const
     {
         return _imp->differential_angular_observables(q2).a_fb_leptonic();
@@ -943,6 +962,9 @@ namespace eos
 
     const std::string BToVectorLeptonNeutrino::kinematics_description_phi = "\
     The azimuthal angle between the D-pi plane and the l-nubar  plane.";
+
+    const std::string BToVectorLeptonNeutrino::kinematics_description_kperp = "\
+    The transverse momentum of the final-state hadron, i.e. the vector meson V, in GeV.";
 
     const std::set<ReferenceName> BToVectorLeptonNeutrino::references{};
 
