@@ -155,6 +155,8 @@ class MixtureDensity:
     :ivar test_statistics: The precomputed test statistics, or ``None`` if not stored.
     """
 
+    _REQUIRED_FILES = ()
+
     varied_parameters: list | None
     """The descriptions (name, min, max) of the varied parameters, or ``None`` for a legacy file that does not record them."""
 

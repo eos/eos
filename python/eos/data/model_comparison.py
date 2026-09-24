@@ -214,6 +214,8 @@ class ModelComparison:
         Each posterior's ``log_prior_volume_adjustment`` is the sum over all blocks of its log volume minus the log reference volume.
     """
 
+    _REQUIRED_FILES = ()
+
     def __init__(self, path):
         """ Read a model comparison from disk.
 
