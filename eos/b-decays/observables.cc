@@ -1124,6 +1124,14 @@ namespace eos
                                                                            Options{ { "V"_ok, "omega"_ov }, { "q"_ok, "u"_ov } }
                                                                            ),
 
+                                                           make_observable("B->omegalnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(B\to\omega\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToVectorLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "V"_ok, "omega"_ov }, { "q"_ok, "u"_ov } }
+                                                                           ),
+
                                                            make_observable("B->omegalnu::BR",
                                                                            R"(\mathcal{B}(B\to\omega\ell^-\bar\nu))",
                                                                            Unit::None(),
@@ -1160,6 +1168,14 @@ namespace eos
                                                                            Unit::InverseGeV2(),
                                                                            &BToVectorLeptonNeutrino::differential_branching_ratio,
                                                                            std::make_tuple("q2"),
+                                                                           Options{ { "V"_ok, "rho"_ov } }
+                                                                           ),
+
+                                                           make_observable("B->rholnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(B\to\rho\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToVectorLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
                                                                            Options{ { "V"_ok, "rho"_ov } }
                                                                            ),
 
@@ -1219,6 +1235,23 @@ namespace eos
                                                                            std::make_tuple("q2"),
                                                                            { { "V"_ok, "D^*"_ov } }
                                                                            ),
+
+                                                           make_observable("B->D^*lnu::dBR_CP_specific/dkperp",
+                                                                           R"(d\mathcal{B}(\bar{B}\to D^*\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToVectorLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           { { "V"_ok, "D^*"_ov } }
+                                                                           ),
+
+                                                           make_expression_observable("B->D^*lnu::dBR/dkperp",
+                                                                                      R"(d\bar{\mathcal{B}}(\bar{B}\to D^*\ell^-\bar\nu)/dk_\perp)",
+                                                                                      Unit::InverseGeV(),
+                                                                                      R"(
+                                0.5 * <<B->D^*lnu::dBR_CP_specific/dkperp;cp-conjugate=false>>
+                                +
+                                0.5 * <<B->D^*lnu::dBR_CP_specific/dkperp;cp-conjugate=true>>
+                                )"),
 
                                                            make_observable("B->D^*lnu::normdBR/dq2",
                                                                            Unit::InverseGeV2(),
@@ -2096,6 +2129,14 @@ namespace eos
                                                                            Options{ { "V"_ok, "D_s^*"_ov }, { "q"_ok, "s"_ov } }
                                                                            ),
 
+                                                           make_observable("B_s->D_s^*lnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(\bar{B}_s\to D_s^*\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToVectorLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "V"_ok, "D_s^*"_ov }, { "q"_ok, "s"_ov } }
+                                                                           ),
+
                                                            make_observable("B_s->D_s^*lnu::normdBR/dq2",
                                                                            Unit::InverseGeV2(),
                                                                            &BToVectorLeptonNeutrino::normalized_differential_branching_ratio,
@@ -2610,6 +2651,14 @@ namespace eos
                                                                            Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
+                                                           make_observable("B_s->K^*lnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(B_s\to \bar{K}^*\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToVectorLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           ),
+
                                                            make_observable("B_s->K^*lnu::normdBR/dq2",
                                                                            R"(d\mathcal{B}(B_s\to \bar{K}^*\ell^-\bar\nu)/dq^2)",
                                                                            Unit::InverseGeV2(),
@@ -2979,6 +3028,14 @@ namespace eos
                                                                            Unit::InverseGeV2(),
                                                                            &BToVectorLeptonNeutrino::differential_branching_ratio,
                                                                            std::make_tuple("q2"),
+                                                                           Options{ { "V"_ok, "J/psi"_ov }, { "q"_ok, "c"_ov } }
+                                                                           ),
+
+                                                           make_observable("B_c->J/psilnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(\bar{B}_c\to J/\psi\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToVectorLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
                                                                            Options{ { "V"_ok, "J/psi"_ov }, { "q"_ok, "c"_ov } }
                                                                            ),
 

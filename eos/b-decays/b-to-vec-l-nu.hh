@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2018, 2019 Ahmet Kokulu
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -40,6 +40,7 @@ namespace eos
             // Differential Observables
             double differential_decay_width(const double & q2) const;
             double differential_branching_ratio(const double & q2) const;
+            double differential_branching_ratio_perp(const double & kperp) const;
             double differential_a_fb_leptonic(const double & q2) const;
             double differential_J1c(const double & q2) const;
             double differential_J1s(const double & q2) const;
