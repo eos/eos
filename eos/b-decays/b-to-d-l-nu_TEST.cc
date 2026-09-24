@@ -21,6 +21,8 @@
 
 #include <eos/b-decays/b-to-psd-l-nu.hh>
 #include <eos/maths/complex.hh>
+#include <eos/maths/integrate-impl.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/observable.hh>
 #include <eos/utils/wilson-polynomial.hh>
 
@@ -29,6 +31,7 @@
 #include <array>
 #include <cmath>
 #include <fstream>
+#include <functional>
 #include <iostream>
 #include <limits>
 #include <string>
@@ -100,6 +103,22 @@ class BToDLeptonNeutrinoTest : public TestCase
 
                 const double eps = 1e-3;
                 TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio(0.001, 11.643), 13.462, eps);
+
+                // k_perp-dependent branching ratios
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio_perp(0.50), 2.85330178, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.differential_branching_ratio_perp(1.50), 9.21528373, eps);
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_perp(0.50, 1.50), 6.30577047, eps);
+
+                // the k_perp integral of the differential rate reproduces the integrated one
+                std::function<double(const double &)> dbr_dkperp = [&d](const double & kperp) { return d.differential_branching_ratio_perp(kperp); };
+                TEST_CHECK_RELATIVE_ERROR(integrate<GSL::QAGS>(dbr_dkperp, 0.50, 1.50), d.integrated_branching_ratio_perp(0.50, 1.50), eps);
+
+                // integrating k_perp over its entire range recovers the q^2-integrated branching ratio
+                TEST_CHECK_RELATIVE_ERROR(d.integrated_branching_ratio_perp(0.0, 2.50), d.integrated_branching_ratio(0.0, 11.643), eps);
+
+                // beyond the maximal k_perp = 2.3095 GeV the rate vanishes
+                TEST_CHECK_NEARLY_EQUAL(d.differential_branching_ratio_perp(2.50), 0.0, eps);
+                TEST_CHECK_NEARLY_EQUAL(d.integrated_branching_ratio_perp(2.50, 3.50), 0.0, eps);
             }
 
             // comparison with Martin Jung in 3/2/1 model

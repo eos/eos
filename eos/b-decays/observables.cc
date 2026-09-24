@@ -228,6 +228,14 @@ namespace eos
                                                                            Options{ { "P"_ok, "pi"_ov } }
                                                                            ),
 
+                                                           make_observable("B->pilnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(B\to\pi\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
                                                            make_observable("B->pilnu::d^2BR/dq2/dcos(theta_l)",
                                                                            R"(d^2\mathcal{B}(B\to\pi\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
                                                                            Unit::InverseGeV2(),
@@ -241,6 +249,14 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "pi"_ov } }
+                                                                           ),
+
+                                                           make_observable("B->pilnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(B\to\pi\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "P"_ok, "pi"_ov } }
                                                                            ),
 
@@ -410,6 +426,14 @@ namespace eos
                                     Options{ { "P"_ok, "D"_ov } }
                                     ),
 
+                    make_observable("B->Dlnu::dBR/dkperp",
+                                    R"(d\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)/dk_\perp)",
+                                    Unit::InverseGeV(),
+                                    &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                                    std::make_tuple("kperp"),
+                                    Options{ { "P"_ok, "D"_ov } }
+                                    ),
+
                     make_observable("B->Dlnu::d^2BR/dq2/dcos(theta_l)",
                                     R"(d^2\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)/dq^2/d\cos(\theta_l))",
                                     Unit::InverseGeV2(),
@@ -423,6 +447,14 @@ namespace eos
                                     Unit::None(),
                                     &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                                     std::make_tuple("q2_min", "q2_max"),
+                                    Options{ { "P"_ok, "D"_ov } }
+                                    ),
+
+                    make_observable("B->Dlnu::BR(kperp_min,kperp_max)",
+                                    R"(\mathcal{B}(\bar{B}\to D\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                    Unit::None(),
+                                    &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
+                                    std::make_tuple("kperp_min", "kperp_max"),
                                     Options{ { "P"_ok, "D"_ov } }
                                     ),
 
@@ -574,11 +606,27 @@ namespace eos
                                                                            Options{ { "P"_ok, "K"_ov }, { "q"_ok, "s"_ov } }
                                                                            ),
 
+                                                           make_observable("B_s->Klnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(\bar{B}_s\to K\ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "P"_ok, "K"_ov }, { "q"_ok, "s"_ov } }
+                                                                           ),
+
                                                            make_observable("B_s->Klnu::BR",
                                                                            R"(\mathcal{B}(\bar{B}_s\to K\ell^-\bar\nu))",
                                                                            Unit::None(),
                                                                            &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "K"_ov }, { "q"_ok, "s"_ov } }
+                                                                           ),
+
+                                                           make_observable("B_s->Klnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(\bar{B}_s\to K\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "P"_ok, "K"_ov }, { "q"_ok, "s"_ov } }
                                                                            ),
 
@@ -824,11 +872,27 @@ namespace eos
                                                                            Options{ { "P"_ok, "eta"_ov }, { "q"_ok, "u"_ov } }
                                                                            ),
 
+                                                           make_observable("B->etalnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(B^- \to \eta \ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "P"_ok, "eta"_ov }, { "q"_ok, "u"_ov } }
+                                                                           ),
+
                                                            make_observable("B->etalnu::BR",
                                                                            R"(\mathcal{B}(B^- \to \eta \ell^-\bar\nu))",
                                                                            Unit::None(),
                                                                            &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "eta"_ov }, { "q"_ok, "u"_ov } }
+                                                                           ),
+
+                                                           make_observable("B->etalnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(B^- \to \eta \ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "P"_ok, "eta"_ov }, { "q"_ok, "u"_ov } }
                                                                            ),
 
@@ -922,11 +986,27 @@ namespace eos
                                                                            Options{ { "P"_ok, "eta_prime"_ov }, { "q"_ok, "u"_ov } }
                                                                            ),
 
+                                                           make_observable("B->eta_primelnu::dBR/dkperp",
+                                                                           R"(d\mathcal{B}(B^- \to \eta^\prime \ell^-\bar\nu)/dk_\perp)",
+                                                                           Unit::InverseGeV(),
+                                                                           &BToPseudoscalarLeptonNeutrino::differential_branching_ratio_perp,
+                                                                           std::make_tuple("kperp"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov }, { "q"_ok, "u"_ov } }
+                                                                           ),
+
                                                            make_observable("B->eta_primelnu::BR",
                                                                            R"(\mathcal{B}(B^- \to \eta^\prime \ell^-\bar\nu))",
                                                                            Unit::None(),
                                                                            &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "P"_ok, "eta_prime"_ov }, { "q"_ok, "u"_ov } }
+                                                                           ),
+
+                                                           make_observable("B->eta_primelnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(B^- \to \eta^\prime \ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToPseudoscalarLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "P"_ok, "eta_prime"_ov }, { "q"_ok, "u"_ov } }
                                                                            ),
 
@@ -1051,6 +1131,14 @@ namespace eos
                                                                            std::make_tuple("q2_min", "q2_max"),
                                                                            Options{ { "V"_ok, "omega"_ov }, { "q"_ok, "u"_ov } }
                                                                            ),
+
+                                                           make_observable("B->omegalnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(B\to\omega\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToVectorLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
+                                                                           Options{ { "V"_ok, "omega"_ov }, { "q"_ok, "u"_ov } }
+                                                                           ),
         });
 
         return ObservableGroup(imp);
@@ -1080,6 +1168,14 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "V"_ok, "rho"_ov } }
+                                                                           ),
+
+                                                           make_observable("B->rholnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(B\to\rho\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToVectorLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "V"_ok, "rho"_ov } }
                                                                            ),
         });
@@ -1296,6 +1392,23 @@ namespace eos
                                                                            std::make_tuple("q2_min", "q2_max"),
                                                                            { { "V"_ok, "D^*"_ov } }
                                                                            ),
+
+                                                           make_observable("B->D^*lnu::BR_CP_specific(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(\bar{B}\to D^*\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToVectorLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
+                                                                           { { "V"_ok, "D^*"_ov } }
+                                                                           ),
+
+                                                           make_expression_observable("B->D^*lnu::BR(kperp_min,kperp_max)",
+                                                                                      R"(\bar{\mathcal{B}}(\bar{B}\to D^*\ell^-\bar\nu)({k_\perp}_\textrm{min,max}))",
+                                                                                      Unit::None(),
+                                                                                      R"(
+                                0.5 * <<B->D^*lnu::BR_CP_specific(kperp_min,kperp_max);cp-conjugate=false>>
+                                +
+                                0.5 * <<B->D^*lnu::BR_CP_specific(kperp_min,kperp_max);cp-conjugate=true>>
+                                )"),
 
                                                            make_expression_observable("B->D^*lnu::BR",
                                                                                       R"(\bar{\mathcal{B}}(\bar{B}\to D^*\ell^-\bar\nu))",
@@ -2129,6 +2242,14 @@ namespace eos
                                                                            Options{ { "V"_ok, "D_s^*"_ov }, { "q"_ok, "s"_ov } }
                                                                            ),
 
+                                                           make_observable("B_s->D_s^*lnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(\bar{B}_s\to D_s^*\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToVectorLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
+                                                                           Options{ { "V"_ok, "D_s^*"_ov }, { "q"_ok, "s"_ov } }
+                                                                           ),
+
                                                            make_observable("B_s->D_s^*lnu::normBR",
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::normalized_integrated_branching_ratio,
@@ -2609,6 +2730,14 @@ namespace eos
                                                                            Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
                                                                            ),
 
+                                                           make_observable("B_s->K^*lnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(B_s\to \bar{K}^*\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToVectorLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
+                                                                           Options{ { "V"_ok, "K^*"_ov }, { "U"_ok, "u"_ov }, { "q"_ok, "s"_ov }, { "I"_ok, "1/2"_ov } }
+                                                                           ),
+
                                                            make_observable("B_s->K^*lnu::normBR",
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::normalized_integrated_branching_ratio,
@@ -2858,6 +2987,14 @@ namespace eos
                                                                            Unit::None(),
                                                                            &BToVectorLeptonNeutrino::integrated_branching_ratio,
                                                                            std::make_tuple("q2_min", "q2_max"),
+                                                                           Options{ { "V"_ok, "J/psi"_ov }, { "q"_ok, "c"_ov } }
+                                                                           ),
+
+                                                           make_observable("B_c->J/psilnu::BR(kperp_min,kperp_max)",
+                                                                           R"(\mathcal{B}(\bar{B}_c\to J/\psi\ell^-\bar\nu)({k_\perp}_\textrm{min},{k_\perp}_\textrm{max}))",
+                                                                           Unit::None(),
+                                                                           &BToVectorLeptonNeutrino::integrated_branching_ratio_perp,
+                                                                           std::make_tuple("kperp_min", "kperp_max"),
                                                                            Options{ { "V"_ok, "J/psi"_ov }, { "q"_ok, "c"_ov } }
                                                                            ),
 
