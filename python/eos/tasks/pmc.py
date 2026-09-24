@@ -134,7 +134,7 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     eos.completed('...finished!')
 
 # Sample PMC
-@task('sample-pmc', 'data/{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a', modules=['pypmc'])
+@task('sample-pmc', ['data/{posterior}/pmc', 'data/{posterior}/samples'], mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a', modules=['pypmc'])
 def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N:int=500, steps:int=10, final_N:int=5000,
                perplexity_threshold:float=1.0, weight_threshold:float=1e-10, sigma_test_stat:list=None, initial_proposal:str='clusters',
                pmc_iterations:int=1, pmc_rel_tol:float=1e-10, pmc_abs_tol:float=1e-05, pmc_lookback:int=1):

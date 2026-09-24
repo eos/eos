@@ -351,9 +351,9 @@ def _normalize_output_path(
     return path, None
 
 
-def _output_template_patterns(templates: Mapping[str, str]) -> tuple[re.Pattern, ...]:
+def _output_template_patterns(templates: Mapping[str, tuple[str, ...]]) -> tuple[re.Pattern, ...]:
     patterns = []
-    for template in templates.values():
+    for template in (template for task_templates in templates.values() for template in task_templates):
         if template.split('/', 1)[0] not in _OUTPUT_ROOTS:
             continue
         try:
@@ -370,7 +370,7 @@ def _output_template_patterns(templates: Mapping[str, str]) -> tuple[re.Pattern,
 
 def _recognized_outputs(
     context: CheckContext,
-    templates: Mapping[str, str],
+    templates: Mapping[str, tuple[str, ...]],
 ) -> tuple[PurePosixPath, ...]:
     results: list[PurePosixPath] = []
     layout_patterns = _output_template_patterns(templates)
@@ -489,8 +489,10 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                         details=details,
                     )
                     continue
-                template = templates[task_name]
-                if not template or template.split('/', 1)[0] not in _OUTPUT_ROOTS:
+                task_templates = [
+                    template for template in templates[task_name] if template.split('/', 1)[0] in _OUTPUT_ROOTS
+                ]
+                if not task_templates:
                     continue
                 function = task_registry._tasks[task_name]
                 arguments = {
@@ -526,24 +528,24 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                 task_defaults = default_component.arguments
                 arguments.update(task_defaults)
                 arguments.update(task_arguments)
-                output, error = _normalize_output_path(
-                    template, task_registry.task_output_fields()[task_name], arguments,
-                )
-                if error is not None:
-                    yield _finding(
-                        check_id, Severity.ERROR,
-                        f'Cannot expand output template for task {task_name!r}: {error}.',
-                        path=_relative_path(context.dataset_root, analysis_path),
-                        details={**details, 'template': template},
-                    )
-                    continue
-                details['output_path'] = output.as_posix()
-                claims[output].append(details)
-                if output.as_posix() not in available_directories and output.as_posix() not in available_files:
-                    yield _finding(
-                        check_id, Severity.ERROR, 'Expected task output is absent.',
-                        path=Path(output.as_posix()), details=details,
-                    )
+                output_fields = task_registry.task_output_fields()[task_name]
+                for template in task_templates:
+                    output, error = _normalize_output_path(template, output_fields, arguments)
+                    if error is not None:
+                        yield _finding(
+                            check_id, Severity.ERROR,
+                            f'Cannot expand output template for task {task_name!r}: {error}.',
+                            path=_relative_path(context.dataset_root, analysis_path),
+                            details={**details, 'template': template},
+                        )
+                        continue
+                    output_details = {**details, 'output_path': output.as_posix()}
+                    claims[output].append(output_details)
+                    if output.as_posix() not in available_directories and output.as_posix() not in available_files:
+                        yield _finding(
+                            check_id, Severity.ERROR, 'Expected task output is absent.',
+                            path=Path(output.as_posix()), details=output_details,
+                        )
 
     for output, output_claims in sorted(claims.items(), key=lambda item: item[0].as_posix()):
         analysis_paths = {claim['analysis_path'] for claim in output_claims}
