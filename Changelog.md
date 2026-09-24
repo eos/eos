@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+### Changed
+
+### Added
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+
+## [v1.1] - 2026-09-25
+
 - Added the eos-analysis task ``create-constraint``. This fits a multi-variate Gaussian to the samples and assesses the goodness-of-fit. The constraint can then be used in subseqeunt tasks. #1240(M. Smith)
 
 ### Changed
@@ -46,6 +59,8 @@
 - Name the base directory of an example notebook after the notebook: ``simulation.ipynb`` writes below ``simulation-base`` in lieu of ``simulation-data``, and ``analysis-organisation.ipynb`` below ``analysis-organisation-base`` in lieu of its own directory (D. van Dyk)
 - Name a type in the ``:type:`` fields of the docstrings, in lieu of prose such as ``iterable``, ``2D numpy array``, or ``int > 0``; the admissible range of a value is now stated in the description of the parameter (issue #779) (D. van Dyk)
 - Build the documentation in Sphinx' ``nitpicky`` mode and treat its warnings as errors, so that a reference which does not resolve fails the build (issue #779) (D. van Dyk)
+- Let a task declare more than one output through the ``eos.tasks.task`` decorator, and declare the importance samples that ``sample-nested`` and ``sample-pmc`` write and the masked predictions that ``predict-observables`` writes, so that ``eos-data check`` no longer reports them as unclaimed (D. van Dyk)
+- Report an absent output of the ``predict-observables`` or ``create-mask`` task as a warning in ``eos-data check``, since it can be regenerated from the importance samples, and report an output that lacks one of its data files as an error (D. van Dyk)
 
 ### Added
 
@@ -422,6 +437,7 @@
 
 
 
+[v1.1]: https://github.com/eos/eos/releases/tag/v1.1
 [v1.0.21]: https://github.com/eos/eos/releases/tag/v1.0.21
 [v1.0.20]: https://github.com/eos/eos/releases/tag/v1.0.20
 [v1.0.19]: https://github.com/eos/eos/releases/tag/v1.0.19
