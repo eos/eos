@@ -171,6 +171,8 @@ class Prediction:
     :ivar weights: The importance weights on a linear scale as a 1D array of shape (N, ).
     """
 
+    _REQUIRED_FILES = ('samples.npy', 'weights.npy')
+
     varied_parameters: list
     """The descriptions (name, kind, kinematics, options) of the predicted columns."""
 

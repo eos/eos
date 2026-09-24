@@ -27,6 +27,7 @@ from eos.cli.data_checks_dataset import (
     FileInventoryEntry,
     MAX_DATASET_SIZE,
     MAX_FILE_SIZE,
+    _output_classes,
     _valid_orcid,
     check_dataset_sizes,
 )
@@ -241,10 +242,16 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
         self.assertEqual(templates['sample-nested'], ('data/{posterior}/nested', 'data/{posterior}/samples'))
         self.assertEqual(templates['sample-pmc'], ('data/{posterior}/pmc', 'data/{posterior}/samples'))
 
+    def test_output_classes_are_discovered_from_eos_data(self):
+        self.assertEqual(set(_output_classes()), {
+            'DynestyResults', 'ImportanceSamples', 'MarkovChain', 'MixtureDensity', 'Mode', 'ModelComparison',
+            'NabuLikelihood', 'PMCSampler', 'Prediction', 'SampleMask',
+        })
+
     def test_valid_claimed_output_and_step_defaults(self):
         step = self.step(arguments={'posterior': 'p'}, defaults={'sample-mcmc': {'chain': 7}})
         self.dataset.valid(analysis=analysis_document(steps=[step]))
-        self.output('data/p/mcmc-0007')
+        self.complete('data/p/mcmc-0007', 'MarkovChain', ('samples.npy', 'usamples.npy', 'weights.npy'))
         result, _ = self.dataset.run()
         findings = [finding for finding in result.findings if finding.check_id == 'outputs.reproducibility']
         self.assertEqual(findings, [])
@@ -342,13 +349,51 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
             ],
         )
 
+    def test_absent_regenerable_output_is_a_warning(self):
+        self.complete('data/p/samples', 'ImportanceSamples', ('samples.npy', 'weights.npy'))
+        steps = [
+            self.step('sample-prior', {'posterior': 'p'}, step_id='sample'),
+            self.step('predict-observables', {'posterior': 'p', 'prediction': 'x'}, step_id='predict'),
+            self.step('create-mask', {'posterior': 'p', 'mask_name': 'm'}, step_id='mask'),
+            self.step('model-comparison', {'posteriors': ['p']}, step_id='compare'),
+        ]
+        findings = self.findings(steps)
+        self.assertEqual(
+            [(finding.severity, finding.details['output_path']) for finding in findings],
+            [
+                (Severity.WARNING, 'data/p/pred-x'), (Severity.WARNING, 'data/p/mask-m'),
+                (Severity.WARNING, 'model-comparison/default'),
+            ],
+        )
+
+    def test_incomplete_output_is_an_error(self):
+        step = self.step('predict-observables', {'posterior': 'p', 'prediction': 'x'})
+        self.complete('data/p/pred-x', 'Prediction', ('weights.npy', 'log'))
+        findings = self.findings([step])
+        self.assertEqual([finding.severity for finding in findings], [Severity.ERROR])
+        self.assertEqual(findings[0].message, 'Task output is incomplete.')
+        self.assertEqual(findings[0].details['missing_files'], ('samples.npy',))
+
+        (self.dataset.root / 'data/p/pred-x/description.yaml').unlink()
+        findings = self.findings([step])
+        self.assertEqual([finding.details['missing_files'] for finding in findings], [('description.yaml',)])
+
+        (self.dataset.root / 'data/p/pred-x/weights.npy').unlink()
+        findings = self.findings([step])
+        self.assertEqual([finding.details['missing_files'] for finding in findings], [('description.yaml',)])
+
+    def test_incomplete_markov_chain_is_an_error(self):
+        self.complete('data/p/mcmc-0000', 'MarkovChain', ('samples.npy', 'usamples.npy'))
+        findings = self.findings([self.step(arguments={'posterior': 'p', 'chain': 0})])
+        self.assertEqual([finding.details['missing_files'] for finding in findings], [('weights.npy',)])
+
     def test_step_default_argument_alias_is_normalized(self):
         step = self.step(
             arguments={'posterior': 'p'},
             defaults={'sample-mcmc': {'CHAIN-IDX': 4}},
         )
         self.dataset.valid(analysis=analysis_document(steps=[step]))
-        self.dataset.yaml('data/p/mcmc-0004/description.yaml', {'type': 'MarkovChain'})
+        self.complete('data/p/mcmc-0004', 'MarkovChain', ('samples.npy', 'usamples.npy', 'weights.npy'))
         result, _ = self.dataset.run()
         findings = [
             finding for finding in result.findings

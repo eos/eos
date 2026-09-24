@@ -133,6 +133,8 @@ class PMCSampler:
     :ivar test_statistics: The precomputed test statistics.
     """
 
+    _REQUIRED_FILES = ()
+
     varied_parameters: list
     """The descriptions (name, min, max) of the varied parameters."""
 
