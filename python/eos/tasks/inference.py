@@ -252,7 +252,7 @@ class DynestyResultLogger:
 
 
 # Nested sampling
-@task('sample-nested', 'data/{posterior}/nested')
+@task('sample-nested', ['data/{posterior}/nested', 'data/{posterior}/samples'])
 def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, min_ess:int=0, seed:int=10, sample:str='auto'):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.

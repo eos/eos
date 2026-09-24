@@ -200,7 +200,7 @@ def _backed_up(path):
 
 
 def task_output_templates():
-    """Return the registered task output templates without executing any task."""
+    """Return the registered task output templates, as tuples, without executing any task."""
     return dict(_task_outputs)
 
 
@@ -241,7 +241,8 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     :type name: str
     :param output: A format string, relative to the base directory, for the task's output directory.
         It may reference the task's arguments (e.g. ``'data/{posterior}/nested'``) and the fields returned by ``output_fields``.
-    :type output: str
+        A list declares several outputs; the first one holds the log file.
+    :type output: str | list[str]
     :param mode: A callable that, given the task's arguments as keyword arguments, returns the file mode
         for the log file (e.g. ``'w'`` or ``'a'``). Defaults to always returning ``'w'``.
     :type mode: collections.abc.Callable
@@ -265,6 +266,8 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     """
     if modules is None:
         modules = []
+    outputs = (output,) if isinstance(output, str) else tuple(output)
+    output = outputs[0]
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
@@ -360,7 +363,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
 
             return result
         _tasks[name] = task_wrapper
-        _task_outputs[name] = output
+        _task_outputs[name] = outputs
         _task_output_fields[name] = output_fields
         return task_wrapper
     return _task
