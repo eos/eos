@@ -74,7 +74,7 @@ _task_outputs = {}
 
 
 def task_output_templates():
-    """Return the registered task output templates without executing any task."""
+    """Return the registered task output templates, as tuples, without executing any task."""
     return dict(_task_outputs)
 
 def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, load_analysis_file=True):
@@ -90,8 +90,10 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     :param name: The name under which the task is registered.
     :type name: str
     :param output: A format string, relative to the base directory, for the task's output directory.
-        It may reference the task's arguments (e.g. ``'data/{posterior}/nested'``).
-    :type output: str
+        It may reference the task's arguments (e.g. ``'data/{posterior}/nested'``). A list declares
+        several outputs; the first one holds the log file. An output that references an argument whose
+        value is None is not written.
+    :type output: str | list[str]
     :param mode: A callable that, given the task's arguments as keyword arguments, returns the file mode
         for the log file (e.g. ``'w'`` or ``'a'``). Defaults to always returning ``'w'``.
     :type mode: collections.abc.Callable
@@ -106,6 +108,8 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     """
     if modules is None:
         modules = []
+    outputs = (output,) if isinstance(output, str) else tuple(output)
+    output = outputs[0]
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
@@ -169,7 +173,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
 
                 return result
         _tasks[name] = task_wrapper
-        _task_outputs[name] = output
+        _task_outputs[name] = outputs
         return task_wrapper
     return _task
 
@@ -549,7 +553,7 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     eos.completed('...finished!')
 
 # Sample PMC
-@task('sample-pmc', 'data/{posterior}/pmc', mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a', modules=['pypmc'])
+@task('sample-pmc', ['data/{posterior}/pmc', 'data/{posterior}/samples'], mode=lambda initial_proposal, **kwargs: 'a' if initial_proposal != 'clusters' else 'a', modules=['pypmc'])
 def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N:int=500, steps:int=10, final_N:int=5000,
                perplexity_threshold:float=1.0, weight_threshold:float=1e-10, sigma_test_stat:list=None, initial_proposal:str='clusters',
                pmc_iterations:int=1, pmc_rel_tol:float=1e-10, pmc_abs_tol:float=1e-05, pmc_lookback:int=1):
@@ -627,13 +631,14 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
     eos.info(f'Finished sampling with {len(samples)} samples.')
 
 # Predict observables
-@task('predict-observables', 'data/{posterior}/pred-{prediction}')
+@task('predict-observables', ['data/{posterior}/pred-{prediction}', 'data/{posterior}/pred-{prediction}_mask-{mask_name}'])
 def predict_observables(analysis_file:str, posterior:str, prediction:str, base_directory:str='./', begin:int=0, end:int=None, mask_name:str=None):
     '''
     Predicts a set of observables based on previously obtained importance samples.
 
     The input files are expected in EOS_BASE_DIRECTORY/data/POSTERIOR/samples.
-    The output files will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/pred-PREDICTION.
+    The output files will be stored in EOS_BASE_DIRECTORY/data/POSTERIOR/pred-PREDICTION, or in
+    EOS_BASE_DIRECTORY/data/POSTERIOR/pred-PREDICTION_mask-MASK_NAME if a mask is applied.
 
     :param analysis_file: The name of the analysis file that describes the named posterior, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or `eos.AnalysisFile`
@@ -773,7 +778,7 @@ class DynestyResultLogger:
 
 
 # Nested sampling
-@task('sample-nested', 'data/{posterior}/nested')
+@task('sample-nested', ['data/{posterior}/nested', 'data/{posterior}/samples'])
 def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bound:str='multi', nlive:int=250, dlogz:float=1.0, maxiter:int=None, miniter:int=0, min_ess:int=0, seed:int=10, sample:str='auto'):
     """
     Samples from a likelihood associated with a named posterior using dynamic nested sampling.

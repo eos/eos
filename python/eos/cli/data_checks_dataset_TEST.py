@@ -236,8 +236,9 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
 
     def test_task_templates_are_introspected_from_decorator_registry(self):
         templates = task_output_templates()
-        self.assertEqual(templates['sample-mcmc'], 'data/{posterior}/mcmc-{chain:04}')
-        self.assertEqual(templates['predict-observables'], 'data/{posterior}/pred-{prediction}')
+        self.assertEqual(templates['sample-mcmc'], ('data/{posterior}/mcmc-{chain:04}',))
+        self.assertEqual(templates['sample-nested'], ('data/{posterior}/nested', 'data/{posterior}/samples'))
+        self.assertEqual(templates['sample-pmc'], ('data/{posterior}/pmc', 'data/{posterior}/samples'))
 
     def test_valid_claimed_output_and_step_defaults(self):
         step = self.step(arguments={'posterior': 'p'}, defaults={'sample-mcmc': {'chain': 7}})
@@ -263,7 +264,7 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
         invalid, _ = self.dataset.run()
         self.assertTrue(any('Cannot expand output template' in finding.message for finding in invalid.findings))
 
-        with mock.patch('eos.tasks.task_output_templates', return_value={'sample-mcmc': 'data/{posterior!bad}'}):
+        with mock.patch('eos.tasks.task_output_templates', return_value={'sample-mcmc': ('data/{posterior!bad}',)}):
             malformed, _ = self.dataset.run()
         self.assertTrue(any('Cannot expand output template' in finding.message for finding in malformed.findings))
 
@@ -282,6 +283,36 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
         result, _ = self.dataset.run()
         findings = [finding for finding in result.findings if finding.check_id == 'outputs.reproducibility']
         self.assertEqual(findings, [])
+
+    def findings(self, steps):
+        self.dataset.valid(analysis=analysis_document(steps=steps))
+        result, _ = self.dataset.run()
+        return [finding for finding in result.findings if finding.check_id == 'outputs.reproducibility']
+
+    def complete(self, relative, output_type, files):
+        self.output(relative, output_type)
+        for name in files:
+            self.dataset.write(f'{relative}/{name}')
+
+    def test_every_output_of_a_task_is_claimed(self):
+        self.complete('data/p/nested', 'DynestyResults', ('dynesty_results.npy',))
+        self.complete('data/p/samples', 'ImportanceSamples', ('samples.npy', 'weights.npy'))
+        self.assertEqual(self.findings([self.step('sample-nested', {'posterior': 'p'})]), [])
+
+        missing = self.findings([self.step('sample-pmc', {'posterior': 'p'})])
+        self.assertEqual(
+            [(finding.severity, finding.message, finding.details['output_path']) for finding in missing],
+            [
+                (Severity.ERROR, 'Expected task output is absent.', 'data/p/pmc'),
+                (Severity.ERROR, 'Recognized EOS output object is not claimed by any analysis step.', 'data/p/nested'),
+            ],
+        )
+
+    def test_masked_prediction_is_claimed(self):
+        self.complete('data/p/pred-x_mask-m', 'Prediction', ('samples.npy', 'weights.npy'))
+        self.dataset.write('data/p/pred-x/log')
+        step = self.step('predict-observables', {'posterior': 'p', 'prediction': 'x', 'mask_name': 'm'})
+        self.assertEqual(self.findings([step]), [])
 
     def test_step_default_argument_alias_is_normalized(self):
         step = self.step(

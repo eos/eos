@@ -337,6 +337,8 @@ def _normalize_output_path(template: str, arguments: Mapping[str, Any]) -> tuple
         fields = [field for _literal, field, _spec, _conversion in string.Formatter().parse(template) if field]
         if any('.' in field or '[' in field for field in fields):
             return None, 'attribute and item access are not permitted in output templates'
+        if any(field in arguments and arguments[field] is None for field in fields):
+            return None, None
         rendered = template.format(**arguments).replace('\\', '/')
     except (KeyError, ValueError, TypeError, IndexError) as error:
         return None, str(error)
@@ -346,9 +348,9 @@ def _normalize_output_path(template: str, arguments: Mapping[str, Any]) -> tuple
     return path, None
 
 
-def _output_template_patterns(templates: Mapping[str, str]) -> tuple[re.Pattern, ...]:
+def _output_template_patterns(templates: Mapping[str, tuple[str, ...]]) -> tuple[re.Pattern, ...]:
     patterns = []
-    for template in templates.values():
+    for template in (template for task_templates in templates.values() for template in task_templates):
         if not template.startswith('data/'):
             continue
         try:
@@ -365,7 +367,7 @@ def _output_template_patterns(templates: Mapping[str, str]) -> tuple[re.Pattern,
 
 def _recognized_outputs(
     context: CheckContext,
-    templates: Mapping[str, str],
+    templates: Mapping[str, tuple[str, ...]],
 ) -> tuple[PurePosixPath, ...]:
     results: list[PurePosixPath] = []
     layout_patterns = _output_template_patterns(templates)
@@ -484,8 +486,8 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                         details=details,
                     )
                     continue
-                template = templates[task_name]
-                if not template or not template.startswith('data/'):
+                task_templates = [template for template in templates[task_name] if template.startswith('data/')]
+                if not task_templates:
                     continue
                 function = task_registry._tasks[task_name]
                 arguments = {
@@ -521,22 +523,25 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                 task_defaults = default_component.arguments
                 arguments.update(task_defaults)
                 arguments.update(task_arguments)
-                output, error = _normalize_output_path(template, arguments)
-                if error is not None:
-                    yield _finding(
-                        check_id, Severity.ERROR,
-                        f'Cannot expand output template for task {task_name!r}: {error}.',
-                        path=_relative_path(context.dataset_root, analysis_path),
-                        details={**details, 'template': template},
-                    )
-                    continue
-                details['output_path'] = output.as_posix()
-                claims[output].append(details)
-                if output.as_posix() not in available_directories and output.as_posix() not in available_files:
-                    yield _finding(
-                        check_id, Severity.ERROR, 'Expected task output is absent.',
-                        path=Path(output.as_posix()), details=details,
-                    )
+                for template in task_templates:
+                    output, error = _normalize_output_path(template, arguments)
+                    if error is not None:
+                        yield _finding(
+                            check_id, Severity.ERROR,
+                            f'Cannot expand output template for task {task_name!r}: {error}.',
+                            path=_relative_path(context.dataset_root, analysis_path),
+                            details={**details, 'template': template},
+                        )
+                        continue
+                    if output is None:
+                        continue
+                    output_details = {**details, 'output_path': output.as_posix()}
+                    claims[output].append(output_details)
+                    if output.as_posix() not in available_directories and output.as_posix() not in available_files:
+                        yield _finding(
+                            check_id, Severity.ERROR, 'Expected task output is absent.',
+                            path=Path(output.as_posix()), details=output_details,
+                        )
 
     for output, output_claims in sorted(claims.items(), key=lambda item: item[0].as_posix()):
         analysis_paths = {claim['analysis_path'] for claim in output_claims}
