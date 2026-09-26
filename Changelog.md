@@ -8,6 +8,9 @@
 
 - Test the ``eos-analysis`` commands in Python, in lieu of the bash script ``src/scripts/eos-analysis_TEST``; the tests of the pypmc-based commands ``sample-mcmc``, ``find-clusters``, ``sample-pmc``, and ``find-mode --from-mcmc`` are kept apart in ``eos/cli/analysis_pypmc_TEST.py`` (issue #1264) (D. van Dyk)
 
+- **Breaking:** Reject a task argument interpolated into the task's output directory unless it is a single path component without whitespace, and reject file-local names ``.`` and ``..`` in analysis files (issue #1291) (D. van Dyk)
+- Write each task's outputs to a temporary directory that replaces the final one only once the task succeeds, so that a failed task leaves previous results untouched and no incomplete output directory behind; ``sample-mcmc`` now fails on a run time error in lieu of logging it and succeeding (issue #1291) (D. van Dyk)
+
 ### Added
 
 ### Deprecated
