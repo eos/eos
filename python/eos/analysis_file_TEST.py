@@ -268,6 +268,13 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
 
         self.assertEqual([], list(description.validate_structure()))
 
+    def test_dot_names_are_rejected(self):
+        for name in ('.', '..'):
+            description = eos.analysis_file_description.AnalysisFileDescription.from_dict(
+                posteriors=[{ 'name': name, 'prior': [], 'likelihood': [] }],
+            )
+            self.assertIn(f"Invalid posterior name '{name}'", [d.message for d in description.validate_structure()])
+
     def test_multiple_structural_errors_are_reported_together(self):
         with self.assertRaises(RuntimeError) as context:
             eos.AnalysisFile(_TESTD / 'invalid' / 'multiple-structural-errors.yaml')
