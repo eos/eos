@@ -383,6 +383,34 @@ class LoggingTests(unittest.TestCase):
                         with self.assertLogs('EOS', level='DEBUG') as cm:
                             _eos._emit_native_log("id", check_level, "msg")
 
+    def test_set_log_level(self):
+        "Check that set_log_level controls the default log handler and the native log level in lock-step"
+        import eos, io, logging, _eos
+        from eos import _NativeLogLevel as ll
+
+        stream = io.StringIO()
+        previous_stream = eos.default_log_handler.setStream(stream)
+        try:
+            eos.set_log_level(logging.WARNING)
+            _eos._emit_native_log("id", ll.INFO, "suppressed")
+            eos.info("suppressed")
+
+            eos.set_log_level('DEBUG')
+            _eos._emit_native_log("id", ll.DEBUG, "native debug")
+            eos.debug("python debug")
+
+            self.assertEqual(eos.logger.level, logging.DEBUG)
+            output = stream.getvalue()
+            self.assertNotIn("suppressed", output)
+            self.assertIn("native debug", output)
+            self.assertIn("python debug", output)
+
+            with self.assertRaises(RuntimeError):
+                eos.set_log_level('NO-SUCH-LEVEL')
+        finally:
+            eos.set_log_level(logging.INFO)
+            eos.default_log_handler.setStream(previous_stream)
+
     def test_log_000(self):
         "Computation of specific observable should log error"
         import eos

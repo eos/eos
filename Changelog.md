@@ -3,6 +3,8 @@
 ## Unreleased
 
 ### Changed
+- Rename ``eos.stderr_handler`` to ``eos.default_log_handler`` #1290 (D. van Dyk)
+- Let ``eos.set_log_level`` accept level names, e.g. ``'DEBUG'``, and change the native log level in lock-step, also for the CLI's verbosity #1290 (D. van Dyk)
 
 ### Added
 
@@ -11,6 +13,7 @@
 ### Removed
 
 ### Fixed
+- Fix ``eos.set_log_level`` to set the level of the default log handler rather than that of the logger, so that DEBUG messages are shown; correct the FAQ on setting the log level, which caused messages to be printed twice #1290 (D. van Dyk)
 
 
 ## [v1.1] - 2026-09-25

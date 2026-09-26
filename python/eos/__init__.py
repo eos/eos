@@ -64,9 +64,9 @@ logger = logging.getLogger('EOS')
 logger.setLevel(logging.DEBUG)
 logger.propagate = False
 # log to stderr by default
-stderr_handler = logging.StreamHandler(stream=_sys.stderr)
-stderr_handler.setLevel(logging.INFO)
-logger.addHandler(stderr_handler)
+default_log_handler = logging.StreamHandler(stream=_sys.stderr)
+default_log_handler.setLevel(logging.INFO)
+logger.addHandler(default_log_handler)
 
 from _eos import _register_log_callback, _set_native_log_level, _NativeLogLevel
 _set_native_log_level(_NativeLogLevel.INFO) # default native log level
@@ -81,9 +81,12 @@ _MAP_PYTHON_TO_NATIVE_LOG_LEVEL = {
     logging.ERROR: _NativeLogLevel.ERROR,
 }
 def set_log_level(level):
-    logger.setLevel(level)
+    if isinstance(level, str):
+        level = logging.getLevelName(level)
     if level not in _MAP_PYTHON_TO_NATIVE_LOG_LEVEL:
         raise RuntimeError(f'Cannot handle unknown log level: {level}')
+    # keep the logger at DEBUG so that additional handlers, e.g. for task log files, still receive all messages
+    default_log_handler.setLevel(level)
     _set_native_log_level(_MAP_PYTHON_TO_NATIVE_LOG_LEVEL[level])
 
 def debug(msg, *args, **kwargs):
