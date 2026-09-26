@@ -4,6 +4,8 @@
 
 ### Changed
 
+- Test the ``eos-analysis`` commands in Python, in lieu of the bash script ``src/scripts/eos-analysis_TEST``; the tests of the pypmc-based commands ``sample-mcmc``, ``find-clusters``, ``sample-pmc``, and ``find-mode --from-mcmc`` are kept apart in ``eos/cli/analysis_pypmc_TEST.py`` (issue #1264) (D. van Dyk)
+
 ### Added
 
 ### Deprecated
