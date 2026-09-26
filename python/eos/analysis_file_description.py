@@ -940,6 +940,10 @@ _task_argument_map = {
     # mixture-product
     ('mixture-product', 'POSTERIOR'): 'posterior',
     ('mixture-product', 'POSTERIORS'): 'posteriors',
+    # model-comparison
+    ('model-comparison', 'POSTERIORS'): 'posteriors',
+    ('model-comparison', 'g'): 'group', ('model-comparison', 'GROUP'): 'group',
+    ('model-comparison', 'm'): 'max_outside_mass', ('model-comparison', 'max-outside-mass'): 'max_outside_mass', ('model-comparison', 'MAX_OUTSIDE_MASS'): 'max_outside_mass',
     # find-clusters
     ('find-clusters', 'POSTERIOR'): 'posterior',
     ('find-clusters', 't'): 'threshold', ('find-clusters', 'THRESHOLD'): 'threshold',
@@ -1560,6 +1564,14 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
                             Severity.ERROR,
                             f"Error in step {step.id}: Posterior '{posterior}' not known to EOS",
                         )
+                if isinstance(task.arguments.get('posteriors'), list):
+                    for index, posterior in enumerate(task.arguments['posteriors']):
+                        if not context.lookup('posterior', posterior):
+                            yield Diagnostic(
+                                ('steps', segment, 'tasks', task_segment, 'arguments', 'posteriors', index),
+                                Severity.ERROR,
+                                f"Error in step {step.id}: Posterior '{posterior}' not known to EOS",
+                            )
 
         expression_names = [
             description.name

@@ -19,10 +19,12 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+import collections
 import contextlib
 import functools
 import glob
 import inspect
+import itertools
 import logging
 import eos.analysis_file_context
 import numpy as _np
@@ -817,6 +819,194 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     eos.data.DynestyResults.create(os.path.join(base_directory, 'data', posterior, 'nested'), analysis.varied_parameters, results)
     eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
+
+
+_model_comparison_checks = {}
+
+def _model_comparison_check(name, description):
+    """Register a named stability check, which receives an :class:`eos.data.model_comparison.PairwiseComparisonDescription`
+    and returns whether the conclusion for that pair of posteriors is stable."""
+    def _register(func):
+        _model_comparison_checks[name] = (description, func)
+        return func
+    return _register
+
+
+# Jeffreys' scale (1961): thresholds at half-integer powers of 10 in B, given on |ln B|
+_BAYES_FACTOR_STRENGTHS = [
+    (2.0 * _np.log(10.0), 'decisive'),
+    (1.5 * _np.log(10.0), 'very strong'),
+    (1.0 * _np.log(10.0), 'strong'),
+    (0.5 * _np.log(10.0), 'substantial'),
+]
+_BAYES_FACTOR_NEGLIGIBLE = 'barely worth mentioning'
+
+def _bayes_factor_strength(log_bayes_factor):
+    for threshold, strength in _BAYES_FACTOR_STRENGTHS:
+        if abs(log_bayes_factor) >= threshold:
+            return strength
+    return _BAYES_FACTOR_NEGLIGIBLE
+
+
+def _bayes_factor_conclusion(log_bayes_factor):
+    strength = _bayes_factor_strength(log_bayes_factor)
+    if strength == _BAYES_FACTOR_NEGLIGIBLE:
+        return (0, strength)
+    return (int(_np.sign(log_bayes_factor)), strength)
+
+
+@_model_comparison_check('uncertainty', 'The conclusion does not change within one standard deviation of the log Bayes factor.')
+def _check_uncertainty(pair):
+    # the conclusion is monotonic in ln B, so comparing the interval's endpoints suffices
+    lower = pair.log_bayes_factor - pair.log_bayes_factor_uncertainty
+    upper = pair.log_bayes_factor + pair.log_bayes_factor_uncertainty
+    return _bayes_factor_conclusion(lower) == _bayes_factor_conclusion(upper)
+
+
+@_model_comparison_check('prior-volume-adjustment', 'The conclusion does not change when the prior-volume adjustment is omitted.')
+def _check_prior_volume_adjustment(pair):
+    return _bayes_factor_conclusion(pair.log_bayes_factor) == _bayes_factor_conclusion(pair.unadjusted_log_bayes_factor)
+
+
+def _log_prior_volume_adjustments(analysis_file, posteriors, results, max_outside_mass):
+    from .analysis_file_description import UniformPriorDescription
+
+    def _parameters(description):
+        if hasattr(description, 'parameter'):
+            return [description.parameter]
+        return list(getattr(description, 'parameters', []))
+
+    descriptions = {
+        p: [d for prior in analysis_file.posteriors[p].prior for d in analysis_file.priors[prior].descriptions]
+        for p in posteriors
+    }
+    shared = set.intersection(*(set(results[p].lookup_table) for p in posteriors))
+    adjustments = { p: 0.0 for p in posteriors }
+    for parameter in sorted(shared):
+        involving = { p: [d for d in descriptions[p] if parameter in _parameters(d)] for p in posteriors }
+        if all(involving[p] == involving[posteriors[0]] for p in posteriors):
+            continue
+
+        if not all(len(involving[p]) == 1 and isinstance(involving[p][0], UniformPriorDescription) for p in posteriors):
+            raise ValueError(f'Shared parameter \'{parameter}\' has differing priors that are not all uniform; cannot adjust for the prior volume')
+
+        ranges = { p: (float(involving[p][0].min), float(involving[p][0].max)) for p in posteriors }
+        lower = max(r[0] for r in ranges.values())
+        upper = min(r[1] for r in ranges.values())
+        if upper <= lower:
+            raise ValueError(f'The prior ranges of shared parameter \'{parameter}\' do not overlap')
+
+        for p in posteriors:
+            values = results[p].samples[:, results[p].lookup_table[parameter]]
+            weights = results[p].weights
+            outside = _np.sum(weights[(values < lower) | (values > upper)]) / _np.sum(weights)
+            if outside > max_outside_mass:
+                raise ValueError(f'Posterior \'{p}\' has a fraction {outside:.2e} of its mass outside the common range [{lower}, {upper}] '
+                                 f'of shared parameter \'{parameter}\', exceeding the maximum of {max_outside_mass:.2e}')
+            adjustments[p] += float(_np.log((ranges[p][1] - ranges[p][0]) / (upper - lower)))
+
+    return adjustments
+
+
+@task('model-comparison', 'model-comparison/{group}')
+def model_comparison(analysis_file:str, posteriors:list, base_directory:str='./', group:str='default', max_outside_mass:float=1e-3):
+    """
+    Compares a group of named posteriors that share the same likelihood by means of their Bayesian evidences.
+
+    The evidences are read from the nested-sampling results in EOS_BASE_DIRECTORY/data/POSTERIOR/nested.
+    Shared parameters whose uniform priors differ in range are corrected to their common range, so that
+    only the parameters that distinguish the models contribute an Occam factor. The log Bayes factors of
+    all pairs of posteriors are checked for the stability of their conclusion.
+
+    The output will be stored in EOS_BASE_DIRECTORY/model-comparison/GROUP.
+
+    :param analysis_file: The name of the analysis file that describes the named posteriors, or an object of class `eos.AnalysisFile`.
+    :type analysis_file: str or `eos.AnalysisFile`
+    :param posteriors: The names of the posteriors to compare.
+    :type posteriors: list[str]
+    :param base_directory: The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.
+    :type base_directory: str, optional
+    :param group: The name of the group of posteriors, used to label the output. Defaults to 'default'.
+    :type group: str, optional
+    :param max_outside_mass: The maximal posterior mass that may lie outside the common range of a shared parameter when adjusting its prior volume. Defaults to 1e-3.
+    :type max_outside_mass: float, optional
+    :returns: The model comparison.
+    :rtype: eos.data.ModelComparison
+    """
+    if len(posteriors) < 2 or len(set(posteriors)) != len(posteriors):
+        raise ValueError('A model comparison requires at least two distinct posteriors')
+    for p in posteriors:
+        if p not in analysis_file.posteriors:
+            raise ValueError(f'Unknown posterior \'{p}\'')
+
+    first = analysis_file.posteriors[posteriors[0]]
+    for p in posteriors[1:]:
+        other = analysis_file.posteriors[p]
+        a, b = collections.Counter(first.likelihood), collections.Counter(other.likelihood)
+        if a != b:
+            raise ValueError(f'Posteriors \'{first.name}\' and \'{p}\' do not share the same likelihood; differing likelihoods: {sorted(((a - b) + (b - a)).elements())}')
+        if other.global_options != first.global_options or other.fixed_parameters != first.fixed_parameters:
+            eos.info(f'Posteriors \'{first.name}\' and \'{p}\' differ in their global options or fixed parameters')
+
+    results = {}
+    for p in posteriors:
+        path = os.path.join(base_directory, 'data', p, 'nested')
+        if not os.path.isdir(path):
+            raise RuntimeError(f'No nested-sampling results found for posterior \'{p}\' in \'{path}\'; run the \'sample-nested\' task first')
+        results[p] = eos.data.DynestyResults(path)
+        _check_varied_parameters_match(analysis_file.analysis(p, base_directory=base_directory), results[p])
+
+    adjustments = _log_prior_volume_adjustments(analysis_file, posteriors, results, max_outside_mass)
+    log_z    = { p: float(results[p].results.logz[-1])    for p in posteriors }
+    sigma    = { p: float(results[p].results.logzerr[-1]) for p in posteriors }
+    adjusted = { p: log_z[p] + adjustments[p]             for p in posteriors }
+    reference = max(posteriors, key=adjusted.get)
+
+    entries = [{
+        'posterior':                    p,
+        'log_evidence':                 log_z[p],
+        'log_evidence_uncertainty':     sigma[p],
+        'log_prior_volume_adjustment':  adjustments[p],
+        'adjusted_log_evidence':        adjusted[p],
+        'log_bayes_factor':             adjusted[p] - adjusted[reference],
+        'log_bayes_factor_uncertainty': float(_np.hypot(sigma[p], sigma[reference])) if p != reference else 0.0,
+        'strength':                     _bayes_factor_strength(adjusted[p] - adjusted[reference]) if p != reference else 'reference',
+    } for p in posteriors]
+
+    from eos.data.model_comparison import PairwiseComparisonDescription
+
+    pairs = []
+    for a, b in itertools.combinations(posteriors, 2):
+        a, b = (a, b) if adjusted[a] >= adjusted[b] else (b, a)
+        pairs.append(PairwiseComparisonDescription(
+            first                        = a,
+            second                       = b,
+            log_bayes_factor             = adjusted[a] - adjusted[b],
+            log_bayes_factor_uncertainty = float(_np.hypot(sigma[a], sigma[b])),
+            unadjusted_log_bayes_factor  = log_z[a] - log_z[b],
+            strength                     = _bayes_factor_strength(adjusted[a] - adjusted[b]),
+        ))
+
+    checks = []
+    for name, (description, check) in _model_comparison_checks.items():
+        failed_pairs = []
+        for pair in pairs:
+            if check(pair):
+                continue
+            pair.failed_checks.append(name)
+            failed_pairs.append([pair.first, pair.second])
+            eos.warn(f'The conclusion for \'{pair.first}\' over \'{pair.second}\' fails the \'{name}\' check')
+        checks.append({ 'name': name, 'status': 'failed' if failed_pairs else 'passed', 'description': description, 'failed_pairs': failed_pairs })
+
+    comparisons = [asdict(pair) for pair in pairs]
+
+    for e in entries:
+        eos.info(f'{e["posterior"]}: adjusted ln Z = {e["adjusted_log_evidence"]:.2f} +/- {e["log_evidence_uncertainty"]:.2f}, '
+                 f'ln B vs. \'{reference}\' = {e["log_bayes_factor"]:.2f} +/- {e["log_bayes_factor_uncertainty"]:.2f} ({e["strength"]})')
+
+    path = os.path.join(base_directory, 'model-comparison', group)
+    eos.data.ModelComparison.create(path, group, reference, entries, comparisons, checks)
+    return eos.data.ModelComparison(path)
 
 
 def _get_references(analysis_file):

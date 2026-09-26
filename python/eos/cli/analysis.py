@@ -353,6 +353,36 @@ EOS_BASE_DIRECTORY/posterior/mode-LABEL.
     parser_mixture_product.set_defaults(cmd = cmd_mixture_product)
 
 
+    # model-comparison
+    parser_model_comparison = subparsers.add_parser('model-comparison',
+        parents = [common_subparser],
+        description = '''
+Compares a group of posteriors that share the same likelihood by means of their Bayesian evidences.
+
+The evidences are read from EOS_BASE_DIRECTORY/data/POSTERIOR_i/nested, where POSTERIOR_i is listed in POSTERIORS.
+The output will be stored in EOS_BASE_DIRECTORY/model-comparison/GROUP.
+''',
+        help = 'Compares a group of named posteriors by means of their Bayesian evidences.'
+    )
+    parser_model_comparison.add_argument('posteriors', metavar = 'POSTERIORS',
+        help = 'The comma-separated list of names of the posteriors to compare.',
+        action = 'store', type = lambda s: s.split(',')
+    )
+    parser_model_comparison.add_argument('-g', '--group',
+        help = 'The name of the group of posteriors, used to label the output. (default: default)',
+        dest = 'group', action = 'store', type = str, default = 'default'
+    )
+    parser_model_comparison.add_argument('-m', '--max-outside-mass',
+        help = 'The maximal posterior mass outside the common range of a shared parameter when adjusting its prior volume. (default: 1e-3)',
+        dest = 'max_outside_mass', action = 'store', type = float, default = 1e-3
+    )
+    parser_model_comparison.add_argument('-b', '--base-directory',
+        help = 'The base directory for the storage of data files. Can also be set via the EOS_BASE_DIRECTORY environment variable.',
+        dest = 'base_directory', action = 'store', default = get_from_env('EOS_BASE_DIRECTORY', './')
+    )
+    parser_model_comparison.set_defaults(cmd = cmd_model_comparison)
+
+
     # find-clusters
     parser_find_clusters = subparsers.add_parser('find-clusters',
         parents = [common_subparser],
@@ -739,6 +769,11 @@ def cmd_sample_nested(args):
 # Cartesian product
 def cmd_mixture_product(args):
     return eos.mixture_product(**args_to_dict(args))
+
+
+# Model comparison
+def cmd_model_comparison(args):
+    return eos.model_comparison(**args_to_dict(args))
 
 
 # Predict observables

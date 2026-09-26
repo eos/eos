@@ -251,6 +251,25 @@ class AnalysisData:
             result[entry] = PosteriorData(entry, base_directory=self.base_directory, analysis_file=self._analysis_file)
         return result
 
+    @cached_property
+    def model_comparisons(self):
+        """The recorded model comparisons, keyed by group and discovered from the ``model-comparison/`` directory.
+
+        Each :class:`eos.data.ModelComparison` exposes its named stability checks and their statuses
+        through its ``checks`` attribute. Returns an empty mapping if ``model-comparison/`` does not exist.
+
+        :rtype: dict[str, eos.data.ModelComparison]
+        """
+        result = {}
+        directory = _os.path.join(self.base_directory, 'model-comparison')
+        if not _os.path.isdir(directory):
+            return result
+        for entry in sorted(_os.listdir(directory)):
+            if not _os.path.isdir(_os.path.join(directory, entry)):
+                continue
+            result[entry] = eos.data.ModelComparison(_os.path.join(directory, entry))
+        return result
+
     @property
     def names(self):
         """The names of the recorded posteriors, in sorted order.

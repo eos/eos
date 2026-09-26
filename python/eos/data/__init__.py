@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # vim: set sw=4 sts=4 et tw=120 :
 
-# Copyright (c) 2020 Danny van Dyk
+# Copyright (c) 2020-2026 Danny van Dyk
 #
 # This file is part of the EOS project. EOS is free software;
 # you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,7 @@ from .importance_samples import ImportanceSamples
 from .markov_chain import MarkovChain
 from .mixture_density import MixtureDensity
 from .mode import Mode
+from .model_comparison import ModelComparison
 from .nabu_likelihood import NabuLikelihood
 from .pmc_sampler import PMCSampler
 from .prediction import Prediction
