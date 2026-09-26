@@ -216,7 +216,7 @@ class CreateConstraintTaskTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):
             eos.create_constraint(self.analysis_file, 'restricted', 'test-strict-abort', base_directory=self.base, strict=True)
 
-        self.assertFalse(os.path.exists(self._constraint_path('test-strict-abort')))
+        self.assertFalse(os.path.exists(os.path.dirname(self._constraint_path('test-strict-abort'))))
 
     def test_non_strict_warns_but_writes(self):
         "strict=False on the same non-Gaussian fixture does not raise, and the constraint is written."
@@ -400,7 +400,7 @@ class TaskOutputTests(unittest.TestCase):
 
         @eos.tasks.task('test-output', 'data/{posterior}/out-{label}', load_analysis_file=False)
         def output_task(posterior, label, base_directory, content, fail=False):
-            path = os.path.join(base_directory, 'data', posterior, f'out-{label}')
+            path = eos.tasks._staged(os.path.join(base_directory, 'data', posterior, f'out-{label}'))
             with open(os.path.join(path, 'result'), 'w') as f:
                 f.write(content)
             if fail:
@@ -410,6 +410,10 @@ class TaskOutputTests(unittest.TestCase):
         self.addCleanup(eos.tasks._task_outputs.pop, 'test-output', None)
         self.task = output_task
 
+    def _read(self, label):
+        with open(os.path.join(self.base, 'data', 'P', f'out-{label}', 'result')) as f:
+            return f.read()
+
     def test_invalid_names_are_rejected(self):
         for label in ('foo/bar', '../x', 'a b', '.', '..', ''):
             with self.subTest(label=label), self.assertRaises(ValueError):
@@ -418,6 +422,30 @@ class TaskOutputTests(unittest.TestCase):
             with self.subTest(posterior=posterior), self.assertRaises(ValueError):
                 self.task(posterior=posterior, label='l', base_directory=self.base, content='x')
         self.assertEqual([], os.listdir(self.base))
+
+    def test_success_creates_directory(self):
+        self.task(posterior='P', label='l', base_directory=self.base, content='v1')
+        self.assertEqual('v1', self._read('l'))
+        self.assertEqual(['out-l'], os.listdir(os.path.join(self.base, 'data', 'P')))
+        self.assertTrue(os.path.isfile(os.path.join(self.base, 'data', 'P', 'out-l', 'log')))
+
+    def test_failure_leaves_no_directory(self):
+        with self.assertRaises(RuntimeError):
+            self.task(posterior='P', label='l', base_directory=self.base, content='v1', fail=True)
+        self.assertEqual([], os.listdir(os.path.join(self.base, 'data', 'P')))
+
+    def test_failure_keeps_previous_result(self):
+        self.task(posterior='P', label='l', base_directory=self.base, content='v1')
+        with self.assertRaises(RuntimeError):
+            self.task(posterior='P', label='l', base_directory=self.base, content='v2', fail=True)
+        self.assertEqual('v1', self._read('l'))
+        self.assertEqual(['out-l'], os.listdir(os.path.join(self.base, 'data', 'P')))
+
+    def test_success_replaces_previous_result(self):
+        self.task(posterior='P', label='l', base_directory=self.base, content='v1')
+        self.task(posterior='P', label='l', base_directory=self.base, content='v2')
+        self.assertEqual('v2', self._read('l'))
+        self.assertEqual(['out-l'], os.listdir(os.path.join(self.base, 'data', 'P')))
 
 if __name__ == '__main__':
     unittest.main(verbosity=5)

@@ -20,6 +20,7 @@
 
 import eos
 import contextlib
+import contextvars
 import functools
 import glob
 import inspect
@@ -28,7 +29,9 @@ import eos.analysis_file_context
 import numpy as _np
 import os
 import scipy
+import shutil
 import string
+import uuid
 import copy as _copy
 import warnings
 import dynesty as _dynesty
@@ -68,6 +71,7 @@ class LogfileHandler:
 
     def __exit__(self, type, value, traceback):
         eos.logger.removeHandler(self.handler)
+        self.handler.close()
 
 
 _tasks = {}
@@ -79,11 +83,54 @@ def _check_path_component(name, value):
         raise ValueError(f"Invalid value '{value}' for argument '{name}': expected a single path component without whitespace")
 
 
+class _Staging:
+    """Temporary directories for a task's outputs, each of which replaces its final directory once the task succeeds."""
+
+    def __init__(self):
+        self.directories = {}
+
+    @staticmethod
+    def _sibling(path, suffix):
+        parent, name = os.path.split(path)
+        return os.path.join(parent, f'.{name}.{uuid.uuid4().hex}.{suffix}')
+
+    def directory(self, path):
+        path = os.path.normpath(path)
+        if path not in self.directories:
+            temporary = self._sibling(path, 'tmp')
+            os.makedirs(temporary)
+            self.directories[path] = temporary
+        return self.directories[path]
+
+    def commit(self):
+        for path, temporary in self.directories.items():
+            if not os.path.lexists(path):
+                os.rename(temporary, path)
+                continue
+            previous = self._sibling(path, 'old')
+            os.rename(path, previous)
+            os.rename(temporary, path)
+            shutil.rmtree(previous)
+
+    def discard(self):
+        for temporary in self.directories.values():
+            shutil.rmtree(temporary, ignore_errors=True)
+
+
+_staging = contextvars.ContextVar('_staging', default=None)
+
+
+def _staged(path):
+    """Return the directory into which the running task writes the output destined for ``path``."""
+    staging = _staging.get()
+    return path if staging is None else staging.directory(path)
+
+
 def task_output_templates():
     """Return the registered task output templates without executing any task."""
     return dict(_task_outputs)
 
-def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, load_analysis_file=True):
+def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, load_analysis_file=True, staged=True):
     """Decorator that registers a function as a named EOS task.
 
     The decorated function is wrapped so that, on each invocation, it imports any optional ``modules``,
@@ -109,6 +156,10 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     :param load_analysis_file: Whether to resolve a string ``analysis_file`` argument into an
         :class:`eos.AnalysisFile` before invoking the task. Defaults to True.
     :type load_analysis_file: bool
+    :param staged: Whether the output directory, and any directory the task obtains through :func:`_staged`,
+        is written to a temporary directory that replaces the final one only once the task succeeds. A failed
+        task thus leaves the final directories untouched. Ignored if ``output`` is empty. Defaults to True.
+    :type staged: bool
     :returns: A decorator that registers and returns the wrapped task function.
     """
     if modules is None:
@@ -142,42 +193,60 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
             for field, spec in fields:
                 _check_path_component(field, format(_args[field], spec))
             # create output directory if needed directly or for logging
+            staging = _Staging() if output and staged else None
             if output or logfile:
                 outputpath = ('{base_directory}/' + output).format(**_args)
-                os.makedirs(outputpath, exist_ok=True)
+                if staging is None:
+                    os.makedirs(outputpath, exist_ok=True)
+                else:
+                    finalpath, outputpath = outputpath, staging.directory(outputpath)
             if logfile:
+                logmode = mode(**_args)
+                if staging is not None and logmode == 'a' and os.path.isfile(os.path.join(finalpath, 'log')):
+                    shutil.copy2(os.path.join(finalpath, 'log'), os.path.join(outputpath, 'log'))
                 # create invocation-specific log file handler
-                handler = LogfileHandler(path=outputpath, mode=mode(**_args))
+                handler = LogfileHandler(path=outputpath, mode=logmode)
             else:
                 handler = contextlib.nullcontext()
-            # use invocation-specific log file handler
-            with handler:
-                iaccordion = None
-                ioutput = contextlib.nullcontext()
-                if __ipython__:
-                    import ipywidgets as _ipywidgets
-                    from IPython.display import display
-                    ioutput = _ipywidgets.Output(layout={'height': '200px', 'overflow': 'auto'})
-                    iaccordion = _ipywidgets.Accordion(children=[ioutput])
-                    iaccordion.set_title(0, output.format(**_args))
-                    display(iaccordion)
-                # use invocation-specific ipython output widget (if available)
-                failure = None
-                # ipywidgets.Output suppresses whatever is raised within it, so the
-                # failure is recorded here and re-raised once it has been displayed.
-                with ioutput:
-                    try:
-                        result = func(**_args)
-                    except BaseException as exception:
-                        failure = exception
-                        raise
-                    if iaccordion:
-                        iaccordion.selected_index = None
+            token = _staging.set(staging)
+            try:
+                # use invocation-specific log file handler
+                with handler:
+                    iaccordion = None
+                    ioutput = contextlib.nullcontext()
+                    if __ipython__:
+                        import ipywidgets as _ipywidgets
+                        from IPython.display import display
+                        ioutput = _ipywidgets.Output(layout={'height': '200px', 'overflow': 'auto'})
+                        iaccordion = _ipywidgets.Accordion(children=[ioutput])
+                        iaccordion.set_title(0, output.format(**_args))
+                        display(iaccordion)
+                    # use invocation-specific ipython output widget (if available)
+                    failure = None
+                    # ipywidgets.Output suppresses whatever is raised within it, so the
+                    # failure is recorded here and re-raised once it has been displayed.
+                    with ioutput:
+                        try:
+                            result = func(**_args)
+                        except BaseException as exception:
+                            failure = exception
+                            raise
+                        if iaccordion:
+                            iaccordion.selected_index = None
 
-                if failure is not None:
-                    raise failure
+                    if failure is not None:
+                        raise failure
+            except BaseException:
+                if staging is not None:
+                    staging.discard()
+                raise
+            finally:
+                _staging.reset(token)
 
-                return result
+            if staging is not None:
+                staging.commit()
+
+            return result
         _tasks[name] = task_wrapper
         _task_outputs[name] = output
         return task_wrapper
@@ -413,7 +482,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         eos.info(f'  - {n}: chi^2 / dof = {e.chi2:.2f} / {e.dof}, local_pvalue = {100 * local_pvalue:.2f}%')
 
     eos.data.Mode.from_bfp_and_gof(
-        os.path.join(base_directory, 'data', posterior, f'mode-{label}'),
+        _staged(os.path.join(base_directory, 'data', posterior, f'mode-{label}')),
         bfp,
         gof
         )
@@ -460,11 +529,12 @@ def sample_mcmc(analysis_file:str, posterior:str, chain:int, base_directory:str=
     rng = _np.random.mtrand.RandomState(int(chain) + 1701)
     try:
         samples, usamples, weights = analysis.sample(N=N, stride=stride, pre_N=pre_N, preruns=preruns, rng=rng, cov_scale=cov_scale, start_point=start_point, return_uspace=True)
-        eos.data.MarkovChain.create(os.path.join(base_directory, 'data', posterior, f'mcmc-{chain:04}'), analysis.varied_parameters, samples, usamples, weights)
+        eos.data.MarkovChain.create(_staged(os.path.join(base_directory, 'data', posterior, f'mcmc-{chain:04}')), analysis.varied_parameters, samples, usamples, weights)
     except RuntimeError as e:
         eos.error(f'encountered run time error ({e}) in parameter point:')
         for p in analysis.varied_parameters:
             eos.error(f' - {p.name()}: {p.evaluate()}')
+        raise
     eos.completed('...finished!')
     eos.info(f'Generated {N} samples from posterior {posterior}.')
 
@@ -492,7 +562,7 @@ def sample_prior(analysis_file:str, posterior:str, base_directory:str='./', N:in
     eos.inprogress('Beginning prior sampling...')
     samples = analysis.sample_prior(N=N, rng=rng)
     weights =  _np.ones(N) / N
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters, samples, weights)
+    eos.data.ImportanceSamples.create(_staged(os.path.join(base_directory, 'data', posterior, 'samples')), analysis.varied_parameters, samples, weights)
     eos.completed('...finished!')
     eos.info(f'Generated {N} samples of prior PDF for posterior {posterior}.')
 
@@ -531,7 +601,7 @@ def find_clusters(posterior:str, base_directory:str='./', threshold:float=2.0, K
     eos.info(f'Found {len(groups)} groups using an R value threshold of {threshold}')
     density   = pypmc.mix_adapt.r_value.make_r_gaussmix(chains, K_g=K_g, critical_r=threshold)
     eos.success(f'Created mixture density with {len(density.components)} components')
-    eos.data.MixtureDensity.create(os.path.join(base_directory, 'data', posterior, 'clusters'), density, parameters)
+    eos.data.MixtureDensity.create(_staged(os.path.join(base_directory, 'data', posterior, 'clusters')), density, parameters)
 
 
 @task('mixture-product', 'data/{posterior}/product', modules=['pypmc'])
@@ -555,7 +625,7 @@ def mixture_product(posterior:str, posteriors:list, base_directory:str='./', ana
     densities = [sampler.density() for sampler in samplers]
     # the cartesian product concatenates the components in the order of the input densities
     parameters = [p for sampler in samplers for p in sampler.varied_parameters]
-    output_path = os.path.join(base_directory, 'data', posterior, 'product')
+    output_path = _staged(os.path.join(base_directory, 'data', posterior, 'product'))
     eos.data.MixtureDensity.create(output_path, eos.data.MixtureDensity.cartesian_product(densities), parameters)
     eos.completed('...finished!')
 
@@ -630,9 +700,9 @@ def sample_pmc(analysis_file:str, posterior:str, base_directory:str='./', step_N
         samples = _np.concatenate((previous_sampler.samples, samples), axis=0)
         weights = _np.concatenate((previous_sampler.weights, weights), axis=0)
 
-    eos.data.PMCSampler.create(os.path.join(base_directory, 'data', posterior, 'pmc'), analysis.varied_parameters, proposal,
+    eos.data.PMCSampler.create(_staged(os.path.join(base_directory, 'data', posterior, 'pmc')), analysis.varied_parameters, proposal,
                                sigma_test_stat=sigma_test_stat, samples=samples, weights=weights)
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters,
+    eos.data.ImportanceSamples.create(_staged(os.path.join(base_directory, 'data', posterior, 'samples')), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
     eos.completed('...finished!')
     eos.info(f'Finished sampling with {len(samples)} samples.')
@@ -707,7 +777,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
         weights = data.weights[mask]
     else:
         weights = data.weights[begin:end]
-    output_path = os.path.join(base_directory, 'data', posterior, filename)
+    output_path = _staged(os.path.join(base_directory, 'data', posterior, filename))
     eos.data.Prediction.create(output_path, observables, observable_samples, weights)
 
 
@@ -826,8 +896,8 @@ def sample_nested(analysis_file:str, posterior:str, base_directory:str='./', bou
     ess = _dynesty.utils.get_neff_from_logwt(results.logwt)
     eos.completed('...finished!')
     eos.info(f'Finished sampling with {len(samples)} samples (effective sample size {ess:.0f}) and evidence estimate {results.logz[-1]:.2f} +/- {results.logzerr[-1]:.2f}')
-    eos.data.DynestyResults.create(os.path.join(base_directory, 'data', posterior, 'nested'), analysis.varied_parameters, results)
-    eos.data.ImportanceSamples.create(os.path.join(base_directory, 'data', posterior, 'samples'), analysis.varied_parameters,
+    eos.data.DynestyResults.create(_staged(os.path.join(base_directory, 'data', posterior, 'nested')), analysis.varied_parameters, results)
+    eos.data.ImportanceSamples.create(_staged(os.path.join(base_directory, 'data', posterior, 'samples')), analysis.varied_parameters,
                                       samples, weights, posterior_values=posterior_values)
 
 
@@ -850,7 +920,7 @@ def _get_references(analysis_file):
     return result
 
 # Create a report
-@task('report', 'reports')
+@task('report', 'reports', staged=False)
 def report(analysis_file:str, template_file:str, base_directory:str='./', generate_pdf:bool=True):
     """
     Generates a report from an analysis file and a Jinja2 template file.
@@ -944,7 +1014,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
 
 
 # Draw figures
-@task('draw-figure', 'figures', mode=lambda **kwargs: 'a')
+@task('draw-figure', 'figures', mode=lambda **kwargs: 'a', staged=False)
 def draw_figure(analysis_file:str, figure_name:str, base_directory:str='./', format:str|list[str]='pdf'):
     """
     Draws figures from the analysis file.
@@ -1093,7 +1163,7 @@ def create_mask(analysis_file:str, posterior:str, mask_name:str, base_directory:
             masks.append(_calculate_mask(analysis_file.observable(posterior, d.name, _parameters), _parameters, data))
             observables.append(d.name)
     mask = mask_combination_function(_np.stack(masks), axis=0)
-    eos.data.SampleMask.create(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}'), mask, observables)
+    eos.data.SampleMask.create(_staged(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}')), mask, observables)
     return mask
 
 
@@ -1212,7 +1282,7 @@ def create_constraint(analysis_file:str, posterior:str, constraint_name:str, bas
         'covariance': covariance.tolist(),
     }
     output_path = os.path.join(base_directory, 'constraints', constraint_name, 'constraint.yaml')
-    with open(output_path, 'w') as f:
+    with open(os.path.join(_staged(os.path.dirname(output_path)), 'constraint.yaml'), 'w') as f:
         yaml.safe_dump({constraint_name: body}, f, sort_keys=False, default_flow_style=False)
 
     eos.success(f"Wrote constraint '{constraint_name}' to '{output_path}'")
