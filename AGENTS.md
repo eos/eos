@@ -104,7 +104,8 @@ at the tip of the branch. Never build with all available cores; keep `-j<N>` bel
 
 New file names use hyphens, never underscores (`observable-cache_TEST.cc`, not
 `observable_cache_TEST.cc`); underscored names are legacy and are being converted, so never
-rename in that direction.
+rename in that direction. Python modules are exempt, since an importable module name cannot
+contain a hyphen; their `_TEST.py` scripts follow the module's name.
 
 `clang-format` is the canonical formatter. In `.cc` files, it correctly emits one
 leading space before an opening `namespace eos {` — do not flag that leading space as a
