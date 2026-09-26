@@ -390,5 +390,34 @@ class TaskFailureTests(unittest.TestCase):
                 failing_task()
 
 
+
+class TaskOutputTests(unittest.TestCase):
+    "Tests of the output-directory handling of the task decorator (issue #1291)."
+
+    def setUp(self):
+        self.base = tempfile.mkdtemp(prefix='eos-task-output-')
+        self.addCleanup(shutil.rmtree, self.base, ignore_errors=True)
+
+        @eos.tasks.task('test-output', 'data/{posterior}/out-{label}', load_analysis_file=False)
+        def output_task(posterior, label, base_directory, content, fail=False):
+            path = os.path.join(base_directory, 'data', posterior, f'out-{label}')
+            with open(os.path.join(path, 'result'), 'w') as f:
+                f.write(content)
+            if fail:
+                raise RuntimeError('the task failed')
+
+        self.addCleanup(eos.tasks._tasks.pop, 'test-output', None)
+        self.addCleanup(eos.tasks._task_outputs.pop, 'test-output', None)
+        self.task = output_task
+
+    def test_invalid_names_are_rejected(self):
+        for label in ('foo/bar', '../x', 'a b', '.', '..', ''):
+            with self.subTest(label=label), self.assertRaises(ValueError):
+                self.task(posterior='P', label=label, base_directory=self.base, content='x')
+        for posterior in ('.', '..'):
+            with self.subTest(posterior=posterior), self.assertRaises(ValueError):
+                self.task(posterior=posterior, label='l', base_directory=self.base, content='x')
+        self.assertEqual([], os.listdir(self.base))
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)

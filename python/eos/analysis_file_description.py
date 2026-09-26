@@ -73,6 +73,8 @@ def _check_file_local_name(value, kind, path):
         yield Diagnostic(path, Severity.ERROR, f"Invalid character '/' in {kind} '{value}'")
     if any(character.isspace() for character in value):
         yield Diagnostic(path, Severity.ERROR, f"Invalid whitespace in {kind} '{value}'")
+    if value in ('.', '..'):
+        yield Diagnostic(path, Severity.ERROR, f"Invalid {kind} '{value}'")
 
 
 @dataclass

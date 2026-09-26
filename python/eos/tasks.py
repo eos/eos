@@ -28,6 +28,7 @@ import eos.analysis_file_context
 import numpy as _np
 import os
 import scipy
+import string
 import copy as _copy
 import warnings
 import dynesty as _dynesty
@@ -73,6 +74,11 @@ _tasks = {}
 _task_outputs = {}
 
 
+def _check_path_component(name, value):
+    if value in ('', '.', '..') or any(c in value for c in {'/', os.sep, os.altsep} - {None}) or any(c.isspace() for c in value):
+        raise ValueError(f"Invalid value '{value}' for argument '{name}': expected a single path component without whitespace")
+
+
 def task_output_templates():
     """Return the registered task output templates without executing any task."""
     return dict(_task_outputs)
@@ -82,7 +88,8 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
 
     The decorated function is wrapped so that, on each invocation, it imports any optional ``modules``,
     resolves a string ``analysis_file`` argument into an :class:`eos.AnalysisFile`, creates the output
-    directory, and (unless disabled) captures its log output into a per-invocation log file. When running
+    directory, and (unless disabled) captures its log output into a per-invocation log file. Each value
+    interpolated into ``output`` must be a single path component. When running
     under IPython, the task's log output is additionally shown in a collapsible output widget. The wrapped
     function is registered in the task registry under ``name`` so that it can be looked up and run by the
     ``run`` task and the command-line interface.
@@ -106,6 +113,7 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
     """
     if modules is None:
         modules = []
+    fields = [(field, spec) for _, field, spec, _ in string.Formatter().parse(output) if field is not None]
     def _task(func):
         @functools.wraps(func)
         def task_wrapper(*args, **kwargs):
@@ -131,6 +139,8 @@ def task(name, output, mode=lambda **kwargs: 'w', modules=None, logfile=True, lo
             _args.update(kwargs)
             if load_analysis_file and 'analysis_file' in _args and type(_args['analysis_file']) is str:
                 _args.update({ 'analysis_file': eos.AnalysisFile(_args['analysis_file'])})
+            for field, spec in fields:
+                _check_path_component(field, format(_args[field], spec))
             # create output directory if needed directly or for logging
             if output or logfile:
                 outputpath = ('{base_directory}/' + output).format(**_args)
@@ -316,6 +326,7 @@ def find_mode(analysis_file:str, posterior:str, base_directory:str='./', optimiz
         raise ValueError('The argument mask-name can only be used with importance_samples')
 
     if mask_name is not None:
+        _check_path_component('mask_name', mask_name)
         mask = eos.data.SampleMask(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}')).mask
         label += f'_mask-{mask_name}'
     else:
@@ -659,6 +670,7 @@ def predict_observables(analysis_file:str, posterior:str, prediction:str, base_d
     if mask_name is not None and (begin != 0 or end is not None):
         raise ValueError('The arguments mask-name and begin or end are mutually exclusive')
     if mask_name is not None:
+        _check_path_component('mask_name', mask_name)
         mask = eos.data.SampleMask(os.path.join(base_directory, 'data', posterior, f'mask-{mask_name}')).mask
 
     data = eos.data.ImportanceSamples(os.path.join(base_directory, 'data', posterior, 'samples'))
