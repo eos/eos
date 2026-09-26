@@ -283,6 +283,25 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
         findings = [finding for finding in result.findings if finding.check_id == 'outputs.reproducibility']
         self.assertEqual(findings, [])
 
+    def test_model_comparison_output_outside_data(self):
+        step = self.step(task='model-comparison', arguments={'posteriors': ['a', 'b']})
+        self.dataset.valid(analysis=analysis_document(steps=[step]))
+        self.output('model-comparison/default', output_type='ModelComparison')
+        result, _ = self.dataset.run()
+        findings = [finding for finding in result.findings if finding.check_id == 'outputs.reproducibility']
+        self.assertEqual(findings, [])
+
+        self.output('model-comparison/other', output_type='ModelComparison')
+        unclaimed, _ = self.dataset.run()
+        finding = next(finding for finding in unclaimed.findings if 'not claimed' in finding.message)
+        self.assertEqual(finding.details['output_path'], 'model-comparison/other')
+
+        step = self.step(task='model-comparison', arguments={'posteriors': ['a', 'b'], 'group': 'missing'})
+        self.dataset.valid(analysis=analysis_document(steps=[step]))
+        absent, _ = self.dataset.run()
+        finding = next(finding for finding in absent.findings if 'absent' in finding.message)
+        self.assertEqual(finding.details['output_path'], 'model-comparison/missing')
+
     def test_invalid_output_name_is_not_claimed(self):
         step = self.step(task='find-mode', arguments={'posterior': 'p', 'label': 'a b'})
         self.dataset.valid(analysis=analysis_document(steps=[step]))
