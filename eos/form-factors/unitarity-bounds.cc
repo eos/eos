@@ -3499,7 +3499,7 @@ namespace eos
 
     BGLCoefficients::~BGLCoefficients() = default;
 
-    const std::set<ReferenceName> BGLCoefficients::references{};
+    const std::set<ReferenceName> BGLCoefficients::references{ "BGJvD:2019A"_rn, "BGJvD:2025A"_rn };
 
     // B -> D form factors
     // {{{
@@ -5203,7 +5203,7 @@ namespace eos
         return _imp->bound_1m_T();
     }
 
-    const std::set<ReferenceName> HQETUnitarityBounds::references{};
+    const std::set<ReferenceName> HQETUnitarityBounds::references{ "BGJvD:2019A"_rn, "BGJvD:2025A"_rn };
 
     // clang-format off
     std::vector<OptionSpecification>::const_iterator
