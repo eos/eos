@@ -169,18 +169,14 @@ We collect here the different ``tags`` used in EOS and the corresponding referen
 ... get more information on what is going on
 ============================================
 
-EOS verbosity is handeled by the `logging module <https://docs.python.org/3/library/logging.html>`__.
+EOS verbosity is handled by the `logging module <https://docs.python.org/3/library/logging.html>`__.
 For the CLI, verbosity is set using the EOS_VERBOSITY environment variable and ranges from 0 (show only errors) to 5 (show all messages).
 Similarly, verbosity can be set for an individual command using the ``-v`` or ``--verbose`` argument.
-The same can be achive in a python notebook with the following trick:
+The same can be achieved in a python notebook with:
 
 .. code-block:: python
 
-    import sys
-    import logging
+    eos.set_log_level('DEBUG')
 
-    eos.logger.setLevel(logging.DEBUG)
-    handler = logging.StreamHandler(stream=sys.stdout)
-    eos.logger.addHandler(handler)
-
-Above, ``logging.DEBUG`` can be replaced by any logging level, which are listed `here <https://docs.python.org/3/library/logging.html#levels>`__.
+Above, ``'DEBUG'`` can be replaced by the name of any logging level, which are listed `here <https://docs.python.org/3/library/logging.html#levels>`__.
+By default, EOS logs to ``sys.stderr``. To log to ``sys.stdout`` instead, use ``eos.default_log_handler.setStream(sys.stdout)``.
