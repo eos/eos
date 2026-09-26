@@ -119,7 +119,7 @@ class ListFiguresTests(unittest.TestCase):
         status, stdout, _ = run('list-figures')
 
         self.assertEqual(status, 0)
-        self.assertEqual(stdout.splitlines(), ['CKM-Vub', 'CKM-Vub-v-FF'])
+        self.assertEqual(stdout.splitlines(), ['FF-norm', 'FF-norm-v-shape'])
 
 
 class ListStepsTests(unittest.TestCase):

@@ -13,8 +13,8 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-# These tests cover the four commands that make up the typical 'eos-analysis' pipeline:
-# 'validate', 'sample-nested', 'find-mode' and 'predict-observables'.
+# These tests cover the commands that make up the typical 'eos-analysis' pipeline:
+# 'validate', 'sample-nested', 'find-mode', 'predict-observables' and 'draw-figure'.
 
 import io
 import math
@@ -519,6 +519,57 @@ class PredictObservablesTests(unittest.TestCase):
         task.assert_called_once_with(
             analysis_file=ANALYSIS_FILE, posterior=POSTERIOR, prediction='dBRdq2',
             base_directory='/base', begin=3, end=7, mask_name=None,
+        )
+
+
+class DrawFigureTests(unittest.TestCase):
+
+    def figure_path(self, name, fmt):
+        return os.path.join(_BASE, 'figures', f'{name}.{fmt}')
+
+    def test_single(self):
+        "A single-panel figure is drawn from the recorded samples."
+
+        status, stdout, _ = run('draw-figure', 'FF-norm', base=_BASE)
+
+        self.assertEqual(status, 0, stdout)
+        self.assertTrue(os.path.isfile(self.figure_path('FF-norm', 'pdf')))
+
+    def test_corner(self):
+        "A corner figure is drawn in each requested format."
+
+        status, stdout, _ = run('draw-figure', 'FF-norm-v-shape', '-F', 'pdf,png', base=_BASE)
+
+        self.assertEqual(status, 0, stdout)
+        for fmt in ('pdf', 'png'):
+            self.assertTrue(os.path.isfile(self.figure_path('FF-norm-v-shape', fmt)))
+
+    def test_unknown_figure(self):
+        "An unknown figure is reported as an error."
+
+        status, stdout, _ = run('draw-figure', 'NOSUCH', base=_BASE)
+
+        self.assertEqual(status, 1)
+        self.assertIn('NOSUCH', stdout)
+
+    def test_unsupported_format(self):
+        "An unsupported format is reported as an error."
+
+        status, stdout, _ = run('draw-figure', 'FF-norm', '-F', 'nosuchformat', base=_BASE)
+
+        self.assertEqual(status, 1)
+        self.assertIn('nosuchformat', stdout)
+
+    def test_arguments_are_forwarded(self):
+        "Every option reaches the task under its documented name."
+
+        with mock.patch.object(eos, 'draw_figure') as task:
+            status, _, _ = run('draw-figure', 'FF-norm', '-F', 'pdf,svg', base='/base')
+
+        self.assertEqual(status, 0)
+        task.assert_called_once_with(
+            analysis_file=ANALYSIS_FILE, figure_name='FF-norm', base_directory='/base',
+            format=['pdf', 'svg'],
         )
 
 
