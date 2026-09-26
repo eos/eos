@@ -390,5 +390,155 @@ class TaskFailureTests(unittest.TestCase):
                 failing_task()
 
 
+_MODEL_COMPARISON_ANALYSIS = '''
+likelihoods:
+  - name: EXP
+    constraints: [ 'B^+->tau^+nu::BR@Belle:2014A' ]
+  - name: OTHER
+    constraints: [ 'B^0->pi^-l^+nu::BR@HFLAV:2019A;form-factors=BCL2008-4' ]
+
+priors:
+  - name: CKM
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 4.5e-3, type: uniform }
+  - name: CKM-wide
+    descriptions:
+      - { parameter: 'CKM::abs(V_ub)', min: 3.0e-3, max: 5e-3, type: uniform }
+  - name: DC
+    descriptions:
+      - { parameter: 'decay-constant::B_u', central: 0.1894, sigma: 0.0014, type: gaussian }
+  - name: DC-flat
+    descriptions:
+      - { parameter: 'decay-constant::B_u', min: 0.18, max: 0.20, type: uniform }
+
+posteriors:
+  - { name: A,     prior: [ CKM, DC ],      likelihood: [ EXP ] }
+  - { name: B,     prior: [ CKM-wide, DC ], likelihood: [ EXP ] }
+  - { name: C,     prior: [ CKM, DC ],      likelihood: [ EXP ] }
+  - { name: FLAT,  prior: [ CKM, DC-flat ], likelihood: [ EXP ] }
+  - { name: OTHER, prior: [ CKM, DC ],      likelihood: [ EXP, OTHER ] }
+  - { name: TWICE, prior: [ CKM, DC ],      likelihood: [ EXP, EXP ] }
+'''
+
+
+class ModelComparisonTaskTests(unittest.TestCase):
+
+    def setUp(self):
+        self.base = tempfile.mkdtemp(prefix='eos-model-comparison-task-')
+        self.addCleanup(shutil.rmtree, self.base, ignore_errors=True)
+        self.analysis_file = os.path.join(self.base, 'analysis.yaml')
+        with open(self.analysis_file, 'w') as f:
+            f.write(_MODEL_COMPARISON_ANALYSIS)
+
+    def _write_nested(self, posterior, logz, logzerr, vub_max=4.2e-3):
+        "Record synthetic nested-sampling results with the given final evidence estimate."
+        import dynesty
+        N = 100
+        rng = np.random.default_rng(1701)
+        samples = np.stack([rng.uniform(3.2e-3, vub_max, N), rng.normal(0.1894, 0.0014, N)], axis=1)
+        results = dynesty.results.Results(dict(
+            samples=samples, samples_u=np.zeros((N, 2)), samples_it=np.arange(N), samples_id=np.arange(N),
+            logwt=np.full(N, logz - np.log(N)), logl=np.zeros(N), logvol=np.zeros(N), information=np.zeros(N),
+            logz=np.full(N, logz), logzerr=np.full(N, logzerr), ncall=np.ones(N, dtype=int), nlive=10, niter=N, eff=1.0,
+        ))
+        analysis = eos.AnalysisFile(self.analysis_file).analysis(posterior)
+        eos.data.DynestyResults.create(os.path.join(self.base, 'data', posterior, 'nested'), analysis.varied_parameters, results)
+
+    def _run(self, posteriors, **kwargs):
+        return eos.tasks.model_comparison(self.analysis_file, posteriors, base_directory=self.base, **kwargs)
+
+    def test_adjustment_and_bayes_factors(self):
+        "Differing uniform ranges of a shared parameter are corrected to their common range."
+        delta = np.log(2.0 / 1.5)
+        self._write_nested('A', -1.0, 0.1)
+        self._write_nested('B', -1.5 - delta, 0.1)
+        self._write_nested('C', -5.3, 0.1)
+        mc = self._run(['A', 'B', 'C'], group='grp')
+
+        entries = { e['posterior']: e for e in mc.posteriors }
+        self.assertEqual(mc.group, 'grp')
+        self.assertEqual(mc.reference, 'A')
+        self.assertAlmostEqual(entries['A']['log_prior_volume_adjustment'], 0.0)
+        self.assertAlmostEqual(entries['B']['log_prior_volume_adjustment'], delta)
+        self.assertAlmostEqual(entries['B']['adjusted_log_evidence'], -1.5)
+        self.assertAlmostEqual(entries['C']['log_bayes_factor'], -4.3)
+        self.assertAlmostEqual(entries['C']['log_bayes_factor_uncertainty'], np.hypot(0.1, 0.1))
+        self.assertEqual(entries['A']['strength'], 'reference')
+        self.assertEqual(entries['B']['strength'], 'barely worth mentioning')
+        self.assertEqual(entries['C']['strength'], 'very strong')
+        self.assertEqual(len(mc.comparisons), 3)
+        self.assertEqual([c['name'] for c in mc.checks], ['uncertainty', 'prior-volume-adjustment'])
+        self.assertTrue(mc.stable)
+
+        from eos.reporting import AnalysisData
+        ad = AnalysisData(base_directory=self.base)
+        self.assertEqual(list(ad.model_comparisons), ['grp'])
+        self.assertEqual([c['status'] for c in ad.model_comparisons['grp'].checks], ['passed', 'passed'])
+        self.assertNotIn('model-comparison', ad)
+
+    def test_uncertainty_check(self):
+        "A pair whose strength changes within one standard deviation fails the uncertainty check."
+        self._write_nested('A', -1.0, 0.1)
+        self._write_nested('C', -2.2, 0.5)
+        mc = self._run(['A', 'C'])
+        checks = { c['name']: c for c in mc.checks }
+        self.assertEqual(checks['uncertainty']['status'], 'failed')
+        self.assertEqual(checks['uncertainty']['failed_pairs'], [['A', 'C']])
+        self.assertEqual(checks['prior-volume-adjustment']['status'], 'passed')
+        self.assertEqual(mc.comparisons[0]['failed_checks'], ['uncertainty'])
+
+    def test_prior_volume_adjustment_check(self):
+        "A pair whose strength changes without the prior-volume adjustment fails that check."
+        self._write_nested('A', -1.0, 0.01)
+        self._write_nested('B', -2.3, 0.01)
+        mc = self._run(['A', 'B'])
+        checks = { c['name']: c for c in mc.checks }
+        self.assertEqual(checks['uncertainty']['status'], 'passed')
+        self.assertEqual(checks['prior-volume-adjustment']['status'], 'failed')
+        self.assertEqual(mc.group, 'default')
+        self.assertEqual(mc.comparisons[0]['strength'], 'barely worth mentioning')
+        self.assertAlmostEqual(mc.comparisons[0]['unadjusted_log_bayes_factor'], 1.3)
+
+    def test_errors(self):
+        "Invalid groups of posteriors are rejected."
+        for p in ['A', 'FLAT', 'OTHER']:
+            self._write_nested(p, -1.0, 0.1)
+        self._write_nested('B', -1.0, 0.1, vub_max=4.8e-3)
+
+        with self.assertRaisesRegex(ValueError, 'at least two distinct'):
+            self._run(['A', 'A'])
+        with self.assertRaisesRegex(ValueError, 'same likelihood'):
+            self._run(['A', 'OTHER'])
+        with self.assertRaisesRegex(ValueError, 'same likelihood'):
+            self._run(['A', 'TWICE'])
+        with self.assertRaisesRegex(ValueError, 'not all uniform'):
+            self._run(['A', 'FLAT'])
+        with self.assertRaisesRegex(ValueError, 'outside the common range'):
+            self._run(['A', 'B'])
+        with self.assertRaisesRegex(RuntimeError, 'sample-nested'):
+            self._run(['A', 'C'])
+
+    def test_report_table(self):
+        "The example report template places the model comparison ahead of the posteriors."
+        template = Path(__file__).parents[2] / 'examples' / 'inference.md.jinja'
+        if not template.is_file():
+            self.skipTest('example report template not available')
+        self._write_nested('A', -1.0, 0.1)
+        self._write_nested('C', -4.5, 0.1)
+        self._run(['A', 'C'])
+
+        cwd = os.getcwd()
+        self.addCleanup(os.chdir, cwd)
+        os.chdir(self.base)
+        shutil.copy(template, 'inference.md.jinja')
+        eos.tasks.report('analysis.yaml', 'inference.md.jinja', base_directory='.', generate_pdf=False)
+        with open('inference.md') as f:
+            rendered = f.read()
+
+        self.assertNotIn('## Group', rendered)
+        self.assertIn('| `C` | $-4.50 \\pm 0.10$ | $-3.50 \\pm 0.14$ | very strong |', rendered)
+        self.assertLess(rendered.index('# Model comparison'), rendered.index('# Posteriors'))
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=5)
