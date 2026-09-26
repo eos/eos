@@ -3,6 +3,34 @@
 {{ key }}: {{ value }}
 {% endfor %}
 ---
+{% if analysis.model_comparisons %}
+# Model comparison
+
+{% for group, comparison in analysis.model_comparisons.items() %}
+{% if not (group == 'default' and analysis.model_comparisons | length == 1) %}
+## Group `{{ group }}`
+
+{% endif %}
+The following table lists the adjusted log evidence $\ln Z$ of each posterior and its log Bayes factor $\ln B$ with respect to the best posterior, `{{ comparison.reference }}`.
+
+| Posterior | adjusted $\ln Z$ | $\ln B$ | strength of evidence against |
+|:----------|:----------------:|:-------:|-----------------------------:|
+{% for entry in comparison.posteriors %}
+| `{{ entry.posterior }}` | ${{ '%.2f'|format(entry.adjusted_log_evidence) }} \pm {{ '%.2f'|format(entry.log_evidence_uncertainty) }}$ | ${{ '%.2f'|format(entry.log_bayes_factor) }} \pm {{ '%.2f'|format(entry.log_bayes_factor_uncertainty) }}$ | {{ entry.strength }} |
+{% endfor %}
+
+| Stability check | status | unstable pairs |
+|:----------------|:------:|:---------------|
+{% for check in comparison.checks %}
+| `{{ check.name }}` | {{ '**' ~ check.status ~ '**' if check.status != 'passed' else check.status }} | {% for first, second in check.failed_pairs %}`{{ first }}` vs. `{{ second }}`{{ ', ' if not loop.last }}{% endfor %} |
+{% endfor %}
+
+{% for check in comparison.checks %}
+- `{{ check.name }}`: {{ check.description }}
+{% endfor %}
+
+{% endfor %}
+{% endif %}
 # Posteriors
 
 This analysis records {{ analysis | length }} posterior{{ 's' if analysis | length != 1 }}:

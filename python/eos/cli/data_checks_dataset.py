@@ -41,8 +41,9 @@ MAX_DATASET_SIZE = 1024 * 1024 * 1024
 _ORCID = re.compile(r'^(\d{4})-(\d{4})-(\d{4})-(\d{3}[\dX])$')
 _MARKDOWN_TARGET = re.compile(r'!?\[[^\]]*\]\((?:<([^>]+)>|([^\s)]+))(?:\s+[^)]*)?\)')
 _HTML_TARGET = re.compile(r'''(?:href|src)\s*=\s*["']([^"']+)["']''', re.IGNORECASE)
+_OUTPUT_ROOTS = frozenset({'data', 'model-comparison'})
 _RECOGNIZED_OUTPUT_TYPES = frozenset({
-    'DynestyResults', 'ImportanceSamples', 'MarkovChain', 'MixtureDensity', 'Mode',
+    'DynestyResults', 'ImportanceSamples', 'MarkovChain', 'MixtureDensity', 'Mode', 'ModelComparison',
     'NabuLikelihood', 'PMCSampler', 'Prediction', 'SampleMask',
 })
 
@@ -353,7 +354,7 @@ def _normalize_output_path(
 def _output_template_patterns(templates: Mapping[str, str]) -> tuple[re.Pattern, ...]:
     patterns = []
     for template in templates.values():
-        if not template.startswith('data/'):
+        if template.split('/', 1)[0] not in _OUTPUT_ROOTS:
             continue
         try:
             parts = string.Formatter().parse(template)
@@ -374,7 +375,7 @@ def _recognized_outputs(
     results: list[PurePosixPath] = []
     layout_patterns = _output_template_patterns(templates)
     for entry in _inventory(context):
-        if entry.path.name != 'description.yaml' or not entry.path.parts or entry.path.parts[0] != 'data':
+        if entry.path.name != 'description.yaml' or not entry.path.parts or entry.path.parts[0] not in _OUTPUT_ROOTS:
             continue
         try:
             document = yaml.safe_load((context.dataset_root / entry.path).read_text(encoding='utf-8'))
@@ -489,7 +490,7 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                     )
                     continue
                 template = templates[task_name]
-                if not template or not template.startswith('data/'):
+                if not template or template.split('/', 1)[0] not in _OUTPUT_ROOTS:
                     continue
                 function = task_registry._tasks[task_name]
                 arguments = {
