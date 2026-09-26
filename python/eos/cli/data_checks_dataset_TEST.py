@@ -237,7 +237,7 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
     def test_task_templates_are_introspected_from_decorator_registry(self):
         templates = task_output_templates()
         self.assertEqual(templates['sample-mcmc'], 'data/{posterior}/mcmc-{chain:04}')
-        self.assertEqual(templates['predict-observables'], 'data/{posterior}/pred-{prediction}')
+        self.assertEqual(templates['predict-observables'], 'data/{posterior}/pred-{prediction}{mask}')
 
     def test_valid_claimed_output_and_step_defaults(self):
         step = self.step(arguments={'posterior': 'p'}, defaults={'sample-mcmc': {'chain': 7}})
@@ -274,6 +274,20 @@ class ReproducibleOutputTests(DatasetCheckTestCase):
         collision, _ = self.dataset.run(paths=('analysis.yaml', 'two.yaml'), main='analysis.yaml')
         finding = next(finding for finding in collision.findings if 'claim the same output' in finding.message)
         self.assertEqual(finding.details['output_path'], 'data/p/mcmc-0001')
+
+    def test_masked_output_is_claimed(self):
+        step = self.step(task='find-mode', arguments={'posterior': 'p', 'importance_samples': True, 'mask_name': 'm'})
+        self.dataset.valid(analysis=analysis_document(steps=[step]))
+        self.output('data/p/mode-default_mask-m', output_type='Mode')
+        result, _ = self.dataset.run()
+        findings = [finding for finding in result.findings if finding.check_id == 'outputs.reproducibility']
+        self.assertEqual(findings, [])
+
+    def test_invalid_output_name_is_not_claimed(self):
+        step = self.step(task='find-mode', arguments={'posterior': 'p', 'label': 'a b'})
+        self.dataset.valid(analysis=analysis_document(steps=[step]))
+        result, _ = self.dataset.run()
+        self.assertTrue(any('Cannot expand output template' in finding.message for finding in result.findings))
 
     def test_legacy_argument_alias_and_description_without_type(self):
         step = self.step(arguments={'posterior': 'p', 'CHAIN-IDX': 3})
