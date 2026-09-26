@@ -80,28 +80,28 @@ posteriors:
       - FF-shape
 
 figures:
-  - name: CKM-Vub
+  - name: FF-norm
     type: single
     plot:
       legend:
         position: 'lower left'
       xaxis:
-        label: '$|V_{ub}|$'
+        label: '$f_+(0)$'
       yaxis:
         label: 'Posterior Density'
       items:
       - type: 'histogram1D'
-        datafile: 'data/CKM+FF/samples'
-        variable: 'CKM::abs(V_ub)'
+        datafile: 'data/FF/samples'
+        variable: 'B->pi::f_+(0)@BCL2008'
       - type: 'kde1D'
-        datafile: 'data/CKM+FF/samples'
-        variable: 'CKM::abs(V_ub)'
-  - name: CKM-Vub-v-FF
+        datafile: 'data/FF/samples'
+        variable: 'B->pi::f_+(0)@BCL2008'
+  - name: FF-norm-v-shape
     type: 'corner'
     contents:
-      - path: 'data/CKM+FF/samples'
-        label: 'CKM+FF'
-    variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+      - path: 'data/FF/samples'
+        label: 'FF'
+    variables: ['B->pi::f_+(0)@BCL2008', 'B->pi::b_+^1@BCL2008']
 
 predictions:
   - name: PDF

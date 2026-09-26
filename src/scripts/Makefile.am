@@ -16,17 +16,6 @@ bin_SCRIPTS = \
 	eos-list-signal-pdfs \
 	eos-mcp-server
 
-AM_TESTS_ENVIRONMENT = \
-			 export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
-			 export EOS_TESTS_PARAMETERS="$(top_srcdir)/eos/parameters"; \
-			 export PYTHONPATH="$(top_builddir)/python/.libs/:$(top_srcdir)/python"; \
-			 export PYTHON="$(PYTHON)"; \
-			 export SOURCE_DIR="$(abs_srcdir)";
-
-LOG_COMPILER="/bin/bash"
-TESTS = \
-	eos-analysis_TEST
-
 endif
 
 EXTRA_DIST = \
@@ -38,6 +27,4 @@ EXTRA_DIST = \
 	eos-list-parameters \
 	eos-list-references \
 	eos-list-signal-pdfs \
-	eos-mcp-server \
-	eos-analysis_TEST \
-	eos-analysis_TEST.d/analysis.yaml
+	eos-mcp-server
