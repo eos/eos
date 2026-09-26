@@ -654,11 +654,11 @@ _LOG_LEVELS = {
 
 @contextmanager
 def _configured_logging(verbosity, stderr):
-    handler            = eos.stderr_handler
+    handler            = eos.default_log_handler
     previous_level     = handler.level
     previous_stream    = handler.stream
     previous_formatter = handler.formatter
-    handler.setLevel(_LOG_LEVELS[verbosity])
+    eos.set_log_level(_LOG_LEVELS[verbosity])
     handler.setStream(stderr)
     handler.setFormatter(CustomLogFormatter())
     try:
@@ -666,7 +666,7 @@ def _configured_logging(verbosity, stderr):
     finally:
         handler.setFormatter(previous_formatter)
         handler.setStream(previous_stream)
-        handler.setLevel(previous_level)
+        eos.set_log_level(previous_level)
 
 
 def main(argv: Sequence[str] | None = None, *, stdout: TextIO | None = None, stderr: TextIO | None = None) -> int:
