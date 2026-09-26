@@ -175,16 +175,16 @@ def _configured_logging(verbosity: int, stderr: TextIO):
         2: logging.INFO,
         3: logging.DEBUG,
     }
-    handler = eos.stderr_handler
+    handler = eos.default_log_handler
     previous_level = handler.level
     previous_stream = handler.stream
-    handler.setLevel(levels[min(verbosity, 3)])
+    eos.set_log_level(levels[min(verbosity, 3)])
     handler.setStream(stderr)
     try:
         yield
     finally:
         handler.setStream(previous_stream)
-        handler.setLevel(previous_level)
+        eos.set_log_level(previous_level)
 
 
 def _datasets():
