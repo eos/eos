@@ -16,7 +16,7 @@
 from __future__ import annotations
 
 from collections import Counter, defaultdict
-from collections.abc import Iterable, Mapping
+from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass
 import html
 import inspect
@@ -332,12 +332,16 @@ def check_dataset_sizes(context: CheckContext) -> Iterable[Finding]:
         )
 
 
-def _normalize_output_path(template: str, arguments: Mapping[str, Any]) -> tuple[PurePosixPath | None, str | None]:
+def _normalize_output_path(
+    template: str, output_fields: Callable[..., Mapping[str, Any]], arguments: Mapping[str, Any],
+) -> tuple[PurePosixPath | None, str | None]:
+    from ..tasks import expand_task_output
+
     try:
         fields = [field for _literal, field, _spec, _conversion in string.Formatter().parse(template) if field]
         if any('.' in field or '[' in field for field in fields):
             return None, 'attribute and item access are not permitted in output templates'
-        rendered = template.format(**arguments).replace('\\', '/')
+        rendered = expand_task_output(template, output_fields, arguments).replace('\\', '/')
     except (KeyError, ValueError, TypeError, IndexError) as error:
         return None, str(error)
     path = PurePosixPath(rendered)
@@ -521,7 +525,9 @@ def check_reproducible_outputs(context: CheckContext) -> Iterable[Finding]:
                 task_defaults = default_component.arguments
                 arguments.update(task_defaults)
                 arguments.update(task_arguments)
-                output, error = _normalize_output_path(template, arguments)
+                output, error = _normalize_output_path(
+                    template, task_registry.task_output_fields()[task_name], arguments,
+                )
                 if error is not None:
                     yield _finding(
                         check_id, Severity.ERROR,
