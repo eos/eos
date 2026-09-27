@@ -16,6 +16,7 @@ libeosscattering_la_SOURCES = \
     svalues-om-dhk.hh reom11-dhk.hh reom12-dhk.hh imom11-dhk.hh imom12-dhk.hh
 libeosscattering_la_LIBADD = \
     $(top_builddir)/eos/utils/libeosutils.la \
+    $(top_builddir)/eos/maths/libeosmaths.la \
     -lgslcblas \
     -lgsl
 
