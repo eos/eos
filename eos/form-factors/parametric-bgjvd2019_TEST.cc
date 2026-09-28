@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2018-2025 Danny van Dyk
+ * Copyright (c) 2018-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -1681,18 +1681,27 @@ class BstarToDHQETFormFactorsTest : public TestCase
                 std::make_pair(-0.082947, eps), // h_{Abar2}
                 std::make_pair(+0.712066, eps), // h_{Abar3}
                 std::make_pair(+0.760677, eps), // h_{Vbar}
+                std::make_pair(+0.662150, eps), // h_{Tbar1}
+                std::make_pair(+0.015929, eps), // h_{Tbar2}
+                std::make_pair(-0.064329, eps), // h_{Tbar3}
 
                 /* HQET form factors at w = 1.2 */
                 std::make_pair(+0.779087, eps), // h_{Abar1}
                 std::make_pair(-0.103046, eps), // h_{Abar2}
                 std::make_pair(+0.866333, eps), // h_{Abar3}
                 std::make_pair(+0.928731, eps), // h_{Vbar}
+                std::make_pair(+0.818295, eps), // h_{Tbar1}
+                std::make_pair(+0.016255, eps), // h_{Tbar2}
+                std::make_pair(-0.081062, eps), // h_{Tbar3}
 
                 /* HQET form factors at w = 1.0 */
                 std::make_pair(+0.969229, eps), // h_{Abar1}
                 std::make_pair(-0.130890, eps), // h_{Abar2}
                 std::make_pair(+1.078436, eps), // h_{Abar3}
                 std::make_pair(+1.160604, eps), // h_{Vbar}
+                std::make_pair(+1.031318, eps), // h_{Tbar1}
+                std::make_pair(+0.019816, eps), // h_{Tbar2}
+                std::make_pair(-0.104821, eps), // h_{Tbar3}
             };
 
             TEST_CHECK_DIAGNOSTICS(diag, ref);
@@ -1855,6 +1864,13 @@ class BstarToDstarHQETFormFactorsTest : public TestCase
                 std::make_pair(-0.043281, eps), // h_{8}
                 std::make_pair(+0.110892, eps), // h_{9}
                 std::make_pair(+0.064994, eps), // h_{10}
+                std::make_pair(+0.644829, eps), // h_{T4}
+                std::make_pair(+0.679595, eps), // h_{T5}
+                std::make_pair(+0.710440, eps), // h_{T6}
+                std::make_pair(+0.774769, eps), // h_{T7}
+                std::make_pair(+0.082281, eps), // h_{T8}
+                std::make_pair(-0.164908, eps), // h_{T9}
+                std::make_pair(+0.000000, eps), // h_{T10}
 
                 /* HQET form factors at w = 1.2 */
                 std::make_pair(+0.757916, eps), // h_{1}
@@ -1867,6 +1883,13 @@ class BstarToDstarHQETFormFactorsTest : public TestCase
                 std::make_pair(-0.048579, eps), // h_{8}
                 std::make_pair(+0.147242, eps), // h_{9}
                 std::make_pair(+0.081839, eps), // h_{10}
+                std::make_pair(+0.779274, eps), // h_{T4}
+                std::make_pair(+0.811839, eps), // h_{T5}
+                std::make_pair(+0.859355, eps), // h_{T6}
+                std::make_pair(+0.940417, eps), // h_{T7}
+                std::make_pair(+0.102269, eps), // h_{T8}
+                std::make_pair(-0.204735, eps), // h_{T9}
+                std::make_pair(+0.000000, eps), // h_{T10}
 
                 /* HQET form factors at w = 1.0 */
                 std::make_pair(+0.954434, eps), // h_{1}
@@ -1879,8 +1902,121 @@ class BstarToDstarHQETFormFactorsTest : public TestCase
                 std::make_pair(-0.055498, eps), // h_{8}
                 std::make_pair(+0.200220, eps), // h_{9}
                 std::make_pair(+0.105747, eps), // h_{10}
+                std::make_pair(+0.961350, eps), // h_{T4}
+                std::make_pair(+0.989113, eps), // h_{T5}
+                std::make_pair(+1.061858, eps), // h_{T6}
+                std::make_pair(+1.166680, eps), // h_{T7}
+                std::make_pair(+0.129964, eps), // h_{T8}
+                std::make_pair(-0.260108, eps), // h_{T9}
+                std::make_pair(+0.000000, eps), // h_{T10}
             };
 
             TEST_CHECK_DIAGNOSTICS(diag, ref);
         }
 } bstar_to_dstar_hqet_form_factors_test;
+
+// Relations among the tensor form factors of the different transitions, exact once
+// the power corrections are switched off. They fix the sign of the (w - 1) / 2
+// (C_{T_2} - C_{T_3}) term of [BGJvD:2025A], eq. (2.32).
+class BstarToDDstarTensorRelationsTest : public TestCase
+{
+    public:
+        BstarToDDstarTensorRelationsTest() :
+            TestCase("bstar_to_d_dstar_tensor_relations_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            static const double eps = 1.0e-10;
+
+            Parameters p                     = Parameters::Defaults();
+            p["B(*)->D(*)::xi'(1)@HQET"]     = -0.849472;
+            p["B(*)->D(*)::xi''(1)@HQET"]    = 2.0 * 0.583711;
+            p["B(*)->D(*)::chi_2(1)@HQET"]   = -0.0600533;
+            p["B(*)->D(*)::chi_2'(1)@HQET"]  = 6.97061e-6;
+            p["B(*)->D(*)::chi_2''(1)@HQET"] = 0.0314499;
+            p["B(*)->D(*)::chi_3'(1)@HQET"]  = 0.0400298;
+            p["B(*)->D(*)::chi_3''(1)@HQET"] = -0.039123;
+            p["B(*)->D(*)::eta(1)@HQET"]     = 0.604052;
+            p["B(*)->D(*)::eta'(1)@HQET"]    = -0.00545745;
+            p["B(*)->D(*)::eta''(1)@HQET"]   = -0.268764;
+            p["B(*)->D(*)::l_1(1)@HQET"]     = +0.111274;
+            p["B(*)->D(*)::l_2(1)@HQET"]     = -2.01963;
+            p["B(*)->D(*)::l_3(1)@HQET"]     = 0.0687349;
+            p["B(*)->D(*)::l_4(1)@HQET"]     = -2.02231;
+            p["B(*)->D(*)::l_5(1)@HQET"]     = 4.21978;
+            p["B(*)->D(*)::l_6(1)@HQET"]     = 4.52949;
+            p["B(*)->D(*)::a@HQET"]          = 1.0;
+            // mBar = m_b^pole - lambda_1 / (2 m_b^1S) makes LambdaBar and therefore
+            // both epsilon_b and epsilon_c vanish identically
+            p["B(*)->D(*)::mBar@HQET"]       = 4.81260180042463;
+
+            auto oo = Options{
+                {   "z-order-lp"_ok, "2"_ov },
+                {  "z-order-slp"_ok, "2"_ov },
+                { "z-order-sslp"_ok, "1"_ov }
+            };
+
+            HQETFormFactors<BToD, PToP>         ff_d(p, oo);
+            HQETFormFactors<BToDstar, PToV>     ff_dstar(p, oo);
+            HQETFormFactors<BstarToD, VToP>     ff_bstar_d(p, oo);
+            HQETFormFactors<BstarToDstar, VToV> ff_bstar_dstar(p, oo);
+
+            const double m_B   = p["mass::B_d"].evaluate();
+            const double m_Bst = p["mass::B_d^*"].evaluate();
+            const double m_D   = p["mass::D_u"].evaluate();
+            const double m_Dst = p["mass::D_u^*"].evaluate();
+
+            auto q2 = [](const double & m_1, const double & m_2, const double & w) -> double { return m_1 * m_1 + m_2 * m_2 - 2.0 * m_1 * m_2 * w; };
+
+            for (const double & w : { 1.0, 1.1, 1.2, 1.3, 1.4 })
+            {
+                const double h_T = ff_d.h_T(q2(m_B, m_D, w));
+
+                const double h_T1 = ff_dstar.h_t1(q2(m_B, m_Dst, w));
+                const double h_T2 = ff_dstar.h_t2(q2(m_B, m_Dst, w));
+                const double h_T3 = ff_dstar.h_t3(q2(m_B, m_Dst, w));
+
+                const double h_T1bar = ff_bstar_d.h_tbar_1(q2(m_Bst, m_D, w));
+                const double h_T2bar = ff_bstar_d.h_tbar_2(q2(m_Bst, m_D, w));
+                const double h_T3bar = ff_bstar_d.h_tbar_3(q2(m_Bst, m_D, w));
+
+                const double h_T4  = ff_bstar_dstar.h_t4(q2(m_Bst, m_Dst, w));
+                const double h_T5  = ff_bstar_dstar.h_t5(q2(m_Bst, m_Dst, w));
+                const double h_T6  = ff_bstar_dstar.h_t6(q2(m_Bst, m_Dst, w));
+                const double h_T7  = ff_bstar_dstar.h_t7(q2(m_Bst, m_Dst, w));
+                const double h_T8  = ff_bstar_dstar.h_t8(q2(m_Bst, m_Dst, w));
+                const double h_T9  = ff_bstar_dstar.h_t9(q2(m_Bst, m_Dst, w));
+                const double h_T10 = ff_bstar_dstar.h_t10(q2(m_Bst, m_Dst, w));
+
+                // C_{T_1}: h_T1 and h_Tbar1 share their alpha_s term
+                TEST_CHECK_NEARLY_EQUAL(h_T1bar, h_T1, eps);
+                // C_{T_2} + C_{T_3}
+                TEST_CHECK_NEARLY_EQUAL(-h_T2bar, h_T2, eps);
+                TEST_CHECK_NEARLY_EQUAL((w + 1.0) / 2.0 * (h_T5 - h_T6), h_T2, eps);
+                // C_{T_2} - C_{T_3}
+                TEST_CHECK_NEARLY_EQUAL((w + 1.0) / 2.0 * (h_T3 + h_T3bar), h_T1 - h_T, eps);
+                // C_{T_2}
+                TEST_CHECK_NEARLY_EQUAL(h_T9, h_T3, eps);
+                TEST_CHECK_NEARLY_EQUAL(h_T4 - h_T6, h_T9, eps);
+                // C_{T_3}
+                TEST_CHECK_NEARLY_EQUAL(-h_T8, h_T3bar, eps);
+                TEST_CHECK_NEARLY_EQUAL(h_T5 - h_T4, -h_T3bar, eps);
+                // C_{T_1} - C_{T_2} + C_{T_3}
+                TEST_CHECK_NEARLY_EQUAL(h_T7, h_T, eps);
+                // proportional to C_{T_4}, which vanishes at this order
+                TEST_CHECK_NEARLY_EQUAL(h_T10, 0.0, eps);
+            }
+
+            // a q2 computed from the meson masses reaches w = 1 only up to rounding,
+            // and the form factors must not depend on which side it lands on
+            {
+                static const double delta = 1.0e-12;
+
+                TEST_CHECK_NEARLY_EQUAL(ff_bstar_d.h_tbar_1(q2(m_Bst, m_D, 1.0 - delta)), ff_bstar_d.h_tbar_1(q2(m_Bst, m_D, 1.0)), 1.0e-8);
+                TEST_CHECK_NEARLY_EQUAL(ff_bstar_dstar.h_t5(q2(m_Bst, m_Dst, 1.0 - delta)), ff_bstar_dstar.h_t5(q2(m_Bst, m_Dst, 1.0)), 1.0e-8);
+            }
+        }
+} bstar_to_d_dstar_tensor_relations_test;
