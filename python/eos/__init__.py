@@ -83,11 +83,13 @@ _MAP_PYTHON_TO_NATIVE_LOG_LEVEL = {
 def set_log_level(level):
     if isinstance(level, str):
         level = logging.getLevelName(level)
-    if level not in _MAP_PYTHON_TO_NATIVE_LOG_LEVEL:
+    if not isinstance(level, int):
         raise RuntimeError(f'Cannot handle unknown log level: {level}')
     # keep the logger at DEBUG so that additional handlers, e.g. for task log files, still receive all messages
     default_log_handler.setLevel(level)
-    _set_native_log_level(_MAP_PYTHON_TO_NATIVE_LOG_LEVEL[level])
+    # use the most verbose native level that does not withhold any message the handler would show
+    native_level = max((l for l in _MAP_PYTHON_TO_NATIVE_LOG_LEVEL if l <= level), default=logging.DEBUG)
+    _set_native_log_level(_MAP_PYTHON_TO_NATIVE_LOG_LEVEL[native_level])
 
 def debug(msg, *args, **kwargs):
     logger.debug(msg, *args, **kwargs)

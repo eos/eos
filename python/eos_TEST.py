@@ -407,6 +407,15 @@ class LoggingTests(unittest.TestCase):
 
             with self.assertRaises(RuntimeError):
                 eos.set_log_level('NO-SUCH-LEVEL')
+
+            # Python levels without a native counterpart are accepted as well
+            eos.set_log_level(logging.CRITICAL)
+            _eos._emit_native_log("id", ll.ERROR, "native error")
+            self.assertNotIn("native error", stream.getvalue())
+
+            eos.set_log_level('NOTSET')
+            _eos._emit_native_log("id", ll.DEBUG, "unfiltered native debug")
+            self.assertIn("unfiltered native debug", stream.getvalue())
         finally:
             eos.set_log_level(logging.INFO)
             eos.default_log_handler.setStream(previous_stream)
