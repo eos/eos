@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2021 Méril Reboud
+ * Copyright (c) 2026 Danny van Dyk
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -174,6 +176,66 @@ namespace eos
                                               Unit::InverseGeV2(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDpDm)),
+
+                    make_cacheable_observable("e^+e^-->D^*0Dbar^0::sigma(E)",
+                                              R"(\sigma(e^+e^- \to D^{*0} \bar{D}^0 + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare, "E"),
+                                              evaluate(&EEToCCBar::sigma_eetoDst0D0bar)),
+
+                    make_cacheable_observable("D^*0Dbar^0::Re{rho}(Re{E},Im{E})",
+                                              R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^0 + \mathrm{h.c.}}(E)))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::rho_Dst0D0bar)),
+
+                    make_cacheable_observable("e^+e^-->D^*0Dbar^0::Re{T^II}(Re{E},Im{E})",
+                                              R"(\mathrm{Re}T^{II}(e^+e^- \to D^{*0} \bar{D}^0 + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::re_T_II_eetoDst0D0bar)),
+
+                    make_cacheable_observable("e^+e^-->D^*0Dbar^0::Im{T^II}(Re{E},Im{E})",
+                                              R"(\mathrm{Im}T^{II}(e^+e^- \to D^{*0} \bar{D}^0 + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::im_T_II_eetoDst0D0bar)),
+
+                    make_cacheable_observable("e^+e^-->D^*0Dbar^0::sigma(Re{E},Im{E})",
+                                              R"(\sigma(e^+e^- \to D^{*0} \bar{D}^0 + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::sigma_eetoDst0D0bar)),
+
+                    make_cacheable_observable("e^+e^-->D^*+D^-::sigma(E)",
+                                              R"(\sigma(e^+e^- \to D^{*+} D^- + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare, "E"),
+                                              evaluate(&EEToCCBar::sigma_eetoDstpDm)),
+
+                    make_cacheable_observable("D^*+D^-::Re{rho}(Re{E},Im{E})",
+                                              R"(\mathrm{Re}\rho_{D^{*+} D^- + \mathrm{h.c.}}(E)))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::rho_DstpDm)),
+
+                    make_cacheable_observable("e^+e^-->D^*+D^-::Re{T^II}(Re{E},Im{E})",
+                                              R"(\mathrm{Re}T^{II}(e^+e^- \to D^{*+} D^- + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::re_T_II_eetoDstpDm)),
+
+                    make_cacheable_observable("e^+e^-->D^*+D^-::Im{T^II}(Re{E},Im{E})",
+                                              R"(\mathrm{Im}T^{II}(e^+e^- \to D^{*+} D^- + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::im_T_II_eetoDstpDm)),
+
+                    make_cacheable_observable("e^+e^-->D^*+D^-::sigma(Re{E},Im{E})",
+                                              R"(\sigma(e^+e^- \to D^{*+} D^- + \mathrm{h.c.}))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::sigma_eetoDstpDm)),
 
                 }
 

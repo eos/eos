@@ -1,5 +1,7 @@
 /*
  * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Danny van Dyk
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -42,6 +44,8 @@ namespace eos
     3   eff(3770)     PP (P)       3       -
     4   D0   D0bar    PP (P)       3       -
     5   D+   D-       PP (P)       3       4 (isospin)
+    6   D*0  D0bar    VP (P)       3       -
+    7   D*+  D-       VP (P)       3       6 (isospin)
     */
 
     // std::atan has branch points at +-i. Channel::chew_mandelstam evaluates
@@ -183,6 +187,49 @@ namespace eos
             }
     };
 
+    // V -> VP channel, e.g. D^* Dbar + h.c.
+    template <unsigned nchannels_, unsigned nresonances_> struct PWaveVPChannel : public KMatrix<nchannels_, nresonances_>::Channel
+    {
+            PWaveVPChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s)
+            {
+            }
+
+            inline double
+            mp()
+            {
+                return this->_m1 + this->_m2;
+            }
+
+            inline double
+            mm()
+            {
+                return this->_m1 - this->_m2;
+            }
+
+            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
+
+            const double          pi = M_PI;
+            const complex<double> i  = complex<double>(0.0, 1.0);
+
+            // TODO: settle the normalization of the + h.c. combination.
+            complex<double>
+            rho(const complex<double> & s)
+            {
+                const double mp = this->mp();
+                const double mm = this->mm();
+
+                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * (s - mm * mm)) / 16.0 / pi / s;
+            }
+
+            // Analytic continuation of i * rho * n * n
+            complex<double>
+            chew_mandelstam(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
+            }
+    };
+
     template <unsigned nchannels_, unsigned nresonances_> struct CharmoniumResonance : public KMatrix<nchannels_, nresonances_>::Resonance
     {
             CharmoniumResonance(std::string name, Parameter m) :
@@ -194,7 +241,7 @@ namespace eos
     class EEToCCBar : public ParameterUser, public PrivateImplementationPattern<EEToCCBar>
     {
         public:
-            static const long unsigned nchannels   = 6;
+            static const long unsigned nchannels   = 8;
             static const long unsigned nresonances = 3;
 
             struct IntermediateResult : public CacheableObservable::IntermediateResult
@@ -235,6 +282,8 @@ namespace eos
             double rho_eff(const IntermediateResult *) const;
             double rho_D0Dbar0(const IntermediateResult *) const;
             double rho_DpDm(const IntermediateResult *) const;
+            double rho_Dst0D0bar(const IntermediateResult *) const;
+            double rho_DstpDm(const IntermediateResult *) const;
 
             // Chew-Mandelstam function on the first Riemann sheet
             double re_chew_mandelstam_ee(const IntermediateResult *) const;
@@ -245,6 +294,10 @@ namespace eos
             double im_chew_mandelstam_D0Dbar0(const IntermediateResult *) const;
             double re_chew_mandelstam_DpDm(const IntermediateResult *) const;
             double im_chew_mandelstam_DpDm(const IntermediateResult *) const;
+            double re_chew_mandelstam_Dst0D0bar(const IntermediateResult *) const;
+            double im_chew_mandelstam_Dst0D0bar(const IntermediateResult *) const;
+            double re_chew_mandelstam_DstpDm(const IntermediateResult *) const;
+            double im_chew_mandelstam_DstpDm(const IntermediateResult *) const;
 
             // Chew-Mandelstam function on the second Riemann sheet
             double re_chew_mandelstam_II_ee(const IntermediateResult *) const;
@@ -255,6 +308,10 @@ namespace eos
             double im_chew_mandelstam_II_D0Dbar0(const IntermediateResult *) const;
             double re_chew_mandelstam_II_DpDm(const IntermediateResult *) const;
             double im_chew_mandelstam_II_DpDm(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_Dst0D0bar(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_Dst0D0bar(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_DstpDm(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_DstpDm(const IntermediateResult *) const;
 
 
             // amplitudes on the first RS
@@ -266,6 +323,10 @@ namespace eos
             double im_T_eetoDpDm(const IntermediateResult *) const;
             double re_T_eetoD0Dbar0(const IntermediateResult *) const;
             double im_T_eetoD0Dbar0(const IntermediateResult *) const;
+            double re_T_eetoDst0D0bar(const IntermediateResult *) const;
+            double im_T_eetoDst0D0bar(const IntermediateResult *) const;
+            double re_T_eetoDstpDm(const IntermediateResult *) const;
+            double im_T_eetoDstpDm(const IntermediateResult *) const;
 
             // amplitudes on the second RS
             double re_T_II_eetoee(const IntermediateResult *) const;
@@ -276,6 +337,10 @@ namespace eos
             double im_T_II_eetoDpDm(const IntermediateResult *) const;
             double re_T_II_eetoD0Dbar0(const IntermediateResult *) const;
             double im_T_II_eetoD0Dbar0(const IntermediateResult *) const;
+            double re_T_II_eetoDst0D0bar(const IntermediateResult *) const;
+            double im_T_II_eetoDst0D0bar(const IntermediateResult *) const;
+            double re_T_II_eetoDstpDm(const IntermediateResult *) const;
+            double im_T_II_eetoDstpDm(const IntermediateResult *) const;
 
             // Spectral function
             double psi3770_spectral_function(const double & E) const;
@@ -285,6 +350,8 @@ namespace eos
             double sigma_eetoeff(const IntermediateResult *) const;
             double sigma_eetoD0Dbar0(const IntermediateResult *) const;
             double sigma_eetoDpDm(const IntermediateResult *) const;
+            double sigma_eetoDst0D0bar(const IntermediateResult *) const;
+            double sigma_eetoDstpDm(const IntermediateResult *) const;
 
             // R ratios
             double R(const IntermediateResult *) const;
