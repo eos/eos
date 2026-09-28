@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2023 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -40,6 +41,8 @@ namespace eos
             UsedParameter m_eff;
             UsedParameter m_D0;
             UsedParameter m_Dp;
+            UsedParameter m_Dst0;
+            UsedParameter m_Dstp;
 
             bool assume_isospin;
 
@@ -52,7 +55,7 @@ namespace eos
                 psi3770
             };
 
-            inline static const std::array<std::string, 6> channel_names = { "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)" };
+            inline static const std::array<std::string, 8> channel_names = { "e^+e^-", "eff(Jpsi)", "eff(2S)", "D^0Dbar^0", "D^+D^-", "eff(3770)", "D^*0Dbar^0", "D^*+D^-" };
 
             enum Channels
             {
@@ -61,7 +64,9 @@ namespace eos
                 eff2S,
                 D0Dbar0,
                 DpDm,
-                eff3770
+                eff3770,
+                Dst0D0bar,
+                DstpDm
             };
 
             // Resonance masses
@@ -123,7 +128,8 @@ namespace eos
                 {
                     switch (channel)
                     {
-                        case DpDm: return D0Dbar0;
+                        case DpDm:   return D0Dbar0;
+                        case DstpDm: return Dst0D0bar;
 
                         default: return channel;
                     }
@@ -220,6 +226,8 @@ namespace eos
                 m_eff(p["ee->ccbar::effective_mass"], u),
                 m_D0(p["mass::D^0"], u),
                 m_Dp(p["mass::D^+"], u),
+                m_Dst0(p["mass::D_u^*"], u),
+                m_Dstp(p["mass::D_d^*"], u),
                 assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"_ov).str())),
                 m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
                 g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -269,6 +277,22 @@ namespace eos
                             channel_array[i] = std::make_shared<PWavePPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(
                                     channel_names[i],
                                     m_Dp,
+                                    m_Dp,
+                                    q[i],
+                                    _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                            break;
+                        case Dst0D0bar:
+                            channel_array[i] = std::make_shared<PWaveVPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(
+                                    channel_names[i],
+                                    m_Dst0,
+                                    m_D0,
+                                    q[i],
+                                    _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                            break;
+                        case DstpDm:
+                            channel_array[i] = std::make_shared<PWaveVPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(
+                                    channel_names[i],
+                                    m_Dstp,
                                     m_Dp,
                                     q[i],
                                     _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
@@ -746,6 +770,126 @@ namespace eos
     EEToCCBar::R(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->R(ir);
+    }
+
+    double
+    EEToCCBar::rho_Dst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->rho(ir, Channels::Dst0D0bar);
+    }
+
+    double
+    EEToCCBar::re_chew_mandelstam_Dst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->chew_mandelstam(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::im_chew_mandelstam_Dst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->chew_mandelstam(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::re_chew_mandelstam_II_Dst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->chew_mandelstam_II(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::im_chew_mandelstam_II_Dst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->chew_mandelstam_II(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::re_T_eetoDst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->T_eetochannel(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::im_T_eetoDst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->T_eetochannel(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::re_T_II_eetoDst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->T_II_eetochannel(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::im_T_II_eetoDst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->T_II_eetochannel(ir, Channels::Dst0D0bar));
+    }
+
+    double
+    EEToCCBar::sigma_eetoDst0D0bar(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::Dst0D0bar);
+    }
+
+    double
+    EEToCCBar::rho_DstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->rho(ir, Channels::DstpDm);
+    }
+
+    double
+    EEToCCBar::re_chew_mandelstam_DstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->chew_mandelstam(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::im_chew_mandelstam_DstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->chew_mandelstam(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::re_chew_mandelstam_II_DstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->chew_mandelstam_II(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::im_chew_mandelstam_II_DstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->chew_mandelstam_II(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::re_T_eetoDstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->T_eetochannel(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::im_T_eetoDstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->T_eetochannel(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::re_T_II_eetoDstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->T_II_eetochannel(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::im_T_II_eetoDstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->T_II_eetochannel(ir, Channels::DstpDm));
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstpDm(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DstpDm);
     }
 
     const std::set<ReferenceName> EEToCCBar::references{};

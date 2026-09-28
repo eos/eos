@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2023 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
+ * Copyright (c) 2026 Simon Mutke
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -257,6 +258,59 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(c.im_T_eetoDpDm(irc), -0.0672643, eps);
                 TEST_CHECK_RELATIVE_ERROR(c.re_T_II_eetoDpDm(irc), 0.296099, eps);
                 TEST_CHECK_RELATIVE_ERROR(c.im_T_II_eetoDpDm(irc), -0.0682443, eps);
+            }
+
+            {
+                // The D^* Dbar + h.c. channels, coupled to the resonances.
+                // TODO: populate with reference values.
+                Parameters p                             = Parameters::Defaults();
+                p["ee->ccbar::g0(psi(2S),e^+e^-)"]       = 10.0;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]     = 12.0;
+                p["ee->ccbar::g0(psi(2S),D^*0Dbar^0)"]   = 0.3;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^0)"] = 0.4;
+                p["ee->ccbar::g0(psi(2S),D^*+D^-)"]      = 0.5;
+                p["ee->ccbar::g0(psi(3770),D^*+D^-)"]    = 0.6;
+
+                p["ee->ccbar::q_0"] = 0.5;
+
+                auto psi2S   = std::make_shared<CharmoniumResonance<3, 2>>("psi2S", p["mass::psi(2S)"]);
+                auto psi3770 = std::make_shared<CharmoniumResonance<3, 2>>("psi3770", p["mass::psi(3770)"]);
+
+                std::array<std::array<Parameter, 3>, 3> bkgcst{
+                    p["ee->ccbar::c(e^+e^-,e^+e^-)"],     p["ee->ccbar::c(e^+e^-,D^*0Dbar^0)"],     p["ee->ccbar::c(e^+e^-,D^*+D^-)"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^0)"], p["ee->ccbar::c(D^*0Dbar^0,D^*0Dbar^0)"], p["ee->ccbar::c(D^*0Dbar^0,D^*+D^-)"],
+                    p["ee->ccbar::c(e^+e^-,D^*+D^-)"],    p["ee->ccbar::c(D^*0Dbar^0,D^*+D^-)"],    p["ee->ccbar::c(D^*+D^-,D^*+D^-)"],
+                };
+
+                std::array<Parameter, 2> ee_g0s{
+                    { p["ee->ccbar::g0(psi(2S),e^+e^-)"], p["ee->ccbar::g0(psi(3770),e^+e^-)"] }
+                };
+                std::array<Parameter, 2> Dst0D0bar_g0s{
+                    { p["ee->ccbar::g0(psi(2S),D^*0Dbar^0)"], p["ee->ccbar::g0(psi(3770),D^*0Dbar^0)"] }
+                };
+                std::array<Parameter, 2> DstpDm_g0s{
+                    { p["ee->ccbar::g0(psi(2S),D^*+D^-)"], p["ee->ccbar::g0(psi(3770),D^*+D^-)"] }
+                };
+
+                auto ee        = std::make_shared<EEChannel<3, 2>>("ee", p["mass::e"], p["mass::e"], p["ee->ccbar::q_0"], ee_g0s);
+                auto Dst0D0bar = std::make_shared<PWaveVPChannel<3, 2>>("Dst0D0bar", p["mass::D_u^*"], p["mass::D^0"], p["ee->ccbar::q_0"], Dst0D0bar_g0s);
+                auto DstpDm    = std::make_shared<PWaveVPChannel<3, 2>>("DstpDm", p["mass::D_d^*"], p["mass::D^+"], p["ee->ccbar::q_0"], DstpDm_g0s);
+
+                KMatrix<3, 2> KMatrix32({ ee, Dst0D0bar, DstpDm }, { psi2S, psi3770 }, bkgcst, "ee->ccbar");
+
+                // s = 20 lies above both thresholds, s = 14 below them
+                [[maybe_unused]] const auto rho_open     = Dst0D0bar->rho(20.0);
+                [[maybe_unused]] const auto rho_closed   = Dst0D0bar->rho(14.0);
+                [[maybe_unused]] const auto cm_open      = Dst0D0bar->chew_mandelstam(20.0);
+                [[maybe_unused]] const auto cm_closed    = Dst0D0bar->chew_mandelstam(14.0);
+                [[maybe_unused]] const auto tmatrix_open = KMatrix32.tmatrix_row(0, 20.0);
+
+                // TEST_CHECK_RELATIVE_ERROR(std::abs(rho_open), ?, eps);
+                // TEST_CHECK_RELATIVE_ERROR(real(cm_open), ?, eps);
+                // TEST_CHECK_RELATIVE_ERROR(imag(cm_open), ?, eps);
+                // TEST_CHECK_RELATIVE_ERROR(real(cm_closed), ?, eps);
+                // TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), ?, eps);
+                // TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), ?, eps);
             }
         }
 } eetoccbar_test;
