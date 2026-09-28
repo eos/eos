@@ -176,7 +176,16 @@ The same can be achieved in a python notebook with:
 
 .. code-block:: python
 
+    import eos
+
     eos.set_log_level('DEBUG')
 
-Above, ``'DEBUG'`` can be replaced by the name of any logging level, which are listed `here <https://docs.python.org/3/library/logging.html#levels>`__.
-By default, EOS logs to ``sys.stderr``. To log to ``sys.stdout`` instead, use ``eos.default_log_handler.setStream(sys.stdout)``.
+Above, ``'DEBUG'`` can be replaced by the name of any of the log levels that EOS uses, in order of decreasing verbosity:
+``'DEBUG'``, ``'INFO'``, ``'INPROGRESS'``, ``'COMPLETED'``, ``'SUCCESS'``, ``'WARNING'``, and ``'ERROR'``.
+By default, EOS logs to ``sys.stderr``. To log to ``sys.stdout`` instead, use:
+
+.. code-block:: python
+
+    import sys
+
+    eos.default_log_handler.setStream(sys.stdout)
