@@ -310,17 +310,21 @@ class ConstraintPriorDescription(_AnalysisFileDeserializable):
 
 @dataclass
 class TransformPriorDescription(_AnalysisFileDeserializable):
-    r"""Describes a prior on a linear transformation of several parameters.
+    r"""Describes a uniform prior on variables :math:`y`, related to several parameters :math:`x` by :math:`x = T y + s`.
 
-    :param parameters: The qualified names of the parameters that enter the transformation.
+    The variables :math:`y` are uniformly distributed on the box :math:`[\text{min}, \text{max}]`. The prior on the
+    parameters is therefore uniform on the image of that box, with the log density
+    :math:`-\sum_j \ln(\text{max}_j - \text{min}_j) - \ln|\det T|`.
+
+    :param parameters: The qualified names of the parameters :math:`x`.
     :type parameters: list[str]
-    :param shift: The constant shift applied to the parameters before the transformation.
+    :param shift: The shift :math:`s` added to the transformed variables.
     :type shift: list[float]
-    :param transform: The transformation matrix applied to the (shifted) parameters.
+    :param transform: The square matrix :math:`T` that maps the variables :math:`y` onto the parameters.
     :type transform: list[list[float]]
-    :param min: The lower bounds of the transformed parameters' support.
+    :param min: The lower bounds of the variables :math:`y`.
     :type min: list[float]
-    :param max: The upper bounds of the transformed parameters' support.
+    :param max: The upper bounds of the variables :math:`y`.
     :type max: list[float]
     """
     parameters:list[str]
@@ -940,6 +944,9 @@ _task_argument_map = {
     # mixture-product
     ('mixture-product', 'POSTERIOR'): 'posterior',
     ('mixture-product', 'POSTERIORS'): 'posteriors',
+    # model-comparison
+    ('model-comparison', 'POSTERIORS'): 'posteriors',
+    ('model-comparison', 'g'): 'group', ('model-comparison', 'GROUP'): 'group',
     # find-clusters
     ('find-clusters', 'POSTERIOR'): 'posterior',
     ('find-clusters', 't'): 'threshold', ('find-clusters', 'THRESHOLD'): 'threshold',
@@ -1560,6 +1567,14 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
                             Severity.ERROR,
                             f"Error in step {step.id}: Posterior '{posterior}' not known to EOS",
                         )
+                if isinstance(task.arguments.get('posteriors'), list):
+                    for index, posterior in enumerate(task.arguments['posteriors']):
+                        if not context.lookup('posterior', posterior):
+                            yield Diagnostic(
+                                ('steps', segment, 'tasks', task_segment, 'arguments', 'posteriors', index),
+                                Severity.ERROR,
+                                f"Error in step {step.id}: Posterior '{posterior}' not known to EOS",
+                            )
 
         expression_names = [
             description.name

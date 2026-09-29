@@ -88,6 +88,7 @@ EXTRA_DIST = \
 	eos/data/mixture_density_TEST.d \
 	eos/data/sample_mask_TEST.d \
 	eos/data/mode.py \
+	eos/data/model_comparison.py \
 	eos/data/nabu_likelihood.py \
 	eos/data/pmc_sampler.py \
 	eos/data/prediction.py \
@@ -176,6 +177,7 @@ eosdata_SCRIPTS = \
 	eos/data/markov_chain.py \
 	eos/data/mixture_density.py \
 	eos/data/mode.py \
+	eos/data/model_comparison.py \
 	eos/data/nabu_likelihood.py \
 	eos/data/pmc_sampler.py \
 	eos/data/prediction.py \
@@ -246,6 +248,7 @@ TESTS = \
 	eos/data/markov_chain_TEST.py \
 	eos/data/mixture_density_TEST.py \
 	eos/data/mode_TEST.py \
+	eos/data/model_comparison_TEST.py \
 	eos/data/nabu_likelihood_TEST.py \
 	eos/data/sample_mask_TEST.py \
 	eos/data/pmc_sampler_TEST.py \
