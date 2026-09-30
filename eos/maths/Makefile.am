@@ -29,6 +29,7 @@ libeosmaths_la_SOURCES = \
 	szego-polynomial.hh
 
 libeosmaths_la_LIBADD = \
+	$(top_builddir)/eos/utils/libeosutils.la \
 	-lfftw3 -lgsl -lgslcblas -lm
 libeosmaths_la_CXXFLAGS = $(AM_CXXFLAGS) \
 	-DEOS_DATADIR='"$(datadir)"' \
