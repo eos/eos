@@ -1744,7 +1744,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
                         levels=plevels[::-1])
 
         CS = ax.contour(self._pdf.transpose(),
-                        colors=self.color,
+                        colors=[self.color],
                         extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1],
                         linestyles=self.linestyle)
