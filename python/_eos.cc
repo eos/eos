@@ -54,8 +54,10 @@
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
 
+#include <cstring>
 #include <memory>
 #include <tuple>
+#include <type_traits>
 
 using namespace boost::python;
 using namespace eos;
@@ -172,7 +174,31 @@ namespace impl
                 void * storage = ((converter::rvalue_from_python_storage<std::vector<T>> *) (data))->storage.bytes;
                 new (storage) std::vector<T>();
                 std::vector<T> * v = (std::vector<T> *) (storage);
-                int              l = PySequence_Size(obj_ptr);
+
+                // copy a contiguous one-dimensional buffer of doubles (e.g. a numpy array) in one go
+                if constexpr (std::is_same_v<T, double>)
+                {
+                    Py_buffer view;
+                    if (PyObject_CheckBuffer(obj_ptr) && (0 == PyObject_GetBuffer(obj_ptr, &view, PyBUF_C_CONTIGUOUS | PyBUF_FORMAT)))
+                    {
+                        const bool is_double = (1 == view.ndim) && (sizeof(double) == view.itemsize) && (nullptr != view.format) && (0 == std::strcmp(view.format, "d"));
+                        if (is_double)
+                        {
+                            const double * begin = static_cast<const double *>(view.buf);
+                            v->assign(begin, begin + view.len / view.itemsize);
+                        }
+                        PyBuffer_Release(&view);
+
+                        if (is_double)
+                        {
+                            data->convertible = storage;
+                            return;
+                        }
+                    }
+                    PyErr_Clear();
+                }
+
+                int l = PySequence_Size(obj_ptr);
                 if (l < 0)
                 {
                     abort();
@@ -181,7 +207,9 @@ namespace impl
                 v->reserve(l);
                 for (int i = 0; i < l; i++)
                 {
-                    v->push_back(extract<T>(PySequence_GetItem(obj_ptr, i)));
+                    // PySequence_GetItem() returns a new reference, released by the handle
+                    object item(handle<>(PySequence_GetItem(obj_ptr, i)));
+                    v->push_back(extract<T>(item));
                 }
                 data->convertible = storage;
             }
