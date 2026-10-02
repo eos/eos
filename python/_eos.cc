@@ -1186,7 +1186,11 @@ BOOST_PYTHON_MODULE(_eos)
 
             :rtype: eos.Parameters
         )",
-                 args("self"));
+                 args("self"))
+            .def("used_parameter_ids", range(&ObservableCache::begin_used_parameter_ids, &ObservableCache::end_used_parameter_ids), R"(
+            Returns an iterator over the ids of the parameters used by any observable in this cache,
+            including those evaluated in batches.
+        )");
 
     // rnp::Name
     class_<rnp::Name>("rnpName", R"(

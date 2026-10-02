@@ -23,6 +23,7 @@
 
 #include <test/test.hh>
 
+#include <set>
 #include <stdexcept>
 
 using namespace test;
@@ -250,3 +251,33 @@ class ObservableCacheCloneTest : public TestCase
             TEST_CHECK_EQUAL(cache[batch_id].size(), 1u);
         }
 } observable_cache_clone_test;
+
+class ObservableCacheUsedParametersTest : public TestCase
+{
+    public:
+        ObservableCacheUsedParametersTest() :
+            TestCase("observable_cache_used_parameters_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            Parameters      parameters = Parameters::Defaults();
+            ObservableCache cache(parameters);
+
+            // register through a second handle, as a LogLikelihoodBlock does; both share one implementation
+            {
+                ObservableCache handle = cache;
+                handle.add(ObservablePtr(new ObservableStub(parameters, "mass::c")));
+
+                std::vector<ObservablePtr> batch;
+                batch.push_back(ObservablePtr(new ObservableStub(parameters, "mass::b(MSbar)")));
+                handle.add_batch(std::move(batch));
+            }
+
+            const std::set<Parameter::Id> used(cache.begin_used_parameter_ids(), cache.end_used_parameter_ids());
+            const std::set<Parameter::Id> expected{ parameters["mass::c"].id(), parameters["mass::b(MSbar)"].id() };
+            TEST_CHECK(used == expected);
+        }
+} observable_cache_used_parameters_test;

@@ -51,7 +51,8 @@ namespace eos
     };
     template class WrappedForwardIterator<ObservableCache::IteratorTag, ObservablePtr>;
 
-    template <> struct Implementation<ObservableCache>
+    // Records the parameters used by all observables, in the implementation shared by all handles to the cache.
+    template <> struct Implementation<ObservableCache> : public ParameterUser
     {
             // Parameters which are common to all observables in the cache.
             Parameters parameters;
@@ -151,6 +152,8 @@ namespace eos
                     throw InternalError("ObservableCache::add(): Mismatch of Parameters between different observables detected.");
                 }
 
+                uses(*observable);
+
                 // compare each observable for options, kinematics and name
                 unsigned index = 0;
                 for (auto i = observables.begin(), i_end = observables.end(); i != i_end; ++i, ++index)
@@ -233,6 +236,11 @@ namespace eos
                     {
                         throw InternalError("ObservableCache::add_batch(): Mismatch of Parameters between different observables detected.");
                     }
+                }
+
+                for (const auto & observable : computations)
+                {
+                    uses(*observable);
                 }
 
                 const unsigned index = batches.size();
@@ -488,6 +496,18 @@ namespace eos
     ObservableCache::parameters() const
     {
         return _imp->parameters;
+    }
+
+    ParameterUser::ConstIterator
+    ObservableCache::begin_used_parameter_ids() const
+    {
+        return _imp->ParameterUser::begin();
+    }
+
+    ParameterUser::ConstIterator
+    ObservableCache::end_used_parameter_ids() const
+    {
+        return _imp->ParameterUser::end();
     }
 
     double
