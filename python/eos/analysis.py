@@ -269,9 +269,8 @@ class Analysis:
         varied_parameter_names = {p.name() for p in self.varied_parameters}
         used_parameter_names = set()
         fixed_parameter_names = set(fixed_parameters.keys())
-        for observable in self._log_likelihood.observable_cache():
-            for i in observable.used_parameter_ids():
-                used_parameter_names.add(self.parameters.by_id(i).name())
+        for i in self._log_likelihood.observable_cache().used_parameter_ids():
+            used_parameter_names.add(self.parameters.by_id(i).name())
 
         # the names of the parameters the likelihood registers as used; consumers (e.g.
         # eos.AnalysisFile.validate) rely on this rather than recomputing it. Note that an
