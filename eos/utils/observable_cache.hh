@@ -145,6 +145,13 @@ namespace eos
             /// Retrieve the cache's common Parameters object.
             Parameters parameters() const;
 
+            ///@name Parameter dependencies
+            ///@{
+            /// Iterate over the ids of the parameters used by any observable in the cache, including those in batches.
+            ParameterUser::ConstIterator begin_used_parameter_ids() const;
+            ParameterUser::ConstIterator end_used_parameter_ids() const;
+            ///@}
+
             /*!
              * Retrieve a unique observable by its ObservableCache::ObservableId.
              *

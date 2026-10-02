@@ -255,6 +255,7 @@ BINDINGS_TESTS = {
     ('ObservableCache', 'add'):                  (_OBSERVABLE,),
     ('ObservableCache', 'parameters'):           (),
     ('ObservableCache', 'update'):               (),
+    ('ObservableCache', 'used_parameter_ids'):   lambda c: list(c.used_parameter_ids()),
 
     ('ObservableEntry', 'kinematic_variables'):  (),
     ('ObservableEntry', 'latex'):                (),
