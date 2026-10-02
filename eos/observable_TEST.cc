@@ -268,6 +268,14 @@ class ObservableTest : public TestCase
 
                 for (const auto & [name, entry] : observables)
                 {
+                    // The whitelist governs the vocabulary that EOS's physics observables expose to
+                    // users. The ``Test...`` fixtures that the test runner registers in every test
+                    // executable are not part of it and sample abstract variables such as 'x' and 'y'.
+                    if (name.prefix_part().str().starts_with("Test"))
+                    {
+                        continue;
+                    }
+
                     for (const auto & kinematic_variable : std::ranges::subrange(entry->begin_kinematic_variables(), entry->end_kinematic_variables()))
                     {
                         if (allowed_kinematic_variables.find(kinematic_variable) != allowed_kinematic_variables.end())

@@ -1,0 +1,10 @@
+axes:
+- max: 3.0
+  min: 0.0
+  points: 4
+  variable: z
+resolution:
+  kind: pdf
+  pdf: TestLegendre1D::P(z)
+type: UnbinnedLikelihood
+version: 1.0.21

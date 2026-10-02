@@ -17,14 +17,15 @@ log
 reference/analysis-file-format.rst
 reference/bibliography.rst
 reference/constraints.rst
+reference/constraint-format.rst
 reference/figure-format.rst
 reference/observables.rst
 reference/parameters.rst
 reference/python.rst
 reference/signal-pdfs.rst
 physics/conventions.rst
-user-guide/CKM-pi/*
 user-guide/analysis-organisation-base/
+user-guide/detector-level-base/
 user-guide/figures/
 user-guide/inference-base/
 user-guide/inference.md

@@ -1,0 +1,20 @@
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data-expression'
+
+posteriors:
+  - name: posterior
+    # centres the resolution on the zero offset; its default would centre it on +1
+    fixed_parameters:
+      'mass::c': 0.0
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test

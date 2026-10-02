@@ -24,6 +24,7 @@ import unittest
 import contextlib
 import io
 import eos
+import math
 import os
 import shutil
 import tempfile
@@ -268,6 +269,39 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
 
         self.assertEqual([], list(description.validate_structure()))
 
+    def test_unbinned_type_exclusivity(self):
+        # 'type: unbinned' together with 'constraints' (or 'manual_constraints', or 'pyhf') is
+        # rejected rather than silently combined
+        with self.assertRaises(RuntimeError) as context:
+            eos.AnalysisFile(_TESTD / 'invalid' / 'unbinned-type-exclusivity.yaml')
+
+        self.assertIn("must not also declare 'constraints'", str(context.exception))
+
+    def test_unbinned_only_keys_require_unbinned_type(self):
+        # keys read only for 'type: unbinned' are rejected on any other component
+        description = eos.analysis_file_description.LikelihoodComponent.from_dict(
+            name='likelihood',
+            constraints=['B^+->tau^+nu::BR@Belle:2014A'],
+            pdf='TestLegendre1D::P(z)',
+            tolerance=1.0e-6,
+        )
+
+        messages = [d.message for d in description.validate_structure() if d.severity is Severity.ERROR]
+        self.assertEqual(2, len(messages))
+        self.assertIn("declares 'pdf', which requires 'type: unbinned'", messages[0])
+        self.assertIn("declares 'tolerance', which requires 'type: unbinned'", messages[1])
+
+    def test_unbinned_unknown_type(self):
+        # a typo'd 'type' value is reported by name, rather than as the misleading "must have at
+        # least one of constraints, ..." diagnostic that a missing type would produce
+        with self.assertRaises(RuntimeError) as context:
+            eos.AnalysisFile(_TESTD / 'invalid' / 'unbinned-unknown-type.yaml')
+
+        message = str(context.exception)
+        self.assertIn("unknown type 'unbinnd'", message)
+        self.assertIn('expected one of', message)
+        self.assertNotIn('must have at least one of constraints', message)
+
     def test_multiple_structural_errors_are_reported_together(self):
         with self.assertRaises(RuntimeError) as context:
             eos.AnalysisFile(_TESTD / 'invalid' / 'multiple-structural-errors.yaml')
@@ -285,6 +319,88 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
             'line 28: masks/broken-mask/description[0]/mask_name',
         ):
             self.assertIn(fragment, message)
+
+
+class TestAnalysisFileUnbinnedLikelihood(unittest.TestCase):
+    """The 'type: unbinned' likelihood component, built on an eos.data.UnbinnedLikelihood directory.
+
+    Unlike the fixtures in TestAnalysisFileConstructionErrors, these do not fail at
+    eos.AnalysisFile() construction: the data directory is read lazily, when the posterior is
+    actually built, so the failures below surface from validate() or analysis() instead.
+    """
+
+    def test_loads_and_evaluates(self):
+        # the case the example notebook depends on: the component builds a working block through
+        # eos.AnalysisFile, and the resulting posterior's log-likelihood evaluates to a finite value
+        af = eos.AnalysisFile(_TESTD / 'unbinned-analysis-file.yaml')
+        self.assertEqual([], [d for d in af.validate(base_directory=_TESTD) if d.severity is Severity.ERROR])
+
+        analysis = af.analysis('posterior', base_directory=_TESTD)
+        llh = analysis.log_likelihood([4.18])
+        self.assertTrue(math.isfinite(llh))
+
+    def test_pdf_resolution_evaluates(self):
+        # TestLegendre1D::P(z) = 4 z - z^2 serves as both truth and resolution. Clamped at the offsets
+        # [-2, 1], the resolution is a delta at +1, so the smeared grid on z = 0..3 is [3, 0, 3, 4];
+        # the events at z = 0.5, 1.5, 2.0, 2.5 have densities 1.5, 1.5, 3, 3.5, normalized by 9
+        af = eos.AnalysisFile(_TESTD / 'unbinned-pdf-resolution.yaml')
+
+        analysis = af.analysis('posterior', base_directory=_TESTD)
+        expected = math.log(1.5) + math.log(1.5) + math.log(3.0) + math.log(3.5) - 4.0 * math.log(9.0)
+        self.assertAlmostEqual(analysis.log_likelihood([4.18]), expected, places=10)
+
+    def test_expression_resolution_honours_fixed_parameters(self):
+        # The kernel exp(-1000 (z - mass::c)^2) is sampled once. With mass::c fixed to 0 it is a delta
+        # at the zero offset, so the grid on z = 0..3 stays [0, 3, 4, 3] and the events at z = 0.5,
+        # 1.5, 2.0, 2.5 have densities 1.5, 3.5, 4, 3.5; mass::c's default would shift the grid by +1
+        af = eos.AnalysisFile(_TESTD / 'unbinned-fixed-expression-resolution.yaml')
+
+        analysis = af.analysis('posterior', base_directory=_TESTD)
+        expected = math.log(1.5) + math.log(3.5) + math.log(4.0) + math.log(3.5) - 4.0 * math.log(9.0)
+        self.assertAlmostEqual(analysis.log_likelihood([4.18]), expected, places=10)
+
+    def test_odd_point_count_is_rejected_never_snapped(self):
+        # A21 i: a crop whose derived point count is odd is rejected outright. This is asserted on
+        # two separate code paths: validate() reports it as an ERROR diagnostic (via the deep
+        # phase's generic exception handling), and analysis() raises ValueError directly.
+        af = eos.AnalysisFile(_TESTD / 'unbinned-odd-point-count.yaml')
+
+        diagnostics = af.validate(base_directory=_TESTD)
+        errors = [d for d in diagnostics if d.severity is Severity.ERROR]
+        self.assertTrue(errors)
+        self.assertTrue(any("Axis 'z'" in d.message and 'odd' in d.message for d in errors))
+
+        with self.assertRaises(ValueError) as context:
+            af.analysis('posterior', base_directory=_TESTD)
+        self.assertIn("Axis 'z'", str(context.exception))
+
+    def test_misaligned_resolution_is_rejected(self):
+        # the fixture's resolution offsets are declared 0.3 away from the grid the (uncropped)
+        # signal axis requires; the offending offset must be named in the error
+        af = eos.AnalysisFile(_TESTD / 'unbinned-misaligned-resolution.yaml')
+
+        with self.assertRaises(RuntimeError) as context:
+            af.analysis('posterior', base_directory=_TESTD)
+
+        self.assertIn('-2.0', str(context.exception))
+
+    def test_global_options_override_component_options(self):
+        # as for constraints, the posterior's global options supersede the component's own options
+        af = eos.AnalysisFile(_TESTD / 'unbinned-global-options.yaml')
+
+        with self.assertLogs('EOS', level='ERROR') as cm:
+            analysis = af.analysis('posterior', base_directory=_TESTD)
+        self.assertTrue(any('Global option model=WET overrides option model=CKM' in message for message in cm.output))
+        self.assertTrue(math.isfinite(analysis.log_likelihood([4.18])))
+
+    def test_events_outside_cropped_axes_are_dropped(self):
+        af = eos.AnalysisFile(_TESTD / 'unbinned-cropped-events.yaml')
+
+        with self.assertLogs('EOS', level='INFO') as cm:
+            analysis = af.analysis('posterior', base_directory=_TESTD)
+        self.assertTrue(any('WARNING' in message and '2 of 4 events lie outside the cropped axes' in message for message in cm.output))
+        self.assertTrue(any('INFO' in message and 'contains 2 events' in message for message in cm.output))
+        self.assertTrue(math.isfinite(analysis.log_likelihood([4.18])))
 
 
 class TestAnalysisFileMethods(unittest.TestCase):

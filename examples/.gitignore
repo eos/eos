@@ -3,6 +3,7 @@
 
 # ignore generated data directories and other artifacts
 analysis-organisation-base/
+detector-level-base/
 predictions-base/
 inference-base/
 figures/
