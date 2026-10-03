@@ -120,7 +120,9 @@ discard the lines it touched outside the change at hand.
 
 Comment sparingly — code says *what*, comments say *why*. Keep in-code comments to a
 minimum. When a comment is necessary, aim for a single line. In exceptional cases, use
-two lines; comments must never exceed four lines.
+two lines; comments must never exceed four lines. The one exception: inside implementation
+namespaces (e.g. `*_impl` or unnamed namespaces), longer comments are permitted where they
+give the mathematical or statistical derivation of why a function is written as it is.
 **Do not use** the following software development/engineering jargon: boundary, materialize,
 provenance, 'single truth' (or 'sole truth').
 **Do not refer to development phases or steps** when writing comments.
