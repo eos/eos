@@ -33,6 +33,7 @@
 
 #include <test/test.hh>
 
+#include <cmath>
 #include <iostream>
 
 using namespace test;
@@ -133,6 +134,15 @@ class ExpressionParserTest : public TestCase
                 ExpressionTest test5("sin(0.0)");
                 TEST_CHECK(test5.completed);
                 TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *test5.e), 0.0, 1e-16);
+
+                // Function arguments are expressions
+                ExpressionTest test6("exp(2 * 0.5)");
+                TEST_CHECK(test6.completed);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, *test6.e), std::exp(1.0), 1e-15);
+
+                // Unknown functions and wrong numbers of arguments
+                TEST_CHECK_THROWS(ExpressionError, ExpressionTest test7("exp(1.0, 2.0)"));
+                TEST_CHECK_THROWS(ExpressionError, ExpressionTest test8("A::nosuch(1.0)"));
             }
 
             // testing parsing of an expression containing kinematic variables
