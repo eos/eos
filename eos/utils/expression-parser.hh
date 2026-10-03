@@ -42,6 +42,8 @@ namespace eos
             qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> exponential_expr;
             qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> function_expr;
 
+            qi::rule<Iterator, std::vector<eos::exp::ExpressionPtr>(), ascii::space_type> function_arguments;
+
             qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> primary_expr;
             qi::rule<Iterator, eos::exp::ExpressionPtr(), ascii::space_type> constant;
             qi::rule<Iterator, std::string(), ascii::space_type>             observable_name;
