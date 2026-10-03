@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -20,7 +20,8 @@
 #include <eos/utils/expression.hh>
 #include <eos/utils/stringify.hh>
 
-#include <math.h>
+#include <algorithm>
+#include <cmath>
 
 namespace eos::exp
 {
@@ -73,16 +74,45 @@ namespace eos::exp
         }
     }
 
-    FunctionExpression::FunctionExpression(const std::string & f, const ExpressionPtr & arg) :
+    namespace
+    {
+        double
+        exp_function(std::span<const double> x)
+        {
+            return std::exp(x[0]);
+        }
+
+        double
+        sin_function(std::span<const double> x)
+        {
+            return std::sin(x[0]);
+        }
+
+        double
+        cos_function(std::span<const double> x)
+        {
+            return std::cos(x[0]);
+        }
+    } // namespace
+
+    const std::map<std::string, FunctionEntry> &
+    functions()
+    {
+        static const std::map<std::string, FunctionEntry> function_table{
+            { "exp", { 1, &exp_function } },
+            { "sin", { 1, &sin_function } },
+            { "cos", { 1, &cos_function } },
+        };
+
+        return function_table;
+    }
+
+    FunctionExpression::FunctionExpression(const std::string & f, std::span<const ExpressionPtr> args) :
         f(nullptr),
         fname(f),
-        arg(arg)
+        number_of_arguments(args.size())
     {
-        static const std::map<std::string, FunctionType> function_table{
-            { std::string("exp"), FunctionType([](const double & x) -> double { return std::exp(x); }) },
-            { std::string("sin"), FunctionType([](const double & x) -> double { return std::sin(x); }) },
-            { std::string("cos"), FunctionType([](const double & x) -> double { return std::cos(x); }) }
-        };
+        const auto & function_table = functions();
 
         auto it = function_table.find(f);
         if (function_table.end() == it)
@@ -90,6 +120,12 @@ namespace eos::exp
             throw ExpressionError("unknown function name " + f);
         }
 
-        this->f = it->second;
+        if (it->second.arity != args.size())
+        {
+            throw ExpressionError("function " + f + " expects " + stringify(it->second.arity) + " arguments, but " + stringify(args.size()) + " were given");
+        }
+
+        std::copy(args.begin(), args.end(), this->args.begin());
+        this->f = it->second.f;
     }
 } // namespace eos::exp
