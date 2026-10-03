@@ -35,6 +35,7 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
+#include <array>
 #include <iostream>
 #include <set>
 
@@ -53,7 +54,10 @@ namespace eos::exp
     void
     ExpressionReferencedNamesReader::operator() (const FunctionExpression & e)
     {
-        std::visit(*this, *e.arg);
+        for (const auto & arg : e.arguments())
+        {
+            std::visit(*this, *arg);
+        }
     }
 
     void
@@ -123,8 +127,12 @@ namespace eos::exp
     ExpressionPrinter::operator() (FunctionExpression & e)
     {
         _os << "FunctionExpression(";
-        _os << e.fname << ", ";
-        std::visit(*this, *e.arg);
+        _os << e.fname;
+        for (const auto & arg : e.arguments())
+        {
+            _os << ", ";
+            std::visit(*this, *arg);
+        }
         _os << ")";
     }
 
@@ -239,7 +247,13 @@ namespace eos::exp
     double
     ExpressionEvaluator::operator() (const FunctionExpression & e)
     {
-        return e.f(std::visit(*this, *e.arg));
+        std::array<double, FunctionExpression::max_arguments> values;
+        for (std::size_t i = 0; i < e.number_of_arguments; ++i)
+        {
+            values[i] = std::visit(*this, *e.args[i]);
+        }
+
+        return e.f(std::span<const double>(values.data(), e.number_of_arguments));
     }
 
     double
@@ -325,7 +339,13 @@ namespace eos::exp
     Expression
     ExpressionCloner::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
+        std::array<ExpressionPtr, FunctionExpression::max_arguments> args;
+        for (std::size_t i = 0; i < e.number_of_arguments; ++i)
+        {
+            args[i] = ExpressionPtr(new Expression(std::move(std::visit(*this, *e.args[i]))));
+        }
+
+        return FunctionExpression(e.fname, std::span<const ExpressionPtr>(args.data(), e.number_of_arguments));
     }
 
     Expression
@@ -453,7 +473,13 @@ namespace eos::exp
     Expression
     ExpressionMaker::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
+        std::array<ExpressionPtr, FunctionExpression::max_arguments> args;
+        for (std::size_t i = 0; i < e.number_of_arguments; ++i)
+        {
+            args[i] = ExpressionPtr(new Expression(std::move(std::visit(*this, *e.args[i]))));
+        }
+
+        return FunctionExpression(e.fname, std::span<const ExpressionPtr>(args.data(), e.number_of_arguments));
     }
 
     Expression
@@ -609,7 +635,10 @@ namespace eos::exp
     void
     ExpressionKinematicReader::operator() (const FunctionExpression & e)
     {
-        std::visit(*this, *e.arg);
+        for (const auto & arg : e.arguments())
+        {
+            std::visit(*this, *arg);
+        }
     }
 
     void
@@ -756,7 +785,13 @@ namespace eos::exp
     Expression
     ExpressionCacher::operator() (const FunctionExpression & e)
     {
-        return FunctionExpression(e.fname, ExpressionPtr(new Expression(std::move(std::visit(*this, *e.arg)))));
+        std::array<ExpressionPtr, FunctionExpression::max_arguments> args;
+        for (std::size_t i = 0; i < e.number_of_arguments; ++i)
+        {
+            args[i] = ExpressionPtr(new Expression(std::move(std::visit(*this, *e.args[i]))));
+        }
+
+        return FunctionExpression(e.fname, std::span<const ExpressionPtr>(args.data(), e.number_of_arguments));
     }
 
     Expression
@@ -843,7 +878,10 @@ namespace eos::exp
     void
     ExpressionUsedParameterReader::operator() (const FunctionExpression & e)
     {
-        std::visit(*this, *e.arg);
+        for (const auto & arg : e.arguments())
+        {
+            std::visit(*this, *arg);
+        }
     }
 
     void
@@ -910,7 +948,10 @@ namespace eos::exp
     void
     ExpressionUsedKinematicsReader::operator() (const FunctionExpression & e)
     {
-        std::visit(*this, *e.arg);
+        for (const auto & arg : e.arguments())
+        {
+            std::visit(*this, *arg);
+        }
     }
 
     void

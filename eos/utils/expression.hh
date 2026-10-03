@@ -25,10 +25,12 @@
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
 
+#include <array>
 #include <cassert>
 #include <iostream>
 #include <map>
 #include <memory>
+#include <span>
 
 namespace eos::exp
 {
@@ -67,16 +69,40 @@ namespace eos::exp
     class FunctionExpression
     {
         public:
-            using FunctionType = double (*)(const double &);
+            // Upper bound on the number of arguments, so that evaluation needs no allocation.
+            static constexpr std::size_t max_arguments = 8;
 
-            FunctionType  f;
-            std::string   fname;
-            ExpressionPtr arg;
+            using FunctionType = double (*)(std::span<const double>);
 
-            FunctionExpression() {}
+            FunctionType                             f;
+            std::string                              fname;
+            std::array<ExpressionPtr, max_arguments> args;
+            std::size_t                              number_of_arguments;
 
-            FunctionExpression(const std::string & f, const ExpressionPtr & arg);
+            FunctionExpression() :
+                f(nullptr),
+                number_of_arguments(0)
+            {
+            }
+
+            FunctionExpression(const std::string & f, std::span<const ExpressionPtr> args);
+
+            std::span<const ExpressionPtr>
+            arguments() const
+            {
+                return { args.data(), number_of_arguments };
+            }
     };
+
+    // An entry of the table of functions known to the parser.
+    struct FunctionEntry
+    {
+            std::size_t                      arity;
+            FunctionExpression::FunctionType f;
+    };
+
+    // The table of functions known to the parser, keyed by name.
+    const std::map<std::string, FunctionEntry> & functions();
 
     class ConstantExpression
     {
