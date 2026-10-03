@@ -12,6 +12,8 @@ libeosmaths_la_SOURCES = \
 	derivative.cc derivative.hh \
 	dft-container.cc dft-container.hh dft-container-impl.hh \
 	dft-plan.cc dft-plan.hh dft-plan-impl.hh \
+	faddeeva.cc faddeeva.hh \
+	faddeeva-const.cc faddeeva-const.hh \
 	gegenbauer-polynomial.cc gegenbauer-polynomial.hh \
 	gsl-interface.hh \
 	integrate.cc integrate.hh integrate-impl.hh \
@@ -76,6 +78,7 @@ TESTS = \
 	dft-container_TEST \
 	dft-plan_TEST \
 	derivative_TEST \
+	faddeeva_TEST \
 	gegenbauer-polynomial_TEST \
 	gsl-interface_TEST \
 	integrate_TEST \
@@ -106,6 +109,8 @@ dft_container_TEST_SOURCES = dft-container_TEST.cc
 dft_plan_TEST_SOURCES = dft-plan_TEST.cc
 
 derivative_TEST_SOURCES = derivative_TEST.cc
+
+faddeeva_TEST_SOURCES = faddeeva_TEST.cc
 
 gegenbauer_polynomial_TEST_SOURCES = gegenbauer-polynomial_TEST.cc
 
