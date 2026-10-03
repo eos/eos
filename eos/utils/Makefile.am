@@ -20,6 +20,7 @@ libeosutils_la_SOURCES = \
 	expression-cacher.hh \
 	expression-cloner.hh \
 	expression-evaluator.hh \
+	expression-kernel-decomposer.hh \
 	expression-kinematic-reader.hh \
 	expression-maker.hh \
 	expression-observable.cc expression-observable.hh \

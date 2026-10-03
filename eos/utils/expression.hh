@@ -99,6 +99,8 @@ namespace eos::exp
     {
             std::size_t                      arity;
             FunctionExpression::FunctionType f;
+            // Kernels are unit-area densities in their first argument, see ExpressionKernelDecomposer.
+            bool                             is_kernel;
     };
 
     // The table of functions known to the parser, keyed by name.

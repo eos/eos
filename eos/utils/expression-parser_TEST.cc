@@ -16,11 +16,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/integrate.hh>
 #include <eos/observable.hh>
 #include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/expression-fwd.hh>
+#include <eos/utils/expression-kernel-decomposer.hh>
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-parser-impl.hh>
@@ -33,8 +35,10 @@
 
 #include <test/test.hh>
 
+#include <array>
 #include <cmath>
 #include <iostream>
+#include <map>
 
 using namespace test;
 using namespace eos::exp;
@@ -571,3 +575,167 @@ class ExpressionParserTest : public TestCase
             }
         }
 } expression_parser_test;
+
+class ExpressionKernelTest : public TestCase
+{
+    public:
+        ExpressionKernelTest() :
+            TestCase("expression_kernel_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            ExpressionEvaluator evaluator;
+
+            // kernels are functions of several arguments
+            {
+                ExpressionTest test1("Kernel::Gaussian(1.0, 1.0, 2.0)");
+                TEST_CHECK(test1.completed);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, *test1.e), 1.0 / (2.0 * std::sqrt(2.0 * M_PI)), 1e-15);
+
+                std::stringstream out;
+                ExpressionPrinter printer(out);
+                std::visit(printer, *test1.e);
+                TEST_CHECK_EQUAL_STR("FunctionExpression(Kernel::Gaussian, ConstantExpression(1), ConstantExpression(1), ConstantExpression(2))", out.str());
+
+                TEST_CHECK_THROWS(ExpressionError, ExpressionTest test2("Kernel::Gaussian(0.0, 1.0)"));
+            }
+
+            // every kernel in the function table is a unit-area density in its first argument
+            {
+                struct Reference
+                {
+                        std::vector<double> parameters; // in argument order, after the offset
+                        double              lo, hi;     // integration range
+                };
+
+                // one entry per kernel in the function table
+                const std::map<std::string, Reference> references{
+                    { "Kernel::Gaussian", { { 0.3, 0.7 }, 0.3 - 12.0 * 0.7, 0.3 + 12.0 * 0.7 } },
+                };
+
+                std::size_t kernels = 0;
+                for (const auto & [name, entry] : functions())
+                {
+                    if (! entry.is_kernel)
+                    {
+                        continue;
+                    }
+                    ++kernels;
+
+                    const auto r = references.find(name);
+                    if (references.end() == r)
+                    {
+                        TEST_CHECK_FAILED("kernel " + name + " has no reference parameters");
+                    }
+                    TEST_CHECK_EQUAL(entry.arity, 1 + r->second.parameters.size());
+
+                    std::array<double, FunctionExpression::max_arguments> x{};
+                    std::copy(r->second.parameters.begin(), r->second.parameters.end(), x.begin() + 1);
+
+                    const auto density = [&](const double & u) -> double
+                    {
+                        x[0] = u;
+                        return entry.f(std::span<const double>(x.data(), entry.arity));
+                    };
+                    const double integral = integrate<GSL::QAGS>(density, r->second.lo, r->second.hi, GSL::QAGS::Config().epsrel(1e-12));
+
+                    TEST_CHECK_RELATIVE_ERROR(integral, 1.0, 1e-10);
+                }
+
+                // no reference for a function that is not a kernel
+                TEST_CHECK_EQUAL(kernels, references.size());
+            }
+
+            // kernels are evaluated in the offset variable
+            {
+                ExpressionTest test("Kernel::Gaussian({u}, 0.5, 2.0)");
+                TEST_CHECK(test.completed);
+
+                Kinematics k{
+                    { "u", 2.5 }
+                };
+                ExpressionMaker maker(Parameters::Defaults(), k, Options());
+                Expression      e = std::visit(maker, *test.e);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, e), std::exp(-0.5) / (2.0 * std::sqrt(2.0 * M_PI)), 1e-15);
+            }
+
+            // linear combinations of kernels
+            {
+                ExpressionTest test("0.5 * Kernel::Gaussian({u}, 0.0, 1.0) + Kernel::Gaussian({u}, 0.1, 0.2) / 4 - 2 * (Kernel::Gaussian({u}, 0, 3) * 0.5)");
+                TEST_CHECK(test.completed);
+
+                ExpressionKernelDecomposer decomposer("u");
+                const auto                 terms = decomposer.decompose(test.e);
+                TEST_CHECK_EQUAL(terms.size(), 3u);
+
+                const std::vector<std::array<double, 3>> reference{
+                    {  0.5, 0.0, 1.0 },
+                    { 0.25, 0.1, 0.2 },
+                    { -1.0, 0.0, 3.0 }
+                };
+                for (std::size_t i = 0; i < terms.size(); ++i)
+                {
+                    TEST_CHECK_EQUAL(terms[i].kernel, "Kernel::Gaussian");
+                    TEST_CHECK_EQUAL(terms[i].parameters.size(), 2u);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms[i].coefficient), reference[i][0], 1e-15);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms[i].parameters[0]), reference[i][1], 1e-15);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms[i].parameters[1]), reference[i][2], 1e-15);
+                }
+
+                // coefficients and parameters may use parameters, observables, and other kinematic variables
+                ExpressionTest test2("[[A::w]] * Kernel::Gaussian({u}, <<A::mu>>[q2=>v], [[A::sigma]] * {v})");
+                TEST_CHECK(test2.completed);
+                TEST_CHECK_EQUAL(decomposer.decompose(test2.e).size(), 1u);
+
+                // kernels in other variables are factors, in either order and in either offset variable
+                for (const std::string input : { "Kernel::Gaussian({u}, 0, 1) * Kernel::Gaussian({v}, 0, 2)", "Kernel::Gaussian({v}, 0, 2) * Kernel::Gaussian({u}, 0, 1)" })
+                {
+                    ExpressionTest test3(input);
+                    TEST_CHECK(test3.completed);
+
+                    const auto terms_u = decomposer.decompose(test3.e);
+                    TEST_CHECK_EQUAL(terms_u.size(), 1u);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms_u[0].parameters[0]), 0.0, 1e-15);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms_u[0].parameters[1]), 1.0, 1e-15);
+
+                    // the coefficient is the kernel in v
+                    Kinematics k{
+                        { "v", 0.5 }
+                    };
+                    ExpressionMaker maker(Parameters::Defaults(), k, Options());
+                    Expression      coefficient = std::visit(maker, *terms_u[0].coefficient);
+                    TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, coefficient), std::exp(-0.5 * 0.0625) / (2.0 * std::sqrt(2.0 * M_PI)), 1e-14);
+
+                    ExpressionKernelDecomposer decomposer_v("v");
+                    const auto                 terms_v = decomposer_v.decompose(test3.e);
+                    TEST_CHECK_EQUAL(terms_v.size(), 1u);
+                    TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms_v[0].parameters[1]), 2.0, 1e-15);
+                }
+            }
+
+            // expressions that are not linear combinations of kernels in the offset variable
+            {
+                ExpressionKernelDecomposer decomposer("u");
+
+                for (const std::string input : { "Kernel::Gaussian({u}, 0, 1) * Kernel::Gaussian({u}, 0, 1)",
+                                                 "1 / Kernel::Gaussian({u}, 0, 1)",
+                                                 "Kernel::Gaussian({u}, 0, 1) + 1",
+                                                 "Kernel::Gaussian({u}, 0, 1)^2",
+                                                 "exp(Kernel::Gaussian({u}, 0, 1))",
+                                                 "{u} * Kernel::Gaussian({u}, 0, 1)",
+                                                 "Kernel::Gaussian(2 * {u}, 0, 1)",
+                                                 "Kernel::Gaussian({u}, {u}, 1)",
+                                                 "Kernel::Gaussian({v}, 0, 1)",
+                                                 "<<A::b>>[q2=>u] * Kernel::Gaussian({u}, 0, 1)",
+                                                 "[[A::b]] * 2" })
+                {
+                    ExpressionTest test(input);
+                    TEST_CHECK(test.completed);
+                    TEST_CHECK_THROWS(ExpressionError, decomposer.decompose(test.e));
+                }
+            }
+        }
+} expression_kernel_test;
