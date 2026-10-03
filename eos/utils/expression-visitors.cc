@@ -22,6 +22,7 @@
 #include <eos/utils/expression-cacher.hh>
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
+#include <eos/utils/expression-kernel-decomposer.hh>
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-printer.hh>
@@ -1003,5 +1004,202 @@ namespace eos::exp
         {
             this->kinematic_variable_ids.insert(*k);
         }
+    }
+
+    ExpressionKernelDecomposer::ExpressionKernelDecomposer(const std::string & offset_variable) :
+        _offset_variable(offset_variable)
+    {
+    }
+
+    std::vector<KernelTerm>
+    ExpressionKernelDecomposer::decompose(const ExpressionPtr & e)
+    {
+        auto result = std::visit(*this, *e);
+        if (result.empty())
+        {
+            throw ExpressionError("expression contains no kernel in the offset variable '" + _offset_variable + "'");
+        }
+
+        return result;
+    }
+
+    void
+    ExpressionKernelDecomposer::_independent(const ExpressionPtr & e, const std::string & context)
+    {
+        if (! std::visit(*this, *e).empty())
+        {
+            throw ExpressionError(context);
+        }
+    }
+
+    void
+    ExpressionKernelDecomposer::_check_aliases(const KinematicsSpecification & spec)
+    {
+        for (const auto & [variable, alias] : spec.aliases)
+        {
+            if (alias == _offset_variable)
+            {
+                throw ExpressionError("offset variable '" + _offset_variable + "' is used outside of a kernel");
+            }
+        }
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const BinaryExpression & e)
+    {
+        auto lhs = std::visit(*this, *e.lhs);
+        auto rhs = std::visit(*this, *e.rhs);
+
+        if (lhs.empty() && rhs.empty())
+        {
+            return {};
+        }
+
+        auto combine = [](char op, const ExpressionPtr & a, const ExpressionPtr & b) { return ExpressionPtr(new Expression(BinaryExpression(op, a, b))); };
+
+        switch (e.op)
+        {
+            case '+':
+            case '-':
+                if (lhs.empty() || rhs.empty())
+                {
+                    throw ExpressionError("a term that is not a kernel is added to a kernel");
+                }
+                for (auto & term : rhs)
+                {
+                    if ('-' == e.op)
+                    {
+                        term.coefficient = combine('*', ExpressionPtr(new Expression(ConstantExpression(-1.0))), term.coefficient);
+                    }
+                    lhs.push_back(std::move(term));
+                }
+                return lhs;
+
+            case '*':
+                if ((! lhs.empty()) && (! rhs.empty()))
+                {
+                    throw ExpressionError("product of kernels");
+                }
+                if (lhs.empty())
+                {
+                    for (auto & term : rhs)
+                    {
+                        term.coefficient = combine('*', e.lhs, term.coefficient);
+                    }
+                    return rhs;
+                }
+                for (auto & term : lhs)
+                {
+                    term.coefficient = combine('*', term.coefficient, e.rhs);
+                }
+                return lhs;
+
+            case '/':
+                if (! rhs.empty())
+                {
+                    throw ExpressionError("kernel in a denominator");
+                }
+                for (auto & term : lhs)
+                {
+                    term.coefficient = combine('/', term.coefficient, e.rhs);
+                }
+                return lhs;
+
+            default: throw ExpressionError("kernel in an argument of the operator '" + std::string(1, e.op) + "'");
+        }
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const FunctionExpression & e)
+    {
+        const auto * name      = std::get_if<KinematicVariableNameExpression>(e.args[0].get());
+        const auto * variable  = std::get_if<KinematicVariableExpression>(e.args[0].get());
+        const bool   in_offset = (name && (name->variable_name == _offset_variable)) || (variable && (variable->kinematic_variable.name() == _offset_variable));
+
+        // other functions, including kernels in other variables, are factors
+        if ((! functions().at(e.fname).is_kernel) || (! in_offset))
+        {
+            for (const auto & arg : e.arguments())
+            {
+                _independent(arg, "kernel in an argument of the function " + e.fname);
+            }
+
+            return {};
+        }
+
+        const auto                 arguments = e.arguments();
+        std::vector<ExpressionPtr> parameters(arguments.begin() + 1, arguments.end());
+        for (const auto & parameter : parameters)
+        {
+            _independent(parameter, "a parameter of " + e.fname + " depends on a kernel");
+        }
+
+        return {
+            KernelTerm{ ExpressionPtr(new Expression(ConstantExpression(1.0))), e.fname, parameters }
+        };
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const ConstantExpression &)
+    {
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const ObservableNameExpression & e)
+    {
+        _check_aliases(e.kinematics_specification);
+
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const ObservableExpression & e)
+    {
+        _check_aliases(e.kinematics_specification);
+
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const ParameterNameExpression &)
+    {
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const ParameterExpression &)
+    {
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const KinematicVariableNameExpression & e)
+    {
+        if (e.variable_name == _offset_variable)
+        {
+            throw ExpressionError("offset variable '" + _offset_variable + "' is used outside of a kernel");
+        }
+
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const KinematicVariableExpression & e)
+    {
+        if (e.kinematic_variable.name() == _offset_variable)
+        {
+            throw ExpressionError("offset variable '" + _offset_variable + "' is used outside of a kernel");
+        }
+
+        return {};
+    }
+
+    ExpressionKernelDecomposer::Result
+    ExpressionKernelDecomposer::operator() (const CachedObservableExpression & e)
+    {
+        _check_aliases(e.kinematics_specification);
+
+        return {};
     }
 } // namespace eos::exp

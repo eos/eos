@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <format>
 
 namespace eos::exp
 {
@@ -93,15 +94,33 @@ namespace eos::exp
         {
             return std::cos(x[0]);
         }
+
+        // Kernel::Gaussian(u, mu, sigma)
+        double
+        gaussian_kernel(std::span<const double> x)
+        {
+            if (! (x[2] > 0.0))
+            {
+                throw ExpressionError(std::format("Kernel::Gaussian requires sigma > 0, but sigma = {}", x[2]));
+            }
+
+            const double z = (x[0] - x[1]) / x[2];
+
+            return std::exp(-0.5 * z * z) / (std::sqrt(2.0 * M_PI) * x[2]);
+        }
     } // namespace
 
     const std::map<std::string, FunctionEntry> &
     functions()
     {
         static const std::map<std::string, FunctionEntry> function_table{
-            { "exp", { 1, &exp_function } },
-            { "sin", { 1, &sin_function } },
-            { "cos", { 1, &cos_function } },
+            // elementary functions
+            {              "exp",   { 1, &exp_function, false } },
+            {              "sin",   { 1, &sin_function, false } },
+            {              "cos",   { 1, &cos_function, false } },
+
+            // kernels: unit-area densities in their first argument
+            { "Kernel::Gaussian", { 3, &gaussian_kernel, true } },
         };
 
         return function_table;
