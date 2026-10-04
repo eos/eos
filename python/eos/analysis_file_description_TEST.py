@@ -42,6 +42,7 @@ from eos.analysis_file_description import (
     PredictionObservableComponent,
     PredictionDescription,
     ParameterComponent,
+    SignalPDFComponent,
     TaskComponent,
     StepComponent,
     MaskDescription,
@@ -378,6 +379,25 @@ class ObservableComponentTests(unittest.TestCase):
         self.assertTrue(desc.expression.startswith('<<'))
         # options defaults to an empty dict
         self.assertEqual(desc.options, {})
+
+
+class SignalPDFComponentTests(unittest.TestCase):
+
+    def test_from_dict(self):
+        desc = SignalPDFComponent.from_dict(name='A::P(x,y)', numerator='A::p(x,y)', variables=['x', 'y'], normalization='A::N')
+        self.assertEqual([], list(desc.validate_structure()))
+        self.assertEqual(desc.description, '')
+        self.assertEqual(desc.options, {})
+        # the normalization variables default to the bounds of each sampling variable
+        self.assertEqual(desc.bounds(), ['x_min', 'x_max', 'y_min', 'y_max'])
+
+        desc = SignalPDFComponent.from_dict(name='A::P(x)', numerator='A::p(x)', variables=['x'], normalization='A::N', normalization_variables=['x_lo', 'x_hi'])
+        self.assertEqual(desc.bounds(), ['x_lo', 'x_hi'])
+
+    def test_diagnostics(self):
+        desc = SignalPDFComponent.from_dict(name='A::B::P(x)', numerator='A::p(x)', variables=[], normalization='A::N')
+        paths = [diagnostic.path for diagnostic in desc.validate_structure()]
+        self.assertEqual(paths, [('name',), ('variables',)])
 
 
 class PredictionObservableComponentTests(unittest.TestCase):
