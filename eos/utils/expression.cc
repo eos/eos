@@ -121,6 +121,34 @@ namespace eos::exp
 
             return std::exp(-0.5 * z * z) / (std::sqrt(2.0 * M_PI) * x[2]);
         }
+
+        // Kernel::CrystalBall(u, mu, sigma, alpha_L, n_L, alpha_R, n_R), two-sided with power-law tails
+        double
+        crystal_ball_kernel(std::span<const double> x)
+        {
+            const double t     = (x[0] - x[1]) / x[2];
+            const double sigma = x[2];
+
+            // A_s (B_s + |t|)^-n_s beyond alpha_s, continuously differentiable at the transition
+            const auto tail = [](const double & alpha, const double & n, const double & abs_t) -> double
+            { return std::pow(n / alpha, n) * std::exp(-0.5 * alpha * alpha) * std::pow(n / alpha - alpha + abs_t, -n); };
+            const auto tail_area = [](const double & alpha, const double & n) -> double { return n * std::exp(-0.5 * alpha * alpha) / (alpha * (n - 1.0)); };
+
+            const double alpha_L = x[3], n_L = x[4], alpha_R = x[5], n_R = x[6];
+            const double norm =
+                    sigma * (std::sqrt(M_PI / 2.0) * (std::erf(alpha_L / std::sqrt(2.0)) + std::erf(alpha_R / std::sqrt(2.0))) + tail_area(alpha_L, n_L) + tail_area(alpha_R, n_R));
+
+            if (t < -alpha_L)
+            {
+                return tail(alpha_L, n_L, -t) / norm;
+            }
+            if (t > alpha_R)
+            {
+                return tail(alpha_R, n_R, t) / norm;
+            }
+
+            return std::exp(-0.5 * t * t) / norm;
+        }
     } // namespace
 
     const std::map<std::string, FunctionEntry> &
@@ -128,15 +156,16 @@ namespace eos::exp
     {
         static const std::map<std::string, FunctionEntry> function_table{
             // elementary functions
-            {              "exp",   { 1, &exp_function, false } },
-            {              "sin",   { 1, &sin_function, false } },
-            {              "cos",   { 1, &cos_function, false } },
-            {             "atan",  { 1, &atan_function, false } },
-            {              "log",   { 1, &log_function, false } },
-            {            "theta", { 1, &theta_function, false } },
+            {                 "exp",       { 1, &exp_function, false } },
+            {                 "sin",       { 1, &sin_function, false } },
+            {                 "cos",       { 1, &cos_function, false } },
+            {                "atan",      { 1, &atan_function, false } },
+            {                 "log",       { 1, &log_function, false } },
+            {               "theta",     { 1, &theta_function, false } },
 
             // kernels: unit-area densities in their first argument
-            { "Kernel::Gaussian", { 3, &gaussian_kernel, true } },
+            {    "Kernel::Gaussian",     { 3, &gaussian_kernel, true } },
+            { "Kernel::CrystalBall", { 7, &crystal_ball_kernel, true } },
         };
 
         return function_table;
