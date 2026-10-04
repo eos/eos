@@ -135,6 +135,16 @@ class AnalysisFile:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
+        # Optional: insert custom signal PDFs, which may use the custom observables
+        self._signal_pdfs = self._description.signal_pdfs
+        if self._signal_pdfs:
+            eos.inprogress('Inserting custom signal PDFs ...')
+            for p in self._signal_pdfs:
+                eos.SignalPDFs().insert(eos.QualifiedName(p.name), p.description, eos.Options(**p.options), eos.QualifiedName(p.numerator), p.variables,
+                                        eos.QualifiedName(p.normalization), p.bounds())
+                eos.info(f'Inserted signal PDF: {p.name}')
+            eos.completed(f'... finished inserting {len(self._signal_pdfs)} custom signal PDFs')
+
         self._steps = { s.id: s for s in self._description.steps }
 
         self._masks = { m.name: m for m in self._description.masks }
