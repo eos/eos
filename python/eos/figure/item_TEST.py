@@ -26,6 +26,7 @@ import numpy as np
 import os
 import shutil
 import tempfile
+import textwrap
 
 from eos.analysis_file_context import AnalysisFileContext
 from eos.figure.item import BandHandle, BandHandler, CompositeRegionHandle, CompositeRegionHandler, ConstraintItem, ConstraintResidueItem, Item
@@ -1808,6 +1809,66 @@ class SignalPDFItemTests(unittest.TestCase):
             item.draw(ax)
         except Exception as e:
             self.fail(f"Error when testing item of type 'signal-pdf': {e}")
+
+class DetectorLevelPDFItemTests(unittest.TestCase):
+
+    # the truth-level PDF z (4 - z) is normalized by 32 / 3 on [0, 4]; a narrow resolution leaves it unchanged
+    _explicit = textwrap.dedent("""
+        type: detector-level-pdf
+        pdf: 'TestLegendre1D::P(z)'
+        variable: 'z'
+        range: [1.0, 3.0]
+        resolution: 3
+        axes: [ { variable: 'z', min: 0.0, max: 4.0, points: 400 } ]
+        kernel: 'Kernel::Gaussian({z}, 0, 0.01)'
+        """)
+
+    def _draw(self, input, context=None):
+        item = eos.figure.ItemFactory.from_yaml(input)
+        item.prepare(context)
+        _, ax = plt.subplots()
+        item.draw(ax)
+        return ax.lines[0].get_ydata()
+
+    def test_explicit(self):
+        values = self._draw(self._explicit)
+        for value, expected in zip(values, [ 3.0, 4.0, 3.0 ]):
+            self.assertAlmostEqual(value, expected * 3.0 / 32.0, delta=1.0e-4)
+
+    def test_data(self):
+        # the data object provides the grid z = 0..3 and the resolution exp(-1000 (z - mass::c)^2), centred by mass::c = 0
+        context = AnalysisFileContext(base_directory=os.path.join(os.path.dirname(__file__), '..', 'analysis_file_TEST.d'))
+        common = textwrap.dedent("""
+            type: detector-level-pdf
+            pdf: 'TestLegendre1D::P(z)'
+            variable: 'z'
+            range: [0.5, 2.5]
+            resolution: 5
+            parameters: { 'mass::c': 0.0 }
+            """)
+        from_data = self._draw(common + "data: './unbinned-data-expression'\n", context)
+        explicit = self._draw(common + "axes: [ { variable: 'z', min: 0.0, max: 3.0, points: 4 } ]\nkernel: 'exp((0.0 - 1000 * ({z} - [[mass::c]])^2))'\n")
+        for value, expected in zip(from_data, explicit):
+            self.assertAlmostEqual(value, expected, delta=1.0e-12)
+
+        # on a finer grid, the narrow resolution leaves z (4 - z), normalized by 9 on [0, 3], nearly unchanged
+        finer = self._draw(common + "data: './unbinned-data-expression'\npoints: 256\n", context)
+        for value, z in zip(finer, [ 0.5, 1.0, 1.5, 2.0, 2.5 ]):
+            self.assertAlmostEqual(value, z * (4.0 - z) / 9.0, delta=1.0e-2 * value)
+
+    def test_invalid(self):
+        base = "type: detector-level-pdf\npdf: 'TestLegendre1D::P(z)'\nvariable: z\nrange: [0.0, 1.0]\n"
+        for extra in (
+            "",
+            "kernel: 'Kernel::Gaussian({z}, 0, 1)'\n",
+            "data: './x'\nkernel: 'Kernel::Gaussian({z}, 0, 1)'\n",
+            "data: './x'\npoints: 63\n",
+        ):
+            with self.assertRaises(ValueError):
+                eos.figure.ItemFactory.from_yaml(base + extra)
+
+        with self.assertRaises(ValueError):
+            self._draw(self._explicit.replace("variable: 'z'", "variable: 'q2'", 1))
 
 class ComplexPlaneItemTests(unittest.TestCase):
 
