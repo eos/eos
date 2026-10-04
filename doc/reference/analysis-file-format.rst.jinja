@@ -38,6 +38,9 @@ The following keys are optional:
 ``parameters``
    A list of :ref:`new parameters <analysis-file-parameters>` defined for the scope of the analysis. Each entry either introduces a genuinely new parameter or defines an alias for one or more existing parameters; the latter is useful to impose symmetries (e.g. lepton-flavour universality) by varying several parameters together.
 
+``signal_pdfs``
+   A list of :ref:`custom signal PDFs <analysis-file-signal-pdfs>`. Each entry introduces a new truth-level signal PDF from two observables, its unnormalized density and its normalization, which can then be fitted in an unbinned likelihood.
+
 ``predictions``
    A list of :ref:`theory predictions <analysis-file-predictions>`. Each entry specifies a set of observables to be evaluated on the samples of a posterior, optionally at several kinematic configurations, and is used to propagate the inferred uncertainties to derived quantities.
 
@@ -327,6 +330,27 @@ New parameters can also be defined in the analysis description. This can be usef
 Each entry is keyed by the qualified name of the new parameter and accepts the keys ``central``, ``min``, ``max``, ``unit``, and ``latex``.
 An optional ``alias_of`` key, holding a list of existing qualified names, instead makes the new parameter an alias for those parameters, so that varying it varies all of them together.
 A custom parameter is described by a :py:class:`~eos.analysis_file_description.ParameterComponent`.
+
+.. _analysis-file-signal-pdfs:
+
+Signal PDFs
+~~~~~~~~~~~
+
+New truth-level signal PDFs can be defined as the ratio of an observable that provides the unnormalized density and an observable that provides its normalization.
+Either can be a custom observable from the ``observables`` section.
+
+.. code-block:: yaml
+
+  signal_pdfs:
+    - name: 'Example::P(x)'
+      numerator: 'Example::dGamma/dx'
+      variables: [ 'x' ]
+      normalization: 'Example::Gamma'
+
+Each entry accepts the keys ``name``, ``numerator``, ``variables`` (the kinematic variables of the numerator, which become the sampling variables), and ``normalization``.
+The optional ``normalization_variables`` lists the kinematic variables of the normalization, and defaults to ``x_min`` and ``x_max`` for each sampling variable ``x``.
+The optional ``description`` and ``options`` keys provide a human-readable description and the options applied to both observables.
+A custom signal PDF is described by a :py:class:`~eos.analysis_file_description.SignalPDFComponent`.
 
 .. _analysis-file-predictions:
 

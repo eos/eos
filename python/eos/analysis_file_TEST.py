@@ -349,6 +349,17 @@ class TestAnalysisFileUnbinnedLikelihood(unittest.TestCase):
         expected = math.log(1.5) + math.log(3.5) + math.log(4.0) + math.log(3.5) - 4.0 * math.log(9.0)
         self.assertAlmostEqual(analysis.log_likelihood([4.18]), expected, places=10)
 
+    def test_custom_signal_pdf(self):
+        # the truth density 1 + z, normalized by its integral 7.5 on z = 0..3, is fitted with the
+        # delta resolution of the test above; the events at z = 0.5, 1.5, 2.0, 2.5 have densities 1.5, 2.5, 3, 3.5
+        af = eos.AnalysisFile(_TESTD / 'unbinned-signal-pdf.yaml')
+        self.assertEqual([], [d for d in af.validate(base_directory=_TESTD) if d.severity is Severity.ERROR])
+        self.assertIn(eos.QualifiedName('test::P(z)'), eos.SignalPDFs())
+
+        analysis = af.analysis('posterior', base_directory=_TESTD)
+        expected = math.log(1.5) + math.log(2.5) + math.log(3.0) + math.log(3.5) - 4.0 * math.log(7.5)
+        self.assertAlmostEqual(analysis.log_likelihood([4.18]), expected, places=10)
+
     def test_odd_point_count_is_rejected_never_snapped(self):
         # A21 i: a crop whose derived point count is odd is rejected outright. This is asserted on
         # two separate code paths: validate() reports it as an ERROR diagnostic (via the deep

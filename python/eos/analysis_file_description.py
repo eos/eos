@@ -869,6 +869,56 @@ class ObservableComponent(_AnalysisFileDeserializable):
 
 
 @dataclass
+class SignalPDFComponent(_AnalysisFileDeserializable):
+    r"""Describes a custom truth-level signal PDF, i.e. one entry of an analysis file's ``signal_pdfs`` list.
+
+    The PDF is the ratio of two observables, either of which may be a custom observable declared in the
+    ``observables`` section; see :meth:`eos.SignalPDFs.insert`.
+
+    :param name: The qualified name under which the new signal PDF is registered.
+    :type name: str
+    :param numerator: The qualified name of the observable that provides the unnormalized density.
+    :type numerator: str
+    :param variables: The kinematic variables of the numerator, which are the PDF's sampling variables.
+    :type variables: list[str]
+    :param normalization: The qualified name of the observable that provides the normalization.
+    :type normalization: str
+    :param normalization_variables: The kinematic variables of the normalization. Optional; defaults to the
+        bounds ``v_min`` and ``v_max`` of each sampling variable ``v``.
+    :type normalization_variables: list[str]
+    :param description: A human-readable description of the signal PDF. Optional.
+    :type description: str
+    :param options: The options applied to both observables. Optional.
+    :type options: dict
+    """
+    name:str
+    numerator:str
+    variables:list
+    normalization:str
+    normalization_variables:list=field(default_factory=list)
+    description:str=''
+    options:dict=field(default_factory=dict)
+
+    def _diagnostics(self):
+        try:
+            eos.QualifiedName(self.name)
+        except RuntimeError as e:
+            yield Diagnostic(('name',), Severity.ERROR, f"'{self.name}' is not a valid qualified name: {e}")
+        if not self.variables:
+            yield Diagnostic(('variables',), Severity.ERROR, f"Signal PDF '{self.name}' must have at least one sampling variable")
+
+    def bounds(self):
+        """Return the kinematic variables of the normalization, including the default."""
+        if self.normalization_variables:
+            return list(self.normalization_variables)
+        return [ f'{v}_{bound}' for v in self.variables for bound in ('min', 'max') ]
+
+    def validate_semantics(self, context):
+        yield from _check_qualified(context, self.numerator, 'observable', ('numerator',))
+        yield from _check_qualified(context, self.normalization, 'observable', ('normalization',))
+
+
+@dataclass
 class PredictionObservableComponent(_AnalysisFileDeserializable):
     r"""Describes a single observable to be predicted, i.e. one entry of a prediction's ``observables`` list.
 
@@ -1435,6 +1485,8 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
     :type observables: list[ObservableComponent]
     :param parameters: The custom parameters (from the YAML mapping keyed by parameter name).
     :type parameters: list[ParameterComponent]
+    :param signal_pdfs: The custom truth-level signal PDFs.
+    :type signal_pdfs: list[SignalPDFComponent]
     :param steps: The reproducible-analysis steps.
     :type steps: list[StepComponent]
     :param masks: The named sample masks.
@@ -1450,6 +1502,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
     figures:list                 = field(default_factory=list)
     observables:list             = field(default_factory=list)
     parameters:list              = field(default_factory=list)
+    signal_pdfs:list             = field(default_factory=list)
     steps:list                   = field(default_factory=list)
     masks:list                   = field(default_factory=list)
 
@@ -1467,6 +1520,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('figures', self.figures, '_figure_segments'),
             ('observables', self.observables, '_observable_segments'),
             ('parameters', self.parameters, '_parameter_segments'),
+            ('signal_pdfs', self.signal_pdfs, '_signal_pdf_segments'),
             ('steps', self.steps, '_step_segments'),
             ('masks', self.masks, '_mask_segments'),
         )
@@ -1584,6 +1638,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('figures', self.figures, '_figure_segments'),
             ('observables', self.observables, '_observable_segments'),
             ('parameters', self.parameters, '_parameter_segments'),
+            ('signal_pdfs', self.signal_pdfs, '_signal_pdf_segments'),
             ('steps', self.steps, '_step_segments'),
             ('masks', self.masks, '_mask_segments'),
         )
@@ -1804,6 +1859,11 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             _kwargs['parameters'] = [ParameterComponent.from_dict(**p) for p in raw_parameters]
         else:
             parameter_segments = []
+        if 'signal_pdfs' in kwargs:
+            signal_pdf_segments = _segments(kwargs['signal_pdfs'])
+            _kwargs['signal_pdfs'] = [SignalPDFComponent.from_dict(**p) for p in kwargs['signal_pdfs']]
+        else:
+            signal_pdf_segments = []
         if 'steps' in kwargs:
             step_segments = _segments(kwargs['steps'], identifier='id')
             _kwargs['steps'] = [StepComponent.from_dict(**s) for s in kwargs['steps']]
@@ -1823,6 +1883,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         result._figure_segments = figure_segments
         result._observable_segments = observable_segments
         result._parameter_segments = parameter_segments
+        result._signal_pdf_segments = signal_pdf_segments
         result._step_segments = step_segments
         result._mask_segments = mask_segments
         result._present_sections = set(kwargs)
