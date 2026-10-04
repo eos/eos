@@ -144,6 +144,21 @@ class ExpressionParserTest : public TestCase
                 TEST_CHECK(test6.completed);
                 TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, *test6.e), std::exp(1.0), 1e-15);
 
+                ExpressionTest test9("atan(1.0) + log(2.0)");
+                TEST_CHECK(test9.completed);
+                TEST_CHECK_RELATIVE_ERROR(std::visit(evaluator, *test9.e), M_PI / 4.0 + std::log(2.0), 1e-15);
+
+                for (const auto & [input, value] : std::vector<std::pair<std::string, double>>{
+                         {   "theta(-1.0)", 0.0 },
+                         {    "theta(0.0)", 1.0 },
+                         { "theta(1.0e-9)", 1.0 }
+                })
+                {
+                    ExpressionTest test10(input);
+                    TEST_CHECK(test10.completed);
+                    TEST_CHECK_EQUAL(std::visit(evaluator, *test10.e), value);
+                }
+
                 // Unknown functions and wrong numbers of arguments
                 TEST_CHECK_THROWS(ExpressionError, ExpressionTest test7("exp(1.0, 2.0)"));
                 TEST_CHECK_THROWS(ExpressionError, ExpressionTest test8("A::nosuch(1.0)"));
