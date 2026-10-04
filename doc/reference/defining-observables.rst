@@ -29,6 +29,8 @@ Basic rules are used to parse the input string
 
     Parentheses are recognized in expressions, and the usual precedence rules of arithmetics apply.
 
+  * Expressions can call the functions ``exp``, ``log``, ``sin``, ``cos``, ``atan``, and ``theta``, the Heaviside step function with ``theta(0) = 1``.
+
   * Expressions can refer to existing EOS objects
 
      - Observables are referenced by their :code:`eos.QualifiedName` and must be encapsulated by two chevrons: ``<<...>>``.
