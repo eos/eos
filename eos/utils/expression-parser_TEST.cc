@@ -628,12 +628,18 @@ class ExpressionKernelTest : public TestCase
                 struct Reference
                 {
                         std::vector<double> parameters; // in argument order, after the offset
-                        double              lo, hi;     // integration range
+                        std::vector<double> points;     // integration range, split at these points
                 };
+
+                // every kernel is located at mu = 0.3 with width sigma = 0.7; points are given in units of sigma
+                const auto at = [](const double & t) -> double { return 0.3 + 0.7 * t; };
 
                 // one entry per kernel in the function table
                 const std::map<std::string, Reference> references{
-                    { "Kernel::Gaussian", { { 0.3, 0.7 }, 0.3 - 12.0 * 0.7, 0.3 + 12.0 * 0.7 } },
+                    {    "Kernel::Gaussian",                                         { { 0.3, 0.7 }, { at(-12.0), at(12.0) } }                                            },
+                    // the power-law tails reach far, and are integrated piecewise
+                    { "Kernel::CrystalBall",
+                     { { 0.3, 0.7, 1.5, 6.0, 2.0, 7.0 }, { at(-1.0e4), at(-1.0e3), at(-1.0e2), at(-10.0), at(-1.5), at(2.0), at(10.0), at(1.0e2), at(1.0e3), at(1.0e4) } } },
                 };
 
                 std::size_t kernels = 0;
@@ -660,13 +666,47 @@ class ExpressionKernelTest : public TestCase
                         x[0] = u;
                         return entry.f(std::span<const double>(x.data(), entry.arity));
                     };
-                    const double integral = integrate<GSL::QAGS>(density, r->second.lo, r->second.hi, GSL::QAGS::Config().epsrel(1e-12));
+                    double integral = 0.0;
+                    for (std::size_t i = 1; i < r->second.points.size(); ++i)
+                    {
+                        integral += integrate<GSL::QAGS>(density, r->second.points[i - 1], r->second.points[i], GSL::QAGS::Config().epsrel(1e-12));
+                    }
 
                     TEST_CHECK_RELATIVE_ERROR(integral, 1.0, 1e-10);
                 }
 
                 // no reference for a function that is not a kernel
                 TEST_CHECK_EQUAL(kernels, references.size());
+            }
+
+            // an asymmetric Crystal Ball, in both tails, at both transitions, and in the core
+            {
+                const auto & entry = functions().at("Kernel::CrystalBall");
+                const auto   cb    = [&](const double & t, const double & alpha_L, const double & n_L, const double & alpha_R, const double & n_R) -> double
+                {
+                    const std::array<double, 7> x{ 0.3 + 0.7 * t, 0.3, 0.7, alpha_L, n_L, alpha_R, n_R };
+                    return entry.f(std::span<const double>(x.data(), x.size()));
+                };
+
+                // reference values from A_s (B_s + |t|)^-n_s, with A_s = (n_s / alpha_s)^n_s exp(-alpha_s^2 / 2) and B_s = n_s / alpha_s - alpha_s
+                TEST_CHECK_RELATIVE_ERROR(cb(-3.0, 1.5, 6.0, 2.0, 7.0), 0.026185997744710234, 1e-12);
+                TEST_CHECK_RELATIVE_ERROR(cb(-1.5, 1.5, 6.0, 2.0, 7.0), 0.17696415844198837, 1e-12);
+                TEST_CHECK_RELATIVE_ERROR(cb(+0.5, 1.5, 6.0, 2.0, 7.0), 0.4810384561814044, 1e-12);
+                TEST_CHECK_RELATIVE_ERROR(cb(+2.0, 1.5, 6.0, 2.0, 7.0), 0.07376963649883485, 1e-12);
+                TEST_CHECK_RELATIVE_ERROR(cb(+4.0, 1.5, 6.0, 2.0, 7.0), 0.0031175622029056935, 1e-12);
+
+                // a steep tail stays finite
+                const double steep = cb(-5.0, 1.0, 150.0, 1.0, 150.0);
+                TEST_CHECK(std::isfinite(steep) && (steep > 0.0));
+
+                // invalid parameters
+                TEST_CHECK_THROWS(ExpressionError, cb(0.0, 0.0, 6.0, 2.0, 7.0));
+                TEST_CHECK_THROWS(ExpressionError, cb(0.0, 1.5, 1.0, 2.0, 7.0));
+                TEST_CHECK_THROWS(ExpressionError, cb(0.0, 1.5, 6.0, -2.0, 7.0));
+                TEST_CHECK_THROWS(ExpressionError, cb(0.0, 1.5, 6.0, 2.0, 0.5));
+
+                const std::array<double, 7> zero_sigma{ 0.0, 0.0, 0.0, 1.5, 6.0, 2.0, 7.0 };
+                TEST_CHECK_THROWS(ExpressionError, entry.f(std::span<const double>(zero_sigma.data(), zero_sigma.size())));
             }
 
             // kernels are evaluated in the offset variable
@@ -704,6 +744,15 @@ class ExpressionKernelTest : public TestCase
                     TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms[i].parameters[0]), reference[i][1], 1e-15);
                     TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms[i].parameters[1]), reference[i][2], 1e-15);
                 }
+
+                // kernels of different kinds combine
+                ExpressionTest test4("0.8 * Kernel::Gaussian({u}, 0, 1) + 0.2 * Kernel::CrystalBall({u}, 0, 1, 1.5, 3, 2, 5)");
+                TEST_CHECK(test4.completed);
+                const auto terms4 = decomposer.decompose(test4.e);
+                TEST_CHECK_EQUAL(terms4.size(), 2u);
+                TEST_CHECK_EQUAL(terms4[1].kernel, "Kernel::CrystalBall");
+                TEST_CHECK_EQUAL(terms4[1].parameters.size(), 6u);
+                TEST_CHECK_NEARLY_EQUAL(std::visit(evaluator, *terms4[1].coefficient), 0.2, 1e-15);
 
                 // coefficients and parameters may use parameters, observables, and other kinematic variables
                 ExpressionTest test2("[[A::w]] * Kernel::Gaussian({u}, <<A::mu>>[q2=>v], [[A::sigma]] * {v})");
