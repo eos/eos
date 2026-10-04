@@ -94,6 +94,25 @@ namespace eos::exp
             return std::cos(x[0]);
         }
 
+        double
+        atan_function(std::span<const double> x)
+        {
+            return std::atan(x[0]);
+        }
+
+        double
+        log_function(std::span<const double> x)
+        {
+            return std::log(x[0]);
+        }
+
+        // Heaviside step function, with theta(0) = 1
+        double
+        theta_function(std::span<const double> x)
+        {
+            return x[0] >= 0.0 ? 1.0 : 0.0;
+        }
+
         // Kernel::Gaussian(u, mu, sigma)
         double
         gaussian_kernel(std::span<const double> x)
@@ -112,6 +131,9 @@ namespace eos::exp
             {              "exp",   { 1, &exp_function, false } },
             {              "sin",   { 1, &sin_function, false } },
             {              "cos",   { 1, &cos_function, false } },
+            {             "atan",  { 1, &atan_function, false } },
+            {              "log",   { 1, &log_function, false } },
+            {            "theta", { 1, &theta_function, false } },
 
             // kernels: unit-area densities in their first argument
             { "Kernel::Gaussian", { 3, &gaussian_kernel, true } },
