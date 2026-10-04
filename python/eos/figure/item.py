@@ -3212,6 +3212,173 @@ class SignalPDFItem(Item):
         return self._legend_line(alpha=self.alpha)
 
 @dataclass(kw_only=True)
+class DetectorLevelPDFItem(Item):
+    """Plots a single EOS signal PDF convolved with a detector resolution as a function of one kinematic variable
+
+    The convolution is carried out by :class:`eos.DetectorLevelPDF`. Its grid and resolution are given either
+    through ``axes`` and ``kernel``, or through ``data``, an :class:`eos.data.UnbinnedLikelihood` data object
+    whose native grid and resolution are used.
+
+    :param axes: The convolution grid, one dictionary per sampling variable with the keys ``variable``, ``min``, ``max``, and ``points``. Mandatory unless ``data`` is given.
+    :type axes: list[dict] | None
+    :param data: The path to an :class:`eos.data.UnbinnedLikelihood` data object, relative to the analysis's base directory. Mandatory unless ``axes`` and ``kernel`` are given.
+    :type data: str | None
+    :param kernel: The resolution as an EOS expression in the sampling variables, which serve as the offset variables. Mandatory unless ``data`` is given.
+    :type kernel: str | None
+    :param kinematics: The values of the sampling variables other than ``variable``, given as a dictionary mapping variable names to their values.
+    :type kinematics: dict[str,float] | None
+    :param options: The set of optional options for the signal PDF, given as a dictionary mapping option names to their values.
+    :type options: dict[str,str] | None
+    :param parameters: The set of optional parameters, given as a dictionary mapping parameter names to their values.
+    :type parameters: dict[eos.QualifiedName,float] | None
+    :param parameters_from_file: The path to a parameter file containing the optional parameters.
+    :type parameters_from_file: str | None
+    :param pdf: The name of the truth-level signal PDF.
+    :type pdf: eos.QualifiedName
+    :param points: The number of grid points along every axis of the data object's grid, which overrides its native spacing; must be even. Only used together with ``data`` whose resolution is an expression.
+    :type points: int | None
+    :param range: The range of the variable to be plotted, given as a tuple of two float values (min, max).
+    :type range: tuple[float,float]
+    :param resolution: The number of points to be used for plotting the PDF. Defaults to 100.
+    :type resolution: int
+    :param variable: The name of the sampling variable to which the x axis will be mapped.
+    :type variable: str
+
+    Example:
+
+    .. code-block::
+
+        figure_args = '''
+        plot:
+          xaxis: { label: r'$z$', range: [0.0, 4.0] }
+          yaxis: { label: r'$P(z)$' }
+          items:
+            - { type: 'detector-level-pdf', pdf: 'TestLegendre1D::P(z)', label: 'smeared',
+                variable: 'z', range: [0.0, 4.0], resolution: 200,
+                axes: [ { variable: 'z', min: 0.0, max: 4.0, points: 400 } ],
+                kernel: 'Kernel::Gaussian({z}, 0, 0.1)'
+              }
+        '''
+    """
+
+    axes:list[dict]|None=field(default=None)
+    data:str|None=field(default=None)
+    kernel:str|None=field(default=None)
+    kinematics:dict[str,float]|None=field(default=None)
+    options:dict[str,str]|None=field(default=None)
+    parameters:dict[eos.QualifiedName,float]|None=field(default=None)
+    parameters_from_file:str|None=field(default=None)
+    pdf:eos.QualifiedName
+    points:int|None=field(default=None)
+    range:tuple[float,float]
+    resolution:int=field(default=100)
+    variable:str
+
+    def __post_init__(self):
+        super().__post_init__()
+
+        if self.range is None or len(self.range) != 2:
+            raise ValueError(f"Invalid range '{self.range}'. It must be a tuple of two float values (min, max).")
+
+        if self.range[0] >= self.range[1]:
+            raise ValueError(f"Invalid range '{self.range}'. The first value must be less than the second value.")
+
+        if self.resolution <= 0:
+            raise ValueError(f"Invalid resolution '{self.resolution}'. It must be a positive integer.")
+
+        if (self.data is None) == (self.axes is None and self.kernel is None):
+            raise ValueError("Either 'data' or both of 'axes' and 'kernel' must be given.")
+
+        if self.data is None and (self.axes is None or self.kernel is None):
+            raise ValueError("'axes' and 'kernel' must be given together.")
+
+        if self.points is not None and (self.data is None or self.points < 2 or self.points % 2 != 0):
+            raise ValueError(f"Invalid points '{self.points}'. It must be an even number of at least 2, and requires 'data'.")
+
+    def _make(self, cache, options, context):
+        """Make the detector-level PDF from either the data object or the explicit grid and kernel."""
+        if self.data is None:
+            return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, self.axes, self.kernel)
+
+        from eos.data.unbinned_likelihood import UnbinnedSampledResolutionDescription
+
+        data = eos.data.UnbinnedLikelihood(context.data_path(self.data))
+        axes = data.cropped_axes()
+        if self.points is not None:
+            axes = [ { **axis, 'points': self.points } for axis in axes ]
+
+        if isinstance(data.resolution, UnbinnedSampledResolutionDescription):
+            return eos.DetectorLevelPDF.make_from_grid(cache, self.pdf, options, axes, data.resolution_kernel(axes))
+
+        return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, axes, data.resolution.expression)
+
+    def prepare(self, context:AnalysisFileContext=None):
+        """Prepare the detector-level PDF for plotting.
+
+        Builds the parameters (optionally overridden from file) and options, instantiates the
+        detector-level PDF together with its own observable cache, and caches its normalization for :meth:`draw`.
+
+        :param context: The analysis file context used to resolve the relative paths to ``data`` and
+            ``parameters_from_file``. If ``None``, a default context rooted at the current working
+            directory is used.
+        :type context: AnalysisFileContext | None
+        """
+        context = AnalysisFileContext() if context is None else context
+
+        self._parameters = eos.Parameters.Defaults()
+        if type(self.parameters_from_file) is str:
+            eos.warn('    overriding parameters from file')
+            self._parameters.override_from_file(context.data_path(self.parameters_from_file))
+
+        if self.parameters is not None and self.parameters_from_file is not None:
+            eos.warn('    overriding values read from \'parameters-from-file\' with explicit values in \'parameters\'')
+
+        if self.parameters is not None and type(self.parameters) is dict:
+            for key, value in self.parameters.items():
+                self._parameters.set(key, value)
+
+        options = eos.Options(**self.options) if self.options is not None else eos.Options()
+
+        # the item owns the cache, which is updated once, since the parameters remain fixed
+        self._cache = eos.ObservableCache(self._parameters)
+        self._pdf = self._make(self._cache, options, context)
+        self._cache.update()
+
+        variables = { v.name(): v for v in self._pdf.variables }
+        if self.variable not in variables:
+            raise ValueError(f"'{self.variable}' is not a sampling variable of the detector-level PDF; expected one of {list(variables)}")
+        self._variable = variables[self.variable]
+
+        for name, value in (self.kinematics or {}).items():
+            if name not in variables:
+                raise ValueError(f"'{name}' is not a sampling variable of the detector-level PDF; expected one of {list(variables)}")
+            variables[name].set(value)
+
+        self._norm = self._pdf.normalization()
+
+    def draw(self, ax):
+        """Draw the detector-level PDF on the provided axes.
+
+        Evaluates the normalized detector-level PDF on a grid of ``resolution`` points spanning ``range``
+        of the chosen sampling ``variable`` and plots the resulting curve.
+
+        :param ax: The matplotlib axes onto which the PDF is drawn.
+        :type ax: matplotlib.axes.Axes
+        """
+
+        xvalues = _np.linspace(self.range[0], self.range[1], self.resolution)
+        pvalues = _np.full(xvalues.shape, -self._norm)
+        for i, xvalue in enumerate(xvalues):
+            self._variable.set(xvalue)
+            pvalues[i] += self._pdf.evaluate()
+
+        ax.plot(xvalues, _np.exp(pvalues), alpha=self.alpha, color=self.color, label=self.label, lw=self.linewidth, ls=self.linestyle)
+
+    def legend(self):
+        """Return the item's legend entry in form of its handle(s) and label(s)."""
+        return self._legend_line(alpha=self.alpha)
+
+@dataclass(kw_only=True)
 class ComplexPlaneItem(Item):
     """Plots a single observable as a function on the complex plan
 
@@ -3572,6 +3739,7 @@ class ItemFactory:
         'band': BandItem,
         'vertical': VerticalLineItem,
         'signal-pdf': SignalPDFItem,
+        'detector-level-pdf': DetectorLevelPDFItem,
         'complex-plane': ComplexPlaneItem,
         'errorbars': ErrorBarsItem,
         'point': PointItem,
