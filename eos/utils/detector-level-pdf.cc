@@ -203,11 +203,32 @@ namespace eos
             d.convolution->set_resolution(d.resolution_grid);
         }
 
-        // Register each grid point's truth PDF observable as one cache batch; the normalization is
-        // identical at every grid point (same [min, max] bounds), so capture it once.
+        // A single signal PDF provides the normalization, which is identical at every grid point (same [min, max]
+        // bounds), and the name and options of its numerator, which is then made directly at every grid point
+        // and registered with the cache as one batch.
+        SignalPDFPtr signal_pdf;
+        {
+            Kinematics k;
+            for (std::size_t i = 0; i < rank; ++i)
+            {
+                k.declare(axes[i].variable, d.origin[i]);
+                k.declare(axes[i].variable + "_min", axes[i].min);
+                k.declare(axes[i].variable + "_max", axes[i].max);
+            }
+
+            signal_pdf = SignalPDF::make(signal_name, d.parameters, k, options);
+            if (! signal_pdf.get())
+            {
+                throw InternalError("DetectorLevelPDF: '" + signal_name.str() + "' is not a valid signal PDF name");
+            }
+        }
+        const ObservablePtr normalization_observable = signal_pdf->normalization_observable();
+        const ObservablePtr numerator                = signal_pdf->unnormalized_pdf();
+        const QualifiedName numerator_name           = numerator->name();
+        const Options       numerator_options        = numerator->options();
+
         std::vector<ObservablePtr> unnormalized_pdfs;
         unnormalized_pdfs.reserve(N);
-        ObservablePtr normalization_observable;
         for (std::size_t flat = 0; flat < N; ++flat)
         {
             Kinematics k;
@@ -216,21 +237,9 @@ namespace eos
                 const std::size_t index = (flat / d.strides[i]) % d.dimensions[i];
 
                 k.declare(axes[i].variable, d.origin[i] + static_cast<double>(index) * d.spacing[i]);
-                k.declare(axes[i].variable + "_min", axes[i].min);
-                k.declare(axes[i].variable + "_max", axes[i].max);
             }
 
-            SignalPDFPtr signal_pdf = SignalPDF::make(signal_name, d.parameters, k, options);
-            if (! signal_pdf.get())
-            {
-                throw InternalError("DetectorLevelPDF: '" + signal_name.str() + "' is not a valid signal PDF name");
-            }
-            unnormalized_pdfs.push_back(signal_pdf->unnormalized_pdf());
-
-            if (! normalization_observable)
-            {
-                normalization_observable = signal_pdf->normalization_observable();
-            }
+            unnormalized_pdfs.push_back(Observable::make(numerator_name, d.parameters, k, numerator_options));
         }
         d.batch_id         = d.cache.add_batch(std::move(unnormalized_pdfs));
         d.normalization_id = d.cache.add(normalization_observable);
