@@ -24,6 +24,7 @@
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/thread_pool.hh>
 #include <eos/utils/verify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -40,6 +41,7 @@
 #include <algorithm>
 #include <cmath>
 #include <config.h>
+#include <exception>
 #include <format>
 #include <limits>
 #include <map>
@@ -1330,21 +1332,77 @@ namespace eos
                         return -std::numeric_limits<double>::infinity();
                     }
 
-                    double log_likelihood = 0.0;
-                    for (std::size_t i = 0; i < interpolator->size(); ++i)
+                    // Sum the log-densities in roughly one contiguous slice of events per thread.
+                    struct Slice
                     {
-                        // Treat a non-positive interpolated density (from numerical roundoff, or a resolution
-                        // kernel with negative lobes) as a zero-probability event, yielding -infinity rather
-                        // than a NaN from std::log() that would silently poison downstream sampling.
-                        const double density = (*interpolator)(i);
-                        if (density > 0.0) [[likely]]
+                            std::size_t        start, end;
+                            double             sum       = 0.0;
+                            std::exception_ptr exception = nullptr;
+                    };
+
+                    constexpr std::size_t minimal_slice    = 1024;
+                    const std::size_t     total            = interpolator->size();
+                    const std::size_t     number_of_slices = std::clamp<std::size_t>(total / minimal_slice, 1u, std::max(1u, ThreadPool::instance()->number_of_threads()));
+                    const std::size_t     slice_size       = (total + number_of_slices - 1) / number_of_slices;
+
+                    std::vector<Slice> slices;
+                    slices.reserve(number_of_slices);
+                    for (std::size_t start = 0; start < total; start += slice_size)
+                    {
+                        slices.push_back(Slice{ start, std::min(total, start + slice_size) });
+                    }
+
+                    const ResolutionConvolution::Interpolator & densities = *interpolator;
+                    const auto                                  sum_slice = [&densities](Slice & slice)
+                    {
+                        try
                         {
-                            log_likelihood += std::log(density) - log_normalization;
+                            for (std::size_t i = slice.start; i < slice.end; ++i)
+                            {
+                                // Treat a non-positive interpolated density (from numerical roundoff, or a resolution
+                                // kernel with negative lobes) as a zero-probability event, yielding -infinity rather
+                                // than a NaN from std::log() that would silently poison downstream sampling.
+                                const double density = densities(i);
+                                if (density > 0.0) [[likely]]
+                                {
+                                    slice.sum += std::log(density);
+                                }
+                                else
+                                {
+                                    slice.sum = -std::numeric_limits<double>::infinity();
+                                    return;
+                                }
+                            }
                         }
-                        else
+                        catch (...)
                         {
-                            return -std::numeric_limits<double>::infinity();
+                            slice.exception = std::current_exception();
                         }
+                    };
+
+                    std::vector<Ticket> tickets;
+                    tickets.reserve(slices.size());
+                    for (std::size_t k = 1; k < slices.size(); ++k)
+                    {
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>([&sum_slice, s = &slices[k]]() { sum_slice(*s); })));
+                    }
+                    if (! slices.empty())
+                    {
+                        sum_slice(slices.front());
+                    }
+                    for (auto & ticket : tickets)
+                    {
+                        ticket.wait();
+                    }
+
+                    double log_likelihood = -static_cast<double>(total) * log_normalization;
+                    for (const auto & slice : slices)
+                    {
+                        if (slice.exception)
+                        {
+                            std::rethrow_exception(slice.exception);
+                        }
+                        log_likelihood += slice.sum;
                     }
 
                     return log_likelihood;
