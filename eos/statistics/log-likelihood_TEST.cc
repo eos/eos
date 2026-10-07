@@ -1102,6 +1102,54 @@ namespace eos
             }
     } unbinned_likelihood_window_2d_test;
 
+    // Enough events to split the event loop into several slices; the result must match a serial sum.
+    class UnbinnedLikelihoodManyEventsTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihoodManyEventsTest() :
+                TestCase("unbinned_likelihood_many_events_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                p["TestGaussian1D::mu"]              = 0.5;
+                p["TestGaussian1D::sigma"]           = 1.2;
+                p["TestGaussianResolution1D::sigma"] = 0.9;
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(cache,
+                                                              "TestGaussian1D::P(x)",
+                                                              Options{
+                },
+                                                              std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", -12.0, +12.0, 2048 } },
+                                                              "<<TestGaussianResolution1D::UnnormalizedPDF(x)>>");
+                cache.update();
+
+                static const std::size_t n = 8192;
+                std::vector<double>      observations(n);
+                for (std::size_t k = 0; k < n; ++k)
+                {
+                    observations[k] = 0.5 + 1.5 * gsl_cdf_ugaussian_Pinv((static_cast<double>(k) + 0.5) / static_cast<double>(n));
+                }
+
+                // the grid is only filled on demand, e.g. by the block's evaluate()
+                pdf->update_grid();
+                auto   interpolator = pdf->make_interpolator(observations);
+                double expected     = -static_cast<double>(n) * pdf->normalization();
+                for (std::size_t k = 0; k < n; ++k)
+                {
+                    expected += std::log((*interpolator)(k));
+                }
+
+                auto block = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations);
+                TEST_CHECK_RELATIVE_ERROR(block->evaluate(), expected, 1.0e-12);
+            }
+    } unbinned_likelihood_many_events_test;
+
     // The events of an unbinned block can be replaced through shared observations, which reach its clones.
     class UnbinnedLikelihoodObservationsTest : public TestCase
     {
