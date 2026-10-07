@@ -45,6 +45,7 @@ API_BASIC_CLASSES = {
     'KinematicVariable':  False,
     'LogLikelihood':      False,
     'LogLikelihoodBlock': False,
+    'UnbinnedObservations': False,
     'LogPrior':           False,
     'LogPosterior':       False,
     'Model':              False,

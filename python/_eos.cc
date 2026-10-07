@@ -31,6 +31,7 @@
 #include "eos/statistics/log-posterior.hh"
 #include "eos/statistics/log-prior.hh"
 #include "eos/statistics/test-statistic-impl.hh"
+#include "eos/statistics/unbinned-observations.hh"
 #include "eos/utils/detector-level-pdf.hh"
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/log.hh"
@@ -215,6 +216,21 @@ namespace impl
                 data->convertible = storage;
             }
     };
+
+    // An unbinned log-likelihood block from either shared observations or an array of events.
+    template <LogLikelihoodBlockPtr (*from_handle_)(ObservableCache, const std::shared_ptr<DetectorLevelPDF> &, const UnbinnedObservations &),
+              LogLikelihoodBlockPtr (*from_values_)(ObservableCache, const std::shared_ptr<DetectorLevelPDF> &, const std::vector<double> &)>
+    LogLikelihoodBlockPtr
+    unbinned_block(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const boost::python::object & observations)
+    {
+        boost::python::extract<UnbinnedObservations> handle(observations);
+        if (handle.check())
+        {
+            return from_handle_(cache, pdf, handle());
+        }
+
+        return from_values_(cache, pdf, boost::python::extract<std::vector<double>>(observations)());
+    }
 } // namespace impl
 
 BOOST_PYTHON_MODULE(_eos)
@@ -1300,7 +1316,7 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("cache", "factory"))
             .staticmethod("External")
-            .def("Unbinned1D", &LogLikelihoodBlock::Unbinned1D, R"(
+            .def("Unbinned1D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned1D, &LogLikelihoodBlock::Unbinned1D>, R"(
             Create a new unbinned log-likelihood block for a rank-1 detector-level PDF.
 
             The block recomputes the resolution-smeared grid of ``pdf`` once per evaluation and evaluates
@@ -1314,15 +1330,17 @@ BOOST_PYTHON_MODULE(_eos)
                 number of sampling axes) must be 1.
             :type pdf: eos.DetectorLevelPDF
             :param observations: The observed events, flat and row-major: one coordinate per axis of
-                ``pdf``, in axis order. Each event must lie within the PDF's grid.
-            :type observations: numpy.ndarray or list of float
+                ``pdf``, in axis order. Each event must lie within the PDF's grid. If given as
+                :class:`UnbinnedObservations <eos.UnbinnedObservations>`, the block and its clones share them, and
+                use their current events at every evaluation.
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
 
             :returns: The new block.
             :rtype: eos.LogLikelihoodBlock
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned1D")
-            .def("Unbinned2D", &LogLikelihoodBlock::Unbinned2D, R"(
+            .def("Unbinned2D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned2D, &LogLikelihoodBlock::Unbinned2D>, R"(
             Create a new unbinned log-likelihood block for a rank-2 detector-level PDF.
 
             See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 2.
@@ -1333,14 +1351,14 @@ BOOST_PYTHON_MODULE(_eos)
             :param pdf: The detector-level PDF whose grid is evaluated and interpolated.
             :type pdf: eos.DetectorLevelPDF
             :param observations: The observed events, flat and row-major in axis order.
-            :type observations: numpy.ndarray or list of float
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
 
             :returns: The new block.
             :rtype: eos.LogLikelihoodBlock
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned2D")
-            .def("Unbinned3D", &LogLikelihoodBlock::Unbinned3D, R"(
+            .def("Unbinned3D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned3D, &LogLikelihoodBlock::Unbinned3D>, R"(
             Create a new unbinned log-likelihood block for a rank-3 detector-level PDF.
 
             See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 3.
@@ -1351,14 +1369,14 @@ BOOST_PYTHON_MODULE(_eos)
             :param pdf: The detector-level PDF whose grid is evaluated and interpolated.
             :type pdf: eos.DetectorLevelPDF
             :param observations: The observed events, flat and row-major in axis order.
-            :type observations: numpy.ndarray or list of float
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
 
             :returns: The new block.
             :rtype: eos.LogLikelihoodBlock
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned3D")
-            .def("Unbinned4D", &LogLikelihoodBlock::Unbinned4D, R"(
+            .def("Unbinned4D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned4D, &LogLikelihoodBlock::Unbinned4D>, R"(
             Create a new unbinned log-likelihood block for a rank-4 detector-level PDF.
 
             See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 4.
@@ -1369,13 +1387,60 @@ BOOST_PYTHON_MODULE(_eos)
             :param pdf: The detector-level PDF whose grid is evaluated and interpolated.
             :type pdf: eos.DetectorLevelPDF
             :param observations: The observed events, flat and row-major in axis order.
-            :type observations: numpy.ndarray or list of float
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
 
             :returns: The new block.
             :rtype: eos.LogLikelihoodBlock
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned4D");
+
+    // UnbinnedObservations
+    class_<UnbinnedObservations>("UnbinnedObservations", R"(
+            Represents the observed events of an unbinned likelihood, flat and row-major with one coordinate per axis.
+
+            Copies share the events: replacing them through :meth:`set <eos.UnbinnedObservations.set>` replaces them
+            for every unbinned log-likelihood block built from these observations, including the copies that
+            :meth:`LogLikelihood.add <eos.LogLikelihood.add>` holds. This allows to fit many pseudo-data sets
+            without constructing the detector-level PDF anew for each of them.
+
+            :param values: The observed events, flat and row-major; their number must be a multiple of ``rank``.
+            :type values: numpy.ndarray or list of float
+            :param rank: The number of coordinates per event.
+            :type rank: int
+        )",
+                                 init<const std::vector<double> &, std::size_t>(args("self", "values", "rank")))
+            .def("set", &UnbinnedObservations::set, R"(
+            Replace the events, which must be a non-empty multiple of the rank, for all blocks that share these observations.
+
+            :param values: The observed events, flat and row-major.
+            :type values: numpy.ndarray or list of float
+        )",
+                 args("self", "values"))
+            .def("rank", &UnbinnedObservations::rank, R"(
+            Return the number of coordinates per event.
+
+            :rtype: int
+        )",
+                 args("self"))
+            .def("size", &UnbinnedObservations::size, R"(
+            Return the number of events.
+
+            :rtype: int
+        )",
+                 args("self"))
+            .def("values",
+                 +[](const UnbinnedObservations & o)
+    {
+        const auto values = o.values();
+        return std::vector<double>(values.begin(), values.end());
+    },
+                 R"(
+            Return a copy of the events, flat and row-major.
+
+            :rtype: list of float
+        )",
+                 args("self"));
 
     // LogLikelihood
     class_<LogLikelihood>("LogLikelihood", R"(
