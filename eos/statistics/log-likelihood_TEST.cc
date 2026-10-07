@@ -953,6 +953,203 @@ namespace eos
             }
     } unbinned_likelihood_gaussian_test;
 
+    // A window normalizes the density by its integral over the window, which is known for two Gaussians.
+    class UnbinnedLikelihoodWindowTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihoodWindowTest() :
+                TestCase("unbinned_likelihood_window_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                static const double mu      = 0.5;
+                static const double sigma_t = 1.2;
+                static const double sigma_r = 0.9;
+                static const double sigma_c = std::sqrt(sigma_t * sigma_t + sigma_r * sigma_r);
+
+                p["TestGaussian1D::mu"]              = mu;
+                p["TestGaussian1D::sigma"]           = sigma_t;
+                p["TestGaussianResolution1D::sigma"] = sigma_r;
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(cache,
+                                                              "TestGaussian1D::P(x)",
+                                                              Options{
+                },
+                                                              std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", -12.0, +12.0, 2048 } },
+                                                              "<<TestGaussianResolution1D::UnnormalizedPDF(x)>>");
+                cache.update();
+
+                const auto probability = [](const double & a, const double & b) { return gsl_cdf_gaussian_P(b - mu, sigma_c) - gsl_cdf_gaussian_P(a - mu, sigma_c); };
+
+                // the integral over the windows, relative to the truth normalization
+                {
+                    const std::vector<DetectorLevelPDF::Window> one{ { { -1.0, 2.5 } } };
+                    TEST_CHECK_NEARLY_EQUAL(pdf->integral(one) - pdf->normalization(), std::log(probability(-1.0, 2.5)), 1.0e-5);
+
+                    const std::vector<DetectorLevelPDF::Window> two{ { { -1.0, 0.3 } }, { { 1.1, 2.5 } } };
+                    TEST_CHECK_NEARLY_EQUAL(pdf->integral(two) - pdf->normalization(), std::log(probability(-1.0, 0.3) + probability(1.1, 2.5)), 1.0e-5);
+
+                    const std::vector<DetectorLevelPDF::Window> full{ { { -12.0, +12.0 } } };
+                    TEST_CHECK_NEARLY_EQUAL(pdf->integral(full), pdf->normalization(), 1.0e-5);
+                }
+
+                // the log-likelihood differs from the one normalized by the truth PDF by the log-ratio of the normalizations
+                {
+                    const std::vector<double>                   observations{ -0.5, 0.2, 1.2, 2.0 };
+                    const std::vector<DetectorLevelPDF::Window> windows{ { { -1.0, 0.3 } }, { { 1.1, 2.5 } } };
+
+                    auto block    = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations, windows);
+                    auto baseline = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations);
+                    TEST_CHECK_RELATIVE_ERROR(block->evaluate(), baseline->evaluate() + 4.0 * (pdf->normalization() - pdf->integral(windows)), 1.0e-12);
+
+                    // the clone registers its own batch, which only the next update fills
+                    auto clone = block->clone(cache);
+                    cache.update();
+                    TEST_CHECK_RELATIVE_ERROR(clone->evaluate(), block->evaluate(), 1.0e-12);
+                }
+
+                // invalid windows, and events outside of all windows
+                {
+                    const std::vector<double> observations{ 0.0 };
+                    TEST_CHECK_THROWS(InternalError, pdf->integral({}));
+                    TEST_CHECK_THROWS(InternalError,
+                                      LogLikelihoodBlock::Unbinned1D(cache,
+                                                                     pdf,
+                                                                     observations,
+                                                                     {
+                                                                         { { -1.0, 1.0 }, { -1.0, 1.0 } }
+                    }));
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, pdf, observations, { { { -13.0, 1.0 } } }));
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, pdf, observations, { { { 1.0, -1.0 } } }));
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, pdf, observations, { { { -1.0, 0.5 } }, { { 0.4, 1.0 } } }));
+                    TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned1D(cache, pdf, observations, { { { 0.5, 1.0 } } }));
+
+                    UnbinnedObservations shared(observations, 1);
+                    auto                 block = LogLikelihoodBlock::Unbinned1D(cache, pdf, shared, { { { -1.0, 1.0 } } });
+                    shared.set(std::vector<double>{ 2.0 });
+                    TEST_CHECK_THROWS(InternalError, block->evaluate());
+                }
+            }
+    } unbinned_likelihood_window_test;
+
+    // In 2D, the window integral factorizes for a separable Gaussian signal and resolution.
+    class UnbinnedLikelihoodWindow2DTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihoodWindow2DTest() :
+                TestCase("unbinned_likelihood_window_2d_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                static const double mu_x    = 0.5;
+                static const double mu_y    = -0.3;
+                static const double sigma_t = 1.2;
+                static const double sigma_r = 0.9;
+                static const double sigma_c = std::sqrt(sigma_t * sigma_t + sigma_r * sigma_r);
+
+                p["TestGaussian2D::mu_x"]              = mu_x;
+                p["TestGaussian2D::mu_y"]              = mu_y;
+                p["TestGaussian2D::sigma_x"]           = sigma_t;
+                p["TestGaussian2D::sigma_y"]           = sigma_t;
+                p["TestGaussianResolution2D::sigma_x"] = sigma_r;
+                p["TestGaussianResolution2D::sigma_y"] = sigma_r;
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(
+                        cache,
+                        "TestGaussian2D::P(x,y)",
+                        Options{
+                },
+                        std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", -8.0, +8.0, 256 }, DetectorLevelPDF::Axis{ "y", -8.0, +8.0, 256 } },
+                        "<<TestGaussianResolution2D::UnnormalizedPDF(x,y)>>");
+                cache.update();
+
+                const auto probability = [](const double & mu, const double & a, const double & b)
+                { return gsl_cdf_gaussian_P(b - mu, sigma_c) - gsl_cdf_gaussian_P(a - mu, sigma_c); };
+
+                // window edges lie between grid nodes; the tolerance reflects the multilinear interpolation on this grid
+                const std::vector<DetectorLevelPDF::Window> windows{
+                    { { -1.0, 2.3 }, { -2.1, 0.7 } },
+                    {  { 2.3, 4.1 }, { -1.4, 0.2 } }
+                };
+                const double expected = probability(mu_x, -1.0, 2.3) * probability(mu_y, -2.1, 0.7) + probability(mu_x, 2.3, 4.1) * probability(mu_y, -1.4, 0.2);
+                TEST_CHECK_NEARLY_EQUAL(pdf->integral(windows) - pdf->normalization(), std::log(expected), 5.0e-4);
+
+                const std::vector<DetectorLevelPDF::Window> full{
+                    { { -8.0, +8.0 }, { -8.0, +8.0 } }
+                };
+                TEST_CHECK_NEARLY_EQUAL(pdf->integral(full), pdf->normalization(), 1.0e-5);
+
+                // two events, one in each window
+                const std::vector<double> observations{ 0.4, -0.5, 3.0, -1.0 };
+                auto                      block    = LogLikelihoodBlock::Unbinned2D(cache, pdf, observations, windows);
+                auto                      baseline = LogLikelihoodBlock::Unbinned2D(cache, pdf, observations);
+                TEST_CHECK_RELATIVE_ERROR(block->evaluate(), baseline->evaluate() + 2.0 * (pdf->normalization() - pdf->integral(windows)), 1.0e-12);
+
+                // inside both windows' x range, but outside of both in y
+                TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned2D(cache, pdf, std::vector<double>{ 2.3, 1.0 }, windows));
+            }
+    } unbinned_likelihood_window_2d_test;
+
+    // The events of an unbinned block can be replaced through shared observations, which reach its clones.
+    class UnbinnedLikelihoodObservationsTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihoodObservationsTest() :
+                TestCase("unbinned_likelihood_observations_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(cache,
+                                                              "TestGaussian1D::P(x)",
+                                                              Options{
+                },
+                                                              std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", -12.0, +12.0, 256 } },
+                                                              "<<TestGaussianResolution1D::UnnormalizedPDF(x)>>");
+
+                UnbinnedObservations observations(std::vector<double>{ 0.5, 1.0 }, 1);
+                auto                 block = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations);
+                // a clone, as LogLikelihood::add() keeps it, shares the observations
+                ObservableCache      other_cache(p);
+                auto                 clone = block->clone(other_cache);
+
+                cache.update();
+                other_cache.update();
+                const double before = clone->evaluate();
+                TEST_CHECK_RELATIVE_ERROR(before, block->evaluate(), 1.0e-14);
+
+                const std::vector<double> replacement{ 2.0, 3.0, -1.0 };
+                observations.set(replacement);
+                TEST_CHECK_EQUAL(block->number_of_observations(), 3u);
+                TEST_CHECK_EQUAL(clone->number_of_observations(), 3u);
+
+                const double expected = LogLikelihoodBlock::Unbinned1D(cache, pdf, replacement)->evaluate();
+                TEST_CHECK_RELATIVE_ERROR(block->evaluate(), expected, 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(clone->evaluate(), expected, 1.0e-14);
+                TEST_CHECK(std::abs(expected - before) > 1.0e-3);
+
+                // observations of the wrong rank are rejected
+                TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned2D(cache, pdf, observations));
+            }
+    } unbinned_likelihood_observations_test;
+
     // 2D Gaussian, fitting one mean component: the marginal likelihood along mu_x recovers the same
     // mode/interval check as the 1D case, with events placed exactly at mu_y so the y-density factors
     // out as a mu_x-independent constant.

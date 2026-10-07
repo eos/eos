@@ -216,6 +216,15 @@ namespace impl
                 data->convertible = storage;
             }
     };
+
+    // An unbinned log-likelihood block from an array of events, without windows.
+    template <LogLikelihoodBlockPtr (*from_values_)(ObservableCache, const std::shared_ptr<DetectorLevelPDF> &, const std::vector<double> &,
+                                                    const std::vector<DetectorLevelPDF::Window> &)>
+    LogLikelihoodBlockPtr
+    unbinned_block(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+    {
+        return from_values_(cache, pdf, observations, {});
+    }
 } // namespace impl
 
 BOOST_PYTHON_MODULE(_eos)
@@ -1301,7 +1310,7 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("cache", "factory"))
             .staticmethod("External")
-            .def("Unbinned1D", &LogLikelihoodBlock::Unbinned1D, R"(
+            .def("Unbinned1D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned1D>, R"(
             Create a new unbinned log-likelihood block for a rank-1 detector-level PDF.
 
             The block recomputes the resolution-smeared grid of ``pdf`` once per evaluation and evaluates
@@ -1323,7 +1332,7 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned1D")
-            .def("Unbinned2D", &LogLikelihoodBlock::Unbinned2D, R"(
+            .def("Unbinned2D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned2D>, R"(
             Create a new unbinned log-likelihood block for a rank-2 detector-level PDF.
 
             See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 2.
@@ -1341,7 +1350,7 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned2D")
-            .def("Unbinned3D", &LogLikelihoodBlock::Unbinned3D, R"(
+            .def("Unbinned3D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned3D>, R"(
             Create a new unbinned log-likelihood block for a rank-3 detector-level PDF.
 
             See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 3.
@@ -1359,7 +1368,7 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("cache", "pdf", "observations"))
             .staticmethod("Unbinned3D")
-            .def("Unbinned4D", &LogLikelihoodBlock::Unbinned4D, R"(
+            .def("Unbinned4D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned4D>, R"(
             Create a new unbinned log-likelihood block for a rank-4 detector-level PDF.
 
             See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 4.
