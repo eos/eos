@@ -12,6 +12,7 @@ EXTRA_DIST = \
 	eos/analysis_file_TEST.d/invalid \
 	eos/analysis_file_TEST.d/unbinned-data \
 	eos/analysis_file_TEST.d/unbinned-data-expression \
+	eos/analysis_file_TEST.d/unbinned-data-parameter \
 	eos/analysis_file_TEST.d/unbinned-data-misaligned \
 	eos/analysis_file_TEST.py \
 	eos/analysis_file_context.py \
