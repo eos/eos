@@ -11,7 +11,8 @@ libeosstatistics_la_SOURCES = \
 	log-likelihood.cc log-likelihood.hh log-likelihood-fwd.hh \
 	log-posterior.cc log-posterior.hh log-posterior-fwd.hh \
 	log-prior.cc log-prior.hh log-prior-fwd.hh \
-	test-statistic.cc test-statistic.hh test-statistic-impl.hh
+	test-statistic.cc test-statistic.hh test-statistic-impl.hh \
+	unbinned-observations.cc unbinned-observations.hh
 libeosstatistics_la_LIBADD = \
 	$(top_builddir)/eos/maths/libeosmaths.la \
 	-lpthread -lgsl -lgslcblas -lm -lyaml-cpp
@@ -24,7 +25,8 @@ include_eos_statistics_HEADERS = \
 	log-likelihood.hh log-likelihood-fwd.hh \
 	log-posterior.hh log-posterior-fwd.hh \
 	log-prior.hh log-prior-fwd.hh \
-	test-statistic.hh
+	test-statistic.hh \
+	unbinned-observations.hh
 
 AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \
@@ -33,7 +35,8 @@ AM_TESTS_ENVIRONMENT = \
 TESTS = \
 	log-likelihood_TEST \
 	log-posterior_TEST \
-	log-prior_TEST
+	log-prior_TEST \
+	unbinned-observations_TEST
 LDADD = \
 	$(top_builddir)/test/libeostest.la \
 	libeosstatistics.la \
@@ -52,3 +55,5 @@ log_posterior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 log_prior_TEST_SOURCES = log-prior_TEST.cc
 log_prior_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
 log_prior_TEST_LDFLAGS = $(GSL_LDFLAGS)
+
+unbinned_observations_TEST_SOURCES = unbinned-observations_TEST.cc

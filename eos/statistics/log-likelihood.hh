@@ -26,6 +26,7 @@
 #include <eos/observable.hh>
 #include <eos/statistics/log-likelihood-fwd.hh>
 #include <eos/statistics/test-statistic.hh>
+#include <eos/statistics/unbinned-observations.hh>
 #include <eos/utils/detector-level-pdf.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/parameters.hh>
@@ -309,14 +310,26 @@ namespace eos
              */
             static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations);
 
+            /// \see Unbinned1D; the block shares @p observations, and uses their current events at every evaluation.
+            static LogLikelihoodBlockPtr Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations);
+
             /// \see Unbinned1D
             static LogLikelihoodBlockPtr Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations);
+
+            /// \see Unbinned1D; the block shares @p observations, and uses their current events at every evaluation.
+            static LogLikelihoodBlockPtr Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations);
 
             /// \see Unbinned1D
             static LogLikelihoodBlockPtr Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations);
 
+            /// \see Unbinned1D; the block shares @p observations, and uses their current events at every evaluation.
+            static LogLikelihoodBlockPtr Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations);
+
             /// \see Unbinned1D
             static LogLikelihoodBlockPtr Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations);
+
+            /// \see Unbinned1D; the block shares @p observations, and uses their current events at every evaluation.
+            static LogLikelihoodBlockPtr Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations);
     };
 
     /*!

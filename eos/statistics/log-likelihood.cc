@@ -1263,20 +1263,19 @@ namespace eos
                 std::shared_ptr<DetectorLevelPDF> pdf;
 
                 // The observed events, flat and row-major in axis order; shared with all clones.
-                std::shared_ptr<const std::vector<double>> observations_data;
+                UnbinnedObservations observations;
 
-                // Bound to pdf->grid() at construction; the buffer is stable for the PDF's lifetime, so
-                // this can be built once and reused across evaluations (see ResolutionConvolution::Interpolator).
-                std::unique_ptr<ResolutionConvolution::Interpolator> interpolator;
+                // Bound to pdf->grid() and to the events of the given generation. The grid buffer is stable for
+                // the PDF's lifetime, so this is rebuilt only when the events are replaced (see
+                // ResolutionConvolution::Interpolator).
+                mutable std::unique_ptr<ResolutionConvolution::Interpolator> interpolator;
+                mutable UnbinnedObservations::Generation                     generation;
 
-                unsigned _number_of_observations;
-
-                UnbinnedLikelihoodBlock(const ObservableCache & cache, const std::shared_ptr<DetectorLevelPDF> & pdf,
-                                        const std::shared_ptr<const std::vector<double>> & observations) :
+                UnbinnedLikelihoodBlock(const ObservableCache & cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations) :
                     cache(cache),
                     pdf(pdf),
-                    observations_data(observations),
-                    _number_of_observations(observations->size() / rank_)
+                    observations(observations),
+                    generation(observations.generation())
                 {
                     // The PDF owns the batch; a block evaluating against a different cache would read a
                     // grid that this cache's update() never fills.
@@ -1290,8 +1289,13 @@ namespace eos
                         throw InternalError(std::format("UnbinnedLikelihoodBlock: DetectorLevelPDF has rank {} but rank {} was requested", pdf->axes().size(), rank_));
                     }
 
+                    if (observations.rank() != rank_)
+                    {
+                        throw InternalError(std::format("UnbinnedLikelihoodBlock: the observations have rank {} but rank {} was requested", observations.rank(), rank_));
+                    }
+
                     // make_interpolator() surfaces an out-of-grid observation as an InternalError
-                    interpolator = pdf->make_interpolator(*observations_data);
+                    interpolator = pdf->make_interpolator(observations.values());
                 }
 
                 virtual ~UnbinnedLikelihoodBlock() = default;
@@ -1299,7 +1303,7 @@ namespace eos
                 virtual std::string
                 as_string() const
                 {
-                    return std::format("Unbinned<{}>: {} events", rank_, _number_of_observations);
+                    return std::format("Unbinned<{}>: {} events", rank_, observations.size());
                 }
 
                 virtual double
@@ -1308,6 +1312,13 @@ namespace eos
                     // Recompute the smeared grid once for this evaluation; a no-op if the cache has not
                     // advanced since the last call (possibly by another block sharing the same PDF).
                     pdf->update_grid();
+
+                    // the events have been replaced since the interpolator was built
+                    if (! (generation == observations.generation()))
+                    {
+                        interpolator = pdf->make_interpolator(observations.values());
+                        generation   = observations.generation();
+                    }
 
                     // The grid holds the *unnormalized* signal PDF, so each event's interpolated density
                     // must be divided by the truth PDF's normalization to yield a proper probability
@@ -1342,7 +1353,7 @@ namespace eos
                 virtual unsigned
                 number_of_observations() const
                 {
-                    return _number_of_observations;
+                    return static_cast<unsigned>(observations.size());
                 }
 
                 virtual double
@@ -1370,32 +1381,22 @@ namespace eos
                     // it first; otherwise the cache-identity check above would fire on every clone. The
                     // cloned PDF has a fresh grid buffer, so the interpolator is rebuilt too,
                     // rather than reused from the parent, in the block constructor above.
-                    return LogLikelihoodBlockPtr(new UnbinnedLikelihoodBlock<rank_>(cache, pdf->clone(cache), observations_data));
+                    return LogLikelihoodBlockPtr(new UnbinnedLikelihoodBlock<rank_>(cache, pdf->clone(cache), observations));
                 }
         };
 
-        // Construct a rank-generic UnbinnedLikelihoodBlock, validating what the class constructor cannot:
-        // a null PDF cannot be queried for its rank, and an empty observation set is never meaningful.
+        // Construct a rank-generic UnbinnedLikelihoodBlock, validating what the class constructor cannot: a null
+        // PDF cannot be queried for its rank. UnbinnedObservations rejects an empty observation set.
         template <std::size_t rank_>
         LogLikelihoodBlockPtr
-        make_unbinned_likelihood_block(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+        make_unbinned_likelihood_block(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
         {
             if (! pdf)
             {
                 throw InternalError(std::format("LogLikelihoodBlock::Unbinned{}D: pdf must not be null", rank_));
             }
 
-            if (observations.empty())
-            {
-                throw InternalError(std::format("LogLikelihoodBlock::Unbinned{}D: observations must not be empty", rank_));
-            }
-
-            if (observations.size() % rank_ != 0)
-            {
-                throw InternalError(std::format("LogLikelihoodBlock::Unbinned{}D: {} coordinates are not a multiple of the rank", rank_, observations.size()));
-            }
-
-            return LogLikelihoodBlockPtr(new UnbinnedLikelihoodBlock<rank_>(cache, pdf, std::make_shared<const std::vector<double>>(observations)));
+            return LogLikelihoodBlockPtr(new UnbinnedLikelihoodBlock<rank_>(cache, pdf, observations));
         }
     } // namespace implementation
 
@@ -1534,11 +1535,23 @@ namespace eos
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
     {
+        return implementation::make_unbinned_likelihood_block<1>(cache, pdf, UnbinnedObservations(observations, 1));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+    {
         return implementation::make_unbinned_likelihood_block<1>(cache, pdf, observations);
     }
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<2>(cache, pdf, UnbinnedObservations(observations, 2));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
     {
         return implementation::make_unbinned_likelihood_block<2>(cache, pdf, observations);
     }
@@ -1546,11 +1559,23 @@ namespace eos
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
     {
+        return implementation::make_unbinned_likelihood_block<3>(cache, pdf, UnbinnedObservations(observations, 3));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+    {
         return implementation::make_unbinned_likelihood_block<3>(cache, pdf, observations);
     }
 
     LogLikelihoodBlockPtr
     LogLikelihoodBlock::Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<4>(cache, pdf, UnbinnedObservations(observations, 4));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
     {
         return implementation::make_unbinned_likelihood_block<4>(cache, pdf, observations);
     }

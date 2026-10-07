@@ -953,6 +953,54 @@ namespace eos
             }
     } unbinned_likelihood_gaussian_test;
 
+    // The events of an unbinned block can be replaced through shared observations, which reach its clones.
+    class UnbinnedLikelihoodObservationsTest : public TestCase
+    {
+        public:
+            UnbinnedLikelihoodObservationsTest() :
+                TestCase("unbinned_likelihood_observations_test")
+            {
+            }
+
+            virtual void
+            run() const
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                auto pdf = std::make_shared<DetectorLevelPDF>(cache,
+                                                              "TestGaussian1D::P(x)",
+                                                              Options{
+                },
+                                                              std::vector<DetectorLevelPDF::Axis>{ DetectorLevelPDF::Axis{ "x", -12.0, +12.0, 256 } },
+                                                              "<<TestGaussianResolution1D::UnnormalizedPDF(x)>>");
+
+                UnbinnedObservations observations(std::vector<double>{ 0.5, 1.0 }, 1);
+                auto                 block = LogLikelihoodBlock::Unbinned1D(cache, pdf, observations);
+                // a clone, as LogLikelihood::add() keeps it, shares the observations
+                ObservableCache      other_cache(p);
+                auto                 clone = block->clone(other_cache);
+
+                cache.update();
+                other_cache.update();
+                const double before = clone->evaluate();
+                TEST_CHECK_RELATIVE_ERROR(before, block->evaluate(), 1.0e-14);
+
+                const std::vector<double> replacement{ 2.0, 3.0, -1.0 };
+                observations.set(replacement);
+                TEST_CHECK_EQUAL(block->number_of_observations(), 3u);
+                TEST_CHECK_EQUAL(clone->number_of_observations(), 3u);
+
+                const double expected = LogLikelihoodBlock::Unbinned1D(cache, pdf, replacement)->evaluate();
+                TEST_CHECK_RELATIVE_ERROR(block->evaluate(), expected, 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(clone->evaluate(), expected, 1.0e-14);
+                TEST_CHECK(std::abs(expected - before) > 1.0e-3);
+
+                // observations of the wrong rank are rejected
+                TEST_CHECK_THROWS(InternalError, LogLikelihoodBlock::Unbinned2D(cache, pdf, observations));
+            }
+    } unbinned_likelihood_observations_test;
+
     // 2D Gaussian, fitting one mean component: the marginal likelihood along mu_x recovers the same
     // mode/interval check as the 1D case, with events placed exactly at mu_y so the y-density factors
     // out as a mu_x-independent constant.
