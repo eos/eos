@@ -1,0 +1,21 @@
+parameters:
+  # used only by the resolution of the data object
+  'test::shift': { central: 0.0, min: -1.0, max: 1.0, unit: '1', latex: 's' }
+
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data-parameter'
+
+posteriors:
+  - name: posterior
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test

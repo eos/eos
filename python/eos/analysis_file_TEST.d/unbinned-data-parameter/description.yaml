@@ -1,0 +1,10 @@
+axes:
+- max: 3.0
+  min: 0.0
+  points: 4
+  variable: z
+resolution:
+  expression: exp((0.0 - 1000 * ({z} - [[test::shift]])^2))
+  kind: expression
+type: UnbinnedLikelihood
+version: 1.0.21

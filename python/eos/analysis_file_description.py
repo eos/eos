@@ -28,6 +28,7 @@ from collections import defaultdict
 import copy as _copy
 import eos
 import inspect
+import os
 from collections import Counter
 
 
@@ -683,6 +684,30 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         axis_segments = getattr(self, '_axis_segments', list(range(len(self.axes))))
         yield from _validate_children(self.axes, axis_segments, 'axes')
 
+    def _validate_resolution_semantics(self, context):
+        """Check the names that the resolution expression of an unbinned likelihood's data object refers to."""
+        from eos.data.unbinned_likelihood import UnbinnedExpressionResolutionDescription, UnbinnedLikelihoodDescription
+
+        try:
+            data = UnbinnedLikelihoodDescription.from_yaml_file(os.path.join(context.data_path(self.data), 'description.yaml'))
+        except Exception:
+            # a missing or unreadable data object is reported by the deep phase
+            return
+
+        if not isinstance(data.resolution, UnbinnedExpressionResolutionDescription):
+            return
+
+        try:
+            references = eos.analyze_expression(data.resolution.expression)
+        except RuntimeError as error:
+            yield Diagnostic(('data',), Severity.ERROR, f"The resolution of data object '{self.data}' does not parse: {error}")
+            return
+
+        for observable in references.observables:
+            yield from _check_qualified(context, observable.full(), 'observable', ('data',))
+        for parameter in references.parameters:
+            yield from _check_qualified(context, parameter.full(), 'parameter', ('data',))
+
     def validate_semantics(self, context):
         constraint_segments = getattr(self, '_constraint_segments', list(range(len(self.constraints))))
         assert len(self.constraints) == len(constraint_segments)
@@ -693,6 +718,10 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
                 'constraint',
                 ('constraints', segment),
             )
+
+        # the resolution of an unbinned likelihood may refer to the file's parameters and observables
+        if self.type == 'unbinned' and self.data:
+            yield from self._validate_resolution_semantics(context)
 
         known_constraints = eos.Constraints()
         manual_segments = getattr(

@@ -425,7 +425,7 @@ class AnalysisFile:
         :returns: The diagnostics found, most-structural first.
         :rtype: list[eos.diagnostic.Diagnostic]
         """
-        context = ValidationContext(self._description)
+        context = ValidationContext(self._description, base_directory=base_directory)
         diagnostics = list(self._description.validate_semantics(context))
 
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file

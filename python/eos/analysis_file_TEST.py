@@ -349,6 +349,23 @@ class TestAnalysisFileUnbinnedLikelihood(unittest.TestCase):
         expected = math.log(1.5) + math.log(3.5) + math.log(4.0) + math.log(3.5) - 4.0 * math.log(9.0)
         self.assertAlmostEqual(analysis.log_likelihood([4.18]), expected, places=10)
 
+    def _semantic_diagnostics(self, name):
+        # the semantic phase alone, which declares nothing in the process-wide EOS registries
+        description = eos.analysis_file_description.AnalysisFileDescription.from_yaml_file(_TESTD / name)
+        context = eos.validation_context.ValidationContext(description, base_directory=_TESTD)
+        return list(description.validate_semantics(context))
+
+    def test_resolution_parameters_are_used(self):
+        # a parameter that only the resolution of the data object refers to is used, not reported as unused
+        diagnostics = self._semantic_diagnostics('unbinned-resolution-parameter.yaml')
+        self.assertEqual([], [d for d in diagnostics if 'test::shift' in d.message])
+
+    def test_resolution_parameters_must_be_known(self):
+        errors = [d for d in self._semantic_diagnostics('unbinned-resolution-unknown-parameter.yaml') if d.severity is Severity.ERROR]
+        self.assertEqual(1, len(errors))
+        self.assertEqual(('likelihoods', 'unbinned-test', 'data'), errors[0].path)
+        self.assertIn("'test::shift' is unknown", errors[0].message)
+
     def test_custom_signal_pdf(self):
         # the truth density 1 + z, normalized by its integral 7.5 on z = 0..3, is fitted with the
         # delta resolution of the test above; the events at z = 0.5, 1.5, 2.0, 2.5 have densities 1.5, 2.5, 3, 3.5
