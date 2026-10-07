@@ -27,6 +27,7 @@
 #include <memory>
 #include <span>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace eos
@@ -80,6 +81,28 @@ namespace eos
                         offset_variable(offset_variable)
                     {
                     }
+            };
+
+            // A box in the sampling variables: one closed interval [min, max] per axis, in axis order.
+            using Window = std::vector<std::pair<double, double>>;
+
+            // The integral over fixed windows, with the per-axis weights of the grid nodes precomputed once.
+            class WindowIntegrator
+            {
+                public:
+                    // See DetectorLevelPDF::integral().
+                    double operator() () const;
+
+                private:
+                    friend class DetectorLevelPDF;
+
+                    // Per window and axis: the first grid node with non-zero weight, and the weights from there on.
+                    using AxisWeights = std::pair<std::size_t, std::vector<double>>;
+
+                    const DetectorLevelPDF &              _pdf;
+                    std::vector<std::vector<AxisWeights>> _weights;
+
+                    WindowIntegrator(const DetectorLevelPDF & pdf, std::vector<std::vector<AxisWeights>> && weights);
             };
 
             // Sampled resolution, ranks 1-4: kernel values, flat and row-major, in centred order
@@ -161,6 +184,20 @@ namespace eos
             // Query points bound to grid(), with the cell index and fractional offsets precomputed
             // once (see ResolutionConvolution::make_interpolator()).
             std::unique_ptr<ResolutionConvolution::Interpolator> make_interpolator(std::span<const double> points) const;
+            ///@}
+
+            ///@name Windows
+            ///@{
+            // Throws unless there is at least one window, each with one non-empty interval per axis within the
+            // grid, and no two windows overlap.
+            void validate(const std::vector<Window> & windows) const;
+
+            // The logarithm of the integral of the unnormalized smeared density over the union of `windows`,
+            // integrating exactly the multilinear interpolation of the grid. Recomputes the grid if needed.
+            double integral(const std::vector<Window> & windows) const;
+
+            // Validates `windows` once; the integrator refers to this PDF and must not outlive it.
+            std::unique_ptr<WindowIntegrator> make_window_integrator(const std::vector<Window> & windows) const;
             ///@}
 
         private:

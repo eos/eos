@@ -30,6 +30,34 @@
 
 namespace eos
 {
+    namespace
+    {
+        // The integral over [a, b] of the hat function of width 2 h centred on the grid node x, i.e. the weight of
+        // that node in the integral of the linear interpolation.
+        double
+        hat_integral(const double & a, const double & b, const double & x, const double & h)
+        {
+            const auto antiderivative = [](const double & u) -> double
+            {
+                if (u <= -1.0)
+                {
+                    return 0.0;
+                }
+                if (u <= 0.0)
+                {
+                    return 0.5 * (1.0 + u) * (1.0 + u);
+                }
+                if (u <= 1.0)
+                {
+                    return 1.0 - 0.5 * (1.0 - u) * (1.0 - u);
+                }
+                return 1.0;
+            };
+
+            return h * (antiderivative((b - x) / h) - antiderivative((a - x) / h));
+        }
+    } // namespace
+
     struct DetectorLevelPDF::Data
     {
             // Construction inputs, retained so that clone() can rebuild an independent copy.
@@ -77,6 +105,62 @@ namespace eos
 
             // The smeared grid exposed via grid(); allocated once, so spans and Interpolators over it stay valid.
             std::vector<double> smeared;
+
+            // The first grid node along `axis` whose hat function overlaps [a, b], and the weights of the nodes from there on.
+            std::pair<std::size_t, std::vector<double>>
+            axis_weights(const std::size_t & axis, const double & a, const double & b) const
+            {
+                const double      h     = spacing[axis];
+                const std::size_t first = static_cast<std::size_t>(std::max(0.0, std::floor((a - origin[axis]) / h)));
+                const std::size_t last  = std::min(dimensions[axis] - 1, static_cast<std::size_t>(std::ceil((b - origin[axis]) / h)));
+
+                std::vector<double> weights;
+                weights.reserve(last - first + 1);
+                for (std::size_t k = first; k <= last; ++k)
+                {
+                    weights.push_back(hat_integral(a, b, origin[axis] + static_cast<double>(k) * h, h));
+                }
+
+                return { first, std::move(weights) };
+            }
+
+            // The integral of the multilinear interpolation of the smeared grid over one window, given its axis_weights().
+            double
+            grid_integral(const std::vector<std::pair<std::size_t, std::vector<double>>> & window_weights) const
+            {
+                const std::size_t rank = axes.size();
+
+                double                   result = 0.0;
+                std::vector<std::size_t> index(rank, 0);
+                while (true)
+                {
+                    std::size_t flat   = 0;
+                    double      weight = 1.0;
+                    for (std::size_t i = 0; i < rank; ++i)
+                    {
+                        const auto & [first, weights]  = window_weights[i];
+                        flat                          += (first + index[i]) * strides[i];
+                        weight                        *= weights[index[i]];
+                    }
+                    result += weight * smeared[flat];
+
+                    std::size_t i = rank;
+                    for (; i > 0; --i)
+                    {
+                        if (++index[i - 1] < window_weights[i - 1].second.size())
+                        {
+                            break;
+                        }
+                        index[i - 1] = 0;
+                    }
+                    if (0 == i)
+                    {
+                        break;
+                    }
+                }
+
+                return result;
+            }
 
             // Empty; present so that Density::begin()/end() have something to iterate over.
             std::vector<ParameterDescription> descriptions;
@@ -360,6 +444,105 @@ namespace eos
     DetectorLevelPDF::make_interpolator(std::span<const double> points) const
     {
         return _data->convolution->make_interpolator(this->grid(), points);
+    }
+
+    void
+    DetectorLevelPDF::validate(const std::vector<Window> & windows) const
+    {
+        const std::vector<Axis> & axes = _data->axes;
+
+        if (windows.empty())
+        {
+            throw InternalError("DetectorLevelPDF: at least one window is required");
+        }
+
+        for (const auto & window : windows)
+        {
+            if (window.size() != axes.size())
+            {
+                throw InternalError(std::format("DetectorLevelPDF: a window has {} intervals, but the PDF has rank {}", window.size(), axes.size()));
+            }
+
+            for (std::size_t i = 0; i < axes.size(); ++i)
+            {
+                // also rejects NaN
+                const auto & [a, b] = window[i];
+                if (! ((axes[i].min <= a) && (a < b) && (b <= axes[i].max)))
+                {
+                    throw InternalError(
+                            std::format("DetectorLevelPDF: window [{}, {}] in '{}' is empty or exceeds the grid [{}, {}]", a, b, axes[i].variable, axes[i].min, axes[i].max));
+                }
+            }
+        }
+
+        for (std::size_t w = 0; w < windows.size(); ++w)
+        {
+            for (std::size_t v = w + 1; v < windows.size(); ++v)
+            {
+                bool overlap = true;
+                for (std::size_t i = 0; i < axes.size(); ++i)
+                {
+                    overlap = overlap && (std::max(windows[w][i].first, windows[v][i].first) < std::min(windows[w][i].second, windows[v][i].second));
+                }
+
+                if (overlap)
+                {
+                    throw InternalError(std::format("DetectorLevelPDF: windows {} and {} overlap", w, v));
+                }
+            }
+        }
+    }
+
+    double
+    DetectorLevelPDF::integral(const std::vector<Window> & windows) const
+    {
+        return (*this->make_window_integrator(windows))();
+    }
+
+    std::unique_ptr<DetectorLevelPDF::WindowIntegrator>
+    DetectorLevelPDF::make_window_integrator(const std::vector<Window> & windows) const
+    {
+        this->validate(windows);
+
+        std::vector<std::vector<WindowIntegrator::AxisWeights>> weights;
+        weights.reserve(windows.size());
+        for (const auto & window : windows)
+        {
+            std::vector<WindowIntegrator::AxisWeights> window_weights;
+            window_weights.reserve(window.size());
+            for (std::size_t i = 0; i < window.size(); ++i)
+            {
+                window_weights.push_back(_data->axis_weights(i, window[i].first, window[i].second));
+            }
+            weights.push_back(std::move(window_weights));
+        }
+
+        return std::unique_ptr<WindowIntegrator>(new WindowIntegrator(*this, std::move(weights)));
+    }
+
+    DetectorLevelPDF::WindowIntegrator::WindowIntegrator(const DetectorLevelPDF & pdf, std::vector<std::vector<AxisWeights>> && weights) :
+        _pdf(pdf),
+        _weights(std::move(weights))
+    {
+    }
+
+    double
+    DetectorLevelPDF::WindowIntegrator::operator() () const
+    {
+        _pdf.update_grid();
+
+        double result = 0.0;
+        for (const auto & window_weights : _weights)
+        {
+            result += _pdf._data->grid_integral(window_weights);
+        }
+
+        if (result > 0.0) [[likely]]
+        {
+            return std::log(result);
+        }
+
+        return -std::numeric_limits<double>::infinity();
     }
 
     double
