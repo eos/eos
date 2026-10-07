@@ -22,6 +22,7 @@ import eos
 import inspect
 import os
 import re
+import struct
 import tempfile
 import unittest
 
@@ -154,6 +155,7 @@ BINDINGS_FACTORIES = {
     'SignalPDFGroup':           lambda: list(list(eos.SignalPDFs().sections())[0])[0],
     'SignalPDFSection':         lambda: list(eos.SignalPDFs().sections())[0],
     'Unit':                     lambda: eos.Unit.GeV(),
+    'UnbinnedObservations':     lambda: _eos.UnbinnedObservations([ 1.0, 2.0 ], 1),
     '_Constraints':             lambda: eos.Constraints(),
     '_Observables':             lambda: eos.Observables(),
     '_Parameters':              lambda: _PARAMETERS,
@@ -198,6 +200,7 @@ BINDINGS_TESTS = {
 
     ('_DetectorLevelPDF', 'make_from_expression'): lambda p: _eos._DetectorLevelPDF.make_from_expression(_detector_level_pdf_cache(),
                                                      'TestLegendre1D::P(z)', eos.Options(), [ _DETECTOR_LEVEL_PDF_AXES[0] ], '1.0'),
+    ('_DetectorLevelPDF', 'integral'):            ([ [ (1.0, 3.0) ] ],),
     ('_DetectorLevelPDF', 'make_from_grid'):      lambda p: _detector_level_pdf(),
 
     ('_DetectorLevelPDFAxis', 'maximum'):         (),
@@ -389,6 +392,11 @@ BINDINGS_TESTS = {
     ('SignalPDFSection', '__iter__'):            lambda s: list(s),
     ('SignalPDFSection', 'description'):         (),
     ('SignalPDFSection', 'name'):                (),
+
+    ('UnbinnedObservations', 'rank'):            (),
+    ('UnbinnedObservations', 'set'):             ([ 3.0 ],),
+    ('UnbinnedObservations', 'size'):            (),
+    ('UnbinnedObservations', 'values'):          (),
 
     ('Unit', 'Femtometer2'):                     (),
     ('Unit', 'GeV'):                             (),
@@ -651,6 +659,43 @@ def exported_functions():
 
 def is_enumeration(cls):
     return any(isinstance(value, cls) for value in vars(cls).values())
+
+
+class UnbinnedObservationsTests(unittest.TestCase):
+
+    def test_replacement_reaches_the_likelihood(self):
+        "Replacing shared observations changes the log-likelihood that holds a clone of the block."
+        cache        = _detector_level_pdf_cache()
+        pdf          = _detector_level_pdf(1, cache)
+        observations = _eos.UnbinnedObservations([ 1.0, 2.0 ], 1)
+        block        = _eos.LogLikelihoodBlock.Unbinned1D(cache, pdf, observations)
+        self.assertEqual(block.number_of_observations(), 2)
+
+        log_likelihood = _eos.LogLikelihood(_PARAMETERS)
+        log_likelihood.add(block)
+        log_likelihood.evaluate()
+
+        observations.set([ 1.0, 2.0, 3.0 ])
+        self.assertEqual(observations.size(), 3)
+        self.assertEqual(observations.values(), [ 1.0, 2.0, 3.0 ])
+        self.assertEqual(block.number_of_observations(), 3)
+
+        expected = _eos.LogLikelihood(_PARAMETERS)
+        expected.add(_eos.LogLikelihoodBlock.Unbinned1D(cache, pdf, [ 1.0, 2.0, 3.0 ]))
+        self.assertAlmostEqual(log_likelihood.evaluate(), expected.evaluate(), places=12)
+
+    def test_unaligned_buffer(self):
+        "A contiguous buffer of doubles at an unaligned address converts to the same values."
+        raw    = bytearray(1) + struct.pack('4d', 1.0, 2.0, 3.0, 4.0)
+        values = memoryview(raw)[1:].cast('d')
+        self.assertEqual(_eos.UnbinnedObservations(values, 1).values(), [ 1.0, 2.0, 3.0, 4.0 ])
+
+    def test_invalid(self):
+        with self.assertRaises(RuntimeError):
+            _eos.UnbinnedObservations([ 1.0, 2.0, 3.0 ], 2)
+        observations = _eos.UnbinnedObservations([ 1.0, 2.0 ], 2)
+        with self.assertRaises(RuntimeError):
+            observations.set([])
 
 
 class BindingsCoverageTests(unittest.TestCase):
