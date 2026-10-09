@@ -168,8 +168,13 @@ class DetectorLevelPDF:
 
     A detector-level PDF represents a truth-level :class:`SignalPDF` after convolution with a
     detector resolution function. The result is itself a :class:`SignalPDF`, so it can be evaluated
-    and plotted like any other PDF. The convolution is circular, so each axis must be padded with a
-    region in which both the PDF and the resolution are negligible.
+    like any other PDF. The convolution is circular, so each axis must be padded with a region in
+    which both the PDF and the resolution are negligible.
+
+    To plot a detector-level PDF, use figure items of type ``detector-level-pdf``
+    (:class:`eos.figure.item.DetectorLevelPDFItem`). They take either a grid and a resolution
+    expression, or an :class:`eos.data.UnbinnedLikelihood` data object whose grid and resolution are
+    reused.
     """
 
     @staticmethod
