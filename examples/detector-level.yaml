@@ -28,3 +28,23 @@ posteriors:
       'B->D::alpha^f+_0@SSE':  0.74943
       'B->D::alpha^f0_1@SSE':  0.17113
       'B->D::alpha^f0_2@SSE': -2.34945
+
+figures:
+  - name: 'B-to-D-detector-level'
+    plot:
+      xaxis: { label: '$q^2$', unit: '$\textnormal{GeV}^2$', range: [-1.0, 12.6] }
+      yaxis: { label: '$P(q^2, \cos\theta_\ell = 0)$', range: [0.0, 0.15] }
+      legend: { position: 'upper center' }
+      items:
+        - { type: 'signal-pdf', label: 'truth level', color: 'C0',
+            pdf: 'B->Dlnu::P(q2,cos(theta_l))', options: { l: 'mu', q: 'd', model: 'WET', form-factors: 'SSE' },
+            variable: 'q2', range: [0.0112, 11.62], resolution: 200,
+            kinematics: { 'cos(theta_l)': 0.0, 'q2_min': 0.0112, 'q2_max': 11.62, 'cos(theta_l)_min': -1.0, 'cos(theta_l)_max': 1.0 }
+          }
+        # the grid and the resolution are taken from the data object of the fit
+        - { type: 'detector-level-pdf', label: 'detector level', color: 'C1',
+            pdf: 'B->Dlnu::P(q2,cos(theta_l))', options: { l: 'mu', q: 'd', model: 'WET', form-factors: 'SSE' },
+            variable: 'q2', range: [-1.0, 12.6], resolution: 200,
+            kinematics: { 'cos(theta_l)': 0.0 },
+            data: './detector-level-data/observed-events'
+          }
