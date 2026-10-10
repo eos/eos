@@ -613,6 +613,11 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     :param tolerance: For ``type: 'unbinned'`` with a sampled resolution, the tolerance used when
         checking the resolution's declared offset grid against the grid the fit requires. Rejected otherwise.
     :type tolerance: float
+    :param windows: For ``type: 'unbinned'``, non-overlapping boxes within the cropped axes, each given as a list
+        of per-axis intervals; an axis omitted from a box uses its full cropped range. If given, only the events
+        within the union of the boxes enter the likelihood, and the detector-level PDF is normalized over that
+        union. Optional; rejected otherwise.
+    :type windows: list[list[UnbinnedAxisComponent]]
     """
     name:str
     constraints:list=field(default_factory=list)
@@ -626,6 +631,7 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     options:dict=field(default_factory=dict)
     axes:list=field(default_factory=list)
     tolerance:float=1.0e-9
+    windows:list=field(default_factory=list)
 
     def _diagnostics(self):
         yield from _check_file_local_name(self.name, 'likelihood name', ('name',))
@@ -652,6 +658,20 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             variables = [axis.variable for axis in self.axes if isinstance(axis, UnbinnedAxisComponent)]
             for variable in sorted({ v for v in variables if variables.count(v) > 1 }):
                 yield Diagnostic(('axes',), Severity.ERROR, f"Likelihood component '{self.name}': 'axes' crops '{variable}' more than once")
+            for index, window in enumerate(self.windows):
+                if not (isinstance(window, list) and window and all(isinstance(entry, (UnbinnedAxisComponent, InvalidComponent)) for entry in window)):
+                    yield Diagnostic(
+                        ('windows', index),
+                        Severity.ERROR,
+                        f"Likelihood component '{self.name}': each window must be a non-empty list of intervals with the keys 'variable', 'min', and 'max'",
+                    )
+                    continue
+                variables = [entry.variable for entry in window if isinstance(entry, UnbinnedAxisComponent)]
+                for variable in sorted({ v for v in variables if variables.count(v) > 1 }):
+                    yield Diagnostic(('windows', index), Severity.ERROR, f"Likelihood component '{self.name}': window {index} constrains '{variable}' more than once")
+                for entry in window:
+                    if isinstance(entry, UnbinnedAxisComponent) and not (entry.min < entry.max):
+                        yield Diagnostic(('windows', index), Severity.ERROR, f"Likelihood component '{self.name}': window {index} has an empty interval [{entry.min}, {entry.max}] in '{entry.variable}'")
         else:
             # these keys are only read for 'type: unbinned'; reject rather than silently ignore them
             unbinned_only = {
@@ -660,6 +680,7 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
                 'options':   bool(self.options),
                 'axes':      bool(self.axes),
                 'tolerance': self.tolerance != 1.0e-9,
+                'windows':   bool(self.windows),
             }
             for key, given in unbinned_only.items():
                 if given:
@@ -693,6 +714,11 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             yield from (diagnostic.prefixed('pyhf') for diagnostic in self.pyhf.validate_structure())
         axis_segments = getattr(self, '_axis_segments', list(range(len(self.axes))))
         yield from _validate_children(self.axes, axis_segments, 'axes')
+        for index, window in enumerate(self.windows):
+            if isinstance(window, list):
+                for position, entry in enumerate(window):
+                    if isinstance(entry, InvalidComponent):
+                        yield from (diagnostic.prefixed('windows', index, position) for diagnostic in entry.validate_structure())
 
     def _validate_resolution_semantics(self, context):
         """Check the names that the resolution expression of an unbinned likelihood's data object refers to."""
@@ -807,6 +833,11 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             _kwargs['axes'] = [UnbinnedAxisComponent.from_dict(**a) for a in kwargs['axes']]
         else:
             axis_segments = []
+        if 'windows' in kwargs:
+            _kwargs['windows'] = [
+                [UnbinnedAxisComponent.from_dict(**entry) if isinstance(entry, dict) else entry for entry in window] if isinstance(window, list) else window
+                for window in kwargs['windows']
+            ]
         result = cls(**_kwargs)
         result._constraint_segments = constraint_segments
         result._manual_constraint_segments = manual_constraint_segments
