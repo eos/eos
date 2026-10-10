@@ -215,6 +215,14 @@ The likelihoods can be of four types:
           - { 'variable': 'q2',           'min': 1.0,  'max': 9.0 }
           - { 'variable': 'cos(theta_l)', 'min': -1.0, 'max': 1.0 }
 
+    The optional ``windows`` key restricts the fit further to a union of non-overlapping boxes within the cropped axes, e.g. to exclude a region of the spectrum. Each box is a list of intervals, at most one per variable; a variable omitted from a box keeps its full cropped range. Only events within one of the boxes enter the likelihood, and the detector-level PDF is normalized over the union of the boxes rather than over the range of the truth-level PDF. Unlike ``axes``, the boxes do not change the grid on which the convolution is computed.
+
+    .. code-block:: yaml
+
+        windows:
+          - [ { 'variable': 'q2', 'min': 1.0, 'max': 6.0 } ]
+          - [ { 'variable': 'q2', 'min': 7.0, 'max': 9.0 }, { 'variable': 'cos(theta_l)', 'min': -0.5, 'max': 0.5 } ]
+
     Because the underlying convolution uses a real discrete Fourier transform, every axis must end up with an **even** number of points; a crop that yields an odd count is rejected rather than silently adjusted. For a resolution supplied as numerical samples, the optional ``tolerance`` key (default ``1.0e-9``) sets the tolerance used when checking that the samples' declared offset grid matches the grid the fit requires. A resolution supplied as an expression (``kind: expression``) is sampled anew whenever the parameters change, and may therefore depend on them.
 
 
