@@ -6,6 +6,8 @@
 - Rename ``eos.stderr_handler`` to ``eos.default_log_handler`` #1290 (D. van Dyk)
 - Let ``eos.set_log_level`` accept any Python log level or its name, e.g. ``'DEBUG'``, and change the native log level in lock-step, also for the CLI's verbosity #1290 (D. van Dyk)
 
+- Test the ``eos-analysis`` commands in Python, in lieu of the bash script ``src/scripts/eos-analysis_TEST``; the tests of the pypmc-based commands ``sample-mcmc``, ``find-clusters``, ``sample-pmc``, and ``find-mode --from-mcmc`` are kept apart in ``eos/cli/analysis_pypmc_TEST.py`` (issue #1264) (D. van Dyk)
+
 ### Added
 
 ### Deprecated
