@@ -19,6 +19,7 @@
 
 from collections import Counter
 from types import MappingProxyType
+import os
 
 from .analysis_file_description import InvalidComponent, MaskExpressionComponent
 
@@ -35,12 +36,17 @@ class ValidationContext:
     :param description: The deserialized analysis file whose declarations should
         be visible during semantic validation.
     :type description: eos.analysis_file_description.AnalysisFileDescription
+    :param base_directory: The base directory against which the analysis file's relative data
+        paths are resolved. Defaults to the current working directory.
+    :type base_directory: str
     """
 
     _LOCAL_KINDS = frozenset(('prior', 'likelihood', 'mask', 'posterior'))
 
-    def __init__(self, description):
+    def __init__(self, description, base_directory='./'):
         import eos
+
+        self._base_directory = base_directory
 
         observables = {observable.name for observable in description.observables}
         for mask in description.masks:
@@ -95,6 +101,10 @@ class ValidationContext:
             'parameter': eos.Parameters(),
             'constraint': eos.Constraints(),
         })
+
+    def data_path(self, relative_path):
+        """Resolve a data path of the analysis file against its base directory."""
+        return os.path.abspath(os.path.join(self._base_directory, relative_path))
 
     def lookup(self, kind, qn):
         """Return whether *qn* exists in the file shadow or the real EOS registry.

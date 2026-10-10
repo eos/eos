@@ -20,6 +20,7 @@
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
 import eos
+import numpy as _np
 import os
 import sys
 import yaml
@@ -27,6 +28,7 @@ from dataclasses import asdict
 from eos.analysis_file_description import AnalysisFileDescription, PriorDescription, \
                                        MaskExpressionComponent, MaskNamedComponent
 from eos.analysis_file_context import AnalysisFileContext
+from eos.data.unbinned_likelihood import UnbinnedSampledResolutionDescription
 from eos.deserializable import InvalidComponent
 from eos.diagnostic import Diagnostic, Severity, attach_line_numbers
 from eos.validation_context import ValidationContext
@@ -133,6 +135,16 @@ class AnalysisFile:
                     raise ValueError(f'Unexpected value encountered in description of parameter \'{p.name}\': {e}')
             eos.completed(f'... finished declaring {len(self._params)} custom parameters')
 
+        # Optional: insert custom signal PDFs, which may use the custom observables
+        self._signal_pdfs = self._description.signal_pdfs
+        if self._signal_pdfs:
+            eos.inprogress('Inserting custom signal PDFs ...')
+            for p in self._signal_pdfs:
+                eos.SignalPDFs().insert(eos.QualifiedName(p.name), p.description, eos.Options(**p.options), eos.QualifiedName(p.numerator), p.variables,
+                                        eos.QualifiedName(p.normalization), p.bounds())
+                eos.info(f'Inserted signal PDF: {p.name}')
+            eos.completed(f'... finished inserting {len(self._signal_pdfs)} custom signal PDFs')
+
         self._steps = { s.id: s for s in self._description.steps }
 
         self._masks = { m.name: m for m in self._description.masks }
@@ -175,12 +187,13 @@ class AnalysisFile:
     def analysis(self, _posterior, base_directory='./'):
         """Create an eos.Analysis object for the named posterior.
 
-        :param base_directory: The base directory against which declared constraints' relative
-            filenames (see the 'constraints' top-level section) are resolved. Defaults to the
-            current working directory.
+        :param base_directory: The base directory against which relative data paths are resolved,
+            i.e., declared constraints' filenames (see the 'constraints' top-level section) and
+            unbinned likelihoods' data directories. Defaults to the current working directory.
         :type base_directory: str
         """
         self._load_declared_constraints(base_directory)
+        context = AnalysisFileContext(base_directory=base_directory)
 
         if _posterior not in self._posteriors:
             raise RuntimeError(f'Cannot create analysis for unknown posterior: \'{_posterior}\'')
@@ -192,6 +205,10 @@ class AnalysisFile:
             prior.extend(self._priors[p].descriptions)
 
         parameters = eos.Parameters()
+
+        # applied here already, since an unbinned likelihood may sample its resolution once, below
+        for name, value in posterior.fixed_parameters.items():
+            parameters.set(name, value)
 
         likelihood = []
         manual_constraints = []
@@ -223,6 +240,10 @@ class AnalysisFile:
 
                 external_likelihood.extend([llh_block])
 
+            # create an unbinned likelihood
+            if self._likelihoods[lh].type == 'unbinned':
+                external_likelihood.append(self._unbinned_likelihood_block(self._likelihoods[lh], posterior, parameters, context))
+
         global_options = posterior.global_options
         fixed_parameters = posterior.fixed_parameters
 
@@ -237,6 +258,54 @@ class AnalysisFile:
                             manual_constraints=manual_constraints,
                             fixed_parameters=fixed_parameters,
                             parameters=parameters)
+
+
+    def _unbinned_likelihood_block(self, component, posterior, parameters, context):
+        """Build the eos.LogLikelihoodBlock.Unbinned<N>D block described by an unbinned likelihood component.
+
+        The component's data directory is resolved against the base directory of the given eos.AnalysisFileContext.
+        """
+        data = eos.data.UnbinnedLikelihood(context.data_path(component.data))
+
+        crop = { axis.variable: (axis.min, axis.max) for axis in component.axes }
+        cropped_axes = data.cropped_axes(crop)
+
+        # as for constraints: the posterior's global options supersede the component's own options
+        for key, value in component.options.items():
+            if key in posterior.global_options and posterior.global_options[key] != value:
+                eos.error(f'Global option {key}={posterior.global_options[key]} overrides option {key}={value} for likelihood component {component.name} when using posterior {posterior.name}.')
+        options = eos.Options(**(component.options | posterior.global_options))
+
+        # A throwaway cache: LogLikelihood.add() clones an external block into its own cache, so this
+        # one only has to satisfy the identity check at construction time (see eos.DetectorLevelPDF).
+        cache = eos.ObservableCache(parameters)
+        if isinstance(data.resolution, UnbinnedSampledResolutionDescription):
+            kernel = data.resolution_kernel(cropped_axes, tolerance=component.tolerance)
+            pdf = eos.DetectorLevelPDF.make_from_grid(cache, component.pdf, options, cropped_axes, kernel)
+        else:
+            # resampled on every update, so that the resolution may depend on the parameters
+            pdf = eos.DetectorLevelPDF.make_from_expression(cache, component.pdf, options, cropped_axes, data.resolution.expression)
+
+        rank = len(cropped_axes)
+        try:
+            factory = getattr(eos.LogLikelihoodBlock, f'Unbinned{rank}D')
+        except AttributeError:
+            raise ValueError(f"Likelihood component '{component.name}' has rank {rank}, which is not supported (must be 1 to 4)")
+
+        # the crop acts as the fit window: events outside it do not enter the likelihood
+        events = _np.asarray(data.observations, dtype=float)
+        minima = _np.array([axis['min'] for axis in cropped_axes])
+        maxima = _np.array([axis['max'] for axis in cropped_axes])
+        observations = events[_np.all((minima <= events) & (events <= maxima), axis=1)]
+
+        dropped = len(events) - len(observations)
+        if dropped > 0:
+            eos.warn(f"Likelihood component '{component.name}': {dropped} of {len(events)} events lie outside the cropped axes and are dropped")
+        if len(observations) == 0:
+            raise ValueError(f"Likelihood component '{component.name}' contains no events within the cropped axes")
+        eos.info(f"Likelihood component '{component.name}' contains {len(observations)} events")
+
+        return factory(cache, pdf, observations.reshape(-1))
 
 
     def observables(self, _posterior, _prediction, parameters):
@@ -356,7 +425,7 @@ class AnalysisFile:
         :returns: The diagnostics found, most-structural first.
         :rtype: list[eos.diagnostic.Diagnostic]
         """
-        context = ValidationContext(self._description)
+        context = ValidationContext(self._description, base_directory=base_directory)
         diagnostics = list(self._description.validate_semantics(context))
 
         # Check all the posteriors can be initialised, and used for the predictions specified in the analysis file

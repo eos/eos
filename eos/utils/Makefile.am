@@ -13,6 +13,7 @@ libeosutils_la_SOURCES = \
 	concrete-signal-pdf.cc concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
 	density.cc density.hh density-fwd.hh density-impl.hh \
+	detector-level-pdf.cc detector-level-pdf.hh \
 	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
@@ -20,6 +21,7 @@ libeosutils_la_SOURCES = \
 	expression-cacher.hh \
 	expression-cloner.hh \
 	expression-evaluator.hh \
+	expression-kernel-decomposer.hh \
 	expression-kinematic-reader.hh \
 	expression-maker.hh \
 	expression-observable.cc expression-observable.hh \
@@ -86,6 +88,7 @@ include_eos_utils_HEADERS = \
 	concrete-signal-pdf.hh \
 	condition_variable.hh \
 	density.hh density-fwd.hh \
+	detector-level-pdf.hh \
 	destringify.hh \
 	exception.hh \
 	expression.hh expression-fwd.hh \
@@ -135,6 +138,7 @@ EXTRA_DIST = \
 TESTS = \
 	cacheable-observable_TEST \
 	cartesian-product_TEST \
+	detector-level-pdf_TEST \
 	expression-parser_TEST \
 	gsl-hacks_TEST \
 	indirect-iterator_TEST \
@@ -145,6 +149,7 @@ TESTS = \
 	log_TEST \
 	memoise_TEST \
 	mutable_TEST \
+	observable-cache_TEST \
 	observable_set_TEST \
 	observable_stub_TEST \
 	options_TEST \
@@ -170,6 +175,15 @@ cacheable_observable_TEST_SOURCES = cacheable_observable_TEST.cc
 
 cartesian_product_TEST_SOURCES = cartesian-product_TEST.cc
 
+detector_level_pdf_TEST_SOURCES = detector-level-pdf_TEST.cc
+detector_level_pdf_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+detector_level_pdf_TEST_LDADD = \
+	$(LDADD) \
+	$(top_builddir)/eos/b-decays/libeosbdecays.la \
+	$(top_builddir)/eos/form-factors/libeosformfactors.la \
+	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
+	-lyaml-cpp
+
 expression_parser_TEST_SOURCES = expression-parser_TEST.cc
 
 gsl_hacks_TEST_SOURCES = gsl-hacks_TEST.cc
@@ -191,6 +205,8 @@ log_TEST_SOURCES = log_TEST.cc
 memoise_TEST_SOURCES = memoise_TEST.cc
 
 mutable_TEST_SOURCES = mutable_TEST.cc
+
+observable_cache_TEST_SOURCES = observable-cache_TEST.cc
 
 observable_set_TEST_SOURCES = observable_set_TEST.cc
 

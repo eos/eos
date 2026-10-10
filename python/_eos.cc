@@ -31,6 +31,8 @@
 #include "eos/statistics/log-posterior.hh"
 #include "eos/statistics/log-prior.hh"
 #include "eos/statistics/test-statistic-impl.hh"
+#include "eos/statistics/unbinned-observations.hh"
+#include "eos/utils/detector-level-pdf.hh"
 #include "eos/utils/kinematic.hh"
 #include "eos/utils/log.hh"
 #include "eos/utils/memoise.hh"
@@ -54,8 +56,10 @@
 #include <boost/python.hpp>
 #include <boost/python/raw_function.hpp>
 
+#include <cstring>
 #include <memory>
 #include <tuple>
+#include <type_traits>
 
 using namespace boost::python;
 using namespace eos;
@@ -172,7 +176,31 @@ namespace impl
                 void * storage = ((converter::rvalue_from_python_storage<std::vector<T>> *) (data))->storage.bytes;
                 new (storage) std::vector<T>();
                 std::vector<T> * v = (std::vector<T> *) (storage);
-                int              l = PySequence_Size(obj_ptr);
+
+                // copy a contiguous one-dimensional buffer of doubles (e.g. a numpy array) in one go
+                if constexpr (std::is_same_v<T, double>)
+                {
+                    Py_buffer view;
+                    if (PyObject_CheckBuffer(obj_ptr) && (0 == PyObject_GetBuffer(obj_ptr, &view, PyBUF_C_CONTIGUOUS | PyBUF_FORMAT)))
+                    {
+                        const bool is_double = (1 == view.ndim) && (sizeof(double) == view.itemsize) && (nullptr != view.format) && (0 == std::strcmp(view.format, "d"));
+                        if (is_double)
+                        {
+                            const double * begin = static_cast<const double *>(view.buf);
+                            v->assign(begin, begin + view.len / view.itemsize);
+                        }
+                        PyBuffer_Release(&view);
+
+                        if (is_double)
+                        {
+                            data->convertible = storage;
+                            return;
+                        }
+                    }
+                    PyErr_Clear();
+                }
+
+                int l = PySequence_Size(obj_ptr);
                 if (l < 0)
                 {
                     abort();
@@ -181,11 +209,28 @@ namespace impl
                 v->reserve(l);
                 for (int i = 0; i < l; i++)
                 {
-                    v->push_back(extract<T>(PySequence_GetItem(obj_ptr, i)));
+                    // PySequence_GetItem() returns a new reference, released by the handle
+                    object item(handle<>(PySequence_GetItem(obj_ptr, i)));
+                    v->push_back(extract<T>(item));
                 }
                 data->convertible = storage;
             }
     };
+
+    // An unbinned log-likelihood block from either shared observations or an array of events.
+    template <LogLikelihoodBlockPtr (*from_handle_)(ObservableCache, const std::shared_ptr<DetectorLevelPDF> &, const UnbinnedObservations &),
+              LogLikelihoodBlockPtr (*from_values_)(ObservableCache, const std::shared_ptr<DetectorLevelPDF> &, const std::vector<double> &)>
+    LogLikelihoodBlockPtr
+    unbinned_block(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const boost::python::object & observations)
+    {
+        boost::python::extract<UnbinnedObservations> handle(observations);
+        if (handle.check())
+        {
+            return from_handle_(cache, pdf, handle());
+        }
+
+        return from_values_(cache, pdf, boost::python::extract<std::vector<double>>(observations)());
+    }
 } // namespace impl
 
 BOOST_PYTHON_MODULE(_eos)
@@ -1132,7 +1177,7 @@ BOOST_PYTHON_MODULE(_eos)
     )",
                             init<const Parameters &>())
             .def("__iter__", range(&ObservableCache::begin, &ObservableCache::end))
-            .def("__getitem__", &ObservableCache::operator[], R"(
+            .def("__getitem__", (double(ObservableCache::*)(const ObservableCache::ObservableId &) const) & ObservableCache::operator[], R"(
             Access the cached value of an observable.
 
             :param handle: The handle of the observable.
@@ -1158,7 +1203,11 @@ BOOST_PYTHON_MODULE(_eos)
 
             :rtype: eos.Parameters
         )",
-                 args("self"));
+                 args("self"))
+            .def("used_parameter_ids", range(&ObservableCache::begin_used_parameter_ids, &ObservableCache::end_used_parameter_ids), R"(
+            Returns an iterator over the ids of the parameters used by any observable in this cache,
+            including those evaluated in batches.
+        )");
 
     // rnp::Name
     class_<rnp::Name>("rnpName", R"(
@@ -1267,16 +1316,131 @@ BOOST_PYTHON_MODULE(_eos)
         )",
                  args("cache", "factory"))
             .staticmethod("External")
-            .def("_Unbinned1D", &LogLikelihoodBlock::Unbinned1D, R"(
-            Internal binding for the unbinned log-likelihood block; use :py:meth:`eos.LogLikelihoodBlock.Unbinned1D` instead.
+            .def("Unbinned1D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned1D, &LogLikelihoodBlock::Unbinned1D>, R"(
+            Create a new unbinned log-likelihood block for a rank-1 detector-level PDF.
 
-            This binding expects the resolution function in wrap-around ("FFT-native") order, with the zero
-            offset at index 0 and the negative offsets at the high end of the array. The public
-            :py:meth:`eos.LogLikelihoodBlock.Unbinned1D` wrapper accepts the resolution in natural (centred)
-            order and converts it before calling this binding.
+            The block recomputes the resolution-smeared grid of ``pdf`` once per evaluation and evaluates
+            the log-likelihood as the sum over ``observations`` of the logarithm of the smeared, normalized
+            density, obtained by multilinear interpolation from the grid.
+
+            :param cache: The observable cache used by the total log-likelihood. Must be the same cache
+                that ``pdf`` is tied to.
+            :type cache: eos.ObservableCache
+            :param pdf: The detector-level PDF whose grid is evaluated and interpolated; its rank (the
+                number of sampling axes) must be 1.
+            :type pdf: eos.DetectorLevelPDF
+            :param observations: The observed events, flat and row-major: one coordinate per axis of
+                ``pdf``, in axis order. Each event must lie within the PDF's grid. If given as
+                :class:`UnbinnedObservations <eos.UnbinnedObservations>`, the block and its clones share them, and
+                use their current events at every evaluation.
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
+
+            :returns: The new block.
+            :rtype: eos.LogLikelihoodBlock
         )",
-                 args("cache", "pdf_name", "kinematics", "options", "resolution", "observations"))
-            .staticmethod("_Unbinned1D");
+                 args("cache", "pdf", "observations"))
+            .staticmethod("Unbinned1D")
+            .def("Unbinned2D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned2D, &LogLikelihoodBlock::Unbinned2D>, R"(
+            Create a new unbinned log-likelihood block for a rank-2 detector-level PDF.
+
+            See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 2.
+
+            :param cache: The observable cache used by the total log-likelihood. Must be the same cache
+                that ``pdf`` is tied to.
+            :type cache: eos.ObservableCache
+            :param pdf: The detector-level PDF whose grid is evaluated and interpolated.
+            :type pdf: eos.DetectorLevelPDF
+            :param observations: The observed events, flat and row-major in axis order.
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
+
+            :returns: The new block.
+            :rtype: eos.LogLikelihoodBlock
+        )",
+                 args("cache", "pdf", "observations"))
+            .staticmethod("Unbinned2D")
+            .def("Unbinned3D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned3D, &LogLikelihoodBlock::Unbinned3D>, R"(
+            Create a new unbinned log-likelihood block for a rank-3 detector-level PDF.
+
+            See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 3.
+
+            :param cache: The observable cache used by the total log-likelihood. Must be the same cache
+                that ``pdf`` is tied to.
+            :type cache: eos.ObservableCache
+            :param pdf: The detector-level PDF whose grid is evaluated and interpolated.
+            :type pdf: eos.DetectorLevelPDF
+            :param observations: The observed events, flat and row-major in axis order.
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
+
+            :returns: The new block.
+            :rtype: eos.LogLikelihoodBlock
+        )",
+                 args("cache", "pdf", "observations"))
+            .staticmethod("Unbinned3D")
+            .def("Unbinned4D", &::impl::unbinned_block<&LogLikelihoodBlock::Unbinned4D, &LogLikelihoodBlock::Unbinned4D>, R"(
+            Create a new unbinned log-likelihood block for a rank-4 detector-level PDF.
+
+            See :py:meth:`eos.LogLikelihoodBlock.Unbinned1D`; ``pdf`` must have rank 4.
+
+            :param cache: The observable cache used by the total log-likelihood. Must be the same cache
+                that ``pdf`` is tied to.
+            :type cache: eos.ObservableCache
+            :param pdf: The detector-level PDF whose grid is evaluated and interpolated.
+            :type pdf: eos.DetectorLevelPDF
+            :param observations: The observed events, flat and row-major in axis order.
+            :type observations: numpy.ndarray or list of float or eos.UnbinnedObservations
+
+            :returns: The new block.
+            :rtype: eos.LogLikelihoodBlock
+        )",
+                 args("cache", "pdf", "observations"))
+            .staticmethod("Unbinned4D");
+
+    // UnbinnedObservations
+    class_<UnbinnedObservations>("UnbinnedObservations", R"(
+            Represents the observed events of an unbinned likelihood, flat and row-major with one coordinate per axis.
+
+            Copies share the events: replacing them through :meth:`set <eos.UnbinnedObservations.set>` replaces them
+            for every unbinned log-likelihood block built from these observations, including the copies that
+            :meth:`LogLikelihood.add <eos.LogLikelihood.add>` holds. This allows to fit many pseudo-data sets
+            without constructing the detector-level PDF anew for each of them.
+
+            :param values: The observed events, flat and row-major; their number must be a multiple of ``rank``.
+            :type values: numpy.ndarray or list of float
+            :param rank: The number of coordinates per event.
+            :type rank: int
+        )",
+                                 init<const std::vector<double> &, std::size_t>(args("self", "values", "rank")))
+            .def("set", &UnbinnedObservations::set, R"(
+            Replace the events, which must be a non-empty multiple of the rank, for all blocks that share these observations.
+
+            :param values: The observed events, flat and row-major.
+            :type values: numpy.ndarray or list of float
+        )",
+                 args("self", "values"))
+            .def("rank", &UnbinnedObservations::rank, R"(
+            Return the number of coordinates per event.
+
+            :rtype: int
+        )",
+                 args("self"))
+            .def("size", &UnbinnedObservations::size, R"(
+            Return the number of events.
+
+            :rtype: int
+        )",
+                 args("self"))
+            .def("values",
+                 +[](const UnbinnedObservations & o)
+    {
+        const auto values = o.values();
+        return std::vector<double>(values.begin(), values.end());
+    },
+                 R"(
+            Return a copy of the events, flat and row-major.
+
+            :rtype: list of float
+        )",
+                 args("self"));
 
     // LogLikelihood
     class_<LogLikelihood>("LogLikelihood", R"(
@@ -2059,9 +2223,18 @@ BOOST_PYTHON_MODULE(_eos)
         )")
             .staticmethod("make")
             .def("evaluate", &SignalPDF::evaluate, R"(
-            Evaluates the (unnormalized) PDF for the present values of the sets of parameters and kinematic variables that it is bound to.
+            Evaluates the logarithm of the (unnormalized) PDF for the present values of the sets of parameters and kinematic variables that it is bound to.
 
-            :return: The value of the PDF.
+            :return: The value of the log of the PDF.
+            :rtype: float
+        )",
+                 args("self"))
+            .def("evaluate_linear", &SignalPDF::evaluate_linear, R"(
+            Evaluates the (unnormalized) PDF on the linear scale for the present values of the sets of parameters and kinematic variables that it is bound to.
+
+            Non-positive values are clamped to zero.
+
+            :return: The value of the PDF on the linear scale.
             :rtype: float
         )",
                  args("self"))
@@ -2099,6 +2272,79 @@ BOOST_PYTHON_MODULE(_eos)
             :rtype: eos.Kinematics
         )",
                  args("self"));
+
+    // DetectorLevelPDF::Axis
+    class_<DetectorLevelPDF::Axis>(
+            "_DetectorLevelPDFAxis", R"(
+            Internal binding for one sampling axis of a :class:`eos.DetectorLevelPDF`'s convolution grid;
+            use a plain dictionary with the :class:`eos.DetectorLevelPDF` factory methods instead.
+    )",
+            init<const std::string &, double, double, unsigned long, optional<const std::string &>>(args("self", "variable", "minimum", "maximum", "points", "offset_variable"), R"(
+            :param variable: The kinematic variable sampled along this axis.
+            :type variable: str
+            :param minimum: The lower bound of the grid, inclusive.
+            :type minimum: float
+            :param maximum: The upper bound of the grid, inclusive.
+            :type maximum: float
+            :param points: The number of grid points (even, >= 2).
+            :type points: int
+            :param offset_variable: The kinematic variable the resolution is sampled over, along this
+                axis. Defaults to ``variable`` when empty.
+            :type offset_variable: str
+        )"))
+            .def_readwrite("variable", &DetectorLevelPDF::Axis::variable, "The kinematic variable sampled along this axis.")
+            .def_readwrite("minimum", &DetectorLevelPDF::Axis::min, "The lower bound of the grid, inclusive.")
+            .def_readwrite("maximum", &DetectorLevelPDF::Axis::max, "The upper bound of the grid, inclusive.")
+            .def_readwrite("points", &DetectorLevelPDF::Axis::points, "The number of grid points (even, >= 2).")
+            .def_readwrite("offset_variable", &DetectorLevelPDF::Axis::offset_variable, "The kinematic variable the resolution is sampled over, along this axis.");
+
+    ::impl::iterable_to_std_vector_converter<DetectorLevelPDF::Axis> iterable_to_std_vector_converter_DetectorLevelPDFAxis;
+
+    // DetectorLevelPDF
+    register_ptr_to_python<std::shared_ptr<DetectorLevelPDF>>();
+    class_<DetectorLevelPDF, bases<SignalPDF>, boost::noncopyable>("_DetectorLevelPDF", R"(
+            Internal binding for a detector-level (resolution-convolved) SignalPDF; use
+            :class:`eos.DetectorLevelPDF` instead.
+    )",
+                                                                   no_init)
+            .def("make_from_grid", &DetectorLevelPDF::make_from_grid, return_value_policy<return_by_value>(), R"(
+            Internal binding; use :meth:`eos.DetectorLevelPDF.make_from_grid` instead, which accepts the
+            axes as plain dictionaries and the resolution as a numpy array.
+
+            :param cache: The observable cache the resulting PDF is tied to for its lifetime.
+            :type cache: eos.ObservableCache
+            :param signal_name: The qualified name of the truth-level SignalPDF.
+            :type signal_name: eos.QualifiedName
+            :param options: The options forwarded to the signal SignalPDF.
+            :type options: eos.Options
+            :param axes: One sampling axis descriptor per grid dimension.
+            :type axes: list of eos._DetectorLevelPDFAxis
+            :param resolution: The pre-computed resolution kernel, flat and row-major in centred order.
+            :type resolution: numpy.ndarray or list of float
+
+            :rtype: eos._DetectorLevelPDF
+        )",
+                 args("cache", "signal_name", "options", "axes", "resolution"))
+            .staticmethod("make_from_grid")
+            .def("make_from_expression", &DetectorLevelPDF::make_from_expression, return_value_policy<return_by_value>(), R"(
+            Internal binding; use :meth:`eos.DetectorLevelPDF.make_from_expression` instead, which accepts the
+            axes as plain dictionaries.
+
+            :param cache: The observable cache the resulting PDF is tied to for its lifetime.
+            :type cache: eos.ObservableCache
+            :param signal_name: The qualified name of the truth-level SignalPDF.
+            :type signal_name: eos.QualifiedName
+            :param options: The options forwarded to the signal SignalPDF and to the resolution expression.
+            :type options: eos.Options
+            :param axes: One sampling axis descriptor per grid dimension.
+            :type axes: list of eos._DetectorLevelPDFAxis
+            :param resolution: The EOS expression for the resolution kernel in the per-axis offset variables.
+            :type resolution: str
+
+            :rtype: eos._DetectorLevelPDF
+        )",
+                 args("cache", "signal_name", "options", "axes", "resolution"))
+            .staticmethod("make_from_expression");
 
     // SignalPDFEntry
     register_ptr_to_python<std::shared_ptr<const SignalPDFEntry>>();

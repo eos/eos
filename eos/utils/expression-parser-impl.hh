@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -81,12 +81,15 @@ namespace eos
 
         kinematics_value = (as_string[lexeme[*~char_(",=>]")]] >> '=' >> double_);
 
-        auto make_function = [](const std::string & f, const auto & arg) -> eos::exp::ExpressionPtr
-        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::FunctionExpression(f, arg)))); };
+        auto make_function = [](const std::string & f, const std::vector<eos::exp::ExpressionPtr> & args) -> eos::exp::ExpressionPtr
+        { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::FunctionExpression(f, args)))); };
 
-        function_expr = (function_name >> '(' >> primary_expr >> ')')[_val = phx::bind(make_function, _1, _2)];
+        function_expr = (function_name >> '(' >> function_arguments >> ')')[_val = phx::bind(make_function, _1, _2)];
 
-        function_name = *(string("exp") | string("cos") | string("sin"));
+        function_arguments = expression % ',';
+
+        // an identifier, optionally prefixed, e.g. 'exp' or 'Prefix::name'
+        function_name = raw[lexeme[(alpha >> *(alnum | char_('_'))) >> -(lit("::") >> alpha >> *(alnum | char_('_')))]];
     }
 
     template <typename Iterator> ExpressionParser<Iterator>::~ExpressionParser() {}

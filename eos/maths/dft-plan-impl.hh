@@ -20,6 +20,8 @@
 
 #include <eos/maths/dft-plan.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/lock.hh>
+#include <eos/utils/mutex.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
 
 #include <algorithm>
@@ -35,6 +37,9 @@ namespace eos
     {
         namespace impl
         {
+            // FFTW's planner is not thread-safe; guards the creation and destruction of all plans.
+            Mutex & planner_mutex();
+
             template <std::size_t rank_>
             inline std::array<std::size_t, rank_>
             frequency_dimensions(const std::array<std::size_t, rank_> & dimensions)
@@ -195,6 +200,16 @@ namespace eos
                         return fftw_plan_dft_c2r(4, n.data(), frequency_domain_data, time_domain_data, flags);
                     }
             };
+
+            template <std::size_t rank_, Direction direction_>
+            fftw_plan
+            alloc_plan(const std::array<std::size_t, rank_> & dimensions, const dft::Container<double, rank_> & time_domain_container,
+                       const dft::Container<std::complex<double>, rank_> & frequency_domain_container)
+            {
+                Lock lock(planner_mutex());
+
+                return PlanTraits<rank_, direction_>::alloc(dimensions, time_domain_container, frequency_domain_container);
+            }
         } // namespace impl
     } // namespace dft
 
@@ -211,12 +226,16 @@ namespace eos
                 // validate the dimensions before allocating any containers or the FFTW plan
                 time_domain_container((dft::impl::check_dimensions(dimensions), dimensions)),
                 frequency_domain_container(dft::impl::frequency_dimensions(dimensions)),
-                plan(dft::impl::PlanTraits<rank_, direction_>::alloc(dimensions, time_domain_container, frequency_domain_container)),
+                plan(dft::impl::alloc_plan<rank_, direction_>(dimensions, time_domain_container, frequency_domain_container)),
                 dimensions(dimensions)
             {
             }
 
-            ~Implementation() { fftw_destroy_plan(this->plan); }
+            ~Implementation()
+            {
+                Lock lock(dft::impl::planner_mutex());
+                fftw_destroy_plan(this->plan);
+            }
     };
 
     namespace dft

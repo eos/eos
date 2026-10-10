@@ -1,0 +1,36 @@
+observables:
+  'test::density(z)':
+    latex: 'p(z)'
+    unit: '1'
+    expression: '1 + {z}'
+  'test::norm':
+    latex: 'N'
+    unit: '1'
+    expression: '{z_max} - {z_min} + ({z_max}^2 - {z_min}^2) / 2'
+
+signal_pdfs:
+  - name: 'test::P(z)'
+    numerator: 'test::density(z)'
+    variables: [ 'z' ]
+    normalization: 'test::norm'
+
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'test::P(z)'
+    data: './unbinned-data-expression'
+
+posteriors:
+  - name: posterior
+    # centres the resolution on the zero offset; its default would centre it on +1
+    fixed_parameters:
+      'mass::c': 0.0
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test

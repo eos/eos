@@ -27,6 +27,10 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/strong-typedef.hh>
 
+#include <cstdint>
+#include <span>
+#include <vector>
+
 namespace eos
 {
     class ObservableCache : public PrivateImplementationPattern<ObservableCache>
@@ -43,6 +47,52 @@ namespace eos
 
             /// Destructor.
             ~ObservableCache();
+            ///@}
+
+            /// Compare two caches on identity of their underlying implementations.
+            bool operator== (const ObservableCache & rhs) const;
+
+            /*!
+             * Generation identifies the state of the predictions held by a cache.
+             *
+             * Two instances compare equal if and only if they have been obtained from the
+             * same cache without an intervening successful update().
+             */
+            class Generation
+            {
+                private:
+                    uint64_t _instance;
+
+                    uint64_t _counter;
+
+                    Generation(const uint64_t & instance, const uint64_t & counter) :
+                        _instance(instance),
+                        _counter(counter)
+                    {
+                    }
+
+                    friend class ObservableCache;
+
+                public:
+                    /// Create a generation that compares unequal to any generation of any cache.
+                    Generation() :
+                        _instance(0u),
+                        _counter(0u)
+                    {
+                    }
+
+                    bool operator== (const Generation &) const = default;
+            };
+
+            ///@name Generation
+            ///@{
+            /*!
+             * Retrieve the current generation of this cache.
+             *
+             * The generation changes whenever update() succeeds. It is invariant under a failed
+             * update() and under reading any of the predictions.
+             */
+            Generation generation() const;
             ///@}
 
             ///@name Access
@@ -62,11 +112,45 @@ namespace eos
              */
             ObservableId add(const ObservablePtr & observable);
 
+            struct BatchIdTag;
+
+            /*!
+             * A BatchId identifies a batch of computations added to the cache via add_batch().
+             *
+             * In contrast to an ObservableId, which addresses a single prediction, a BatchId
+             * addresses a contiguous block of predictions, one per observable in the batch.
+             */
+            class BatchId : public StrongTypedef<unsigned, ObservableCache::BatchIdTag>
+            {
+                public:
+                    using StrongTypedef::StrongTypedef;
+            };
+
+            /*!
+             * Add a batch of computations to the cache and return its unique BatchId.
+             *
+             * The observables of a batch are evaluated into a contiguous, pre-allocated block of
+             * memory upon update(). Different batches may be evaluated in parallel; the computations
+             * within a single batch are partitioned across the available threads. The results are
+             * retrieved as a contiguous span via operator[](const BatchId &). A later call to
+             * add_batch() invalidates all spans obtained before.
+             *
+             * @param computations The observables which shall be added to the cache as a single batch.
+             */
+            BatchId add_batch(std::vector<ObservablePtr> && computations);
+
             /// Update the predictions for all observables.
             void update();
 
             /// Retrieve the cache's common Parameters object.
             Parameters parameters() const;
+
+            ///@name Parameter dependencies
+            ///@{
+            /// Iterate over the ids of the parameters used by any observable in the cache, including those in batches.
+            ParameterUser::ConstIterator begin_used_parameter_ids() const;
+            ParameterUser::ConstIterator end_used_parameter_ids() const;
+            ///@}
 
             /*!
              * Retrieve a unique observable by its ObservableCache::ObservableId.
@@ -82,6 +166,13 @@ namespace eos
              */
             double operator[] (const ObservableCache::ObservableId & id) const;
 
+            /*!
+             * Retrieve the predictions for a given batch of computations from the cache.
+             *
+             * @param id The unique ObservableCache::BatchId whose associated batch's predictions shall be retrieved.
+             */
+            std::span<const double> operator[] (const ObservableCache::BatchId & id) const;
+
             /// Retrieve the number of independent predictions from the cache.
             unsigned size() const;
 
@@ -91,7 +182,12 @@ namespace eos
             Iterator end() const;
             ///@}
 
-            /// Clone this cache whilst keeping the observables in the given order, i.e. all ids remain valid.
+            /*!
+             * Clone this cache whilst keeping the observables in the given order, i.e. all ObservableIds remain valid.
+             *
+             * Batches are not cloned, and a BatchId of this cache is not valid for the clone; their owners
+             * register them again through add_batch().
+             */
             ObservableCache clone(const Parameters & parameters) const;
     };
 

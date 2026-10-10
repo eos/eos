@@ -18,14 +18,13 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <eos/maths/dft-plan-impl.hh>
 #include <eos/maths/power-of.hh>
-#include <eos/signal-pdf.hh>
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/test-statistic-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/thread_pool.hh>
 #include <eos/utils/verify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
@@ -42,6 +41,7 @@
 #include <algorithm>
 #include <cmath>
 #include <config.h>
+#include <exception>
 #include <format>
 #include <limits>
 #include <map>
@@ -1254,243 +1254,155 @@ namespace eos
                 }
         };
 
-        template <std::size_t rank_> struct Unbinned1DLikelihoodBlock : public LogLikelihoodBlock
+        // A rank-generic unbinned likelihood: the signal PDF is evaluated on a grid and convolved with
+        // a resolution function via eos::ResolutionConvolution (owned by the DetectorLevelPDF handed
+        // in at construction), and the log-likelihood sums the logarithm of the smeared, normalized
+        // density at each observed event, evaluated by multilinear interpolation from the grid.
+        template <std::size_t rank_> struct UnbinnedLikelihoodBlock : public LogLikelihoodBlock
         {
                 ObservableCache cache;
 
-                QualifiedName           pdf_name;
-                std::vector<Kinematics> kinematics_data;
-                Options                 options;
+                std::shared_ptr<DetectorLevelPDF> pdf;
 
-                std::vector<SignalPDFPtr> signal_pdfs;
-                std::vector<double>       resolution_data;
+                // The observed events, flat and row-major in axis order; shared with all clones.
+                UnbinnedObservations observations;
 
-                // The events that were actually observed, expressed as kinematic variables.
-                std::vector<Kinematics> observations_data;
+                // Bound to pdf->grid() and to the events of the given generation. The grid buffer is stable for
+                // the PDF's lifetime, so this is rebuilt only when the events are replaced (see
+                // ResolutionConvolution::Interpolator).
+                mutable std::unique_ptr<ResolutionConvolution::Interpolator> interpolator;
+                mutable UnbinnedObservations::Generation                     generation;
 
-                std::array<std::size_t, rank_> dimensions;
-
-                mutable dft::Plan<rank_, dft::Direction::Forward>  forward_plan;
-                mutable dft::Plan<rank_, dft::Direction::Backward> backward_plan;
-
-                // Pre-computed DFT of the resolution function.
-                dft::Container<std::complex<double>, rank_> resolution_dft;
-
-                // Row-major strides into the (time-domain) grid containers.
-                std::array<std::size_t, rank_> strides;
-
-                // The pre-computed multilinear interpolation data for each observation. Because both the grid and the
-                // observations are fixed at construction, the lower-corner grid index and the fractional offsets along
-                // each axis can be computed once; only the convolved PDF values on the grid change between evaluations.
-                struct InterpolationWeights
-                {
-                        std::size_t               base;     // flat index of the lower corner of the enclosing grid cell
-                        std::array<double, rank_> fraction; // fractional offset within the cell along each axis, in [0, 1]
-                };
-
-                std::vector<InterpolationWeights> interpolation;
-
-                unsigned _number_of_observations;
-
-                Unbinned1DLikelihoodBlock(const ObservableCache & cache, const QualifiedName & pdf_name, const std::vector<Kinematics> & kinematics, const Options & options,
-                                          const std::vector<double> & resolution, const std::vector<Kinematics> & observations, const std::array<std::size_t, rank_> & dimensions) :
+                UnbinnedLikelihoodBlock(const ObservableCache & cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations) :
                     cache(cache),
-                    pdf_name(pdf_name),
-                    kinematics_data(kinematics),
-                    options(options),
-                    resolution_data(resolution),
-                    observations_data(observations),
-                    dimensions(dimensions),
-                    forward_plan(dimensions),
-                    backward_plan(dimensions),
-                    resolution_dft(dft::impl::frequency_dimensions<rank_>(dimensions)),
-                    _number_of_observations(observations.size())
+                    pdf(pdf),
+                    observations(observations),
+                    generation(observations.generation())
                 {
-                    signal_pdfs.reserve(kinematics.size());
-                    for (const auto & k : kinematics)
+                    // The PDF owns the batch; a block evaluating against a different cache would read a
+                    // grid that this cache's update() never fills.
+                    if (! (this->cache == pdf->cache()))
                     {
-                        signal_pdfs.push_back(SignalPDF::make(pdf_name, cache.parameters(), k, options));
+                        throw InternalError("UnbinnedLikelihoodBlock: cache does not match the DetectorLevelPDF's cache");
                     }
 
-                    // Pre-compute the DFT of the resolution function.
-                    std::copy(resolution.begin(), resolution.end(), forward_plan.time_domain_container().data());
-                    forward_plan.transform();
-                    resolution_dft = forward_plan.frequency_domain_container();
+                    if (pdf->axes().size() != rank_)
+                    {
+                        throw InternalError(std::format("UnbinnedLikelihoodBlock: DetectorLevelPDF has rank {} but rank {} was requested", pdf->axes().size(), rank_));
+                    }
 
-                    // Pre-compute the interpolation data that maps each observation onto the grid.
-                    this->setup_interpolation();
+                    if (observations.rank() != rank_)
+                    {
+                        throw InternalError(std::format("UnbinnedLikelihoodBlock: the observations have rank {} but rank {} was requested", observations.rank(), rank_));
+                    }
+
+                    // make_interpolator() surfaces an out-of-grid observation as an InternalError
+                    interpolator = pdf->make_interpolator(observations.values());
                 }
 
-                // Retrieve the value of a kinematic variable from a Kinematics object.
-                static double
-                coordinate(const Kinematics & k, const std::string & name)
-                {
-                    return k[name].evaluate();
-                }
-
-                // Determine the grid geometry and the per-observation interpolation weights.
-                //
-                // The grid is assumed to be a uniform tensor-product grid stored in row-major order (the same layout the
-                // DFT containers use): along axis d the coordinate is x_0[d] + i * dx[d]. Stepping the flat index by
-                // strides[d] therefore advances the index along axis d by one while leaving the other axes unchanged,
-                // which lets us identify the variable that parametrises each axis and the corresponding grid spacing.
-                void
-                setup_interpolation()
-                {
-                    // Row-major strides.
-                    strides[rank_ - 1] = 1;
-                    for (std::size_t d = rank_ - 1; d-- > 0;)
-                    {
-                        strides[d] = strides[d + 1] * dimensions[d + 1];
-                    }
-
-                    // The total number of grid points must match the number of supplied grid kinematics.
-                    const std::size_t grid_size = strides[0] * dimensions[0];
-                    if (grid_size != kinematics_data.size())
-                    {
-                        throw InternalError(std::format("Unbinned1DLikelihoodBlock: grid has {} points but {} kinematics were supplied", grid_size, kinematics_data.size()));
-                    }
-
-                    // Identify the axis variable, origin, and spacing for each dimension.
-                    std::array<std::string, rank_> axis_names;
-                    std::array<double, rank_>      origin;
-                    std::array<double, rank_>      spacing;
-                    for (std::size_t d = 0; d < rank_; ++d)
-                    {
-                        const Kinematics & lower = kinematics_data[0];
-                        const Kinematics & upper = kinematics_data[strides[d]];
-
-                        // The axis variable is the one whose value differs between the two neighbouring grid points.
-                        bool found = false;
-                        for (auto v = lower.begin(); v != lower.end(); ++v)
-                        {
-                            const std::string & name = v->name();
-                            const double        dx   = coordinate(upper, name) - coordinate(lower, name);
-                            if (dx != 0.0)
-                            {
-                                axis_names[d] = name;
-                                origin[d]     = coordinate(lower, name);
-                                spacing[d]    = dx;
-                                found         = true;
-                                break;
-                            }
-                        }
-
-                        if (! found)
-                        {
-                            throw InternalError(std::format("Unbinned1DLikelihoodBlock: cannot determine the kinematic variable for grid axis {}", d));
-                        }
-                    }
-
-                    // Pre-compute the interpolation weights for each observation.
-                    interpolation.reserve(observations_data.size());
-                    for (const auto & obs : observations_data)
-                    {
-                        InterpolationWeights w;
-                        w.base = 0;
-                        for (std::size_t d = 0; d < rank_; ++d)
-                        {
-                            const double p = (coordinate(obs, axis_names[d]) - origin[d]) / spacing[d];
-
-                            if ((p < 0.0) || (p > static_cast<double>(dimensions[d] - 1)))
-                            {
-                                throw InternalError(std::format("Unbinned1DLikelihoodBlock: observation lies outside the grid along axis '{}'", axis_names[d]));
-                            }
-
-                            // Lower corner index, clamped so that the upper corner (index + 1) is always valid.
-                            std::size_t j = static_cast<std::size_t>(std::floor(p));
-                            double      t = p - static_cast<double>(j);
-                            if (j >= dimensions[d] - 1)
-                            {
-                                j = dimensions[d] - 2;
-                                t = 1.0;
-                            }
-
-                            w.base        += j * strides[d];
-                            w.fraction[d]  = t;
-                        }
-                        interpolation.push_back(w);
-                    }
-                }
-
-                virtual ~Unbinned1DLikelihoodBlock() = default;
+                virtual ~UnbinnedLikelihoodBlock() = default;
 
                 virtual std::string
                 as_string() const
                 {
-                    return std::format("Unbinned<{}>: {} events on a grid of {} points", rank_, observations_data.size(), signal_pdfs.size());
+                    return std::format("Unbinned<{}>: {} events", rank_, observations.size());
                 }
 
                 virtual double
                 evaluate() const
                 {
-                    // Evaluate all signal PDFs on the linear scale and fill the time-domain container. The convolution
-                    // with the resolution function operates on the linear density; non-positive values are clamped to
-                    // zero by evaluate_linear().
-                    double * time_data = forward_plan.time_domain_container().data();
-                    for (std::size_t i = 0; i < signal_pdfs.size(); ++i)
+                    // Recompute the smeared grid once for this evaluation; a no-op if the cache has not
+                    // advanced since the last call (possibly by another block sharing the same PDF).
+                    pdf->update_grid();
+
+                    // the events have been replaced since the interpolator was built
+                    if (! (generation == observations.generation()))
                     {
-                        time_data[i] = signal_pdfs[i]->evaluate_linear();
+                        interpolator = pdf->make_interpolator(observations.values());
+                        generation   = observations.generation();
                     }
 
-                    // Forward DFT of the signal values.
-                    forward_plan.transform();
-
-                    // Multiply the signal spectrum by the pre-computed resolution spectrum, leaving the result in the
-                    // backward plan's frequency-domain buffer. The data must be copied in place: assigning the container
-                    // (operator=) would reallocate its buffer and invalidate the pointer the backward FFTW plan was
-                    // created with, causing a use-after-free in transform() below.
-                    const auto  freq_dims = dft::impl::frequency_dimensions<rank_>(dimensions);
-                    std::size_t freq_size = 1;
-                    for (const auto & d : freq_dims)
+                    // The grid holds the *unnormalized* signal PDF, so each event's interpolated density
+                    // must be divided by the truth PDF's normalization to yield a proper probability
+                    // density. normalization() is already logarithmic, as for every SignalPDF; a
+                    // non-positive normalization reports itself as -infinity and leaves the PDF undefined.
+                    const double log_normalization = pdf->normalization();
+                    if (! std::isfinite(log_normalization)) [[unlikely]]
                     {
-                        freq_size *= d;
+                        return -std::numeric_limits<double>::infinity();
                     }
 
-                    const std::complex<double> * forward_freq_data  = forward_plan.frequency_domain_container().data();
-                    std::complex<double> *       backward_freq_data = backward_plan.frequency_domain_container().data();
-                    std::copy(forward_freq_data, forward_freq_data + freq_size, backward_freq_data);
-                    backward_plan.frequency_domain_container() *= resolution_dft;
-
-                    // Backward DFT.  The DFT is unnormalised, so the result is N times the
-                    // circular convolution; we divide by N below.
-                    backward_plan.transform();
-
-                    const double   norm   = 1.0 / static_cast<double>(signal_pdfs.size());
-                    const double * result = backward_plan.time_domain_container().data();
-
-                    // The backward DFT yields the resolution-convolved PDF sampled on the grid points. The likelihood,
-                    // however, is a product over the *observed* events, so we evaluate the convolved PDF at each
-                    // observation by multilinear interpolation from the surrounding grid points.
-                    double log_likelihood = 0.0;
-                    for (const auto & w : interpolation)
+                    // Sum the log-densities in roughly one contiguous slice of events per thread.
+                    struct Slice
                     {
-                        double value = 0.0;
-                        for (std::size_t corner = 0; corner < (std::size_t(1) << rank_); ++corner)
+                            std::size_t        start, end;
+                            double             sum       = 0.0;
+                            std::exception_ptr exception = nullptr;
+                    };
+
+                    constexpr std::size_t minimal_slice    = 1024;
+                    const std::size_t     total            = interpolator->size();
+                    const std::size_t     number_of_slices = std::clamp<std::size_t>(total / minimal_slice, 1u, std::max(1u, ThreadPool::instance()->number_of_threads()));
+                    const std::size_t     slice_size       = (total + number_of_slices - 1) / number_of_slices;
+
+                    std::vector<Slice> slices;
+                    slices.reserve(number_of_slices);
+                    for (std::size_t start = 0; start < total; start += slice_size)
+                    {
+                        slices.push_back(Slice{ start, std::min(total, start + slice_size) });
+                    }
+
+                    const ResolutionConvolution::Interpolator & densities = *interpolator;
+                    const auto                                  sum_slice = [&densities](Slice & slice)
+                    {
+                        try
                         {
-                            double      weight = 1.0;
-                            std::size_t offset = 0;
-                            for (std::size_t d = 0; d < rank_; ++d)
+                            for (std::size_t i = slice.start; i < slice.end; ++i)
                             {
-                                const bool upper  = (corner >> d) & 1u;
-                                weight           *= upper ? w.fraction[d] : (1.0 - w.fraction[d]);
-                                offset           += upper ? strides[d] : 0;
+                                // Treat a non-positive interpolated density (from numerical roundoff, or a resolution
+                                // kernel with negative lobes) as a zero-probability event, yielding -infinity rather
+                                // than a NaN from std::log() that would silently poison downstream sampling.
+                                const double density = densities(i);
+                                if (density > 0.0) [[likely]]
+                                {
+                                    slice.sum += std::log(density);
+                                }
+                                else
+                                {
+                                    slice.sum = -std::numeric_limits<double>::infinity();
+                                    return;
+                                }
                             }
-                            value += weight * result[w.base + offset];
                         }
+                        catch (...)
+                        {
+                            slice.exception = std::current_exception();
+                        }
+                    };
 
-                        // Treat a non-positive interpolated density (from numerical roundoff, or a resolution kernel
-                        // with negative lobes) as a zero-probability event, yielding -infinity rather than a NaN from
-                        // std::log() that would silently poison downstream minimization/sampling.
-                        const double density = value * norm;
-                        if (density > 0.0) [[likely]]
+                    std::vector<Ticket> tickets;
+                    tickets.reserve(slices.size());
+                    for (std::size_t k = 1; k < slices.size(); ++k)
+                    {
+                        tickets.push_back(ThreadPool::instance()->enqueue(std::function<void(void)>([&sum_slice, s = &slices[k]]() { sum_slice(*s); })));
+                    }
+                    if (! slices.empty())
+                    {
+                        sum_slice(slices.front());
+                    }
+                    for (auto & ticket : tickets)
+                    {
+                        ticket.wait();
+                    }
+
+                    double log_likelihood = -static_cast<double>(total) * log_normalization;
+                    for (const auto & slice : slices)
+                    {
+                        if (slice.exception)
                         {
-                            log_likelihood += std::log(density);
+                            std::rethrow_exception(slice.exception);
                         }
-                        else
-                        {
-                            return -std::numeric_limits<double>::infinity();
-                        }
+                        log_likelihood += slice.sum;
                     }
 
                     return log_likelihood;
@@ -1499,19 +1411,19 @@ namespace eos
                 virtual unsigned
                 number_of_observations() const
                 {
-                    return _number_of_observations;
+                    return static_cast<unsigned>(observations.size());
                 }
 
                 virtual double
                 sample(gsl_rng * /* rng */) const
                 {
-                    throw InternalError("Unbinned1DLikelihoodBlock::sample() is not implemented");
+                    throw InternalError("UnbinnedLikelihoodBlock::sample() is not implemented");
                 }
 
                 virtual double
                 significance() const
                 {
-                    throw InternalError("Unbinned1DLikelihoodBlock::significance() is not implemented");
+                    throw InternalError("UnbinnedLikelihoodBlock::significance() is not implemented");
                 }
 
                 virtual TestStatistic
@@ -1523,9 +1435,27 @@ namespace eos
                 virtual LogLikelihoodBlockPtr
                 clone(ObservableCache cache) const
                 {
-                    return LogLikelihoodBlockPtr(new Unbinned1DLikelihoodBlock<rank_>(cache, pdf_name, kinematics_data, options, resolution_data, observations_data, dimensions));
+                    // The clone is handed a different cache, so the DetectorLevelPDF must be cloned into
+                    // it first; otherwise the cache-identity check above would fire on every clone. The
+                    // cloned PDF has a fresh grid buffer, so the interpolator is rebuilt too,
+                    // rather than reused from the parent, in the block constructor above.
+                    return LogLikelihoodBlockPtr(new UnbinnedLikelihoodBlock<rank_>(cache, pdf->clone(cache), observations));
                 }
         };
+
+        // Construct a rank-generic UnbinnedLikelihoodBlock, validating what the class constructor cannot: a null
+        // PDF cannot be queried for its rank. UnbinnedObservations rejects an empty observation set.
+        template <std::size_t rank_>
+        LogLikelihoodBlockPtr
+        make_unbinned_likelihood_block(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+        {
+            if (! pdf)
+            {
+                throw InternalError(std::format("LogLikelihoodBlock::Unbinned{}D: pdf must not be null", rank_));
+            }
+
+            return LogLikelihoodBlockPtr(new UnbinnedLikelihoodBlock<rank_>(cache, pdf, observations));
+        }
     } // namespace implementation
 
     LogLikelihoodBlock::~LogLikelihoodBlock() {}
@@ -1661,26 +1591,51 @@ namespace eos
     }
 
     LogLikelihoodBlockPtr
-    LogLikelihoodBlock::Unbinned1D(ObservableCache cache, const QualifiedName & pdf_name, const std::vector<Kinematics> & kinematics, const Options & options,
-                                   const std::vector<double> & resolution, const std::vector<Kinematics> & observations)
+    LogLikelihoodBlock::Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
     {
-        if (kinematics.empty())
-        {
-            throw InternalError("LogLikelihoodBlock::Unbinned1D: kinematics must not be empty");
-        }
+        return implementation::make_unbinned_likelihood_block<1>(cache, pdf, UnbinnedObservations(observations, 1));
+    }
 
-        if (kinematics.size() != resolution.size())
-        {
-            throw InternalError("LogLikelihoodBlock::Unbinned1D: kinematics and resolution must have the same size");
-        }
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned1D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<1>(cache, pdf, observations);
+    }
 
-        if (observations.empty())
-        {
-            throw InternalError("LogLikelihoodBlock::Unbinned1D: observations must not be empty");
-        }
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<2>(cache, pdf, UnbinnedObservations(observations, 2));
+    }
 
-        return LogLikelihoodBlockPtr(
-                new implementation::Unbinned1DLikelihoodBlock<1>(cache, pdf_name, kinematics, options, resolution, observations, std::array<std::size_t, 1>{ kinematics.size() }));
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned2D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<2>(cache, pdf, observations);
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<3>(cache, pdf, UnbinnedObservations(observations, 3));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned3D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<3>(cache, pdf, observations);
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const std::vector<double> & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<4>(cache, pdf, UnbinnedObservations(observations, 4));
+    }
+
+    LogLikelihoodBlockPtr
+    LogLikelihoodBlock::Unbinned4D(ObservableCache cache, const std::shared_ptr<DetectorLevelPDF> & pdf, const UnbinnedObservations & observations)
+    {
+        return implementation::make_unbinned_likelihood_block<4>(cache, pdf, observations);
     }
 
     LogLikelihoodBlockPtr
