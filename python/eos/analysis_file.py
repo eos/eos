@@ -292,20 +292,50 @@ class AnalysisFile:
         except AttributeError:
             raise ValueError(f"Likelihood component '{component.name}' has rank {rank}, which is not supported (must be 1 to 4)")
 
-        # the crop acts as the fit window: events outside it do not enter the likelihood
+        # without windows, the crop acts as the fit window: events outside it do not enter the likelihood
         events = _np.asarray(data.observations, dtype=float)
-        minima = _np.array([axis['min'] for axis in cropped_axes])
-        maxima = _np.array([axis['max'] for axis in cropped_axes])
-        observations = events[_np.all((minima <= events) & (events <= maxima), axis=1)]
+        windows = self._unbinned_windows(component, cropped_axes)
+        region = 'windows' if component.windows else 'cropped axes'
+        inside = _np.zeros(len(events), dtype=bool)
+        for window in windows:
+            minima, maxima = _np.array(window, dtype=float).T
+            inside |= _np.all((minima <= events) & (events <= maxima), axis=1)
+        observations = events[inside]
 
         dropped = len(events) - len(observations)
         if dropped > 0:
-            eos.warn(f"Likelihood component '{component.name}': {dropped} of {len(events)} events lie outside the cropped axes and are dropped")
+            eos.warn(f"Likelihood component '{component.name}': {dropped} of {len(events)} events lie outside the {region} and are dropped")
         if len(observations) == 0:
-            raise ValueError(f"Likelihood component '{component.name}' contains no events within the cropped axes")
+            raise ValueError(f"Likelihood component '{component.name}' contains no events within the {region}")
         eos.info(f"Likelihood component '{component.name}' contains {len(observations)} events")
 
-        return factory(cache, pdf, observations.reshape(-1))
+        return factory(cache, pdf, observations.reshape(-1), windows=windows if component.windows else None)
+
+
+    @staticmethod
+    def _unbinned_windows(component, cropped_axes):
+        """Return the windows of an unbinned likelihood component as lists of (min, max) pairs in axis order, or the cropped axes if it has none."""
+        full = [(axis['min'], axis['max']) for axis in cropped_axes]
+        if not component.windows:
+            return [full]
+
+        variables = [axis['variable'] for axis in cropped_axes]
+        result = []
+        for index, window in enumerate(component.windows):
+            box = list(full)
+            for interval in window:
+                if interval.variable not in variables:
+                    raise ValueError(f"Likelihood component '{component.name}': window {index} constrains '{interval.variable}', which matches no axis; the axes are {', '.join(variables)}")
+                i = variables.index(interval.variable)
+                lo, hi = full[i]
+                # a bound on the crop's outermost node may differ from it by round-off; clip it onto the node
+                tolerance = 1.0e-9 * (hi - lo)
+                if not (lo - tolerance <= interval.min and interval.max <= hi + tolerance):
+                    raise ValueError(f"Likelihood component '{component.name}': window {index} exceeds the cropped axis '{interval.variable}' [{lo}, {hi}]")
+                box[i] = (max(lo, interval.min), min(hi, interval.max))
+            result.append(box)
+
+        return result
 
 
     def observables(self, _posterior, _prediction, parameters):

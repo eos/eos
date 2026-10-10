@@ -304,6 +304,34 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
         self.assertIn("declares 'pdf', which requires 'type: unbinned'", messages[0])
         self.assertIn("declares 'tolerance', which requires 'type: unbinned'", messages[1])
 
+    def test_unbinned_windows(self):
+        # windows are read only for 'type: unbinned'
+        description = eos.analysis_file_description.LikelihoodComponent.from_dict(
+            name='likelihood',
+            constraints=['B^+->tau^+nu::BR@Belle:2014A'],
+            windows=[[{ 'variable': 'z', 'min': 0.0, 'max': 1.0 }]],
+        )
+        messages = [d.message for d in description.validate_structure() if d.severity is Severity.ERROR]
+        self.assertEqual(1, len(messages))
+        self.assertIn("declares 'windows', which requires 'type: unbinned'", messages[0])
+
+        # each window is a non-empty list of non-empty intervals, with each variable at most once
+        description = eos.analysis_file_description.LikelihoodComponent.from_dict(
+            name='likelihood', type='unbinned', pdf='TestLegendre1D::P(z)', data='./unbinned-data',
+            windows=[
+                { 'variable': 'z', 'min': 0.0, 'max': 1.0 },
+                [],
+                [{ 'variable': 'z', 'min': 1.0, 'max': 1.0 }],
+                [{ 'variable': 'z', 'min': 0.0, 'max': 1.0 }, { 'variable': 'z', 'min': 2.0, 'max': 3.0 }],
+            ],
+        )
+        messages = [d.message for d in description.validate_structure() if d.severity is Severity.ERROR]
+        self.assertEqual(4, len(messages))
+        self.assertIn('each window must be a non-empty list of intervals', messages[0])
+        self.assertIn('each window must be a non-empty list of intervals', messages[1])
+        self.assertIn("window 2 has an empty interval [1.0, 1.0] in 'z'", messages[2])
+        self.assertIn("window 3 constrains 'z' more than once", messages[3])
+
     def test_unbinned_unknown_type(self):
         # a typo'd 'type' value is reported by name, rather than as the misleading "must have at
         # least one of constraints, ..." diagnostic that a missing type would produce
@@ -442,6 +470,43 @@ class TestAnalysisFileUnbinnedLikelihood(unittest.TestCase):
         self.assertTrue(any('WARNING' in message and '2 of 4 events lie outside the cropped axes' in message for message in cm.output))
         self.assertTrue(any('INFO' in message and 'contains 2 events' in message for message in cm.output))
         self.assertTrue(math.isfinite(analysis.log_likelihood([4.18])))
+
+
+    def test_events_outside_windows_are_dropped(self):
+        af = eos.AnalysisFile(_TESTD / 'unbinned-windows.yaml')
+
+        with self.assertLogs('EOS', level='INFO') as cm:
+            analysis = af.analysis('posterior', base_directory=_TESTD)
+        self.assertTrue(any('WARNING' in message and '1 of 4 events lie outside the windows' in message for message in cm.output))
+        self.assertTrue(any('INFO' in message and 'contains 3 events' in message for message in cm.output))
+
+        # the sampled resolution is a delta at the offset -1, so the grid on z = 0..3 is [3, 4, 3, 0]; its linear
+        # interpolation integrates to 3.5 over [0, 1] and to 1.5 over [2, 3], and the events at z = 0.5, 2.0, 2.5
+        # have densities 3.5, 3, 1.5
+        expected = math.log(3.5) + math.log(3.0) + math.log(1.5) - 3.0 * math.log(3.5 + 1.5)
+        self.assertAlmostEqual(analysis.log_likelihood([4.18]), expected, places=10)
+
+    def test_windows_outside_cropped_axes(self):
+        component = eos.analysis_file_description.LikelihoodComponent.from_dict(
+            name='unbinned-test', type='unbinned', pdf='TestLegendre1D::P(z)', data='./unbinned-data',
+            axes=[{ 'variable': 'z', 'min': 1.0, 'max': 2.0 }],
+            windows=[[{ 'variable': 'z', 'min': 0.0, 'max': 1.5 }]],
+        )
+        cropped_axes = [{ 'variable': 'z', 'min': 1.0, 'max': 2.0, 'points': 2 }]
+
+        with self.assertRaises(ValueError) as context:
+            eos.AnalysisFile._unbinned_windows(component, cropped_axes)
+        self.assertIn("window 0 exceeds the cropped axis 'z'", str(context.exception))
+
+        # a bound beyond the cropped axis by round-off only is clipped onto it
+        component.windows[0][0].min = 1.0 - 1.0e-12
+        component.windows[0][0].max = 2.0 + 1.0e-12
+        self.assertEqual(eos.AnalysisFile._unbinned_windows(component, cropped_axes), [[(1.0, 2.0)]])
+
+        component.windows[0][0].variable = 'y'
+        with self.assertRaises(ValueError) as context:
+            eos.AnalysisFile._unbinned_windows(component, cropped_axes)
+        self.assertIn("window 0 constrains 'y', which matches no axis", str(context.exception))
 
 
 class TestAnalysisFileMethods(unittest.TestCase):
