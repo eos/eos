@@ -18,6 +18,8 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/utils/expression-observable.hh>
+#include <eos/utils/expression-parser.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/observable_stub.hh>
 
@@ -250,6 +252,25 @@ class ObservableCacheCloneTest : public TestCase
             TEST_CHECK_EQUAL(clone[id], cache[id]);
             TEST_CHECK_THROWS(InternalError, clone[batch_id]);
             TEST_CHECK_EQUAL(cache[batch_id].size(), 1u);
+
+            // a cloned expression caches the observables it refers to in the clone, not in the original cache
+            {
+                Parameters      expression_parameters = Parameters::Defaults();
+                ObservableCache expression_cache(expression_parameters);
+
+                const Kinematics k{
+                    { "z", 1.0 }
+                };
+                const auto expression_id = expression_cache.add(ObservablePtr(
+                        new ExpressionObservable("test::twice", expression_parameters, k, Options(), exp::parse_expression("2 * <<TestLegendre1D::UnnormalizedPDF(z)>>"))));
+                expression_cache.update();
+                const unsigned size = expression_cache.size();
+
+                ObservableCache expression_clone = expression_cache.clone(expression_parameters.clone());
+                TEST_CHECK_EQUAL(expression_cache.size(), size);
+                TEST_CHECK_EQUAL(expression_clone.size(), size);
+                TEST_CHECK_NEARLY_EQUAL(expression_clone[expression_id], 6.0, 1.0e-14);
+            }
         }
 } observable_cache_clone_test;
 

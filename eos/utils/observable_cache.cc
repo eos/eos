@@ -564,7 +564,7 @@ namespace eos
         {
             // cloning cached observables creates independent *cacheable* observables
             // adding them back creates new and independent cached observables
-            result._imp->add((*o)->clone(parameters), *this);
+            result._imp->add((*o)->clone(parameters), result);
         }
 
         result.update();
