@@ -29,6 +29,10 @@ Basic rules are used to parse the input string
 
     Parentheses are recognized in expressions, and the usual precedence rules of arithmetics apply.
 
+  * Expressions can call the functions ``exp``, ``log``, ``sin``, ``cos``, ``atan``, and ``theta``, the Heaviside step function with ``theta(0) = 1``.
+    The resolution kernels ``Kernel::Gaussian(u, mu, sigma)`` and ``Kernel::CrystalBall(u, mu, sigma, alpha_L, n_L, alpha_R, n_R)`` are densities of unit area in their first argument ``u``.
+    The latter is a Gaussian core with power-law tails beyond ``-alpha_L`` and ``alpha_R`` standard deviations, of powers ``n_L`` and ``n_R``, which must exceed one.
+
   * Expressions can refer to existing EOS objects
 
      - Observables are referenced by their :code:`eos.QualifiedName` and must be encapsulated by two chevrons: ``<<...>>``.

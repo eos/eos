@@ -7,7 +7,9 @@ AM_LDFLAGS = @AM_LDFLAGS@
 noinst_LTLIBRARIES = libeostest.la
 
 libeostest_la_SOURCES = \
-	test.cc test.hh
+	test.cc test.hh \
+	test-observables.cc test-observables.hh \
+	test-pdfs.cc test-pdfs.hh
 
 AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_CONSTRAINTS="$(top_srcdir)/eos/constraints"; \

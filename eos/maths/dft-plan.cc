@@ -21,6 +21,17 @@ namespace eos
 {
     namespace dft
     {
+        namespace impl
+        {
+            Mutex &
+            planner_mutex()
+            {
+                static Mutex mutex;
+
+                return mutex;
+            }
+        } // namespace impl
+
         template class Plan<1, Direction::Forward>;
         template class Plan<1, Direction::Backward>;
 

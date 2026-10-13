@@ -28,6 +28,7 @@ from collections import defaultdict
 import copy as _copy
 import eos
 import inspect
+import os
 from collections import Counter
 
 
@@ -553,11 +554,37 @@ class PyHFConstraintDescription(_AnalysisFileDeserializable):
     parameter_map:dict=field(default_factory=dict)
 
 @dataclass
+class UnbinnedAxisComponent(_AnalysisFileDeserializable):
+    r"""Describes the crop applied to one axis of an unbinned likelihood's native grid.
+
+    This gives the window only, never the spacing: the point count is derived from the data object's
+    native spacing, so the analysis file and the data object cannot disagree.
+
+    :param variable: The kinematic variable cropped by this entry.
+    :type variable: str
+    :param min: The lower bound of the crop window.
+    :type min: float
+    :param max: The upper bound of the crop window.
+    :type max: float
+    """
+    variable:str
+    min:float
+    max:float
+
+
+# The recognised values of a likelihood component's 'type' discriminator. Only 'unbinned' changes
+# behaviour; the others name the kinds that are still inferred from which key is present.
+_LIKELIHOOD_COMPONENT_TYPES = frozenset({ 'constraints', 'manual_constraints', 'pyhf', 'unbinned' })
+
+
+@dataclass
 class LikelihoodComponent(_AnalysisFileDeserializable):
     r"""Describes a single named likelihood, i.e. one entry of an analysis file's ``likelihoods`` list.
 
-    A named likelihood may combine any number of built-in constraints, inline (manual) constraints, and
-    pyhf-based contributions; at least one of the three must be present.
+    A named likelihood is either a combination of any number of built-in constraints, inline (manual)
+    constraints, and pyhf-based contributions (at least one of the three must be present), or, with
+    ``type: 'unbinned'``, a single unbinned likelihood built from a :class:`eos.data.UnbinnedLikelihood`
+    data object; the two forms are mutually exclusive.
 
     :param name: The unique name of the likelihood, by which posteriors refer to it.
     :type name: str
@@ -567,6 +594,30 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     :type manual_constraints: list[ManualConstraintDescription]
     :param pyhf: The pyhf-based contribution to the likelihood, or None if there is none. Optional.
     :type pyhf: PyHFConstraintDescription | None
+    :param type: The discriminator selecting the kind of likelihood component. Only ``'unbinned'`` is
+        currently enforced; when absent, the kind is inferred from which of ``constraints``,
+        ``manual_constraints``, or ``pyhf`` is present. Optional.
+    :type type: str | None
+    :param pdf: For ``type: 'unbinned'``, the qualified name of the truth-level SignalPDF fitted to the
+        data. Mandatory for that type, rejected otherwise.
+    :type pdf: str
+    :param data: For ``type: 'unbinned'``, the path to the :class:`eos.data.UnbinnedLikelihood`
+        directory holding the observed events and the resolution, relative to the analysis's base
+        directory. Mandatory for that type, rejected otherwise.
+    :type data: str
+    :param options: For ``type: 'unbinned'``, the options forwarded to the signal PDF. Optional; rejected otherwise.
+    :type options: dict
+    :param axes: For ``type: 'unbinned'``, the per-axis crop of the data object's native grid.
+        Optional; an axis (or the whole list) omitted uses the native range for that axis. Rejected otherwise.
+    :type axes: list[UnbinnedAxisComponent]
+    :param tolerance: For ``type: 'unbinned'`` with a sampled resolution, the tolerance used when
+        checking the resolution's declared offset grid against the grid the fit requires. Rejected otherwise.
+    :type tolerance: float
+    :param windows: For ``type: 'unbinned'``, non-overlapping boxes within the cropped axes, each given as a list
+        of per-axis intervals; an axis omitted from a box uses its full cropped range. If given, only the events
+        within the union of the boxes enter the likelihood, and the detector-level PDF is normalized over that
+        union. Optional; rejected otherwise.
+    :type windows: list[list[UnbinnedAxisComponent]]
     """
     name:str
     constraints:list=field(default_factory=list)
@@ -574,15 +625,76 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     # unlike 'constraints' and 'manual_constraints', a likelihood carries at most one pyhf
     # contribution; from_dict deserializes it into a single PyHFConstraintDescription
     pyhf:PyHFConstraintDescription|None=None
+    type:str|None=None
+    pdf:str=''
+    data:str=''
+    options:dict=field(default_factory=dict)
+    axes:list=field(default_factory=list)
+    tolerance:float=1.0e-9
+    windows:list=field(default_factory=list)
 
     def _diagnostics(self):
         yield from _check_file_local_name(self.name, 'likelihood name', ('name',))
-        if not (self.constraints or self.manual_constraints or self.pyhf):
+
+        if self.type is not None and self.type not in _LIKELIHOOD_COMPONENT_TYPES:
             yield Diagnostic(
-                (),
+                ('type',),
                 Severity.ERROR,
-                'LikelihoodComponent must have at least one of constraints, manual_constraints, or pyhf',
+                f"Likelihood component '{self.name}' has unknown type '{self.type}'; expected one of "
+                + ', '.join(sorted(_LIKELIHOOD_COMPONENT_TYPES)),
             )
+        elif self.type == 'unbinned':
+            for key in ('constraints', 'manual_constraints', 'pyhf'):
+                if getattr(self, key):
+                    yield Diagnostic(
+                        (key,),
+                        Severity.ERROR,
+                        f"Likelihood component '{self.name}' has 'type: unbinned' and must not also declare '{key}'",
+                    )
+            if not self.pdf:
+                yield Diagnostic(('pdf',), Severity.ERROR, f"Likelihood component '{self.name}' has 'type: unbinned' but no 'pdf'")
+            if not self.data:
+                yield Diagnostic(('data',), Severity.ERROR, f"Likelihood component '{self.name}' has 'type: unbinned' but no 'data'")
+            variables = [axis.variable for axis in self.axes if isinstance(axis, UnbinnedAxisComponent)]
+            for variable in sorted({ v for v in variables if variables.count(v) > 1 }):
+                yield Diagnostic(('axes',), Severity.ERROR, f"Likelihood component '{self.name}': 'axes' crops '{variable}' more than once")
+            for index, window in enumerate(self.windows):
+                if not (isinstance(window, list) and window and all(isinstance(entry, (UnbinnedAxisComponent, InvalidComponent)) for entry in window)):
+                    yield Diagnostic(
+                        ('windows', index),
+                        Severity.ERROR,
+                        f"Likelihood component '{self.name}': each window must be a non-empty list of intervals with the keys 'variable', 'min', and 'max'",
+                    )
+                    continue
+                variables = [entry.variable for entry in window if isinstance(entry, UnbinnedAxisComponent)]
+                for variable in sorted({ v for v in variables if variables.count(v) > 1 }):
+                    yield Diagnostic(('windows', index), Severity.ERROR, f"Likelihood component '{self.name}': window {index} constrains '{variable}' more than once")
+                for entry in window:
+                    if isinstance(entry, UnbinnedAxisComponent) and not (entry.min < entry.max):
+                        yield Diagnostic(('windows', index), Severity.ERROR, f"Likelihood component '{self.name}': window {index} has an empty interval [{entry.min}, {entry.max}] in '{entry.variable}'")
+        else:
+            # these keys are only read for 'type: unbinned'; reject rather than silently ignore them
+            unbinned_only = {
+                'pdf':       bool(self.pdf),
+                'data':      bool(self.data),
+                'options':   bool(self.options),
+                'axes':      bool(self.axes),
+                'tolerance': self.tolerance != 1.0e-9,
+                'windows':   bool(self.windows),
+            }
+            for key, given in unbinned_only.items():
+                if given:
+                    yield Diagnostic(
+                        (key,),
+                        Severity.ERROR,
+                        f"Likelihood component '{self.name}' declares '{key}', which requires 'type: unbinned'",
+                    )
+            if not (self.constraints or self.manual_constraints or self.pyhf):
+                yield Diagnostic(
+                    (),
+                    Severity.ERROR,
+                    'LikelihoodComponent must have at least one of constraints, manual_constraints, or pyhf',
+                )
 
     def validate_structure(self):
         yield from self._diagnostics()
@@ -600,6 +712,37 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         )
         if self.pyhf:
             yield from (diagnostic.prefixed('pyhf') for diagnostic in self.pyhf.validate_structure())
+        axis_segments = getattr(self, '_axis_segments', list(range(len(self.axes))))
+        yield from _validate_children(self.axes, axis_segments, 'axes')
+        for index, window in enumerate(self.windows):
+            if isinstance(window, list):
+                for position, entry in enumerate(window):
+                    if isinstance(entry, InvalidComponent):
+                        yield from (diagnostic.prefixed('windows', index, position) for diagnostic in entry.validate_structure())
+
+    def _validate_resolution_semantics(self, context):
+        """Check the names that the resolution expression of an unbinned likelihood's data object refers to."""
+        from eos.data.unbinned_likelihood import UnbinnedExpressionResolutionDescription, UnbinnedLikelihoodDescription
+
+        try:
+            data = UnbinnedLikelihoodDescription.from_yaml_file(os.path.join(context.data_path(self.data), 'description.yaml'))
+        except Exception:
+            # a missing or unreadable data object is reported by the deep phase
+            return
+
+        if not isinstance(data.resolution, UnbinnedExpressionResolutionDescription):
+            return
+
+        try:
+            references = eos.analyze_expression(data.resolution.expression)
+        except RuntimeError as error:
+            yield Diagnostic(('data',), Severity.ERROR, f"The resolution of data object '{self.data}' does not parse: {error}")
+            return
+
+        for observable in references.observables:
+            yield from _check_qualified(context, observable.full(), 'observable', ('data',))
+        for parameter in references.parameters:
+            yield from _check_qualified(context, parameter.full(), 'parameter', ('data',))
 
     def validate_semantics(self, context):
         constraint_segments = getattr(self, '_constraint_segments', list(range(len(self.constraints))))
@@ -611,6 +754,10 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
                 'constraint',
                 ('constraints', segment),
             )
+
+        # the resolution of an unbinned likelihood may refer to the file's parameters and observables
+        if self.type == 'unbinned' and self.data:
+            yield from self._validate_resolution_semantics(context)
 
         known_constraints = eos.Constraints()
         manual_segments = getattr(
@@ -681,9 +828,20 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             manual_constraint_segments = []
         if 'pyhf' in kwargs:
             _kwargs['pyhf'] = PyHFConstraintDescription.from_dict(**kwargs['pyhf'])
+        if 'axes' in kwargs:
+            axis_segments = _segments(kwargs['axes'])
+            _kwargs['axes'] = [UnbinnedAxisComponent.from_dict(**a) for a in kwargs['axes']]
+        else:
+            axis_segments = []
+        if 'windows' in kwargs:
+            _kwargs['windows'] = [
+                [UnbinnedAxisComponent.from_dict(**entry) if isinstance(entry, dict) else entry for entry in window] if isinstance(window, list) else window
+                for window in kwargs['windows']
+            ]
         result = cls(**_kwargs)
         result._constraint_segments = constraint_segments
         result._manual_constraint_segments = manual_constraint_segments
+        result._axis_segments = axis_segments
         return result
 
 
@@ -778,6 +936,56 @@ class ObservableComponent(_AnalysisFileDeserializable):
         for parameter in references.parameters:
             yield from _check_qualified(context, parameter.full(), 'parameter', ('expression',))
 
+
+
+@dataclass
+class SignalPDFComponent(_AnalysisFileDeserializable):
+    r"""Describes a custom truth-level signal PDF, i.e. one entry of an analysis file's ``signal_pdfs`` list.
+
+    The PDF is the ratio of two observables, either of which may be a custom observable declared in the
+    ``observables`` section; see :meth:`eos.SignalPDFs.insert`.
+
+    :param name: The qualified name under which the new signal PDF is registered.
+    :type name: str
+    :param numerator: The qualified name of the observable that provides the unnormalized density.
+    :type numerator: str
+    :param variables: The kinematic variables of the numerator, which are the PDF's sampling variables.
+    :type variables: list[str]
+    :param normalization: The qualified name of the observable that provides the normalization.
+    :type normalization: str
+    :param normalization_variables: The kinematic variables of the normalization. Optional; defaults to the
+        bounds ``v_min`` and ``v_max`` of each sampling variable ``v``.
+    :type normalization_variables: list[str]
+    :param description: A human-readable description of the signal PDF. Optional.
+    :type description: str
+    :param options: The options applied to both observables. Optional.
+    :type options: dict
+    """
+    name:str
+    numerator:str
+    variables:list
+    normalization:str
+    normalization_variables:list=field(default_factory=list)
+    description:str=''
+    options:dict=field(default_factory=dict)
+
+    def _diagnostics(self):
+        try:
+            eos.QualifiedName(self.name)
+        except RuntimeError as e:
+            yield Diagnostic(('name',), Severity.ERROR, f"'{self.name}' is not a valid qualified name: {e}")
+        if not self.variables:
+            yield Diagnostic(('variables',), Severity.ERROR, f"Signal PDF '{self.name}' must have at least one sampling variable")
+
+    def bounds(self):
+        """Return the kinematic variables of the normalization, including the default."""
+        if self.normalization_variables:
+            return list(self.normalization_variables)
+        return [ f'{v}_{bound}' for v in self.variables for bound in ('min', 'max') ]
+
+    def validate_semantics(self, context):
+        yield from _check_qualified(context, self.numerator, 'observable', ('numerator',))
+        yield from _check_qualified(context, self.normalization, 'observable', ('normalization',))
 
 
 @dataclass
@@ -1350,6 +1558,8 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
     :type observables: list[ObservableComponent]
     :param parameters: The custom parameters (from the YAML mapping keyed by parameter name).
     :type parameters: list[ParameterComponent]
+    :param signal_pdfs: The custom truth-level signal PDFs.
+    :type signal_pdfs: list[SignalPDFComponent]
     :param steps: The reproducible-analysis steps.
     :type steps: list[StepComponent]
     :param masks: The named sample masks.
@@ -1365,6 +1575,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
     figures:list                 = field(default_factory=list)
     observables:list             = field(default_factory=list)
     parameters:list              = field(default_factory=list)
+    signal_pdfs:list             = field(default_factory=list)
     steps:list                   = field(default_factory=list)
     masks:list                   = field(default_factory=list)
 
@@ -1382,6 +1593,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('figures', self.figures, '_figure_segments'),
             ('observables', self.observables, '_observable_segments'),
             ('parameters', self.parameters, '_parameter_segments'),
+            ('signal_pdfs', self.signal_pdfs, '_signal_pdf_segments'),
             ('steps', self.steps, '_step_segments'),
             ('masks', self.masks, '_mask_segments'),
         )
@@ -1499,6 +1711,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             ('figures', self.figures, '_figure_segments'),
             ('observables', self.observables, '_observable_segments'),
             ('parameters', self.parameters, '_parameter_segments'),
+            ('signal_pdfs', self.signal_pdfs, '_signal_pdf_segments'),
             ('steps', self.steps, '_step_segments'),
             ('masks', self.masks, '_mask_segments'),
         )
@@ -1727,6 +1940,11 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
             _kwargs['parameters'] = [ParameterComponent.from_dict(**p) for p in raw_parameters]
         else:
             parameter_segments = []
+        if 'signal_pdfs' in kwargs:
+            signal_pdf_segments = _segments(kwargs['signal_pdfs'])
+            _kwargs['signal_pdfs'] = [SignalPDFComponent.from_dict(**p) for p in kwargs['signal_pdfs']]
+        else:
+            signal_pdf_segments = []
         if 'steps' in kwargs:
             step_segments = _segments(kwargs['steps'], identifier='id')
             _kwargs['steps'] = [StepComponent.from_dict(**s) for s in kwargs['steps']]
@@ -1746,6 +1964,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         result._figure_segments = figure_segments
         result._observable_segments = observable_segments
         result._parameter_segments = parameter_segments
+        result._signal_pdf_segments = signal_pdf_segments
         result._step_segments = step_segments
         result._mask_segments = mask_segments
         result._present_sections = set(kwargs)

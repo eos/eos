@@ -1,0 +1,19 @@
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    # a typo of 'unbinned'; must be reported as an unknown type, not as a missing
+    # constraints/manual_constraints/pyhf key
+    type: 'unbinnd'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data'
+
+posteriors:
+  - name: posterior
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test

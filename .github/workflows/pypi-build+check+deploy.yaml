@@ -102,7 +102,7 @@ jobs:
         run: cp pyproject.toml.in pyproject.toml
 
       - name: Build EOS, run tests, and create wheels
-        timeout-minutes: 60
+        timeout-minutes: 75
         uses: pypa/cibuildwheel@v3.2.1
         env:
           CIBW_BUILD: ${{ matrix.version}}-*
