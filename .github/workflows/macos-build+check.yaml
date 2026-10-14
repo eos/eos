@@ -54,8 +54,8 @@ jobs:
           tar xzmf macos-arm64.tar.gz -C /
           echo "/opt/homebrew/opt/make/libexec/gnubin" >> "$GITHUB_PATH"
 
-      # jinja2 (eos/tasks.py's report rendering) and pyhf (PyHF likelihoods)
-      # are hard imports exercised by eos/tasks_TEST.py and eos/analysis_TEST.py,
+      # jinja2 (eos/tasks/output.py's report rendering) and pyhf (PyHF likelihoods)
+      # are hard imports exercised by eos/tasks/output_TEST.py and eos/analysis_TEST.py,
       # not optional/skip-guarded like e.g. wilson; match the resolute Ubuntu
       # image's pip install list (eos/docker.io's ubuntu/*/Dockerfile).
       - name: Install Python dependencies
