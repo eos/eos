@@ -27,7 +27,7 @@ import numpy as np
 class DataFile(Deserializable):
     r""" Collects the relevant information to load a data file, to extract data, variables, and labels from it.
 
-    :param path: Path to the data file (either in eos.Prediction or eos.ImportanceSample format) that will be used.
+    :param path: Path to the data file (in eos.data.Prediction, eos.data.ImportanceSamples, or eos.data.Mode format) that will be used.
     :type path: str
     :param label: Title to appear in a figure's legend in association with this data file.
     :type label: str
@@ -49,15 +49,16 @@ class DataFile(Deserializable):
         """Load the underlying data file and cache it for subsequent access.
 
         Resolves ``path`` against the given context, opens the file as either
-        :class:`eos.data.ImportanceSamples` (a file named ``samples``) or :class:`eos.data.Prediction`
-        (a file whose name starts with ``pred-``), and records the available variable names. The result
+        :class:`eos.data.ImportanceSamples` (a file named ``samples``), :class:`eos.data.Prediction`
+        (a file whose name starts with ``pred-``), or :class:`eos.data.Mode` (a file whose name starts
+        with ``mode-``), and records the available variable names. The result
         is cached, so repeated calls return the already-loaded data file without reloading.
 
         :param context: The analysis file context used to resolve the relative ``path``. If ``None``,
             a default context rooted at the current working directory is used.
         :type context: AnalysisFileContext | None
         :returns: The loaded data file.
-        :rtype: eos.data.ImportanceSamples | eos.data.Prediction
+        :rtype: eos.data.ImportanceSamples | eos.data.Prediction | eos.data.Mode
         :raises ValueError: If the data file does not exist.
         :raises NotImplementedError: If the data file has an unsupported format.
         """
@@ -79,6 +80,10 @@ class DataFile(Deserializable):
             # The datafile refers to observable predictions
             self._datafile = eos.data.Prediction(path)
             self._type = 'prediction'
+        elif name.startswith('mode-'):
+            # The datafile refers to a (local) mode of a posterior
+            self._datafile = eos.data.Mode(path)
+            self._type = 'mode'
         else:
             eos.error(f"Data file '{path}' has an unsupported format")
             raise NotImplementedError
@@ -101,12 +106,17 @@ class DataFile(Deserializable):
         """An empirically determined plotting range for each variable in the data file.
 
         For each variable, the range is centered on the weighted median and extends to 1.3 times the
-        distance from the median to the weighted 1% and 99% quantiles, respectively.
+        distance from the median to the weighted 1% and 99% quantiles, respectively. For a mode, the
+        range collapses onto the mode itself.
 
         :returns: A tuple ``(min, max)`` of arrays holding the lower and upper bound for each variable.
         :rtype: tuple[numpy.ndarray, numpy.ndarray]
         """
         self.prepare()
+        if self._type == 'mode':
+            mode = np.array(self._datafile.mode)
+            return (mode, mode)
+
         lower  = np.quantile(self._datafile.samples, 0.01, weights=self._datafile.weights, method='inverted_cdf', axis=0)
         median = np.quantile(self._datafile.samples, 0.50, weights=self._datafile.weights, method='inverted_cdf', axis=0)
         upper  = np.quantile(self._datafile.samples, 0.99, weights=self._datafile.weights, method='inverted_cdf', axis=0)
@@ -118,7 +128,7 @@ class DataFile(Deserializable):
     def labels(self, variables):
         """Return LaTeX labels for the given variables.
 
-        For parameter samples, the labels are taken from the corresponding EOS parameters; for
+        For parameter samples and modes, the labels are taken from the corresponding EOS parameters; for
         predictions, they are taken from the corresponding EOS observables, falling back to the
         parameter label if the name does not identify an observable.
 
@@ -130,7 +140,7 @@ class DataFile(Deserializable):
         """
         self.prepare()
 
-        if self._type == 'samples':
+        if self._type in ('samples', 'mode'):
             p = eos.Parameters()
             return ["$" + p[dist].latex() + "$" for dist in variables]
         elif self._type == 'prediction':
