@@ -163,6 +163,7 @@ class Mode:
     :ivar format_version: The on-disk format version the mode was read from (1 for legacy files).
     :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
     :ivar mode: The location of the mode in parameter space.
+    :ivar lookup_table: A mapping from each parameter name to its index in ``mode``.
     :ivar pvalue: The global p-value at the mode.
     :ivar local_pvalues: A mapping from each element's name to its local p-value, derived from :attr:`test_statistics`.
     :ivar global_chi2: The global :math:`\chi^2` value at the mode, or ``None`` if not stored.
@@ -187,6 +188,7 @@ class Mode:
         self.format_version = description.format_version
         self.varied_parameters = [asdict(p) for p in description.parameters]
         self.mode = description.mode
+        self.lookup_table = { p.name: idx for idx, p in enumerate(description.parameters) }
         self.pvalue = description.pvalue
         self.global_chi2 = description.global_chi2
         self.dof = description.dof

@@ -132,6 +132,7 @@ class ModeTests(unittest.TestCase):
             self.assertEqual(m.format_version, 2)
             self.assertEqual([p['name'] for p in m.varied_parameters], ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008'])
             self.assertEqual(m.mode, [3.67e-3, 0.27])
+            self.assertEqual(m.lookup_table, {'CKM::abs(V_ub)': 0, 'B->pi::f_+(0)@BCL2008': 1})
             self.assertAlmostEqual(m.pvalue, 0.25)
             self.assertAlmostEqual(m.global_chi2, 12.0)
             self.assertAlmostEqual(m.dof, 5.0)
