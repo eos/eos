@@ -17,11 +17,30 @@ import unittest
 
 import eos
 import eos.figure
+import numpy as np
 import os
+import tempfile
 
 from eos.analysis_file_context import AnalysisFileContext
 
 class DataFileTests(unittest.TestCase):
+
+    class _Parameter:
+        "Minimal stand-in for eos.Parameter, exposing the name/min/max accessors that Mode.create() uses."
+
+        def __init__(self, name, minimum, maximum):
+            self._name = name
+            self._min  = minimum
+            self._max  = maximum
+
+        def name(self):
+            return self._name
+
+        def min(self):
+            return self._min
+
+        def max(self):
+            return self._max
 
     def test_defaults(self):
         "Check the construction of a DataFile and its default values."
@@ -53,6 +72,24 @@ class DataFileTests(unittest.TestCase):
         self.assertEqual(df._type, 'samples')
         # the variables are populated from the data file's lookup table
         self.assertGreater(len(df.variables), 0)
+
+    def test_prepare_mode(self):
+        "Check that a DataFile can load a mode, and that its range collapses onto the mode."
+        from eos.figure.data import DataFile
+
+        parameters = [self._Parameter('CKM::abs(V_ub)', 3.0e-3, 4.5e-3), self._Parameter('B->pi::f_+(0)@BCL2008', 0.21, 0.32)]
+        with tempfile.TemporaryDirectory() as d:
+            eos.data.Mode.create(os.path.join(d, 'mode-default'), parameters, [3.67e-3, 0.27], None, [], None, None)
+
+            df = DataFile.from_dict(path='mode-default', label='mode')
+            df.prepare(context=AnalysisFileContext(base_directory=d))
+
+            self.assertEqual(df._type, 'mode')
+            self.assertEqual(df.variables, ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008'])
+            lower, upper = df.empirical_range
+            np.testing.assert_array_equal(lower, [3.67e-3, 0.27])
+            np.testing.assert_array_equal(upper, [3.67e-3, 0.27])
+            self.assertEqual(len(df.labels(df.variables)), 2)
 
     def test_prepare_missing_file(self):
         "Check that loading a non-existent data file raises an error."
