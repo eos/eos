@@ -72,8 +72,19 @@ EXTRA_DIST = \
 	eos/reporting_TEST.d/data/CKM/samples \
 	eos/reporting_TEST.d/data/FF/samples \
 	eos/signal_pdf.py \
-	eos/tasks.py \
-	eos/tasks_TEST.py \
+	eos/tasks/__init__.py \
+	eos/tasks/_framework.py \
+	eos/tasks/_framework_TEST.py \
+	eos/tasks/comparison.py \
+	eos/tasks/comparison_TEST.py \
+	eos/tasks/inference.py \
+	eos/tasks/output.py \
+	eos/tasks/output_TEST.py \
+	eos/tasks/pmc.py \
+	eos/tasks/predictions.py \
+	eos/tasks/predictions_TEST.py \
+	eos/tasks/workflow.py \
+	eos/tasks/workflow_TEST.py \
 	eos/pyhf_likelihood.py \
 	eos/data/__init__.py \
 	eos/data/_common.py \
@@ -147,7 +158,6 @@ eos_SCRIPTS = \
 	eos/reference.py \
 	eos/reporting.py \
 	eos/signal_pdf.py \
-	eos/tasks.py \
 	eos/pyhf_likelihood.py
 
 eosclidir = $(pkgpythondir)/cli
@@ -199,6 +209,17 @@ eosmcp_SCRIPTS = \
 	eos/mcp/__init__.py \
 	eos/mcp/server.py
 
+eostasksdir = $(pkgpythondir)/tasks
+eostasks_SCRIPTS = \
+	eos/tasks/__init__.py \
+	eos/tasks/_framework.py \
+	eos/tasks/comparison.py \
+	eos/tasks/inference.py \
+	eos/tasks/output.py \
+	eos/tasks/pmc.py \
+	eos/tasks/predictions.py \
+	eos/tasks/workflow.py
+
 _eosdir = $(pythondir)
 _eos_LTLIBRARIES = _eos.la
 _eos_la_SOURCES = \
@@ -244,7 +265,11 @@ TESTS = \
 	eos/deserializable_TEST.py \
 	eos/diagnostic_TEST.py \
 	eos/serializable_TEST.py \
-	eos/tasks_TEST.py \
+	eos/tasks/_framework_TEST.py \
+	eos/tasks/comparison_TEST.py \
+	eos/tasks/output_TEST.py \
+	eos/tasks/predictions_TEST.py \
+	eos/tasks/workflow_TEST.py \
 	eos/data/dynesty_results_TEST.py \
 	eos/data/importance_samples_TEST.py \
 	eos/data/markov_chain_TEST.py \
