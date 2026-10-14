@@ -35,6 +35,8 @@
 
 - Add the ``eos-analysis`` task ``model-comparison``, which compares a group of posteriors sharing the same likelihood by their nested-sampling evidences: it corrects for differing uniform or transform priors of shared parameters and records their log prior volumes, grades all pairwise Bayes factors on Jeffreys' scale, and flags pairs whose conclusion is unstable under the evidence uncertainties or the prior-volume correction. The result is stored as the new ``eos.data.ModelComparison``, exposed to reports through ``AnalysisData.model_comparisons``, and shown at the top of the example report template (issue #1282) (D. van Dyk)
 
+- Let ``eos.figure.CornerFigure`` display an ``eos.data.Mode``, drawn as a vertical line on the diagonal and as a point off the diagonal; ``eos.data.Mode`` gains a ``lookup_table`` #1302 (D. van Dyk)
+
 ### Deprecated
 
 ### Removed
