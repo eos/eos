@@ -477,6 +477,7 @@ class CornerFigure(Figure):
     r"""Produces a corner figure, i.e., a figure with a triangular arrangement of 1D and 2D marginal PDFs.
 
     Distributions of the variables are shown on the diagonal, while correlations are plotted on the lower-left corner.
+    A data file that refers to an :class:`eos.data.Mode` is shown as a vertical line on the diagonal and as a point elsewhere.
 
     :param contents: The list of :class:`DataFile <eos.figure.DataFile>` objects to be used, each containing the path to the data file, its label, and optionally its color.
     :type contents: list[:class:`DataFile <eos.figure.DataFile>`]
@@ -505,6 +506,8 @@ class CornerFigure(Figure):
     The following keys are mandatory:
         * ``contents`` (*list* of :class:`DataFile <eos.figure.data.DataFile>`) -- The list of data files to be drawn in the figure.
           Each data file should be a dictionary containing the path to the data file, a label and optionally a color.
+          A data file that refers to an :class:`eos.data.Mode` is shown as a vertical line on the diagonal and as a point elsewhere;
+          at least one data file must not be a mode.
 
     The following keys are optional:
         * ``variables`` (*list[str]*) -- The list of variable names to be considered. Defaults to None, in which case all variables contained in the first data file are shown.
@@ -531,6 +534,9 @@ class CornerFigure(Figure):
         context = AnalysisFileContext() if context is None else context
         for content in self.contents:
             content.prepare(context=context)
+
+        if all(content._type == 'mode' for content in self.contents):
+            raise ValueError("Contents must include at least one item other than a mode.")
 
         if self.variables:
             self._variables = self.variables
@@ -583,20 +589,9 @@ class CornerFigure(Figure):
                         },
                         'grid': { 'visible': True, 'axis': 'x' },
                         'items': [
-                            {
-                                'type': 'kde1D', 'label': content.label,
-                                'datafile': context.data_path(content.path),
-                                'variable': self._variables[j],
-                                'color': content.color,
-                                'range': [absmin[j], absmax[j]]
-                            } if content.kde else {
-                                'type': 'histogram1D', 'label': content.label,
-                                'datafile': context.data_path(content.path),
-                                'variable': self._variables[j],
-                                'color': content.color,
-                                'range': [absmin[j], absmax[j]]
-                            }
-                        for content in self.contents]
+                            self._diagonal_item(context, content, j, [absmin[j], absmax[j]])
+                            for content in self.contents
+                        ]
                     }))
 
                 else:
@@ -623,24 +618,9 @@ class CornerFigure(Figure):
                         },
                         'grid': { 'visible': True},
                         'items': [
-                            {
-                                'type': 'kde2D', 'label': content.label,
-                                'datafile': context.data_path(content.path),
-                                'variables': [self._variables[j], self._variables[i]],
-                                'color': content.color,
-                                'contours': ['lines', 'areas'],
-                                'xrange': [absmin[j], absmax[j]],
-                                'yrange': [absmin[i], absmax[i]]
-                            } if content.kde else
-                            {
-                                'type': 'histogram2D', 'label': content.label,
-                                'datafile': context.data_path(content.path),
-                                'variables': [self._variables[j], self._variables[i]],
-                                'color': content.color,
-                                'xrange': [absmin[j], absmax[j]],
-                                'yrange': [absmin[i], absmax[i]]
-                            }
-                        for content in self.contents]
+                            self._off_diagonal_item(context, content, i, j, [absmin[j], absmax[j]], [absmin[i], absmax[i]])
+                            for content in self.contents
+                        ]
                     }))
 
         watermark_plot = self.watermark_plot
@@ -650,6 +630,47 @@ class CornerFigure(Figure):
         self._figure = GridFigure(shape=(size, size), plots=plots, padding=(0.0, 0.0),
                                   watermark=self.watermark, watermark_plot=watermark_plot)
 
+
+    def _diagonal_item(self, context, content, j, xrange):
+        """Return the description of the item showing the j-th variable on the diagonal."""
+        variable = self._variables[j]
+        if content._type == 'mode':
+            return {
+                'type': 'vertical', 'label': content.label,
+                'x': content._datafile.mode[content._datafile.lookup_table[variable]],
+                'color': content.color
+            }
+
+        return {
+            'type': 'kde1D' if content.kde else 'histogram1D', 'label': content.label,
+            'datafile': context.data_path(content.path),
+            'variable': variable,
+            'color': content.color,
+            'range': xrange
+        }
+
+    def _off_diagonal_item(self, context, content, i, j, xrange, yrange):
+        """Return the description of the item showing the j-th versus the i-th variable off the diagonal."""
+        xvariable, yvariable = self._variables[j], self._variables[i]
+        if content._type == 'mode':
+            return {
+                'type': 'point', 'label': content.label,
+                'x': content._datafile.mode[content._datafile.lookup_table[xvariable]],
+                'y': content._datafile.mode[content._datafile.lookup_table[yvariable]],
+                'color': content.color
+            }
+
+        item = {
+            'type': 'kde2D' if content.kde else 'histogram2D', 'label': content.label,
+            'datafile': context.data_path(content.path),
+            'variables': [xvariable, yvariable],
+            'color': content.color,
+            'xrange': xrange,
+            'yrange': yrange
+        }
+        if content.kde:
+            item['contours'] = ['lines', 'areas']
+        return item
 
     def draw(self, context:AnalysisFileContext=None):
         """Draw the corner figure.
