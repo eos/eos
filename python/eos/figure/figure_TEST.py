@@ -18,6 +18,7 @@ import unittest
 import eos
 import eos.figure
 import os
+import tempfile
 import yaml
 
 from eos.analysis_file_context import AnalysisFileContext
@@ -430,6 +431,29 @@ class CornerFigureTests(unittest.TestCase):
 
     _DATAFILE = 'eos/data/importance_samples_TEST.d/samples'
 
+    class _Parameter:
+        "Minimal stand-in for eos.Parameter, exposing the name/min/max accessors that Mode.create() uses."
+
+        def __init__(self, name, minimum, maximum):
+            self._name = name
+            self._min  = minimum
+            self._max  = maximum
+
+        def name(self):
+            return self._name
+
+        def min(self):
+            return self._min
+
+        def max(self):
+            return self._max
+
+    def _write_mode(self, directory):
+        path = os.path.join(directory, 'mode-default')
+        parameters = [self._Parameter('CKM::abs(V_ub)', 3.0e-3, 4.5e-3), self._Parameter('B->pi::f_+(0)@BCL2008', 0.21, 0.32)]
+        eos.data.Mode.create(path, parameters, [3.67e-3, 0.27], None, [], None, None)
+        return path
+
     @staticmethod
     def _has_watermark(ax):
         return any('EOS' in t.get_text() for t in ax.texts)
@@ -487,6 +511,43 @@ class CornerFigureTests(unittest.TestCase):
             figure = eos.figure.FigureFactory.from_yaml(input)
         except Exception as e:
             self.fail(f"Error when testing figure of type 'corner': {e}")
+
+    def test_mode(self):
+
+        # A mode is shown as a vertical line on the diagonal and as a point off the diagonal.
+        with tempfile.TemporaryDirectory() as d:
+            input = f"""
+            type: 'corner'
+            contents:
+              - path: '{self._DATAFILE}'
+                label: 'samples'
+              - path: '{self._write_mode(d)}'
+                label: 'mode'
+            variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+            """
+            figure = eos.figure.FigureFactory.from_yaml(input)
+            figure.draw(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
+
+        plots = figure._figure.plots
+        for idx, x in [(0, 3.67e-3), (3, 0.27)]:
+            self.assertIsInstance(plots[idx].items[1], eos.figure.item.VerticalLineItem)
+            self.assertEqual(plots[idx].items[1].x, x)
+        self.assertIsInstance(plots[2].items[1], eos.figure.item.PointItem)
+        self.assertEqual((plots[2].items[1].x, plots[2].items[1].y), (3.67e-3, 0.27))
+
+    def test_mode_only(self):
+
+        # Without any samples or predictions, the plot ranges cannot be determined.
+        with tempfile.TemporaryDirectory() as d:
+            input = f"""
+            type: 'corner'
+            contents:
+              - path: '{self._write_mode(d)}'
+                label: 'mode'
+            """
+            figure = eos.figure.FigureFactory.from_yaml(input)
+            with self.assertRaises(ValueError):
+                figure.prepare()
 
 
 if __name__ == '__main__':
