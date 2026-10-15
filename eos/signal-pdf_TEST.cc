@@ -18,6 +18,7 @@
 #include <eos/signal-pdf.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/observable_cache.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/units.hh>
@@ -137,3 +138,38 @@ class SignalPDFRuntimeInsertionTest : public TestCase
         }
 
 } signal_pdf_runtime_insertion_test;
+
+class SignalPDFCloneTest : public TestCase
+{
+    public:
+        SignalPDFCloneTest() :
+            TestCase("signal_pdf_clone_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            Parameters p = Parameters::Defaults();
+            Kinematics k{
+                {     "z", 2.0 },
+                { "z_min", 0.0 },
+                { "z_max", 4.0 }
+            };
+
+            auto pdf = SignalPDF::make("TestLegendre1D::P(z)", p, k, Options{});
+            TEST_CHECK(pdf != nullptr);
+
+            ObservableCache cache(p.clone());
+            auto            clone = pdf->clone(cache);
+            TEST_CHECK(clone != nullptr);
+            TEST_CHECK_EQUAL(clone->name(), pdf->name());
+            TEST_CHECK_NEARLY_EQUAL(clone->evaluate(), std::log(4.0), 1.0e-10);
+            TEST_CHECK_NEARLY_EQUAL(clone->normalization(), std::log(32.0 / 3.0), 1.0e-10);
+
+            // the clone owns its kinematics
+            k["z"] = 1.0;
+            TEST_CHECK_NEARLY_EQUAL(pdf->evaluate(), std::log(3.0), 1.0e-10);
+            TEST_CHECK_NEARLY_EQUAL(clone->evaluate(), std::log(4.0), 1.0e-10);
+        }
+} signal_pdf_clone_test;

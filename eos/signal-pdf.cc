@@ -24,7 +24,6 @@
 #include <eos/signal-pdf-impl.hh>
 #include <eos/signal-pdf.hh>
 #include <eos/utils/concrete-signal-pdf.hh>
-#include <eos/utils/density.hh>
 #include <eos/utils/instantiation_policy-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>

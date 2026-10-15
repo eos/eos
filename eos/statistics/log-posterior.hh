@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2011 Frederik Beaujean
- * Copyright (c) 2015-2023 Danny van Dyk
+ * Copyright (c) 2015-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,7 +24,6 @@
 #include <eos/statistics/log-likelihood.hh>
 #include <eos/statistics/log-posterior-fwd.hh>
 #include <eos/statistics/log-prior.hh>
-#include <eos/utils/density.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/verify.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>

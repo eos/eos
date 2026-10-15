@@ -22,7 +22,6 @@
 
 #include <eos/observable.hh>
 #include <eos/signal-pdf.hh>
-#include <eos/utils/density-impl.hh>
 #include <eos/utils/tuple-maker.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
@@ -37,90 +36,6 @@ namespace eos
 {
     namespace impl
     {
-        template <unsigned i_, typename Tuple_> struct DescriptionFiller
-        {
-                static std::vector<ParameterDescription>
-                fill(Kinematics & k, const Tuple_ & kinematic_ranges)
-                {
-                    auto result = DescriptionFiller<i_ - 1, Tuple_>::fill(k, kinematic_ranges);
-
-                    auto &      kinematic_range = std::get<i_ - 1>(kinematic_ranges);
-                    std::string kname           = std::string(kinematic_range.name);
-                    double      kvalue          = (kinematic_range.max - kinematic_range.min) / 2.0;
-                    MutablePtr  kvar(new KinematicVariable(k.declare(kname, kvalue)));
-                    result.push_back(ParameterDescription{ kvar, kinematic_range.min, kinematic_range.max, false });
-
-                    return result;
-                }
-        };
-
-        template <typename Tuple_> struct DescriptionFiller<1u, Tuple_>
-        {
-                static std::vector<ParameterDescription>
-                fill(Kinematics & k, const Tuple_ & kinematic_ranges)
-                {
-                    std::vector<ParameterDescription> result;
-
-                    auto &      kinematic_range = std::get<0u>(kinematic_ranges);
-                    std::string kname           = std::string(kinematic_range.name);
-                    double      kvalue          = (kinematic_range.max - kinematic_range.min) / 2.0;
-                    MutablePtr  kvar(new KinematicVariable(k.declare(kname, kvalue)));
-                    result.push_back(ParameterDescription{ kvar, kinematic_range.min, kinematic_range.max, false });
-
-                    return std::move(result);
-                }
-        };
-
-        template <unsigned i_, typename Tuple_> struct KinematicRangePrinter
-        {
-                static void
-                print(std::ostream & os, const Tuple_ & kinematic_ranges)
-                {
-                    KinematicRangePrinter<i_ - 1, Tuple_>::print(os, kinematic_ranges);
-                    auto & kinematic_range = std::get<i_ - 1>(kinematic_ranges);
-
-                    os << "    " << kinematic_range.name << "\t" << kinematic_range.description << std::endl;
-                }
-        };
-
-        template <typename Tuple_> struct KinematicRangePrinter<1u, Tuple_>
-        {
-                static void
-                print(std::ostream & os, const Tuple_ & kinematic_ranges)
-                {
-                    auto & kinematic_range = std::get<0u>(kinematic_ranges);
-
-                    os << "    " << kinematic_range.name << "\t" << kinematic_range.description << std::endl;
-                }
-        };
-
-        template <typename Result_, unsigned n_> struct ArgumentFromRange
-        {
-                template <typename Ranges_, typename... TempArgs_>
-                static Result_
-                make(Kinematics & k, const Ranges_ & r, TempArgs_... args)
-                {
-                    return ArgumentFromRange<Result_, n_ - 1>::make(k, r, k[r[n_ - 1].name], args...);
-                }
-        };
-
-        template <typename Result_> struct ArgumentFromRange<Result_, 0>
-        {
-                template <typename Ranges_, typename... TempArgs_>
-                static Result_
-                make(Kinematics &, const Ranges_ &, TempArgs_... args)
-                {
-                    return Result_{ args... };
-                }
-        };
-
-        template <unsigned long n_>
-        auto
-        make_arguments(Kinematics & kinematics, const std::array<KinematicRange, n_> & kinematic_ranges) -> std::array<KinematicVariable, n_>
-        {
-            return ArgumentFromRange<std::array<KinematicVariable, n_>, n_>::make(kinematics, kinematic_ranges);
-        }
-
         template <typename Result_, unsigned n_> struct ArgumentFromName
         {
                 template <typename Names_, typename... TempArgs_>
@@ -146,25 +61,6 @@ namespace eos
         make_arguments(Kinematics & kinematics, const std::array<std::string, n_> & kinematic_names) -> std::array<KinematicVariable, n_>
         {
             return ArgumentFromName<std::array<KinematicVariable, n_>, n_>::make(kinematics, kinematic_names);
-        }
-
-        template <unsigned long n_>
-        std::vector<ParameterDescription>
-        make_descriptions(Kinematics & kinematics, const std::array<KinematicRange, n_> & kinematic_ranges)
-        {
-            std::vector<ParameterDescription> result;
-
-            for (auto krange : kinematic_ranges)
-            {
-                auto kname  = std::string(krange.name);
-                auto kvalue = (krange.max - krange.min) / 2.0;
-
-                MutablePtr kvar(new KinematicVariable(kinematics.declare(kname, kvalue)));
-
-                result.push_back(ParameterDescription{ kvar, krange.min, krange.max, false });
-            }
-
-            return result;
         }
 
         template <typename Result_, unsigned n_> struct Evaluator
@@ -268,9 +164,6 @@ namespace eos
 
             ObservablePtr _normalization;
 
-            // TODO: remove
-            std::vector<ParameterDescription> _descriptions;
-
         public:
             ConcreteSignalPDF(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
                               const QualifiedName & unnormalized_pdf, const QualifiedName & normalization);
@@ -289,13 +182,7 @@ namespace eos
 
             virtual Options options();
 
-            virtual DensityPtr clone() const;
-
-            virtual DensityPtr clone(const Parameters & parameters) const;
-
-            virtual Density::Iterator begin() const;
-
-            virtual Density::Iterator end() const;
+            virtual SignalPDFPtr clone(const ObservableCache & cache) const;
     };
 
     class ConcreteSignalPDFEntry : public SignalPDFEntry

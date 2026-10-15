@@ -99,28 +99,10 @@ namespace eos
         return _options;
     }
 
-    DensityPtr
-    ConcreteSignalPDF::clone() const
+    SignalPDFPtr
+    ConcreteSignalPDF::clone(const ObservableCache & cache) const
     {
-        return DensityPtr(new ConcreteSignalPDF(_name, _parameters.clone(), _kinematics.clone(), _options, _unnormalized_pdf->name(), _normalization->name()));
-    }
-
-    DensityPtr
-    ConcreteSignalPDF::clone(const Parameters & parameters) const
-    {
-        return DensityPtr(new ConcreteSignalPDF(_name, parameters, _kinematics.clone(), _options, _unnormalized_pdf->name(), _normalization->name()));
-    }
-
-    Density::Iterator
-    ConcreteSignalPDF::begin() const
-    {
-        return Density::Iterator(_descriptions.cbegin());
-    }
-
-    Density::Iterator
-    ConcreteSignalPDF::end() const
-    {
-        return Density::Iterator(_descriptions.cend());
+        return SignalPDFPtr(new ConcreteSignalPDF(_name, cache.parameters(), _kinematics.clone(), _options, _unnormalized_pdf->name(), _normalization->name()));
     }
 
     ConcreteSignalPDFEntry::ConcreteSignalPDFEntry(const QualifiedName & name, const std::string & description, const Options & default_options, const QualifiedName & numerator,
