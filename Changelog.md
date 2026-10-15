@@ -20,6 +20,7 @@
 ### Deprecated
 
 ### Removed
+- **Breaking:** Remove the C++ base class ``eos::Density``; ``eos::SignalPDF`` no longer offers ``begin()``/``end()``, and its two ``clone()`` overloads are replaced by ``clone(const ObservableCache &)``, which returns a ``SignalPDFPtr`` #1303 (D. van Dyk)
 
 ### Fixed
 - Fix ``eos.set_log_level`` to set the level of the default log handler rather than that of the logger, so that DEBUG messages are shown; correct the FAQ on setting the log level, which caused messages to be printed twice #1290 (D. van Dyk)
