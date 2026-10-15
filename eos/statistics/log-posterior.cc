@@ -20,9 +20,9 @@
 
 #include <eos/maths/power-of.hh>
 #include <eos/statistics/log-posterior.hh>
-#include <eos/utils/density-impl.hh>
 #include <eos/utils/log.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/wrapped_forward_iterator-impl.hh>
 
 #include <gsl/gsl_cdf.h>
 

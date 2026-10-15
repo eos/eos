@@ -21,10 +21,10 @@
 #define EOS_GUARD_EOS_UTILS_SIGNAL_PDF_HH 1
 
 #include <eos/signal-pdf-fwd.hh>
-#include <eos/utils/density.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/iterator-range.hh>
 #include <eos/utils/kinematic.hh>
+#include <eos/utils/observable_cache.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/qualified-name.hh>
@@ -36,21 +36,11 @@
 
 namespace eos
 {
-    class KinematicRange
+    class SignalPDF
     {
         public:
-            const char * name;
+            virtual ~SignalPDF() = default;
 
-            const double min, max;
-
-            const std::string description;
-
-            operator const char * () const { return name; }
-    };
-
-    class SignalPDF : public Density
-    {
-        public:
             virtual const QualifiedName & name() const = 0;
 
             virtual double evaluate() const = 0;
@@ -66,9 +56,7 @@ namespace eos
 
             virtual Options options() = 0;
 
-            virtual DensityPtr clone() const = 0;
-
-            virtual DensityPtr clone(const Parameters & parameters) const = 0;
+            virtual SignalPDFPtr clone(const ObservableCache & cache) const = 0;
 
             static SignalPDFPtr make(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options);
     };

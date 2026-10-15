@@ -12,7 +12,6 @@ libeosutils_la_SOURCES = \
 	concrete-cacheable-observable.hh \
 	concrete-signal-pdf.cc concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
-	density.cc density.hh density-fwd.hh density-impl.hh \
 	destringify.cc destringify.hh \
 	diagnostics.cc diagnostics.hh \
 	exception.cc exception.hh \
@@ -85,7 +84,6 @@ include_eos_utils_HEADERS = \
 	concrete_observable.hh \
 	concrete-signal-pdf.hh \
 	condition_variable.hh \
-	density.hh density-fwd.hh \
 	destringify.hh \
 	exception.hh \
 	expression.hh expression-fwd.hh \
