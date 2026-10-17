@@ -531,6 +531,26 @@ class TestAnalysisFileMethods(unittest.TestCase):
                         'OBSERVABLES', 'PARAMETERS', 'STEPS', 'MASKS'):
             self.assertIn(section, html)
 
+    def test_repr_html_multivariate_priors(self):
+        # priors without a single 'parameter' key are rendered by their constraint or parameter names
+        import yaml
+        with tempfile.TemporaryDirectory() as d:
+            f = os.path.join(d, 'analysis.yaml')
+            with open(f, 'w') as stream:
+                yaml.safe_dump({
+                    'priors': [
+                        { 'name': 'FF', 'descriptions': [ { 'type': 'constraint', 'constraint': 'B->D::f_++f_0@HPQCD:2015A' } ] },
+                        { 'name': 'masses', 'descriptions': [ {
+                            'type': 'transform', 'parameters': ['mass::c', 'mass::b(MSbar)'], 'shift': [0.0, 0.0],
+                            'transform': [[1.0, 0.0], [0.0, 1.0]], 'min': [1.0, 4.0], 'max': [1.5, 4.5] } ] },
+                    ],
+                    'likelihoods': [],
+                    'posteriors': [ { 'name': 'p', 'prior': ['FF', 'masses'], 'likelihood': [] } ],
+                }, stream)
+            html = eos.AnalysisFile(f)._repr_html_()
+        for name in ('B->D::f_++f_0@HPQCD:2015A', 'mass::c', 'mass::b(MSbar)'):
+            self.assertIn(f'<code>{name}</code>', html)
+
     def test_dump(self):
         # dump() writes the input data back out as YAML
         buffer = io.StringIO()

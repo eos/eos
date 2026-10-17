@@ -602,9 +602,16 @@ class AnalysisFile:
                 p_min, p_max = None, None
                 if p.type == 'uniform':
                     p_min, p_max = p.min, p.max
+                if p.type == 'constraint':
+                    names = [p.constraint]
+                elif p.type == 'transform':
+                    names = p.parameters
+                else:
+                    names = [p.parameter]
+                names = '<br>'.join(f'<code>{n}</code>' for n in names)
                 result += fr'''
                     <tr>
-                        <td style="text-align: center"><code>{p.parameter}</code></td>
+                        <td style="text-align: center">{names}</td>
                         <td style="text-align: center">{p_min}</td>
                         <td style="text-align: center">{p_max}</td>
                         <td style="text-align: center">{p.type}</td>

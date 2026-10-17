@@ -857,12 +857,19 @@ class Analysis:
             <tbody>'''
 
         for p in self.init_args['priors']:
+            if 'parameter' in p:
+                names = [p['parameter']]
+            elif 'parameters' in p:
+                names = p['parameters']
+            else:
+                names = [p['constraint']]
+            names = '<br>'.join(f'<tt>{n}</tt>' for n in names)
             result += fr'''
                 <tr>
-                    <td><tt>{p['parameter']}</tt></td>
-                    <td>{p['min'] if 'min' in p else None}</td>
-                    <td>{p['max'] if 'min' in p else None}</td>
-                    <td>{p['type']}</td>
+                    <td>{names}</td>
+                    <td>{p.get('min')}</td>
+                    <td>{p.get('max')}</td>
+                    <td>{p.get('type')}</td>
                 </tr>
             '''
         result += r'''
