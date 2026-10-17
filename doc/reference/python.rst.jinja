@@ -48,6 +48,12 @@ EOS provides common classes for use in statistical analyses via the main ``eos``
    * **sigma** (*float*, or *list*, *tuple* of *float*) -- The width of the 68% probability interval. If a list or tuple
      of two numbers is provided, the prior will by a asymmetric but continuous. The two values are then taken to be the
      distance to the lower and upper end of the 68% probability interval.
+
+   An external prior description has a **type** listed in :attr:`eos.Analysis.external_prior_types` and no
+   **parameter** key; its remaining elements are passed on to the corresponding factory, which determines the varied
+   parameters. For ``nabu``, the only element is
+
+   * **path** (*str*) -- The directory of an :class:`eos.data.NabuLikelihood`.
 {% endif %}
 {% endfor %}
 
@@ -89,6 +95,9 @@ EOS provides access to save and load the various (intermediate) results of analy
    :members:
 
 .. autoclass:: eos.data.MixtureDensity
+   :members:
+
+.. autoclass:: eos.data.NabuLikelihood
    :members:
 
 .. autoclass:: eos.data.Mode

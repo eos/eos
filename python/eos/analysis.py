@@ -81,6 +81,13 @@ class Analysis:
     varied_parameters: list
     """The parameters varied by this analysis, as a list of :class:`eos.Parameter` objects."""
 
+    external_prior_types = {
+        'nabu': lambda parameters, **kwargs: eos.data.NabuLikelihood.make_log_prior(parameters, **kwargs),
+    }
+    """Maps the type of an external prior description to a callable that receives the analysis' parameters and
+    the description's remaining keys as keyword arguments, and returns an :class:`eos.LogPrior`. The prior's varied
+    parameters are taken from the returned object."""
+
     def __init__(self, priors, likelihood, external_likelihood=None, global_options=None, manual_constraints=None, fixed_parameters=None, parameters=None):
         """Constructor."""
         if external_likelihood is None:
@@ -111,6 +118,8 @@ class Analysis:
                 eos.debug(' - {name} (constraint)'.format(name=p['constraint']))
             elif 'parameters' in p:
                 eos.debug(' - {names} ({type})'.format(names=p['parameters'], type=p['type']))
+            else:
+                eos.debug(f' - {p}')
         eos.debug('constraints:')
         for cn in likelihood:
             eos.debug(f' - {cn}')
@@ -140,7 +149,16 @@ class Analysis:
             if 'parameters' in prior and 'constraint' in prior:
                 raise ValueError('Prior specification must not contain both parameters and a constraint')
 
-            if 'parameter' in prior:
+            if prior.get('type') in self.external_prior_types:
+                kwargs = {k: v for k, v in prior.items() if k != 'type'}
+                log_prior = self.external_prior_types[prior['type']](self.parameters, **kwargs)
+                self._log_posterior.add(log_prior, False)
+                for p in log_prior.varied_parameters():
+                    if p.name() in self.varied_parameter_names:
+                        raise ValueError(f'Parameter \'{p.name()}\' is repeated in an external prior of type \'{prior["type"]}\'')
+                    self.varied_parameters.append(p)
+                    self.varied_parameter_names.append(p.name())
+            elif 'parameter' in prior:
                 prior_type = prior['type'] if 'type' in prior else 'uniform'
                 parameter = prior['parameter']
 
@@ -232,7 +250,7 @@ class Analysis:
                     self.varied_parameters.append(p)
                     self.varied_parameter_names.append(p.name())
             else:
-                raise ValueError('Prior specification must contains either \'parameter\', \'parameters\', or \'constraint\'')
+                raise ValueError(f'Prior specification must contain either \'parameter\', \'parameters\', \'constraint\', or one of the external prior types {list(self.external_prior_types)}')
 
         # check for duplicate entries in the likelihood
         set_likelihood = set(likelihood)
@@ -425,7 +443,7 @@ class Analysis:
         # Check that all starting parameters lie in their respective ranges
         start_point_in_u = self._par_to_u(_start_point)
         for i, p in enumerate(start_point_in_u):
-            if p > 1 or p < 0:
+            if not 0 <= p <= 1:
                 eos.error(f'The {i}th starting parameter of this analysis is outside its defined range.')
 
         res = scipy.optimize.minimize(
@@ -861,6 +879,8 @@ class Analysis:
                 names = [p['parameter']]
             elif 'parameters' in p:
                 names = p['parameters']
+            elif p.get('type') == 'nabu':
+                names = [p['path']]
             else:
                 names = [p['constraint']]
             names = '<br>'.join(f'<tt>{n}</tt>' for n in names)

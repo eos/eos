@@ -532,7 +532,7 @@ class TestAnalysisFileMethods(unittest.TestCase):
             self.assertIn(section, html)
 
     def test_repr_html_multivariate_priors(self):
-        # priors without a single 'parameter' key are rendered by their constraint or parameter names
+        # priors without a single 'parameter' key are rendered by their constraint, parameter names, or path
         import yaml
         with tempfile.TemporaryDirectory() as d:
             f = os.path.join(d, 'analysis.yaml')
@@ -543,12 +543,13 @@ class TestAnalysisFileMethods(unittest.TestCase):
                         { 'name': 'masses', 'descriptions': [ {
                             'type': 'transform', 'parameters': ['mass::c', 'mass::b(MSbar)'], 'shift': [0.0, 0.0],
                             'transform': [[1.0, 0.0], [0.0, 1.0]], 'min': [1.0, 4.0], 'max': [1.5, 4.5] } ] },
+                        { 'name': 'flow', 'descriptions': [ { 'type': 'nabu', 'path': 'data/flow/nabu' } ] },
                     ],
                     'likelihoods': [],
-                    'posteriors': [ { 'name': 'p', 'prior': ['FF', 'masses'], 'likelihood': [] } ],
+                    'posteriors': [ { 'name': 'p', 'prior': ['FF', 'masses', 'flow'], 'likelihood': [] } ],
                 }, stream)
             html = eos.AnalysisFile(f)._repr_html_()
-        for name in ('B->D::f_++f_0@HPQCD:2015A', 'mass::c', 'mass::b(MSbar)'):
+        for name in ('B->D::f_++f_0@HPQCD:2015A', 'mass::c', 'mass::b(MSbar)', 'data/flow/nabu'):
             self.assertIn(f'<code>{name}</code>', html)
 
     def test_dump(self):

@@ -32,6 +32,7 @@ from eos.analysis_file_description import (
     UniformPriorDescription,
     ConstraintPriorDescription,
     TransformPriorDescription,
+    NabuPriorDescription,
     PriorComponent,
     ConstraintLikelihoodDescription,
     ManualConstraintDescription,
@@ -271,6 +272,39 @@ class TransformPriorDescriptionTests(unittest.TestCase):
         self.assertEqual(desc.min, [-2.0, -2.0])
         self.assertEqual(desc.max, [2.0, 2.0])
         self.assertEqual(desc.type, 'transform')
+
+
+class NabuPriorDescriptionTests(unittest.TestCase):
+
+    def test_from_dict(self):
+        desc = PriorDescription.from_dict(type='nabu', path='data/A/nabu')
+        self.assertIsInstance(desc, NabuPriorDescription)
+        self.assertEqual(desc.path, 'data/A/nabu')
+        self.assertEqual(list(desc.validate_structure()), [])
+        self.assertIs(PriorDescription.registry['nabu'], NabuPriorDescription)
+
+    def test_invalid(self):
+        "A nabu prior description requires a non-empty path and accepts no other keys."
+        for kwargs in ({}, {'path': 'p', 'parameters': ['mass::c']}):
+            desc = PriorDescription.from_dict(type='nabu', **kwargs)
+            self.assertIsInstance(desc, InvalidComponent)
+            self.assertTrue(any(d.severity == Severity.ERROR for d in desc.validate_structure()))
+        for path in ('', 42):
+            desc = PriorDescription.from_dict(type='nabu', path=path)
+            self.assertEqual(
+                [(d.path, d.severity) for d in desc.validate_structure()],
+                [(('path',), Severity.ERROR)])
+
+    def test_resolve(self):
+        "The path is resolved relative to the base directory, while an absolute path is kept."
+        from eos.analysis_file_context import AnalysisFileContext
+        import os, tempfile
+        with tempfile.TemporaryDirectory() as base:
+            context = AnalysisFileContext(base_directory=base)
+            desc = PriorDescription.from_dict(type='nabu', path='data/A/nabu')
+            self.assertEqual(desc.resolve(context), {'type': 'nabu', 'path': os.path.join(os.path.abspath(base), 'data/A/nabu')})
+            desc = PriorDescription.from_dict(type='nabu', path='/some/where/nabu')
+            self.assertEqual(desc.resolve(context), {'type': 'nabu', 'path': '/some/where/nabu'})
 
 
 class PriorComponentTests(unittest.TestCase):

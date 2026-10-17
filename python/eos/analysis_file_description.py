@@ -153,8 +153,14 @@ class PriorDescription:
     from the ``type`` key. The recognized types are ``constraint`` (:class:`ConstraintPriorDescription`),
     ``uniform``/``flat`` (:class:`UniformPriorDescription`), ``scale`` (:class:`ScalePriorDescription`),
     ``gauss``/``gaussian`` (:class:`GaussianPriorDescription`, or :class:`CurtailedGaussianDescription`
-    if ``min``/``max`` are given), ``poisson`` (:class:`PoissonPriorDescription`), and ``transform``
-    (:class:`TransformPriorDescription`).
+    if ``min``/``max`` are given), ``poisson`` (:class:`PoissonPriorDescription`), ``transform``
+    (:class:`TransformPriorDescription`), and ``nabu`` (:class:`NabuPriorDescription`).
+
+    The ``nabu`` type is an external prior: its varied parameters are not named in the analysis file but
+    determined by the object it refers to. An external prior description may provide a method
+    ``resolve(context)`` that returns its keyword description for :class:`eos.Analysis` with all paths
+    resolved against the :class:`AnalysisFileContext <eos.analysis_file_context.AnalysisFileContext>`;
+    see :attr:`eos.Analysis.external_prior_types` for the dispatch.
 
     For backwards compatibility, a description that omits the ``type`` key but provides a ``constraint``
     key is still interpreted as a :class:`ConstraintPriorDescription`; this form is deprecated.
@@ -192,6 +198,8 @@ class PriorDescription:
                 return Deserializable.make_with_diagnostics(PoissonPriorDescription, **_kwargs)
             elif kwargs['type'] in ("transform",):
                 return Deserializable.make_with_diagnostics(TransformPriorDescription, **_kwargs)
+            elif kwargs['type'] in ("nabu",):
+                return Deserializable.make_with_diagnostics(NabuPriorDescription, **_kwargs)
         elif 'constraint' in kwargs:
             return Deserializable.make_with_diagnostics(ConstraintPriorDescription, **kwargs)
 
@@ -338,6 +346,29 @@ class TransformPriorDescription(_AnalysisFileDeserializable):
     max:list[float]
     type:str=field(repr=False, init=False, default="transform")
 
+@dataclass
+class NabuPriorDescription(_AnalysisFileDeserializable):
+    r"""Describes a prior given by a normalising flow stored as an :class:`eos.data.NabuLikelihood`.
+
+    The varied parameters and their order are taken from the likelihood's ``description.yaml``. They must
+    not appear in any other prior of the same posterior. Using this prior requires the optional nabu module.
+
+    :param path: The directory holding ``description.yaml`` and ``likelihood.nabu``, resolved relative to
+        the analysis's base directory (e.g. ``data/POSTERIOR/nabu`` for the output of another posterior).
+        Absolute paths are used as given.
+    :type path: str
+    """
+    path:str
+    type:str=field(repr=False, init=False, default="nabu")
+
+    def _diagnostics(self):
+        if not isinstance(self.path, str) or not self.path:
+            yield Diagnostic(('path',), Severity.ERROR, 'path must be a non-empty string')
+
+    def resolve(self, context):
+        """Return the keyword description for :class:`eos.Analysis`, with :attr:`path` resolved against ``context``."""
+        return { 'type': self.type, 'path': context.data_path(self.path) }
+
 # Maps the YAML selector of a prior description to the corresponding concrete description class.
 # The canonical dispatch logic lives in PriorDescription.from_dict; this mapping mirrors it and is
 # used to generate the reference documentation of the recognized prior types. It is assigned here,
@@ -352,6 +383,7 @@ PriorDescription.registry = {
     'gauss (with min/max)': CurtailedGaussianDescription,
     'poisson':              PoissonPriorDescription,
     'transform':            TransformPriorDescription,
+    'nabu':                 NabuPriorDescription,
 }
 
 @dataclass
@@ -1728,7 +1760,7 @@ class AnalysisFileDescription(_AnalysisFileDeserializable):
         # A posterior must not fix a parameter that one of its own priors varies: the prior wins, so
         # the fixed value is silently ignored and the file does not describe the intended analysis.
         # Only the parameters a prior names explicitly are known here; the parameters varied by a
-        # constraint prior are determined by EOS and are therefore not covered.
+        # constraint or external prior are determined at run time and are therefore not covered.
         priors_by_name = {
             prior.name: prior for prior in self.priors
             if not isinstance(prior, InvalidComponent)
