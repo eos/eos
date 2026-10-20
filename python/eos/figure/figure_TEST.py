@@ -470,6 +470,20 @@ class CornerFigureTests(unittest.TestCase):
         grid = self._drawn_grid(extra='watermark: { preliminary: true }')
         self.assertTrue(any('Preliminary' in t.get_text() for t in grid._axes[2].texts))
 
+    def test_unknown_variable(self):
+
+        # A variable missing from a data file is reported as such.
+        input = f"""
+        type: 'corner'
+        contents:
+          - path: '{self._DATAFILE}'
+            label: 'label'
+        variables: ['CKM::abs(V_ub)', 'NOSUCH::parameter']
+        """
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        with self.assertRaisesRegex(ValueError, 'NOSUCH::parameter'):
+            figure.prepare(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
+
     def test_full(self):
 
         try:
