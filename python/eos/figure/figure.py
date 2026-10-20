@@ -537,6 +537,12 @@ class CornerFigure(Figure):
         else:
             self._variables = self.contents[0].variables
 
+        # Check that the variables of the data files match
+        for content in self.contents:
+            unknown_variables = set(self._variables) - set(content.variables)
+            if len(unknown_variables) > 0:
+                raise ValueError(f"Unknown variables requested from data file '{content.path}': {list(unknown_variables)}")
+
         # determine useful ranges empirically
         absmin, absmax = np.array([+np.inf] * len(self._variables)), np.array([-np.inf] * len(self._variables))
         for content in self.contents:
@@ -545,12 +551,6 @@ class CornerFigure(Figure):
             for idx, cidx in enumerate(indices):
                 absmin[idx] = cmin[cidx] if cmin[cidx] < absmin[idx] else absmin[idx]
                 absmax[idx] = cmax[cidx] if cmax[cidx] > absmax[idx] else absmax[idx]
-
-        # Check that the variables of the data files match
-        for content in self.contents:
-            unknown_variables = set(self._variables) - set(content.variables)
-            if len(unknown_variables) > 0:
-                raise ValueError(f"Unknown variables requested from data file '{content.path}': {list(unknown_variables)}")
 
         self._labels = self.contents[0].labels(self._variables)
 
