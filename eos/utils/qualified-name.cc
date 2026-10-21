@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2016-2023 Danny van Dyk
+ * Copyright (c) 2016-2026 Danny van Dyk
  * Copyright (c) 2016 Rafael Silva Coutinho
  *
  * This file is part of the EOS project. EOS is free software;
@@ -232,16 +232,6 @@ namespace eos
 
     QualifiedName::QualifiedName(const char * input) :
         QualifiedName(std::string(input))
-    {
-    }
-
-    QualifiedName::QualifiedName(const QualifiedName & other) :
-        _str(other._str),
-        _full(other._full),
-        _prefix(other._prefix),
-        _name(other._name),
-        _suffix(other._suffix),
-        _options(other._options)
     {
     }
 

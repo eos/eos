@@ -1856,6 +1856,30 @@ class DetectorLevelPDFItemTests(unittest.TestCase):
         for value, z in zip(finer, [ 0.5, 1.0, 1.5, 2.0, 2.5 ]):
             self.assertAlmostEqual(value, z * (4.0 - z) / 9.0, delta=1.0e-2 * value)
 
+    def test_poles(self):
+        # the item passes the poles on to eos.DetectorLevelPDF
+        for name, value in (('Re_z', '2.0'), ('Im_z', '-0.01'), ('Re_c', '0.001'), ('Im_c', '0.01')):
+            eos.Observables().insert(eos.QualifiedName(f'DetectorLevelPDFItemTest::{name}'), '', eos.Unit.Unity(), eos.Options(), value)
+        pole = { 'variable': 'z', 'position_re': 'DetectorLevelPDFItemTest::Re_z', 'position_im': 'DetectorLevelPDFItemTest::Im_z',
+                 'coefficient_re': 'DetectorLevelPDFItemTest::Re_c', 'coefficient_im': 'DetectorLevelPDFItemTest::Im_c' }
+        poles = "poles: [ { variable: 'z', position_re: 'DetectorLevelPDFItemTest::Re_z', position_im: 'DetectorLevelPDFItemTest::Im_z', " \
+                + "coefficient_re: 'DetectorLevelPDFItemTest::Re_c', coefficient_im: 'DetectorLevelPDFItemTest::Im_c' } ]\n"
+        values = self._draw(self._explicit + poles)
+
+        cache = eos.ObservableCache(eos.Parameters.Defaults())
+        pdf = eos.DetectorLevelPDF.make_from_expression(cache, 'TestLegendre1D::P(z)', eos.Options(), [ { 'variable': 'z', 'min': 0.0, 'max': 4.0, 'points': 400 } ],
+                                                        'Kernel::Gaussian({z}, 0, 0.01)', poles=[ pole ])
+        cache.update()
+        (variable,) = pdf.variables
+        for value, z in zip(values, [ 1.0, 2.0, 3.0 ]):
+            variable.set(z)
+            self.assertAlmostEqual(value, math.exp(pdf.evaluate() - pdf.normalization()), delta=1.0e-12)
+
+        # poles require a resolution given as an expression
+        context = AnalysisFileContext(base_directory=os.path.join(os.path.dirname(__file__), '..', 'analysis_file_TEST.d'))
+        with self.assertRaises(ValueError):
+            self._draw("type: detector-level-pdf\npdf: 'TestLegendre1D::P(z)'\nvariable: z\nrange: [0.5, 2.5]\ndata: './unbinned-data'\n" + poles, context)
+
     def test_invalid(self):
         base = "type: detector-level-pdf\npdf: 'TestLegendre1D::P(z)'\nvariable: z\nrange: [0.0, 1.0]\n"
         for extra in (
@@ -2431,6 +2455,21 @@ class TwoDimensionalHistogramItemValidationTests(unittest.TestCase):
         item.draw(ax)
 
 class OneDimensionalKernelDensityItemValidationTests(unittest.TestCase):
+
+    def test_level(self):
+
+        # the 68.3% interval is shaded by default, and no interval at all for level None
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'x'\ndatafile: 'x'")
+        self.assertEqual(item.level, 68.3)
+
+        for level, shaded in [(68.3, 1), (None, 0)]:
+            item = eos.figure.ItemFactory.from_dict(type='kde1D', variable='CKM::abs(V_ub)', level=level,
+                                                    datafile='eos/data/importance_samples_TEST.d/samples')
+            item.prepare(context=_source_context())
+            _, ax = plt.subplots()
+            item.draw(ax)
+            self.assertEqual(shaded, len(ax.collections))
+            plt.close()
 
     def test_invalid(self):
 

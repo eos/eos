@@ -67,7 +67,8 @@ namespace eos
         public:
             QualifiedName(const std::string & name);
             QualifiedName(const char * name);
-            QualifiedName(const QualifiedName & other);
+            QualifiedName(const QualifiedName & other)              = default;
+            QualifiedName & operator= (const QualifiedName & other) = default;
             QualifiedName(const qnp::Prefix & prefix, const qnp::Name & name, const qnp::Suffix & suffix = qnp::Suffix());
             ~QualifiedName();
 

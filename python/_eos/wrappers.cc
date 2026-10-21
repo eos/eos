@@ -124,6 +124,19 @@ namespace impl
         return object(spec.default_value->str());
     }
 
+    // getters for DetectorLevelPDF::Pole::coefficient_{re,im}, mapping an absent coefficient to None
+    object
+    DetectorLevelPDFPole_coefficient_re(const eos::DetectorLevelPDF::Pole & pole)
+    {
+        return pole.coefficient_re.has_value() ? object(*pole.coefficient_re) : object();
+    }
+
+    object
+    DetectorLevelPDFPole_coefficient_im(const eos::DetectorLevelPDF::Pole & pole)
+    {
+        return pole.coefficient_im.has_value() ? object(*pole.coefficient_im) : object();
+    }
+
     // shim for Model::make, accepting a Python str and implicitly converting it to a qnp::OptionValue
     std::shared_ptr<eos::Model>
     Model_make(const std::string & name, const eos::Parameters & parameters, const eos::Options & options)

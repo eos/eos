@@ -7,6 +7,7 @@ import shutil
 import tempfile
 import unittest
 import eos
+import yaml
 from pathlib import Path
 
 
@@ -46,6 +47,27 @@ class ReportTaskTests(unittest.TestCase):
         # A corner figure is produced for 'CKM' and referenced from the report.
         self.assertIn('figures/corner-CKM.pdf', rendered)
         self.assertTrue(os.path.isfile(os.path.join(base, 'figures', 'corner-CKM.pdf')))
+
+    def test_report_task_load_yaml(self):
+        "Render a template that reads a YAML file below the base directory."
+        workdir = tempfile.mkdtemp(prefix='eos-report-task-')
+        self.addCleanup(shutil.rmtree, workdir, ignore_errors=True)
+        base = os.path.join(workdir, 'base')
+        shutil.copytree(self._fixture, base)
+        os.makedirs(os.path.join(base, 'results'))
+        with open(os.path.join(base, 'results', 'accuracy.yaml'), 'w') as f:
+            yaml.safe_dump({ 'max_relative_error': 1.5e-15 }, f)
+        with open(os.path.join(base, 'accuracy.md.jinja'), 'w') as f:
+            f.write("error: {{ '%.1e' | format(load_yaml('results/accuracy.yaml').max_relative_error) }}\n")
+
+        cwd = os.getcwd()
+        self.addCleanup(os.chdir, cwd)
+        os.chdir(base)
+
+        eos.tasks.report('analysis.yaml', 'accuracy.md.jinja', base_directory='.', generate_pdf=False)
+
+        with open(os.path.join(base, 'accuracy.md')) as f:
+            self.assertEqual(f.read().strip(), 'error: 1.5e-15')
 
 
 if __name__ == '__main__':

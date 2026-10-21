@@ -21,6 +21,7 @@ import eos.analysis_file_context
 import numpy as _np
 import os
 import warnings
+import yaml
 
 from dataclasses import asdict
 from ._framework import task, _backed_up, _staged_file
@@ -51,6 +52,8 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
     Generates a report from an analysis file and a Jinja2 template file.
 
     The processed file will be stored in the same directory as the template file, with the the extension '.jinja' or '.jinja2' stripped from the file name.
+    Besides the recorded posteriors, the template can access any YAML file through the function ``load_yaml(path)``, with ``path``
+    relative to the base directory.
     If `generate_pdf` is set to True, the intermediate file will be converted to PDF using Pandoc and XeLaTeX. This requires a working installation of both programs.
 
     :param analysis_file: The name of the analysis file that shall be used for the report.
@@ -93,6 +96,10 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
         filename = posterior.corner_figure(output_directory=figures_directory, **kwargs)
         return os.path.join('figures', filename)
 
+    def load_yaml(path):
+        with open(os.path.join(base_directory, path)) as f:
+            return yaml.safe_load(f)
+
     env = jinja2.Environment(
         loader=jinja2.FileSystemLoader(searchpath='./'),
         undefined=jinja2.StrictUndefined, # error for undefined variables in
@@ -107,6 +114,7 @@ def report(analysis_file:str, template_file:str, base_directory:str='./', genera
         analysis=analysis,
         base_directory=base_directory,
         corner_figure=corner_figure,
+        load_yaml=load_yaml,
         references=_get_references(analysis_file),
     )
 

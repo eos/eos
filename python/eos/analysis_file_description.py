@@ -572,6 +572,51 @@ class UnbinnedAxisComponent(_AnalysisFileDeserializable):
     max:float
 
 
+@dataclass
+class UnbinnedPoleComponent(_AnalysisFileDeserializable):
+    r"""Describes one pole of the truth-level amplitude of an unbinned likelihood.
+
+    Each value other than ``variable`` is the qualified name of an observable or a parameter; custom
+    observables can be declared in the analysis file's ``observables`` section.
+
+    :param variable: The sampling variable in which the pole lies.
+    :type variable: str
+    :param position_re: The real part of the pole position.
+    :type position_re: str
+    :param position_im: The imaginary part of the pole position, which must be negative.
+    :type position_im: str
+    :param coefficient_re: The real part of the subtraction coefficient. Optional, together with ``coefficient_im``;
+        if absent, the coefficient is extracted from the truth-level PDF on the grid points nearest to the pole.
+    :type coefficient_re: str | None
+    :param coefficient_im: The imaginary part of the subtraction coefficient. Given together with ``coefficient_re``.
+    :type coefficient_im: str | None
+    """
+    variable:str
+    position_re:str
+    position_im:str
+    coefficient_re:str|None=None
+    coefficient_im:str|None=None
+
+    def _diagnostics(self):
+        if (self.coefficient_re is None) != (self.coefficient_im is None):
+            yield Diagnostic(
+                (),
+                Severity.ERROR,
+                f"Pole in '{self.variable}' must provide both or neither of 'coefficient_re' and 'coefficient_im'",
+            )
+
+    def names(self):
+        """Yield the keys and values of the names of observables or parameters that this pole refers to."""
+        for key in ('position_re', 'position_im', 'coefficient_re', 'coefficient_im'):
+            value = getattr(self, key)
+            if value is not None:
+                yield key, value
+
+    def to_dict(self):
+        """Serialize this pole as expected by :meth:`eos.DetectorLevelPDF.make_from_expression`."""
+        return { 'variable': self.variable, **dict(self.names()) }
+
+
 # The recognised values of a likelihood component's 'type' discriminator. Only 'unbinned' changes
 # behaviour; the others name the kinds that are still inferred from which key is present.
 _LIKELIHOOD_COMPONENT_TYPES = frozenset({ 'constraints', 'manual_constraints', 'pyhf', 'unbinned' })
@@ -618,6 +663,9 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
         within the union of the boxes enter the likelihood, and the detector-level PDF is normalized over that
         union. Optional; rejected otherwise.
     :type windows: list[list[UnbinnedAxisComponent]]
+    :param poles: For ``type: 'unbinned'`` with a resolution given as an expression, the poles of the
+        truth-level amplitude. Optional; rejected otherwise.
+    :type poles: list[UnbinnedPoleComponent]
     """
     name:str
     constraints:list=field(default_factory=list)
@@ -631,6 +679,7 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
     options:dict=field(default_factory=dict)
     axes:list=field(default_factory=list)
     tolerance:float=1.0e-9
+    poles:list=field(default_factory=list)
     windows:list=field(default_factory=list)
 
     def _diagnostics(self):
@@ -680,6 +729,7 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
                 'options':   bool(self.options),
                 'axes':      bool(self.axes),
                 'tolerance': self.tolerance != 1.0e-9,
+                'poles':     bool(self.poles),
                 'windows':   bool(self.windows),
             }
             for key, given in unbinned_only.items():
@@ -714,6 +764,8 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             yield from (diagnostic.prefixed('pyhf') for diagnostic in self.pyhf.validate_structure())
         axis_segments = getattr(self, '_axis_segments', list(range(len(self.axes))))
         yield from _validate_children(self.axes, axis_segments, 'axes')
+        pole_segments = getattr(self, '_pole_segments', list(range(len(self.poles))))
+        yield from _validate_children(self.poles, pole_segments, 'poles')
         for index, window in enumerate(self.windows):
             if isinstance(window, list):
                 for position, entry in enumerate(window):
@@ -795,6 +847,20 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
             except RuntimeError:
                 pass
 
+        pole_segments = getattr(self, '_pole_segments', list(range(len(self.poles))))
+        for pole, segment in zip(self.poles, pole_segments):
+            if not isinstance(pole, UnbinnedPoleComponent):
+                continue
+            for key, value in pole.names():
+                path = ('poles', segment, key)
+                try:
+                    qn = eos.QualifiedName(value)
+                except RuntimeError as e:
+                    yield Diagnostic(path, Severity.ERROR, f"'{value}' is not a valid qualified name: {e}")
+                    continue
+                if not (context.lookup('observable', qn) or context.lookup('parameter', qn)):
+                    yield Diagnostic(path, Severity.ERROR, f"'{value}' is neither a known observable nor a parameter")
+
     @classmethod
     def from_dict(cls, **kwargs):
         """Create a :class:`LikelihoodComponent` from its keyword description.
@@ -838,10 +904,16 @@ class LikelihoodComponent(_AnalysisFileDeserializable):
                 [UnbinnedAxisComponent.from_dict(**entry) if isinstance(entry, dict) else entry for entry in window] if isinstance(window, list) else window
                 for window in kwargs['windows']
             ]
+        if 'poles' in kwargs:
+            pole_segments = _segments(kwargs['poles'])
+            _kwargs['poles'] = [UnbinnedPoleComponent.from_dict(**p) for p in kwargs['poles']]
+        else:
+            pole_segments = []
         result = cls(**_kwargs)
         result._constraint_segments = constraint_segments
         result._manual_constraint_segments = manual_constraint_segments
         result._axis_segments = axis_segments
+        result._pole_segments = pole_segments
         return result
 
 

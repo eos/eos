@@ -28,6 +28,7 @@ AM_LDFLAGS = @AM_LDFLAGS@
 
 lib_LTLIBRARIES = libeos.la
 libeos_la_SOURCES = \
+	benchmarks.cc benchmarks.hh \
 	config.cc config.hh \
 	constraint.cc constraint.hh \
 	observable.cc observable.hh observable-fwd.hh observable-impl.hh \
@@ -40,6 +41,7 @@ libeos_la_CXXFLAGS = $(AM_CXXFLAGS) \
 libeos_la_LDFLAGS = $(AM_LDFLAGS) $(GSL_LDFLAGS) $(YAMLCPP_LDFLAGS)
 libeos_la_LIBADD = \
 	$(top_builddir)/eos/utils/libeosutils.la \
+	$(top_builddir)/eos/maths/libeosmaths.la \
 	$(top_builddir)/eos/statistics/libeosstatistics.la \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
@@ -55,6 +57,7 @@ libeos_la_LIBADD = \
 
 include_eosdir = $(includedir)/eos
 include_eos_HEADERS = \
+	benchmarks.hh \
 	constraint.hh \
 	observable.hh \
 	reference.hh \
@@ -66,6 +69,7 @@ AM_TESTS_ENVIRONMENT = \
 	export EOS_TESTS_REFERENCES="$(top_srcdir)/eos/";
 
 TESTS = \
+	benchmarks_TEST \
 	constraint_TEST \
 	observable_TEST \
 	reference_TEST \
@@ -88,10 +92,15 @@ LDADD = \
 	$(top_builddir)/eos/libeos.la
 
 check_PROGRAMS = \
+	benchmarks_TEST \
 	constraint_TEST \
 	observable_TEST \
 	reference_TEST \
 	signal-pdf_TEST
+
+benchmarks_TEST_SOURCES = benchmarks_TEST.cc
+benchmarks_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)
+benchmarks_TEST_LDADD = $(LDADD) -lyaml-cpp
 
 constraint_TEST_SOURCES = constraint_TEST.cc
 constraint_TEST_CXXFLAGS = $(AM_CXXFLAGS) $(GSL_CXXFLAGS)

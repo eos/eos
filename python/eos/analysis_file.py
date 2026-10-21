@@ -280,11 +280,14 @@ class AnalysisFile:
         # one only has to satisfy the identity check at construction time (see eos.DetectorLevelPDF).
         cache = eos.ObservableCache(parameters)
         if isinstance(data.resolution, UnbinnedSampledResolutionDescription):
+            if component.poles:
+                raise ValueError(f"Likelihood component '{component.name}' declares poles, which require a resolution given as an expression (kind: expression)")
             kernel = data.resolution_kernel(cropped_axes, tolerance=component.tolerance)
             pdf = eos.DetectorLevelPDF.make_from_grid(cache, component.pdf, options, cropped_axes, kernel)
         else:
             # resampled on every update, so that the resolution may depend on the parameters
-            pdf = eos.DetectorLevelPDF.make_from_expression(cache, component.pdf, options, cropped_axes, data.resolution.expression)
+            poles = [pole.to_dict() for pole in component.poles]
+            pdf = eos.DetectorLevelPDF.make_from_expression(cache, component.pdf, options, cropped_axes, data.resolution.expression, poles=poles)
 
         rank = len(cropped_axes)
         try:

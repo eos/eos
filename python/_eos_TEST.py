@@ -125,6 +125,7 @@ BINDINGS_FACTORIES = {
     'ConstraintEntry':          lambda: eos.Constraints()[_CONSTRAINT_ENTRY_NAME],
     '_DetectorLevelPDF':        lambda: _detector_level_pdf(),
     '_DetectorLevelPDFAxis':    lambda: _DETECTOR_LEVEL_PDF_AXES[0],
+    '_DetectorLevelPDFPole':    lambda: _eos._DetectorLevelPDFPole('z', 'TestLegendre1D::c_0', 'TestLegendre1D::c_1'),
     'ExpressionReferences':     lambda: _eos.analyze_expression('<<B->D::f_+(q2)>>'),
     'GoodnessOfFit':            lambda: _eos.GoodnessOfFit(_log_posterior()),
     'Kinematics':               lambda: _KINEMATICS,
@@ -199,7 +200,7 @@ BINDINGS_TESTS = {
     ('ExpressionReferences', 'parameters'):      (),
 
     ('_DetectorLevelPDF', 'make_from_expression'): lambda p: _eos._DetectorLevelPDF.make_from_expression(_detector_level_pdf_cache(),
-                                                     'TestLegendre1D::P(z)', eos.Options(), [ _DETECTOR_LEVEL_PDF_AXES[0] ], '1.0'),
+                                                     'TestLegendre1D::P(z)', eos.Options(), [ _DETECTOR_LEVEL_PDF_AXES[0] ], '1.0', []),
     ('_DetectorLevelPDF', 'integral'):            ([ [ (1.0, 3.0) ] ],),
     ('_DetectorLevelPDF', 'make_from_grid'):      lambda p: _detector_level_pdf(),
 
@@ -208,6 +209,12 @@ BINDINGS_TESTS = {
     ('_DetectorLevelPDFAxis', 'offset_variable'): (),
     ('_DetectorLevelPDFAxis', 'points'):          (),
     ('_DetectorLevelPDFAxis', 'variable'):        (),
+
+    ('_DetectorLevelPDFPole', 'coefficient_im'):  (),
+    ('_DetectorLevelPDFPole', 'coefficient_re'):  (),
+    ('_DetectorLevelPDFPole', 'position_im'):     (),
+    ('_DetectorLevelPDFPole', 'position_re'):     (),
+    ('_DetectorLevelPDFPole', 'variable'):        (),
 
     ('GoodnessOfFit', '__iter__'):               lambda g: list(g),
     ('GoodnessOfFit', 'total_chi_square'):       (),
@@ -517,6 +524,7 @@ BINDINGS_TESTS = {
     (MODULE, 'make_wilson_polynomial_observable'): ('test::wilson-polynomial', _WET_OBSERVABLE, _WET_COEFFICIENTS),
     (MODULE, 'make_wilson_polynomial_ratio_observable'): ('test::wilson-polynomial-ratio', _WET_OBSERVABLE,
                                                      _WET_OBSERVABLE, _WET_COEFFICIENTS),
+    (MODULE, 'register_benchmarks'):             (),
     (MODULE, 'register_python_observable'):      lambda _: _eos.register_python_observable('test::python-observable',
                                                      _ExternalObservableProvider(), '', eos.Unit.Unity()),
 }

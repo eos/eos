@@ -1376,7 +1376,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     :type bandwidth: float | None
     :param datafile: Path to the file that contains the KDE data, which must be of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`.
     :type datafile: str
-    :param level: Credibility level that shall be visualized in percent (optional). Defaults to None, which means that no credibility level is visualized.
+    :param level: Credibility level that shall be visualized in percent (optional). Defaults to 68.3. None means that no credibility level is visualized.
     :type level: float | None
     :param range: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
     :type range: tuple[float, float] | None
@@ -1404,7 +1404,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     bandwidth:float|None=field(default=None)
     datafile:str
-    level:float|None=field(default=None)
+    level:float|None=field(default=68.3)
     range:tuple[float, float]|None=field(default=None)
     variable:str
     xsamples:int=field(default=100)
@@ -1424,7 +1424,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     The following keys are optional:
 
         * ``bandwidth`` (*float*) -- The relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional). Defaults to 68.3%
+        * ``level`` (*float* or *None*) -- The credibility level that shall be visualized in percent (optional). Defaults to 68.3%. None means that no credibility level is visualized.
         * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
         * ``xsamples`` (*int*) -- The number of samples to be used for the x-axis. Defaults to 100.
 
@@ -1448,8 +1448,6 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     def __post_init__(self):
         super().__post_init__()
-        if self.level is None:
-            self.level = 68.3
         if self.level is not None and (self.level <= 0 or self.level >= 100):
             raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
 
@@ -3237,6 +3235,8 @@ class DetectorLevelPDFItem(Item):
     :type pdf: eos.QualifiedName
     :param points: The number of grid points along every axis of the data object's grid, which overrides its native spacing; must be even. Only used together with ``data`` whose resolution is an expression.
     :type points: int | None
+    :param poles: The poles of the truth-level amplitude, which are subtracted before the convolution and convolved analytically; see :meth:`eos.DetectorLevelPDF.make_from_expression`. Requires a resolution given as an expression. They are not taken from ``data``, which does not record the poles of a likelihood; repeat them here to plot the PDF of a likelihood with poles.
+    :type poles: list[dict] | None
     :param range: The range of the variable to be plotted, given as a tuple of two float values (min, max).
     :type range: tuple[float,float]
     :param resolution: The number of points to be used for plotting the PDF. Defaults to 100.
@@ -3270,6 +3270,7 @@ class DetectorLevelPDFItem(Item):
     parameters_from_file:str|None=field(default=None)
     pdf:eos.QualifiedName
     points:int|None=field(default=None)
+    poles:list[dict]|None=field(default=None)
     range:tuple[float,float]
     resolution:int=field(default=100)
     variable:str
@@ -3298,7 +3299,7 @@ class DetectorLevelPDFItem(Item):
     def _make(self, cache, options, context):
         """Make the detector-level PDF from either the data object or the explicit grid and kernel."""
         if self.data is None:
-            return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, self.axes, self.kernel)
+            return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, self.axes, self.kernel, poles=self.poles)
 
         from eos.data.unbinned_likelihood import UnbinnedSampledResolutionDescription
 
@@ -3308,9 +3309,11 @@ class DetectorLevelPDFItem(Item):
             axes = [ { **axis, 'points': self.points } for axis in axes ]
 
         if isinstance(data.resolution, UnbinnedSampledResolutionDescription):
+            if self.poles:
+                raise ValueError(f"Poles require a resolution given as an expression, but the data object '{self.data}' holds a sampled resolution")
             return eos.DetectorLevelPDF.make_from_grid(cache, self.pdf, options, axes, data.resolution_kernel(axes))
 
-        return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, axes, data.resolution.expression)
+        return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, axes, data.resolution.expression, poles=self.poles)
 
     def prepare(self, context:AnalysisFileContext=None):
         """Prepare the detector-level PDF for plotting.

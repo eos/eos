@@ -39,6 +39,10 @@ if is_wheel:
 else:
     _pkg_data_dir = __pkg_data_dir__
 
+# register the benchmark problems on request, e.g. for analysis files that use them on the command line
+if _os.environ.get('EOS_REGISTER_BENCHMARKS', '0') not in ('', '0'):
+    register_benchmarks()
+
 from .data import *
 from .datasets import DataSets
 from .analysis import Analysis, BestFitPoint
