@@ -505,7 +505,7 @@ class CornerFigure(Figure):
 
     The following keys are mandatory:
         * ``contents`` (*list* of :class:`DataFile <eos.figure.data.DataFile>`) -- The list of data files to be drawn in the figure.
-          Each data file should be a dictionary containing the path to the data file, a label and optionally a color.
+          Each data file should be a dictionary containing the path to the data file, a label and optionally a color, a line style, a line width, an opacity, and the credibility levels of a KDE.
           A data file that refers to an :class:`eos.data.Mode` is shown as a vertical line on the diagonal and as a point elsewhere;
           at least one data file must not be a mode.
 
@@ -638,16 +638,19 @@ class CornerFigure(Figure):
             return {
                 'type': 'vertical', 'label': content.label,
                 'x': content._datafile.mode[content._datafile.lookup_table[variable]],
-                'color': content.color
+                'color': content.color, 'linestyle': content.linestyle, 'linewidth': content.linewidth, 'alpha': content.alpha
             }
 
-        return {
+        item = {
             'type': 'kde1D' if content.kde else 'histogram1D', 'label': content.label,
             'datafile': context.data_path(content.path),
             'variable': variable,
-            'color': content.color,
+            'color': content.color, 'linestyle': content.linestyle, 'linewidth': content.linewidth, 'alpha': content.alpha,
             'range': xrange
         }
+        if content.kde:
+            item['level'] = content.level
+        return item
 
     def _off_diagonal_item(self, context, content, i, j, xrange, yrange):
         """Return the description of the item showing the j-th versus the i-th variable off the diagonal."""
@@ -657,19 +660,21 @@ class CornerFigure(Figure):
                 'type': 'point', 'label': content.label,
                 'x': content._datafile.mode[content._datafile.lookup_table[xvariable]],
                 'y': content._datafile.mode[content._datafile.lookup_table[yvariable]],
-                'color': content.color
+                'color': content.color, 'linestyle': content.linestyle, 'linewidth': content.linewidth, 'alpha': content.alpha
             }
 
         item = {
             'type': 'kde2D' if content.kde else 'histogram2D', 'label': content.label,
             'datafile': context.data_path(content.path),
             'variables': [xvariable, yvariable],
-            'color': content.color,
+            'color': content.color, 'linestyle': content.linestyle, 'linewidth': content.linewidth, 'alpha': content.alpha,
             'xrange': xrange,
             'yrange': yrange
         }
         if content.kde:
-            item['contours'] = ['lines', 'areas']
+            item['contours'] = content.contours
+            if content.levels is not None:
+                item['levels'] = content.levels
         return item
 
     def draw(self, context:AnalysisFileContext=None):

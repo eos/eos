@@ -1376,7 +1376,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     :type bandwidth: float | None
     :param datafile: Path to the file that contains the KDE data, which must be of type :class:`eos.data.ImportanceSamples` or :class:`eos.data.Prediction`.
     :type datafile: str
-    :param level: Credibility level that shall be visualized in percent (optional). Defaults to None, which means that no credibility level is visualized.
+    :param level: Credibility level that shall be visualized in percent (optional). Defaults to 68.3. None means that no credibility level is visualized.
     :type level: float | None
     :param range: The range of the variable to be plotted on the x-axis, given as a tuple of two float values (min, max). Defaults to the full range of the variable in the data file.
     :type range: tuple[float, float] | None
@@ -1404,7 +1404,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     bandwidth:float|None=field(default=None)
     datafile:str
-    level:float|None=field(default=None)
+    level:float|None=field(default=68.3)
     range:tuple[float, float]|None=field(default=None)
     variable:str
     xsamples:int=field(default=100)
@@ -1424,7 +1424,7 @@ class OneDimensionalKernelDensityEstimateItem(Item):
     The following keys are optional:
 
         * ``bandwidth`` (*float*) -- The relative bandwidth factor that multiplies the automatically determined bandwidth of the KDE (optional).
-        * ``level`` (*float*) -- The credibility level that shall be visualized in percent (optional). Defaults to 68.3%
+        * ``level`` (*float* or *None*) -- The credibility level that shall be visualized in percent (optional). Defaults to 68.3%. None means that no credibility level is visualized.
         * ``range`` (*tuple* of two *float* values) -- The range of the variable to be plotted on the x-axis. Defaults to the full range of the variable in the data file.
         * ``xsamples`` (*int*) -- The number of samples to be used for the x-axis. Defaults to 100.
 
@@ -1448,8 +1448,6 @@ class OneDimensionalKernelDensityEstimateItem(Item):
 
     def __post_init__(self):
         super().__post_init__()
-        if self.level is None:
-            self.level = 68.3
         if self.level is not None and (self.level <= 0 or self.level >= 100):
             raise ValueError(f"Credibility level '{self.level}' is not in the interval (0, 100)")
 

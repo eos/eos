@@ -2432,6 +2432,21 @@ class TwoDimensionalHistogramItemValidationTests(unittest.TestCase):
 
 class OneDimensionalKernelDensityItemValidationTests(unittest.TestCase):
 
+    def test_level(self):
+
+        # the 68.3% interval is shaded by default, and no interval at all for level None
+        item = eos.figure.ItemFactory.from_yaml("type: kde1D\nvariable: 'x'\ndatafile: 'x'")
+        self.assertEqual(item.level, 68.3)
+
+        for level, shaded in [(68.3, 1), (None, 0)]:
+            item = eos.figure.ItemFactory.from_dict(type='kde1D', variable='CKM::abs(V_ub)', level=level,
+                                                    datafile='eos/data/importance_samples_TEST.d/samples')
+            item.prepare(context=_source_context())
+            _, ax = plt.subplots()
+            item.draw(ax)
+            self.assertEqual(shaded, len(ax.collections))
+            plt.close()
+
     def test_invalid(self):
 
         # a credibility level outside (0, 100) is rejected
