@@ -19,6 +19,7 @@ import unittest
 
 import eos
 import numpy as np
+import scipy.special
 
 
 def pypmc_is_missing():
@@ -101,6 +102,82 @@ class SampleMCMCTests(unittest.TestCase):
         self.assertTrue(np.all(samples[:, 0] >= 0.02))
         self.assertTrue(np.all(samples[:, 0] <= 11.6))
         self.assertTrue(np.all(np.isfinite(weights)))
+
+
+class DetectorLevelPDFPolesTests(unittest.TestCase):
+    """
+    For p(x) = |1 + R / (x - z)|^2 = 1 + Re[c / (x - z)] with c = 2 R + i |R|^2 / gamma, the remainder is constant, and the
+    smeared density is 1 + Re[c S(x - z)], with S(zeta) = -i sqrt(pi / 2) / sigma w(zeta / (sqrt(2) sigma)) for a Gaussian resolution.
+    """
+
+    x_p, gamma, sigma = 0.3, 1.0e-3, 0.5
+    R = 0.01 * np.exp(0.25j * np.pi)
+    c = 2.0 * R + 1.0j * abs(R)**2 / gamma
+    # off the grid nodes, within 3 sigma of the pole
+    points = [-1.2, -0.13, 0.3013, 0.67, 1.7]
+
+    @classmethod
+    def setUpClass(cls):
+        R, x_p, gamma = cls.R, cls.x_p, cls.gamma
+        pole_re = f'(({R.real} * ({{x}} - {x_p}) + {R.imag} * {gamma}) / (({{x}} - {x_p})^2 + {gamma}^2))'
+        pole_im = f'(({R.imag} * ({{x}} - {x_p}) - {R.real} * {gamma}) / (({{x}} - {x_p})^2 + {gamma}^2))'
+        expressions = {
+            'p(x)': f'(1 + {pole_re})^2 + {pole_im}^2', 'N': '{x_max} - {x_min}',
+            'Re_z': f'{x_p}', 'Im_z': f'{-gamma}', 'Re_c': f'{cls.c.real}', 'Im_c': f'{cls.c.imag}', 'zero': '0',
+        }
+        for name, expression in expressions.items():
+            eos.Observables().insert(eos.QualifiedName(f'DetectorLevelPDFPolesTest::{name}'), '', eos.Unit.Unity(), eos.Options(), expression)
+        eos.SignalPDFs().insert(eos.QualifiedName('DetectorLevelPDFPolesTest::P(x)'), '', eos.Options(), eos.QualifiedName('DetectorLevelPDFPolesTest::p(x)'), ['x'],
+                                eos.QualifiedName('DetectorLevelPDFPolesTest::N'), ['x_min', 'x_max'])
+
+    def _pole(self, **coefficients):
+        return { 'variable': 'x', 'position_re': 'DetectorLevelPDFPolesTest::Re_z', 'position_im': 'DetectorLevelPDFPolesTest::Im_z',
+                 **{ key: f'DetectorLevelPDFPolesTest::{value}' for key, value in coefficients.items() } }
+
+    def _make(self, poles):
+        cache = eos.ObservableCache(eos.Parameters.Defaults())
+        axes  = [{ 'variable': 'x', 'min': -20.0, 'max': 20.0, 'points': 1024 }]
+        return eos.DetectorLevelPDF.make_from_expression(cache, 'DetectorLevelPDFPolesTest::P(x)', eos.Options(), axes,
+                                                         f'Kernel::Gaussian({{x}}, 0, {self.sigma})', poles=poles), cache
+
+    def _values(self, poles):
+        pdf, cache = self._make(poles)
+        cache.update()
+        variable = pdf.kinematics()['x']
+        values = []
+        for x in self.points:
+            variable.set(x)
+            values.append(pdf.evaluate_linear())
+        return np.array(values)
+
+    def test_poles(self):
+        "Check that a pole given as a dictionary reaches the PDF, against the smeared density in closed form."
+        zeta     = np.array(self.points) - complex(self.x_p, -self.gamma)
+        S        = -1.0j * np.sqrt(np.pi / 2.0) / self.sigma * scipy.special.wofz(zeta / (np.sqrt(2.0) * self.sigma))
+        expected = 1.0 + (self.c * S).real
+        np.testing.assert_allclose(self._values([self._pole(coefficient_re='Re_c', coefficient_im='Im_c')]), expected, rtol=1.0e-10)
+
+    def test_no_coefficient(self):
+        "Check that a pole without a subtraction coefficient has it extracted from the grid."
+        np.testing.assert_allclose(self._values([self._pole()]), self._values([self._pole(coefficient_re='Re_c', coefficient_im='Im_c')]), rtol=1.0e-10)
+
+    def test_zero_coefficient(self):
+        "Check that a pole with a vanishing coefficient leaves the PDF without poles unchanged."
+        np.testing.assert_allclose(self._values([self._pole(coefficient_re='zero', coefficient_im='zero')]), self._values([]), rtol=1.0e-14)
+
+    def test_one_coefficient(self):
+        "Check that a pole with only one part of the coefficient is rejected."
+        with self.assertRaises(ValueError):
+            self._make([self._pole(coefficient_re='Re_c')])
+
+    def test_unknown_or_missing_key(self):
+        "Check that a pole with a misspelled or a missing key is rejected."
+        with self.assertRaisesRegex(ValueError, 'coefficent_re'):
+            self._make([self._pole(coefficent_re='Re_c', coefficent_im='Im_c')])
+        pole = self._pole()
+        del pole['variable']
+        with self.assertRaisesRegex(ValueError, 'variable'):
+            self._make([pole])
 
 
 class SignalPDFsContainsTests(unittest.TestCase):
