@@ -568,6 +568,49 @@ class CornerFigureTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'B->pi::f_\\+\\(0\\)@BCL2008'):
                 figure.prepare(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
 
+    def test_line_style(self):
+
+        # The line style, line width, and opacity of a data file apply to all of its items.
+        input = f"""
+        type: 'corner'
+        contents:
+          - path: '{self._DATAFILE}'
+            label: 'samples'
+            kde: true
+            linestyle: 'dashed'
+            linewidth: 2.0
+            alpha: 1.0
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        """
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.prepare(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
+
+        for idx in (0, 2, 3):
+            item = figure._figure.plots[idx].items[0]
+            self.assertEqual((item.linestyle, item.linewidth, item.alpha), ('dashed', 2.0, 1.0))
+
+    def test_contours(self):
+
+        # The contours and credibility levels of a data file apply to its KDEs.
+        input = f"""
+        type: 'corner'
+        contents:
+          - path: '{self._DATAFILE}'
+            label: 'samples'
+            kde: true
+            contours: ['lines']
+            levels: [95]
+            level: null
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        """
+        figure = eos.figure.FigureFactory.from_yaml(input)
+        figure.prepare(context=AnalysisFileContext(base_directory=os.environ['SOURCE_DIR']))
+
+        item = figure._figure.plots[2].items[0]
+        self.assertEqual((set(item.contours), item.levels), ({'lines'}, [0, 95]))
+        for idx in (0, 3):
+            self.assertIsNone(figure._figure.plots[idx].items[0].level)
+
     def test_mode_only(self):
 
         # Without any samples or predictions, the plot ranges cannot be determined.

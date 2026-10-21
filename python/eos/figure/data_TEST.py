@@ -50,16 +50,25 @@ class DataFileTests(unittest.TestCase):
         self.assertEqual(df.path, 'path/to/data')
         self.assertEqual(df.label, 'my label')
         self.assertFalse(df.kde)
+        self.assertEqual(df.linestyle, 'solid')
+        self.assertEqual(df.linewidth, 1.0)
+        self.assertEqual(df.alpha, 0.5)
+        self.assertEqual(df.contours, ['lines', 'areas'])
+        self.assertIsNone(df.levels)
+        self.assertEqual(df.level, 68.3)
         # when no color is given, one is assigned from the color cycler
         self.assertIsNotNone(df.color)
 
     def test_custom(self):
-        "Check the construction of a DataFile with explicit color and KDE flag."
+        "Check the construction of a DataFile with explicit color, KDE flag, line style, line width, and opacity."
         from eos.figure.data import DataFile
 
-        df = DataFile.from_dict(path='path/to/data', label='my label', color='red', kde=True)
+        df = DataFile.from_dict(path='path/to/data', label='my label', color='red', kde=True, linestyle='dashed', linewidth=2.0, alpha=1.0)
         self.assertEqual(df.color, 'red')
         self.assertTrue(df.kde)
+        self.assertEqual(df.linestyle, 'dashed')
+        self.assertEqual(df.linewidth, 2.0)
+        self.assertEqual(df.alpha, 1.0)
 
     def test_prepare_samples(self):
         "Check that a DataFile can load a file of importance samples."
