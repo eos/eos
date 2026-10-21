@@ -225,6 +225,13 @@ The likelihoods can be of four types:
 
     Because the underlying convolution uses a real discrete Fourier transform, every axis must end up with an **even** number of points; a crop that yields an odd count is rejected rather than silently adjusted. For a resolution supplied as numerical samples, the optional ``tolerance`` key (default ``1.0e-9``) sets the tolerance used when checking that the samples' declared offset grid matches the grid the fit requires. A resolution supplied as an expression (``kind: expression``) is sampled anew whenever the parameters change, and may therefore depend on them.
 
+    For a resolution supplied as an expression, the optional ``poles`` key declares the poles of the truth-level amplitude, one entry per pole; all poles must lie in the same sampling variable. Each entry names the sampling ``variable`` in which the pole lies, and the observables or parameters that provide the real and imaginary parts of the pole position, ``position_re`` and ``position_im``; the imaginary part must be negative. The optional ``coefficient_re`` and ``coefficient_im`` must be given together; they provide the subtraction coefficient :math:`c`. If they are absent, :math:`c` is extracted from the truth-level PDF on the grid points nearest to the pole, which must not straddle an edge of the phase space or another pole. The term :math:`\mathrm{Re}[c / (x - z_p)]` is subtracted from the truth-level PDF before the numerical convolution, and convolved analytically instead. The resolution must be a linear combination of kernels with known Cauchy transforms, such as ``Kernel::Gaussian``, in the offset variable of each pole's axis. For ``Kernel::CrystalBall``, the analytic convolution is accurate to first order in the ratio of the pole's width to the kernel's width, and a warning is logged once that ratio exceeds 0.1; changing its tail parameters is costly, so they are best kept fixed. For several axes, the coefficients of these kernels may contain kernels in the other offset variables, such as ``Kernel::Gaussian({m}, 0, 0.005) * Kernel::Gaussian({c}, 0, 0.02)``. Custom pole observables are declared in the ``observables`` section.
+
+    .. code-block:: yaml
+
+        poles:
+          - { 'variable': 'q2', 'position_re': 'Example::Re_z_p', 'position_im': 'Example::Im_z_p' }
+
 
 .. _analysis-file-posteriors:
 

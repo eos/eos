@@ -1,0 +1,10 @@
+axes:
+- max: 3.0
+  min: 0.0
+  points: 64
+  variable: z
+resolution:
+  expression: Kernel::Gaussian({z}, 0, 0.2)
+  kind: expression
+type: UnbinnedLikelihood
+version: 1.0.21

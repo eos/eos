@@ -332,6 +332,33 @@ class TestAnalysisFileConstructionErrors(unittest.TestCase):
         self.assertIn("window 2 has an empty interval [1.0, 1.0] in 'z'", messages[2])
         self.assertIn("window 3 constrains 'z' more than once", messages[3])
 
+    def test_unbinned_poles_require_unbinned_type(self):
+        # poles are read only for 'type: unbinned'
+        description = eos.analysis_file_description.LikelihoodComponent.from_dict(
+            name='likelihood',
+            constraints=['B^+->tau^+nu::BR@Belle:2014A'],
+            poles=[{ 'variable': 'z', 'position_re': 'test::pole-re', 'position_im': 'test::pole-im' }],
+        )
+
+        messages = [d.message for d in description.validate_structure() if d.severity is Severity.ERROR]
+        self.assertEqual(1, len(messages))
+        self.assertIn("declares 'poles', which requires 'type: unbinned'", messages[0])
+
+    def test_unbinned_pole_with_one_coefficient(self):
+        # the two parts of the subtraction coefficient are given together or not at all
+        description = eos.analysis_file_description.LikelihoodComponent.from_dict(
+            name='likelihood',
+            type='unbinned',
+            pdf='TestLegendre1D::P(z)',
+            data='./unbinned-data-kernel',
+            poles=[{ 'variable': 'z', 'position_re': 'test::pole-re', 'position_im': 'test::pole-im', 'coefficient_re': 'test::pole-re' }],
+        )
+
+        diagnostics = [d for d in description.validate_structure() if d.severity is Severity.ERROR]
+        self.assertEqual(1, len(diagnostics))
+        self.assertEqual(('poles', 0), diagnostics[0].path)
+        self.assertIn("both or neither of 'coefficient_re' and 'coefficient_im'", diagnostics[0].message)
+
     def test_unbinned_unknown_type(self):
         # a typo'd 'type' value is reported by name, rather than as the misleading "must have at
         # least one of constraints, ..." diagnostic that a missing type would produce
@@ -452,6 +479,29 @@ class TestAnalysisFileUnbinnedLikelihood(unittest.TestCase):
             af.analysis('posterior', base_directory=_TESTD)
 
         self.assertIn('-2.0', str(context.exception))
+
+    def test_poles_load_and_evaluate(self):
+        # poles are passed on to the detector-level PDF; their custom observables count as used
+        af = eos.AnalysisFile(_TESTD / 'unbinned-poles.yaml')
+        diagnostics = af.validate(base_directory=_TESTD)
+        self.assertEqual([], [d for d in diagnostics if d.severity is Severity.ERROR])
+        self.assertEqual([], [d for d in diagnostics if 'test::pole' in d.message])
+
+        analysis = af.analysis('posterior', base_directory=_TESTD)
+        self.assertTrue(math.isfinite(analysis.log_likelihood([4.18])))
+
+    def test_poles_require_expression_resolution(self):
+        af = eos.AnalysisFile(_TESTD / 'unbinned-poles-sampled-resolution.yaml')
+
+        with self.assertRaises(ValueError) as context:
+            af.analysis('posterior', base_directory=_TESTD)
+        self.assertIn('declares poles, which require a resolution given as an expression', str(context.exception))
+
+    def test_poles_unknown_observable(self):
+        af = eos.AnalysisFile(_TESTD / 'unbinned-poles-unknown-observable.yaml')
+
+        errors = [d for d in af.validate(base_directory=_TESTD) if d.severity is Severity.ERROR]
+        self.assertTrue(any("'test::no-such-pole' is neither a known observable nor a parameter" in d.message for d in errors))
 
     def test_global_options_override_component_options(self):
         # as for constraints, the posterior's global options supersede the component's own options
