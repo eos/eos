@@ -21,6 +21,7 @@ For the description of the file format see the corresponding `section in the ref
 The following provide a documentation of the command-line interface, which is available through a single script called ``eos-analysis``.
 
 Note that the CLI verbosity can be changed using the EOS_VERBOSITY environment variable that ranges between 0 (show only errors) to 5 (show all messages).
+Setting the EOS_REGISTER_BENCHMARKS environment variable to a value other than 0 registers the benchmark problems when EOS is imported, as a call to ``eos.register_benchmarks()`` would.
 Similarly, verbosity can be set for an individual command using the ``-v`` or ``--verbose`` argument.
 
 .. argparse::
