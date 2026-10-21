@@ -14,7 +14,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
 from eos.figure.item import ItemColorCycler
@@ -35,11 +35,29 @@ class DataFile(Deserializable):
     :type color: str (optional)
     :param kde: A boolean determining whether to use kernel density estimates (KDE) to visualize the distributions. Defaults to False, in which case histograms are used.
     :type kde: bool
+    :param linestyle: Line style to be used in the plot. Defaults to ``'solid'``.
+    :type linestyle: str (optional)
+    :param linewidth: Line width to be used in the plot. Defaults to 1.0.
+    :type linewidth: float (optional)
+    :param alpha: Opacity to be used in the plot. Defaults to 0.5.
+    :type alpha: float (optional)
+    :param contours: The types of contours of a two-dimensional KDE, any combination of ``'lines'``, ``'areas'``, and ``'labels'``. Defaults to ``['lines', 'areas']``.
+    :type contours: list[str] (optional)
+    :param levels: The credibility levels of the contours of a two-dimensional KDE in percent. Defaults to None, in which case the KDE's default levels are used.
+    :type levels: list[float] (optional)
+    :param level: The credibility level of the shaded interval of a one-dimensional KDE in percent. Defaults to 68.3. None means that no interval is shaded.
+    :type level: float (optional)
     """
     path:str
     label:str
     color:str=None
     kde:bool=False
+    linestyle:str='solid'
+    linewidth:float=1.0
+    alpha:float=0.5
+    contours:list[str]=field(default_factory=lambda: ['lines', 'areas'])
+    levels:list[float]|None=None
+    level:float|None=68.3
 
     def __post_init__(self):
         if self.color is None:
