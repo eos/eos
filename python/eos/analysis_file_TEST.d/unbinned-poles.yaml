@@ -1,0 +1,37 @@
+observables:
+  'test::pole-re':
+    latex: 'x_p'
+    unit: '1'
+    expression: '1.5'
+  'test::pole-im':
+    latex: '-\gamma'
+    unit: '1'
+    expression: '-0.01'
+  'test::pole-c-re':
+    latex: '\mathrm{Re}\, c'
+    unit: '1'
+    expression: '0.001'
+  'test::pole-c-im':
+    latex: '\mathrm{Im}\, c'
+    unit: '1'
+    expression: '0.01'
+
+priors:
+  - name: dummy-prior
+    descriptions:
+      - { 'parameter': 'mass::b(MSbar)', 'min': 4.0, 'max': 4.4, 'type': 'uniform' }
+
+likelihoods:
+  - name: unbinned-test
+    type: 'unbinned'
+    pdf: 'TestLegendre1D::P(z)'
+    data: './unbinned-data-kernel'
+    poles:
+      - { 'variable': 'z', 'position_re': 'test::pole-re', 'position_im': 'test::pole-im', 'coefficient_re': 'test::pole-c-re', 'coefficient_im': 'test::pole-c-im' }
+
+posteriors:
+  - name: posterior
+    prior:
+      - dummy-prior
+    likelihood:
+      - unbinned-test
