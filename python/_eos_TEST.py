@@ -524,6 +524,7 @@ BINDINGS_TESTS = {
     (MODULE, 'make_wilson_polynomial_observable'): ('test::wilson-polynomial', _WET_OBSERVABLE, _WET_COEFFICIENTS),
     (MODULE, 'make_wilson_polynomial_ratio_observable'): ('test::wilson-polynomial-ratio', _WET_OBSERVABLE,
                                                      _WET_OBSERVABLE, _WET_COEFFICIENTS),
+    (MODULE, 'register_benchmarks'):             (),
     (MODULE, 'register_python_observable'):      lambda _: _eos.register_python_observable('test::python-observable',
                                                      _ExternalObservableProvider(), '', eos.Unit.Unity()),
 }
