@@ -15,7 +15,7 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
-from _eos import _SignalPDF, _SignalPDFs, _DetectorLevelPDF, _DetectorLevelPDFAxis
+from _eos import _SignalPDF, _SignalPDFs, _DetectorLevelPDF, _DetectorLevelPDFAxis, _DetectorLevelPDFPole
 import eos
 import numpy as np
 
@@ -149,6 +149,26 @@ def _axis_from_dict(axis):
     )
 
 
+_POLE_KEYS = ('variable', 'position_re', 'position_im', 'coefficient_re', 'coefficient_im')
+
+
+def _pole_from_dict(pole):
+    """Build a native pole descriptor from a dictionary."""
+    unknown = [key for key in pole if key not in _POLE_KEYS]
+    if unknown:
+        raise ValueError(f"pole has the unknown keys {unknown}; the known keys are {list(_POLE_KEYS)}")
+    missing = [key for key in _POLE_KEYS[:3] if key not in pole]
+    if missing:
+        raise ValueError(f"pole lacks the keys {missing}")
+    names = [pole['variable'], pole['position_re'], pole['position_im']]
+    has_re, has_im = 'coefficient_re' in pole, 'coefficient_im' in pole
+    if has_re != has_im:
+        raise ValueError(f"pole in '{pole['variable']}' must provide both or neither of 'coefficient_re' and 'coefficient_im'")
+    if has_re:
+        names += [pole['coefficient_re'], pole['coefficient_im']]
+    return _DetectorLevelPDFPole(*names)
+
+
 def _as_signal_pdf(pdf):
     """Attach the :class:`SignalPDF` interface (and the ``variables``/``bounds`` attributes) to a raw PDF."""
     kinematics = pdf.kinematics()
@@ -169,7 +189,9 @@ class DetectorLevelPDF:
     A detector-level PDF represents a truth-level :class:`SignalPDF` after convolution with a
     detector resolution function. The result is itself a :class:`SignalPDF`, so it can be evaluated
     like any other PDF. The convolution is circular, so each axis must be padded with a region in
-    which both the PDF and the resolution are negligible.
+    which both the PDF and the resolution are negligible. With poles, the padding must instead be
+    wider than the reach of the resolution, and the PDF is only valid farther than that reach from
+    either end of the grid.
 
     To plot a detector-level PDF, use figure items of type ``detector-level-pdf``
     (:class:`eos.figure.item.DetectorLevelPDFItem`). They take either a grid and a resolution
@@ -208,12 +230,18 @@ class DetectorLevelPDF:
         return _as_signal_pdf(_DetectorLevelPDF.make_from_grid(cache, signal, options, _axes, _resolution))
 
     @staticmethod
-    def make_from_expression(cache, signal, options, axes, resolution):
+    def make_from_expression(cache, signal, options, axes, resolution, poles=None):
         """
         Make a detector-level PDF whose resolution is supplied as an EOS expression, ranks 1 to 4.
 
         The expression is evaluated in the per-axis offset variables and resampled whenever the
-        cache is updated, so that the resolution may depend on parameters.
+        cache is updated, so that the resolution may depend on parameters. Poles can only be declared
+        here; their terms are subtracted from the truth-level PDF and convolved analytically, so that the
+        resolution must be a linear combination of kernels with known Cauchy transforms, such as
+        ``Kernel::Gaussian``, in each pole's offset variable. For ``Kernel::CrystalBall``, the analytic
+        convolution is accurate to first order in the ratio of the pole's width to the kernel's width, and
+        a warning is logged once that ratio exceeds 0.1; changing its tail parameters is costly, so they are
+        best kept fixed.
 
         :param cache: The observable cache providing the common set of parameters.
         :type cache: eos.ObservableCache
@@ -226,11 +254,18 @@ class DetectorLevelPDF:
         :type axes: list of dict
         :param resolution: The EOS expression for the resolution kernel in the offset variables.
         :type resolution: str
+        :param poles: One descriptor per pole of the truth-level amplitude; each is a dictionary with the
+            keys ``variable``, ``position_re`` and ``position_im`` and, optionally, both of ``coefficient_re``
+            and ``coefficient_im``. Each value other than ``variable`` is the name of an observable or
+            parameter; the imaginary part of the pole position must be negative. Absent coefficients are
+            extracted from the truth-level PDF on the grid points nearest to the pole.
+        :type poles: list of dict
 
         :rtype: eos.SignalPDF
         """
         _axes = [_axis_from_dict(axis) for axis in axes]
-        return _as_signal_pdf(_DetectorLevelPDF.make_from_expression(cache, signal, options, _axes, resolution))
+        _poles = [_pole_from_dict(pole) for pole in (poles or [])]
+        return _as_signal_pdf(_DetectorLevelPDF.make_from_expression(cache, signal, options, _axes, resolution, _poles))
 
 
 class SignalPDFs(_SignalPDFs):

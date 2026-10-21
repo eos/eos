@@ -2342,6 +2342,46 @@ BOOST_PYTHON_MODULE(_eos)
 
     ::impl::iterable_to_std_vector_converter<DetectorLevelPDF::Axis> iterable_to_std_vector_converter_DetectorLevelPDFAxis;
 
+    // DetectorLevelPDF::Pole
+    class_<DetectorLevelPDF::Pole>("_DetectorLevelPDFPole", R"(
+            Internal binding for one pole of the truth-level amplitude of a :class:`eos.DetectorLevelPDF`;
+            use a plain dictionary with the :class:`eos.DetectorLevelPDF` factory methods instead.
+    )",
+                                   init<const std::string &, const QualifiedName &, const QualifiedName &>(args("self", "variable", "position_re", "position_im"), R"(
+            :param variable: The sampling variable in which the pole lies.
+            :type variable: str
+            :param position_re: The name of the observable or parameter providing the real part of the pole position.
+            :type position_re: eos.QualifiedName
+            :param position_im: The name of the observable or parameter providing the imaginary part of the pole
+                position, which must be negative.
+            :type position_im: eos.QualifiedName
+        )"))
+            .def(init<const std::string &, const QualifiedName &, const QualifiedName &, const QualifiedName &, const QualifiedName &>(
+                    args("self", "variable", "position_re", "position_im", "coefficient_re", "coefficient_im"), R"(
+            :param variable: The sampling variable in which the pole lies.
+            :type variable: str
+            :param position_re: The name of the observable or parameter providing the real part of the pole position.
+            :type position_re: eos.QualifiedName
+            :param position_im: The name of the observable or parameter providing the imaginary part of the pole
+                position, which must be negative.
+            :type position_im: eos.QualifiedName
+            :param coefficient_re: The name of the observable providing the real part of the subtraction coefficient,
+                evaluated with the coordinates of the other sampling variables.
+            :type coefficient_re: eos.QualifiedName
+            :param coefficient_im: The name of the observable providing the imaginary part of the subtraction
+                coefficient, evaluated with the coordinates of the other sampling variables.
+            :type coefficient_im: eos.QualifiedName
+        )"))
+            .def_readonly("variable", &DetectorLevelPDF::Pole::variable, "The sampling variable in which the pole lies.")
+            .def_readonly("position_re", &DetectorLevelPDF::Pole::position_re, "The name providing the real part of the pole position.")
+            .def_readonly("position_im", &DetectorLevelPDF::Pole::position_im, "The name providing the imaginary part of the pole position.")
+            .add_property("coefficient_re", &::impl::DetectorLevelPDFPole_coefficient_re,
+                          "The name providing the real part of the subtraction coefficient, or ``None`` if it is extracted from the grid.")
+            .add_property("coefficient_im", &::impl::DetectorLevelPDFPole_coefficient_im,
+                          "The name providing the imaginary part of the subtraction coefficient, or ``None`` if it is extracted from the grid.");
+
+    ::impl::iterable_to_std_vector_converter<DetectorLevelPDF::Pole> iterable_to_std_vector_converter_DetectorLevelPDFPole;
+
     // DetectorLevelPDF
     register_ptr_to_python<std::shared_ptr<DetectorLevelPDF>>();
     class_<DetectorLevelPDF, bases<SignalPDF>, boost::noncopyable>("_DetectorLevelPDF", R"(
@@ -2370,7 +2410,7 @@ BOOST_PYTHON_MODULE(_eos)
             .staticmethod("make_from_grid")
             .def("make_from_expression", &DetectorLevelPDF::make_from_expression, return_value_policy<return_by_value>(), R"(
             Internal binding; use :meth:`eos.DetectorLevelPDF.make_from_expression` instead, which accepts the
-            axes as plain dictionaries.
+            axes and the poles as plain dictionaries.
 
             :param cache: The observable cache the resulting PDF is tied to for its lifetime.
             :type cache: eos.ObservableCache
@@ -2382,10 +2422,12 @@ BOOST_PYTHON_MODULE(_eos)
             :type axes: list of eos._DetectorLevelPDFAxis
             :param resolution: The EOS expression for the resolution kernel in the per-axis offset variables.
             :type resolution: str
+            :param poles: The poles of the truth-level amplitude.
+            :type poles: list of eos._DetectorLevelPDFPole
 
             :rtype: eos._DetectorLevelPDF
         )",
-                 args("cache", "signal_name", "options", "axes", "resolution"))
+                 args("cache", "signal_name", "options", "axes", "resolution", "poles"))
             .staticmethod("make_from_expression")
             .def("integral", &::impl::DetectorLevelPDF_integral, R"(
             The logarithm of the integral of the unnormalized smeared density over the union of non-overlapping
