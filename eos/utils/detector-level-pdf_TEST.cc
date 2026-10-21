@@ -17,6 +17,8 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/faddeeva.hh>
+#include <eos/maths/integrate.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/observable.hh>
 #include <eos/signal-pdf.hh>
@@ -26,7 +28,9 @@
 #include <test/test.hh>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
+#include <format>
 #include <functional>
 #include <memory>
 #include <set>
@@ -94,6 +98,67 @@ namespace
         }
 
         return 0.0;
+    }
+
+    // The integral of 1 + Re[c C_{R_G}(x - z)] over [a, b] for a Gaussian resolution, by Simpson's rule.
+    double
+    smeared_pole_integral(double a, double b, const complex<double> & c, const complex<double> & z, double sigma)
+    {
+        static const std::size_t n = 20000;
+        const double             h = (b - a) / static_cast<double>(n);
+
+        double result = 0.0;
+        for (std::size_t k = 0; k <= n; ++k)
+        {
+            const double          x       = a + static_cast<double>(k) * h;
+            const complex<double> C       = -1.0i * std::sqrt(M_PI / 2.0) / sigma * faddeeva_w((x - z) / (std::sqrt(2.0) * sigma));
+            const double          weight  = ((0 == k) || (n == k)) ? 1.0 : ((k % 2) ? 4.0 : 2.0);
+            result                       += weight * (1.0 + (c * C).real());
+        }
+
+        return result * h / 3.0;
+    }
+
+    // The Cauchy transform int du R(u) / (zeta - u), Im zeta > 0, of the kernel R normalized over [-reach, reach], by adaptive quadrature.
+    complex<double>
+    brute_force_cauchy_transform(const std::function<double(const double &)> & R, const complex<double> & zeta, const double & reach, std::vector<double> points)
+    {
+        const double s = zeta.real(), g = zeta.imag();
+        for (const double k : { -100.0, -10.0, 0.0, 10.0, 100.0 })
+        {
+            points.push_back(s + k * g);
+        }
+        points.push_back(-reach);
+        points.push_back(+reach);
+        std::sort(points.begin(), points.end());
+
+        const auto config = GSL::QAGS::Config().epsrel(1.0e-12).epsabs(0.0);
+        double     norm = 0.0, re = 0.0, im = 0.0;
+        for (std::size_t i = 1; i < points.size(); ++i)
+        {
+            norm += integrate<GSL::QAGS>(R, points[i - 1], points[i], config);
+            re   += integrate<GSL::QAGS>([&](const double & u) { return R(u) * (s - u) / ((s - u) * (s - u) + g * g); }, points[i - 1], points[i], config);
+            im   += integrate<GSL::QAGS>([&](const double & u) { return -R(u) * g / ((s - u) * (s - u) + g * g); }, points[i - 1], points[i], config);
+        }
+
+        return complex<double>(re, im) / norm;
+    }
+
+    // Kernel::CrystalBall(u, mu, sigma, alpha_L, n_L, alpha_R, n_R), up to its normalization.
+    double
+    crystal_ball_shape(const double & u, const double & mu, const double & sigma, const double & alpha_L, const double & n_L, const double & alpha_R, const double & n_R)
+    {
+        const double t = (u - mu) / sigma;
+        if (t < -alpha_L)
+        {
+            return std::exp(-0.5 * alpha_L * alpha_L) * std::pow(1.0 + alpha_L * (-t - alpha_L) / n_L, -n_L);
+        }
+        if (t > alpha_R)
+        {
+            return std::exp(-0.5 * alpha_R * alpha_R) * std::pow(1.0 + alpha_R * (t - alpha_R) / n_R, -n_R);
+        }
+
+        return std::exp(-0.5 * t * t);
     }
 } // namespace
 
@@ -714,3 +779,552 @@ class DetectorLevelPDFExpressionTest : public TestCase
             }
         }
 } detector_level_pdf_expression_test;
+
+// Poles, with given or extracted coefficients, on either axis of grids of rank 1 and 2, subtracted and convolved analytically.
+class DetectorLevelPDFPolesTest : public TestCase
+{
+    public:
+        DetectorLevelPDFPolesTest() :
+            TestCase("detector_level_pdf_poles_test")
+        {
+        }
+
+        virtual void
+        run() const override
+        {
+            Observables().insert("DetectorLevelPDFTest::Re_z_p", "", Unit::None(), Options(), "[[TestGaussian1D::sigma]]");
+            Observables().insert("DetectorLevelPDFTest::Im_z_p", "", Unit::None(), Options(), "0 - [[TestGaussian1D::sigma]]");
+            Observables().insert("DetectorLevelPDFTest::Re_c", "", Unit::None(), Options(), "0.5");
+            Observables().insert("DetectorLevelPDFTest::Im_c", "", Unit::None(), Options(), "0.25");
+            Observables().insert("DetectorLevelPDFTest::Re_c_x", "", Unit::None(), Options(), "{x}");
+
+            static const std::size_t M  = 64;
+            static const double      lo = -20.0;
+            static const double      hi = +20.0;
+
+            const std::vector<DetectorLevelPDF::Axis> axes{
+                DetectorLevelPDF::Axis{ "x", lo, hi, M }
+            };
+            const std::string resolution = "Kernel::Gaussian({x}, 0, 2)";
+
+            const DetectorLevelPDF::Pole valid{ "x", "DetectorLevelPDFTest::Re_z_p", "DetectorLevelPDFTest::Im_z_p", "DetectorLevelPDFTest::Re_c", "DetectorLevelPDFTest::Im_c" };
+
+            // Invalid poles leave the cache untouched.
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache pristine(p);
+
+                const DetectorLevelPDF::Pole unknown_variable{ "y",
+                                                               "DetectorLevelPDFTest::Re_z_p",
+                                                               "DetectorLevelPDFTest::Im_z_p",
+                                                               "DetectorLevelPDFTest::Re_c",
+                                                               "DetectorLevelPDFTest::Im_c" };
+                const DetectorLevelPDF::Pole unknown_name{ "x",
+                                                           "DetectorLevelPDFTest::Re_z_p",
+                                                           "DetectorLevelPDFTest::NOSUCH",
+                                                           "DetectorLevelPDFTest::Re_c",
+                                                           "DetectorLevelPDFTest::Im_c" };
+                DetectorLevelPDF::Pole       one_coefficient{ "x", "DetectorLevelPDFTest::Re_z_p", "DetectorLevelPDFTest::Im_z_p" };
+                one_coefficient.coefficient_re = QualifiedName("DetectorLevelPDFTest::Re_c");
+
+                TEST_CHECK_THROWS(InternalError, DetectorLevelPDF::make_from_expression(pristine, "TestGaussian1D::P(x)", Options{}, axes, resolution, { unknown_variable }));
+                TEST_CHECK_THROWS(InternalError, DetectorLevelPDF::make_from_expression(pristine, "TestGaussian1D::P(x)", Options{}, axes, resolution, { unknown_name }));
+                TEST_CHECK_THROWS(InternalError, DetectorLevelPDF::make_from_expression(pristine, "TestGaussian1D::P(x)", Options{}, axes, resolution, { one_coefficient }));
+
+                // all poles must lie in the same variable
+                const std::vector<DetectorLevelPDF::Axis> axes_xy{
+                    DetectorLevelPDF::Axis{ "x", lo, hi, M },
+                    DetectorLevelPDF::Axis{ "y", lo, hi, M }
+                };
+                const DetectorLevelPDF::Pole pole_y{ "y",
+                                                     "DetectorLevelPDFTest::Re_z_p",
+                                                     "DetectorLevelPDFTest::Im_z_p",
+                                                     "DetectorLevelPDFTest::Re_c",
+                                                     "DetectorLevelPDFTest::Im_c" };
+                TEST_CHECK_THROWS(InternalError,
+                                  DetectorLevelPDF::make_from_expression(pristine,
+                                                                         "TestGaussian2D::P(x,y)",
+                                                                         Options{},
+                                                                         axes_xy,
+                                                                         "Kernel::Gaussian({x}, 0, 2) * Kernel::Gaussian({y}, 0, 2)",
+                                                                         { valid, pole_y }));
+
+                // the resolution must be a linear combination of kernels in the pole's offset variable
+                TEST_CHECK_THROWS(InternalError, DetectorLevelPDF::make_from_expression(pristine, "TestGaussian1D::P(x)", Options{}, axes, "exp(0 - {x}^2)", { valid }));
+                TEST_CHECK_THROWS(InternalError,
+                                  DetectorLevelPDF::make_from_expression(pristine, "TestGaussian1D::P(x)", Options{}, axes, "Kernel::Gaussian({x}, 0, 2) + 0.1", { valid }));
+
+                // coefficients do not receive the pole variable
+                TEST_CHECK_THROWS(UnknownKinematicVariableError,
+                                  DetectorLevelPDF::make_from_expression(pristine,
+                                                                         "TestGaussian1D::P(x)",
+                                                                         Options{
+                },
+                                                                         axes,
+                                                                         resolution,
+                                                                         { DetectorLevelPDF::Pole{ "x",
+                                                                                                   "DetectorLevelPDFTest::Re_z_p",
+                                                                                                   "DetectorLevelPDFTest::Im_z_p",
+                                                                                                   "DetectorLevelPDFTest::Re_c_x",
+                                                                                                   "DetectorLevelPDFTest::Im_c" } }));
+
+                TEST_CHECK_EQUAL(pristine.size(), 0u);
+            }
+
+            // A pole is reported, and cloned along with the PDF.
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                auto pdf =
+                        std::dynamic_pointer_cast<DetectorLevelPDF>(DetectorLevelPDF::make_from_expression(cache, "TestGaussian1D::P(x)", Options{}, axes, resolution, { valid }));
+
+                TEST_CHECK_EQUAL(pdf->poles().size(), 1u);
+                TEST_CHECK_EQUAL(pdf->poles()[0].variable, "x");
+                TEST_CHECK_EQUAL(pdf->poles()[0].position_re.full(), "DetectorLevelPDFTest::Re_z_p");
+                TEST_CHECK_EQUAL(pdf->poles()[0].position_im.full(), "DetectorLevelPDFTest::Im_z_p");
+                TEST_CHECK_EQUAL(pdf->poles()[0].coefficient_re->full(), "DetectorLevelPDFTest::Re_c");
+                TEST_CHECK_EQUAL(pdf->poles()[0].coefficient_im->full(), "DetectorLevelPDFTest::Im_c");
+
+                ObservableCache other(p);
+                TEST_CHECK_EQUAL(std::dynamic_pointer_cast<DetectorLevelPDF>(pdf->clone(other))->poles().size(), 1u);
+            }
+
+            // A parameter serves as a position; Im z_p >= 0 is rejected on update.
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                const DetectorLevelPDF::Pole pole{ "x", "DetectorLevelPDFTest::Re_z_p", "TestGaussian1D::mu", "DetectorLevelPDFTest::Re_c", "DetectorLevelPDFTest::Im_c" };
+
+                auto pdf =
+                        std::dynamic_pointer_cast<DetectorLevelPDF>(DetectorLevelPDF::make_from_expression(cache, "TestGaussian1D::P(x)", Options{}, axes, resolution, { pole }));
+
+                p["TestGaussian1D::mu"] = 0.0;
+                cache.update();
+                TEST_CHECK_THROWS(InternalError, pdf->update_grid());
+
+                p["TestGaussian1D::mu"] = -1.0;
+                cache.update();
+                pdf->update_grid();
+            }
+
+            // The kernels must integrate to the grid sum of the resolution.
+            {
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+
+                auto weighted  = DetectorLevelPDF::make_from_expression(cache,
+                                                                       "TestGaussian1D::P(x)",
+                                                                       Options{},
+                                                                       axes,
+                                                                       "0.25 * Kernel::Gaussian({x}, 0, 2) + Kernel::Gaussian({x}, 1, 3) / 2",
+                                                                        { valid });
+                auto truncated = DetectorLevelPDF::make_from_expression(cache, "TestGaussian1D::P(x)", Options{}, axes, "Kernel::Gaussian({x}, 0, 15)", { valid });
+                cache.update();
+                TEST_CHECK_NO_THROW(weighted->evaluate());
+                TEST_CHECK_THROWS(InternalError, truncated->evaluate());
+            }
+
+            // For p(x) = |1 + R / (x - z)|^2 = 1 + Re[c / (x - z)], c = 2 R + i |R|^2 / gamma, the subtracted
+            // remainder is constant, so the smeared grid is exactly 1 + Re[c S(x - z)], with
+            // S(zeta) = -i sqrt(pi / 2) / sigma w(zeta / (sqrt(2) sigma)) for a Gaussian resolution.
+            {
+                const double          x_p = 0.3, gamma = 1.0e-3, sigma = 0.5;
+                const complex<double> R = 0.01 * std::polar(1.0, M_PI / 4.0);
+                const complex<double> z(x_p, -gamma);
+                const complex<double> c = 2.0 * R + 1.0i * std::norm(R) / gamma;
+
+                const std::string pole    = std::format("(({} * ({{x}} - {}) + {} * {}) / (({{x}} - {})^2 + {}^2))", R.real(), x_p, R.imag(), gamma, x_p, gamma);
+                const std::string pole_im = std::format("(({} * ({{x}} - {}) - {} * {}) / (({{x}} - {})^2 + {}^2))", R.imag(), x_p, R.real(), gamma, x_p, gamma);
+                Observables().insert("DetectorLevelPDFTest::p(x)", "", Unit::None(), Options(), std::format("(1 + {})^2 + {}^2", pole, pole_im));
+                Observables().insert("DetectorLevelPDFTest::N", "", Unit::None(), Options(), "{x_max} - {x_min}");
+                Observables().insert("DetectorLevelPDFTest::Re_z", "", Unit::None(), Options(), std::format("{}", x_p));
+                Observables().insert("DetectorLevelPDFTest::Im_z", "", Unit::None(), Options(), std::format("{}", -gamma));
+                Observables().insert("DetectorLevelPDFTest::Re_c_exact", "", Unit::None(), Options(), std::format("{}", c.real()));
+                Observables().insert("DetectorLevelPDFTest::Im_c_exact", "", Unit::None(), Options(), std::format("{}", c.imag()));
+                SignalPDFs().insert("DetectorLevelPDFTest::P(x)", "", Options(), "DetectorLevelPDFTest::p(x)", { "x" }, "DetectorLevelPDFTest::N", { "x_min", "x_max" });
+
+                const std::size_t                         points = 1024;
+                const std::vector<DetectorLevelPDF::Axis> fine_axes{
+                    DetectorLevelPDF::Axis{ "x", lo, hi, points }
+                };
+                const std::string            gaussian = std::format("Kernel::Gaussian({{x}}, 0, {})", sigma);
+                const DetectorLevelPDF::Pole exact{ "x",
+                                                    "DetectorLevelPDFTest::Re_z",
+                                                    "DetectorLevelPDFTest::Im_z",
+                                                    "DetectorLevelPDFTest::Re_c_exact",
+                                                    "DetectorLevelPDFTest::Im_c_exact" };
+
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+                auto            subtracted = std::dynamic_pointer_cast<DetectorLevelPDF>(
+                        DetectorLevelPDF::make_from_expression(cache, "DetectorLevelPDFTest::P(x)", Options{}, fine_axes, gaussian, { exact }));
+                auto naive =
+                        std::dynamic_pointer_cast<DetectorLevelPDF>(DetectorLevelPDF::make_from_expression(cache, "DetectorLevelPDFTest::P(x)", Options{}, fine_axes, gaussian));
+                // without a coefficient, it is extracted from the grid; |x - z|^2 p(x) = |x - z + R|^2 is interpolated exactly
+                auto extracted = std::dynamic_pointer_cast<DetectorLevelPDF>(
+                        DetectorLevelPDF::make_from_expression(cache,
+                                                               "DetectorLevelPDFTest::P(x)",
+                                                               Options{
+                },
+                                                               fine_axes,
+                                                               gaussian,
+                                                               { DetectorLevelPDF::Pole{ "x", "DetectorLevelPDFTest::Re_z", "DetectorLevelPDFTest::Im_z" } }));
+                cache.update();
+                subtracted->update_grid();
+                naive->update_grid();
+                extracted->update_grid();
+                // the remainder is constant and the add-back is evaluated at the query points, so even points
+                // between the grid nodes are exact
+                const double        spacing = (hi - lo) / static_cast<double>(points - 1);
+                std::vector<double> query;
+                for (std::size_t k = 0; k + 1 < points; ++k)
+                {
+                    const double x = lo + (static_cast<double>(k) + 0.37) * spacing;
+                    if (std::abs(x - x_p) <= 5.0 * sigma)
+                    {
+                        query.push_back(x);
+                    }
+                }
+                const auto values = [&query](const std::shared_ptr<DetectorLevelPDF> & pdf) -> std::vector<double>
+                {
+                    const auto          interpolator = pdf->make_interpolator(query);
+                    std::vector<double> result;
+                    for (std::size_t i = 0; i < interpolator->size(); ++i)
+                    {
+                        result.push_back((*interpolator)(i));
+                    }
+                    return result;
+                };
+                const auto values_subtracted = values(subtracted), values_naive = values(naive), values_extracted = values(extracted);
+
+                double max_subtracted = 0.0, max_naive = 0.0;
+                for (std::size_t i = 0; i < query.size(); ++i)
+                {
+                    const complex<double> S        = -1.0i * std::sqrt(M_PI / 2.0) / sigma * faddeeva_w((query[i] - z) / (std::sqrt(2.0) * sigma));
+                    const double          expected = 1.0 + (c * S).real();
+                    max_subtracted                 = std::max(max_subtracted, std::abs(values_subtracted[i] / expected - 1.0));
+                    max_naive                      = std::max(max_naive, std::abs(values_naive[i] / expected - 1.0));
+                    TEST_CHECK_RELATIVE_ERROR(values_extracted[i], values_subtracted[i], 1.0e-10);
+                }
+
+                // the same holds for a single point
+                auto variable = subtracted->kinematics()["x"];
+                variable.set(query.front());
+                TEST_CHECK_RELATIVE_ERROR(subtracted->evaluate_linear(), values_subtracted.front(), 1.0e-14);
+                TEST_CHECK(max_subtracted < 1.0e-10);
+                // the grid spacing of 0.04 does not resolve gamma = 1e-3
+                TEST_CHECK(max_naive > 1.0e-2);
+
+                // the integral over windows includes the integral of the add-back
+                const std::vector<DetectorLevelPDF::Window> windows{ { { x_p - 1.3, x_p + 0.71 } }, { { x_p + 2.0, x_p + 3.0 } } };
+                const double expected_integral = smeared_pole_integral(x_p - 1.3, x_p + 0.71, c, z, sigma) + smeared_pole_integral(x_p + 2.0, x_p + 3.0, c, z, sigma);
+                TEST_CHECK_NEARLY_EQUAL(subtracted->integral(windows), std::log(expected_integral), 1.0e-10);
+                TEST_CHECK_NEARLY_EQUAL(extracted->integral(windows), std::log(expected_integral), 1.0e-10);
+
+                // extracting a coefficient requires grid points on either side of the pole
+                Observables().insert("DetectorLevelPDFTest::Re_z_edge", "", Unit::None(), Options(), std::format("{}", hi - 0.01));
+                auto edge = DetectorLevelPDF::make_from_expression(cache,
+                                                                   "DetectorLevelPDFTest::P(x)",
+                                                                   Options{
+                },
+                                                                   fine_axes,
+                                                                   gaussian,
+                                                                   { DetectorLevelPDF::Pole{ "x", "DetectorLevelPDFTest::Re_z_edge", "DetectorLevelPDFTest::Im_z" } });
+                cache.update();
+                TEST_CHECK_THROWS(InternalError, edge->evaluate());
+            }
+
+            // For p(x, y) = q(y) |1 + R / (x - z)|^2 with q(y) = 1 + cos(2 pi (y - y_min) / L) / 2, periodic on the grid,
+            // the coefficient is c q(y) and the remainder is q(y). With the discrete resolution in y, whose cosine moment is
+            // kappa, the smeared grid is exactly (1 + kappa cos(...) / 2) (1 + Re[c S(x - z)]).
+            {
+                const double          x_p = 0.3, gamma = 1.0e-3, sigma_x = 0.5, sigma_y = 0.1;
+                const complex<double> R = 0.01 * std::polar(1.0, M_PI / 4.0);
+                const complex<double> z(x_p, -gamma);
+                const complex<double> c = 2.0 * R + 1.0i * std::norm(R) / gamma;
+
+                const std::size_t points_x = 1024, points_y = 32;
+                const double      y_min = -1.0, y_max = 1.0, spacing_y = (y_max - y_min) / static_cast<double>(points_y - 1);
+                const double      omega = 2.0 * M_PI / (static_cast<double>(points_y) * spacing_y);
+
+                const std::string q       = std::format("(1 + 0.5 * cos({} * ({{y}} - {})))", omega, y_min);
+                const std::string pole    = std::format("(({} * ({{x}} - {}) + {} * {}) / (({{x}} - {})^2 + {}^2))", R.real(), x_p, R.imag(), gamma, x_p, gamma);
+                const std::string pole_im = std::format("(({} * ({{x}} - {}) - {} * {}) / (({{x}} - {})^2 + {}^2))", R.imag(), x_p, R.real(), gamma, x_p, gamma);
+                Observables().insert("DetectorLevelPDFTest::p(x,y)", "", Unit::None(), Options(), std::format("{} * ((1 + {})^2 + {}^2)", q, pole, pole_im));
+                Observables().insert("DetectorLevelPDFTest::N2", "", Unit::None(), Options(), "({x_max} - {x_min}) * ({y_max} - {y_min})");
+                Observables().insert("DetectorLevelPDFTest::Re_c(y)", "", Unit::None(), Options(), std::format("{} * {}", c.real(), q));
+                Observables().insert("DetectorLevelPDFTest::Im_c(y)", "", Unit::None(), Options(), std::format("{} * {}", c.imag(), q));
+                SignalPDFs().insert("DetectorLevelPDFTest::P(x,y)",
+                                    "",
+                                    Options(),
+                                    "DetectorLevelPDFTest::p(x,y)",
+                                    { "x", "y" },
+                                    "DetectorLevelPDFTest::N2",
+                                    { "x_min", "x_max", "y_min", "y_max" });
+
+                const DetectorLevelPDF::Axis axis_x{ "x", lo, hi, points_x }, axis_y{ "y", y_min, y_max, points_y };
+                const std::string            resolution_2d = std::format("Kernel::Gaussian({{x}}, 0, {}) * Kernel::Gaussian({{y}}, 0, {})", sigma_x, sigma_y);
+
+                // the cosine moment of the y resolution, sampled on the centred offsets and normalized to unit sum
+                double kernel_sum = 0.0, kernel_moment = 0.0;
+                for (std::size_t m = 0; m < points_y; ++m)
+                {
+                    const double v       = (static_cast<double>(m) - static_cast<double>(points_y / 2)) * spacing_y;
+                    const double weight  = std::exp(-0.5 * v * v / (sigma_y * sigma_y));
+                    kernel_sum          += weight;
+                    kernel_moment       += weight * std::cos(omega * v);
+                }
+                const double kappa = kernel_moment / kernel_sum;
+
+                // the pole lies on the leading axis, and on the trailing one
+                for (const bool x_leads : { true, false })
+                {
+                    const std::vector<DetectorLevelPDF::Axis> axes_2d =
+                            x_leads ? std::vector<DetectorLevelPDF::Axis>{ axis_x, axis_y } : std::vector<DetectorLevelPDF::Axis>{ axis_y, axis_x };
+                    // a point or an interval, in the order of the axes
+                    const auto in_order = [x_leads](const auto & x, const auto & y) { return x_leads ? std::array{ x, y } : std::array{ y, x }; };
+
+                    Parameters      p = Parameters::Defaults();
+                    ObservableCache cache(p);
+                    auto            given     = std::dynamic_pointer_cast<DetectorLevelPDF>(DetectorLevelPDF::make_from_expression(cache,
+                                                                                                                    "DetectorLevelPDFTest::P(x,y)",
+                                                                                                                    Options{
+                    },
+                                                                                                                    axes_2d,
+                                                                                                                    resolution_2d,
+                                                                                                                                   { DetectorLevelPDF::Pole{ "x",
+                                                                                                                                              "DetectorLevelPDFTest::Re_z",
+                                                                                                                                              "DetectorLevelPDFTest::Im_z",
+                                                                                                                                              "DetectorLevelPDFTest::Re_c(y)",
+                                                                                                                                              "DetectorLevelPDFTest::Im_c(y)" } }));
+                    auto            extracted = std::dynamic_pointer_cast<DetectorLevelPDF>(
+                            DetectorLevelPDF::make_from_expression(cache,
+                                                                   "DetectorLevelPDFTest::P(x,y)",
+                                                                   Options{
+                    },
+                                                                   axes_2d,
+                                                                   resolution_2d,
+                                                                              { DetectorLevelPDF::Pole{ "x", "DetectorLevelPDFTest::Re_z", "DetectorLevelPDFTest::Im_z" } }));
+                    cache.update();
+                    given->update_grid();
+                    extracted->update_grid();
+
+                    // between the grid nodes in x, where the remainder is constant, and on the nodes in y
+                    const double        spacing_x = (hi - lo) / static_cast<double>(points_x - 1);
+                    std::vector<double> query;
+                    for (std::size_t i = 0; i + 1 < points_x; ++i)
+                    {
+                        for (std::size_t n = 0; n < points_y; ++n)
+                        {
+                            for (const double value : in_order(lo + (static_cast<double>(i) + 0.37) * spacing_x, y_min + static_cast<double>(n) * spacing_y))
+                            {
+                                query.push_back(value);
+                            }
+                        }
+                    }
+                    const auto interpolator_given = given->make_interpolator(query), interpolator_extracted = extracted->make_interpolator(query);
+
+                    double max_given = 0.0, max_extracted = 0.0;
+                    for (std::size_t i = 0; i < query.size() / 2; ++i)
+                    {
+                        const double          x         = query[x_leads ? 2 * i : 2 * i + 1];
+                        const std::size_t     n         = i % points_y;
+                        const complex<double> S         = -1.0i * std::sqrt(M_PI / 2.0) / sigma_x * faddeeva_w((x - z) / (std::sqrt(2.0) * sigma_x));
+                        const double          smeared_x = 1.0 + (c * S).real();
+                        const double          expected  = (1.0 + 0.5 * kappa * std::cos(omega * static_cast<double>(n) * spacing_y)) * smeared_x;
+                        max_given                       = std::max(max_given, std::abs((*interpolator_given)(i) / expected - 1.0));
+                        max_extracted                   = std::max(max_extracted, std::abs((*interpolator_extracted)(i) / expected - 1.0));
+                    }
+                    TEST_CHECK(max_given < 1.0e-10);
+                    TEST_CHECK(max_extracted < 1.0e-10);
+
+                    // the integral over a window aligned with the nodes in y: the trapezoidal rule in y times the integral in x
+                    const std::size_t n_min = 3, n_max = 20;
+                    double            trapezoid_y = 0.0;
+                    for (std::size_t n = n_min; n <= n_max; ++n)
+                    {
+                        const double weight  = ((n_min == n) || (n_max == n)) ? 0.5 : 1.0;
+                        trapezoid_y         += weight * spacing_y * (1.0 + 0.5 * kappa * std::cos(omega * static_cast<double>(n) * spacing_y));
+                    }
+                    const auto                                  intervals = in_order(std::pair{ x_p - 1.3, x_p + 0.71 },
+                                                    std::pair{ y_min + static_cast<double>(n_min) * spacing_y, y_min + static_cast<double>(n_max) * spacing_y });
+                    const std::vector<DetectorLevelPDF::Window> windows{
+                        { intervals[0], intervals[1] }
+                    };
+                    const double expected_integral = trapezoid_y * smeared_pole_integral(x_p - 1.3, x_p + 0.71, c, z, sigma_x);
+                    TEST_CHECK_NEARLY_EQUAL(given->integral(windows), std::log(expected_integral), 1.0e-10);
+                    TEST_CHECK_NEARLY_EQUAL(extracted->integral(windows), std::log(expected_integral), 1.0e-10);
+                }
+            }
+
+            // As for p(x) = |1 + R / (x - z)|^2 above, the smeared grid is 1 + Re[c S(x - z)] for any resolution; here S is
+            // the Cauchy transform of the normalized resolution, a sum over its kernels for several of them.
+            const std::size_t                         fine_points  = 1024;
+            const double                              fine_spacing = (hi - lo) / static_cast<double>(fine_points - 1);
+            const std::vector<DetectorLevelPDF::Axis> fine_axes{
+                DetectorLevelPDF::Axis{ "x", lo, hi, fine_points }
+            };
+            // the largest relative deviation from the expected smeared grid between the grid nodes within [a, b]
+            const auto max_deviation =
+                    [&](const std::shared_ptr<DetectorLevelPDF> & pdf, const double & a, const double & b, const std::function<double(const double &)> & expected) -> double
+            {
+                std::vector<double> query;
+                for (std::size_t k = 0; k + 1 < fine_points; ++k)
+                {
+                    const double x = lo + (static_cast<double>(k) + 0.37) * fine_spacing;
+                    if ((a <= x) && (x <= b))
+                    {
+                        query.push_back(x);
+                    }
+                }
+
+                const auto interpolator = pdf->make_interpolator(query);
+                double     result       = 0.0;
+                for (std::size_t i = 0; i < query.size(); ++i)
+                {
+                    result = std::max(result, std::abs((*interpolator)(i) / expected(query[i]) - 1.0));
+                }
+
+                return result;
+            };
+            const auto gaussian_transform = [](const complex<double> & zeta, const double & mu, const double & sigma) -> complex<double>
+            { return -1.0i * std::sqrt(M_PI / 2.0) / sigma * faddeeva_w((zeta - mu) / (std::sqrt(2.0) * sigma)); };
+
+            // An asymmetric resolution, against a brute-force convolution: a shifted Gaussian, and a shifted Crystal Ball
+            // with unequal tails, whose add-back is accurate to first order in gamma / sigma = 4e-3.
+            {
+                const double          x_p = 0.3, gamma = 1.0e-3;
+                const complex<double> R = 0.01 * std::polar(1.0, M_PI / 4.0);
+                const complex<double> z(x_p, -gamma);
+                const complex<double> c = 2.0 * R + 1.0i * std::norm(R) / gamma;
+
+                const DetectorLevelPDF::Pole exact{ "x",
+                                                    "DetectorLevelPDFTest::Re_z",
+                                                    "DetectorLevelPDFTest::Im_z",
+                                                    "DetectorLevelPDFTest::Re_c_exact",
+                                                    "DetectorLevelPDFTest::Im_c_exact" };
+
+                const double mu = 0.1, sigma = 0.25, alpha_L = 1.5, n_L = 4.0, alpha_R = 2.0, n_R = 5.0;
+
+                struct Resolution
+                {
+                        std::string                           expression;
+                        std::function<double(const double &)> kernel;
+                        std::vector<double>                   points;
+                        double                                tolerance;
+                };
+
+                const std::vector<Resolution> resolutions{
+                    { std::format("Kernel::Gaussian({{x}}, {}, {})", mu, sigma),
+                     [=](const double & u) { return std::exp(-0.5 * power_of<2>((u - mu) / sigma)); },
+                     { mu },
+                     1.0e-12 },
+                    { std::format("Kernel::CrystalBall({{x}}, {}, {}, {}, {}, {}, {})", mu, sigma, alpha_L, n_L, alpha_R, n_R),
+                     [=](const double & u) { return crystal_ball_shape(u, mu, sigma, alpha_L, n_L, alpha_R, n_R); },
+                     { mu - alpha_L * sigma, mu, mu + alpha_R * sigma },
+                     2.0e-6 },
+                };
+
+                for (const auto & resolution : resolutions)
+                {
+                    Parameters      p = Parameters::Defaults();
+                    ObservableCache cache(p);
+                    auto            pdf = std::dynamic_pointer_cast<DetectorLevelPDF>(
+                            DetectorLevelPDF::make_from_expression(cache, "DetectorLevelPDFTest::P(x)", Options{}, fine_axes, resolution.expression, { exact }));
+                    cache.update();
+                    pdf->update_grid();
+
+                    const auto expected = [&](const double & x) -> double
+                    { return 1.0 + (c * brute_force_cauchy_transform(resolution.kernel, x - z, 1.0e4 * sigma, resolution.points)).real(); };
+                    TEST_CHECK(max_deviation(pdf, x_p - 5.0 * sigma, x_p + 5.0 * sigma, expected) < resolution.tolerance);
+                }
+            }
+
+            // A resolution of several kernels in the pole variable: S is the weighted sum of their Cauchy transforms.
+            {
+                const double          x_p = 0.3, gamma = 1.0e-3;
+                const complex<double> R = 0.01 * std::polar(1.0, M_PI / 4.0);
+                const complex<double> z(x_p, -gamma);
+                const complex<double> c = 2.0 * R + 1.0i * std::norm(R) / gamma;
+
+                const DetectorLevelPDF::Pole exact{ "x",
+                                                    "DetectorLevelPDFTest::Re_z",
+                                                    "DetectorLevelPDFTest::Im_z",
+                                                    "DetectorLevelPDFTest::Re_c_exact",
+                                                    "DetectorLevelPDFTest::Im_c_exact" };
+
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+                auto            pdf = std::dynamic_pointer_cast<DetectorLevelPDF>(
+                        DetectorLevelPDF::make_from_expression(cache,
+                                                               "DetectorLevelPDFTest::P(x)",
+                                                               Options{},
+                                                               fine_axes,
+                                                               "0.25 * Kernel::Gaussian({x}, 0, 0.5) + Kernel::Gaussian({x}, 0.2, 0.8) / 2",
+                                                                          { exact }));
+                cache.update();
+                pdf->update_grid();
+
+                const auto expected = [&](const double & x) -> double
+                { return 1.0 + (c * (0.25 * gaussian_transform(x - z, 0.0, 0.5) + 0.5 * gaussian_transform(x - z, 0.2, 0.8)) / 0.75).real(); };
+                TEST_CHECK(max_deviation(pdf, x_p - 4.0, x_p + 4.0, expected) < 1.0e-10);
+            }
+
+            // Two poles in the same variable: p(x) = |1 + R_1 / (x - z_1) + R_2 / (x - z_2)|^2 = 1 + sum_j Re[c_j / (x - z_j)],
+            // with c_j = 2 R_j (1 + sum_k conj(R_k) / (z_j - conj(z_k))), so that the smeared grid is 1 + sum_j Re[c_j S(x - z_j)].
+            {
+                const double                         sigma = 0.5;
+                const std::array<double, 2>          x_p{ 0.3, 1.1 }, gamma{ 1.0e-3, 2.0e-3 };
+                const std::array<complex<double>, 2> R{ 0.01 * std::polar(1.0, M_PI / 4.0), 0.008 * std::polar(1.0, -M_PI / 3.0) };
+                const std::array<complex<double>, 2> z{ complex<double>(x_p[0], -gamma[0]), complex<double>(x_p[1], -gamma[1]) };
+                std::array<complex<double>, 2>       c;
+                for (std::size_t j = 0; j < 2; ++j)
+                {
+                    c[j] = 2.0 * R[j] * (1.0 + std::conj(R[0]) / (z[j] - std::conj(z[0])) + std::conj(R[1]) / (z[j] - std::conj(z[1])));
+                }
+
+                std::string re_sum = "1", im_sum = "0";
+                for (std::size_t j = 0; j < 2; ++j)
+                {
+                    re_sum += std::format(" + (({} * ({{x}} - {}) + {} * {}) / (({{x}} - {})^2 + {}^2))", R[j].real(), x_p[j], R[j].imag(), gamma[j], x_p[j], gamma[j]);
+                    im_sum += std::format(" + (({} * ({{x}} - {}) - {} * {}) / (({{x}} - {})^2 + {}^2))", R[j].imag(), x_p[j], R[j].real(), gamma[j], x_p[j], gamma[j]);
+
+                    Observables().insert(std::format("DetectorLevelPDFTest::Re_z_{}", j + 1), "", Unit::None(), Options(), std::format("{}", x_p[j]));
+                    Observables().insert(std::format("DetectorLevelPDFTest::Im_z_{}", j + 1), "", Unit::None(), Options(), std::format("{}", -gamma[j]));
+                    Observables().insert(std::format("DetectorLevelPDFTest::Re_c_{}", j + 1), "", Unit::None(), Options(), std::format("{}", c[j].real()));
+                    Observables().insert(std::format("DetectorLevelPDFTest::Im_c_{}", j + 1), "", Unit::None(), Options(), std::format("{}", c[j].imag()));
+                }
+                Observables().insert("DetectorLevelPDFTest::p_two(x)", "", Unit::None(), Options(), std::format("({})^2 + ({})^2", re_sum, im_sum));
+                Observables().insert("DetectorLevelPDFTest::N_two", "", Unit::None(), Options(), "{x_max} - {x_min}");
+                SignalPDFs()
+                        .insert("DetectorLevelPDFTest::P_two(x)", "", Options(), "DetectorLevelPDFTest::p_two(x)", { "x" }, "DetectorLevelPDFTest::N_two", { "x_min", "x_max" });
+
+                std::vector<DetectorLevelPDF::Pole> poles;
+                for (std::size_t j = 1; j <= 2; ++j)
+                {
+                    poles.push_back(DetectorLevelPDF::Pole{ "x",
+                                                            std::format("DetectorLevelPDFTest::Re_z_{}", j),
+                                                            std::format("DetectorLevelPDFTest::Im_z_{}", j),
+                                                            std::format("DetectorLevelPDFTest::Re_c_{}", j),
+                                                            std::format("DetectorLevelPDFTest::Im_c_{}", j) });
+                }
+
+                Parameters      p = Parameters::Defaults();
+                ObservableCache cache(p);
+                auto            pdf = std::dynamic_pointer_cast<DetectorLevelPDF>(DetectorLevelPDF::make_from_expression(cache,
+                                                                                                              "DetectorLevelPDFTest::P_two(x)",
+                                                                                                              Options{},
+                                                                                                              fine_axes,
+                                                                                                              std::format("Kernel::Gaussian({{x}}, 0, {})", sigma),
+                                                                                                              poles));
+                cache.update();
+                pdf->update_grid();
+
+                const auto expected = [&](const double & x) -> double
+                { return 1.0 + (c[0] * gaussian_transform(x - z[0], 0.0, sigma)).real() + (c[1] * gaussian_transform(x - z[1], 0.0, sigma)).real(); };
+                TEST_CHECK(max_deviation(pdf, x_p[0] - 5.0 * sigma, x_p[1] + 5.0 * sigma, expected) < 1.0e-10);
+            }
+        }
+} detector_level_pdf_poles_test;

@@ -23,8 +23,10 @@
 #include <eos/maths/resolution-convolution.hh>
 #include <eos/signal-pdf.hh>
 #include <eos/utils/observable_cache.hh>
+#include <eos/utils/qualified-name.hh>
 
 #include <memory>
+#include <optional>
 #include <span>
 #include <string>
 #include <utility>
@@ -43,10 +45,23 @@ namespace eos
      * kinematics(). The convolution is circular, so the grid must be padded with a region in which
      * both the PDF and the resolution are negligible (see eos::ResolutionConvolution).
      *
+     * Narrow poles of the truth-level amplitude, which the grid cannot resolve, can be declared in any
+     * one sampling variable; all poles must lie in the same variable. Their terms Re[c / (x - z)] are subtracted from the truth PDF before the
+     * convolution, and convolved analytically through the Cauchy transform of the resolution (see
+     * eos::CauchyTransform); for rank > 1, the coefficients c are convolved numerically over the
+     * other axes. The convolved singular terms are evaluated at the query points rather than
+     * interpolated from the grid. The numerically convolved remainder does not vanish in the padding;
+     * the padding must be wider than the reach of the resolution, and the PDF is only valid farther
+     * than that reach from either end of the grid. For a Kernel::CrystalBall resolution, the convolved
+     * singular terms are accurate to first order in the ratio of the pole's width to the kernel's
+     * width, with a warning once that ratio exceeds 0.1; changing the tail parameters tabulates the
+     * Cauchy transform anew, which is costly, so they are best kept fixed.
+     *
      * The resolution can be supplied in two ways:
      *   - as an EOS expression in the per-axis *offset* variables, sampled through the cache on
      *     every update, so that it may depend on parameters, or
      *   - as a pre-computed grid of kernel values in centred (pre-ifftshift) order.
+     * Poles of the truth-level amplitude can only be declared for the former.
      *
      * As for every SignalPDF, evaluate() and evaluate_linear() return the *unnormalized* smeared
      * density and normalization() returns the logarithm of its normalization; a normalized log
@@ -100,9 +115,38 @@ namespace eos
                     using AxisWeights = std::pair<std::size_t, std::vector<double>>;
 
                     const DetectorLevelPDF &              _pdf;
+                    std::vector<Window>                   _windows;
                     std::vector<std::vector<AxisWeights>> _weights;
 
-                    WindowIntegrator(const DetectorLevelPDF & pdf, std::vector<std::vector<AxisWeights>> && weights);
+                    WindowIntegrator(const DetectorLevelPDF & pdf, const std::vector<Window> & windows, std::vector<std::vector<AxisWeights>> && weights);
+            };
+
+            // A simple pole z_p, Im z_p < 0, in `variable`; each member names an observable or a parameter. The coefficient
+            // is evaluated per grid line along `variable`, or extracted from the grid if absent.
+            struct Pole
+            {
+                    std::string                  variable;
+                    QualifiedName                position_re;
+                    QualifiedName                position_im;
+                    std::optional<QualifiedName> coefficient_re;
+                    std::optional<QualifiedName> coefficient_im;
+
+                    Pole(const std::string & variable, const QualifiedName & position_re, const QualifiedName & position_im) :
+                        variable(variable),
+                        position_re(position_re),
+                        position_im(position_im)
+                    {
+                    }
+
+                    Pole(const std::string & variable, const QualifiedName & position_re, const QualifiedName & position_im, const QualifiedName & coefficient_re,
+                         const QualifiedName & coefficient_im) :
+                        variable(variable),
+                        position_re(position_re),
+                        position_im(position_im),
+                        coefficient_re(coefficient_re),
+                        coefficient_im(coefficient_im)
+                    {
+                    }
             };
 
             // Sampled resolution, ranks 1-4: kernel values, flat and row-major, in centred order
@@ -110,9 +154,11 @@ namespace eos
             DetectorLevelPDF(const ObservableCache & cache, const QualifiedName & signal_name, const Options & options, const std::vector<Axis> & axes,
                              const std::vector<double> & resolution);
 
-            // Resolution as an EOS expression in the offset variables of `axes`.
+            // Resolution as an EOS expression in the offset variables of `axes`. With poles, it must be a linear
+            // combination of kernels with known Cauchy transforms in each pole's offset variable, whose
+            // parameters do not depend on the other offset variables.
             DetectorLevelPDF(const ObservableCache & cache, const QualifiedName & signal_name, const Options & options, const std::vector<Axis> & axes,
-                             const std::string & resolution);
+                             const std::string & resolution, const std::vector<Pole> & poles = {});
 
             ~DetectorLevelPDF();
 
@@ -128,7 +174,7 @@ namespace eos
 
             // Resolution as an EOS expression (see the constructor above).
             static SignalPDFPtr make_from_expression(const ObservableCache & cache, const QualifiedName & signal_name, const Options & options, const std::vector<Axis> & axes,
-                                                     const std::string & resolution);
+                                                     const std::string & resolution, const std::vector<Pole> & poles = {});
             ///@}
 
             ///@name SignalPDF interface
@@ -156,8 +202,9 @@ namespace eos
 
             ///@name Grid access
             ///@{
-            // The smeared grid. Stable for the lifetime of this PDF: the buffer is allocated once
-            // and never reallocated.
+            // The smeared grid; with poles, without the convolved singular terms, which evaluate_linear() and
+            // make_interpolator() add at the query points. Stable for the lifetime of this PDF: the buffer is
+            // allocated once and never reallocated.
             std::span<const double> grid() const;
 
             // Recompute the smeared grid in place from the current cache contents. A no-op when the
@@ -170,8 +217,12 @@ namespace eos
             // The sampling axes, in axis order.
             const std::vector<Axis> & axes() const;
 
+            // The poles of the truth-level amplitude, as given at construction.
+            const std::vector<Pole> & poles() const;
+
             // Query points bound to grid(), with the cell index and fractional offsets precomputed
-            // once (see ResolutionConvolution::make_interpolator()).
+            // once (see ResolutionConvolution::make_interpolator()); with poles, the convolved singular
+            // terms are added at each point.
             std::unique_ptr<ResolutionConvolution::Interpolator> make_interpolator(std::span<const double> points) const;
             ///@}
 
@@ -182,7 +233,8 @@ namespace eos
             void validate(const std::vector<Window> & windows) const;
 
             // The logarithm of the integral of the unnormalized smeared density over the union of `windows`,
-            // integrating exactly the multilinear interpolation of the grid. Recomputes the grid if needed.
+            // integrating exactly the multilinear interpolation of the grid; with poles, the integral of the
+            // convolved singular terms is added. Recomputes the grid if needed.
             double integral(const std::vector<Window> & windows) const;
 
             // Validates `windows` once; the integrator refers to this PDF and must not outlive it.
@@ -203,7 +255,7 @@ namespace eos
             // Shared construction: build the convolution, the query kinematics, and the per-grid-point
             // truth PDFs. Of the two resolution arguments, only the one matching `kind` is used.
             DetectorLevelPDF(const ObservableCache & cache, const QualifiedName & signal_name, const Options & options, const std::vector<Axis> & axes, ResolutionKind kind,
-                             const std::vector<double> & resolution_grid, const std::string & resolution_expression);
+                             const std::vector<double> & resolution_grid, const std::string & resolution_expression, const std::vector<Pole> & poles);
     };
 } // namespace eos
 
