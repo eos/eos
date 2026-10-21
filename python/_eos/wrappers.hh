@@ -20,6 +20,7 @@
 
 #include "eos/models/model.hh"
 #include "eos/observable.hh"
+#include "eos/utils/detector-level-pdf.hh"
 #include "eos/utils/exception.hh"
 #include "eos/utils/observable_cache.hh"
 #include "eos/utils/options.hh"
@@ -40,6 +41,10 @@ namespace impl
 
     // getter for OptionSpecification::default_value, mapping an unset default value to None
     boost::python::object OptionSpecification_default_value(const eos::OptionSpecification & spec);
+
+    // getters for DetectorLevelPDF::Pole::coefficient_{re,im}, mapping an absent coefficient to None
+    boost::python::object DetectorLevelPDFPole_coefficient_re(const eos::DetectorLevelPDF::Pole & pole);
+    boost::python::object DetectorLevelPDFPole_coefficient_im(const eos::DetectorLevelPDF::Pole & pole);
 
     // shim for Model::make, accepting a Python str and implicitly converting it to a qnp::OptionValue
     std::shared_ptr<eos::Model> Model_make(const std::string & name, const eos::Parameters & parameters, const eos::Options & options);
