@@ -15,6 +15,9 @@
 # this program; if not, write to the Free Software Foundation, Inc., 59 Temple
 # Place, Suite 330, Boston, MA  02111-1307  USA
 
+import os
+import subprocess
+import sys
 import unittest
 
 import eos
@@ -245,6 +248,26 @@ class SignalPDFsReprHTMLTests(unittest.TestCase):
         result = eos.SignalPDFs(prefix='nosuchprefix')._repr_html_()
 
         self.assertNotIn('<tt>', result)
+
+
+
+class RegisterBenchmarksTests(unittest.TestCase):
+
+    def _registered(self, value):
+        "Whether a fresh import of EOS knows the benchmark signal PDF, with EOS_REGISTER_BENCHMARKS set to value."
+        env = { k: v for k, v in os.environ.items() if k != 'EOS_REGISTER_BENCHMARKS' }
+        if value is not None:
+            env['EOS_REGISTER_BENCHMARKS'] = value
+        script = "import eos; print(eos.QualifiedName('benchmark::B2@RvDV:2026A') in eos.SignalPDFs())"
+        result = subprocess.run([ sys.executable, '-c', script ], env=env, capture_output=True, text=True, check=True)
+        return result.stdout.strip().splitlines()[-1] == 'True'
+
+    def test_environment_variable(self):
+        "Check that EOS_REGISTER_BENCHMARKS registers the benchmarks on import, unless it is unset, empty, or 0."
+        self.assertTrue(self._registered('1'))
+        self.assertFalse(self._registered(None))
+        self.assertFalse(self._registered(''))
+        self.assertFalse(self._registered('0'))
 
 
 if __name__ == '__main__':

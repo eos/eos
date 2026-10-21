@@ -19,6 +19,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include "eos/benchmarks.hh"
 #include "eos/config.hh"
 #include "eos/constraint.hh"
 #include "eos/models/model.hh"
@@ -2144,6 +2145,13 @@ BOOST_PYTHON_MODULE(_eos)
 
 
     def("register_python_observable", &register_python_observable);
+
+    def("register_benchmarks", &register_benchmarks, R"(
+            Register the benchmark problems, which are not registered by default: their parameters,
+            observables, and signal PDFs. Calling it more than once has no further effect. Call it
+            before creating any :class:`eos.Parameters`, which do not know of parameters declared after
+            their creation.
+        )");
 
     // ObservableGroup
     register_ptr_to_python<std::shared_ptr<ObservableGroup>>();
