@@ -3235,6 +3235,8 @@ class DetectorLevelPDFItem(Item):
     :type pdf: eos.QualifiedName
     :param points: The number of grid points along every axis of the data object's grid, which overrides its native spacing; must be even. Only used together with ``data`` whose resolution is an expression.
     :type points: int | None
+    :param poles: The poles of the truth-level amplitude, which are subtracted before the convolution and convolved analytically; see :meth:`eos.DetectorLevelPDF.make_from_expression`. Requires a resolution given as an expression. They are not taken from ``data``, which does not record the poles of a likelihood; repeat them here to plot the PDF of a likelihood with poles.
+    :type poles: list[dict] | None
     :param range: The range of the variable to be plotted, given as a tuple of two float values (min, max).
     :type range: tuple[float,float]
     :param resolution: The number of points to be used for plotting the PDF. Defaults to 100.
@@ -3268,6 +3270,7 @@ class DetectorLevelPDFItem(Item):
     parameters_from_file:str|None=field(default=None)
     pdf:eos.QualifiedName
     points:int|None=field(default=None)
+    poles:list[dict]|None=field(default=None)
     range:tuple[float,float]
     resolution:int=field(default=100)
     variable:str
@@ -3296,7 +3299,7 @@ class DetectorLevelPDFItem(Item):
     def _make(self, cache, options, context):
         """Make the detector-level PDF from either the data object or the explicit grid and kernel."""
         if self.data is None:
-            return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, self.axes, self.kernel)
+            return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, self.axes, self.kernel, poles=self.poles)
 
         from eos.data.unbinned_likelihood import UnbinnedSampledResolutionDescription
 
@@ -3306,9 +3309,11 @@ class DetectorLevelPDFItem(Item):
             axes = [ { **axis, 'points': self.points } for axis in axes ]
 
         if isinstance(data.resolution, UnbinnedSampledResolutionDescription):
+            if self.poles:
+                raise ValueError(f"Poles require a resolution given as an expression, but the data object '{self.data}' holds a sampled resolution")
             return eos.DetectorLevelPDF.make_from_grid(cache, self.pdf, options, axes, data.resolution_kernel(axes))
 
-        return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, axes, data.resolution.expression)
+        return eos.DetectorLevelPDF.make_from_expression(cache, self.pdf, options, axes, data.resolution.expression, poles=self.poles)
 
     def prepare(self, context:AnalysisFileContext=None):
         """Prepare the detector-level PDF for plotting.
