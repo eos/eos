@@ -169,6 +169,47 @@ class ObservableTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(obs->evaluate(), cache[obs_id], 1e-3);
             }
 
+            /* Test fixed kinematic values of several, also nested, expressions that share one set of kinematics */
+            {
+                auto observables = Observables();
+
+                // P(z) = z (4 - z), so P(1) = 3 and P(2) = 4
+                observables.insert("test::P(z=1)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>>[z=1.0]");
+                observables.insert("test::P(z=2)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>>[z=2.0]");
+                observables.insert("test::P(z=1)*P(z=2)", R"()", Unit::None(), Options(), "<<test::P(z=1)>> * <<TestLegendre1D::UnnormalizedPDF(z)>>[z=2.0]");
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k;
+                Options    o;
+
+                auto obs_1       = Observable::make("test::P(z=1)", p, k, o);
+                auto obs_2       = Observable::make("test::P(z=2)", p, k, o);
+                auto obs_product = Observable::make("test::P(z=1)*P(z=2)", p, k, o);
+
+                TEST_CHECK_NEARLY_EQUAL(obs_1->evaluate(), 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(obs_2->evaluate(), 4.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(obs_product->evaluate(), 12.0, 1e-12);
+
+                TEST_CHECK_NEARLY_EQUAL(obs_1->clone()->evaluate(), 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(obs_product->clone()->evaluate(), 12.0, 1e-12);
+
+                ObservableCache cache(p);
+                auto            id_1       = cache.add(obs_1);
+                auto            id_2       = cache.add(obs_2);
+                auto            id_product = cache.add(obs_product);
+
+                TEST_CHECK_NO_THROW(cache.update());
+                TEST_CHECK_NEARLY_EQUAL(cache[id_1], 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache[id_2], 4.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache[id_product], 12.0, 1e-12);
+
+                ObservableCache cache_clone = cache.clone(p.clone());
+                TEST_CHECK_NO_THROW(cache_clone.update());
+                TEST_CHECK_NEARLY_EQUAL(cache_clone[id_1], 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache_clone[id_2], 4.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache_clone[id_product], 12.0, 1e-12);
+            }
+
             /* Test insertion of a problematic observable */
             {
                 auto observables = Observables();

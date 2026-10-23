@@ -174,12 +174,15 @@ namespace eos::exp
     class ObservableExpression
     {
         public:
-            ObservablePtr           observable;
-            KinematicsSpecification kinematics_specification;
+            ObservablePtr                      observable;
+            KinematicsSpecification            kinematics_specification;
+            // Maps each kinematic variable fixed by the specification to the hidden variable holding its value.
+            std::map<std::string, std::string> hidden_variables;
 
-            ObservableExpression(ObservablePtr observable, const KinematicsSpecification & kinematics_specification) :
+            ObservableExpression(ObservablePtr observable, const KinematicsSpecification & kinematics_specification, const std::map<std::string, std::string> & hidden_variables) :
                 observable(observable),
-                kinematics_specification(kinematics_specification)
+                kinematics_specification(kinematics_specification),
+                hidden_variables(hidden_variables)
             {
             }
     };
@@ -187,14 +190,18 @@ namespace eos::exp
     class CachedObservableExpression
     {
         public:
-            ObservableCache               cache;
-            ObservableCache::ObservableId id;
-            KinematicsSpecification       kinematics_specification;
+            ObservableCache                    cache;
+            ObservableCache::ObservableId      id;
+            KinematicsSpecification            kinematics_specification;
+            // Maps each kinematic variable fixed by the specification to the hidden variable holding its value.
+            std::map<std::string, std::string> hidden_variables;
 
-            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::ObservableId & id, const KinematicsSpecification & kinematics_specification) :
+            CachedObservableExpression(const ObservableCache & cache, const ObservableCache::ObservableId & id, const KinematicsSpecification & kinematics_specification,
+                                       const std::map<std::string, std::string> & hidden_variables) :
                 cache(cache),
                 id(id),
-                kinematics_specification(kinematics_specification)
+                kinematics_specification(kinematics_specification),
+                hidden_variables(hidden_variables)
             {
             }
     };

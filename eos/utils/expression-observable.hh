@@ -55,6 +55,9 @@ namespace eos
             virtual ObservablePtr clone() const;
             virtual ObservablePtr clone(const Parameters & parameters) const;
 
+            // Clone onto kinematics that are shared with an enclosing expression.
+            ObservablePtr clone(const Parameters & parameters, const Kinematics & kinematics) const;
+
             virtual const QualifiedName &
             name() const
             {

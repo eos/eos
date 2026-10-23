@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2023 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -33,12 +33,9 @@ namespace eos::exp
             Parameters _parameters;
             Kinematics _kinematics;
             Options    _options;
-            unsigned   _hidden_alias_index;
 
         public:
             ExpressionCloner(const Parameters & parameters, const Kinematics & kinematics, const Options & options);
-
-            std::string next_hidden_alias();
 
             Expression operator() (const BinaryExpression & e);
 

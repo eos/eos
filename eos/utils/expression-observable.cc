@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2024 Danny van Dyk
+ * Copyright (c) 2024-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -110,19 +110,18 @@ namespace eos
     ObservablePtr
     ExpressionObservable::clone() const
     {
-        auto parameters = _parameters.clone();
-        auto kinematics = _kinematics.clone();
-
-        exp::ExpressionCloner cloner(parameters, kinematics, _options);
-
-        return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, ExpressionPtr(new Expression(std::move(std::visit(cloner, *_expression))))));
+        return this->clone(_parameters.clone(), _kinematics.clone());
     }
 
     ObservablePtr
     ExpressionObservable::clone(const Parameters & parameters) const
     {
-        auto kinematics = _kinematics.clone();
+        return this->clone(parameters, _kinematics.clone());
+    }
 
+    ObservablePtr
+    ExpressionObservable::clone(const Parameters & parameters, const Kinematics & kinematics) const
+    {
         exp::ExpressionCloner cloner(parameters, kinematics, _options);
 
         return ObservablePtr(new ExpressionObservable(_name, parameters, kinematics, _options, ExpressionPtr(new Expression(std::move(std::visit(cloner, *_expression))))));
