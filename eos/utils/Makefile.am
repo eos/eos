@@ -21,6 +21,7 @@ libeosutils_la_SOURCES = \
 	expression-cloner.hh \
 	expression-evaluator.hh \
 	expression-kernel-decomposer.hh \
+	expression-kinematic-hook.cc expression-kinematic-hook.hh \
 	expression-kinematic-reader.hh \
 	expression-maker.hh \
 	expression-observable.cc expression-observable.hh \
@@ -137,6 +138,7 @@ TESTS = \
 	cacheable-observable_TEST \
 	cartesian-product_TEST \
 	detector-level-pdf_TEST \
+	expression-kinematic-hook_TEST \
 	expression-parser_TEST \
 	gsl-hacks_TEST \
 	indirect-iterator_TEST \
@@ -181,6 +183,8 @@ detector_level_pdf_TEST_LDADD = \
 	$(top_builddir)/eos/form-factors/libeosformfactors.la \
 	$(top_builddir)/eos/nonlocal-form-factors/libeosnonlocalformfactors.la \
 	-lyaml-cpp
+
+expression_kinematic_hook_TEST_SOURCES = expression-kinematic-hook_TEST.cc
 
 expression_parser_TEST_SOURCES = expression-parser_TEST.cc
 

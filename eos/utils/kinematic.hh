@@ -168,6 +168,13 @@ namespace eos
             KinematicVariable operator[] (const std::string & variable) const;
 
             /*!
+             * Retrieve a declared variable's KinematicVariable object by name, disregarding any aliases.
+             *
+             * @param name  The name of the declared variable.
+             */
+            KinematicVariable variable(const std::string & name) const;
+
+            /*!
              * Verify if a kinematic variable or an alias thereof with a given name exists.
              *
              * @param variable  The name to be checked against the known kinematic variables.
