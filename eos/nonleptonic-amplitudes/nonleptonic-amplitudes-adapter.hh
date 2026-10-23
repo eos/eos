@@ -2,7 +2,7 @@
 
 /*
  * Copyright (c) 2024 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -48,7 +48,7 @@ namespace eos
 
             std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> _nonleptonic_amplitudes_function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, std::string>::Type...> _kinematics_names;
 
             std::tuple<const NonleptonicAmplitudes<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type...> _argument_tuple;
 
@@ -56,7 +56,7 @@ namespace eos
             NonleptonicAmplitudesAdapter(const QualifiedName & name, const qnp::Prefix & process, const Parameters & parameters, const Kinematics & kinematics,
                                          const Options &                                                                             options,
                                          const std::function<double(const NonleptonicAmplitudes<Transition_> *, const Args_ &...)> & nonleptonic_amplitudes_function,
-                                         const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> &                  kinematics_names) :
+                                         const std::tuple<typename impl::ConvertTo<Args_, std::string>::Type...> &                   kinematics_names) :
                 _name(name),
                 _process(process),
                 _parameters(parameters),
@@ -87,6 +87,8 @@ namespace eos
                     }
                 };
                 std::apply(_register_kinematics, _argument_tuple);
+
+                _kinematics_names = impl::resolved_names(_argument_tuple);
             }
 
             virtual const QualifiedName &
