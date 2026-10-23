@@ -84,6 +84,11 @@ Two types of kinematics specification are supported
 
 Note that both types of specifications can be combined in comma-separated list in an arbitrary order, for example ``[q2_min=1.0,q2_max=>q2_max_mu]``.
 
+Note also that the references to observables can be nested: an observable defined by an expression can itself be referenced in a further expression.
+In that case, the kinematic specification of the outer reference must not rename or fix a kinematic variable that the expression of the inner observable already renames or fixes.
+For example, if ``ex::f(q2=1)`` is defined by the expression ``<<B->pi::f_+(q2)>>[q2=1.0]``, then neither ``<<ex::f(q2=1)>>[q2=>q2_e]``
+nor ``<<ex::f(q2=1)>>[q2=2.0]`` is supported.
+
 Making a new Observable known
 =============================
 
