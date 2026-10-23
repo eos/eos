@@ -219,6 +219,19 @@ namespace eos
         throw UnknownKinematicVariableError(name);
     }
 
+    KinematicVariable
+    Kinematics::variable(const std::string & name) const
+    {
+        auto i(_imp->variables_map.find(name));
+
+        if (_imp->variables_map.end() == i)
+        {
+            throw UnknownKinematicVariableError(name);
+        }
+
+        return KinematicVariable(_imp, i->second, false);
+    }
+
     bool
     Kinematics::has(const std::string & name) const
     {
