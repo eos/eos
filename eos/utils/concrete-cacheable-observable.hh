@@ -53,7 +53,7 @@ namespace eos
         public:
             using PrepareFunction = const IntermediateResult_ * (Decay_::*) (const PrepareArgs_ &...) const;
 
-            using PrepareKinematicsNames = std::tuple<typename impl::ConvertTo<PrepareArgs_, const char *>::Type...>;
+            using PrepareKinematicsNames = std::tuple<typename impl::ConvertTo<PrepareArgs_, std::string>::Type...>;
 
         protected:
             QualifiedName _name;
@@ -94,6 +94,8 @@ namespace eos
                 };
                 std::apply(_register_kinematics, _prepare_argument_tuple);
                 uses(impl::ProviderTraits<Decay_>::references());
+
+                _prepare_kinematics_names = impl::resolved_names(_prepare_argument_tuple);
             }
 
         public:
@@ -193,8 +195,8 @@ namespace eos
             using PrepareFunction  = const IntermediateResult_ * (Decay_::*) (const PrepareArgs_ &...) const;
             using EvaluateFunction = double (Decay_::*)(const IntermediateResult_ *, const EvaluateArgs_ &...) const;
 
-            using PrepareKinematicsNames  = std::tuple<typename impl::ConvertTo<PrepareArgs_, const char *>::Type...>;
-            using EvaluateKinematicsNames = std::tuple<typename impl::ConvertTo<EvaluateArgs_, const char *>::Type...>;
+            using PrepareKinematicsNames  = std::tuple<typename impl::ConvertTo<PrepareArgs_, std::string>::Type...>;
+            using EvaluateKinematicsNames = std::tuple<typename impl::ConvertTo<EvaluateArgs_, std::string>::Type...>;
 
         private:
             QualifiedName _name;
@@ -321,7 +323,7 @@ namespace eos
             using EvaluateFunction = double (Decay_::*)(const IntermediateResult_ *, const EvaluateArgs_ &...) const;
 
             using PrepareKinematicsNames  = typename Preparer::PrepareKinematicsNames;
-            using EvaluateKinematicsNames = std::tuple<typename impl::ConvertTo<EvaluateArgs_, const char *>::Type...>;
+            using EvaluateKinematicsNames = std::tuple<typename impl::ConvertTo<EvaluateArgs_, std::string>::Type...>;
 
         private:
             EvaluateFunction _evaluate_fn;
@@ -348,6 +350,8 @@ namespace eos
                     }
                 };
                 std::apply(_register_kinematics, _evaluate_argument_tuple);
+
+                _evaluate_kinematics_names = impl::resolved_names(_evaluate_argument_tuple);
             }
 
             ~ConcreteCacheableObservable() = default;

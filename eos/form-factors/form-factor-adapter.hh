@@ -89,14 +89,14 @@ namespace eos
 
             std::function<double(const FormFactors<Transition_> *, const Args_ &...)> _form_factor_function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, std::string>::Type...> _kinematics_names;
 
             std::tuple<const FormFactors<Transition_> *, typename impl::ConvertTo<Args_, KinematicVariable>::Type...> _argument_tuple;
 
         public:
             FormFactorAdapter(const QualifiedName & name, const qnp::Prefix & process, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
                               const std::function<double(const FormFactors<Transition_> *, const Args_ &...)> & form_factor_function,
-                              const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> &        kinematics_names) :
+                              const std::tuple<typename impl::ConvertTo<Args_, std::string>::Type...> &         kinematics_names) :
                 _name(name),
                 _process(process),
                 _parameters(parameters),
@@ -123,6 +123,8 @@ namespace eos
                     }
                 };
                 std::apply(_register_kinematics, _argument_tuple);
+
+                _kinematics_names = impl::resolved_names(_argument_tuple);
             }
 
             virtual const QualifiedName &

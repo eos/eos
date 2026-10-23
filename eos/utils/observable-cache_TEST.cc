@@ -271,6 +271,22 @@ class ObservableCacheCloneTest : public TestCase
                 TEST_CHECK_EQUAL(expression_clone.size(), size);
                 TEST_CHECK_NEARLY_EQUAL(expression_clone[expression_id], 6.0, 1.0e-14);
             }
+
+            // the observables that an expression makes through an alias remain bound to the aliased variable in the clone
+            {
+                Parameters      expression_parameters = Parameters::Defaults();
+                ObservableCache expression_cache(expression_parameters);
+
+                const Kinematics k{
+                    { "y", 1.0 }
+                };
+                const auto expression_id = expression_cache.add(ObservablePtr(
+                        new ExpressionObservable("test::aliased", expression_parameters, k, Options(), exp::parse_expression("<<TestLegendre1D::UnnormalizedPDF(z)>>[z=>y]"))));
+                expression_cache.update();
+
+                ObservableCache expression_clone = expression_cache.clone(expression_parameters.clone());
+                TEST_CHECK_NEARLY_EQUAL(expression_clone[expression_id], 3.0, 1.0e-14);
+            }
         }
 } observable_cache_clone_test;
 

@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2018 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -23,6 +23,7 @@
 #include <eos/utils/kinematic.hh>
 
 #include <array>
+#include <string>
 #include <tuple>
 #include <utility>
 
@@ -42,7 +43,7 @@ namespace eos
                 make(const Kinematics & k, const std::tuple<TupleElements_...> & t, const Decay_ * d, ResultElements_... r)
                         -> std::tuple<const Decay_ *, typename ConvertTo<TupleElements_, KinematicVariable>::Type...>
                 {
-                    return TupleMaker<n_ - 1>::make(k, t, d, k[static_cast<const char *>(std::get<n_ - 1>(t))], r...);
+                    return TupleMaker<n_ - 1>::make(k, t, d, k[std::get<n_ - 1>(t)], r...);
                 }
         };
 
@@ -56,6 +57,14 @@ namespace eos
                     return std::make_tuple(d, r...);
                 }
         };
+
+        // The names of the variables that the arguments refer to, which differ from the requested names for aliases.
+        template <typename Provider_, typename... KinematicVariables_>
+        auto
+        resolved_names(const std::tuple<const Provider_ *, KinematicVariables_...> & arguments) -> std::tuple<typename ConvertTo<KinematicVariables_, std::string>::Type...>
+        {
+            return std::apply([](const Provider_ *, const KinematicVariables_ &... variables) { return std::make_tuple(variables.name()...); }, arguments);
+        }
 
         template <typename T_> struct TupleSize;
 

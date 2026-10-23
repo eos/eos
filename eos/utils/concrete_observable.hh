@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2010, 2011, 2015, 2016, 2017 Danny van Dyk
+ * Copyright (c) 2010-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -50,14 +50,14 @@ namespace eos
 
             std::function<double(const Decay_ *, const Args_ &...)> _function;
 
-            std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> _kinematics_names;
+            std::tuple<typename impl::ConvertTo<Args_, std::string>::Type...> _kinematics_names;
 
             std::tuple<const Decay_ *, typename impl::ConvertTo<Args_, KinematicVariable>::Type...> _argument_tuple;
 
         public:
             ConcreteObservable(const QualifiedName & name, const Parameters & parameters, const Kinematics & kinematics, const Options & options,
-                               const std::function<double(const Decay_ *, const Args_ &...)> &            function,
-                               const std::tuple<typename impl::ConvertTo<Args_, const char *>::Type...> & kinematics_names) :
+                               const std::function<double(const Decay_ *, const Args_ &...)> &           function,
+                               const std::tuple<typename impl::ConvertTo<Args_, std::string>::Type...> & kinematics_names) :
                 _name(name),
                 _parameters(parameters),
                 _kinematics(kinematics),
@@ -78,6 +78,9 @@ namespace eos
                 };
                 std::apply(_register_kinematics, _argument_tuple);
                 uses(Decay_::references);
+
+                // clones must not depend on aliases that are installed only while this observable is made
+                _kinematics_names = impl::resolved_names(_argument_tuple);
             }
 
             virtual const QualifiedName &
