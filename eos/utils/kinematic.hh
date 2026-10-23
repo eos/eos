@@ -25,6 +25,7 @@
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <memory>
 #include <set>
 
 namespace eos
@@ -57,6 +58,7 @@ namespace eos
 
     // Forward declaration.
     class KinematicVariable;
+    class KinematicHook;
 
     /*!
      * Kinematics keeps the set of all kinematic variables for any Observable.
@@ -91,6 +93,10 @@ namespace eos
              */
             Kinematics clone() const;
 
+            /*!
+             * Combine two sets of kinematic variables, where values of the right-hand side take precedence.
+             * Throws InternalError if a derived variable on either side shares its name with a variable on the other side.
+             */
             Kinematics operator+ (const Kinematics & rhs) const;
 
             /// Equality comparison operator.
@@ -130,6 +136,21 @@ namespace eos
              * @param value (Optional) value for the new variable.
              */
             KinematicVariable declare(const std::string & name, const double & value = 0.0);
+
+            /*!
+             * Declare a new derived kinematic variable, whose value is computed by a hook and cannot be set.
+             *
+             * @param name  Name of the new variable; must not exist!
+             * @param hook  The hook that computes the variable's value.
+             */
+            KinematicVariable declare_derived(const std::string & name, const std::shared_ptr<const KinematicHook> & hook);
+
+            /*!
+             * Retrieve the hook of a derived kinematic variable, or a null pointer for any other variable.
+             *
+             * @param name  The name of the variable, or of an alias thereof.
+             */
+            std::shared_ptr<const KinematicHook> hook(const std::string & name) const;
 
             /*!
              * Set a kinematic variable's numeric value.
@@ -282,6 +303,21 @@ namespace eos
     };
 
     extern template class WrappedForwardIterator<KinematicUser::ConstIteratorTag, const KinematicVariable::Id>;
+
+    /*!
+     * KinematicHook computes the value of a derived kinematic variable from other kinematic variables
+     * whenever the derived variable is read. As a KinematicUser, it reports the variables that it reads.
+     */
+    class KinematicHook : public KinematicUser
+    {
+        public:
+            virtual ~KinematicHook() = default;
+
+            virtual double evaluate() const = 0;
+
+            /// Bind a copy of this hook to the variables of a clone of the original kinematics.
+            virtual std::shared_ptr<const KinematicHook> clone(const Kinematics & kinematics) const = 0;
+    };
 
     /*!
      * Wrapper class to automate usage tracking of Kinematics objects.

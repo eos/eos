@@ -22,9 +22,40 @@
 #include <test/test.hh>
 
 #include <cmath>
+#include <iterator>
+#include <memory>
 
 using namespace test;
 using namespace eos;
+
+namespace
+{
+    // Squares the value of another kinematic variable.
+    class SquareHook : public KinematicHook
+    {
+        private:
+            KinematicVariable _variable;
+
+        public:
+            SquareHook(const KinematicVariable & variable) :
+                _variable(variable)
+            {
+                uses_kinematic(variable.id());
+            }
+
+            virtual double
+            evaluate() const
+            {
+                return _variable * _variable;
+            }
+
+            virtual std::shared_ptr<const KinematicHook>
+            clone(const Kinematics & kinematics) const
+            {
+                return std::make_shared<SquareHook>(kinematics[_variable.name()]);
+            }
+    };
+} // namespace
 
 class KinematicsTest : public TestCase
 {
@@ -191,6 +222,66 @@ class KinematicsTest : public TestCase
                 TEST_CHECK(k.end() == i);
 
                 TEST_CHECK_NO_THROW(-0.5 == k["z"].evaluate());
+            }
+
+            // Derived variables
+            {
+                Kinematics k{
+                    { "m", 2.0 }
+                };
+                auto q2 = k.declare_derived("q2", std::make_shared<SquareHook>(k["m"]));
+
+                TEST_CHECK_EQUAL(4.0, q2.evaluate());
+                TEST_CHECK_EQUAL(4.0, static_cast<double>(k["q2"]));
+                TEST_CHECK_EQUAL(4.0, q2());
+
+                k.set("m", 3.0);
+                TEST_CHECK_EQUAL(9.0, q2.evaluate());
+
+                // read through an alias
+                k.alias("s", "q2");
+                TEST_CHECK_EQUAL(9.0, k["s"].evaluate());
+                k.remove_alias("s");
+
+                // derived variables cannot be set or declared anew
+                TEST_CHECK_THROWS(InternalError, k.set("q2", 1.0));
+                TEST_CHECK_THROWS(InternalError, q2.set(1.0));
+                TEST_CHECK_THROWS(InternalError, k.declare("q2", 1.0));
+                TEST_CHECK_THROWS(InternalError, k.declare_derived("q2", std::make_shared<SquareHook>(k["m"])));
+                TEST_CHECK_THROWS(InternalError, k.declare_derived("m", std::make_shared<SquareHook>(k["m"])));
+
+                // a clone reads its own variables
+                Kinematics clone = k.clone();
+                clone.set("m", 4.0);
+                TEST_CHECK_EQUAL(16.0, clone["q2"].evaluate());
+                TEST_CHECK_EQUAL(9.0, k["q2"].evaluate());
+
+                // comparison and printing use the derived values
+                TEST_CHECK(k != clone);
+                clone.set("m", 3.0);
+                TEST_CHECK(k == clone);
+                TEST_CHECK_EQUAL_STR("m=3, q2=9", k.as_string());
+
+                // the sum reads its own variables, too
+                Kinematics sum = Kinematics{
+                    { "E", 1.0 }
+                } + k;
+                sum.set("m", 5.0);
+                TEST_CHECK_EQUAL(25.0, sum["q2"].evaluate());
+                TEST_CHECK_EQUAL(9.0, k["q2"].evaluate());
+
+                // a derived variable must not share its name with a variable of the other summand
+                const Kinematics other{
+                    { "q2", 1.0 }
+                };
+                TEST_CHECK_THROWS(InternalError, k + other);
+                TEST_CHECK_THROWS(InternalError, other + k);
+
+                // the hook reports the variables that it reads
+                TEST_CHECK(nullptr == k.hook("m"));
+                TEST_CHECK(nullptr != k.hook("q2"));
+                TEST_CHECK_EQUAL(1, std::distance(k.hook("q2")->begin_kinematics(), k.hook("q2")->end_kinematics()));
+                TEST_CHECK_EQUAL(k["m"].id(), *k.hook("q2")->begin_kinematics());
             }
         }
 } kinematics_test;

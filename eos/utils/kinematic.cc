@@ -22,6 +22,7 @@
 #include <eos/utils/stringify.hh>
 #include <eos/utils/wrapped_forward_iterator-impl.hh>
 
+#include <limits>
 #include <map>
 #include <set>
 #include <vector>
@@ -38,6 +39,9 @@ namespace eos
     {
             std::vector<double> variables_data;
 
+            // Non-null only for derived variables.
+            std::vector<std::shared_ptr<const KinematicHook>> hooks;
+
             std::map<std::string, unsigned> variables_map;
 
             std::vector<std::string> variables_names;
@@ -45,6 +49,28 @@ namespace eos
             std::map<std::string, unsigned> alias_map;
 
             std::vector<KinematicVariable> variables;
+
+            double
+            value(const unsigned & index) const
+            {
+                if (hooks[index]) [[unlikely]]
+                {
+                    return hooks[index]->evaluate();
+                }
+
+                return variables_data[index];
+            }
+
+            void
+            set(const unsigned & index, const double & value)
+            {
+                if (hooks[index]) [[unlikely]]
+                {
+                    throw InternalError("Kinematic variable '" + variables_names[index] + "' is derived and cannot be set");
+                }
+
+                variables_data[index] = value;
+            }
     };
 
     Kinematics::Kinematics() :
@@ -64,6 +90,7 @@ namespace eos
                 int index                    = _imp->variables_data.size();
                 _imp->variables_map[v.first] = index;
                 _imp->variables_data.push_back(v.second);
+                _imp->hooks.push_back(nullptr);
                 _imp->variables_names.push_back(v.first);
                 _imp->variables.push_back(KinematicVariable(_imp, index, false));
             }
@@ -84,6 +111,14 @@ namespace eos
 
         result._imp.reset(new Implementation<Kinematics>(*_imp));
 
+        for (auto & hook : result._imp->hooks)
+        {
+            if (hook)
+            {
+                hook = hook->clone(result);
+            }
+        }
+
         return result;
     }
 
@@ -92,9 +127,21 @@ namespace eos
     {
         Kinematics result = this->clone();
 
-        for (const auto & kv : rhs._imp->variables_names)
+        for (unsigned i = 0; i < rhs._imp->variables_names.size(); ++i)
         {
-            result.declare(kv, rhs[kv].evaluate());
+            if (! rhs._imp->hooks[i])
+            {
+                result.declare(rhs._imp->variables_names[i], rhs._imp->variables_data[i]);
+            }
+        }
+
+        // derived variables read the variables declared above
+        for (unsigned i = 0; i < rhs._imp->variables_names.size(); ++i)
+        {
+            if (rhs._imp->hooks[i])
+            {
+                result.declare_derived(rhs._imp->variables_names[i], rhs._imp->hooks[i]->clone(result));
+            }
         }
 
         for (const auto & x : rhs._imp->alias_map)
@@ -120,7 +167,7 @@ namespace eos
                 return false;
             }
 
-            if (_imp->variables_data[l->second] != rhs._imp->variables_data[r->second])
+            if (_imp->value(l->second) != rhs._imp->value(r->second))
             {
                 return false;
             }
@@ -187,13 +234,13 @@ namespace eos
         auto i(_imp->variables_map.cbegin()), i_end(_imp->variables_map.cend());
         if (i != i_end)
         {
-            result = i->first + '=' + stringify(_imp->variables_data[i->second]);
+            result = i->first + '=' + stringify(_imp->value(i->second));
             ++i;
         }
 
         for (; i != i_end; ++i)
         {
-            result += ", " + i->first + '=' + stringify(_imp->variables_data[i->second]);
+            result += ", " + i->first + '=' + stringify(_imp->value(i->second));
         }
 
         auto j(_imp->alias_map.cbegin()), j_end(_imp->alias_map.cend());
@@ -260,6 +307,7 @@ namespace eos
             int index                 = _imp->variables_data.size();
             _imp->variables_map[name] = index;
             _imp->variables_data.push_back(value);
+            _imp->hooks.push_back(nullptr);
             _imp->variables_names.push_back(name);
             _imp->variables.push_back(KinematicVariable(_imp, index, false));
 
@@ -267,16 +315,40 @@ namespace eos
         }
         else if (regular)
         {
-            _imp->variables_data[i->second] = value;
+            _imp->set(i->second, value);
 
             return KinematicVariable(_imp, i->second, false);
         }
         else // alias
         {
-            _imp->variables_data[j->second] = value;
+            _imp->set(j->second, value);
 
             return KinematicVariable(_imp, j->second, true);
         }
+    }
+
+    KinematicVariable
+    Kinematics::declare_derived(const std::string & name, const std::shared_ptr<const KinematicHook> & hook)
+    {
+        if (this->has(name))
+        {
+            throw InternalError("Cannot declare the derived kinematic variable '" + name + "', since a variable of that name already exists");
+        }
+
+        int index                 = _imp->variables_data.size();
+        _imp->variables_map[name] = index;
+        _imp->variables_data.push_back(std::numeric_limits<double>::quiet_NaN());
+        _imp->hooks.push_back(hook);
+        _imp->variables_names.push_back(name);
+        _imp->variables.push_back(KinematicVariable(_imp, index, false));
+
+        return KinematicVariable(_imp, index, false);
+    }
+
+    std::shared_ptr<const KinematicHook>
+    Kinematics::hook(const std::string & name) const
+    {
+        return _imp->hooks[(*this)[name].id()];
     }
 
     void
@@ -295,11 +367,11 @@ namespace eos
 
         if (regular)
         {
-            _imp->variables_data[i->second] = value;
+            _imp->set(i->second, value);
         }
         else // alias
         {
-            _imp->variables_data[j->second] = value;
+            _imp->set(j->second, value);
         }
     }
 
@@ -332,25 +404,25 @@ namespace eos
 
     KinematicVariable::operator double () const
     {
-        return _imp->variables_data[_index];
+        return _imp->value(_index);
     }
 
     double
     KinematicVariable::operator() () const
     {
-        return _imp->variables_data[_index];
+        return _imp->value(_index);
     }
 
     double
     KinematicVariable::evaluate() const
     {
-        return _imp->variables_data[_index];
+        return _imp->value(_index);
     }
 
     const KinematicVariable &
     KinematicVariable::operator= (const double & value)
     {
-        _imp->variables_data[_index] = value;
+        _imp->set(_index, value);
 
         return *this;
     }
@@ -358,7 +430,7 @@ namespace eos
     void
     KinematicVariable::set(const double & value)
     {
-        _imp->variables_data[_index] = value;
+        _imp->set(_index, value);
     }
 
     const std::string &
