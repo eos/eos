@@ -25,6 +25,7 @@
 #include <eos/utils/expression-kernel-decomposer.hh>
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
+#include <eos/utils/expression-observable.hh>
 #include <eos/utils/expression-printer.hh>
 #include <eos/utils/expression-referenced-names-reader.hh>
 #include <eos/utils/expression-used-kinematics-reader.hh>
@@ -42,6 +43,22 @@
 
 namespace eos::exp
 {
+    namespace
+    {
+        // Nested expressions are cloned rather than made anew, so that they retain their hidden kinematic variables.
+        ObservablePtr
+        remake(const ObservablePtr & observable, const Parameters & parameters, const Kinematics & kinematics, const Options & options)
+        {
+            if (const auto * expression_observable = dynamic_cast<const ExpressionObservable *>(observable.get()))
+            {
+                // the clone keeps the options it was made with, which already include the options passed here
+                return expression_observable->clone(parameters, kinematics);
+            }
+
+            return Observable::make(observable->name(), parameters, kinematics, options);
+        }
+    } // namespace
+
     /*
      * ExpressionReferencedNamesReader
      */
@@ -318,17 +335,8 @@ namespace eos::exp
     ExpressionCloner::ExpressionCloner(const Parameters & parameters, const Kinematics & kinematics, const Options & options) :
         _parameters(parameters),
         _kinematics(kinematics),
-        _options(options),
-        _hidden_alias_index(0)
+        _options(options)
     {
-    }
-
-    std::string
-    ExpressionCloner::next_hidden_alias()
-    {
-        this->_hidden_alias_index++;
-
-        return "internal_variable_" + stringify(_hidden_alias_index);
     }
 
     Expression
@@ -367,13 +375,11 @@ namespace eos::exp
         const auto & kinematics_values  = e.kinematics_specification.values;
         auto         kinematics_aliases = e.kinematics_specification.aliases;
 
-        // Set or alias kinematic specifications
-        for (const auto & value : kinematics_values)
+        // Set or alias kinematic specifications, reusing the hidden variables of the original
+        for (const auto & [variable, hidden_alias] : e.hidden_variables)
         {
-            // Set variables are aliased before being set
-            std::string hidden_alias = this->next_hidden_alias();
-            _kinematics.declare(hidden_alias, value.second);
-            kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
+            _kinematics.declare(hidden_alias, kinematics_values.at(variable));
+            kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
         for (const auto & alias : kinematics_aliases)
         {
@@ -381,11 +387,15 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(e.observable->name(), this->_parameters, this->_kinematics, this->_options + e.observable->options());
-        // Clear alias map
-        _kinematics.clear_aliases();
+        auto observable = remake(e.observable, this->_parameters, this->_kinematics, this->_options + e.observable->options());
 
-        return ObservableExpression(observable, e.kinematics_specification);
+        // Clear aliases installed as part of this expression
+        for (const auto & alias : kinematics_aliases)
+        {
+            _kinematics.remove_alias(alias.first);
+        }
+
+        return ObservableExpression(observable, e.kinematics_specification, e.hidden_variables);
     }
 
     Expression
@@ -420,16 +430,11 @@ namespace eos::exp
         const auto & kinematics_values  = e.kinematics_specification.values;
         auto         kinematics_aliases = e.kinematics_specification.aliases;
 
-        // Set or alias kinematic specifications
-        for (const auto & value : kinematics_values)
+        // Set or alias kinematic specifications, reusing the hidden variables of the original
+        for (const auto & [variable, hidden_alias] : e.hidden_variables)
         {
-            // Set variables are aliased before being set, using a hidden alias
-            // that is unique per sub-observable. Declaring under the original
-            // name would let two sub-observables that fix the same variable
-            // (e.g. 'q2') collide on a single shared kinematic variable.
-            std::string hidden_alias = this->next_hidden_alias();
-            _kinematics.declare(hidden_alias, value.second);
-            kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
+            _kinematics.declare(hidden_alias, kinematics_values.at(variable));
+            kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
         for (const auto & alias : kinematics_aliases)
         {
@@ -437,11 +442,15 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(e.cache.observable(e.id)->name(), this->_parameters, this->_kinematics, this->_options + e.cache.observable(e.id)->options());
-        // Clear alias map
-        _kinematics.clear_aliases();
+        auto observable = remake(e.cache.observable(e.id), this->_parameters, this->_kinematics, this->_options + e.cache.observable(e.id)->options());
 
-        return ObservableExpression(observable, e.kinematics_specification);
+        // Clear aliases installed as part of this expression
+        for (const auto & alias : kinematics_aliases)
+        {
+            _kinematics.remove_alias(alias.first);
+        }
+
+        return ObservableExpression(observable, e.kinematics_specification, e.hidden_variables);
     }
 
     /*
@@ -460,9 +469,16 @@ namespace eos::exp
     std::string
     ExpressionMaker::next_hidden_alias()
     {
-        this->_hidden_alias_index++;
+        // Other expressions, including nested ones, may have declared hidden variables in the same kinematics
+        std::string result;
+        do
+        {
+            this->_hidden_alias_index++;
+            result = "internal_variable_" + stringify(_hidden_alias_index);
+        }
+        while (_kinematics.has(result));
 
-        return "internal_variable_" + stringify(_hidden_alias_index);
+        return result;
     }
 
     Expression
@@ -496,12 +512,14 @@ namespace eos::exp
         auto         kinematics_aliases = e.kinematics_specification.aliases;
 
         // Set or alias kinematic specifications
+        std::map<std::string, std::string> hidden_variables;
         for (const auto & value : kinematics_values)
         {
             // Set variables are aliased before being set
             std::string hidden_alias = this->next_hidden_alias();
             _kinematics.declare(hidden_alias, value.second);
             kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
+            hidden_variables.insert(std::make_pair(value.first, hidden_alias));
         }
         for (const auto & alias : kinematics_aliases)
         {
@@ -523,7 +541,7 @@ namespace eos::exp
             _parameter_user->uses(*observable);
         }
 
-        return ObservableExpression(observable, e.kinematics_specification);
+        return ObservableExpression(observable, e.kinematics_specification, hidden_variables);
     }
 
     Expression
@@ -534,13 +552,11 @@ namespace eos::exp
         const auto & kinematics_values  = e.kinematics_specification.values;
         auto         kinematics_aliases = e.kinematics_specification.aliases;
 
-        // Set or alias kinematic specifications
-        for (const auto & value : kinematics_values)
+        // Set or alias kinematic specifications, reusing the hidden variables of the original
+        for (const auto & [variable, hidden_alias] : e.hidden_variables)
         {
-            // Set variables are aliased before being set
-            std::string hidden_alias = this->next_hidden_alias();
-            _kinematics.declare(hidden_alias, value.second);
-            kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
+            _kinematics.declare(hidden_alias, kinematics_values.at(variable));
+            kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
         for (const auto & alias : kinematics_aliases)
         {
@@ -548,7 +564,7 @@ namespace eos::exp
         }
 
         // Make observable
-        auto observable = Observable::make(e.observable->name(), this->_parameters, this->_kinematics, this->_options + e.observable->options());
+        auto observable = remake(e.observable, this->_parameters, this->_kinematics, this->_options + e.observable->options());
 
         // Clear aliases installed as part of this expression
         for (const auto & alias : kinematics_aliases)
@@ -562,7 +578,7 @@ namespace eos::exp
             _parameter_user->uses(*observable);
         }
 
-        return ObservableExpression(observable, e.kinematics_specification);
+        return ObservableExpression(observable, e.kinematics_specification, e.hidden_variables);
     }
 
     Expression
@@ -827,7 +843,7 @@ namespace eos::exp
             e.observable->kinematics().remove_alias(alias.first);
         }
 
-        return CachedObservableExpression(_cache, id, e.kinematics_specification);
+        return CachedObservableExpression(_cache, id, e.kinematics_specification, e.hidden_variables);
     }
 
     Expression
