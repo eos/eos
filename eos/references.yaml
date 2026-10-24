@@ -2599,6 +2599,10 @@ RHK:2018A:
     id: oai:arXiv.org:1809.06867
   inspire-id: Ropertz:2018stk
   title: A new parametrization for the scalar pion form factors
+RvDV:2026A:
+  authors: Reboud, Méril and van Dyk, Danny and Verzeletti, Matteo
+  title: Unbinned Likelihoods for PDFs with Poles
+  url: https://collaboration.eoshep.org/publications.html#EOS-2026-05
 S:1982A:
   authors: Sirlin, A.
   inspire-id: Sirlin:1981ie
