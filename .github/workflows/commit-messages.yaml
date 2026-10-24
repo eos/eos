@@ -32,7 +32,7 @@ jobs:
             "+refs/pull/$PR_NUMBER/head:refs/remotes/origin/pull/$PR_NUMBER/head"
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.10.13'
+          python-version: '3.12'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
