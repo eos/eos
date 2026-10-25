@@ -111,6 +111,7 @@ class KinematicsTest : public TestCase
                     { "q2_e", 2.0 },
                 };
                 kinematics.alias("q2", "q2_e");
+                TEST_CHECK_THROWS(DuplicateKinematicAliasError, kinematics.alias("q2", "q2_e"));
 
                 TEST_CHECK_EQUAL(2.0, kinematics["q2"].evaluate());
                 TEST_CHECK_EQUAL("q2_e", kinematics["q2"].name());

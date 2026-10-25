@@ -95,7 +95,8 @@ namespace eos
 
             /*!
              * Combine two sets of kinematic variables, where values of the right-hand side take precedence.
-             * Throws InternalError if a derived variable on either side shares its name with a variable on the other side.
+             * Throws InternalError if a derived variable on either side shares its name with a variable on the other side,
+             * and DuplicateKinematicAliasError if both sides hold an alias of the same name.
              */
             Kinematics operator+ (const Kinematics & rhs) const;
 
