@@ -202,18 +202,19 @@ namespace eos
     KinematicVariable
     Kinematics::operator[] (const std::string & name) const
     {
-        auto i(_imp->variables_map.find(name));
-
-        if (_imp->variables_map.end() != i)
-        {
-            return KinematicVariable(_imp, i->second, false);
-        }
-
+        // aliases take precedence over variables of the same name
         auto j(_imp->alias_map.find(name));
 
         if (_imp->alias_map.end() != j)
         {
             return KinematicVariable(_imp, j->second, true);
+        }
+
+        auto i(_imp->variables_map.find(name));
+
+        if (_imp->variables_map.end() != i)
+        {
+            return KinematicVariable(_imp, i->second, false);
         }
 
         throw UnknownKinematicVariableError(name);
@@ -326,17 +327,17 @@ namespace eos
 
             return KinematicVariable(_imp, index, false);
         }
-        else if (regular)
-        {
-            _imp->set(i->second, value);
-
-            return KinematicVariable(_imp, i->second, false);
-        }
-        else // alias
+        else if (alias)
         {
             _imp->set(j->second, value);
 
             return KinematicVariable(_imp, j->second, true);
+        }
+        else // regular
+        {
+            _imp->set(i->second, value);
+
+            return KinematicVariable(_imp, i->second, false);
         }
     }
 
@@ -370,7 +371,7 @@ namespace eos
         const auto i(_imp->variables_map.find(name));
         const auto j(_imp->alias_map.find(name));
         bool       regular    = (_imp->variables_map.end() != i);
-        bool       alias      = (_imp->alias_map.end() == j);
+        bool       alias      = (_imp->alias_map.end() != j);
         bool       undeclared = (! regular) && (! alias);
 
         if (undeclared)
@@ -378,13 +379,13 @@ namespace eos
             throw UnknownKinematicVariableError(name);
         }
 
-        if (regular)
-        {
-            _imp->set(i->second, value);
-        }
-        else // alias
+        if (alias)
         {
             _imp->set(j->second, value);
+        }
+        else // regular
+        {
+            _imp->set(i->second, value);
         }
     }
 
