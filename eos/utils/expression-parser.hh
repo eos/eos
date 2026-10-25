@@ -53,9 +53,9 @@ namespace eos
 
             using KinematicsSpecification = eos::exp::KinematicsSpecification;
 
-            qi::rule<Iterator, KinematicsSpecification(), ascii::space_type>             kinematics;
-            qi::rule<Iterator, std::pair<std::string, std::string>(), ascii::space_type> kinematics_alias;
-            qi::rule<Iterator, std::pair<std::string, double>, ascii::space_type>        kinematics_value;
+            qi::rule<Iterator, KinematicsSpecification(), ascii::space_type>                         kinematics;
+            qi::rule<Iterator, std::pair<std::string, std::string>(), ascii::space_type>             kinematics_alias;
+            qi::rule<Iterator, std::pair<std::string, eos::exp::ExpressionPtr>(), ascii::space_type> kinematics_value;
 
             // Destuctor
             ~ExpressionParser();

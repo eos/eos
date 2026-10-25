@@ -23,6 +23,7 @@
 #include <eos/utils/expression-cloner.hh>
 #include <eos/utils/expression-evaluator.hh>
 #include <eos/utils/expression-kernel-decomposer.hh>
+#include <eos/utils/expression-kinematic-hook.hh>
 #include <eos/utils/expression-kinematic-reader.hh>
 #include <eos/utils/expression-maker.hh>
 #include <eos/utils/expression-observable.hh>
@@ -223,6 +224,16 @@ namespace eos::exp
             }
             _os << "]";
         }
+        if (! e.kinematics_specification.substitutions.empty())
+        {
+            _os << ", substitutions=[";
+            for (auto s = e.kinematics_specification.substitutions.cbegin(), s_begin = s, s_end = e.kinematics_specification.substitutions.cend(); s != s_end; ++s)
+            {
+                _os << (s == s_begin ? "" : ",") << s->first << "=";
+                std::visit(*this, *s->second);
+            }
+            _os << "]";
+        }
         _os << ")";
     }
 
@@ -249,6 +260,16 @@ namespace eos::exp
             for (auto v_end = e.kinematics_specification.values.cend(); v != v_end; ++v)
             {
                 _os << "," << v->first << "=" << v->second;
+            }
+            _os << "]";
+        }
+        if (! e.kinematics_specification.substitutions.empty())
+        {
+            _os << ", substitutions=[";
+            for (auto s = e.kinematics_specification.substitutions.cbegin(), s_begin = s, s_end = e.kinematics_specification.substitutions.cend(); s != s_end; ++s)
+            {
+                _os << (s == s_begin ? "" : ",") << s->first << "=";
+                std::visit(*this, *s->second);
             }
             _os << "]";
         }
@@ -415,7 +436,11 @@ namespace eos::exp
         // Set or alias kinematic specifications, reusing the hidden variables of the original
         for (const auto & [variable, hidden_alias] : e.hidden_variables)
         {
-            _kinematics.declare(hidden_alias, kinematics_values.at(variable));
+            // the kinematics carry the derived variables of substitutions along
+            if (auto value = kinematics_values.find(variable); kinematics_values.end() != value)
+            {
+                _kinematics.declare(hidden_alias, value->second);
+            }
             kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
         AliasGuard guard(_kinematics);
@@ -465,7 +490,11 @@ namespace eos::exp
         // Set or alias kinematic specifications, reusing the hidden variables of the original
         for (const auto & [variable, hidden_alias] : e.hidden_variables)
         {
-            _kinematics.declare(hidden_alias, kinematics_values.at(variable));
+            // the kinematics carry the derived variables of substitutions along
+            if (auto value = kinematics_values.find(variable); kinematics_values.end() != value)
+            {
+                _kinematics.declare(hidden_alias, value->second);
+            }
             kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
         AliasGuard guard(_kinematics);
@@ -548,6 +577,14 @@ namespace eos::exp
             kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
             hidden_variables.insert(std::make_pair(value.first, hidden_alias));
         }
+        for (const auto & [variable, expression] : e.kinematics_specification.substitutions)
+        {
+            // the derived variable reads the kinematics without this specification's aliases
+            std::string hidden_alias = this->next_hidden_alias();
+            _kinematics.declare_derived(hidden_alias, std::make_shared<ExpressionKinematicHook>(expression, _kinematics));
+            kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
+            hidden_variables.insert(std::make_pair(variable, hidden_alias));
+        }
         AliasGuard guard(_kinematics);
         for (const auto & alias : kinematics_aliases)
         {
@@ -577,7 +614,11 @@ namespace eos::exp
         // Set or alias kinematic specifications, reusing the hidden variables of the original
         for (const auto & [variable, hidden_alias] : e.hidden_variables)
         {
-            _kinematics.declare(hidden_alias, kinematics_values.at(variable));
+            // the kinematics carry the derived variables of substitutions along
+            if (auto value = kinematics_values.find(variable); kinematics_values.end() != value)
+            {
+                _kinematics.declare(hidden_alias, value->second);
+            }
             kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
         AliasGuard guard(_kinematics);
@@ -710,6 +751,17 @@ namespace eos::exp
                 alias_set.insert(alias.first);
                 kinematic_set.insert(alias.second);
             }
+            for (const auto & substitution : e.kinematics_specification.substitutions)
+            {
+                kinematic_set.erase(substitution.first);
+            }
+            // only now, since the right-hand sides read the variables without this specification, e.g. in [z=2*{z}]
+            for (const auto & substitution : e.kinematics_specification.substitutions)
+            {
+                ExpressionKinematicReader reader;
+                std::visit(reader, *substitution.second);
+                kinematic_set.insert(reader.kinematics.begin(), reader.kinematics.end());
+            }
 
             this->kinematics.insert(kinematic_set.begin(), kinematic_set.end());
             this->aliases.insert(alias_set.begin(), alias_set.end());
@@ -747,6 +799,14 @@ namespace eos::exp
             kinematic_set.erase(alias.first);
             alias_set.insert(alias.first);
             kinematic_set.insert(alias.second);
+        }
+        for (const auto & substitution : e.kinematics_specification.substitutions)
+        {
+            alias_set.insert(substitution.first);
+
+            ExpressionKinematicReader reader;
+            std::visit(reader, *substitution.second);
+            kinematic_set.insert(reader.kinematics.begin(), reader.kinematics.end());
         }
 
         this->kinematics.insert(kinematic_set.begin(), kinematic_set.end());
@@ -795,6 +855,14 @@ namespace eos::exp
             kinematic_set.erase(alias.first);
             alias_set.insert(alias.first);
             kinematic_set.insert(alias.second);
+        }
+        for (const auto & substitution : e.kinematics_specification.substitutions)
+        {
+            alias_set.insert(substitution.first);
+
+            ExpressionKinematicReader reader;
+            std::visit(reader, *substitution.second);
+            kinematic_set.insert(reader.kinematics.begin(), reader.kinematics.end());
         }
 
         this->kinematics.insert(kinematic_set.begin(), kinematic_set.end());
@@ -1001,6 +1069,8 @@ namespace eos::exp
         {
             this->kinematic_variable_ids.insert(*k);
         }
+
+        this->insert_substituted(e.observable->kinematics(), e.hidden_variables);
     }
 
     void
@@ -1031,6 +1101,21 @@ namespace eos::exp
         for (auto k = kinematic_user.begin_kinematics(), k_end = kinematic_user.end_kinematics(); k != k_end; ++k)
         {
             this->kinematic_variable_ids.insert(*k);
+        }
+
+        this->insert_substituted(e.cache.observable(e.id)->kinematics(), e.hidden_variables);
+    }
+
+    void
+    ExpressionUsedKinematicsReader::insert_substituted(const Kinematics & kinematics, const std::map<std::string, std::string> & hidden_variables)
+    {
+        // the hidden variables of substitutions are derived from further variables, which their hooks report
+        for (const auto & [variable, hidden_alias] : hidden_variables)
+        {
+            if (const auto hook = kinematics.hook(hidden_alias))
+            {
+                this->kinematic_variable_ids.insert(hook->begin_kinematics(), hook->end_kinematics());
+            }
         }
     }
 
@@ -1066,6 +1151,16 @@ namespace eos::exp
         for (const auto & [variable, alias] : spec.aliases)
         {
             if (alias == _offset_variable)
+            {
+                throw ExpressionError("offset variable '" + _offset_variable + "' is used outside of a kernel");
+            }
+        }
+
+        for (const auto & [variable, expression] : spec.substitutions)
+        {
+            ExpressionKinematicReader reader;
+            std::visit(reader, *expression);
+            if (reader.kinematics.contains(_offset_variable))
             {
                 throw ExpressionError("offset variable '" + _offset_variable + "' is used outside of a kernel");
             }

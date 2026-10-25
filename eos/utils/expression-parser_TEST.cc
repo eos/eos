@@ -210,6 +210,28 @@ class ExpressionParserTest : public TestCase
                 TEST_CHECK_EQUAL(std::visit(evaluator, assessable_test), 1.0);
             }
 
+            // testing parsing of kinematic substitutions
+            {
+                ExpressionTest test("<<test::obs1>>[q2_min=2 * 0.5, q2_max={m}^2]");
+
+                std::stringstream out;
+                ExpressionPrinter printer(out);
+                std::visit(printer, *test.e);
+
+                TEST_CHECK(test.completed);
+                TEST_CHECK_EQUAL_STR("ObservableNameExpression(test::obs1, values=[q2_min=1], "
+                                     "substitutions=[q2_max=BinaryExpression(KinematicVariableNameExpression(m) ^ ConstantExpression(2))])",
+                                     out.str());
+
+                ExpressionKinematicReader kinematic_reader;
+                std::visit(kinematic_reader, *test.e);
+                std::set<std::string> expected_kinematic{ "m" };
+                TEST_CHECK_EQUAL(expected_kinematic, kinematic_reader.kinematics);
+
+                TEST_CHECK_THROWS(ExpressionError, ExpressionTest("<<test::obs1>>[q2_max=[[mass::c]] * {m}]"));
+                TEST_CHECK_THROWS(ExpressionError, ExpressionTest("<<test::obs1>>[q2_max=<<mass::c>> * {m}]"));
+            }
+
             // testing parsing and evaluation of observables
             {
                 // test::obs1 is a test observable that requires two kinematic specifications, q2_min and q2_max

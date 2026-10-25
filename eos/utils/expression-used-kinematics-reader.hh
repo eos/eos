@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021      Méril Reboud
- * Copyright (c) 2023-2025 Danny van Dyk
+ * Copyright (c) 2023-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -21,6 +21,9 @@
 
 #include <eos/observable.hh>
 #include <eos/utils/expression-fwd.hh>
+
+#include <map>
+#include <string>
 
 namespace eos::exp
 {
@@ -52,6 +55,9 @@ namespace eos::exp
             void operator() (const KinematicVariableExpression & e);
 
             void operator() (const CachedObservableExpression & e);
+
+        private:
+            void insert_substituted(const Kinematics & kinematics, const std::map<std::string, std::string> & hidden_variables);
     };
 } // namespace eos::exp
 
