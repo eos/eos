@@ -12,6 +12,8 @@
 - **Breaking:** Reject a task argument interpolated into the task's output directory unless it is a single path component without whitespace, and reject file-local names ``.`` and ``..`` in analysis files (issue #1291) (D. van Dyk)
 - Write each task's outputs to a temporary directory that replaces the final one only once the task succeeds, so that a failed task leaves previous results untouched and no incomplete output directory behind; ``sample-mcmc`` now fails on a run time error in lieu of logging it and succeeding (issue #1291) (D. van Dyk)
 
+- Let kinematic aliases take precedence over kinematic variables of the same name, so that a kinematic specification in an expression applies even if the kinematics provide a variable of that name, e.g. in ``<<B->pi::f_+(q2)>> / <<B->pi::f_+(q2)>>[q2=0.0]`` (D. van Dyk)
+
 ### Added
 - Add the ``Bbar^*->D`` and ``Bbar^*->D^*`` tensor form factors in the HQE parametrisation, following [BGJvD:2025A]; the ``FormFactors<VToP>`` and ``FormFactors<VToV>`` interfaces gain ``h_tbar_1`` to ``h_tbar_3`` and ``h_t4`` to ``h_t10`` respectively (D. van Dyk)
 - Add the reference [BGJvD:2025A] and cite it from ``BGLCoefficients`` and ``HQETUnitarityBounds``, which implement its BGL coefficients for the tensor form factors and its ``1^+`` and ``1^-`` tensor bounds (D. van Dyk)
@@ -37,6 +39,9 @@
 
 - Let ``eos.figure.CornerFigure`` display an ``eos.data.Mode``, drawn as a vertical line on the diagonal and as a point off the diagonal; ``eos.data.Mode`` gains a ``lookup_table`` #1302 (D. van Dyk)
 
+- Add kinematic substitutions to EOS expressions: ``<<B->pi::f_+(q2)>>[q2={m}^2]`` evaluates the referenced observable with ``q2`` computed from other kinematic variables through constants and functions; parameters and observables are rejected. The substituted variable is computed whenever it is read, so that it follows changes of the kinematics, also within an ``ObservableCache`` and its clones (D. van Dyk)
+- Add derived kinematic variables to ``eos::Kinematics``, declared through ``Kinematics::declare_derived()`` with a ``KinematicHook`` that computes the value whenever the variable is read; derived variables cannot be set, and follow clones of their kinematics (D. van Dyk)
+
 ### Deprecated
 
 ### Removed
@@ -49,6 +54,11 @@
 - Evaluate the HQET form factors at zero recoil independently of the compiler's use of fused multiply-add: reconstructing ``q2`` from the meson masses reproduces ``w = 1`` only up to rounding, and the auxiliary functions ``r`` and ``Omega`` returned NaN whenever it landed a few ulps below the endpoint (D. van Dyk)
 - Fix a reference leak in the conversion of Python sequences to ``std::vector`` in the Python bindings #1236 (D. van Dyk)
 - Fix ``ObservableCache::clone()`` to register the observables that a cloned expression refers to with the clone, rather than with the original cache #1236 (D. van Dyk)
+
+- Fix fixed kinematic values in expressions, e.g. ``<<B->pi::f_+(q2)>>[q2=1.0]``, which overwrote each other when several expressions, including nested ones, were made on the same kinematics (D. van Dyk)
+- Fix cloning an ``ObservableCache`` that holds an expression whose observables are made through a kinematic alias or a fixed kinematic value, which threw an ``UnknownKinematicVariableError`` (D. van Dyk)
+- Fix ``Kinematics::set()`` for an alias, which threw an ``UnknownKinematicVariableError``, and for an unknown name, which accessed invalid memory (D. van Dyk)
+- Fix ``Kinematics::alias()`` to reject an alias name that is already installed, which it replaced silently; an expression whose kinematic specification renames, fixes, or substitutes a variable that a nested expression handles already now raises an error in lieu of yielding wrong values (D. van Dyk)
 
 
 ## [v1.1] - 2026-09-25
