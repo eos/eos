@@ -79,7 +79,7 @@ namespace eos
 
         kinematics_alias = (as_string[lexeme[*~char_(",=>]")]] >> "=>" >> as_string[lexeme[*~char_(",=]")]]);
 
-        kinematics_value = (as_string[lexeme[*~char_(",=>]")]] >> '=' >> double_);
+        kinematics_value = (as_string[lexeme[*~char_(",=>]")]] >> '=' >> expression);
 
         auto make_function = [](const std::string & f, const std::vector<eos::exp::ExpressionPtr> & args) -> eos::exp::ExpressionPtr
         { return eos::exp::ExpressionPtr(new eos::exp::Expression(std::move(eos::exp::FunctionExpression(f, args)))); };

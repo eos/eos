@@ -120,14 +120,13 @@ namespace eos::exp
     class KinematicsSpecification
     {
         public:
-            std::map<std::string, double>      values;
-            std::map<std::string, std::string> aliases;
+            std::map<std::string, double>        values;
+            std::map<std::string, std::string>   aliases;
+            // Maps each substituted kinematic variable to the expression that its value is derived from.
+            std::map<std::string, ExpressionPtr> substitutions;
 
-            void
-            operator() (const std::pair<std::string, double> & value)
-            {
-                values.insert(value);
-            }
+            // Expressions without kinematic variables fix the variable's value; any other expression substitutes the variable.
+            void operator() (const std::pair<std::string, ExpressionPtr> & value);
 
             void
             operator() (const std::pair<std::string, std::string> & alias)

@@ -18,6 +18,7 @@
  */
 
 #include <eos/observable.hh>
+#include <eos/utils/expression.hh>
 #include <eos/utils/observable_cache.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/units.hh>
@@ -27,6 +28,7 @@
 #include <format>
 #include <iostream>
 #include <ranges>
+#include <set>
 
 using namespace test;
 using namespace eos;
@@ -238,6 +240,85 @@ class ObservableTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(cache_clone[id_1], 3.0, 1e-12);
                 TEST_CHECK_NEARLY_EQUAL(cache_clone[id_2], 4.0, 1e-12);
                 TEST_CHECK_NEARLY_EQUAL(cache_clone[id_product], 12.0, 1e-12);
+            }
+
+            /* Test kinematic substitutions */
+            {
+                auto observables = Observables();
+
+                // P(z) = z (4 - z), so P(1) = 3, P(2) = 4, and P(3) = 3
+                observables.insert("test::P(z=2w)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>>[z=2 * {w}]");
+                observables.insert("test::P(z=2E)", R"()", Unit::None(), Options(), "<<test::P(z=2w)>>[w=>E]");
+                observables.insert("test::P(z=2z)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>>[z=2 * {z}]");
+
+                const auto kinematic_variables = [&observables](const char * name)
+                {
+                    const auto entry = observables[name];
+                    return std::set<std::string>(entry->begin_kinematic_variables(), entry->end_kinematic_variables());
+                };
+                TEST_CHECK_EQUAL(kinematic_variables("test::P(z=2w)"), std::set<std::string>{ "w" });
+                TEST_CHECK_EQUAL(kinematic_variables("test::P(z=2E)"), std::set<std::string>{ "E" });
+                TEST_CHECK_EQUAL(kinematic_variables("test::P(z=2z)"), std::set<std::string>{ "z" });
+
+                TEST_CHECK_THROWS(exp::ExpressionError,
+                                  observables.insert("test::P(z=c)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>>[z=[[mass::c]] * {w}]"));
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k{
+                    { "E", 1.5 },
+                    { "w", 1.0 },
+                    { "z", 0.5 },
+                };
+                Options o;
+
+                auto obs_w = Observable::make("test::P(z=2w)", p, k, o);
+                auto obs_E = Observable::make("test::P(z=2E)", p, k, o);
+                auto obs_z = Observable::make("test::P(z=2z)", p, k, o);
+
+                TEST_CHECK_NEARLY_EQUAL(obs_w->evaluate(), 4.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(obs_E->evaluate(), 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(obs_z->evaluate(), 3.0, 1e-12);
+
+                // the observables report the variables that their substitutions read
+                const auto used_kinematics = [](const ObservablePtr & observable)
+                {
+                    const KinematicUser & user = static_cast<const KinematicUser &>(*observable);
+                    return std::set<KinematicVariable::Id>(user.begin_kinematics(), user.end_kinematics());
+                };
+                TEST_CHECK(used_kinematics(obs_w).contains(k["w"].id()));
+                TEST_CHECK(used_kinematics(obs_E).contains(k["E"].id()));
+                TEST_CHECK(used_kinematics(obs_z).contains(k["z"].id()));
+
+                k.set("w", 0.5);
+                TEST_CHECK_NEARLY_EQUAL(obs_w->evaluate(), 3.0, 1e-12);
+
+                // a clone follows its own kinematics
+                auto clone = obs_w->clone();
+                clone->kinematics().set("w", 1.5);
+                TEST_CHECK_NEARLY_EQUAL(clone->evaluate(), 3.0, 1e-12);
+                k.set("w", 1.0);
+                TEST_CHECK_NEARLY_EQUAL(obs_w->evaluate(), 4.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(clone->evaluate(), 3.0, 1e-12);
+
+                // the cache reads the substituted variable when it is updated
+                ObservableCache cache(p);
+                auto            id_w = cache.add(obs_w);
+                auto            id_E = cache.add(obs_E);
+
+                TEST_CHECK_NO_THROW(cache.update());
+                TEST_CHECK_NEARLY_EQUAL(cache[id_w], 4.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache[id_E], 3.0, 1e-12);
+
+                k.set("w", 0.5);
+                k.set("E", 1.0);
+                TEST_CHECK_NO_THROW(cache.update());
+                TEST_CHECK_NEARLY_EQUAL(cache[id_w], 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache[id_E], 4.0, 1e-12);
+
+                ObservableCache cache_clone = cache.clone(p.clone());
+                TEST_CHECK_NO_THROW(cache_clone.update());
+                TEST_CHECK_NEARLY_EQUAL(cache_clone[id_w], 3.0, 1e-12);
+                TEST_CHECK_NEARLY_EQUAL(cache_clone[id_E], 4.0, 1e-12);
             }
 
             /* Test insertion of a problematic observable */

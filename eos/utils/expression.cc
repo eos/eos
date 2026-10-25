@@ -17,6 +17,9 @@
  */
 
 #include <eos/utils/exception.hh>
+#include <eos/utils/expression-evaluator.hh>
+#include <eos/utils/expression-kinematic-reader.hh>
+#include <eos/utils/expression-referenced-names-reader.hh>
 #include <eos/utils/expression.hh>
 #include <eos/utils/stringify.hh>
 
@@ -29,6 +32,28 @@ namespace eos::exp
     ExpressionError::ExpressionError(const std::string & msg) :
         eos::Exception("Invalid expression statement (" + msg + ")")
     {
+    }
+
+    void
+    KinematicsSpecification::operator() (const std::pair<std::string, ExpressionPtr> & value)
+    {
+        ExpressionReferencedNamesReader reader;
+        std::visit(reader, *value.second);
+        if ((! reader.observable_names.empty()) || (! reader.parameter_names.empty()))
+        {
+            throw ExpressionError("the substitution of kinematic variable '" + value.first + "' may only depend on kinematic variables, constants, and functions");
+        }
+
+        ExpressionKinematicReader kinematic_reader;
+        std::visit(kinematic_reader, *value.second);
+        if (kinematic_reader.kinematics.empty())
+        {
+            ExpressionEvaluator evaluator;
+            values.insert(std::make_pair(value.first, std::visit(evaluator, *value.second)));
+            return;
+        }
+
+        substitutions.insert(value);
     }
 
     double
