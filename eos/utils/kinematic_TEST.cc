@@ -104,6 +104,30 @@ class KinematicsTest : public TestCase
                 TEST_CHECK_EQUAL(1.0, alias);
             }
 
+            // Aliases take precedence over variables of the same name
+            {
+                Kinematics kinematics{
+                    {   "q2", 1.0 },
+                    { "q2_e", 2.0 },
+                };
+                kinematics.alias("q2", "q2_e");
+
+                TEST_CHECK_EQUAL(2.0, kinematics["q2"].evaluate());
+                TEST_CHECK_EQUAL("q2_e", kinematics["q2"].name());
+
+                kinematics.set("q2", 3.0);
+                TEST_CHECK_EQUAL(3.0, kinematics["q2_e"].evaluate());
+
+                kinematics.declare("q2", 4.0);
+                TEST_CHECK_EQUAL(4.0, kinematics["q2_e"].evaluate());
+
+                TEST_CHECK_THROWS(UnknownKinematicVariableError, kinematics.set("q2_mu", 5.0));
+
+                kinematics.remove_alias("q2");
+                TEST_CHECK_EQUAL(1.0, kinematics["q2"].evaluate());
+                TEST_CHECK_EQUAL(4.0, kinematics["q2_e"].evaluate());
+            }
+
             // Testing has(), for variables as well as for aliases
             {
                 Kinematics kinematics{

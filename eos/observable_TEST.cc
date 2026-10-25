@@ -169,6 +169,26 @@ class ObservableTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(obs->evaluate(), cache[obs_id], 1e-3);
             }
 
+            /* Test a fixed kinematic value of a variable that the kinematics also provide */
+            {
+                auto observables = Observables();
+
+                // P(z) = z (4 - z), so P(1) = 3 and P(2) = 4
+                observables.insert("test::P(z)/P(1)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>> / <<TestLegendre1D::UnnormalizedPDF(z)>>[z=1.0]");
+
+                Parameters p = Parameters::Defaults();
+                Kinematics k{
+                    { "z", 2.0 }
+                };
+                Options o;
+
+                auto obs = Observable::make("test::P(z)/P(1)", p, k, o);
+                TEST_CHECK_NEARLY_EQUAL(obs->evaluate(), 4.0 / 3.0, 1e-12);
+
+                k.set("z", 1.0);
+                TEST_CHECK_NEARLY_EQUAL(obs->evaluate(), 1.0, 1e-12);
+            }
+
             /* Test fixed kinematic values of several, also nested, expressions that share one set of kinematics */
             {
                 auto observables = Observables();
