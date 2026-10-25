@@ -40,11 +40,48 @@
 #include <array>
 #include <iostream>
 #include <set>
+#include <vector>
 
 namespace eos::exp
 {
     namespace
     {
+        // Removes the aliases installed through it when leaving its scope, also by an exception.
+        class AliasGuard
+        {
+            private:
+                Kinematics _kinematics;
+
+                std::vector<std::string> _aliases;
+
+            public:
+                AliasGuard(const Kinematics & kinematics) :
+                    _kinematics(kinematics)
+                {
+                }
+
+                ~AliasGuard()
+                {
+                    for (const auto & alias : _aliases)
+                    {
+                        try
+                        {
+                            _kinematics.remove_alias(alias);
+                        }
+                        catch (const UnknownKinematicAliasError &)
+                        {
+                        }
+                    }
+                }
+
+                void
+                install(const std::string & alias, const std::string & name)
+                {
+                    _kinematics.alias(alias, name);
+                    _aliases.push_back(alias);
+                }
+        };
+
         // Nested expressions are cloned rather than made anew, so that they retain their hidden kinematic variables.
         ObservablePtr
         remake(const ObservablePtr & observable, const Parameters & parameters, const Kinematics & kinematics, const Options & options)
@@ -381,19 +418,14 @@ namespace eos::exp
             _kinematics.declare(hidden_alias, kinematics_values.at(variable));
             kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
+        AliasGuard guard(_kinematics);
         for (const auto & alias : kinematics_aliases)
         {
-            _kinematics.alias(alias.first, alias.second);
+            guard.install(alias.first, alias.second);
         }
 
         // Make observable
         auto observable = remake(e.observable, this->_parameters, this->_kinematics, this->_options + e.observable->options());
-
-        // Clear aliases installed as part of this expression
-        for (const auto & alias : kinematics_aliases)
-        {
-            _kinematics.remove_alias(alias.first);
-        }
 
         return ObservableExpression(observable, e.kinematics_specification, e.hidden_variables);
     }
@@ -436,19 +468,14 @@ namespace eos::exp
             _kinematics.declare(hidden_alias, kinematics_values.at(variable));
             kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
+        AliasGuard guard(_kinematics);
         for (const auto & alias : kinematics_aliases)
         {
-            _kinematics.alias(alias.first, alias.second);
+            guard.install(alias.first, alias.second);
         }
 
         // Make observable
         auto observable = remake(e.cache.observable(e.id), this->_parameters, this->_kinematics, this->_options + e.cache.observable(e.id)->options());
-
-        // Clear aliases installed as part of this expression
-        for (const auto & alias : kinematics_aliases)
-        {
-            _kinematics.remove_alias(alias.first);
-        }
 
         return ObservableExpression(observable, e.kinematics_specification, e.hidden_variables);
     }
@@ -521,19 +548,14 @@ namespace eos::exp
             kinematics_aliases.insert(std::make_pair(value.first, hidden_alias));
             hidden_variables.insert(std::make_pair(value.first, hidden_alias));
         }
+        AliasGuard guard(_kinematics);
         for (const auto & alias : kinematics_aliases)
         {
-            _kinematics.alias(alias.first, alias.second);
+            guard.install(alias.first, alias.second);
         }
 
         // Make observable
         auto observable = Observable::make(e.observable_name, this->_parameters, this->_kinematics, this->_options);
-
-        // Clear aliases installed as part of this expression
-        for (const auto & alias : kinematics_aliases)
-        {
-            _kinematics.remove_alias(alias.first);
-        }
 
         // Record the used parameters
         if (_parameter_user)
@@ -558,19 +580,14 @@ namespace eos::exp
             _kinematics.declare(hidden_alias, kinematics_values.at(variable));
             kinematics_aliases.insert(std::make_pair(variable, hidden_alias));
         }
+        AliasGuard guard(_kinematics);
         for (const auto & alias : kinematics_aliases)
         {
-            _kinematics.alias(alias.first, alias.second);
+            guard.install(alias.first, alias.second);
         }
 
         // Make observable
         auto observable = remake(e.observable, this->_parameters, this->_kinematics, this->_options + e.observable->options());
-
-        // Clear aliases installed as part of this expression
-        for (const auto & alias : kinematics_aliases)
-        {
-            _kinematics.remove_alias(alias.first);
-        }
 
         // Record the used parameters
         if (_parameter_user)
@@ -830,18 +847,13 @@ namespace eos::exp
     {
         const auto & kinematics_aliases = e.kinematics_specification.aliases;
 
+        AliasGuard guard(e.observable->kinematics());
         for (const auto & alias : kinematics_aliases)
         {
-            e.observable->kinematics().alias(alias.first, alias.second);
+            guard.install(alias.first, alias.second);
         }
 
         auto id = _cache.add(e.observable);
-
-        // Clear aliases installed as part of this expression
-        for (const auto & alias : kinematics_aliases)
-        {
-            e.observable->kinematics().remove_alias(alias.first);
-        }
 
         return CachedObservableExpression(_cache, id, e.kinematics_specification, e.hidden_variables);
     }

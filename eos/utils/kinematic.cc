@@ -271,7 +271,7 @@ namespace eos
     Kinematics::alias(const std::string & alias, const std::string & name)
     {
         const auto i(_imp->variables_map.find(name));
-        const auto j(_imp->alias_map.find(name));
+        const auto j(_imp->alias_map.find(alias));
         bool       name_exists  = (_imp->variables_map.end() != i);
         bool       alias_exists = (_imp->alias_map.end() != j);
 

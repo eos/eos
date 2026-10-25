@@ -187,6 +187,16 @@ class ObservableTest : public TestCase
 
                 k.set("z", 1.0);
                 TEST_CHECK_NEARLY_EQUAL(obs->evaluate(), 1.0, 1e-12);
+
+                // an outer reference must not rename a variable that the inner expression fixes already
+                observables.insert("test::P(z=3)", R"()", Unit::None(), Options(), "<<TestLegendre1D::UnnormalizedPDF(z)>>[z=3.0]");
+                observables.insert("test::P(z=3)[z=w]", R"()", Unit::None(), Options(), "<<test::P(z=3)>>[z=>w]");
+
+                Kinematics k_w{
+                    { "w", 1.0 }
+                };
+                TEST_CHECK_THROWS(DuplicateKinematicAliasError, Observable::make("test::P(z=3)[z=w]", p, k_w, o));
+                TEST_CHECK(! k_w.has("z"));
             }
 
             /* Test fixed kinematic values of several, also nested, expressions that share one set of kinematics */
