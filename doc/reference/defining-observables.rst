@@ -65,11 +65,12 @@ When more than one observable appears in the expression, it is sometimes useful 
 i.e., create an alias for the name of the kinematic variable.
 For example, when defining a lepton-flavour universality observable such as the ratio of branching fractions ``<<B->Dlnu::BR;l=tau>> / <<B->Dlnu::BR;l=mu>>``,
 the kinematic variable ``q2`` should be renamed to ``q2_tau`` and ``q2_mu`` for the two observables, respectively, to avoid any ambiguity.
-Moreover, phenomenological application sometimes involve the evaluation of an observable at a fixed value of a kinematic variable.
-Both types of modification to the kinematic variables of a referenced observable are supported.
+Moreover, phenomenological application sometimes involve the evaluation of an observable at a fixed value of a kinematic variable,
+or as a function of a different kinematic variable.
+All of these modifications to the kinematic variables of a referenced observable are supported.
 They are achieved by appending a kinematic specification to the reference of an EOS observable: ``<<...>>[...]``.
 
-Two types of kinematics specification are supported
+Three types of kinematics specification are supported
 
   * the ``=>`` operator renames the kinematic variable on its left-hand side to the name on its right-hand side.
     For example, the expression ``<<B_u->lnu::BR@l=mu>>[q2=>q2_mu] / <<B_u->lnu::BR@l=e>>[q2=>q2_e]`` expects
@@ -82,12 +83,28 @@ Two types of kinematics specification are supported
     fixed to the value ``0.1``. The same kinematic variable can be set to different values in a single expression, i.e.
     ``<<B->pi::f_+(q2)>>[q2=1.0] +  <<B->pi::f_0(q2)>>[q2=2.0]`` is also a valid expression.
 
-Note that both types of specifications can be combined in comma-separated list in an arbitrary order, for example ``[q2_min=1.0,q2_max=>q2_max_mu]``.
+  * the ``=`` operator followed by an expression substitutes a kinematic variable by a function of other kinematic variables.
+    For example, the expression ``<<B->pi::f_+(q2)>>[q2={m}^2]`` expects only one kinematic variable ``m``,
+    and evaluates the form factor at ``q2`` equal to the square of ``m``.
+    The expression on the right-hand side of ``=`` may only contain kinematic variables, constants, and functions;
+    parameters and observables are rejected.
+    The kinematic variables in this expression are those of the newly defined observable, not those of the referenced observable.
+    For example, in ``<<B->pi::f_+(q2)>>[q2=2 * {q2}]``, the ``q2`` on the left-hand side of ``=`` is the kinematic variable of the form factor,
+    while the ``{q2}`` on the right-hand side is the kinematic variable of the newly defined observable.
+    This expression therefore evaluates the form factor at twice the value of the new observable's ``q2``.
+
+Note that all types of specifications can be combined in comma-separated list in an arbitrary order, for example ``[q2_min=1.0,q2_max=>q2_max_mu]``.
+A kinematic specification applies even if the kinematic variables of the newly defined observable include a variable of the same name.
+For example, the expression ``<<B->pi::f_+(q2)>> / <<B->pi::f_+(q2)>>[q2=0.0]`` depends on ``q2`` through its numerator only.
+
+A substitution changes the variable, but not the measure of a density.
+For example, to express the differential branching ratio of :math:`B\to K\mu^+\mu^-` in the dilepton mass ``m_ll``, the Jacobian must
+be included explicitly: ``<<B->Kll::dBR/ds;l=mu>>[q2={m_ll}^2] * 2 * {m_ll}``.
 
 Note also that the references to observables can be nested: an observable defined by an expression can itself be referenced in a further expression.
-In that case, the kinematic specification of the outer reference must not rename or fix a kinematic variable that the expression of the inner observable already renames or fixes.
+In that case, the kinematic specification of the outer reference must not rename, fix, or substitute a kinematic variable that the expression of the inner observable already renames, fixes, or substitutes.
 For example, if ``ex::f(q2=1)`` is defined by the expression ``<<B->pi::f_+(q2)>>[q2=1.0]``, then neither ``<<ex::f(q2=1)>>[q2=>q2_e]``
-nor ``<<ex::f(q2=1)>>[q2=2.0]`` is supported.
+nor ``<<ex::f(q2=1)>>[q2=2.0]`` is supported; making an observable from either expression raises an error.
 
 Making a new Observable known
 =============================
