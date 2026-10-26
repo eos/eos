@@ -36,6 +36,7 @@
 - Add the ``eos-analysis`` task ``model-comparison``, which compares a group of posteriors sharing the same likelihood by their nested-sampling evidences: it corrects for differing uniform or transform priors of shared parameters and records their log prior volumes, grades all pairwise Bayes factors on Jeffreys' scale, and flags pairs whose conclusion is unstable under the evidence uncertainties or the prior-volume correction. The result is stored as the new ``eos.data.ModelComparison``, exposed to reports through ``AnalysisData.model_comparisons``, and shown at the top of the example report template (issue #1282) (D. van Dyk)
 
 - Let ``eos.figure.CornerFigure`` display an ``eos.data.Mode``, drawn as a vertical line on the diagonal and as a point off the diagonal; ``eos.data.Mode`` gains a ``lookup_table`` #1302 (D. van Dyk)
+- Add external prior types to ``eos.Analysis``, dispatched through ``eos.Analysis.external_prior_types``, and the ``nabu`` prior type for analysis files, which uses a normalising flow stored as an ``eos.data.NabuLikelihood`` as a prior; its ``path`` is resolved relative to the base directory, and its varied parameters are taken from the flow's ``description.yaml`` (D. van Dyk)
 
 ### Deprecated
 
@@ -43,6 +44,7 @@
 - **Breaking:** Remove the C++ base class ``eos::Density``; ``eos::SignalPDF`` no longer offers ``begin()``/``end()``, and its two ``clone()`` overloads are replaced by ``clone(const ObservableCache &)``, which returns a ``SignalPDFPtr`` #1303 (D. van Dyk)
 
 ### Fixed
+- Fix the HTML representations of ``eos.Analysis`` and ``eos.AnalysisFile`` for constraint and transform priors (D. van Dyk)
 - Fix ``eos.set_log_level`` to set the level of the default log handler rather than that of the logger, so that DEBUG messages are shown; correct the FAQ on setting the log level, which caused messages to be printed twice #1290 (D. van Dyk)
 - Use the mass parameters, rather than compile-time constants, when converting ``q2`` to ``w`` in the ``V->V`` HQE form factors, as the other three transitions already did; setting ``mass::B_d^*`` or ``mass::D_u^*`` previously had no effect on the ``Bbar^*->D^*`` form factors (D. van Dyk)
 - Correct the normalization constants ``K`` passed to the outer function ``_phi`` for the tensor form factors ``t_1``, ``t_2``, ``t_23``, and ``f_t`` in the ``BGL1997``-like parametrization (D. van Dyk)
