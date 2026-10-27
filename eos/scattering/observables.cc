@@ -237,6 +237,36 @@ namespace eos
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDm)),
 
+                    make_cacheable_observable("e^+e^-->D_s^+D_s^-::sigma(E)",
+                                              R"(\sigma(e^+e^- \to D_s^+ D_s^-))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare, "E"),
+                                              evaluate(&EEToCCBar::sigma_eetoDsDs)),
+
+                    make_cacheable_observable("D_s^+D_s^-::Re{rho}(Re{E},Im{E})",
+                                              R"(\mathrm{Re}\rho_{D_s^+ D_s^-}(E)))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::rho_DsDs)),
+
+                    make_cacheable_observable("e^+e^-->D_s^+D_s^-::Re{T^II}(Re{E},Im{E})",
+                                              R"(\mathrm{Re}T^{II}(e^+e^- \to D_s^+ D_s^-))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::re_T_II_eetoDsDs)),
+
+                    make_cacheable_observable("e^+e^-->D_s^+D_s^-::Im{T^II}(Re{E},Im{E})",
+                                              R"(\mathrm{Im}T^{II}(e^+e^- \to D_s^+ D_s^-))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::im_T_II_eetoDsDs)),
+
+                    make_cacheable_observable("e^+e^-->D_s^+D_s^-::sigma(Re{E},Im{E})",
+                                              R"(\sigma(e^+e^- \to D_s^+ D_s^-))",
+                                              Unit::InverseGeV2(),
+                                              cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
+                                              evaluate(&EEToCCBar::sigma_eetoDsDs)),
+
                 }
 
         );
