@@ -56,40 +56,40 @@ groups:
           comments: 'cf. [PDG:2012A], p. 39'
       # D meson masses
       'mass::D_d' :
-          central: +1.86965
-          min:     +1.86960
-          max:     +1.86970
+          central: +1.86966
+          min:     +1.86961
+          max:     +1.86971
           latex:   'm_{D^\pm}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D^+' :
-          central: +1.86965
-          min:     +1.86960
-          max:     +1.86970
+          central: +1.86966
+          min:     +1.86961
+          max:     +1.86971
           latex:   'm_{D^\pm}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D_u' :
-          central: +1.86483
-          min:     +1.86478
+          central: +1.86484
+          min:     +1.86480
           max:     +1.86488
           latex:   'm_{D^0}'
           unit:     'GeV'
-          comments: 'cf. [PDG:2016A]'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D^0' :
-          central: +1.86483
-          min:     +1.86478
+          central: +1.86484
+          min:     +1.86480
           max:     +1.86488
           latex:   'm_{D^0}'
           unit:     'GeV'
-          comments: 'cf. [PDG:2016A]'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D_s' :
-          central: +1.96834
-          min:     +1.96827
-          max:     +1.96841
+          central: +1.96835
+          min:     +1.96828
+          max:     +1.96842
           latex:   'm_{D_s}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D_s,0' :
           central: +2.318
           min:     +2.318
@@ -186,26 +186,26 @@ groups:
           comments: 'cf. [PDG:2012A], p. 45'
       # D meson masses
       'mass::D_d^*' :
-          central: +2.01026
-          min:     +2.01021
+          central: +2.01027
+          min:     +2.01023
           max:     +2.01031
           latex:   'm_{D^{\pm*}}'
           unit:     'GeV'
-          comments: 'cf. [PDG:2016A]'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D_u^*' :
-          central: +2.00685
-          min:     +2.00680
-          max:     +2.00690
+          central: +2.00686
+          min:     +2.00681
+          max:     +2.00691
           latex:   'm_{D^{0*}}'
           unit:     'GeV'
-          comments: 'cf. [PDG:2016A]'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D_s^*' :
           central: +2.1122
           min:     +2.1118
           max:     +2.1126
           latex:   'm_{D_s^*}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::D_s,1' :
           central: +2.460
           min:     +2.460
@@ -250,42 +250,42 @@ groups:
           max:     +3.096906
           latex:   'm_{J/\psi}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::psi(2S)' :
-          central: +3.68610
-          min:     +3.68604
-          max:     +3.68616
+          central: +3.686097
+          min:     +3.686086
+          max:     +3.686108
           latex:   'm_{\psi(2S)}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::psi(3770)' :
           central: +3.7737
-          min:     +3.7733
-          max:     +3.7741
+          min:     +3.7730
+          max:     +3.7744
           latex:   'm_{\psi(3770)}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::psi(4040)' :
-          central: +4.039
-          min:     +4.038
-          max:     +4.040
+          central: +4.040
+          min:     +4.036
+          max:     +4.044
           latex:   'm_{\psi(4040)}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::psi(4160)' :
           central: +4.191
           min:     +4.186
           max:     +4.196
           latex:   'm_{\psi(4160)}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
       'mass::psi(4415)' :
-          central: +4.421
-          min:     +4.417
-          max:     +4.425
+          central: +4.415
+          min:     +4.410
+          max:     +4.420
           latex:   'm_{\psi(4415)}'
           unit:     'GeV'
-          comments: 'cf. [PDG-Live], December 2020'
+          comments: 'cf. [PDG-Live], October 2026'
   # }}}
 
   # Baryon Masses
