@@ -262,7 +262,6 @@ class eetoccbarTest : public TestCase
 
             {
                 // The D^* Dbar + h.c. channels, coupled to the resonances.
-                // TODO: populate with reference values.
                 Parameters p                             = Parameters::Defaults();
                 p["ee->ccbar::g0(psi(2S),e^+e^-)"]       = 10.0;
                 p["ee->ccbar::g0(psi(3770),e^+e^-)"]     = 12.0;
@@ -270,6 +269,14 @@ class eetoccbarTest : public TestCase
                 p["ee->ccbar::g0(psi(3770),D^*0Dbar^0)"] = 0.4;
                 p["ee->ccbar::g0(psi(2S),D^*+D^-)"]      = 0.5;
                 p["ee->ccbar::g0(psi(3770),D^*+D^-)"]    = 0.6;
+
+                // Set all cst to zero
+                p["ee->ccbar::c(e^+e^-,e^+e^-)"]         = 0.0;
+                p["ee->ccbar::c(e^+e^-,D^*0Dbar^0)"]     = 0.0;
+                p["ee->ccbar::c(e^+e^-,D^*+D^-)"]        = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^0,D^*0Dbar^0)"] = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^0,D^*+D^-)"]    = 0.0;
+                p["ee->ccbar::c(D^*+D^-,D^*+D^-)"]       = 0.0;
 
                 p["ee->ccbar::q_0"] = 0.5;
 
@@ -299,18 +306,17 @@ class eetoccbarTest : public TestCase
                 KMatrix<3, 2> KMatrix32({ ee, Dst0D0bar, DstpDm }, { psi2S, psi3770 }, bkgcst, "ee->ccbar");
 
                 // s = 20 lies above both thresholds, s = 14 below them
-                [[maybe_unused]] const auto rho_open     = Dst0D0bar->rho(20.0);
-                [[maybe_unused]] const auto rho_closed   = Dst0D0bar->rho(14.0);
-                [[maybe_unused]] const auto cm_open      = Dst0D0bar->chew_mandelstam(20.0);
-                [[maybe_unused]] const auto cm_closed    = Dst0D0bar->chew_mandelstam(14.0);
-                [[maybe_unused]] const auto tmatrix_open = KMatrix32.tmatrix_row(0, 20.0);
+                const auto rho_open     = Dst0D0bar->rho(20.0);
+                const auto cm_open      = Dst0D0bar->chew_mandelstam(20.0);
+                const auto cm_closed    = Dst0D0bar->chew_mandelstam(14.0);
+                const auto tmatrix_open = KMatrix32.tmatrix_row(0, 20.0);
 
-                // TEST_CHECK_RELATIVE_ERROR(std::abs(rho_open), ?, eps);
-                // TEST_CHECK_RELATIVE_ERROR(real(cm_open), ?, eps);
-                // TEST_CHECK_RELATIVE_ERROR(imag(cm_open), ?, eps);
-                // TEST_CHECK_RELATIVE_ERROR(real(cm_closed), ?, eps);
-                // TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), ?, eps);
-                // TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), ?, eps);
+                TEST_CHECK_RELATIVE_ERROR(std::abs(rho_open), 0.0099522, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(cm_open), 0.000793319, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(cm_open), 0.00829489, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(cm_closed), -0.00190795, eps);
+                TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.3089342, eps);
+                TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0681416, eps);
             }
         }
 } eetoccbar_test;

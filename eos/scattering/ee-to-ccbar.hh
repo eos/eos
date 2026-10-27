@@ -46,6 +46,9 @@ namespace eos
     5   D+   D-       PP (P)       3       4 (isospin)
     6   D*0  D0bar    VP (P)       3       -
     7   D*+  D-       VP (P)       3       6 (isospin)
+
+    Here, channels 6 and 7 stand for the properly normalised C=-1 eigenstates,
+    ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
     */
 
     // std::atan has branch points at +-i. Channel::chew_mandelstam evaluates
@@ -212,7 +215,6 @@ namespace eos
             const double          pi = M_PI;
             const complex<double> i  = complex<double>(0.0, 1.0);
 
-            // TODO: settle the normalization of the + h.c. combination.
             complex<double>
             rho(const complex<double> & s)
             {
