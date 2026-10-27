@@ -347,5 +347,21 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.3089342, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0681416, eps);
             }
+
+            {
+                // The D_s^+ D_s^- channel is closed below threshold
+                Parameters p                             = Parameters::Defaults();
+                p["ee->ccbar::q_0"]                      = 0.5;
+                p["mass::D_s"]                           = 1.96835;
+                p["mass::psi(3770)"]                     = 3.7737;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]     = 0.05;
+                p["ee->ccbar::g0(psi(3770),D_s^+D_s^-)"] = 1.0;
+
+                EEToCCBar c(p, Options{});
+
+                const double threshold = 2.0 * 1.96835;
+                TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDsDs(c.prepare(threshold - 0.01)), 0.0, 1.0e-15);
+                TEST_CHECK(c.sigma_eetoDsDs(c.prepare(threshold + 0.01)) > 0.0);
+            }
         }
 } eetoccbar_test;
