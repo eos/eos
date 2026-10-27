@@ -63,6 +63,13 @@ class eetoccbarTest : public TestCase
                 // Channels effective momentum
                 p["ee->ccbar::q_0"] = 0.5;
 
+                // Masses
+                p["mass::psi(2S)"]   = 3.68610;
+                p["mass::psi(3770)"] = 3.7737;
+                p["mass::e"]         = 5.10999e-4;
+                p["mass::D^0"]       = 1.86483;
+                p["mass::D^+"]       = 1.86965;
+
                 // Build K Matrix
                 auto psi2S   = std::make_shared<CharmoniumResonance<3, 2>>("psi2S", p["mass::psi(2S)"]);
                 auto psi3770 = std::make_shared<CharmoniumResonance<3, 2>>("psi3770", p["mass::psi(3770)"]);
@@ -145,6 +152,12 @@ class eetoccbarTest : public TestCase
                 // Channels effective momentum
                 p["ee->ccbar::q_0"] = 0.5;
 
+                // Masses
+                p["mass::psi(2S)"] = 3.68610;
+                p["mass::e"]       = 5.10999e-4;
+                p["mass::D^0"]     = 1.86483;
+                p["mass::D^+"]     = 1.86965;
+
                 // Build K Matrix
                 auto psi2S   = std::make_shared<CharmoniumResonance<5, 2>>("psi2S", p["mass::psi(2S)"]);
                 auto psi3770 = std::make_shared<CharmoniumResonance<5, 2>>("psi3770", p["mass::psi(3770)"]);
@@ -218,6 +231,12 @@ class eetoccbarTest : public TestCase
                 // Channels effective momentum
                 p["ee->ccbar::q_0"] = 0.5;
 
+                // Masses
+                p["mass::psi(2S)"] = 3.68610;
+                p["mass::e"]       = 5.10999e-4;
+                p["mass::D^0"]     = 1.86483;
+                p["mass::D^+"]     = 1.86965;
+
                 Options   oo;
                 EEToCCBar c(p, oo);
 
@@ -278,7 +297,17 @@ class eetoccbarTest : public TestCase
                 p["ee->ccbar::c(D^*0Dbar^0,D^*+D^-)"]    = 0.0;
                 p["ee->ccbar::c(D^*+D^-,D^*+D^-)"]       = 0.0;
 
+                // Channels effective momentum
                 p["ee->ccbar::q_0"] = 0.5;
+
+                // Masses
+                p["mass::psi(2S)"]   = 3.68610;
+                p["mass::psi(3770)"] = 3.7737;
+                p["mass::e"]         = 5.10999e-4;
+                p["mass::D^0"]       = 1.86483;
+                p["mass::D^+"]       = 1.86965;
+                p["mass::D_u^*"]     = 2.00685;
+                p["mass::D_d^*"]     = 2.01026;
 
                 auto psi2S   = std::make_shared<CharmoniumResonance<3, 2>>("psi2S", p["mass::psi(2S)"]);
                 auto psi3770 = std::make_shared<CharmoniumResonance<3, 2>>("psi3770", p["mass::psi(3770)"]);
