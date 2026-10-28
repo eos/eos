@@ -45,7 +45,8 @@ namespace eos
             UsedParameter m_Dstp;
             UsedParameter m_Ds;
 
-            bool assume_isospin;
+            // assume_symmetry can take values "none", "isospin", and "su3f" and has default value "none"
+            std::string assume_symmetry;
 
             inline static const std::array<std::string, 3> resonance_names = { "J/psi", "psi(2S)", "psi(3770)" };
 
@@ -127,11 +128,22 @@ namespace eos
             long unsigned
             _filter_channel_index(Channels channel)
             {
-                if (assume_isospin)
+                if (assume_symmetry == "isospin")
                 {
                     switch (channel)
                     {
                         case DpDm:   return D0Dbar0;
+                        case DstpDm: return Dst0D0bar;
+
+                        default: return channel;
+                    }
+                }
+                else if (assume_symmetry == "su3f")
+                {
+                    switch (channel)
+                    {
+                        case DpDm:
+                        case DsDs:   return D0Dbar0;
                         case DstpDm: return Dst0D0bar;
 
                         default: return channel;
@@ -232,7 +244,7 @@ namespace eos
                 m_Dst0(p["mass::D_u^*"], u),
                 m_Dstp(p["mass::D_d^*"], u),
                 m_Ds(p["mass::D_s"], u),
-                assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"_ov).str())),
+                assume_symmetry(o.get("assume-symmetry"_ok, "none"_ov).str()),
                 m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
                 g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
                 q(_channel_effective_momentum(p, u, std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -453,7 +465,7 @@ namespace eos
     EEToCCBar::~EEToCCBar() {}
 
     const std::vector<OptionSpecification> Implementation<EEToCCBar>::options{
-        { "assume-isospin"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        { "assume-symmetry"_ok, { "isospin"_ov, "su3f"_ov, "none"_ov }, "none"_ov },
     };
 
     const EEToCCBar::IntermediateResult *
