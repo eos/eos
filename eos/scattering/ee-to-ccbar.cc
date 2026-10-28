@@ -22,6 +22,7 @@
 #include <eos/utils/destringify.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/kmatrix-impl.hh>
+#include <eos/utils/log.hh>
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
@@ -45,7 +46,15 @@ namespace eos
             UsedParameter m_Dstp;
             UsedParameter m_Ds;
 
-            bool assume_isospin;
+            enum class Symmetry
+            {
+                none,
+                isospin,
+                su3f
+            };
+
+            RestrictedOption opt_assume_symmetry;
+            Symmetry         assume_symmetry;
 
             inline static const std::array<std::string, 3> resonance_names = { "J/psi", "psi(2S)", "psi(3770)" };
 
@@ -124,14 +133,41 @@ namespace eos
                 // clang-format on
             }
 
+            static Symmetry
+            _symmetry(const std::string & value)
+            {
+                if ("isospin" == value)
+                {
+                    return Symmetry::isospin;
+                }
+
+                if ("su3f" == value)
+                {
+                    return Symmetry::su3f;
+                }
+
+                return Symmetry::none;
+            }
+
             long unsigned
             _filter_channel_index(Channels channel)
             {
-                if (assume_isospin)
+                if (Symmetry::isospin == assume_symmetry)
                 {
                     switch (channel)
                     {
                         case DpDm:   return D0Dbar0;
+                        case DstpDm: return Dst0D0bar;
+
+                        default: return channel;
+                    }
+                }
+                else if (Symmetry::su3f == assume_symmetry)
+                {
+                    switch (channel)
+                    {
+                        case DpDm:
+                        case DsDs:   return D0Dbar0;
                         case DstpDm: return Dst0D0bar;
 
                         default: return channel;
@@ -232,7 +268,8 @@ namespace eos
                 m_Dst0(p["mass::D_u^*"], u),
                 m_Dstp(p["mass::D_d^*"], u),
                 m_Ds(p["mass::D_s"], u),
-                assume_isospin(destringify<bool>(o.get("assume-isospin"_ok, "false"_ov).str())),
+                opt_assume_symmetry(o, options, "assume-symmetry"_ok),
+                assume_symmetry(_symmetry(opt_assume_symmetry.value())),
                 m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
                 g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
                 q(_channel_effective_momentum(p, u, std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -240,6 +277,13 @@ namespace eos
                 Rconstant(p["ee->ccbar::Rconstant"], u),
                 exclusive_norm(p["ee->ccbar::exclusive_norm"], u)
             {
+                if (o.has("assume-isospin"_ok))
+                {
+                    static const Log::OneTimeMessage message("[EEToCCBar]",
+                                                             ll_warning,
+                                                             "The option 'assume-isospin' is ignored; use 'assume-symmetry=isospin' or 'assume-symmetry=su3f' instead");
+                }
+
                 std::array<std::shared_ptr<KMatrix<EEToCCBar::nchannels, EEToCCBar::nresonances>::Resonance>, EEToCCBar::nresonances> resonance_array;
                 for (unsigned i = 0; i < EEToCCBar::nresonances; i++)
                 {
@@ -453,7 +497,7 @@ namespace eos
     EEToCCBar::~EEToCCBar() {}
 
     const std::vector<OptionSpecification> Implementation<EEToCCBar>::options{
-        { "assume-isospin"_ok, { "true"_ov, "false"_ov }, "false"_ov },
+        { "assume-symmetry"_ok, { "isospin"_ov, "su3f"_ov, "none"_ov }, "none"_ov },
     };
 
     const EEToCCBar::IntermediateResult *

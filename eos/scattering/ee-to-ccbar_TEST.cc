@@ -349,6 +349,78 @@ class eetoccbarTest : public TestCase
             }
 
             {
+                // An unknown value of assume-symmetry is rejected
+                Parameters p = Parameters::Defaults();
+                Options    o{
+                       { "assume-symmetry"_ok, "su3"_ov }
+                };
+
+                TEST_CHECK_THROWS(InvalidOptionValueError, EEToCCBar(p, o));
+            }
+
+            {
+                // assume-symmetry replaces the couplings of related channels; their own couplings are then ignored
+                Parameters p                             = Parameters::Defaults();
+                p["ee->ccbar::q_0"]                      = 0.5;
+                p["mass::psi(3770)"]                     = 3.7737;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]     = 0.05;
+                p["ee->ccbar::g0(psi(3770),D^0Dbar^0)"]  = 1.0;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^0)"] = 1.0;
+
+                // cross sections into D^+ D^-, D^*+ D^- + h.c., and D_s^+ D_s^-
+                const auto sigmas = [&](const qnp::OptionValue & symmetry)
+                {
+                    EEToCCBar  c(p,
+                                Options{
+                                     { "assume-symmetry"_ok, symmetry }
+                    });
+                    const auto ir = c.prepare(4.3);
+
+                    return std::array<double, 3>{ c.sigma_eetoDpDm(ir), c.sigma_eetoDstpDm(ir), c.sigma_eetoDsDs(ir) };
+                };
+
+                const auto none    = sigmas("none"_ov);
+                const auto isospin = sigmas("isospin"_ov);
+                const auto su3f    = sigmas("su3f"_ov);
+
+                TEST_CHECK_NEARLY_EQUAL(none[0], 0.0, 1.0e-15);
+                TEST_CHECK_NEARLY_EQUAL(none[1], 0.0, 1.0e-15);
+                TEST_CHECK_NEARLY_EQUAL(none[2], 0.0, 1.0e-15);
+                TEST_CHECK(isospin[0] > 0.0);
+                TEST_CHECK(isospin[1] > 0.0);
+                TEST_CHECK_NEARLY_EQUAL(isospin[2], 0.0, 1.0e-15);
+                TEST_CHECK(su3f[0] > 0.0);
+                TEST_CHECK(su3f[1] > 0.0);
+                TEST_CHECK(su3f[2] > 0.0);
+
+                // coupling the isospin partners changes nothing under either symmetry
+                p["ee->ccbar::g0(psi(3770),D^+D^-)"]  = 2.0;
+                p["ee->ccbar::g0(psi(3770),D^*+D^-)"] = 2.0;
+
+                const auto none2    = sigmas("none"_ov);
+                const auto isospin2 = sigmas("isospin"_ov);
+                const auto su3f2    = sigmas("su3f"_ov);
+
+                TEST_CHECK(none2[0] > 0.0);
+                TEST_CHECK(none2[1] > 0.0);
+                TEST_CHECK_RELATIVE_ERROR(isospin2[0], isospin[0], 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(isospin2[1], isospin[1], 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(su3f2[0], su3f[0], 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(su3f2[1], su3f[1], 1.0e-14);
+
+                // coupling D_s^+ D_s^- opens it under isospin, and changes nothing under SU(3)_F
+                p["ee->ccbar::g0(psi(3770),D_s^+D_s^-)"] = 2.0;
+
+                const auto isospin3 = sigmas("isospin"_ov);
+                const auto su3f3    = sigmas("su3f"_ov);
+
+                TEST_CHECK(isospin3[2] > 0.0);
+                TEST_CHECK_RELATIVE_ERROR(su3f3[0], su3f[0], 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(su3f3[1], su3f[1], 1.0e-14);
+                TEST_CHECK_RELATIVE_ERROR(su3f3[2], su3f[2], 1.0e-14);
+            }
+
+            {
                 // The D_s^+ D_s^- channel is closed below threshold
                 Parameters p                             = Parameters::Defaults();
                 p["ee->ccbar::q_0"]                      = 0.5;
