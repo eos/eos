@@ -408,6 +408,7 @@ namespace eos
                 return T1f;
             }
 
+            // Cross section for PP and VP, where only one helicity state plays a role
             double
             sigma_eetochannel(const IntermediateResult * intermediate_result, const Channels & channel)
             {
@@ -420,6 +421,42 @@ namespace eos
                 const double rhof = std::abs(K->_channels[channel]->rho(intermediate_result->s));
 
                 return GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(T_eetochannel(intermediate_result, channel));
+            }
+
+            // Cross sections for VV, where three helicity states "TT", "TL", and "LL" play a role
+            struct VVHelicities
+            {
+                    double tt, tl, ll;
+            };
+
+            VVHelicities
+            sigma_eetoVVhelicity(const IntermediateResult * intermediate_result, const Channels & channel1P1, const Channels & channel5P1, const Channels & channel5F1)
+            {
+                // Conversion factor between GeV^2 and nb
+                static const double speedoflight = 299792458.; // Exact value
+                const double        GeVtonb      = 10.0 * power_of<2>(1.0e18 * hbar * speedoflight);
+
+                // Channel properties
+                const double Nf   = 3.0;                                                             // Nf = 2J+1
+                const double rhof = std::abs(K->_channels[channel1P1]->rho(intermediate_result->s)); // Same phase space for all three channels
+
+                const complex<double> a01 = T_eetochannel(intermediate_result, channel1P1);
+                const complex<double> a21 = T_eetochannel(intermediate_result, channel5P1);
+                const complex<double> a23 = T_eetochannel(intermediate_result, channel5F1);
+
+                const double s3  = std::sqrt(3.0);
+                const double s15 = std::sqrt(15.0);
+                const double s10 = std::sqrt(10.0);
+
+                const complex<double> Fpp = a01 / s3 - a21 / s15 + a23 / s10;
+                const complex<double> Fp0 = -(s15 / 10.0) * a21 - (s10 / 10.0) * a23;
+                const complex<double> F00 = -a01 / s3 - (2.0 / s15) * a21 + (2.0 / s10) * a23;
+
+                const double sigmaTT = 2.0 * GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(Fpp);
+                const double sigmaTL = 4.0 * GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(Fp0);
+                const double sigmaLL = GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(F00);
+
+                return VVHelicities{ sigmaTT, sigmaTL, sigmaLL };
             }
 
             // K matrix widths, they are not expected to match the experimental ones

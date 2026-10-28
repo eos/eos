@@ -233,6 +233,77 @@ namespace eos
             }
     };
 
+    // V -> VV channel
+    // P-wave
+    template <unsigned nchannels_, unsigned nresonances_> struct PWaveVVChannel : public KMatrix<nchannels_, nresonances_>::Channel
+    {
+            PWaveVVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s)
+            {
+            }
+
+            inline double
+            mp()
+            {
+                return this->_m1 + this->_m2;
+            }
+
+            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
+
+            const double          pi = M_PI;
+            const complex<double> i  = complex<double>(0.0, 1.0);
+
+            complex<double>
+            rho(const complex<double> & s)
+            {
+                const double mp = this->mp();
+
+                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
+            }
+
+            // Analytic continuation of i * rho * n * n
+            complex<double>
+            chew_mandelstam(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
+            }
+    };
+
+    // F-wave
+    template <unsigned nchannels_, unsigned nresonances_> struct FWaveVVChannel : public KMatrix<nchannels_, nresonances_>::Channel
+    {
+            FWaveVVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 3, q0, g0s)
+            {
+            }
+
+            inline double
+            mp()
+            {
+                return this->_m1 + this->_m2;
+            }
+
+            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
+
+            const double          pi = M_PI;
+            const complex<double> i  = complex<double>(0.0, 1.0);
+
+            complex<double>
+            rho(const complex<double> & s)
+            {
+                const double mp = this->mp();
+
+                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
+            }
+
+            // Analytic continuation of i * rho * n * n
+            complex<double>
+            chew_mandelstam(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::f_wave(S, this->_m1, this->_m2, this->_q0());
+            }
+    };
+
     template <unsigned nchannels_, unsigned nresonances_> struct CharmoniumResonance : public KMatrix<nchannels_, nresonances_>::Resonance
     {
             CharmoniumResonance(std::string name, Parameter m) :
