@@ -177,6 +177,18 @@ class ClassMethodTests(unittest.TestCase):
             )
 
 
+    def test_repr_html_multivariate_priors(self):
+        "Priors without a 'parameter' key are rendered by their constraint or parameter names."
+        analysis = eos.Analysis(priors=[
+            { 'type': 'constraint', 'constraint': 'B->K::FormFactors[parametric,LCSR]@GKvD:2018A' },
+            { 'type': 'transform', 'parameters': ['mass::c', 'mass::b(MSbar)'], 'shift': [0.0, 0.0],
+              'transform': [[1.0, 0.0], [0.0, 1.0]], 'min': [1.0, 4.0], 'max': [1.5, 4.5] },
+        ], likelihood=[])
+        html = analysis._repr_html_()
+        for name in ('B->K::FormFactors[parametric,LCSR]@GKvD:2018A', 'mass::c', 'mass::b(MSbar)'):
+            self.assertIn(f'<tt>{name}</tt>', html)
+
+
     def test_univariate_priors_with_infinite_support(self):
 
         # Note: the cases are not physically meaningful

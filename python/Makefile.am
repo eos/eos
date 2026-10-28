@@ -106,6 +106,8 @@ EXTRA_DIST = \
 	eos/data/mode.py \
 	eos/data/model_comparison.py \
 	eos/data/nabu_likelihood.py \
+	eos/data/nabu_likelihood_TEST.d \
+	eos/data/nabu_likelihood_TEST.d/nabu \
 	eos/data/pmc_sampler.py \
 	eos/data/prediction.py \
 	eos/data/prediction_TEST.d \
