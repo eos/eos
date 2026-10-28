@@ -10,6 +10,7 @@ libeosutils_la_SOURCES = \
 	cartesian-product.hh \
 	concrete_observable.cc concrete_observable.hh \
 	concrete-cacheable-observable.hh \
+	intermediate-result.hh \
 	concrete-signal-pdf.cc concrete-signal-pdf.hh \
 	condition_variable.cc condition_variable.hh \
 	detector-level-pdf.cc detector-level-pdf.hh \
