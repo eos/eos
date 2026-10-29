@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Stefan Meiser
+ * Copyright (c) 2023-2026 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -107,20 +107,20 @@ class RhoLCDAsTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(rho.a1perp(4.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a1perp(5.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a2perp(1.0), 0.14, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(2.0), 0.103147, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(3.0), 0.0913332, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(4.0), 0.0849017, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(5.0), 0.0806361, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(2.0), 0.110681, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(3.0), 0.1007943, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(4.0), 0.0952888, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a2perp(5.0), 0.0915844, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(1.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(2.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(3.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(4.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a3perp(5.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.a4perp(1.0), 0.25, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(2.0), 0.16224, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(3.0), 0.13658, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(4.0), 0.12317, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(5.0), 0.11450, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(2.0), 0.17409, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(3.0), 0.15073, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(4.0), 0.13824, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.a4perp(5.0), 0.13005, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(rho.fperp(1.0), 0.16, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.fperp(2.0), 0.149109, eps);
@@ -147,9 +147,9 @@ class RhoLCDAsTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(rho.phi2para(0.7, 2.0), 1.02489, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.phi2para(1.0, 2.0), 0.0, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.0, 2.0), 0.0, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.3, 2.0), 0.951784, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.5, 2.0), 1.72422, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.7, 2.0), 0.951784, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.3, 2.0), 0.929272, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.5, 2.0), 1.74060, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(0.7, 2.0), 0.929272, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.phi2perp(1.0, 2.0), 0.0, eps);
             }
 
@@ -205,17 +205,17 @@ class RhoLCDAsTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(rho.phi3perp(0.9, 1.0), 1.25141, eps);
 
                 // two particle LCDAs at scale mu = 2.0 GeV
-                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.1, 2.0), 0.76089, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.3, 2.0), 1.21314, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.5, 2.0), 1.2211, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.7, 2.0), 1.21314, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.9, 2.0), 0.76089, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.1, 2.0), 0.76313, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.3, 2.0), 1.21267, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.5, 2.0), 1.21827, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.7, 2.0), 1.21267, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.psi3para(0.9, 2.0), 0.76313, eps);
 
-                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.1, 2.0), 1.49203, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.3, 2.0), 0.20838, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.1, 2.0), 1.49348, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.3, 2.0), 0.20440, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.5, 2.0), 0.72066, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.7, 2.0), 0.20838, eps);
-                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.9, 2.0), 1.49203, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.7, 2.0), 0.20440, eps);
+                TEST_CHECK_NEARLY_EQUAL(rho.phi3para(0.9, 2.0), 1.49348, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(rho.psi3perp(0.1, 2.0), 0.71328, eps);
                 TEST_CHECK_NEARLY_EQUAL(rho.psi3perp(0.3, 2.0), 1.22324, eps);

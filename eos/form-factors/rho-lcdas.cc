@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023 Stefan Meiser
+ * Copyright (c) 2023-2026 Stefan Meiser
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -137,13 +137,13 @@ namespace eos
             inline double
             a2perp(const double & mu) const
             {
-                return a2perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
+                return a2perp_0 * std::pow(c_rge(mu), 40.0 / 9.0);
             }
 
             inline double
             a4perp(const double & mu) const
             {
-                return a4perp_0 * std::pow(c_rge(mu), 368.0 / 45.0);
+                return a4perp_0 * std::pow(c_rge(mu), 308.0 / 45.0);
             }
 
             inline double
