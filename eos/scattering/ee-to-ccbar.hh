@@ -43,10 +43,16 @@ namespace eos
     2   eff(2S)       PP (P)       3       -
     3   eff(3770)     PP (P)       3       -
     4   D0   D0bar    PP (P)       3       -
-    5   D+   D-       PP (P)       3       4 (isospin)
+    5   D+   D-       PP (P)       3       4  (isospin)
     6   D*0  D0bar    VP (P)       3       -
-    7   D*+  D-       VP (P)       3       6 (isospin)
+    7   D*+  D-       VP (P)       3       6  (isospin)
     8   Ds+  Ds-      PP (P)       3       -
+    9   D*0  D*0bar   VV (P, 1P1)  3       -
+    10  D*0  D*0bar   VV (P, 5P1)  3       -
+    11  D*0  D*0bar   VV (F, 5F1)  3       -
+    12  D*+  D*-      VV (P, 1P1)  3       9  (isospin)
+    13  D*+  D*-      VV (P, 5P1)  3       10 (isospin)
+    14  D*+  D*-      VV (F, 5F1)  3       11 (isospin)
 
     Here, channels 6 and 7 stand for the properly normalised C=-1 eigenstates,
     ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
@@ -315,7 +321,7 @@ namespace eos
     class EEToCCBar : public ParameterUser, public PrivateImplementationPattern<EEToCCBar>
     {
         public:
-            static const long unsigned nchannels   = 9;
+            static const long unsigned nchannels   = 15;
             static const long unsigned nresonances = 3;
 
             struct IntermediateResult : public CacheableObservable::IntermediateResult
@@ -359,6 +365,8 @@ namespace eos
             double rho_Dst0D0bar(const IntermediateResult *) const;
             double rho_DstpDm(const IntermediateResult *) const;
             double rho_DsDs(const IntermediateResult *) const;
+            double rho_Dst0Dst0bar(const IntermediateResult *) const;
+            double rho_DstpDstm(const IntermediateResult *) const;
 
             // Chew-Mandelstam function on the first Riemann sheet
             double re_chew_mandelstam_ee(const IntermediateResult *) const;
@@ -375,6 +383,14 @@ namespace eos
             double im_chew_mandelstam_DstpDm(const IntermediateResult *) const;
             double re_chew_mandelstam_DsDs(const IntermediateResult *) const;
             double im_chew_mandelstam_DsDs(const IntermediateResult *) const;
+            double re_chew_mandelstam_Dst0Dst0bar_P(const IntermediateResult *) const;
+            double im_chew_mandelstam_Dst0Dst0bar_P(const IntermediateResult *) const;
+            double re_chew_mandelstam_Dst0Dst0bar_F(const IntermediateResult *) const;
+            double im_chew_mandelstam_Dst0Dst0bar_F(const IntermediateResult *) const;
+            double re_chew_mandelstam_DstpDstm_P(const IntermediateResult *) const;
+            double im_chew_mandelstam_DstpDstm_P(const IntermediateResult *) const;
+            double re_chew_mandelstam_DstpDstm_F(const IntermediateResult *) const;
+            double im_chew_mandelstam_DstpDstm_F(const IntermediateResult *) const;
 
             // Chew-Mandelstam function on the second Riemann sheet
             double re_chew_mandelstam_II_ee(const IntermediateResult *) const;
@@ -391,6 +407,14 @@ namespace eos
             double im_chew_mandelstam_II_DstpDm(const IntermediateResult *) const;
             double re_chew_mandelstam_II_DsDs(const IntermediateResult *) const;
             double im_chew_mandelstam_II_DsDs(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_Dst0Dst0bar_P(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_Dst0Dst0bar_P(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_Dst0Dst0bar_F(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_Dst0Dst0bar_F(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_DstpDstm_P(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_DstpDstm_P(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_DstpDstm_F(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_DstpDstm_F(const IntermediateResult *) const;
 
 
             // amplitudes on the first RS
@@ -408,6 +432,18 @@ namespace eos
             double im_T_eetoDstpDm(const IntermediateResult *) const;
             double re_T_eetoDsDs(const IntermediateResult *) const;
             double im_T_eetoDsDs(const IntermediateResult *) const;
+            double re_T_eetoDst0Dst0bar_1P1(const IntermediateResult *) const;
+            double im_T_eetoDst0Dst0bar_1P1(const IntermediateResult *) const;
+            double re_T_eetoDst0Dst0bar_5P1(const IntermediateResult *) const;
+            double im_T_eetoDst0Dst0bar_5P1(const IntermediateResult *) const;
+            double re_T_eetoDst0Dst0bar_5F1(const IntermediateResult *) const;
+            double im_T_eetoDst0Dst0bar_5F1(const IntermediateResult *) const;
+            double re_T_eetoDstpDstm_1P1(const IntermediateResult *) const;
+            double im_T_eetoDstpDstm_1P1(const IntermediateResult *) const;
+            double re_T_eetoDstpDstm_5P1(const IntermediateResult *) const;
+            double im_T_eetoDstpDstm_5P1(const IntermediateResult *) const;
+            double re_T_eetoDstpDstm_5F1(const IntermediateResult *) const;
+            double im_T_eetoDstpDstm_5F1(const IntermediateResult *) const;
 
             // amplitudes on the second RS
             double re_T_II_eetoee(const IntermediateResult *) const;
@@ -424,6 +460,18 @@ namespace eos
             double im_T_II_eetoDstpDm(const IntermediateResult *) const;
             double re_T_II_eetoDsDs(const IntermediateResult *) const;
             double im_T_II_eetoDsDs(const IntermediateResult *) const;
+            double re_T_II_eetoDst0Dst0bar_1P1(const IntermediateResult *) const;
+            double im_T_II_eetoDst0Dst0bar_1P1(const IntermediateResult *) const;
+            double re_T_II_eetoDst0Dst0bar_5P1(const IntermediateResult *) const;
+            double im_T_II_eetoDst0Dst0bar_5P1(const IntermediateResult *) const;
+            double re_T_II_eetoDst0Dst0bar_5F1(const IntermediateResult *) const;
+            double im_T_II_eetoDst0Dst0bar_5F1(const IntermediateResult *) const;
+            double re_T_II_eetoDstpDstm_1P1(const IntermediateResult *) const;
+            double im_T_II_eetoDstpDstm_1P1(const IntermediateResult *) const;
+            double re_T_II_eetoDstpDstm_5P1(const IntermediateResult *) const;
+            double im_T_II_eetoDstpDstm_5P1(const IntermediateResult *) const;
+            double re_T_II_eetoDstpDstm_5F1(const IntermediateResult *) const;
+            double im_T_II_eetoDstpDstm_5F1(const IntermediateResult *) const;
 
             // Spectral function
             double psi3770_spectral_function(const double & E) const;
@@ -436,6 +484,20 @@ namespace eos
             double sigma_eetoDst0D0bar(const IntermediateResult *) const;
             double sigma_eetoDstpDm(const IntermediateResult *) const;
             double sigma_eetoDsDs(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar_TT(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar_TL(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar_LL(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar_1P1(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar_5P1(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar_5F1(const IntermediateResult *) const;
+            double sigma_eetoDst0Dst0bar(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm_TT(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm_TL(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm_LL(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm_1P1(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm_5P1(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm_5F1(const IntermediateResult *) const;
+            double sigma_eetoDstpDstm(const IntermediateResult *) const;
 
             // R ratios
             double R(const IntermediateResult *) const;
