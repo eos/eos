@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2023-2025 Stefan Meiser
+ * Copyright (c) 2023-2026 Stefan Meiser
  * Copyright (c) 2025      Matthew Kirk
  * Copyright (c) 2026      Danny van Dyk
  *
@@ -168,25 +168,25 @@ namespace eos
             inline double
             a1perp(const double & mu) const
             {
-                return a1perp_0 * std::pow(c_rge(mu), 36.0 / 9.0);
+                return a1perp_0 * std::pow(c_rge(mu), 8.0 / 3.0);
             }
 
             inline double
             a2perp(const double & mu) const
             {
-                return a2perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
+                return a2perp_0 * std::pow(c_rge(mu), 40.0 / 9.0);
             }
 
             inline double
             a3perp(const double & mu) const
             {
-                return a3perp_0 * std::pow(c_rge(mu), 64.0 / 9.0);
+                return a3perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
             }
 
             inline double
             a4perp(const double & mu) const
             {
-                return a4perp_0 * std::pow(c_rge(mu), 368.0 / 45.0);
+                return a4perp_0 * std::pow(c_rge(mu), 308.0 / 45.0);
             }
 
             inline double
@@ -1329,25 +1329,25 @@ namespace eos
             inline double
             a1perp(const double & mu) const
             {
-                return -1.0 * a1perp_0 * std::pow(c_rge(mu), 36.0 / 9.0);
+                return -1.0 * a1perp_0 * std::pow(c_rge(mu), 8.0 / 3.0);
             }
 
             inline double
             a2perp(const double & mu) const
             {
-                return a2perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
+                return a2perp_0 * std::pow(c_rge(mu), 40.0 / 9.0);
             }
 
             inline double
             a3perp(const double & mu) const
             {
-                return -1.0 * a3perp_0 * std::pow(c_rge(mu), 64.0 / 9.0);
+                return -1.0 * a3perp_0 * std::pow(c_rge(mu), 52.0 / 9.0);
             }
 
             inline double
             a4perp(const double & mu) const
             {
-                return a4perp_0 * std::pow(c_rge(mu), 368.0 / 45.0);
+                return a4perp_0 * std::pow(c_rge(mu), 308.0 / 45.0);
             }
 
             inline double
