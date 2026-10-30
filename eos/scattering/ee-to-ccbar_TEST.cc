@@ -347,5 +347,99 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.3089342, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0681416, eps);
             }
+
+            {
+                // The D^*0 Dbar^*0 channels, coupled to the resonances.
+                Parameters p                                   = Parameters::Defaults();
+                p["ee->ccbar::g0(psi(2S),e^+e^-)"]             = 10.0;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]           = 12.0;
+                p["ee->ccbar::g0(psi(2S),D^*0Dbar^*0(1P1))"]   = 0.3;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(1P1))"] = 0.4;
+                p["ee->ccbar::g0(psi(2S),D^*0Dbar^*0(5P1))"]   = 0.5;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(5P1))"] = 0.6;
+                p["ee->ccbar::g0(psi(2S),D^*0Dbar^*0(5F1))"]   = 0.7;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(5F1))"] = 0.8;
+
+                // Set all cst to zero
+                p["ee->ccbar::c(e^+e^-,e^+e^-)"]                     = 0.0;
+                p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(1P1))"]           = 0.0;
+                p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(5P1))"]           = 0.0;
+                p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(5F1))"]           = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(1P1))"] = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(5P1))"] = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(5F1))"] = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^*0(5P1),D^*0Dbar^*0(5P1))"] = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^*0(5P1),D^*0Dbar^*0(5F1))"] = 0.0;
+                p["ee->ccbar::c(D^*0Dbar^*0(5F1),D^*0Dbar^*0(5F1))"] = 0.0;
+
+                // Channels effective momentum
+                p["ee->ccbar::q_0"] = 0.5;
+
+                // Masses
+                p["mass::psi(2S)"]   = 3.68610;
+                p["mass::psi(3770)"] = 3.7737;
+                p["mass::e"]         = 5.10999e-4;
+                p["mass::D_u^*"]     = 2.00685;
+
+                auto psi2S   = std::make_shared<CharmoniumResonance<4, 2>>("psi2S", p["mass::psi(2S)"]);
+                auto psi3770 = std::make_shared<CharmoniumResonance<4, 2>>("psi3770", p["mass::psi(3770)"]);
+
+                std::array<std::array<Parameter, 4>, 4> bkgcst{
+                    p["ee->ccbar::c(e^+e^-,e^+e^-)"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(1P1))"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(5P1))"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(5F1))"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(1P1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(1P1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(5P1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(5F1))"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(5P1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(5P1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(5P1),D^*0Dbar^*0(5P1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(5P1),D^*0Dbar^*0(5F1))"],
+                    p["ee->ccbar::c(e^+e^-,D^*0Dbar^*0(5F1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(1P1),D^*0Dbar^*0(5F1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(5P1),D^*0Dbar^*0(5F1))"],
+                    p["ee->ccbar::c(D^*0Dbar^*0(5F1),D^*0Dbar^*0(5F1))"],
+                };
+
+                std::array<Parameter, 2> ee_g0s{
+                    { p["ee->ccbar::g0(psi(2S),e^+e^-)"], p["ee->ccbar::g0(psi(3770),e^+e^-)"] }
+                };
+                std::array<Parameter, 2> Dst0Dst0bar1P1_g0s{
+                    { p["ee->ccbar::g0(psi(2S),D^*0Dbar^*0(1P1))"], p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(1P1))"] }
+                };
+                std::array<Parameter, 2> Dst0Dst0bar5P1_g0s{
+                    { p["ee->ccbar::g0(psi(2S),D^*0Dbar^*0(5P1))"], p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(5P1))"] }
+                };
+                std::array<Parameter, 2> Dst0Dst0bar5F1_g0s{
+                    { p["ee->ccbar::g0(psi(2S),D^*0Dbar^*0(5F1))"], p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(5F1))"] }
+                };
+
+                auto ee             = std::make_shared<EEChannel<4, 2>>("ee", p["mass::e"], p["mass::e"], p["ee->ccbar::q_0"], ee_g0s);
+                auto Dst0Dst0bar1P1 = std::make_shared<PWaveVVChannel<4, 2>>("Dst0Dst0bar1P1", p["mass::D_u^*"], p["mass::D_u^*"], p["ee->ccbar::q_0"], Dst0Dst0bar1P1_g0s);
+                auto Dst0Dst0bar5P1 = std::make_shared<PWaveVVChannel<4, 2>>("Dst0Dst0bar5P1", p["mass::D_u^*"], p["mass::D_u^*"], p["ee->ccbar::q_0"], Dst0Dst0bar5P1_g0s);
+                auto Dst0Dst0bar5F1 = std::make_shared<FWaveVVChannel<4, 2>>("Dst0Dst0bar5F1", p["mass::D_u^*"], p["mass::D_u^*"], p["ee->ccbar::q_0"], Dst0Dst0bar5F1_g0s);
+
+                KMatrix<4, 2> KMatrix42({ ee, Dst0Dst0bar1P1, Dst0Dst0bar5P1, Dst0Dst0bar5F1 }, { psi2S, psi3770 }, bkgcst, "ee->ccbar");
+
+                // s = 20 lies above both thresholds, s = 14 below them
+                const auto rho_open     = Dst0Dst0bar1P1->rho(20.0);
+                const auto cm_open_P    = Dst0Dst0bar1P1->chew_mandelstam(20.0);
+                const auto cm_closed_P  = Dst0Dst0bar1P1->chew_mandelstam(14.0);
+                const auto cm_open_F    = Dst0Dst0bar5F1->chew_mandelstam(20.0);
+                const auto cm_closed_F  = Dst0Dst0bar5F1->chew_mandelstam(14.0);
+                const auto tmatrix_open = KMatrix42.tmatrix_row(0, 20.0);
+
+                TEST_CHECK_RELATIVE_ERROR(std::abs(rho_open), 0.008774084, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(cm_open_P), 0.001314708, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(cm_open_P), 0.006979871, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(cm_closed_P), -0.00305087, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(cm_open_F), 0.002703345, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(cm_open_F), 0.000939654, eps);
+                TEST_CHECK_RELATIVE_ERROR(real(cm_closed_F), -0.000929367, eps);
+                TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.30186, eps);
+                TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0665914, eps);
+            }
         }
 } eetoccbar_test;
