@@ -67,6 +67,7 @@
 - Fix cloning an ``ObservableCache`` that holds an expression whose observables are made through a kinematic alias or a fixed kinematic value, which threw an ``UnknownKinematicVariableError`` (D. van Dyk)
 - Fix ``Kinematics::set()`` for an alias, which threw an ``UnknownKinematicVariableError``, and for an unknown name, which accessed invalid memory (D. van Dyk)
 - Fix ``Kinematics::alias()`` to reject an alias name that is already installed, which it replaced silently; an expression whose kinematic specification renames, fixes, or substitutes a variable that a nested expression handles already now raises an error in lieu of yielding wrong values (D. van Dyk)
+- **Breaking:** Fix running of the transverse Gegenbauer moments for rho and K* mesons. The previous implementation did not subtract the running of the transverse decay constant #1311 (S. Meiser)
 
 
 ## [v1.1] - 2026-09-25
