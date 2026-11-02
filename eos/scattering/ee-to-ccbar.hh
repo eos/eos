@@ -46,7 +46,7 @@ namespace eos
     5   eff(3770)     PP (P)       3       -
     6   D*0  D0bar    VP (P)       3       -
     7   D*+  D-       VP (P)       3       6  (isospin)
-    8   Ds+  Ds-      PP (P)       3       -
+    8   Ds+  Ds-      PP (P)       3       3  (su3f)
     9   D*0  D*0bar   VV (P, 1P1)  3       -
     10  D*0  D*0bar   VV (P, 5P1)  3       -
     11  D*0  D*0bar   VV (F, 5F1)  3       -
@@ -54,6 +54,7 @@ namespace eos
     13  D*+  D*-      VV (P, 5P1)  3       10 (isospin)
     14  D*+  D*-      VV (F, 5F1)  3       11 (isospin)
     15  eff(4040)     PP (P)       3       -
+    16  D*s+ Ds-      VP (P)       3       6  (su3f)
 
     Here, channels 6 and 7 stand for the properly normalised C=-1 eigenstates,
     ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
@@ -296,7 +297,7 @@ namespace eos
     class EEToCCBar : public ParameterUser, public PrivateImplementationPattern<EEToCCBar>
     {
         public:
-            static const long unsigned nchannels   = 16;
+            static const long unsigned nchannels   = 17;
             static const long unsigned nresonances = 4;
 
             struct IntermediateResult : public CacheableObservable::IntermediateResult
@@ -344,6 +345,7 @@ namespace eos
             double rho_DsDs(const IntermediateResult *) const;
             double rho_Dst0Dst0bar(const IntermediateResult *) const;
             double rho_DstpDstm(const IntermediateResult *) const;
+            double rho_DstsDs(const IntermediateResult *) const;
 
             // Chew-Mandelstam function on the first Riemann sheet
             double re_chew_mandelstam_ee(const IntermediateResult *) const;
@@ -368,6 +370,8 @@ namespace eos
             double im_chew_mandelstam_DstpDstm_P(const IntermediateResult *) const;
             double re_chew_mandelstam_DstpDstm_F(const IntermediateResult *) const;
             double im_chew_mandelstam_DstpDstm_F(const IntermediateResult *) const;
+            double re_chew_mandelstam_DstsDs(const IntermediateResult *) const;
+            double im_chew_mandelstam_DstsDs(const IntermediateResult *) const;
 
             // Chew-Mandelstam function on the second Riemann sheet
             double re_chew_mandelstam_II_ee(const IntermediateResult *) const;
@@ -392,6 +396,8 @@ namespace eos
             double im_chew_mandelstam_II_DstpDstm_P(const IntermediateResult *) const;
             double re_chew_mandelstam_II_DstpDstm_F(const IntermediateResult *) const;
             double im_chew_mandelstam_II_DstpDstm_F(const IntermediateResult *) const;
+            double re_chew_mandelstam_II_DstsDs(const IntermediateResult *) const;
+            double im_chew_mandelstam_II_DstsDs(const IntermediateResult *) const;
 
 
             // amplitudes on the first RS
@@ -421,6 +427,8 @@ namespace eos
             double im_T_eetoDstpDstm_5P1(const IntermediateResult *) const;
             double re_T_eetoDstpDstm_5F1(const IntermediateResult *) const;
             double im_T_eetoDstpDstm_5F1(const IntermediateResult *) const;
+            double re_T_eetoDstsDs(const IntermediateResult *) const;
+            double im_T_eetoDstsDs(const IntermediateResult *) const;
 
             // amplitudes on the second RS
             double re_T_II_eetoee(const IntermediateResult *) const;
@@ -449,6 +457,8 @@ namespace eos
             double im_T_II_eetoDstpDstm_5P1(const IntermediateResult *) const;
             double re_T_II_eetoDstpDstm_5F1(const IntermediateResult *) const;
             double im_T_II_eetoDstpDstm_5F1(const IntermediateResult *) const;
+            double re_T_II_eetoDstsDs(const IntermediateResult *) const;
+            double im_T_II_eetoDstsDs(const IntermediateResult *) const;
 
             // Spectral function
             double psi3770_spectral_function(const double & E) const;
@@ -476,6 +486,7 @@ namespace eos
             double sigma_eetoDstpDstm_5P1(const IntermediateResult *) const;
             double sigma_eetoDstpDstm_5F1(const IntermediateResult *) const;
             double sigma_eetoDstpDstm(const IntermediateResult *) const;
+            double sigma_eetoDstsDs(const IntermediateResult *) const;
 
             // R ratios
             double R(const IntermediateResult *) const;

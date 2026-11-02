@@ -530,5 +530,33 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDsDs(c.prepare(threshold - 0.01)), 0.0, 1.0e-15);
                 TEST_CHECK(c.sigma_eetoDsDs(c.prepare(threshold + 0.01)) > 0.0);
             }
+
+            {
+                // The D_s^*+ D_s^- + h.c. channel: closed below threshold, and its SU(3)_F partner D^*0 Dbar^0 + h.c.
+                Parameters p                             = Parameters::Defaults();
+                p["ee->ccbar::q_0"]                      = 0.5;
+                p["mass::D_s"]                           = 1.96835;
+                p["mass::D_s^*"]                         = 2.1122;
+                p["mass::psi(3770)"]                     = 3.7737;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]     = 0.05;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^0)"] = 1.0;
+
+                EEToCCBar none(p, Options{});
+                EEToCCBar su3f(p,
+                               Options{
+                                   { "assume-symmetry"_ok, "su3f"_ov }
+                });
+
+                const double threshold = 2.1122 + 1.96835;
+                TEST_CHECK_NEARLY_EQUAL(none.sigma_eetoDstsDs(none.prepare(4.3)), 0.0, 1.0e-15);
+                TEST_CHECK_NEARLY_EQUAL(su3f.sigma_eetoDstsDs(su3f.prepare(threshold - 0.01)), 0.0, 1.0e-15);
+                TEST_CHECK(su3f.sigma_eetoDstsDs(su3f.prepare(threshold + 0.01)) > 0.0);
+
+                // its own coupling is ignored under SU(3)_F
+                const double sigma                        = su3f.sigma_eetoDstsDs(su3f.prepare(4.3));
+                p["ee->ccbar::g0(psi(3770),D_s^*+D_s^-)"] = 2.0;
+                TEST_CHECK_RELATIVE_ERROR(su3f.sigma_eetoDstsDs(su3f.prepare(4.3)), sigma, 1.0e-14);
+                TEST_CHECK(none.sigma_eetoDstsDs(none.prepare(4.3)) > 0.0);
+            }
         }
 } eetoccbar_test;
