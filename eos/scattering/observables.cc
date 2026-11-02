@@ -69,6 +69,16 @@ namespace eos
                                     &EEToCCBar::psi4040_spectral_function,
                                     std::make_tuple("E")),
 
+                    make_observable("psi(4160)->eff::decay_width", R"(\Gamma(\psi(4160) \to \textrm{eff}))", Unit::GeV(), &EEToCCBar::psi4160_eff_width),
+
+                    make_observable("psi(4160)::total_width", R"(\Gamma_{\psi(4160)})", Unit::GeV(), &EEToCCBar::psi4160_total_width),
+
+                    make_observable("psi(4160)::spectral_function(E)",
+                                    R"(\textrm{spect}_{\psi(4160)}(E))",
+                                    Unit::InverseGeV2(),
+                                    &EEToCCBar::psi4160_spectral_function,
+                                    std::make_tuple("E")),
+
                     make_cacheable_observable("e^+e^-->e^+e^-::sigma(E)",
                                               R"(\sigma(e^+e^- \to e^+e^-)|_{s\textrm{-channel}})",
                                               Unit::InverseGeV2(),

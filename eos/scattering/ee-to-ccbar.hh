@@ -55,6 +55,7 @@ namespace eos
     14  D*+  D*-      VV (F, 5F1)  3       11 (isospin)
     15  eff(4040)     PP (P)       3       -
     16  D*s+ Ds-      VP (P)       3       6  (su3f)
+    17  eff(4160)     PP (P)       3       -
 
     Here, channels 6 and 7 stand for the properly normalised C=-1 eigenstates,
     ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
@@ -323,8 +324,8 @@ namespace eos
     class EEToCCBar : public ParameterUser, public PrivateImplementationPattern<EEToCCBar>
     {
         public:
-            static const long unsigned nchannels   = 17;
-            static const long unsigned nresonances = 4;
+            static const long unsigned nchannels   = 18;
+            static const long unsigned nresonances = 5;
 
             struct IntermediateResult : public CacheableObservable::IntermediateResult
             {
@@ -360,6 +361,8 @@ namespace eos
             double psi3770_total_width() const;
             double psi4040_eff_width() const;
             double psi4040_total_width() const;
+            double psi4160_eff_width() const;
+            double psi4160_total_width() const;
 
             // Phase space factor
             double rho_ee(const IntermediateResult *) const;
@@ -489,6 +492,7 @@ namespace eos
             // Spectral function
             double psi3770_spectral_function(const double & E) const;
             double psi4040_spectral_function(const double & E) const;
+            double psi4160_spectral_function(const double & E) const;
 
             // sigma(ee -> channel)
             double sigma_eetoee(const IntermediateResult *) const;
