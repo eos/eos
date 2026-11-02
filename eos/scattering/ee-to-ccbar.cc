@@ -48,18 +48,20 @@ namespace eos
             // assume_symmetry can take values "none", "isospin", and "su3f" and has default value "none"
             std::string assume_symmetry;
 
-            inline static const std::array<std::string, 3> resonance_names = { "J/psi", "psi(2S)", "psi(3770)" };
+            inline static const std::array<std::string, 4> resonance_names = { "J/psi", "psi(2S)", "psi(3770)", "psi(4040)" };
 
             enum Resonances
             {
                 Jpsi = 0,
                 psi2S,
-                psi3770
+                psi3770,
+                psi4040
             };
 
-            inline static const std::array<std::string, 15> channel_names = { "e^+e^-",           "eff(Jpsi)",        "eff(2S)",       "D^0Dbar^0",     "D^+D^-",
-                                                                              "eff(3770)",        "D^*0Dbar^0",       "D^*+D^-",       "D_s^+D_s^-",    "D^*0Dbar^*0(1P1)",
-                                                                              "D^*0Dbar^*0(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(1P1)", "D^*+D^*-(5P1)", "D^*+D^*-(5F1)" };
+            inline static const std::array<std::string, 16> channel_names = { "e^+e^-",        "eff(Jpsi)",        "eff(2S)",          "D^0Dbar^0",
+                                                                              "D^+D^-",        "eff(3770)",        "D^*0Dbar^0",       "D^*+D^-",
+                                                                              "D_s^+D_s^-",    "D^*0Dbar^*0(1P1)", "D^*0Dbar^*0(5P1)", "D^*0Dbar^*0(5F1)",
+                                                                              "D^*+D^*-(1P1)", "D^*+D^*-(5P1)",    "D^*+D^*-(5F1)",    "eff(4040)" };
 
             enum Channels
             {
@@ -77,7 +79,8 @@ namespace eos
                 Dst0Dst0bar5F1,
                 DstpDstm1P1,
                 DstpDstm5P1,
-                DstpDstm5F1
+                DstpDstm5F1,
+                eff4040
             };
 
             // Resonance masses
@@ -287,6 +290,7 @@ namespace eos
                         case effJpsi:
                         case eff2S:
                         case eff3770:
+                        case eff4040:
                             channel_array[i] = std::make_shared<EffChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(
                                     channel_names[i],
                                     m_eff,
@@ -628,6 +632,18 @@ namespace eos
     }
 
     double
+    EEToCCBar::psi4040_total_width() const
+    {
+        return _imp->res_total_width(Resonances::psi4040);
+    }
+
+    double
+    EEToCCBar::psi4040_eff_width() const
+    {
+        return _imp->res_partial_width(Resonances::psi4040, Channels::eff4040);
+    }
+
+    double
     EEToCCBar::sigma_eetoee(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::ee);
@@ -637,7 +653,8 @@ namespace eos
     EEToCCBar::sigma_eetoeff(const EEToCCBar::IntermediateResult * ir) const
     {
         return _imp->exclusive_norm
-               * (_imp->sigma_eetochannel(ir, Channels::effJpsi) + _imp->sigma_eetochannel(ir, Channels::eff2S) + _imp->sigma_eetochannel(ir, Channels::eff3770));
+               * (_imp->sigma_eetochannel(ir, Channels::effJpsi) + _imp->sigma_eetochannel(ir, Channels::eff2S) + _imp->sigma_eetochannel(ir, Channels::eff3770)
+                  + _imp->sigma_eetochannel(ir, Channels::eff4040));
     }
 
     double
@@ -872,6 +889,12 @@ namespace eos
     EEToCCBar::psi3770_spectral_function(const double & E) const
     {
         return _imp->spectral_function(E, Resonances::psi3770);
+    }
+
+    double
+    EEToCCBar::psi4040_spectral_function(const double & E) const
+    {
+        return _imp->spectral_function(E, Resonances::psi4040);
     }
 
     double

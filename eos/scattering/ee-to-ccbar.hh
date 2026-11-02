@@ -41,9 +41,9 @@ namespace eos
     0   ee            ee (S)       3       -
     1   effJpsi       PP (P)       3       -
     2   eff(2S)       PP (P)       3       -
-    3   eff(3770)     PP (P)       3       -
-    4   D0   D0bar    PP (P)       3       -
-    5   D+   D-       PP (P)       3       4  (isospin)
+    3   D0   D0bar    PP (P)       3       -
+    4   D+   D-       PP (P)       3       3  (isospin)
+    5   eff(3770)     PP (P)       3       -
     6   D*0  D0bar    VP (P)       3       -
     7   D*+  D-       VP (P)       3       6  (isospin)
     8   Ds+  Ds-      PP (P)       3       -
@@ -53,6 +53,7 @@ namespace eos
     12  D*+  D*-      VV (P, 1P1)  3       9  (isospin)
     13  D*+  D*-      VV (P, 5P1)  3       10 (isospin)
     14  D*+  D*-      VV (F, 5F1)  3       11 (isospin)
+    15  eff(4040)     PP (P)       3       -
 
     Here, channels 6 and 7 stand for the properly normalised C=-1 eigenstates,
     ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
@@ -321,8 +322,8 @@ namespace eos
     class EEToCCBar : public ParameterUser, public PrivateImplementationPattern<EEToCCBar>
     {
         public:
-            static const long unsigned nchannels   = 15;
-            static const long unsigned nresonances = 3;
+            static const long unsigned nchannels   = 16;
+            static const long unsigned nresonances = 4;
 
             struct IntermediateResult : public CacheableObservable::IntermediateResult
             {
@@ -356,6 +357,8 @@ namespace eos
             double psi3770_DpDm_width() const;
             double psi3770_eff_width() const;
             double psi3770_total_width() const;
+            double psi4040_eff_width() const;
+            double psi4040_total_width() const;
 
             // Phase space factor
             double rho_ee(const IntermediateResult *) const;
@@ -475,6 +478,7 @@ namespace eos
 
             // Spectral function
             double psi3770_spectral_function(const double & E) const;
+            double psi4040_spectral_function(const double & E) const;
 
             // sigma(ee -> channel)
             double sigma_eetoee(const IntermediateResult *) const;
