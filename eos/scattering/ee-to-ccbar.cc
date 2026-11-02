@@ -44,6 +44,7 @@ namespace eos
             UsedParameter m_Dst0;
             UsedParameter m_Dstp;
             UsedParameter m_Ds;
+            UsedParameter m_Dsts;
 
             // assume_symmetry can take values "none", "isospin", and "su3f" and has default value "none"
             std::string assume_symmetry;
@@ -58,10 +59,10 @@ namespace eos
                 psi4040
             };
 
-            inline static const std::array<std::string, 16> channel_names = { "e^+e^-",        "eff(Jpsi)",        "eff(2S)",          "D^0Dbar^0",
-                                                                              "D^+D^-",        "eff(3770)",        "D^*0Dbar^0",       "D^*+D^-",
-                                                                              "D_s^+D_s^-",    "D^*0Dbar^*0(1P1)", "D^*0Dbar^*0(5P1)", "D^*0Dbar^*0(5F1)",
-                                                                              "D^*+D^*-(1P1)", "D^*+D^*-(5P1)",    "D^*+D^*-(5F1)",    "eff(4040)" };
+            inline static const std::array<std::string, 17> channel_names = { "e^+e^-",           "eff(Jpsi)",        "eff(2S)",       "D^0Dbar^0",     "D^+D^-",
+                                                                              "eff(3770)",        "D^*0Dbar^0",       "D^*+D^-",       "D_s^+D_s^-",    "D^*0Dbar^*0(1P1)",
+                                                                              "D^*0Dbar^*0(5P1)", "D^*0Dbar^*0(5F1)", "D^*+D^*-(1P1)", "D^*+D^*-(5P1)", "D^*+D^*-(5F1)",
+                                                                              "eff(4040)",        "D_s^*+D_s^-" };
 
             enum Channels
             {
@@ -80,7 +81,8 @@ namespace eos
                 DstpDstm1P1,
                 DstpDstm5P1,
                 DstpDstm5F1,
-                eff4040
+                eff4040,
+                DstsDs
             };
 
             // Resonance masses
@@ -158,6 +160,7 @@ namespace eos
                         case DpDm:
                         case DsDs:        return D0Dbar0;
                         case DstpDm:      return Dst0D0bar;
+                        case DstsDs:      return Dst0D0bar;
                         case DstpDstm1P1: return Dst0Dst0bar1P1;
                         case DstpDstm5P1: return Dst0Dst0bar5P1;
                         case DstpDstm5F1: return Dst0Dst0bar5F1;
@@ -260,6 +263,7 @@ namespace eos
                 m_Dst0(p["mass::D_u^*"], u),
                 m_Dstp(p["mass::D_d^*"], u),
                 m_Ds(p["mass::D_s"], u),
+                m_Dsts(p["mass::D_s^*"], u),
                 assume_symmetry(o.get("assume-symmetry"_ok, "none"_ov).str()),
                 m(_resonance_masses(p, u, std::make_index_sequence<EEToCCBar::nresonances>())),
                 g0(_g0_matrix(p, u, std::make_index_sequence<EEToCCBar::nresonances>(), std::make_index_sequence<EEToCCBar::nchannels>())),
@@ -369,6 +373,14 @@ namespace eos
                                     channel_names[i],
                                     m_Dstp,
                                     m_Dstp,
+                                    q[i],
+                                    _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
+                            break;
+                        case DstsDs:
+                            channel_array[i] = std::make_shared<PWaveVPChannel<EEToCCBar::nchannels, EEToCCBar::nresonances>>(
+                                    channel_names[i],
+                                    m_Dsts,
+                                    m_Ds,
                                     q[i],
                                     _get_g0_column(_filter_channel_index(Channels(i)), std::make_index_sequence<EEToCCBar::nresonances>()));
                             break;
@@ -1420,6 +1432,66 @@ namespace eos
     {
         return _imp->exclusive_norm
                * (_imp->sigma_eetochannel(ir, Channels::DstpDstm1P1) + _imp->sigma_eetochannel(ir, Channels::DstpDstm5P1) + _imp->sigma_eetochannel(ir, Channels::DstpDstm5F1));
+    }
+
+    double
+    EEToCCBar::rho_DstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->rho(ir, Channels::DstsDs);
+    }
+
+    double
+    EEToCCBar::re_chew_mandelstam_DstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->chew_mandelstam(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::im_chew_mandelstam_DstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->chew_mandelstam(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::re_chew_mandelstam_II_DstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->chew_mandelstam_II(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::im_chew_mandelstam_II_DstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->chew_mandelstam_II(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::re_T_eetoDstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->T_eetochannel(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::im_T_eetoDstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->T_eetochannel(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::re_T_II_eetoDstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return real(_imp->T_II_eetochannel(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::im_T_II_eetoDstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return imag(_imp->T_II_eetochannel(ir, Channels::DstsDs));
+    }
+
+    double
+    EEToCCBar::sigma_eetoDstsDs(const EEToCCBar::IntermediateResult * ir) const
+    {
+        return _imp->exclusive_norm * _imp->sigma_eetochannel(ir, Channels::DstsDs);
     }
 
     const std::set<ReferenceName> EEToCCBar::references{};
