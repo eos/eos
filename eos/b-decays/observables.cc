@@ -595,7 +595,7 @@ namespace eos
     make_bs_to_k_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $B_s\to \bar{K} \ell^-\bar\nu$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "l" selects the charged lepton flavor. )"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
                                                            make_observable("B_s->Klnu::dBR/dq2",
@@ -685,7 +685,7 @@ namespace eos
     make_bs_to_ds_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $\bar{B}_s\to D_s \ell^-\bar\nu$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "l" selects the charged lepton flavor. )"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
                                                            make_observable("B_s->D_slnu::dBR/dq2",
@@ -861,7 +861,7 @@ namespace eos
     make_b_to_eta_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $B^- \to \eta \ell^-\bar\nu$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "l" selects the charged lepton flavor. )"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
                                                            make_observable("B->etalnu::dBR/dq2",
@@ -975,7 +975,7 @@ namespace eos
     make_b_to_eta_prime_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $B^- \to \eta^\prime \ell^-\bar\nu$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "l" selects the charged lepton flavor. )"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
                                                            make_observable("B->eta_primelnu::dBR/dq2",
@@ -2102,7 +2102,7 @@ namespace eos
     make_bs_to_dsstar_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $\bar{B}_s\to D_s^* \ell^-\bar\nu$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "l" selects the charged lepton flavor. )"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
                                                            // B_s -> D_s^* l nu
@@ -3003,7 +3003,7 @@ namespace eos
     make_bc_to_jpsi_l_nu_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $\bar{B}_c\to J/\psi \ell^-\bar\nu$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor.)"
+                                                       R"(The option "l" selects the charged lepton flavor. )"
                                                        R"(The option "form-factors" selects the form factor parametrization.)",
                                                        {
                                                            // B_c -> J/psi l nu

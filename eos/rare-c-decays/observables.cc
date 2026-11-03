@@ -30,9 +30,10 @@ namespace eos
     make_lambdac_to_proton_l_l_group()
     {
         auto imp = new Implementation<ObservableGroup>(R"(Observables in $\Lambda_c \to p \ell^+ \ell^-$ decays)",
-                                                       R"(The option "l" selects the charged lepton flavor. The option
-                                                       "cp-conjugate" selects between the decay and its CP-conjugate. The option "model" selects
-                                                       the model for the Wilson coefficients. The option "form-factors" selects the form factor parameterization.)",
+                                                       R"(The option "l" selects the charged lepton flavor. )"
+                                                       R"(The option "cp-conjugate" selects between the decay and its CP-conjugate. )"
+                                                       R"(The option "model" selects the model for the Wilson coefficients. )"
+                                                       R"(The option "form-factors" selects the form factor parameterization.)",
                                                        {
                                                            make_observable("Lambda_c->protonll::Gamma",
                                                                            R"(\Gamma(\Lambda_c^+ \to p \ell^+ \ell^-))",
