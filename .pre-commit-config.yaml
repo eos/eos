@@ -27,10 +27,10 @@ repos:
         files: ^(\.github/.*\.(yaml|yml)|[^/]+\.yaml)$
 
   - repo: https://github.com/asottile/pyupgrade
-    rev: v3.21.2
+    rev: v3.22.0
     hooks:
       - id: pyupgrade
-        args: [--py39-plus]
+        args: [--py311-plus]
 
   - repo: https://github.com/pre-commit/pygrep-hooks
     rev: v1.10.0
