@@ -91,7 +91,7 @@ def __format_ObservableEntry(e):
     result = '<table>\n'
     result += f'<tr><th>QualifedName</th><td><tt style="color:grey">{e.name()}</tt></td></tr>'
     result += f'<tr><th>Description</th><td>$${e.latex()}$$</td></tr>'
-    kvs = [kv for kv in e.kinematic_variables()]
+    kvs = [*e.kinematic_variables()]
     if len(kvs) > 0:
         result += f'<tr><th rowspan={len(kvs)}>Kinematic Variables</th><td>{kvs[0]}</td></tr>'
     for i in range(1, len(kvs)):

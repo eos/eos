@@ -119,7 +119,7 @@ class ObservableEntryTests(unittest.TestCase):
         entry  = eos.Observables()['B->Dlnu::dBR/dq2;l=e,q=d']
         result = format_ObservableEntry(entry)
 
-        kvs = [kv for kv in entry.kinematic_variables()]
+        kvs = [*entry.kinematic_variables()]
         self.assertGreater(len(kvs), 0)
         self.assertIn('B->Dlnu::dBR/dq2', result)
         self.assertIn(f'<th rowspan={len(kvs)}>Kinematic Variables</th>', result)
@@ -132,7 +132,7 @@ class ObservableEntryTests(unittest.TestCase):
         entry  = eos.Observables()['0->Kpi::Im{f_+}(Re{q2},Im{q2})']
         result = format_ObservableEntry(entry)
 
-        kvs = [kv for kv in entry.kinematic_variables()]
+        kvs = [*entry.kinematic_variables()]
         self.assertEqual(len(kvs), 2)
         self.assertIn(f'<th rowspan={len(kvs)}>Kinematic Variables</th><td>{kvs[0]}</td></tr>', result)
         self.assertIn(f'<tr><td>{kvs[1]}</td></tr>', result)
@@ -143,7 +143,7 @@ class ObservableEntryTests(unittest.TestCase):
         entry  = eos.Observables()['0->Kpi::Delta_CT@KSvD2025']
         result = format_ObservableEntry(entry)
 
-        self.assertEqual([kv for kv in entry.kinematic_variables()], [])
+        self.assertEqual([*entry.kinematic_variables()], [])
         self.assertIn('0->Kpi::Delta_CT@KSvD2025', result)
         self.assertNotIn('Kinematic Variables', result)
 
