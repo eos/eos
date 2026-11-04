@@ -107,7 +107,7 @@ class Parameters(_Parameters):
                 group_result = fr'''
                     <tr><th style="text-align:left" colspan=4>{group.name()}</th></tr>
                     <tr><td style="text-align:left" colspan=4>{group.description()}</td></tr>'''
-                group_parameters = [p for p in group]
+                group_parameters = [*group]
                 group_parameters.sort(key = Parameters._key)
                 for parameter in group_parameters:
                     qn = parameter.name()
@@ -161,7 +161,7 @@ class Parameters(_Parameters):
 
         parameters = []
         if names is None:
-            parameters = [p for p in self]
+            parameters = [*self]
         else:
             for p in self:
                 if p.name() not in names:

@@ -534,7 +534,7 @@ class ObservableItem(Item):
         super().__post_init__()
         eos.debug(f'Handling item to plot {self.observable}')
         self._observable_entry = eos.Observables()[self.observable]
-        valid_kinematic_variables = {kv for kv in self._observable_entry.kinematic_variables()}
+        valid_kinematic_variables = {*self._observable_entry.kinematic_variables()}
 
         # Create kinematics
         self._kinematics = eos.Kinematics()
@@ -3414,7 +3414,7 @@ class ComplexPlaneItem(Item):
     def __post_init__(self):
         eos.debug(f'Handling item to plot {self.observable} in the complex plane')
         self._observable_entry = eos.Observables()[self.observable]
-        valid_kinematic_variables = {kv for kv in self._observable_entry.kinematic_variables()}
+        valid_kinematic_variables = {*self._observable_entry.kinematic_variables()}
 
         # Create kinematics
         self._kinematics = eos.Kinematics()
