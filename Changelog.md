@@ -13,6 +13,7 @@
 - Write each task's outputs to a temporary directory that replaces the final one only once the task succeeds, so that a failed task leaves previous results untouched and no incomplete output directory behind; ``sample-mcmc`` now fails on a run time error in lieu of logging it and succeeding (issue #1291) (D. van Dyk)
 
 - Let kinematic aliases take precedence over kinematic variables of the same name, so that a kinematic specification in an expression applies even if the kinematics provide a variable of that name, e.g. in ``<<B->pi::f_+(q2)>> / <<B->pi::f_+(q2)>>[q2=0.0]`` (D. van Dyk)
+- Require at least Python 3.11 as 3.10 went EOL in October 2026 (M. Kirk)
 
 ### Added
 - Add the ``Bbar^*->D`` and ``Bbar^*->D^*`` tensor form factors in the HQE parametrisation, following [BGJvD:2025A]; the ``FormFactors<VToP>`` and ``FormFactors<VToV>`` interfaces gain ``h_tbar_1`` to ``h_tbar_3`` and ``h_t4`` to ``h_t10`` respectively (D. van Dyk)

@@ -7,7 +7,7 @@ name = "eoshep"
 version = "@PYPI_VERSION@"
 description = "EOS -- A HEP program for Flavor Observables"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = { text = "GPLv2" }
 authors = [
     { name = "Danny van Dyk and others", email = "danny.van.dyk@gmail.com" },

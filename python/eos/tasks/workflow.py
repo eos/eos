@@ -113,7 +113,7 @@ def list_figures(analysis_file:str):
     :param analysis_file: The name of the analysis file, or an object of class `eos.AnalysisFile`.
     :type analysis_file: str or :class:`eos.AnalysisFile`
     """
-    return [name for name in analysis_file._figures.keys()]
+    return [*analysis_file._figures.keys()]
 
 
 @task('list-steps', '', logfile=False)
