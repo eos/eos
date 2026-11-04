@@ -216,7 +216,7 @@ class ToYAMLTests(unittest.TestCase):
         parameters = eos.Parameters()
         contents   = yaml.safe_load(parameters.to_yaml())
 
-        self.assertEqual(len(contents), len([p for p in parameters]))
+        self.assertEqual(len(contents), len([*parameters]))
         self.assertIn('mass::b(MSbar)',        contents)
         self.assertIn('B->pi::f_+(0)@BCL2008', contents)
 

@@ -386,7 +386,7 @@ class AnalysisFile:
             if type(o.kinematics) == dict:
                 kinematics = [o.kinematics]
             else:
-                kinematics = [k for k in o.kinematics]
+                kinematics = [*o.kinematics]
 
             for k in kinematics:
                 # eos.Observable.make raises for an unknown observable; collect every offending name
