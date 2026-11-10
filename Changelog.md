@@ -3,19 +3,30 @@
 ## Unreleased
 
 ### Changed
+
+### Added
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+## [v1.1.1] - 2026-11-10
+
+### Changed
+
 - Rename ``eos.stderr_handler`` to ``eos.default_log_handler`` #1290 (D. van Dyk)
 - Let ``eos.set_log_level`` accept any Python log level or its name, e.g. ``'DEBUG'``, and change the native log level in lock-step, also for the CLI's verbosity #1290 (D. van Dyk)
 - **Breaking:** Rethrow the first exception raised while evaluating an observable in ``ObservableCache::update()``, on the calling thread and only after every pending computation has been waited on, in lieu of logging it and writing a ``NaN`` into the affected prediction; every evaluation path now catches exceptions of any type, not only ``eos::Exception``, so that an exception escaping a worker thread no longer terminates the process. Code that relied on ``update()`` never throwing must now handle the exception, and a single unevaluable point of a large grid surfaces as an error in lieu of a ``NaN`` log-posterior that a sampler steps straight past #1236 (D. van Dyk)
-
 - Test the ``eos-analysis`` commands in Python, in lieu of the bash script ``src/scripts/eos-analysis_TEST``; the tests of the pypmc-based commands ``sample-mcmc``, ``find-clusters``, ``sample-pmc``, and ``find-mode --from-mcmc`` are kept apart in ``eos/cli/analysis_pypmc_TEST.py`` (issue #1264) (D. van Dyk)
-
 - **Breaking:** Reject a task argument interpolated into the task's output directory unless it is a single path component without whitespace, and reject file-local names ``.`` and ``..`` in analysis files (issue #1291) (D. van Dyk)
 - Write each task's outputs to a temporary directory that replaces the final one only once the task succeeds, so that a failed task leaves previous results untouched and no incomplete output directory behind; ``sample-mcmc`` now fails on a run time error in lieu of logging it and succeeding (issue #1291) (D. van Dyk)
-
 - Let kinematic aliases take precedence over kinematic variables of the same name, so that a kinematic specification in an expression applies even if the kinematics provide a variable of that name, e.g. in ``<<B->pi::f_+(q2)>> / <<B->pi::f_+(q2)>>[q2=0.0]`` (D. van Dyk)
 - Require at least Python 3.11 as 3.10 went EOL in October 2026 (M. Kirk)
 
 ### Added
+
 - Add the ``Bbar^*->D`` and ``Bbar^*->D^*`` tensor form factors in the HQE parametrisation, following [BGJvD:2025A]; the ``FormFactors<VToP>`` and ``FormFactors<VToV>`` interfaces gain ``h_tbar_1`` to ``h_tbar_3`` and ``h_t4`` to ``h_t10`` respectively (D. van Dyk)
 - Add the reference [BGJvD:2025A] and cite it from ``BGLCoefficients`` and ``HQETUnitarityBounds``, which implement its BGL coefficients for the tensor form factors and its ``1^+`` and ``1^-`` tensor bounds (D. van Dyk)
 - Add batch computations to ``ObservableCache``: ``add_batch()`` registers a group of observables that are evaluated into one contiguous, pre-allocated block of memory, partitioned across the available threads, and ``operator[](BatchId)`` retrieves their predictions as a ``std::span`` #1236 (D. van Dyk)
@@ -43,27 +54,25 @@
 - Let each data file of ``eos.figure.CornerFigure`` set its line style, line width, and opacity, as well as the contours and credibility levels of its kernel density estimates; ``level: null`` on a one-dimensional KDE item now shades no interval, rather than the 68.3% interval (D. van Dyk)
 - Let the templates of the ``report`` task load any YAML file through the function ``load_yaml(path)``, with ``path`` relative to the base directory (D. van Dyk)
 - Add two benchmark problems of the pole subtraction, which ``eos::register_benchmarks()`` and ``eos.register_benchmarks()`` register on request, as does importing ``eos`` with the environment variable ``EOS_REGISTER_BENCHMARKS`` set (D. van Dyk)
-
 - Add the ``eos-analysis`` task ``model-comparison``, which compares a group of posteriors sharing the same likelihood by their nested-sampling evidences: it corrects for differing uniform or transform priors of shared parameters and records their log prior volumes, grades all pairwise Bayes factors on Jeffreys' scale, and flags pairs whose conclusion is unstable under the evidence uncertainties or the prior-volume correction. The result is stored as the new ``eos.data.ModelComparison``, exposed to reports through ``AnalysisData.model_comparisons``, and shown at the top of the example report template (issue #1282) (D. van Dyk)
-
 - Let ``eos.figure.CornerFigure`` display an ``eos.data.Mode``, drawn as a vertical line on the diagonal and as a point off the diagonal; ``eos.data.Mode`` gains a ``lookup_table`` #1302 (D. van Dyk)
-
 - Add kinematic substitutions to EOS expressions: ``<<B->pi::f_+(q2)>>[q2={m}^2]`` evaluates the referenced observable with ``q2`` computed from other kinematic variables through constants and functions; parameters and observables are rejected. The substituted variable is computed whenever it is read, so that it follows changes of the kinematics, also within an ``ObservableCache`` and its clones (D. van Dyk)
 - Add derived kinematic variables to ``eos::Kinematics``, declared through ``Kinematics::declare_derived()`` with a ``KinematicHook`` that computes the value whenever the variable is read; derived variables cannot be set, and follow clones of their kinematics (D. van Dyk)
 
 ### Deprecated
 
 ### Removed
+
 - **Breaking:** Remove the C++ base class ``eos::Density``; ``eos::SignalPDF`` no longer offers ``begin()``/``end()``, and its two ``clone()`` overloads are replaced by ``clone(const ObservableCache &)``, which returns a ``SignalPDFPtr`` #1303 (D. van Dyk)
 
 ### Fixed
+
 - Fix ``eos.set_log_level`` to set the level of the default log handler rather than that of the logger, so that DEBUG messages are shown; correct the FAQ on setting the log level, which caused messages to be printed twice #1290 (D. van Dyk)
 - Use the mass parameters, rather than compile-time constants, when converting ``q2`` to ``w`` in the ``V->V`` HQE form factors, as the other three transitions already did; setting ``mass::B_d^*`` or ``mass::D_u^*`` previously had no effect on the ``Bbar^*->D^*`` form factors (D. van Dyk)
 - Correct the normalization constants ``K`` passed to the outer function ``_phi`` for the tensor form factors ``t_1``, ``t_2``, ``t_23``, and ``f_t`` in the ``BGL1997``-like parametrization (D. van Dyk)
 - Evaluate the HQET form factors at zero recoil independently of the compiler's use of fused multiply-add: reconstructing ``q2`` from the meson masses reproduces ``w = 1`` only up to rounding, and the auxiliary functions ``r`` and ``Omega`` returned NaN whenever it landed a few ulps below the endpoint (D. van Dyk)
 - Fix a reference leak in the conversion of Python sequences to ``std::vector`` in the Python bindings #1236 (D. van Dyk)
 - Fix ``ObservableCache::clone()`` to register the observables that a cloned expression refers to with the clone, rather than with the original cache #1236 (D. van Dyk)
-
 - Fix fixed kinematic values in expressions, e.g. ``<<B->pi::f_+(q2)>>[q2=1.0]``, which overwrote each other when several expressions, including nested ones, were made on the same kinematics (D. van Dyk)
 - Fix cloning an ``ObservableCache`` that holds an expression whose observables are made through a kinematic alias or a fixed kinematic value, which threw an ``UnknownKinematicVariableError`` (D. van Dyk)
 - Fix ``Kinematics::set()`` for an alias, which threw an ``UnknownKinematicVariableError``, and for an unknown name, which accessed invalid memory (D. van Dyk)
@@ -72,8 +81,6 @@
 
 
 ## [v1.1] - 2026-09-25
-
-- Added the eos-analysis task ``create-constraint``. This fits a multi-variate Gaussian to the samples and assesses the goodness-of-fit. The constraint can then be used in subseqeunt tasks. #1240(M. Smith)
 
 ### Changed
 
@@ -170,6 +177,7 @@
 - Implement a generation tracker for Parameters (M. Reboud)
 - Add the possibility of specifying options in the when plotting constraint's residues (M. Reboud)
 - Add the possibility of changing the colormap when plotting observables in the complex plane (M. Reboud)
+- Added the eos-analysis task ``create-constraint``. This fits a multi-variate Gaussian to the samples and assesses the goodness-of-fit. The constraint can then be used in subseqeunt tasks. #1240(M. Smith)
 
 ### Deprecated
 
@@ -501,6 +509,7 @@
 
 
 
+[v1.1.1]: https://github.com/eos/eos/releases/tag/v1.1.1
 [v1.1]: https://github.com/eos/eos/releases/tag/v1.1
 [v1.0.21]: https://github.com/eos/eos/releases/tag/v1.0.21
 [v1.0.20]: https://github.com/eos/eos/releases/tag/v1.0.20
