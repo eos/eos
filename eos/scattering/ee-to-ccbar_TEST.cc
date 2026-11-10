@@ -241,8 +241,8 @@ class eetoccbarTest : public TestCase
                 EEToCCBar c(p, oo);
 
                 auto ir = c.prepare(3.78);
-                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
-                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDpDm(ir), 2.70723, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882 / 4.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDpDm(ir), 2.70723 / 4.0, eps);
 
                 auto irc = c.prepare_complex(3.78, -0.001);
 
