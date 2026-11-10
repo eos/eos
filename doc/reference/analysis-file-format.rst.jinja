@@ -109,6 +109,18 @@ The following example illustrates such a prior.
        descriptions:
          - { 'type': 'constraint', 'constraint': 'B->rho::FormFactors[parametric,LCSR]@BSZ:2015A' }
 
+A ``type: nabu`` description draws a (correlated, multivariate) prior from a normalising flow stored as an :class:`eos.data.NabuLikelihood`, e.g. one fitted to the samples of another posterior.
+Its ``path`` names the directory holding ``description.yaml`` and ``likelihood.nabu``, relative to the base directory of the analysis; an absolute path is used as given.
+The varied parameters and their order are taken from ``description.yaml``, and none of them may appear in another prior of the same posterior.
+This prior requires the optional ``nabu`` module.
+
+.. code-block:: yaml
+
+   priors:
+     - name: FF-HQE
+       descriptions:
+         - { 'type': 'nabu', 'path': 'data/HQE-LQCD/nabu' }
+
 Each prior description's ``type`` key selects one of the following:
 
 .. list-table::

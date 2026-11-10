@@ -20,7 +20,34 @@ from eos.serializable import Serializable
 
 import copy as _copy
 import eos
+import numpy as _np
 import os
+
+
+_jax_initialized = False
+
+def _init_jax_single_threaded():
+    # XLA sizes its CPU thread pool from the affinity at backend start-up; a large pool slows
+    # down the single-point evaluations used by NabuLogPrior about eightfold on many-core hosts.
+    global _jax_initialized
+    if _jax_initialized:
+        return
+    import jax
+    _jax_initialized = True
+    if not hasattr(os, 'sched_setaffinity'):
+        return
+    affinity = os.sched_getaffinity(0)
+    threads = set(os.listdir('/proc/self/task'))
+    os.sched_setaffinity(0, {min(affinity)})
+    try:
+        jax.devices()
+    finally:
+        # the threads started by XLA inherit the restricted affinity, but keep their small pool once released
+        for tid in ['0'] + sorted(set(os.listdir('/proc/self/task')) - threads):
+            try:
+                os.sched_setaffinity(int(tid), affinity)
+            except ProcessLookupError:
+                pass
 
 
 @dataclass(kw_only=True)
@@ -78,7 +105,12 @@ class NabuLikelihood:
     Wraps a :class:`nabu.Likelihood` object together with the descriptions of the varied parameters.
     Instances are created either by reading an existing likelihood from disk (passing its ``path`` to
     the constructor) or by writing a new likelihood with :meth:`create`. Reading requires the optional
-    nabu module.
+    nabu module. The likelihood can be used as a prior through :meth:`log_prior`.
+
+    Reading a likelihood initializes the CPU backend of JAX, unless already initialized, with a
+    thread pool sized for a single core; no thread of the process remains pinned to that core.
+    This speeds up the evaluation of single points about eightfold on many-core hosts, but makes
+    JAX computations on large batches in the same process (e.g. fitting a flow) slower.
 
     :ivar type: The type identifier of the data object, always ``'NabuLikelihood'``.
     :ivar varied_parameters: The descriptions (name, min, max) of the varied parameters.
@@ -105,8 +137,26 @@ class NabuLikelihood:
         if not os.path.exists(f) or not os.path.isfile(f):
             raise RuntimeError(f'Nabu likelihood file {f} does not exist or is not a file')
 
+        _init_jax_single_threaded()
         import nabu
         self.likelihood = nabu.Likelihood.load(f)
+
+
+    def log_prior(self, parameters):
+        """Return this likelihood as an external prior on the parameters listed in ``description.yaml``.
+
+        :param parameters: The parameters to which the prior is bound.
+        :type parameters: eos.Parameters
+        :returns: The prior, varying the parameters in the order of :attr:`varied_parameters`.
+        :rtype: eos.LogPrior
+        """
+        return eos.LogPrior.External(parameters, lambda p: NabuLogPrior(p, self))
+
+
+    @staticmethod
+    def make_log_prior(parameters, path):
+        """Read the likelihood at ``path`` and return it as a prior; see :meth:`log_prior`."""
+        return NabuLikelihood(path).log_prior(parameters)
 
 
     @staticmethod
@@ -129,3 +179,39 @@ class NabuLikelihood:
         description.to_yaml_file(os.path.join(path, 'description.yaml'))
 
         likelihood.save(os.path.join(path, 'likelihood.nabu'))
+
+
+class NabuLogPrior:
+    r"""Provider of an external prior backed by a :class:`NabuLikelihood`, for use with
+    :meth:`eos.LogPrior.External`.
+
+    The prior density is the nabu likelihood's density in the physical basis. Inverse transform
+    sampling uses the likelihood's map from and to the unit hypercube. Outside the likelihood's
+    support, the prior evaluates to :math:`-\infty` and :meth:`compute_cdf` yields NaN.
+
+    :param parameters: The parameters to which the prior is bound.
+    :type parameters: eos.Parameters
+    :param likelihood: The likelihood that provides the prior density.
+    :type likelihood: NabuLikelihood
+    """
+    informative = True
+
+    def __init__(self, parameters, likelihood):
+        self._likelihood = likelihood.likelihood
+        self.varied_parameters = [p['name'] for p in likelihood.varied_parameters]
+        self._parameters = [parameters[n] for n in self.varied_parameters]
+
+    def _values(self):
+        return _np.array([p.evaluate() for p in self._parameters])
+
+    def evaluate(self):
+        return float(self._likelihood.log_prob(self._values()))
+
+    def sample(self):
+        u = _np.array([p.evaluate_generator() for p in self._parameters])
+        for p, v in zip(self._parameters, self._likelihood.from_unit_cube(u)):
+            p.set(float(v))
+
+    def compute_cdf(self):
+        for p, u in zip(self._parameters, self._likelihood.to_unit_cube(self._values())):
+            p.set_generator(float(u))

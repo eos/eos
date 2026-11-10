@@ -225,7 +225,7 @@ class AnalysisFile:
 
                 # extend prior
                 pyhf_priors = eos.PyhfLogLikelihood.factory(cache, workspace, parameter_map).priors()
-                existing_priors = [p.parameter for p in prior]
+                existing_priors = [p.parameter for p in prior if hasattr(p, 'parameter')]
                 # only add missing pyhf priors
                 for pyhf_prior in pyhf_priors:
                     if pyhf_prior['parameter'] not in existing_priors:
@@ -248,7 +248,8 @@ class AnalysisFile:
         fixed_parameters = posterior.fixed_parameters
 
         #  Convert back to dictionaries (for now) as that is what Analysis expects
-        prior = [ asdict(pc) for pc in prior]
+        context = AnalysisFileContext(base_directory=base_directory)
+        prior = [ pc.resolve(context) if hasattr(pc, 'resolve') else asdict(pc) for pc in prior]
         likelihood = [ d["constraint"] for d in (asdict(lc) for lc in likelihood) ]
         manual_constraints = { d["name"]: d["info"] for d in (asdict(mc) for mc in manual_constraints) }
 
@@ -605,9 +606,18 @@ class AnalysisFile:
                 p_min, p_max = None, None
                 if p.type == 'uniform':
                     p_min, p_max = p.min, p.max
+                if p.type == 'constraint':
+                    names = [p.constraint]
+                elif p.type == 'transform':
+                    names = p.parameters
+                elif p.type == 'nabu':
+                    names = [p.path]
+                else:
+                    names = [p.parameter]
+                names = '<br>'.join(f'<code>{n}</code>' for n in names)
                 result += fr'''
                     <tr>
-                        <td style="text-align: center"><code>{p.parameter}</code></td>
+                        <td style="text-align: center">{names}</td>
                         <td style="text-align: center">{p_min}</td>
                         <td style="text-align: center">{p_max}</td>
                         <td style="text-align: center">{p.type}</td>
