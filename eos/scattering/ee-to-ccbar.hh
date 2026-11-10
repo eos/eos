@@ -37,25 +37,25 @@ namespace eos
 {
     /*
     Channels follow the following convention
-    #   name          type         Nf      copy
-    0   ee            ee (S)       3       -
-    1   effJpsi       PP (P)       3       -
-    2   eff(2S)       PP (P)       3       -
-    3   D0   D0bar    PP (P)       3       -
-    4   D+   D-       PP (P)       3       3  (isospin)
-    5   eff(3770)     PP (P)       3       -
-    6   D*0  D0bar    VP (P)       3       -
-    7   D*+  D-       VP (P)       3       6  (isospin)
-    8   Ds+  Ds-      PP (P)       3       3  (su3f)
-    9   D*0  D*0bar   VV (P, 1P1)  3       -
-    10  D*0  D*0bar   VV (P, 5P1)  3       -
-    11  D*0  D*0bar   VV (F, 5F1)  3       -
-    12  D*+  D*-      VV (P, 1P1)  3       9  (isospin)
-    13  D*+  D*-      VV (P, 5P1)  3       10 (isospin)
-    14  D*+  D*-      VV (F, 5F1)  3       11 (isospin)
-    15  eff(4040)     PP (P)       3       -
-    16  D*s+ Ds-      VP (P)       3       6  (su3f)
-    17  eff(4160)     PP (P)       3       -
+    #   name          type         copy
+    0   ee            ee (S)       -
+    1   effJpsi       PP (P)       -
+    2   eff(2S)       PP (P)       -
+    3   D0   D0bar    PP (P)       -
+    4   D+   D-       PP (P)       3  (isospin)
+    5   eff(3770)     PP (P)       -
+    6   D*0  D0bar    VP (P)       -
+    7   D*+  D-       VP (P)       6  (isospin)
+    8   Ds+  Ds-      PP (P)       3  (su3f)
+    9   D*0  D*0bar   VV (P, 1P1)  -
+    10  D*0  D*0bar   VV (P, 5P1)  -
+    11  D*0  D*0bar   VV (F, 5F1)  -
+    12  D*+  D*-      VV (P, 1P1)  9  (isospin)
+    13  D*+  D*-      VV (P, 5P1)  10 (isospin)
+    14  D*+  D*-      VV (F, 5F1)  11 (isospin)
+    15  eff(4040)     PP (P)       -
+    16  D*s+ Ds-      VP (P)       6  (su3f)
+    17  eff(4160)     PP (P)       -
 
     Here, channels 6 and 7 stand for the properly normalised C=-1 eigenstates,
     ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
