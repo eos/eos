@@ -18,12 +18,14 @@
  */
 
 #include <eos/maths/complex.hh>
+#include <eos/maths/power-of.hh>
 #include <eos/scattering/ee-to-ccbar.hh>
 #include <eos/utils/kmatrix-impl.hh>
 
 #include <test/test.hh>
 
 #include <array>
+#include <cmath>
 #include <memory>
 #include <string>
 
@@ -242,8 +244,8 @@ class eetoccbarTest : public TestCase
                 EEToCCBar c(p, oo);
 
                 auto ir = c.prepare(3.78);
-                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 3.48882, eps);
-                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDpDm(ir), 2.70723, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(ir), 0.872205, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDpDm(ir), 0.676807, eps);
 
                 auto irc = c.prepare_complex(3.78, -0.001);
 
@@ -444,6 +446,49 @@ class eetoccbarTest : public TestCase
             }
 
             {
+                // Narrow-resonance limit: at the peak, sigma(e^+e^- -> f) = 12 pi / s * B(e^+e^-) * B(f)
+                Parameters p                            = Parameters::Defaults();
+                p["mass::psi(3770)"]                    = 3.7737;
+                p["ee->ccbar::q_0"]                     = 0.5;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"]    = 0.05;
+                p["ee->ccbar::g0(psi(3770),D^0Dbar^0)"] = 1.0;
+
+                EEToCCBar c(p, Options{});
+
+                // Locate the peak through a ternary search
+                double lo = 3.76, hi = 3.79;
+                for (unsigned i = 0; i < 200; ++i)
+                {
+                    const double E1     = lo + (hi - lo) / 3.0;
+                    const double E2     = hi - (hi - lo) / 3.0;
+                    const double sigma1 = c.sigma_eetoD0Dbar0(c.prepare(E1));
+                    const double sigma2 = c.sigma_eetoD0Dbar0(c.prepare(E2));
+                    if (sigma1 < sigma2)
+                    {
+                        lo = E1;
+                    }
+                    else
+                    {
+                        hi = E2;
+                    }
+                }
+                const double E = (lo + hi) / 2.0, s = E * E;
+
+                const double m_e      = p["mass::e"].evaluate();
+                const double m_D      = p["mass::D^0"].evaluate();
+                const double q2       = s / 4.0 - m_D * m_D;
+                const double rho_ee   = std::sqrt(1.0 - 4.0 * m_e * m_e / s) / (16.0 * M_PI);
+                const double rho_D    = std::sqrt(4.0 * q2 / s) / (16.0 * M_PI);
+                const double Gamma_ee = power_of<2>(0.05) * rho_ee;
+                // P-wave barrier factor n^2 = q^2 / (q^2 + q_0^2)
+                const double Gamma_D  = power_of<2>(1.0) * rho_D * q2 / (q2 + 0.25);
+                const double hbarc2   = 0.3893793721e6; // (hbar c)^2 in GeV^2 nb
+                const double expected = hbarc2 * 12.0 * M_PI / s * Gamma_ee * Gamma_D / power_of<2>(Gamma_ee + Gamma_D) / (16.0 * M_PI * rho_ee);
+
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoD0Dbar0(c.prepare(E)), expected, eps);
+            }
+
+            {
                 // An unknown value of assume-symmetry is rejected
                 Parameters p = Parameters::Defaults();
                 Options    o{
@@ -532,6 +577,69 @@ class eetoccbarTest : public TestCase
             }
 
             {
+                // VV helicity cross sections: each LS channel alone has fixed helicity fractions TT : TL : LL
+                Parameters p                         = Parameters::Defaults();
+                p["ee->ccbar::q_0"]                  = 0.5;
+                p["mass::D_u^*"]                     = 2.00685;
+                p["mass::D_d^*"]                     = 2.01026;
+                p["mass::psi(3770)"]                 = 3.7737;
+                p["ee->ccbar::g0(psi(3770),e^+e^-)"] = 0.05;
+
+                const std::array<std::string, 3>           waves{ "1P1", "5P1", "5F1" };
+                const std::array<std::array<double, 3>, 3> fractions{
+                    { { 2.0 / 3.0, 0.0, 1.0 / 3.0 }, { 2.0 / 15.0, 3.0 / 5.0, 4.0 / 15.0 }, { 1.0 / 5.0, 2.0 / 5.0, 2.0 / 5.0 } }
+                };
+
+                for (unsigned i = 0; i < waves.size(); ++i)
+                {
+                    for (unsigned j = 0; j < waves.size(); ++j)
+                    {
+                        p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(" + waves[j] + "))"] = (i == j) ? 1.0 : 0.0;
+                    }
+
+                    EEToCCBar  c(p, Options{});
+                    const auto ir    = c.prepare(4.3);
+                    const auto total = c.sigma_eetoDst0Dst0bar(ir);
+
+                    TEST_CHECK(total > 0.0);
+                    TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDst0Dst0bar_TT(ir) / total, fractions[i][0], 1.0e-12);
+                    TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDst0Dst0bar_TL(ir) / total, fractions[i][1], 1.0e-12);
+                    TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDst0Dst0bar_LL(ir) / total, fractions[i][2], 1.0e-12);
+                }
+
+                // with all LS channels coupled, the helicity cross sections still sum to the total
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(1P1))"] = 1.0;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(5P1))"] = 0.5;
+                p["ee->ccbar::g0(psi(3770),D^*0Dbar^*0(5F1))"] = 0.7;
+
+                for (const auto & symmetry : { "none"_ov, "isospin"_ov })
+                {
+                    EEToCCBar  c(p,
+                                Options{
+                                     { "assume-symmetry"_ok, symmetry }
+                    });
+                    const auto ir = c.prepare(4.3);
+
+                    const auto total0 = c.sigma_eetoDst0Dst0bar(ir);
+                    TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0Dst0bar_1P1(ir) + c.sigma_eetoDst0Dst0bar_5P1(ir) + c.sigma_eetoDst0Dst0bar_5F1(ir), total0, 1.0e-12);
+                    TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0Dst0bar_TT(ir) + c.sigma_eetoDst0Dst0bar_TL(ir) + c.sigma_eetoDst0Dst0bar_LL(ir), total0, 1.0e-12);
+
+                    // the charged channels have no couplings of their own, but inherit the neutral ones under isospin
+                    const auto totalp = c.sigma_eetoDstpDstm(ir);
+                    if (symmetry == "none"_ov)
+                    {
+                        TEST_CHECK_NEARLY_EQUAL(totalp, 0.0, 1.0e-15);
+                    }
+                    else
+                    {
+                        TEST_CHECK(totalp > 0.0);
+                        TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstpDstm_1P1(ir) + c.sigma_eetoDstpDstm_5P1(ir) + c.sigma_eetoDstpDstm_5F1(ir), totalp, 1.0e-12);
+                        TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstpDstm_TT(ir) + c.sigma_eetoDstpDstm_TL(ir) + c.sigma_eetoDstpDstm_LL(ir), totalp, 1.0e-12);
+                    }
+                }
+            }
+
+            {
                 // The D_s^*+ D_s^- + h.c. channel: closed below threshold, and its SU(3)_F partner D^*0 Dbar^0 + h.c.
                 Parameters p                             = Parameters::Defaults();
                 p["ee->ccbar::q_0"]                      = 0.5;
@@ -557,6 +665,124 @@ class eetoccbarTest : public TestCase
                 p["ee->ccbar::g0(psi(3770),D_s^*+D_s^-)"] = 2.0;
                 TEST_CHECK_RELATIVE_ERROR(su3f.sigma_eetoDstsDs(su3f.prepare(4.3)), sigma, 1.0e-14);
                 TEST_CHECK(none.sigma_eetoDstsDs(none.prepare(4.3)) > 0.0);
+            }
+
+            {
+                // Narrow-resonance limit for psi(4040) and psi(4160) decaying into their effective channels, and their widths
+                struct Case
+                {
+                        std::string resonance, channel;
+                        double      mass;
+                        double (EEToCCBar::*eff_width)() const;
+                        double (EEToCCBar::*total_width)() const;
+                };
+
+                for (const auto & [resonance, channel, M, eff_width, total_width] : {
+                         Case{ "psi(4040)", "eff(4040)", 4.040, &EEToCCBar::psi4040_eff_width, &EEToCCBar::psi4040_total_width },
+                         Case{ "psi(4160)", "eff(4160)", 4.191, &EEToCCBar::psi4160_eff_width, &EEToCCBar::psi4160_total_width }
+                })
+                {
+                    Parameters p                                          = Parameters::Defaults();
+                    p["mass::" + resonance]                               = M;
+                    p["ee->ccbar::q_0"]                                   = 0.5;
+                    p["ee->ccbar::effective_mass"]                        = 0.1;
+                    p["ee->ccbar::g0(" + resonance + ",e^+e^-)"]          = 0.05;
+                    p["ee->ccbar::g0(" + resonance + "," + channel + ")"] = 1.0;
+
+                    EEToCCBar c(p, Options{});
+
+                    // Locate the peak through a ternary search
+                    double lo = M - 0.03, hi = M + 0.03;
+                    for (unsigned i = 0; i < 200; ++i)
+                    {
+                        const double E1     = lo + (hi - lo) / 3.0;
+                        const double E2     = hi - (hi - lo) / 3.0;
+                        const double sigma1 = c.sigma_eetoeff(c.prepare(E1));
+                        const double sigma2 = c.sigma_eetoeff(c.prepare(E2));
+                        if (sigma1 < sigma2)
+                        {
+                            lo = E1;
+                        }
+                        else
+                        {
+                            hi = E2;
+                        }
+                    }
+                    const double E = (lo + hi) / 2.0, s = E * E;
+
+                    const double m_e       = p["mass::e"].evaluate();
+                    const double q2        = s / 4.0 - 0.01;
+                    const double rho_ee    = std::sqrt(1.0 - 4.0 * m_e * m_e / s) / (16.0 * M_PI);
+                    const double rho_eff   = std::sqrt(4.0 * q2 / s) / (16.0 * M_PI);
+                    const double Gamma_ee  = power_of<2>(0.05) * rho_ee;
+                    // P-wave barrier factor n^2 = q^2 / (q^2 + q_0^2)
+                    const double Gamma_eff = power_of<2>(1.0) * rho_eff * q2 / (q2 + 0.25);
+                    const double hbarc2    = 0.3893793721e6; // (hbar c)^2 in GeV^2 nb
+                    const double expected  = hbarc2 * 12.0 * M_PI / s * Gamma_ee * Gamma_eff / power_of<2>(Gamma_ee + Gamma_eff) / (16.0 * M_PI * rho_ee);
+
+                    TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoeff(c.prepare(E)), expected, eps);
+
+                    // partial widths g0^2 rho(M^2) / M, without barrier factor
+                    const double width_ee  = power_of<2>(0.05) * std::sqrt(1.0 - 4.0 * m_e * m_e / (M * M)) / (16.0 * M_PI) / M;
+                    const double width_eff = power_of<2>(1.0) * std::sqrt(1.0 - 4.0 * 0.01 / (M * M)) / (16.0 * M_PI) / M;
+                    TEST_CHECK_RELATIVE_ERROR((c.*eff_width)(), width_eff, eps);
+                    TEST_CHECK_RELATIVE_ERROR((c.*total_width)(), width_ee + width_eff, eps);
+                }
+            }
+
+            {
+                // Coupled-channel cross sections above all open-charm thresholds. The reference values stem from an
+                // independent evaluation that computes the Chew-Mandelstam functions as dispersion integrals.
+                Parameters p                                   = Parameters::Defaults();
+                p["ee->ccbar::q_0"]                            = 0.5;
+                p["ee->ccbar::exclusive_norm"]                 = 1.0;
+                p["ee->ccbar::Rconstant"]                      = 0.0;
+                p["mass::e"]                                   = 5.10999e-4;
+                p["mass::D^0"]                                 = 1.86483;
+                p["mass::D^+"]                                 = 1.86965;
+                p["mass::D_u^*"]                               = 2.00685;
+                p["mass::D_d^*"]                               = 2.01026;
+                p["mass::D_s"]                                 = 1.96835;
+                p["mass::D_s^*"]                               = 2.1122;
+                p["mass::psi(4040)"]                           = 4.040;
+                p["mass::psi(4160)"]                           = 4.191;
+                p["ee->ccbar::g0(psi(4040),e^+e^-)"]           = 0.05;
+                p["ee->ccbar::g0(psi(4040),D^*0Dbar^0)"]       = 1.0;
+                p["ee->ccbar::g0(psi(4040),D^*+D^-)"]          = 0.8;
+                p["ee->ccbar::g0(psi(4040),D_s^+D_s^-)"]       = 0.6;
+                p["ee->ccbar::g0(psi(4040),D^*+D^*-(1P1))"]    = 0.3;
+                p["ee->ccbar::g0(psi(4040),D^*+D^*-(5F1))"]    = 0.6;
+                p["ee->ccbar::g0(psi(4160),e^+e^-)"]           = 0.04;
+                p["ee->ccbar::g0(psi(4160),D^*0Dbar^0)"]       = 0.5;
+                p["ee->ccbar::g0(psi(4160),D_s^+D_s^-)"]       = 0.3;
+                p["ee->ccbar::g0(psi(4160),D_s^*+D_s^-)"]      = 0.9;
+                p["ee->ccbar::g0(psi(4160),D^*0Dbar^*0(1P1))"] = 0.7;
+                p["ee->ccbar::g0(psi(4160),D^*0Dbar^*0(5P1))"] = 0.4;
+                p["ee->ccbar::g0(psi(4160),D^*0Dbar^*0(5F1))"] = 0.5;
+
+                EEToCCBar c(p, Options{});
+
+                const auto ir = c.prepare(4.2);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0D0bar(ir), 7.786533313, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstpDm(ir), 0.08112239587, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDsDs(ir), 2.368817589, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstsDs(ir), 8.011028937, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0Dst0bar(ir), 9.807427087, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0Dst0bar_TT(ir), 3.119090068, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0Dst0bar_TL(ir), 1.871259624, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDst0Dst0bar_LL(ir), 4.817077395, eps);
+                TEST_CHECK_RELATIVE_ERROR(c.sigma_eetoDstpDstm(ir), 0.007626808885, eps);
+
+                // R sums all channels, unaffected by the normalisation of the exclusive cross sections
+                p["ee->ccbar::exclusive_norm"] = 2.0;
+                p["ee->ccbar::Rconstant"]      = 0.3;
+
+                const auto   ir2 = c.prepare(4.2);
+                const double sum = c.sigma_eetoeff(ir2) + c.sigma_eetoD0Dbar0(ir2) + c.sigma_eetoDpDm(ir2) + c.sigma_eetoDst0D0bar(ir2) + c.sigma_eetoDstpDm(ir2)
+                                   + c.sigma_eetoDsDs(ir2) + c.sigma_eetoDst0Dst0bar(ir2) + c.sigma_eetoDstpDstm(ir2) + c.sigma_eetoDstsDs(ir2);
+                const double GeVtonb    = 10.0 * power_of<2>(1.0e18 * p["QM::hbar"].evaluate() * 299792458.0);
+                const double sigma_mumu = GeVtonb * 4.0 * M_PI * power_of<2>(p["QED::alpha_e(0)"].evaluate()) / (3.0 * 4.2 * 4.2);
+                TEST_CHECK_RELATIVE_ERROR(c.R(ir2), sum / 2.0 / sigma_mumu + 0.3, 1.0e-12);
             }
         }
 } eetoccbar_test;

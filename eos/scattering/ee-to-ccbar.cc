@@ -506,6 +506,9 @@ namespace eos
                 return T1f;
             }
 
+            // (2J + 1) / ((2s_1 + 1) (2s_2 + 1)) for a J = 1 state produced in unpolarised e^+e^- collisions
+            static constexpr double spin_factor = 3.0 / 4.0;
+
             // Cross section for channels with a single helicity amplitude
             double
             sigma_eetochannel(const IntermediateResult * intermediate_result, const Channels & channel)
@@ -515,10 +518,9 @@ namespace eos
                 const double        GeVtonb      = 10.0 * power_of<2>(1.0e18 * hbar * speedoflight);
 
                 // Channel properties
-                const double Nf   = 2.0 * K->_channels[channel]->_l_orbital + 1.0;
                 const double rhof = std::abs(K->_channels[channel]->rho(intermediate_result->s));
 
-                return GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(T_eetochannel(intermediate_result, channel));
+                return GeVtonb / std::abs(intermediate_result->s) * spin_factor * rhof * norm(T_eetochannel(intermediate_result, channel));
             }
 
             // Cross sections for VV, where three helicity states "TT", "TL", and "LL" play a role
@@ -535,7 +537,6 @@ namespace eos
                 const double        GeVtonb      = 10.0 * power_of<2>(1.0e18 * hbar * speedoflight);
 
                 // Channel properties
-                const double Nf   = 3.0;                                                             // Nf = 2J+1
                 const double rhof = std::abs(K->_channels[channel1P1]->rho(intermediate_result->s)); // Same phase space for all three channels
 
                 const complex<double> a01 = T_eetochannel(intermediate_result, channel1P1);
@@ -550,9 +551,9 @@ namespace eos
                 const complex<double> Fp0 = -(s15 / 10.0) * a21 - (s10 / 10.0) * a23;
                 const complex<double> F00 = -a01 / s3 - (2.0 / s15) * a21 + (2.0 / s10) * a23;
 
-                const double sigmaTT = 2.0 * GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(Fpp);
-                const double sigmaTL = 4.0 * GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(Fp0);
-                const double sigmaLL = GeVtonb / std::abs(intermediate_result->s) * Nf * rhof * norm(F00);
+                const double sigmaTT = 2.0 * GeVtonb / std::abs(intermediate_result->s) * spin_factor * rhof * norm(Fpp);
+                const double sigmaTL = 4.0 * GeVtonb / std::abs(intermediate_result->s) * spin_factor * rhof * norm(Fp0);
+                const double sigmaLL = GeVtonb / std::abs(intermediate_result->s) * spin_factor * rhof * norm(F00);
 
                 return VVHelicities{ sigmaTT, sigmaTL, sigmaLL };
             }
