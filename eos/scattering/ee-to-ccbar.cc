@@ -25,6 +25,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <array>
 #include <memory>
@@ -403,11 +404,9 @@ namespace eos
             prepare(const complex<double> & E)
             {
                 // Amplitude on the first RS
-                _intermediate_result.tmatrix_row_0                  = K->tmatrix_row(0, E * E);
+                _intermediate_result.tmatrix_row_0  = K->tmatrix_row(0, E * E);
                 // Amplitude on the second RS
-                std::array<bool, EEToCCBar::nchannels> second_sheet = {};
-                second_sheet.fill(true);
-                _intermediate_result.tmatrix2_row_0 = K->tmatrix_row(0, E * E, second_sheet);
+                _intermediate_result.tmatrix2_row_0 = K->tmatrix_row(0, E * E, destringify<RiemannSheet<EEToCCBar::nchannels>>(std::string(EEToCCBar::nchannels, '2')));
 
                 _intermediate_result.E = E;
                 _intermediate_result.s = E * E;
