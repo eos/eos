@@ -20,6 +20,7 @@
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/scattering/ee-to-ccbar.hh>
+#include <eos/utils/destringify.hh>
 #include <eos/utils/kmatrix-impl.hh>
 
 #include <test/test.hh>
@@ -358,6 +359,13 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(imag(Dst0D0bar->chew_mandelstam_disc(14.0)), 0.0, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.3089342, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0681416, eps);
+
+                // below both thresholds, the second sheet of a closed channel alters the amplitude
+                const complex<double> s_closed(14.0, -0.1);
+                const auto            tmatrix_I  = KMatrix32.tmatrix_row(0, s_closed, destringify<RiemannSheet<3>>("1"));
+                const auto            tmatrix_II = KMatrix32.tmatrix_row(0, s_closed, destringify<RiemannSheet<3>>("12"));
+
+                TEST_CHECK(std::abs(tmatrix_II[1] - tmatrix_I[1]) > 1.0e-4 * std::abs(tmatrix_I[1]));
             }
 
             {

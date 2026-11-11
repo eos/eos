@@ -26,6 +26,7 @@
 #include <eos/utils/options.hh>
 #include <eos/utils/parameters.hh>
 #include <eos/utils/private_implementation_pattern-impl.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <array>
 #include <memory>
@@ -434,10 +435,17 @@ namespace eos
             const IntermediateResult *
             prepare(const complex<double> & E)
             {
+                static const RiemannSheet<EEToCCBar::nchannels> all_second = []
+                {
+                    RiemannSheet<EEToCCBar::nchannels> result;
+                    result.second_sheet.fill(true);
+                    return result;
+                }();
+
                 // Amplitude on the first RS
                 _intermediate_result.tmatrix_row_0  = K->tmatrix_row(0, E * E);
                 // Amplitude on the second RS
-                _intermediate_result.tmatrix2_row_0 = K->tmatrix_row(0, E * E, true);
+                _intermediate_result.tmatrix2_row_0 = K->tmatrix_row(0, E * E, all_second);
 
                 _intermediate_result.E = E;
                 _intermediate_result.s = E * E;
