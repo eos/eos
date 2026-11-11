@@ -185,5 +185,10 @@ class RiemannSheetTest : public TestCase
 
             TEST_CHECK_EQUAL_STR("0", stringify(rs2[0]));
             TEST_CHECK_EQUAL_STR("1", stringify(rs2[1]));
+
+            const RiemannSheet<2> rs3 = destringify<RiemannSheet<2>>("2");
+
+            TEST_CHECK_EQUAL_STR("1", stringify(rs3[0]));
+            TEST_CHECK_EQUAL_STR("0", stringify(rs3[1]));
         }
 } riemann_sheet_test;
