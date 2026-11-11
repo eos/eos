@@ -73,8 +73,9 @@ namespace eos
 
             // Return the rowindex^th row of the T matrix on the first Riemann sheet, i.e. defined as T = n * (1 - i * K * rho * n * n)^(-1) * K * n
             // rowindex corresponds to the initial channel
-            // If second_sheet is set to true, the value is calculated on the second Riemann sheet
-            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, bool second_sheet = false) const;
+            // For each channel, second_sheet determines the Riemann sheet. If the i-th entry is set to true, the value of the i-th channel's Chew-Mandelstam function is calculated
+            // on the second Riemann sheet
+            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, std::array<bool, nchannels_> second_sheet = {}) const;
 
 
             // Return the K matrix partial and total widths of a resonance.
