@@ -195,6 +195,47 @@ namespace eos
 
     std::ostream & operator<< (std::ostream & os, PartialWave i);
 
+    template <unsigned nchannels_> struct RiemannSheet
+    {
+            std::array<bool, nchannels_> second_sheet{};
+
+            bool &
+            operator[] (unsigned index)
+            {
+                return second_sheet[index];
+            }
+
+            const constexpr bool &
+            operator[] (unsigned index) const
+            {
+                return second_sheet[index];
+            }
+
+            auto
+            begin()
+            {
+                return second_sheet.begin();
+            }
+
+            constexpr auto
+            begin() const
+            {
+                return second_sheet.begin();
+            }
+
+            auto
+            end()
+            {
+                return second_sheet.end();
+            }
+
+            constexpr auto
+            end() const
+            {
+                return second_sheet.end();
+            }
+    };
+
 } // namespace eos
 
 #endif
