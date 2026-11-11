@@ -174,14 +174,14 @@ namespace eos
                 static RiemannSheet<nchannels_>
                 destringify(const std::string & input)
                 {
-                    if (input.size() != nchannels_)
+                    if (input.size() > nchannels_)
                     {
                         throw DestringifyError("String length must match number of Channels");
                     }
 
                     RiemannSheet<nchannels_> result;
 
-                    for (unsigned i = 0; i < nchannels_; ++i)
+                    for (unsigned i = 0; i < input.size(); ++i)
                     {
                         if (input[i] == '1')
                         {
