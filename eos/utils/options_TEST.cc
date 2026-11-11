@@ -520,3 +520,41 @@ class PartialWaveOptionTest : public TestCase
             }
         }
 } partial_wave_option_test;
+
+class RiemannSheetOptionTest : public TestCase
+{
+    public:
+        RiemannSheetOptionTest() :
+            TestCase("riemann_sheet_option_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            // correctly specify permitted options
+            std::vector<OptionSpecification> specifications{
+                { "RS"_ok, { "1"_ov, "2"_ov, "22"_ov }, "1"_ov },
+            };
+
+            // Creation of option with valid default value, with value = default value
+            {
+                RiemannSheetOption<2> so{ Options{ { "RS"_ok, "1"_ov } }, specifications, "RS"_ok };
+                RiemannSheet<2>       rs = so.value();
+                TEST_CHECK_EQUAL_STR("0", stringify(rs[1]));
+            }
+
+            // Creation of option with valid default value, with value != default value
+            {
+                RiemannSheetOption<2> so{ Options{ { "RS"_ok, "2"_ov } }, specifications, "RS"_ok };
+                RiemannSheet<2>       rs = so.value();
+                TEST_CHECK_EQUAL_STR("1", stringify(rs[0]));
+            }
+
+            // Creation with value not in list of allowed values
+            {
+                auto test = [specifications]() { RiemannSheetOption<2> so{ Options{ { "RS"_ok, "12"_ov } }, specifications, "RS"_ok }; };
+                TEST_CHECK_THROWS(InvalidOptionValueError, test());
+            }
+        }
+} riemann_sheet_option_test;
