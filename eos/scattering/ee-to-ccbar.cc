@@ -403,9 +403,11 @@ namespace eos
             prepare(const complex<double> & E)
             {
                 // Amplitude on the first RS
-                _intermediate_result.tmatrix_row_0  = K->tmatrix_row(0, E * E);
+                _intermediate_result.tmatrix_row_0                  = K->tmatrix_row(0, E * E);
                 // Amplitude on the second RS
-                _intermediate_result.tmatrix2_row_0 = K->tmatrix_row(0, E * E, true);
+                std::array<bool, EEToCCBar::nchannels> second_sheet = {};
+                second_sheet.fill(true);
+                _intermediate_result.tmatrix2_row_0 = K->tmatrix_row(0, E * E, second_sheet);
 
                 _intermediate_result.E = E;
                 _intermediate_result.s = E * E;
