@@ -24,6 +24,7 @@
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/kmatrix.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_complex.h>
@@ -168,7 +169,7 @@ namespace eos
     // If second_sheet is set to true, the calculation is performed on the second Riemann sheet
     template <unsigned nchannels_, unsigned nresonances_>
     std::array<complex<double>, nchannels_>
-    KMatrix<nchannels_, nresonances_>::tmatrix_row(unsigned rowindex, complex<double> _s, std::array<bool, nchannels_> second_sheet) const
+    KMatrix<nchannels_, nresonances_>::tmatrix_row(unsigned rowindex, complex<double> _s, RiemannSheet<nchannels_> second_sheet) const
     {
         std::array<complex<double>, nchannels_> tmatrixrow;
         std::array<complex<double>, nchannels_> nfactors;

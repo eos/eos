@@ -23,6 +23,7 @@
 #include <eos/maths/complex.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_complex.h>
@@ -75,7 +76,7 @@ namespace eos
             // rowindex corresponds to the initial channel
             // For each channel, second_sheet determines the Riemann sheet. If the i-th entry is set to true, the value of the i-th channel's Chew-Mandelstam function is calculated
             // on the second Riemann sheet
-            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, std::array<bool, nchannels_> second_sheet = {}) const;
+            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, RiemannSheet<nchannels_> second_sheet = {}) const;
 
 
             // Return the K matrix partial and total widths of a resonance.
