@@ -191,6 +191,10 @@ class RiemannSheetTest : public TestCase
             TEST_CHECK_EQUAL_STR("1", stringify(rs3[0]));
             TEST_CHECK_EQUAL_STR("0", stringify(rs3[1]));
 
+            TEST_CHECK(rs == rs2);
+            TEST_CHECK(rs3 == destringify<RiemannSheet<2>>("21"));
+            TEST_CHECK(! (rs == rs3));
+
             TEST_CHECK(destringify<RiemannSheet<2>>("") == RiemannSheet<2>{});
             TEST_CHECK_THROWS(DestringifyError, destringify<RiemannSheet<2>>("222"));
             TEST_CHECK_THROWS(DestringifyError, destringify<RiemannSheet<2>>("13"));
