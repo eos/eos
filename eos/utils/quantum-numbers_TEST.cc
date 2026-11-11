@@ -164,3 +164,26 @@ class PartialWaveTest : public TestCase
             TEST_CHECK_EQUAL(destringify<PartialWave>("S|P|D|F"), PartialWave::S | PartialWave::P | PartialWave::D | PartialWave::F);
         }
 } partial_wave_test;
+
+class RiemannSheetTest : public TestCase
+{
+    public:
+        RiemannSheetTest() :
+            TestCase("riemann_sheet_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            const RiemannSheet<2> rs = { false, true };
+
+            TEST_CHECK_EQUAL_STR("0", stringify(rs[0]));
+            TEST_CHECK_EQUAL_STR("1", stringify(rs[1]));
+
+            const RiemannSheet<2> rs2 = destringify<RiemannSheet<2>>("12");
+
+            TEST_CHECK_EQUAL_STR("0", stringify(rs2[0]));
+            TEST_CHECK_EQUAL_STR("1", stringify(rs2[1]));
+        }
+} riemann_sheet_test;

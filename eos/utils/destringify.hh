@@ -168,6 +168,38 @@ namespace eos
                     return result;
                 }
         };
+
+        template <unsigned nchannels_> struct DoDestringify<RiemannSheet<nchannels_>>
+        {
+                static RiemannSheet<nchannels_>
+                destringify(const std::string & input)
+                {
+                    if (input.size() != nchannels_)
+                    {
+                        throw DestringifyError("String length must match number of Channels");
+                    }
+
+                    RiemannSheet<nchannels_> result;
+
+                    for (unsigned i = 0; i < nchannels_; ++i)
+                    {
+                        if (input[i] == '1')
+                        {
+                            result[i] = false;
+                        }
+                        else if (input[i] == '2')
+                        {
+                            result[i] = true;
+                        }
+                        else
+                        {
+                            throw DestringifyError("String must contain only '1' and '2'");
+                        }
+                    }
+
+                    return result;
+                }
+        };
     } // namespace impl
 
     template <typename T_>
