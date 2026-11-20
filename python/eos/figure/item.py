@@ -70,6 +70,23 @@ class ItemColorCycler:
         return result
 
 
+def _validated_color(color, owner):
+    """Return ``color`` as a matplotlib color specification, or raise if it is not one.
+
+    Lists, e.g. as read from YAML, are converted to tuples, so that matplotlib treats an RGB(A)
+    specification as a single color.
+
+    :param color: A color name, a hex string, or a sequence of three or four floats (RGB or RGBA).
+    :param owner: The name of the object the color belongs to, used in the error message.
+    :type owner: str
+    """
+    if isinstance(color, list):
+        color = tuple(color)
+    if not _matplotlib.colors.is_color_like(color):
+        raise ValueError(f'{owner}: invalid color {color!r}; expected a color name, a hex string, or a list of three (RGB) or four (RGBA) floats')
+    return color
+
+
 class CompositeRegionHandle:
     """A legend handle for items that draw several nested, translucent regions.
 

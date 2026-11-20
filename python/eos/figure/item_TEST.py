@@ -60,6 +60,25 @@ class ItemColorCyclerTests(unittest.TestCase):
         ItemColorCycler.reset()
         self.assertEqual(ItemColorCycler.next_color(), colors[0])
 
+class ValidatedColorTests(unittest.TestCase):
+
+    def test_valid(self):
+
+        from eos.figure.item import _validated_color
+
+        for color, expected in [('red', 'red'), ('C1', 'C1'), ('eos:C3', 'eos:C3'), ('#ff0000', '#ff0000'),
+                                ([0.1, 0.2, 0.3], (0.1, 0.2, 0.3)), ((0.1, 0.2, 0.3, 0.5), (0.1, 0.2, 0.3, 0.5))]:
+            self.assertEqual(_validated_color(color, 'owner'), expected)
+
+    def test_invalid(self):
+
+        from eos.figure.item import _validated_color
+
+        for color in ['notacolor', [0.1, 0.2], [0.1, 0.2, 0.3, 0.4, 0.5], [1.2, 0.0, 0.0], 0.5, 42, ['red']]:
+            with self.assertRaises(ValueError) as cm:
+                _validated_color(color, 'owner')
+            self.assertIn('owner: invalid color', str(cm.exception))
+
 class ObservableItemTests(unittest.TestCase):
 
     def test_validate_semantics_checks_fixed_parameters(self):
