@@ -17,7 +17,7 @@
 from dataclasses import dataclass, field
 from eos.analysis_file_context import AnalysisFileContext
 from eos.deserializable import Deserializable
-from eos.figure.item import ItemColorCycler
+from eos.figure.item import ItemColorCycler, _validated_color
 
 import eos
 import os
@@ -31,8 +31,8 @@ class DataFile(Deserializable):
     :type path: str
     :param label: Title to appear in a figure's legend in association with this data file.
     :type label: str
-    :param color: Color to be used in the plot.
-    :type color: str (optional)
+    :param color: Color to be used in the plot, either a color name, a hex string, or a list of three (RGB) or four (RGBA) floats.
+    :type color: str | tuple (optional)
     :param kde: A boolean determining whether to use kernel density estimates (KDE) to visualize the distributions. Defaults to False, in which case histograms are used.
     :type kde: bool
     :param linestyle: Line style to be used in the plot. Defaults to ``'solid'``.
@@ -50,7 +50,7 @@ class DataFile(Deserializable):
     """
     path:str
     label:str
-    color:str=None
+    color:str|tuple=None
     kde:bool=False
     linestyle:str='solid'
     linewidth:float=1.0
@@ -62,6 +62,8 @@ class DataFile(Deserializable):
     def __post_init__(self):
         if self.color is None:
             self.color = ItemColorCycler.next_color()
+        else:
+            self.color = _validated_color(self.color, 'DataFile')
 
     def prepare(self, context:AnalysisFileContext=None):
         """Load the underlying data file and cache it for subsequent access.

@@ -79,6 +79,31 @@ class ValidatedColorTests(unittest.TestCase):
                 _validated_color(color, 'owner')
             self.assertIn('owner: invalid color', str(cm.exception))
 
+class ItemColorTests(unittest.TestCase):
+
+    def test_valid(self):
+
+        base = "type: vertical\nx: 1.0\n"
+        for color, expected in [("'eos:C3'", 'eos:C3'), ('[0.1, 0.2, 0.3]', (0.1, 0.2, 0.3)), ('[0.1, 0.2, 0.3, 0.5]', (0.1, 0.2, 0.3, 0.5))]:
+            item = eos.figure.ItemFactory.from_yaml(base + f"color: {color}")
+            self.assertEqual(item.color, expected)
+
+    def test_invalid(self):
+
+        base = "type: vertical\nx: 1.0\n"
+        for color in ["'notacolor'", '[0.1, 0.2]', '42']:
+            with self.assertRaises(ValueError):
+                eos.figure.ItemFactory.from_yaml(base + f"color: {color}")
+
+        # items that do not draw with their color still reject an invalid one
+        with self.assertRaises(ValueError):
+            eos.figure.ItemFactory.from_yaml("""
+            type: 'complex-plane'
+            observable: 'b->s::Re{F17}(Re{q2},Im{q2})'
+            variables: ['Re{q2}', 'Im{q2}']
+            color: 'notacolor'
+            """)
+
 class ObservableItemTests(unittest.TestCase):
 
     def test_validate_semantics_checks_fixed_parameters(self):
@@ -1638,6 +1663,23 @@ class TwoDimensionalKernelDensityItemTests(unittest.TestCase):
             self.assertGreater(p, 0.0)
             self.assertLessEqual(p, pdf_max)
 
+    def test_rgba_color(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'kde2D'
+        bandwidth: 3
+        contours: ['lines']
+        levels: [68, 95]
+        color: [0.1, 0.2, 0.3, 0.5]
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+        _, ax = plt.subplots()
+        item.draw(ax)
+        for edgecolor in ax.collections[-1].get_edgecolor():
+            np.testing.assert_allclose(edgecolor, (0.1, 0.2, 0.3, 0.5))
+
 class TwoDimensionalContoursItemTests(unittest.TestCase):
 
     def test_full(self):
@@ -1684,6 +1726,23 @@ class TwoDimensionalContoursItemTests(unittest.TestCase):
         for p in plevels:
             self.assertGreater(p, 0.0)
             self.assertLessEqual(p, pdf_max)
+
+    def test_rgba_color(self):
+
+        item = eos.figure.ItemFactory.from_yaml("""
+        type: 'contours2D'
+        bins: 50
+        contours: ['lines']
+        levels: [68, 95]
+        color: [0.1, 0.2, 0.3, 0.5]
+        variables: ['CKM::abs(V_ub)', 'B->pi::f_+(0)@BCL2008']
+        datafile: 'eos/data/importance_samples_TEST.d/samples'
+        """)
+        item.prepare(context=AnalysisFileContext(base_directory=os.path.join(os.environ['SOURCE_DIR'])))
+        _, ax = plt.subplots()
+        item.draw(ax)
+        for edgecolor in ax.collections[-1].get_edgecolor():
+            np.testing.assert_allclose(edgecolor, (0.1, 0.2, 0.3, 0.5))
 
     def test_invalid(self):
 

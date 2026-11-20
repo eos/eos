@@ -218,6 +218,7 @@ Every item has a mandatory ``type`` key that selects one of the following item t
 
 Besides the type-specific keys documented on each class, all items share a set of optional keys that control their appearance:
 ``label`` (the entry shown in the plot legend), ``color``, ``alpha`` (the opacity), ``linestyle``, and ``linewidth``.
+A ``color`` is either a color name, such as ``'C0'`` or ``'red'``, or a sequence of three (RGB) or four (RGBA) floats in the range :math:`[0, 1]`.
 If no ``color`` is given, a color is chosen automatically from EOS's color cycle.
 
 The most common items fall into two groups.
@@ -251,7 +252,7 @@ Such a data file is described by a :py:class:`~eos.figure.DataFile` and accepts 
 
   - ``path`` (**mandatory**) --- The path to the data file, in either :py:class:`eos.data.ImportanceSamples` or :py:class:`eos.data.Prediction` format. When the figure is part of an analysis file, the path is resolved relative to the analysis's base directory.
   - ``label`` (**mandatory**) --- The label to appear in the figure's legend in association with this data file.
-  - ``color`` (**optional**) --- The color to be used for this data file. If omitted, a color is chosen from EOS's color cycle.
+  - ``color`` (**optional**) --- The color to be used for this data file, either a color name or a sequence of three (RGB) or four (RGBA) floats. If omitted, a color is chosen from EOS's color cycle.
   - ``kde`` (**optional**) --- Whether to visualize the distributions using kernel density estimates rather than histograms. Defaults to ``false``.
 
 

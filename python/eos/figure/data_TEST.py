@@ -70,6 +70,17 @@ class DataFileTests(unittest.TestCase):
         self.assertEqual(df.linewidth, 2.0)
         self.assertEqual(df.alpha, 1.0)
 
+    def test_color(self):
+        "Check that a DataFile accepts RGB(A) colors and rejects invalid ones."
+        from eos.figure.data import DataFile
+
+        df = DataFile.from_dict(path='path/to/data', label='my label', color=[0.1, 0.2, 0.3])
+        self.assertEqual(df.color, (0.1, 0.2, 0.3))
+
+        for color in ['notacolor', [0.1, 0.2]]:
+            with self.assertRaises(ValueError):
+                DataFile.from_dict(path='path/to/data', label='my label', color=color)
+
     def test_prepare_samples(self):
         "Check that a DataFile can load a file of importance samples."
         from eos.figure.data import DataFile

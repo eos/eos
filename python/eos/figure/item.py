@@ -289,7 +289,7 @@ class Item(Deserializable):
     r"""Base class for items to be drawn in a figure."""
 
     alpha:float=field(default=0.5)
-    color:str=field(default=None)
+    color:str|tuple=field(default=None)
     label:str=field(default=None)
     linestyle:str=field(default='solid')
     linewidth:float=field(default=1.0)
@@ -297,6 +297,8 @@ class Item(Deserializable):
     def __post_init__(self):
         if self.color is None:
             self.color = ItemColorCycler.next_color()
+        else:
+            self.color = _validated_color(self.color, type(self).__name__)
 
     @abstractmethod
     def prepare(self, context:AnalysisFileContext=None):
@@ -432,7 +434,7 @@ class Item(Deserializable):
         capsize  = 2.0 * _matplotlib.rcParams['errorbar.capsize']
         line     = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker=marker, linestyle='none', alpha=alpha)
         capline  = _matplotlib.lines.Line2D((0,), (0,), color=self.color, marker='_', linestyle='none', markersize=capsize, alpha=alpha)
-        barlines = _matplotlib.collections.LineCollection([[(0, 0), (0, 1)]], colors=self.color, linewidths=self.linewidth, alpha=alpha)
+        barlines = _matplotlib.collections.LineCollection([[(0, 0), (0, 1)]], colors=[self.color], linewidths=self.linewidth, alpha=alpha)
         handle   = _matplotlib.container.ErrorbarContainer((line, [capline], [barlines]), has_xerr=has_xerr, has_yerr=has_yerr)
         return [(handle, self.label)]
 
@@ -1759,7 +1761,7 @@ class TwoDimensionalKernelDensityEstimateItem(Item):
                         levels=plevels[::-1])
 
         CS = ax.contour(self._pdf.transpose(),
-                        colors=self.color,
+                        colors=[self.color],
                         extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1],
                         linestyles=self.linestyle)
@@ -2000,7 +2002,7 @@ class TwoDimensionalContoursItem(Item):
                         levels=plevels[::-1])
 
         CS = ax.contour(self._pdf.transpose(),
-                        colors=self.color,
+                        colors=[self.color],
                         extent=[self.xrange[0], self.xrange[1], self.yrange[0], self.yrange[1]],
                         levels=plevels[::-1],
                         linestyles=self.linestyle)
@@ -3429,6 +3431,7 @@ class ComplexPlaneItem(Item):
     resolution:int=100
 
     def __post_init__(self):
+        super().__post_init__()
         eos.debug(f'Handling item to plot {self.observable} in the complex plane')
         self._observable_entry = eos.Observables()[self.observable]
         valid_kinematic_variables = {kv for kv in self._observable_entry.kinematic_variables()}
