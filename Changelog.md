@@ -4,13 +4,19 @@
 
 ### Changed
 
+- Let ``eos-data check`` report an absent output of ``create-mask``, ``model-comparison``, or ``predict-observables`` as a warning, since it can be regenerated from the remaining data, and report an existing output that lacks one of its required files as an error (D. van Dyk)
+
 ### Added
+
+- Let a task declare more than one output (D. van Dyk)
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+- Declare the importance samples written by ``sample-nested`` and ``sample-pmc`` as outputs of these tasks, so that ``eos-data check`` no longer reports them as unclaimed (D. van Dyk)
 
 ## [v1.1.1] - 2026-11-10
 
