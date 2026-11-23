@@ -883,12 +883,11 @@ namespace eos
         return abs(series_prime);
     }
 
-    // Unused but needed to satisfy the FormFactors interface
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToP>::f_plus_T(const double &) const
+    G2026FormFactors<Process_, PToP>::f_plus_T(const double & q2) const
     {
-        return 0.0;
+        return f_t(q2) * q2 / _mB / (_mB + _mP);
     }
 
     // EOS uses channel labels for the dispersive-bound saturations.
