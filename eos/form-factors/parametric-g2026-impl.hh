@@ -411,47 +411,55 @@ namespace eos
         return ((power_of<2>(_mB) - power_of<2>(_mV)) * (power_of<2>(_mB) + 3.0 * power_of<2>(_mV) - s) * t_2(s) - 8.0 * _mB * power_of<2>(_mV) * (_mB - _mV) * t_23(s)) / lambda;
     }
 
-    // Unused but needed to satisfy the FormFactors interface
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToV>::f_perp(const double &) const
+    G2026FormFactors<Process_, PToV>::f_perp(const double & s) const
     {
-        return 0.0;
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
+
+        return std::sqrt(2.0 * lambda) / _mB / (_mB + _mV) * v(s);
     }
 
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToV>::f_para(const double &) const
+    G2026FormFactors<Process_, PToV>::f_para(const double & s) const
     {
-        return 0.0;
+        return std::sqrt(2.0) * (_mB + _mV) / _mB * a_1(s);
     }
 
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToV>::f_long(const double &) const
+    G2026FormFactors<Process_, PToV>::f_long(const double & s) const
     {
-        return 0.0;
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
+
+        return ((power_of<2>(_mB) - power_of<2>(_mV) - s) * power_of<2>(_mB + _mV) * a_1(s) - lambda * a_2(s)) / (2 * _mV * power_of<2>(_mB) * (_mB + _mV));
     }
 
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToV>::f_perp_T(const double &) const
+    G2026FormFactors<Process_, PToV>::f_perp_T(const double & s) const
     {
-        return 0.0;
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
+
+        return std::sqrt(2.0 * lambda) / power_of<2>(_mB) * t_1(s);
     }
 
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToV>::f_para_T(const double &) const
+    G2026FormFactors<Process_, PToV>::f_para_T(const double & s) const
     {
-        return 0.0;
+        return std::sqrt(2.0) * (power_of<2>(_mB) - power_of<2>(_mV)) / power_of<2>(_mB) * t_2(s);
     }
 
     template <typename Process_>
     double
-    G2026FormFactors<Process_, PToV>::f_long_T(const double &) const
+    G2026FormFactors<Process_, PToV>::f_long_T(const double & s) const
     {
-        return 0.0;
+        const double lambda = eos::lambda(power_of<2>(_mB), power_of<2>(_mV), s);
+
+        return s * (power_of<2>(_mB) + 3 * power_of<2>(_mV) - s) / (2 * power_of<3>(_mB) * _mV) * t_2(s)
+               - s * lambda / (2 * power_of<3>(_mB) * _mV * (power_of<2>(_mB) - power_of<2>(_mV))) * t_3(s);
     }
 
     // EOS uses channel labels for the dispersive-bound saturations.
