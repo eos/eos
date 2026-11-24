@@ -128,6 +128,11 @@ class BToKG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(-15.0), 0.084602925, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(3.0), 0.16545090, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(25.0), 1.5162935, eps);
+                // The f_plus_T checks below use an independent Python implementation
+                TEST_CHECK_NEARLY_EQUAL(ff.f_plus_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(-15.0), -0.041641218, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(3.0), 0.016286853, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(25.0), 1.2438559, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0.0025029313, eps); // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0, eps);            // [G:2026A]: saturation_A0
@@ -197,6 +202,10 @@ class BToKG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(-15.0), 0.16757222, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(3.0), 0.32309113, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(25.0), 3.2127419, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_plus_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(-15.0), -0.082478367, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(3.0), 0.031804829, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(25.0), 2.6354976, eps);
             }
         }
 } b_to_k_g2026_form_factors_test;
@@ -258,6 +267,11 @@ class BToPiG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(-15.0), 0.078078319, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(3.0), 0.17672171, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(25.0), 3.8490245, eps);
+                // The f_plus_T checks below use an independent Python implementation
+                TEST_CHECK_NEARLY_EQUAL(ff.f_plus_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(-15.0), -0.040978098, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(3.0), 0.018549886, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(25.0), 3.3668268, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0.00250559, eps); // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0, eps);          // [G:2026A]: saturation_A0
@@ -324,6 +338,11 @@ class BsToKG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(-15.0), 0.11059611, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(3.0), 0.22061292, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(25.0), 2.4124228, eps);
+                // The f_plus_T checks below use an independent Python implementation
+                TEST_CHECK_NEARLY_EQUAL(ff.f_plus_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(-15.0), -0.052738502, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(3.0), 0.021040152, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(25.0), 1.9173002, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0.00264205, eps); // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0, eps);          // [G:2026A]: saturation_A0
@@ -394,6 +413,11 @@ class BToDG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(-15.0), 0.31540983, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(3.0), 0.54169034, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(25.0), 1.7384875, eps);
+                // The f_plus_T checks below use an independent Python implementation
+                TEST_CHECK_NEARLY_EQUAL(ff.f_plus_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(-15.0), -0.12545078, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(3.0), 0.043090272, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(25.0), 1.1524404, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0.0028941315, eps); // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0, eps);            // [G:2026A]: saturation_A0
@@ -464,6 +488,11 @@ class BsToDsG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(-15.0), 0.44404500, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(3.0), 0.75389239, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.f_t(25.0), 2.3378782, eps);
+                // The f_plus_T checks below use an independent Python implementation
+                TEST_CHECK_NEARLY_EQUAL(ff.f_plus_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(-15.0), -0.16919461, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(3.0), 0.057451173, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_plus_T(25.0), 1.4846708, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0.0028840563, eps); // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0, eps);            // [G:2026A]: saturation_A0
@@ -573,6 +602,32 @@ class BsToKstarG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(-15.0), -2.5396854, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(3.0), -2.2455291, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(25.0), -0.052814319, eps);
+
+                // The f_perp, f_para, f_long and f_*_T checks below use an independent Python implementation
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(-15.0), 0.044788194, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(0.0), 0.053599551, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(3.0), 0.055261058, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(8.0), 0.057396762, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(-15.0), 2.1536792, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(0.0), 2.2170649, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(3.0), 2.2409152, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(8.0), 2.2948825, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(-15.0), -0.30611915, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(0.0), 0.11663082, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(3.0), 0.2297701, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(8.0), 0.45803857, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(-15.0), 0.80258005, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(0.0), 0.72750037, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(3.0), 0.70585474, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(8.0), 0.6582143, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(-15.0), 1.2613636, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(0.0), 0.72750037, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(3.0), 0.59008739, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(8.0), 0.31844768, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(-15.0), 0.75392454, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(3.0), -0.13332041, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(8.0), -0.3337149, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0, eps);          // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0.0025, eps);     // [G:2026A]: saturation_A0
@@ -738,6 +793,32 @@ class BToKstarG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(3.0), -1.4553959, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(25.0), 0.080068039, eps);
 
+                // The f_perp, f_para, f_long and f_*_T checks below use an independent Python implementation
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(-15.0), 0.036751465, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(0.0), 0.042518672, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(3.0), 0.043408676, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(8.0), 0.044083598, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(-15.0), 1.6502181, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(0.0), 1.703176, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(3.0), 1.7227225, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(8.0), 1.7667542, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(-15.0), -0.26039339, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(0.0), 0.096721075, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(3.0), 0.19209393, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(8.0), 0.38387819, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(-15.0), 0.65534195, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(0.0), 0.5835264, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(3.0), 0.56251084, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(8.0), 0.51594507, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(-15.0), 1.0021414, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(0.0), 0.5835264, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(3.0), 0.47603634, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(8.0), 0.26427483, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(-15.0), 0.52753273, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(3.0), -0.090587519, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(8.0), -0.22301987, eps);
+
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0, eps);          // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0.0025, eps);     // [G:2026A]: saturation_A0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(), 0.00883968, eps); // [G:2026A]: saturation_A1
@@ -784,6 +865,31 @@ class BToKstarG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(-15.0), 0.67859760, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(3.0), 1.0230491, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(25.0), 2.8515852, eps);
+
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(-15.0), 0.11171011, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(0.0), 0.12625533, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(3.0), 0.12904171, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(8.0), 0.13217707, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(-15.0), 1.1415491, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(0.0), 1.1384704, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(3.0), 1.1440683, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(8.0), 1.1623143, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(-15.0), -0.028997226, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(0.0), 0.19747775, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(3.0), 0.25382648, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(8.0), 0.362852, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(-15.0), 1.7526353, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(0.0), 1.6849852, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(3.0), 1.6611465, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(8.0), 1.5960348, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(-15.0), 1.9950487, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(0.0), 1.6849852, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(3.0), 1.622169, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(8.0), 1.5169276, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(-15.0), -0.21118815, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(3.0), 0.063677164, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(8.0), 0.19663436, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0, eps);          // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0.0025, eps);     // [G:2026A]: saturation_A0
@@ -896,6 +1002,32 @@ class BsToPhiG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(3.0), -1.6727656, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(25.0), -0.40022028, eps);
 
+                // The f_perp, f_para, f_long and f_*_T checks below use an independent Python implementation
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(-15.0), 0.03930004, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(0.0), 0.055122861, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(3.0), 0.057291211, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(8.0), 0.058931563, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(-15.0), 2.2554156, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(0.0), 2.2441443, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(3.0), 2.252992, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(8.0), 2.2841488, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(-15.0), -0.52633428, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(0.0), 0.12613314, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(3.0), 0.28113477, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(8.0), 0.56989164, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(-15.0), 0.81646628, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(0.0), 0.7622193, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(3.0), 0.73787069, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(8.0), 0.67661933, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(-15.0), 1.5257767, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(0.0), 0.7622193, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(3.0), 0.58565462, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(8.0), 0.26222643, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(-15.0), 0.72035585, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(3.0), -0.11129007, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(8.0), -0.26404822, eps);
+
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0, eps);          // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0.005, eps);      // [G:2026A]: saturation_A0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_1p_a(), 0.0171064, eps);  // [G:2026A]: saturation_A1
@@ -999,6 +1131,32 @@ class BToDstarG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(-15.0), 0.95933568, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(3.0), 1.2327428, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(25.0), 2.1412154, eps);
+
+                // The f_perp, f_para, f_long and f_*_T checks below use an independent Python implementation
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(-15.0), 0.10977213, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(0.0), 0.10261309, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(3.0), 0.095061231, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(8.0), 0.066193045, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(-15.0), 1.2640789, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(0.0), 1.2527911, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(3.0), 1.2517122, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(8.0), 1.2511022, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(-15.0), -0.066802659, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(0.0), 0.24225238, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(3.0), 0.31802286, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(8.0), 0.46050799, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(-15.0), 2.1469967, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(0.0), 1.6986676, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(3.0), 1.5172072, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(8.0), 0.99082715, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(-15.0), 2.0629476, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(0.0), 1.6986676, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(3.0), 1.6159843, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(8.0), 1.4668174, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(-15.0), -0.56895344, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(3.0), 0.14622062, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(8.0), 0.42717394, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0, eps);          // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0.0025, eps);     // [G:2026A]: saturation_A0
@@ -1104,6 +1262,32 @@ class BsToDsstarG2026FormFactorsTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(-15.0), 1.2938586, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(3.0), 1.6554173, eps);
                 TEST_CHECK_RELATIVE_ERROR(ff.t_23(25.0), 2.8425204, eps);
+
+                // The f_perp, f_para, f_long and f_*_T checks below use an independent Python implementation
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(-15.0), 0.15086072, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(0.0), 0.14014491, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(3.0), 0.12945665, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp(8.0), 0.088773082, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(-15.0), 1.7338912, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(0.0), 1.7129294, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(3.0), 1.7099846, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para(8.0), 1.706288, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(-15.0), -0.092212817, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(0.0), 0.32530061, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(3.0), 0.42725169, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long(8.0), 0.61849278, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(-15.0), 2.9002254, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(0.0), 2.2807128, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(3.0), 2.0312683, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_perp_T(8.0), 1.3064452, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(-15.0), 2.7804413, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(0.0), 2.2807128, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(3.0), 2.1673855, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_para_T(8.0), 1.9631179, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(-15.0), -0.76107115, eps);
+                TEST_CHECK_NEARLY_EQUAL(ff.f_long_T(0.0), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(3.0), 0.19474931, eps);
+                TEST_CHECK_RELATIVE_ERROR(ff.f_long_T(8.0), 0.56797041, eps);
 
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0p_v(), 0, eps);          // [G:2026A]: saturation_V0
                 TEST_CHECK_NEARLY_EQUAL(ff.saturation_0m_a(), 0.0025, eps);     // [G:2026A]: saturation_A0
