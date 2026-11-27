@@ -572,7 +572,7 @@ class eetoccbarTest : public TestCase
             }
 
             {
-                // The D_s^+ D_s^- channel is closed below threshold
+                // The D_s^+ D_s^- channel is closed below threshold, and its second sheet flips Im of the Chew-Mandelstam function
                 Parameters p                             = Parameters::Defaults();
                 p["ee->ccbar::q_0"]                      = 0.5;
                 p["mass::D_s"]                           = 1.96835;
@@ -585,6 +585,11 @@ class eetoccbarTest : public TestCase
                 const double threshold = 2.0 * 1.96835;
                 TEST_CHECK_NEARLY_EQUAL(c.sigma_eetoDsDs(c.prepare(threshold - 0.01)), 0.0, 1.0e-15);
                 TEST_CHECK(c.sigma_eetoDsDs(c.prepare(threshold + 0.01)) > 0.0);
+
+                const auto irc = c.prepare_complex(4.2, 0.0);
+                TEST_CHECK(c.im_chew_mandelstam_DsDs(irc) > 0.0);
+                TEST_CHECK_RELATIVE_ERROR(c.re_chew_mandelstam_II_DsDs(irc), c.re_chew_mandelstam_DsDs(irc), eps);
+                TEST_CHECK_RELATIVE_ERROR(c.im_chew_mandelstam_II_DsDs(irc), -c.im_chew_mandelstam_DsDs(irc), eps);
             }
 
             {
@@ -651,7 +656,7 @@ class eetoccbarTest : public TestCase
             }
 
             {
-                // The D_s^*+ D_s^- + h.c. channel: closed below threshold, and its SU(3)_F partner D^*0 Dbar^0 + h.c.
+                // The D_s^*+ D_s^- + h.c. channel: closed below threshold, second sheet, and its SU(3)_F partner D^*0 Dbar^0 + h.c.
                 Parameters p                             = Parameters::Defaults();
                 p["ee->ccbar::q_0"]                      = 0.5;
                 p["mass::D_s"]                           = 1.96835;
@@ -676,6 +681,11 @@ class eetoccbarTest : public TestCase
                 p["ee->ccbar::g0(psi(3770),D_s^*+D_s^-)"] = 2.0;
                 TEST_CHECK_RELATIVE_ERROR(su3f.sigma_eetoDstsDs(su3f.prepare(4.3)), sigma, 1.0e-14);
                 TEST_CHECK(none.sigma_eetoDstsDs(none.prepare(4.3)) > 0.0);
+
+                const auto irc = none.prepare_complex(4.3, 0.0);
+                TEST_CHECK(none.im_chew_mandelstam_DstsDs(irc) > 0.0);
+                TEST_CHECK_RELATIVE_ERROR(none.re_chew_mandelstam_II_DstsDs(irc), none.re_chew_mandelstam_DstsDs(irc), eps);
+                TEST_CHECK_RELATIVE_ERROR(none.im_chew_mandelstam_II_DstsDs(irc), -none.im_chew_mandelstam_DstsDs(irc), eps);
             }
 
             {

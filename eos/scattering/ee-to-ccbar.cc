@@ -460,21 +460,9 @@ namespace eos
             complex<double>
             chew_mandelstam_II(const IntermediateResult * intermediate_result, const Channels & channel)
             {
-                complex<double> s           = intermediate_result->s;
-                auto            get_channel = K->_channels[channel];
+                const complex<double> s = intermediate_result->s;
 
-                const unsigned        li    = get_channel->_l_orbital;
-                const double          q0    = get_channel->_q0.evaluate();
-                const complex<double> mi1_2 = power_of<2>(get_channel->_m1());
-                const complex<double> mi2_2 = power_of<2>(get_channel->_m2());
-
-                // Momentum of particles in their center-of-momentum frame
-                const complex<double> q = 0.5 * sqrt(eos::lambda(s, mi1_2, mi2_2)) / sqrt(s);
-
-                // Blatt-Weisskopf factors, cf eq. (50.26)
-                const complex<double> Fi = kmatrix_utils::blatt_weisskopf_factor(li, q / q0);
-
-                return get_channel->chew_mandelstam(s) + complex<double>(0.0, 2.0) * get_channel->rho(s) * power_of<2>(pow(q / q0, li) * Fi);
+                return K->_channels[channel]->chew_mandelstam(s) - K->_channels[channel]->chew_mandelstam_disc(s);
             }
 
             inline double
