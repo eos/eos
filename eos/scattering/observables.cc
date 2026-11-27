@@ -108,25 +108,25 @@ namespace eos
                     // Phase space factor
                     make_cacheable_observable("e^+e^-::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{e^+e^-}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_ee)),
 
                     make_cacheable_observable("eff::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{e^+e^-}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_eff)),
 
                     make_cacheable_observable("D^0Dbar^0::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D^0 \bar{D}^0}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_D0Dbar0)),
 
                     make_cacheable_observable("D^+D^-::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D^+D^-}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DpDm)),
 
@@ -205,7 +205,7 @@ namespace eos
 
                     make_cacheable_observable("D^*0Dbar^0::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^0 + \mathrm{h.c.}}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_Dst0D0bar)),
 
@@ -235,7 +235,7 @@ namespace eos
 
                     make_cacheable_observable("D^*+D^-::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D^{*+} D^- + \mathrm{h.c.}}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DstpDm)),
 
@@ -265,7 +265,7 @@ namespace eos
 
                     make_cacheable_observable("D_s^+D_s^-::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D_s^+ D_s^-}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DsDs)),
 
@@ -313,7 +313,7 @@ namespace eos
 
                     make_cacheable_observable("D^*0Dbar^*0::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^{*0}}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_Dst0Dst0bar)),
 
@@ -403,7 +403,7 @@ namespace eos
 
                     make_cacheable_observable("D^*+D^*-::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D^{*+} D^{*-}}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DstpDstm)),
 
@@ -475,7 +475,7 @@ namespace eos
 
                     make_cacheable_observable("D_s^*+D_s^-::Re{rho}(Re{E},Im{E})",
                                               R"(\mathrm{Re}\rho_{D_s^{*+} D_s^- + \mathrm{h.c.}}(E)))",
-                                              Unit::InverseGeV2(),
+                                              Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DstsDs)),
 
