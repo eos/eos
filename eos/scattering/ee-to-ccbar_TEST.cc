@@ -111,6 +111,12 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(real(DpDm->chew_mandelstam(20)), 0.00024738, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(DpDm->chew_mandelstam(20)), 0.0093575, eps);
 
+                // above threshold, the discontinuity is twice the imaginary part of the Chew-Mandelstam function
+                TEST_CHECK_NEARLY_EQUAL(real(ee->chew_mandelstam_disc(20)), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(ee->chew_mandelstam_disc(20)), 2.0 * imag(ee->chew_mandelstam(20)), eps);
+                TEST_CHECK_NEARLY_EQUAL(real(DpDm->chew_mandelstam_disc(20)), 0.0, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(DpDm->chew_mandelstam_disc(20)), 2.0 * imag(DpDm->chew_mandelstam(20)), eps);
+
                 auto tMatrix32s0 = KMatrix32.tmatrix_row(0, 0.0001);
                 auto tMatrix32s1 = KMatrix32.tmatrix_row(0, 13.94);
                 auto tMatrix32s2 = KMatrix32.tmatrix_row(0, 20.0);
@@ -207,6 +213,7 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(imag(eff2S->chew_mandelstam(20)), 0.0189092, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(eff3770->chew_mandelstam(20)), -0.0172797, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(eff3770->chew_mandelstam(20)), 0.0189092, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(eff3770->chew_mandelstam_disc(20)), 2.0 * imag(eff3770->chew_mandelstam(20)), eps);
 
                 TEST_CHECK_RELATIVE_ERROR(tMatrix32s0[0].real(), 3.17782e-5, eps);
                 TEST_CHECK_RELATIVE_ERROR(tMatrix32s0[0].imag(), 1.99853e-11, eps);
@@ -347,6 +354,8 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(real(cm_open), 0.000793319, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(cm_open), 0.00829489, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(cm_closed), -0.00190795, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(Dst0D0bar->chew_mandelstam_disc(20.0)), 2.0 * imag(cm_open), eps);
+                TEST_CHECK_NEARLY_EQUAL(imag(Dst0D0bar->chew_mandelstam_disc(14.0)), 0.0, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.3089342, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0681416, eps);
             }
@@ -441,6 +450,8 @@ class eetoccbarTest : public TestCase
                 TEST_CHECK_RELATIVE_ERROR(real(cm_open_F), 0.002703345, eps);
                 TEST_CHECK_RELATIVE_ERROR(imag(cm_open_F), 0.000939654, eps);
                 TEST_CHECK_RELATIVE_ERROR(real(cm_closed_F), -0.000929367, eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(Dst0Dst0bar1P1->chew_mandelstam_disc(20.0)), 2.0 * imag(cm_open_P), eps);
+                TEST_CHECK_RELATIVE_ERROR(imag(Dst0Dst0bar5F1->chew_mandelstam_disc(20.0)), 2.0 * imag(cm_open_F), eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].real(), 0.30186, eps);
                 TEST_CHECK_RELATIVE_ERROR(tmatrix_open[1].imag(), 0.0665914, eps);
             }

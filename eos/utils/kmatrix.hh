@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2019 Stephan Kürten
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -123,6 +123,9 @@ namespace eos
 
             // Analytic continuation of the phase space factor
             virtual complex<double> chew_mandelstam(const complex<double> & s) = 0;
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            virtual complex<double> chew_mandelstam_disc(const complex<double> & s) = 0;
     };
 
     template <unsigned nchannels_, unsigned nresonances_> struct KMatrix<nchannels_, nresonances_>::Resonance

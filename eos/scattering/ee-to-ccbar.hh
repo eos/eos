@@ -98,6 +98,13 @@ namespace eos
             {
                 return eos::chew_mandelstam::s_wave(S, this->_m1, this->_m2);
             }
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            complex<double>
+            chew_mandelstam_disc(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::s_wave_disc(S, this->_m1, this->_m2);
+            }
     };
 
     // Effective channel
@@ -137,6 +144,13 @@ namespace eos
             {
                 return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
             }
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            complex<double>
+            chew_mandelstam_disc(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
+            }
     };
 
     // V -> PP channel
@@ -171,6 +185,13 @@ namespace eos
             chew_mandelstam(const complex<double> & S)
             {
                 return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
+            }
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            complex<double>
+            chew_mandelstam_disc(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
             }
     };
 
@@ -214,6 +235,13 @@ namespace eos
             {
                 return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
             }
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            complex<double>
+            chew_mandelstam_disc(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
+            }
     };
 
     // V -> VV channel
@@ -250,6 +278,13 @@ namespace eos
             {
                 return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
             }
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            complex<double>
+            chew_mandelstam_disc(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
+            }
     };
 
     // F-wave
@@ -284,6 +319,13 @@ namespace eos
             chew_mandelstam(const complex<double> & S)
             {
                 return eos::chew_mandelstam::f_wave(S, this->_m1, this->_m2, this->_q0());
+            }
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            complex<double>
+            chew_mandelstam_disc(const complex<double> & S)
+            {
+                return eos::chew_mandelstam::f_wave_disc(S, this->_m1, this->_m2, this->_q0());
             }
     };
 
