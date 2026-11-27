@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -147,6 +147,8 @@ class BToKstarDileptonJavierTest : public TestCase
             p["mass::B_d"]      = 5;
             p["mass::K_d^*"]    = 0.9;
             p["mass::mu"]       = 1e-15;
+            p["mass::psi(2S)"]  = 3.68610;
+            p["mass::D^0"]      = 1.86483;
             p["mass::b(MSbar)"] = 4;
             p["mass::s(2GeV)"]  = 0.;
 
