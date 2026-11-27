@@ -27,6 +27,7 @@
 #include <cmath>
 #include <functional>
 #include <string>
+#include <utility>
 #include <vector>
 
 using namespace test;
@@ -788,6 +789,71 @@ class ChewMandelstamFWaveTest : public TestCase
             }
         }
 } chew_mandelstam_f_wave_test;
+
+class ChewMandelstamMasslessTest : public TestCase
+{
+    public:
+        ChewMandelstamMasslessTest() :
+            TestCase("chew_mandelstam_massless_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            constexpr double eps = 1e-6;
+
+            static constexpr double m  = 1.86;
+            static constexpr double q0 = 0.5;
+
+            // reference values from the dispersion integral of rho(s) = (s - m^2) / (16 pi s), subtracted at threshold
+            const std::vector<std::pair<complex<double>, complex<double>>> references{
+                {          -2.0,                        -0.00788656433562 },
+                {           1.0,                        -0.00531368162968 },
+                { { 20.0, 5.0 },   { -0.00926101976069, 0.0146846040815 } },
+                { { 2.0, -1.0 }, { -0.00426185662505, -0.00147813852605 } },
+            };
+            for (const auto & [s, reference] : references)
+            {
+                for (const auto & result : { chew_mandelstam::s_wave(s, m, 0.0), chew_mandelstam::s_wave(s, 0.0, m) })
+                {
+                    TEST_CHECK_NEARLY_EQUAL(real(result), real(reference), eps * std::abs(reference));
+                    TEST_CHECK_NEARLY_EQUAL(imag(result), imag(reference), eps * std::abs(reference));
+                }
+            }
+
+            // Im s_wave = rho above threshold
+            for (const double s : { 5.0, 20.0 })
+            {
+                TEST_CHECK_RELATIVE_ERROR(imag(chew_mandelstam::s_wave(s, m, 0.0)), (s - m * m) / (16.0 * M_PI * s), eps);
+            }
+
+            // the limit m2 -> 0 is approached as O(m2 log m2)
+            static constexpr double small     = 1e-5;
+            static constexpr double eps_limit = 1e-3;
+
+            const auto check_limit = [&](const complex<double> & a, const complex<double> & b)
+            {
+                TEST_CHECK_NEARLY_EQUAL(real(a), real(b), eps_limit * std::abs(b));
+                TEST_CHECK_NEARLY_EQUAL(imag(a), imag(b), eps_limit * std::abs(b));
+            };
+
+            for (const complex<double> s : { complex<double>(-2.0), complex<double>(5.0), complex<double>(20.0, 5.0), complex<double>(2.0, -1.0) })
+            {
+                check_limit(chew_mandelstam::p_wave(s, m, 0.0, q0), chew_mandelstam::p_wave(s, m, small, q0));
+                check_limit(chew_mandelstam::d_wave(s, m, 0.0, q0), chew_mandelstam::d_wave(s, m, small, q0));
+                check_limit(chew_mandelstam::f_wave(s, m, 0.0, q0), chew_mandelstam::f_wave(s, m, small, q0));
+            }
+
+            // at a pole of the Blatt-Weisskopf form factor, which uses the derivative of s_wave
+            {
+                const double          a = m * m - 2.0 * q0 * q0;
+                const complex<double> s = a + std::sqrt(complex<double>(a * a - power_of<4>(m)));
+
+                check_limit(chew_mandelstam::p_wave(s, m, 0.0, q0), chew_mandelstam::p_wave(s, m, small, q0));
+            }
+        }
+} chew_mandelstam_massless_test;
 
 class ChewMandelstamDiscontinuityTest : public TestCase
 {

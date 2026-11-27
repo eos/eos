@@ -52,6 +52,30 @@ namespace eos
                 return std::atan(z);
             }
 
+            // Limit of s_wave(s, m1, m2) for m2 -> 0. The logarithms of the general expression diverge
+            // individually as log(m2), and only their sum remains finite.
+            complex<double>
+            s_wave_massless(const complex<double> & S, const double & m)
+            {
+                static const double pi = M_PI;
+
+                // Adapt s to match Mathematica's behaviour on the branch cut
+                const complex<double> s = S + complex<double>(0.0, 1e-15);
+
+                return 1.0 / 16.0 / pi / pi * (s - m * m) / s * std::log(m * m / (m * m - s));
+            }
+
+            complex<double>
+            s_wave_massless_prime(const complex<double> & S, const double & m)
+            {
+                static const double pi = M_PI;
+
+                // Adapt s to match Mathematica's behaviour on the branch cut
+                const complex<double> s = S + complex<double>(0.0, 1e-15);
+
+                return 1.0 / 16.0 / pi / pi / s * (m * m / s * std::log(m * m / (m * m - s)) - 1.0);
+            }
+
             // The derivative of s_wave with respect to s.
             complex<double>
             s_wave_prime(const complex<double> & S, const double & m)
@@ -72,6 +96,11 @@ namespace eos
                 if (m1 == m2)
                 {
                     return s_wave_prime(S, m1);
+                }
+
+                if ((m1 == 0.0) || (m2 == 0.0))
+                {
+                    return s_wave_massless_prime(S, m1 + m2);
                 }
 
                 static const double pi = M_PI;
@@ -162,6 +191,11 @@ namespace eos
             if (m1 == m2)
             {
                 return s_wave(S, m1);
+            }
+
+            if ((m1 == 0.0) || (m2 == 0.0))
+            {
+                return impl::s_wave_massless(S, m1 + m2);
             }
 
             static const double pi = M_PI;

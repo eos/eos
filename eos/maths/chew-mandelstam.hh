@@ -43,9 +43,9 @@ namespace eos
          * amplitudes below and above threshold, and onto other Riemann sheets.
          *
          * @param s     Mandelstam variable at which to evaluate the function.
-         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
-         * @param m2    Mass of the second particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
          */
         complex<double> s_wave(const complex<double> & s, const double & m);
         complex<double> s_wave(const complex<double> & s, const double & m1, const double & m2);
@@ -62,9 +62,9 @@ namespace eos
          * so the function stays regular there.
          *
          * @param s     Mandelstam variable at which to evaluate the function.
-         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
-         * @param m2    Mass of the second particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
          * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
          */
         complex<double> p_wave(const complex<double> & s, const double & m, const double & q0);
@@ -82,9 +82,9 @@ namespace eos
          * so the function stays regular there.
          *
          * @param s     Mandelstam variable at which to evaluate the function.
-         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
-         * @param m2    Mass of the second particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
          * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
          */
         complex<double> d_wave(const complex<double> & s, const double & m, const double & q0);
@@ -102,9 +102,9 @@ namespace eos
          * so the function stays regular there.
          *
          * @param s     Mandelstam variable at which to evaluate the function.
-         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
-         * @param m2    Mass of the second particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
          * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
          */
         complex<double> f_wave(const complex<double> & s, const double & m, const double & q0);
