@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2023 Méril Reboud
  * Copyright (c) 2026 Simon Mutke
+ * Copyright (c) 2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -108,6 +109,34 @@ namespace eos
          */
         complex<double> f_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> f_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
+        /*!
+         * The discontinuities of the S-, P-, D-, and F-wave Chew-Mandelstam
+         * functions across the unitarity cut,
+         *
+         *   disc(s) = 2 * i * rho(s) * n_l(s)^2,
+         *
+         * continued analytically into the complex s plane from the upper lip
+         * of the unitarity cut. The branch cuts of i * rho(s) lie on the real
+         * axis above threshold, s >= (m1 + m2)^2, and below pseudothreshold,
+         * s <= (m1 - m2)^2. The function is real-valued in between. The
+         * Chew-Mandelstam function on the second Riemann sheet of the channel
+         * is obtained as l_wave(s) - l_wave_disc(s) in the entire complex plane.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         */
+        complex<double> s_wave_disc(const complex<double> & s, const double & m);
+        complex<double> s_wave_disc(const complex<double> & s, const double & m1, const double & m2);
+        complex<double> p_wave_disc(const complex<double> & s, const double & m, const double & q0);
+        complex<double> p_wave_disc(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+        complex<double> d_wave_disc(const complex<double> & s, const double & m, const double & q0);
+        complex<double> d_wave_disc(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+        complex<double> f_wave_disc(const complex<double> & s, const double & m, const double & q0);
+        complex<double> f_wave_disc(const complex<double> & s, const double & m1, const double & m2, const double & q0);
     } // namespace chew_mandelstam
 } // namespace eos
 

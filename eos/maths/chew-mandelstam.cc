@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2023 Méril Reboud
  * Copyright (c) 2026 Simon Mutke
+ * Copyright (c) 2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -101,6 +102,46 @@ namespace eos
                 }
 
                 return (s_wave(S, m1, m2) + (S - mp * mp) / (mp * mp - pole) * s_wave(pole, m1, m2)) / (S - pole);
+            }
+
+            // 2 i rho(s) n_l(s)^2 with i rho(s) = -sqrt(-lambda(s)) / (16 pi s), where n_l(s)^2 is rational in
+            // u = lambda(s) / (4 s q0^2). The principal square root of -lambda = (s_+ - s) (s - s_-) is negative
+            // real only for real s above threshold s_+ or below pseudothreshold s_-, which places the branch
+            // cuts there and nowhere else. On the cut above threshold, the small positive imaginary part
+            // added to s selects the upper lip, where i rho(s) = +i |rho(s)|.
+            template <unsigned l_>
+            complex<double>
+            l_wave_disc(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+            {
+                static const double pi = M_PI;
+
+                const double mp = m1 + m2;
+                const double mm = m1 - m2;
+
+                const complex<double> s       = S + complex<double>(0.0, 1e-15);
+                const complex<double> mlambda = (mp * mp - s) * (s - mm * mm);
+                const complex<double> disc    = -2.0 * std::sqrt(mlambda) / 16.0 / pi / s;
+
+                const complex<double> u = -mlambda / (4.0 * s * q0 * q0);
+
+                if constexpr (l_ == 0)
+                {
+                    return disc;
+                }
+                else if constexpr (l_ == 1)
+                {
+                    return disc * u / (u + 1.0);
+                }
+                else if constexpr (l_ == 2)
+                {
+                    return disc * u * u / (u * u + 3.0 * u + 9.0);
+                }
+                else
+                {
+                    static_assert(l_ == 3);
+
+                    return disc * u * u * u / (u * u * u + 6.0 * u * u + 45.0 * u + 225.0);
+                }
             }
         } // namespace impl
 
@@ -236,6 +277,54 @@ namespace eos
                                           * (s2plus * impl::L_wave_pole(S, s2plus, m1, m2) - s2minus * impl::L_wave_pole(S, s2minus, m1, m2))
                                 + u3 * u3 * u3 / (3.0 * u3 * u3 + 12.0 * u3 + 45.0) / b3
                                           * (s3plus * impl::L_wave_pole(S, s3plus, m1, m2) - s3minus * impl::L_wave_pole(S, s3minus, m1, m2)));
+        }
+
+        complex<double>
+        s_wave_disc(const complex<double> & S, const double & m)
+        {
+            return impl::l_wave_disc<0>(S, m, m, 1.0);
+        }
+
+        complex<double>
+        s_wave_disc(const complex<double> & S, const double & m1, const double & m2)
+        {
+            return impl::l_wave_disc<0>(S, m1, m2, 1.0);
+        }
+
+        complex<double>
+        p_wave_disc(const complex<double> & S, const double & m, const double & q0)
+        {
+            return impl::l_wave_disc<1>(S, m, m, q0);
+        }
+
+        complex<double>
+        p_wave_disc(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            return impl::l_wave_disc<1>(S, m1, m2, q0);
+        }
+
+        complex<double>
+        d_wave_disc(const complex<double> & S, const double & m, const double & q0)
+        {
+            return impl::l_wave_disc<2>(S, m, m, q0);
+        }
+
+        complex<double>
+        d_wave_disc(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            return impl::l_wave_disc<2>(S, m1, m2, q0);
+        }
+
+        complex<double>
+        f_wave_disc(const complex<double> & S, const double & m, const double & q0)
+        {
+            return impl::l_wave_disc<3>(S, m, m, q0);
+        }
+
+        complex<double>
+        f_wave_disc(const complex<double> & S, const double & m1, const double & m2, const double & q0)
+        {
+            return impl::l_wave_disc<3>(S, m1, m2, q0);
         }
     } // namespace chew_mandelstam
 } // namespace eos

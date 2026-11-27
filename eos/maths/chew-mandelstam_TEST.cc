@@ -3,6 +3,7 @@
 /*
  * Copyright (c) 2023 Méril Reboud
  * Copyright (c) 2026 Simon Mutke
+ * Copyright (c) 2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -24,6 +25,9 @@
 #include <test/test.hh>
 
 #include <cmath>
+#include <functional>
+#include <string>
+#include <vector>
 
 using namespace test;
 using namespace eos;
@@ -784,3 +788,105 @@ class ChewMandelstamFWaveTest : public TestCase
             }
         }
 } chew_mandelstam_f_wave_test;
+
+class ChewMandelstamDiscontinuityTest : public TestCase
+{
+    public:
+        ChewMandelstamDiscontinuityTest() :
+            TestCase("chew_mandelstam_discontinuity_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            using Function = std::function<complex<double>(const complex<double> &)>;
+
+            struct Channel
+            {
+                    std::string name;
+                    Function    cm;
+                    Function    disc;
+                    double      m1, m2;
+            };
+
+            static constexpr double me = 5.10999e-4;
+            static constexpr double mD = 1.86965;
+            static constexpr double m1 = 1.86;
+            static constexpr double m2 = 2.01;
+            static constexpr double q0 = 0.5;
+
+            using namespace chew_mandelstam;
+
+            // clang-format off
+            const std::vector<Channel> channels{
+                { "S, m",      [](const complex<double> & s) { return s_wave(s, me); },          [](const complex<double> & s) { return s_wave_disc(s, me); },          me, me },
+                { "S, m, m",   [](const complex<double> & s) { return s_wave(s, me, me); },      [](const complex<double> & s) { return s_wave_disc(s, me, me); },      me, me },
+                { "S, m1, m2", [](const complex<double> & s) { return s_wave(s, m1, m2); },      [](const complex<double> & s) { return s_wave_disc(s, m1, m2); },      m1, m2 },
+                { "P, m",      [](const complex<double> & s) { return p_wave(s, mD, q0); },      [](const complex<double> & s) { return p_wave_disc(s, mD, q0); },      mD, mD },
+                { "P, m, m",   [](const complex<double> & s) { return p_wave(s, mD, mD, q0); },  [](const complex<double> & s) { return p_wave_disc(s, mD, mD, q0); },  mD, mD },
+                { "P, m1, m2", [](const complex<double> & s) { return p_wave(s, m1, m2, q0); },  [](const complex<double> & s) { return p_wave_disc(s, m1, m2, q0); },  m1, m2 },
+                { "D, m",      [](const complex<double> & s) { return d_wave(s, mD, q0); },      [](const complex<double> & s) { return d_wave_disc(s, mD, q0); },      mD, mD },
+                { "D, m, m",   [](const complex<double> & s) { return d_wave(s, mD, mD, q0); },  [](const complex<double> & s) { return d_wave_disc(s, mD, mD, q0); },  mD, mD },
+                { "D, m1, m2", [](const complex<double> & s) { return d_wave(s, m1, m2, q0); },  [](const complex<double> & s) { return d_wave_disc(s, m1, m2, q0); },  m1, m2 },
+                { "F, m",      [](const complex<double> & s) { return f_wave(s, mD, q0); },      [](const complex<double> & s) { return f_wave_disc(s, mD, q0); },      mD, mD },
+                { "F, m, m",   [](const complex<double> & s) { return f_wave(s, mD, mD, q0); },  [](const complex<double> & s) { return f_wave_disc(s, mD, mD, q0); },  mD, mD },
+                { "F, m1, m2", [](const complex<double> & s) { return f_wave(s, m1, m2, q0); },  [](const complex<double> & s) { return f_wave_disc(s, m1, m2, q0); },  m1, m2 },
+            };
+            // clang-format on
+
+            constexpr double eps = 1e-6;
+
+            // small imaginary part relative to the real part of s
+            const auto ie = [](const double & x) { return complex<double>(0.0, 1e-11 * std::abs(x)); };
+
+            const auto check_close = [](const complex<double> & a, const complex<double> & b, const double & eps)
+            {
+                TEST_CHECK_NEARLY_EQUAL(real(a), real(b), eps * std::abs(b));
+                TEST_CHECK_NEARLY_EQUAL(imag(a), imag(b), eps * std::abs(b));
+            };
+
+            for (const auto & c : channels)
+            {
+                const double s_plus  = power_of<2>(c.m1 + c.m2);
+                const double s_minus = power_of<2>(c.m1 - c.m2);
+
+                // above threshold, the discontinuity of the Chew-Mandelstam function across the real axis
+                for (const double x : { s_plus + 0.5, s_plus + 2.0, s_plus + 10.0 })
+                {
+                    const complex<double> disc = c.disc(x);
+
+                    TEST_CHECK_MSG(imag(disc) > 0.0, c.name);
+                    TEST_CHECK_RELATIVE_ERROR(imag(c.cm(x)), 0.5 * imag(disc), eps);
+                    check_close(c.disc(x + ie(x)), disc, eps);
+                    check_close(c.cm(x + ie(x)) - c.cm(x - ie(x)), disc, eps);
+
+                    // the second sheet, approached from below, continues the first sheet's upper lip
+                    check_close(c.cm(x - ie(x)) - c.disc(x - ie(x)), c.cm(x + ie(x)), eps);
+                }
+
+                // between pseudothreshold and threshold, real-valued and without a cut
+                for (const double x : { s_minus + 0.25 * (s_plus - s_minus), s_minus + 0.75 * (s_plus - s_minus) })
+                {
+                    const complex<double> disc = c.disc(x);
+
+                    TEST_CHECK_NEARLY_EQUAL(imag(disc), 0.0, eps * std::abs(disc));
+                    check_close(c.disc(x + ie(x)), c.disc(x - ie(x)), eps);
+                }
+
+                // below pseudothreshold, a cut across which the function changes sign
+                for (const double x : { s_minus - 1.0, s_minus - 10.0 })
+                {
+                    check_close(c.disc(x + ie(x)), -c.disc(x - ie(x)), eps);
+                }
+
+                // no cut off the real axis, in particular not at Re(s) = m1^2 + m2^2
+                for (const double y : { -1.0, 1.0 })
+                {
+                    const double x = c.m1 * c.m1 + c.m2 * c.m2;
+
+                    check_close(c.disc(complex<double>(x - 1e-9, y)), c.disc(complex<double>(x + 1e-9, y)), eps);
+                }
+            }
+        }
+} chew_mandelstam_discontinuity_test;
