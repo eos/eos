@@ -61,273 +61,89 @@ namespace eos
     ( |D*0 D0bar> - |D0 D*0bar> ) / sqrt(2) and ( |D*+ D-> - |D+ D*-> ) / sqrt(2).
     */
 
-    // e^+e^- channel
-    template <unsigned nchannels_, unsigned nresonances_> struct EEChannel : public KMatrix<nchannels_, nresonances_>::Channel
+    // Two-body channel in the partial wave l_
+    template <unsigned nchannels_, unsigned nresonances_, unsigned l_> struct PartialWaveChannel : public KMatrix<nchannels_, nresonances_>::Channel
     {
-            EEChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 0, q0, g0s)
+            PartialWaveChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
+                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, l_, q0, g0s)
             {
-                if (m1 != m2)
-                {
-                    InternalError("K-matrix channels with different masses are not yet implemented.");
-                }
-            }
-
-            inline double
-            mp()
-            {
-                return this->_m1 + this->_m2;
             }
 
             using KMatrix<nchannels_, nresonances_>::Channel::_q0;
 
-            const double          pi = M_PI;
-            const complex<double> i  = complex<double>(0.0, 1.0);
-
             complex<double>
             rho(const complex<double> & s)
             {
-                const double mp = this->mp();
+                const double mp = this->_m1 + this->_m2;
+                const double mm = this->_m1 - this->_m2;
 
-                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
+                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * (s - mm * mm)) / 16.0 / M_PI / s;
             }
 
             // Analytic continuation of i * rho * n * n
             complex<double>
             chew_mandelstam(const complex<double> & S)
             {
-                return eos::chew_mandelstam::s_wave(S, this->_m1, this->_m2);
+                if constexpr (l_ == 0)
+                {
+                    return eos::chew_mandelstam::s_wave(S, this->_m1, this->_m2);
+                }
+                else if constexpr (l_ == 1)
+                {
+                    return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
+                }
+                else if constexpr (l_ == 2)
+                {
+                    return eos::chew_mandelstam::d_wave(S, this->_m1, this->_m2, this->_q0());
+                }
+                else
+                {
+                    static_assert(l_ == 3);
+
+                    return eos::chew_mandelstam::f_wave(S, this->_m1, this->_m2, this->_q0());
+                }
             }
 
             // Discontinuity of the Chew-Mandelstam function across the unitarity cut
             complex<double>
             chew_mandelstam_disc(const complex<double> & S)
             {
-                return eos::chew_mandelstam::s_wave_disc(S, this->_m1, this->_m2);
+                if constexpr (l_ == 0)
+                {
+                    return eos::chew_mandelstam::s_wave_disc(S, this->_m1, this->_m2);
+                }
+                else if constexpr (l_ == 1)
+                {
+                    return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
+                }
+                else if constexpr (l_ == 2)
+                {
+                    return eos::chew_mandelstam::d_wave_disc(S, this->_m1, this->_m2, this->_q0());
+                }
+                else
+                {
+                    static_assert(l_ == 3);
+
+                    return eos::chew_mandelstam::f_wave_disc(S, this->_m1, this->_m2, this->_q0());
+                }
             }
     };
+
+    // e^+e^- channel
+    template <unsigned nchannels_, unsigned nresonances_> using EEChannel = PartialWaveChannel<nchannels_, nresonances_, 0>;
 
     // Effective channel
-    template <unsigned nchannels_, unsigned nresonances_> struct EffChannel : public KMatrix<nchannels_, nresonances_>::Channel
-    {
-            EffChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s)
-            {
-                if (m1 != m2)
-                {
-                    InternalError("K-matrix channels with different masses are not yet implemented.");
-                }
-            }
-
-            inline double
-            mp()
-            {
-                return this->_m1 + this->_m2;
-            }
-
-            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
-
-            const double          pi = M_PI;
-            const complex<double> i  = complex<double>(0.0, 1.0);
-
-            complex<double>
-            rho(const complex<double> & s)
-            {
-                const double mp = this->mp();
-
-                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
-            }
-
-            // Analytic continuation of i * rho * n * n
-            complex<double>
-            chew_mandelstam(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
-            }
-
-            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
-            complex<double>
-            chew_mandelstam_disc(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
-            }
-    };
+    template <unsigned nchannels_, unsigned nresonances_> using EffChannel = PartialWaveChannel<nchannels_, nresonances_, 1>;
 
     // V -> PP channel
-    template <unsigned nchannels_, unsigned nresonances_> struct PWavePPChannel : public KMatrix<nchannels_, nresonances_>::Channel
-    {
-            PWavePPChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s)
-            {
-            }
-
-            inline double
-            mp()
-            {
-                return this->_m1 + this->_m2;
-            }
-
-            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
-
-            const double          pi = M_PI;
-            const complex<double> i  = complex<double>(0.0, 1.0);
-
-            complex<double>
-            rho(const complex<double> & s)
-            {
-                const double mp = this->mp();
-
-                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
-            }
-
-            // Analytic continuation of i * rho * n * n
-            complex<double>
-            chew_mandelstam(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
-            }
-
-            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
-            complex<double>
-            chew_mandelstam_disc(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
-            }
-    };
+    template <unsigned nchannels_, unsigned nresonances_> using PWavePPChannel = PartialWaveChannel<nchannels_, nresonances_, 1>;
 
     // V -> VP channel, e.g. D^* Dbar + h.c.
-    template <unsigned nchannels_, unsigned nresonances_> struct PWaveVPChannel : public KMatrix<nchannels_, nresonances_>::Channel
-    {
-            PWaveVPChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s)
-            {
-            }
+    template <unsigned nchannels_, unsigned nresonances_> using PWaveVPChannel = PartialWaveChannel<nchannels_, nresonances_, 1>;
 
-            inline double
-            mp()
-            {
-                return this->_m1 + this->_m2;
-            }
-
-            inline double
-            mm()
-            {
-                return this->_m1 - this->_m2;
-            }
-
-            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
-
-            const double          pi = M_PI;
-            const complex<double> i  = complex<double>(0.0, 1.0);
-
-            complex<double>
-            rho(const complex<double> & s)
-            {
-                const double mp = this->mp();
-                const double mm = this->mm();
-
-                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * (s - mm * mm)) / 16.0 / pi / s;
-            }
-
-            // Analytic continuation of i * rho * n * n
-            complex<double>
-            chew_mandelstam(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
-            }
-
-            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
-            complex<double>
-            chew_mandelstam_disc(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
-            }
-    };
-
-    // V -> VV channel
-    // P-wave
-    template <unsigned nchannels_, unsigned nresonances_> struct PWaveVVChannel : public KMatrix<nchannels_, nresonances_>::Channel
-    {
-            PWaveVVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 1, q0, g0s)
-            {
-            }
-
-            inline double
-            mp()
-            {
-                return this->_m1 + this->_m2;
-            }
-
-            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
-
-            const double          pi = M_PI;
-            const complex<double> i  = complex<double>(0.0, 1.0);
-
-            complex<double>
-            rho(const complex<double> & s)
-            {
-                const double mp = this->mp();
-
-                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
-            }
-
-            // Analytic continuation of i * rho * n * n
-            complex<double>
-            chew_mandelstam(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave(S, this->_m1, this->_m2, this->_q0());
-            }
-
-            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
-            complex<double>
-            chew_mandelstam_disc(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::p_wave_disc(S, this->_m1, this->_m2, this->_q0());
-            }
-    };
-
-    // F-wave
-    template <unsigned nchannels_, unsigned nresonances_> struct FWaveVVChannel : public KMatrix<nchannels_, nresonances_>::Channel
-    {
-            FWaveVVChannel(std::string name, Parameter m1, Parameter m2, Parameter q0, std::array<Parameter, nresonances_> g0s) :
-                KMatrix<nchannels_, nresonances_>::Channel(name, m1, m2, 3, q0, g0s)
-            {
-            }
-
-            inline double
-            mp()
-            {
-                return this->_m1 + this->_m2;
-            }
-
-            using KMatrix<nchannels_, nresonances_>::Channel::_q0;
-
-            const double          pi = M_PI;
-            const complex<double> i  = complex<double>(0.0, 1.0);
-
-            complex<double>
-            rho(const complex<double> & s)
-            {
-                const double mp = this->mp();
-
-                return (real(s) < mp * mp) ? 0.0 : std::sqrt((s - mp * mp) * s) / 16.0 / pi / s;
-            }
-
-            // Analytic continuation of i * rho * n * n
-            complex<double>
-            chew_mandelstam(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::f_wave(S, this->_m1, this->_m2, this->_q0());
-            }
-
-            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
-            complex<double>
-            chew_mandelstam_disc(const complex<double> & S)
-            {
-                return eos::chew_mandelstam::f_wave_disc(S, this->_m1, this->_m2, this->_q0());
-            }
-    };
+    // V -> VV channels in the P and F waves
+    template <unsigned nchannels_, unsigned nresonances_> using PWaveVVChannel = PartialWaveChannel<nchannels_, nresonances_, 1>;
+    template <unsigned nchannels_, unsigned nresonances_> using FWaveVVChannel = PartialWaveChannel<nchannels_, nresonances_, 3>;
 
     template <unsigned nchannels_, unsigned nresonances_> struct CharmoniumResonance : public KMatrix<nchannels_, nresonances_>::Resonance
     {
