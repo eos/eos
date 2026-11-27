@@ -81,25 +81,25 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->e^+e^-::sigma(E)",
                                               R"(\sigma(e^+e^- \to e^+e^-)|_{s\textrm{-channel}})",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoee)),
 
                     make_cacheable_observable("e^+e^-->eff::sigma(E)",
                                               R"(\sigma(e^+e^- \to \textrm{eff}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoeff)),
 
                     make_cacheable_observable("e^+e^-->D^0Dbar^0::sigma(E)",
                                               R"(\sigma(e^+e^- \to D^0 \bar{D}^0))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoD0Dbar0)),
 
                     make_cacheable_observable("e^+e^-->D^+D^-::sigma(E)",
                                               R"(\sigma(e^+e^- \to D^+ D^-))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDpDm)),
 
@@ -157,7 +157,7 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->e^+e^-::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to e^+e^-))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoee)),
 
@@ -175,7 +175,7 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D^0Dbar^0::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D^0 \bar{D}^0))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoD0Dbar0)),
 
@@ -193,13 +193,13 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D^+D^-::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D^+ D^-))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDpDm)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^0::sigma(E)",
                                               R"(\sigma(e^+e^- \to D^{*0} \bar{D}^0 + \mathrm{h.c.}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0D0bar)),
 
@@ -223,13 +223,13 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^0::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D^{*0} \bar{D}^0 + \mathrm{h.c.}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0D0bar)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^-::sigma(E)",
                                               R"(\sigma(e^+e^- \to D^{*+} D^- + \mathrm{h.c.}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDm)),
 
@@ -253,13 +253,13 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D^*+D^-::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D^{*+} D^- + \mathrm{h.c.}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDm)),
 
                     make_cacheable_observable("e^+e^-->D_s^+D_s^-::sigma(E)",
                                               R"(\sigma(e^+e^- \to D_s^+ D_s^-))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDsDs)),
 
@@ -283,31 +283,31 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D_s^+D_s^-::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D_s^+ D_s^-))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDsDs)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma(E)",
                                               R"(\sigma(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_TT(E)",
                                               R"(\sigma_{TT}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_TT)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_TL(E)",
                                               R"(\sigma_{TL}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_TL)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_LL(E)",
                                               R"(\sigma_{LL}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_LL)),
 
@@ -355,49 +355,49 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_TT(Re{E},Im{E})",
                                               R"(\sigma_{TT}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_TT)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_TL(Re{E},Im{E})",
                                               R"(\sigma_{TL}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_TL)),
 
                     make_cacheable_observable("e^+e^-->D^*0Dbar^*0::sigma_LL(Re{E},Im{E})",
                                               R"(\sigma_{LL}(e^+e^- \to D^{*0} \bar{D}^{*0}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_LL)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma(E)",
                                               R"(\sigma(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_TT(E)",
                                               R"(\sigma_{TT}(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_TT)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_TL(E)",
                                               R"(\sigma_{TL}(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_TL)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_LL(E)",
                                               R"(\sigma_{LL}(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_LL)),
 
@@ -445,31 +445,31 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_TT(Re{E},Im{E})",
                                               R"(\sigma_{TT}(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_TT)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_TL(Re{E},Im{E})",
                                               R"(\sigma_{TL}(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_TL)),
 
                     make_cacheable_observable("e^+e^-->D^*+D^*-::sigma_LL(Re{E},Im{E})",
                                               R"(\sigma_{LL}(e^+e^- \to D^{*+} D^{*-}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_LL)),
 
                     make_cacheable_observable("e^+e^-->D_s^*+D_s^-::sigma(E)",
                                               R"(\sigma(e^+e^- \to D_s^{*+} D_s^- + \mathrm{h.c.}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare, "E"),
                                               evaluate(&EEToCCBar::sigma_eetoDstsDs)),
 
@@ -493,7 +493,7 @@ namespace eos
 
                     make_cacheable_observable("e^+e^-->D_s^*+D_s^-::sigma(Re{E},Im{E})",
                                               R"(\sigma(e^+e^- \to D_s^{*+} D_s^- + \mathrm{h.c.}))",
-                                              Unit::InverseGeV2(),
+                                              Unit::Nanobarn(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::sigma_eetoDstsDs)),
 
