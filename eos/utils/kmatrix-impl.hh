@@ -24,6 +24,7 @@
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kinematic.hh>
 #include <eos/utils/kmatrix.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_complex.h>
@@ -168,7 +169,7 @@ namespace eos
     // If second_sheet is set to true, the calculation is performed on the second Riemann sheet
     template <unsigned nchannels_, unsigned nresonances_>
     std::array<complex<double>, nchannels_>
-    KMatrix<nchannels_, nresonances_>::tmatrix_row(unsigned rowindex, complex<double> _s, bool second_sheet) const
+    KMatrix<nchannels_, nresonances_>::tmatrix_row(unsigned rowindex, complex<double> _s, RiemannSheet<nchannels_> second_sheet) const
     {
         std::array<complex<double>, nchannels_> tmatrixrow;
         std::array<complex<double>, nchannels_> nfactors;
@@ -204,9 +205,9 @@ namespace eos
         {
             complex<double> entry = channels[i]->chew_mandelstam(s);
 
-            if (second_sheet && (real(s) > power_of<2>(channels[i]->_m1.evaluate() + channels[i]->_m2.evaluate())))
+            if (second_sheet[i])
             {
-                entry += complex<double>(0.0, 2.0) * channels[i]->rho(s) * nfactors[i] * nfactors[i];
+                entry -= channels[i]->chew_mandelstam_disc(s);
             }
 
             gsl_matrix_complex_set(_tmp_1, i, i, gsl_complex_rect(entry.real(), entry.imag()));

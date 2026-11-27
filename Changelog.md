@@ -5,6 +5,9 @@
 ### Changed
 
 - Let ``eos-data check`` report an absent output of ``create-mask``, ``model-comparison``, or ``predict-observables`` as a warning, since it can be regenerated from the remaining data, and report an existing output that lacks one of its required files as an error (D. van Dyk)
+- **Breaking:** Replace the option ``assume-isospin`` of the ``e^+e^- -> ccbar`` observables by ``assume-symmetry``, which takes the values ``none`` (default), ``isospin``, or ``su3f``; ``assume-isospin=true`` corresponds to ``assume-symmetry=isospin``. The option ``assume-isospin`` is ignored, and its use triggers a one-time warning (S. Mutke)
+- **Breaking:** Correct the spin factor of the ``e^+e^- -> ccbar`` cross sections to ``3/4``, i.e., the three polarisations of the intermediate ``1^--`` state over the four spin states of the unpolarised ``e^+e^-`` pair, in lieu of ``2l+1``. All P-wave cross sections, and therefore the resonant part of ``e^+e^-->ccbar::R(E)``, decrease by a factor of four, and ``e^+e^-->e^+e^-::sigma(E)`` by a factor of ``3/4``; since the ``e^+e^-`` couplings of the resonances are small, values fitted with a previous version must be multiplied by a factor of about two (S. Mutke)
+- Update the default masses of the ``D^0``, ``D^+``, ``D_s``, ``D^{*0}``, and ``D^{*+}`` mesons and of the ``psi(2S)``, ``psi(3770)``, ``psi(4040)``, and ``psi(4415)`` charmonia to the PDG's live values as of October 2026 (S. Mutke)
 
 ### Added
 

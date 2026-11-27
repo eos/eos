@@ -164,3 +164,40 @@ class PartialWaveTest : public TestCase
             TEST_CHECK_EQUAL(destringify<PartialWave>("S|P|D|F"), PartialWave::S | PartialWave::P | PartialWave::D | PartialWave::F);
         }
 } partial_wave_test;
+
+class RiemannSheetTest : public TestCase
+{
+    public:
+        RiemannSheetTest() :
+            TestCase("riemann_sheet_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            const RiemannSheet<2> rs = { false, true };
+
+            TEST_CHECK_EQUAL_STR("0", stringify(rs[0]));
+            TEST_CHECK_EQUAL_STR("1", stringify(rs[1]));
+
+            const RiemannSheet<2> rs2 = destringify<RiemannSheet<2>>("12");
+
+            TEST_CHECK_EQUAL_STR("0", stringify(rs2[0]));
+            TEST_CHECK_EQUAL_STR("1", stringify(rs2[1]));
+
+            const RiemannSheet<2> rs3 = destringify<RiemannSheet<2>>("2");
+
+            TEST_CHECK_EQUAL_STR("1", stringify(rs3[0]));
+            TEST_CHECK_EQUAL_STR("0", stringify(rs3[1]));
+
+            TEST_CHECK(rs == rs2);
+            TEST_CHECK(rs3 == destringify<RiemannSheet<2>>("21"));
+            TEST_CHECK(! (rs == rs3));
+
+            TEST_CHECK(destringify<RiemannSheet<2>>("") == RiemannSheet<2>{});
+            TEST_CHECK_THROWS(DestringifyError, destringify<RiemannSheet<2>>("222"));
+            TEST_CHECK_THROWS(DestringifyError, destringify<RiemannSheet<2>>("13"));
+            TEST_CHECK_THROWS(DestringifyError, destringify<RiemannSheet<2>>("x"));
+        }
+} riemann_sheet_test;

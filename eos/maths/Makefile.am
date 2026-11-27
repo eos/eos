@@ -9,6 +9,7 @@ lib_LTLIBRARIES = libeosmaths.la
 libeosmaths_la_SOURCES = \
 	angular-integrals.cc angular-integrals.hh \
 	cauchy-transform.cc cauchy-transform.hh \
+	chew-mandelstam.cc chew-mandelstam.hh \
 	complex.hh \
 	derivative.cc derivative.hh \
 	dft-container.cc dft-container.hh dft-container-impl.hh \
@@ -51,6 +52,7 @@ include_eos_utilsdir = $(includedir)/eos/utils
 include_eos_utils_HEADERS = \
     angular-integrals.hh \
 	cauchy-transform.hh \
+	chew-mandelstam.hh \
 	complex.hh \
 	derivative.hh \
 	dft-container.hh \
@@ -78,6 +80,7 @@ AM_TESTS_ENVIRONMENT = \
 TESTS = \
     angular-integrals_TEST \
 	cauchy-transform_TEST \
+	chew-mandelstam_TEST \
 	dft-container_TEST \
 	dft-plan_TEST \
 	derivative_TEST \
@@ -108,6 +111,8 @@ check_PROGRAMS = $(TESTS)
 angular_integrals_TEST_SOURCES = angular-integrals_TEST.cc
 
 cauchy_transform_TEST_SOURCES = cauchy-transform_TEST.cc
+
+chew_mandelstam_TEST_SOURCES = chew-mandelstam_TEST.cc
 
 dft_container_TEST_SOURCES = dft-container_TEST.cc
 

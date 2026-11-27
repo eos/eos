@@ -21,12 +21,15 @@
 #ifndef EOS_GUARD_EOS_UTILS_OPTIONS_HH
 #define EOS_GUARD_EOS_UTILS_OPTIONS_HH 1
 
+#include <eos/utils/destringify.hh>
 #include <eos/utils/exception.hh>
+#include <eos/utils/join.hh>
 #include <eos/utils/private_implementation_pattern.hh>
 #include <eos/utils/qualified-name-parts.hh>
 #include <eos/utils/quantum-numbers.hh>
 #include <eos/utils/wrapped_forward_iterator.hh>
 
+#include <algorithm>
 #include <optional>
 #include <string>
 #include <variant>
@@ -263,6 +266,64 @@ namespace eos
             PartialWave         value() const;
             const std::string & str() const;
     };
+
+    template <unsigned nchannels_> class RiemannSheetOption : public SpecifiedOption
+    {
+        private:
+            RiemannSheet<nchannels_> riemann_sheet_value;
+
+        public:
+            RiemannSheetOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key = "riemann-sheet"_ok);
+            ~RiemannSheetOption();
+
+            RiemannSheet<nchannels_> value() const;
+            const std::string &      str() const;
+    };
+
+    template <unsigned nchannels_>
+    RiemannSheetOption<nchannels_>::RiemannSheetOption(const Options & options, const std::vector<OptionSpecification> & specifications, const qnp::OptionKey & key) :
+        SpecifiedOption(options, specifications, key)
+    {
+        try
+        {
+            riemann_sheet_value = destringify<RiemannSheet<nchannels_>>(_value);
+        }
+        catch (DestringifyError &)
+        {
+            throw InvalidOptionValueError(_specification.key, _value);
+        }
+
+        const auto allowed_values = std::holds_alternative<qnp::OptionValue>(this->_specification.allowed_values)
+                                            ? std::vector<qnp::OptionValue>{ std::get<qnp::OptionValue>(this->_specification.allowed_values) }
+                                            : std::get<std::vector<qnp::OptionValue>>(this->_specification.allowed_values);
+
+        // An empty list of allowed values permits any Riemann sheet
+        if (allowed_values.empty())
+        {
+            return;
+        }
+
+        if (std::none_of(allowed_values.cbegin(), allowed_values.cend(), [this](const auto & v) { return destringify<RiemannSheet<nchannels_>>(v.str()) == riemann_sheet_value; }))
+        {
+            throw InvalidOptionValueError(_specification.key, _value, join(allowed_values.cbegin(), allowed_values.cend()));
+        }
+    }
+
+    template <unsigned nchannels_> RiemannSheetOption<nchannels_>::~RiemannSheetOption() = default;
+
+    template <unsigned nchannels_>
+    RiemannSheet<nchannels_>
+    RiemannSheetOption<nchannels_>::value() const
+    {
+        return riemann_sheet_value;
+    }
+
+    template <unsigned nchannels_>
+    const std::string &
+    RiemannSheetOption<nchannels_>::str() const
+    {
+        return _value;
+    }
 } // namespace eos
 
 #endif

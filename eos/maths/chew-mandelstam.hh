@@ -1,0 +1,143 @@
+/* vim: set sw=4 sts=4 et foldmethod=syntax : */
+
+/*
+ * Copyright (c) 2023 Méril Reboud
+ * Copyright (c) 2026 Simon Mutke
+ * Copyright (c) 2026 Danny van Dyk
+ *
+ * This file is part of the EOS project. EOS is free software;
+ * you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License version 2, as published by the Free Software Foundation.
+ *
+ * EOS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
+ *
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#ifndef EOS_GUARD_EOS_MATHS_CHEW_MANDELSTAM_HH
+#define EOS_GUARD_EOS_MATHS_CHEW_MANDELSTAM_HH 1
+
+#include <eos/maths/complex.hh>
+
+namespace eos
+{
+    namespace chew_mandelstam
+    {
+        /*!
+         * The S-wave Chew-Mandelstam function for a two-body channel of two
+         * particles with masses m1 and m2, evaluated at the Mandelstam
+         * variable s.
+         *
+         * The Chew-Mandelstam function is the once-subtracted dispersive
+         * integral of the two-body phase space
+         *
+         *   rho(s) = sqrt((s - (m1 + m2)^2) * (s - (m1 - m2)^2)) / (16 pi s),
+         *
+         * and is the S-wave (l_orbital = 0) analytic continuation of i * rho(s)
+         * used e.g. within the K-matrix formalism to unitarize scattering
+         * amplitudes below and above threshold, and onto other Riemann sheets.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
+         */
+        complex<double> s_wave(const complex<double> & s, const double & m);
+        complex<double> s_wave(const complex<double> & s, const double & m1, const double & m2);
+
+        /*!
+         * The P-wave Chew-Mandelstam function for a two-body channel of two
+         * particles with masses m1 and m2, evaluated at the Mandelstam
+         * variable s.
+         *
+         * This is the P-wave (l_orbital = 1) analytic continuation of
+         * i * rho(s), including the squared Blatt-Weisskopf form factor
+         * for l = 1 (cf. the PDG's resonance review, eq. (50.26)). The
+         * form factor's poles cancel in the partial-fraction decomposition,
+         * so the function stays regular there.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
+         */
+        complex<double> p_wave(const complex<double> & s, const double & m, const double & q0);
+        complex<double> p_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
+        /*!
+         * The D-wave Chew-Mandelstam function for a two-body channel of two
+         * particles with masses m1 and m2, evaluated at the Mandelstam
+         * variable s.
+         *
+         * This is the D-wave (l_orbital = 2) analytic continuation of
+         * i * rho(s), including the squared Blatt-Weisskopf form factor
+         * for l = 2 (cf. the PDG's resonance review, eq. (50.26)). The
+         * form factor's poles cancel in the partial-fraction decomposition,
+         * so the function stays regular there.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
+         */
+        complex<double> d_wave(const complex<double> & s, const double & m, const double & q0);
+        complex<double> d_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
+        /*!
+         * The F-wave Chew-Mandelstam function for a two-body channel of two
+         * particles with masses m1 and m2, evaluated at the Mandelstam
+         * variable s.
+         *
+         * This is the F-wave (l_orbital = 3) analytic continuation of
+         * i * rho(s), including the squared Blatt-Weisskopf form factor
+         * for l = 3 (cf. the PDG's resonance review, eq. (50.26)). The
+         * form factor's poles cancel in the partial-fraction decomposition,
+         * so the function stays regular there.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
+         */
+        complex<double> f_wave(const complex<double> & s, const double & m, const double & q0);
+        complex<double> f_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+
+        /*!
+         * The discontinuities of the S-, P-, D-, and F-wave Chew-Mandelstam
+         * functions across the unitarity cut,
+         *
+         *   disc(s) = 2 * i * rho(s) * n_l(s)^2,
+         *
+         * continued analytically into the complex s plane from the upper lip
+         * of the unitarity cut. The branch cuts of i * rho(s) lie on the real
+         * axis above threshold, s >= (m1 + m2)^2, and below pseudothreshold,
+         * s <= (m1 - m2)^2. The function is real-valued in between. The
+         * Chew-Mandelstam function on the second Riemann sheet of the channel
+         * is obtained as l_wave(s) - l_wave_disc(s) in the entire complex plane.
+         *
+         * @param s     Mandelstam variable at which to evaluate the function.
+         * @param m     Mass of both particles in the equal-mass two-body channel.
+         * @param m1    Mass of the first particle in the two-body channel.
+         * @param m2    Mass of the second particle in the two-body channel.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
+         */
+        complex<double> s_wave_disc(const complex<double> & s, const double & m);
+        complex<double> s_wave_disc(const complex<double> & s, const double & m1, const double & m2);
+        complex<double> p_wave_disc(const complex<double> & s, const double & m, const double & q0);
+        complex<double> p_wave_disc(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+        complex<double> d_wave_disc(const complex<double> & s, const double & m, const double & q0);
+        complex<double> d_wave_disc(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+        complex<double> f_wave_disc(const complex<double> & s, const double & m, const double & q0);
+        complex<double> f_wave_disc(const complex<double> & s, const double & m1, const double & m2, const double & q0);
+    } // namespace chew_mandelstam
+} // namespace eos
+
+#endif

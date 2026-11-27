@@ -415,6 +415,7 @@ BINDINGS_TESTS = {
     ('Unit', 'InverseGeV4'):                     (),
     ('Unit', 'InversePicoSecond'):               (),
     ('Unit', 'InverseSecond'):                   (),
+    ('Unit', 'Nanobarn'):                        (),
     ('Unit', 'Second'):                          (),
     ('Unit', 'Undefined'):                       (),
     ('Unit', 'Unity'):                           (),

@@ -27,6 +27,7 @@
 #include <map>
 #include <ranges>
 #include <sstream>
+#include <string>
 #include <string_view>
 
 namespace eos
@@ -164,6 +165,38 @@ namespace eos
                         }
                     }
                     while (std::string::npos != i);
+
+                    return result;
+                }
+        };
+
+        template <unsigned nchannels_> struct DoDestringify<RiemannSheet<nchannels_>>
+        {
+                static RiemannSheet<nchannels_>
+                destringify(const std::string & input)
+                {
+                    if (input.size() > nchannels_)
+                    {
+                        throw DestringifyError(input + ": at most " + std::to_string(nchannels_) + " characters were expected");
+                    }
+
+                    RiemannSheet<nchannels_> result;
+
+                    for (unsigned i = 0; i < input.size(); ++i)
+                    {
+                        if (input[i] == '1')
+                        {
+                            result[i] = false;
+                        }
+                        else if (input[i] == '2')
+                        {
+                            result[i] = true;
+                        }
+                        else
+                        {
+                            throw DestringifyError(input + ": only '1' and '2' were expected");
+                        }
+                    }
 
                     return result;
                 }

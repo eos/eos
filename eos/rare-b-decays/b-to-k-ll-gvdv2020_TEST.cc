@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2021 Méril Reboud
- * Copyright (c) 2025 Danny van Dyk
+ * Copyright (c) 2025-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -123,10 +123,12 @@ class BToKDileptonJavierTest : public TestCase
         virtual void
         run() const
         {
-            Parameters p   = Parameters::Defaults();
-            p["mass::B_d"] = 5;
-            p["mass::K_d"] = 0.5;
-            p["mass::mu"]  = 1e-15;
+            Parameters p       = Parameters::Defaults();
+            p["mass::B_d"]     = 5;
+            p["mass::K_d"]     = 0.5;
+            p["mass::mu"]      = 1e-15;
+            p["mass::psi(2S)"] = 3.68610;
+            p["mass::D^0"]     = 1.86483;
 
             p["B->Kccbar::Re{alpha_0^plus}@GvDV2020"] = 0.01;
             p["B->Kccbar::Im{alpha_0^plus}@GvDV2020"] = 0.;

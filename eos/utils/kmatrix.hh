@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2019 Stephan Kürten
- * Copyright (c) 2019 Danny van Dyk
+ * Copyright (c) 2019-2026 Danny van Dyk
  * Copyright (c) 2021-2023 Méril Reboud
  *
  * This file is part of the EOS project. EOS is free software;
@@ -23,6 +23,7 @@
 #include <eos/maths/complex.hh>
 #include <eos/utils/exception.hh>
 #include <eos/utils/parameters.hh>
+#include <eos/utils/quantum-numbers.hh>
 
 #include <gsl/gsl_blas.h>
 #include <gsl/gsl_complex.h>
@@ -73,8 +74,9 @@ namespace eos
 
             // Return the rowindex^th row of the T matrix on the first Riemann sheet, i.e. defined as T = n * (1 - i * K * rho * n * n)^(-1) * K * n
             // rowindex corresponds to the initial channel
-            // If second_sheet is set to true, the value is calculated on the second Riemann sheet
-            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, bool second_sheet = false) const;
+            // For each channel, second_sheet determines the Riemann sheet. If the i-th entry is set to true, the value of the i-th channel's Chew-Mandelstam function is calculated
+            // on the second Riemann sheet
+            std::array<complex<double>, nchannels_> tmatrix_row(unsigned rowindex, const complex<double> s, RiemannSheet<nchannels_> second_sheet = {}) const;
 
 
             // Return the K matrix partial and total widths of a resonance.
@@ -123,6 +125,9 @@ namespace eos
 
             // Analytic continuation of the phase space factor
             virtual complex<double> chew_mandelstam(const complex<double> & s) = 0;
+
+            // Discontinuity of the Chew-Mandelstam function across the unitarity cut
+            virtual complex<double> chew_mandelstam_disc(const complex<double> & s) = 0;
     };
 
     template <unsigned nchannels_, unsigned nresonances_> struct KMatrix<nchannels_, nresonances_>::Resonance

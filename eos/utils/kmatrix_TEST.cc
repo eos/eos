@@ -15,6 +15,7 @@
  * Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <eos/maths/chew-mandelstam.hh>
 #include <eos/maths/complex.hh>
 #include <eos/maths/power-of.hh>
 #include <eos/utils/kmatrix-impl.hh>
@@ -102,6 +103,12 @@ template <unsigned nchannels_, unsigned nresonances_> struct PPchannel : public 
 
                 return result / 16.0 / pi;
             }
+        }
+
+        complex<double>
+        chew_mandelstam_disc(const complex<double> & S)
+        {
+            return eos::chew_mandelstam::s_wave_disc(S, this->_m1, this->_m2);
         }
 };
 
@@ -210,6 +217,8 @@ class KMatrixTest : public TestCase
                 TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(1.5).imag(), 0., eps);
                 TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(0.001).real(), -0.0126445, eps);
                 TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam(0.001).imag(), 0., eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam_disc(9.0).real(), 0., eps);
+                TEST_CHECK_NEARLY_EQUAL(chan_12->chew_mandelstam_disc(9.0).imag(), 2.0 * 0.0172195, eps);
 
                 // Test K matrix inversion into T matrix
                 KMatrix<1, 2> kmatrix_12({ chan_12 }, { res1, res2 }, { { p["test::c_1"] } }, "kmatrix_12");
