@@ -904,7 +904,7 @@ BOOST_PYTHON_MODULE(_eos)
     class_<Unit>("Unit", R"(
             Represents the unit of the observables.
 
-            Thirteen possible entries are currently implemented in EOS:
+            Fourteen possible entries are currently implemented in EOS:
               - Undefined
               - Unity
               - GeV
@@ -918,6 +918,7 @@ BOOST_PYTHON_MODULE(_eos)
               - InversePicoSecond
               - GeVSecond
               - Femtometer2
+              - Nanobarn
         )",
                  init<std::string>())
             .def("Undefined", &Unit::Undefined, R"(
@@ -998,6 +999,12 @@ BOOST_PYTHON_MODULE(_eos)
             :rtype: eos.Unit
         )")
             .staticmethod("Femtometer2")
+            .def("Nanobarn", &Unit::Nanobarn, R"(
+            Returns the unit :math:`\textrm{nb}`.
+
+            :rtype: eos.Unit
+        )")
+            .staticmethod("Nanobarn")
             .def("latex", &Unit::latex, return_value_policy<copy_const_reference>(), R"(
             Returns the LaTeX representation of the unit.
         )",

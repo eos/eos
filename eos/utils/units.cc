@@ -2,7 +2,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -35,11 +35,11 @@ namespace eos
         R"(\textrm{GeV}^{-2})",  R"(\textrm{GeV}^{-4})",
         R"(\textrm{s})",         R"(\textrm{s}^{-1})",
         R"(\textrm{ps}^{-1})",   R"(\textrm{GeV}\,\textrm{s})",
-        R"(\textrm{fm}^2)",
+        R"(\textrm{fm}^2)",      R"(\textrm{nb})",
     };
 
     const std::vector<std::string> Unit::_internal_representations{
-        "undefined", "1", "GeV", "GeV^2", "GeV^3", "GeV^-1", "GeV^-2", "GeV^-4", "s", "s^-1", "ps^-1", "GeV s", "fm^2",
+        "undefined", "1", "GeV", "GeV^2", "GeV^3", "GeV^-1", "GeV^-2", "GeV^-4", "s", "s^-1", "ps^-1", "GeV s", "fm^2", "nb",
     };
 
     const std::string &
@@ -71,6 +71,7 @@ namespace eos
             {   _internal_representations[static_cast<unsigned>(Id::inverse_ps)],   Id::inverse_ps },
             {        _internal_representations[static_cast<unsigned>(Id::gev_s)],        Id::gev_s },
             {          _internal_representations[static_cast<unsigned>(Id::fm2)],          Id::fm2 },
+            {           _internal_representations[static_cast<unsigned>(Id::nb)],           Id::nb },
         };
 
         const auto i = map.find(s);
@@ -160,6 +161,12 @@ namespace eos
     Unit::Femtometer2()
     {
         return Unit(Id::fm2);
+    }
+
+    Unit
+    Unit::Nanobarn()
+    {
+        return Unit(Id::nb);
     }
 
     bool

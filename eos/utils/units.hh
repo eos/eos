@@ -1,7 +1,7 @@
 /* vim: set sw=4 sts=4 et foldmethod=syntax : */
 
 /*
- * Copyright (c) 2021-2025 Danny van Dyk
+ * Copyright (c) 2021-2026 Danny van Dyk
  *
  * This file is part of the EOS project. EOS is free software;
  * you can redistribute it and/or modify it under the terms of the GNU General
@@ -58,7 +58,8 @@ namespace eos
                 inverse_s,
                 inverse_ps,
                 gev_s,
-                fm2
+                fm2,
+                nb
             };
 
             Unit(const std::string &);
@@ -82,6 +83,7 @@ namespace eos
             static Unit InversePicoSecond();
             static Unit GeVSecond();
             static Unit Femtometer2();
+            static Unit Nanobarn();
 
             bool   operator== (const Unit &) const;
             Unit & operator= (const Unit &) = default;
