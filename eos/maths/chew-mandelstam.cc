@@ -133,6 +133,19 @@ namespace eos
                 return (s_wave(S, m1, m2) + (S - mp * mp) / (mp * mp - pole) * s_wave(pole, m1, m2)) / (S - pole);
             }
 
+            // The pair of poles s_+- = a +- b of the partial-fraction decomposition of n_L(s)^2, contributing
+            // (s_+ L(s_+) - s_- L(s_-)) / b. The pair is even in b and regular as b -> 0, where the poles coincide
+            // and the difference quotient cancels catastrophically. For |b| below 1e-4 (|a| + (m1 + m2)^2), evaluate
+            // the pair at that value of |b| instead, which approximates the limit to relative accuracy O(1e-8).
+            complex<double>
+            pole_pair(const complex<double> & S, const complex<double> & a, const complex<double> & b, const double & m1, const double & m2)
+            {
+                const double          h = 1e-4 * (std::abs(a) + (m1 + m2) * (m1 + m2));
+                const complex<double> c = (std::abs(b) < h) ? complex<double>(h, 0.0) : b;
+
+                return ((a + c) * L_wave_pole(S, a + c, m1, m2) - (a - c) * L_wave_pole(S, a - c, m1, m2)) / c;
+            }
+
             // 2 i rho(s) n_l(s)^2 with i rho(s) = -sqrt(-lambda(s)) / (16 pi s), where n_l(s)^2 is rational in
             // u = lambda(s) / (4 s q0^2). The principal square root of -lambda = (s_+ - s) (s - s_-) is negative
             // real only for real s above threshold s_+ or below pseudothreshold s_-, which places the branch
@@ -234,15 +247,13 @@ namespace eos
                 return p_wave(S, m1, q0);
             }
 
-            const double          mp      = m1 + m2;
-            const double          mm      = m1 - m2;
-            const double          q0sq    = q0 * q0;
-            const complex<double> a       = m1 * m1 + m2 * m2 - 2.0 * q0sq;
-            const complex<double> b       = std::sqrt(a * a - mp * mp * mm * mm);
-            const complex<double> s1plus  = a + b;
-            const complex<double> s1minus = a - b;
+            const double          mp   = m1 + m2;
+            const double          mm   = m1 - m2;
+            const double          q0sq = q0 * q0;
+            const complex<double> a    = m1 * m1 + m2 * m2 - 2.0 * q0sq;
+            const complex<double> b    = std::sqrt(a * a - mp * mp * mm * mm);
 
-            return s_wave(S, m1, m2) + 2.0 * q0sq / b * (s1minus * impl::L_wave_pole(S, s1minus, m1, m2) - s1plus * impl::L_wave_pole(S, s1plus, m1, m2));
+            return s_wave(S, m1, m2) - 2.0 * q0sq * impl::pole_pair(S, a, b, m1, m2);
         }
 
         complex<double>
@@ -254,24 +265,18 @@ namespace eos
         complex<double>
         d_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
         {
-            const double          mp      = m1 + m2;
-            const double          mm      = m1 - m2;
-            const double          q0sq    = q0 * q0;
-            const complex<double> u1      = 3.0 / 2.0 * complex<double>(-1, std::sqrt(3.0));
-            const complex<double> u2      = -3.0 / 2.0 * complex<double>(1, std::sqrt(3.0));
-            const complex<double> a1      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
-            const complex<double> b1      = std::sqrt(a1 * a1 - mp * mp * mm * mm);
-            const complex<double> a2      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
-            const complex<double> b2      = std::sqrt(a2 * a2 - mp * mp * mm * mm);
-            const complex<double> s1plus  = a1 + b1;
-            const complex<double> s1minus = a1 - b1;
-            const complex<double> s2plus  = a2 + b2;
-            const complex<double> s2minus = a2 - b2;
+            const double          mp   = m1 + m2;
+            const double          mm   = m1 - m2;
+            const double          q0sq = q0 * q0;
+            const complex<double> u1   = 3.0 / 2.0 * complex<double>(-1, std::sqrt(3.0));
+            const complex<double> u2   = -3.0 / 2.0 * complex<double>(1, std::sqrt(3.0));
+            const complex<double> a1   = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
+            const complex<double> b1   = std::sqrt(a1 * a1 - mp * mp * mm * mm);
+            const complex<double> a2   = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
+            const complex<double> b2   = std::sqrt(a2 * a2 - mp * mp * mm * mm);
 
             return s_wave(S, m1, m2)
-                   + 2.0 * q0sq
-                             * (u1 * u1 / (2.0 * u1 + 3.0) / b1 * (s1plus * impl::L_wave_pole(S, s1plus, m1, m2) - s1minus * impl::L_wave_pole(S, s1minus, m1, m2))
-                                + u2 * u2 / (2.0 * u2 + 3.0) / b2 * (s2plus * impl::L_wave_pole(S, s2plus, m1, m2) - s2minus * impl::L_wave_pole(S, s2minus, m1, m2)));
+                   + 2.0 * q0sq * (u1 * u1 / (2.0 * u1 + 3.0) * impl::pole_pair(S, a1, b1, m1, m2) + u2 * u2 / (2.0 * u2 + 3.0) * impl::pole_pair(S, a2, b2, m1, m2));
         }
 
         complex<double>
@@ -283,34 +288,25 @@ namespace eos
         complex<double>
         f_wave(const complex<double> & S, const double & m1, const double & m2, const double & q0)
         {
-            const double          mp      = m1 + m2;
-            const double          mm      = m1 - m2;
-            const double          q0sq    = q0 * q0;
-            const double          acbr    = std::cbrt((75.0 * std::sqrt(5.0) - 151.0) / 2.0);
-            const double          u1      = -2.0 + acbr - 11.0 / acbr;
-            const complex<double> u2      = -2.0 + acbr * complex<double>(-1, std::sqrt(3.0)) / 2.0 + 5.5 / acbr * complex<double>(1, std::sqrt(3.0));
-            const complex<double> u3      = -2.0 - acbr * complex<double>(1, std::sqrt(3.0)) / 2.0 - 5.5 / acbr * complex<double>(-1, std::sqrt(3.0));
-            const complex<double> a1      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
-            const complex<double> b1      = std::sqrt(a1 * a1 - mp * mp * mm * mm);
-            const complex<double> a2      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
-            const complex<double> b2      = std::sqrt(a2 * a2 - mp * mp * mm * mm);
-            const complex<double> a3      = m1 * m1 + m2 * m2 + 2.0 * q0sq * u3;
-            const complex<double> b3      = std::sqrt(a3 * a3 - mp * mp * mm * mm);
-            const complex<double> s1plus  = a1 + b1;
-            const complex<double> s1minus = a1 - b1;
-            const complex<double> s2plus  = a2 + b2;
-            const complex<double> s2minus = a2 - b2;
-            const complex<double> s3plus  = a3 + b3;
-            const complex<double> s3minus = a3 - b3;
+            const double          mp   = m1 + m2;
+            const double          mm   = m1 - m2;
+            const double          q0sq = q0 * q0;
+            const double          acbr = std::cbrt((75.0 * std::sqrt(5.0) - 151.0) / 2.0);
+            const double          u1   = -2.0 + acbr - 11.0 / acbr;
+            const complex<double> u2   = -2.0 + acbr * complex<double>(-1, std::sqrt(3.0)) / 2.0 + 5.5 / acbr * complex<double>(1, std::sqrt(3.0));
+            const complex<double> u3   = -2.0 - acbr * complex<double>(1, std::sqrt(3.0)) / 2.0 - 5.5 / acbr * complex<double>(-1, std::sqrt(3.0));
+            const complex<double> a1   = m1 * m1 + m2 * m2 + 2.0 * q0sq * u1;
+            const complex<double> b1   = std::sqrt(a1 * a1 - mp * mp * mm * mm);
+            const complex<double> a2   = m1 * m1 + m2 * m2 + 2.0 * q0sq * u2;
+            const complex<double> b2   = std::sqrt(a2 * a2 - mp * mp * mm * mm);
+            const complex<double> a3   = m1 * m1 + m2 * m2 + 2.0 * q0sq * u3;
+            const complex<double> b3   = std::sqrt(a3 * a3 - mp * mp * mm * mm);
 
             return s_wave(S, m1, m2)
                    + 2.0 * q0sq
-                             * (u1 * u1 * u1 / (3.0 * u1 * u1 + 12.0 * u1 + 45.0) / b1
-                                        * (s1plus * impl::L_wave_pole(S, s1plus, m1, m2) - s1minus * impl::L_wave_pole(S, s1minus, m1, m2))
-                                + u2 * u2 * u2 / (3.0 * u2 * u2 + 12.0 * u2 + 45.0) / b2
-                                          * (s2plus * impl::L_wave_pole(S, s2plus, m1, m2) - s2minus * impl::L_wave_pole(S, s2minus, m1, m2))
-                                + u3 * u3 * u3 / (3.0 * u3 * u3 + 12.0 * u3 + 45.0) / b3
-                                          * (s3plus * impl::L_wave_pole(S, s3plus, m1, m2) - s3minus * impl::L_wave_pole(S, s3minus, m1, m2)));
+                             * (u1 * u1 * u1 / (3.0 * u1 * u1 + 12.0 * u1 + 45.0) * impl::pole_pair(S, a1, b1, m1, m2)
+                                + u2 * u2 * u2 / (3.0 * u2 * u2 + 12.0 * u2 + 45.0) * impl::pole_pair(S, a2, b2, m1, m2)
+                                + u3 * u3 * u3 / (3.0 * u3 * u3 + 12.0 * u3 + 45.0) * impl::pole_pair(S, a3, b3, m1, m2));
         }
 
         complex<double>

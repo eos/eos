@@ -65,7 +65,7 @@ namespace eos
          * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
-         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
          */
         complex<double> p_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> p_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
@@ -85,7 +85,7 @@ namespace eos
          * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
-         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
          */
         complex<double> d_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> d_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
@@ -105,7 +105,7 @@ namespace eos
          * @param m     Mass of both particles in the equal-mass two-body channel; must be positive.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel; at most one of m1 and m2 may vanish.
-         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
          */
         complex<double> f_wave(const complex<double> & s, const double & m, const double & q0);
         complex<double> f_wave(const complex<double> & s, const double & m1, const double & m2, const double & q0);
@@ -127,7 +127,7 @@ namespace eos
          * @param m     Mass of both particles in the equal-mass two-body channel.
          * @param m1    Mass of the first particle in the two-body channel.
          * @param m2    Mass of the second particle in the two-body channel.
-         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor.
+         * @param q0    Effective momentum scale entering the Blatt-Weisskopf form factor; must be positive.
          */
         complex<double> s_wave_disc(const complex<double> & s, const double & m);
         complex<double> s_wave_disc(const complex<double> & s, const double & m1, const double & m2);

@@ -855,6 +855,59 @@ class ChewMandelstamMasslessTest : public TestCase
         }
 } chew_mandelstam_massless_test;
 
+class ChewMandelstamCoincidentPolesTest : public TestCase
+{
+    public:
+        ChewMandelstamCoincidentPolesTest() :
+            TestCase("chew_mandelstam_coincident_poles_test")
+        {
+        }
+
+        virtual void
+        run() const
+        {
+            constexpr double eps   = 1e-6;
+            constexpr double delta = 1e-6;
+
+            // real root of the F-wave Blatt-Weisskopf denominator u^3 + 6 u^2 + 45 u + 225
+            const double acbr = std::cbrt((75.0 * std::sqrt(5.0) - 151.0) / 2.0);
+            const double u1   = -2.0 + acbr - 11.0 / acbr;
+
+            // the value at coincident poles must match the average of its neighbours
+            const auto check = [&](const std::function<complex<double>(const double &)> & f, const double & q0)
+            {
+                const complex<double> result    = f(q0);
+                const complex<double> reference = 0.5 * (f(q0 * (1.0 - delta)) + f(q0 * (1.0 + delta)));
+
+                TEST_CHECK_NEARLY_EQUAL(real(result), real(reference), eps * std::abs(reference));
+                TEST_CHECK_NEARLY_EQUAL(imag(result), imag(reference), eps * std::abs(reference));
+            };
+
+            for (const complex<double> s : { complex<double>(20.0), complex<double>(5.0), complex<double>(-2.0), complex<double>(20.0, 5.0) })
+            {
+                for (const auto & [m1, m2] : {
+                         std::pair{  1.0,  2.0 },
+                         std::pair{ 1.86, 2.01 }
+                })
+                {
+                    const auto p_wave = [&](const double & q0) { return chew_mandelstam::p_wave(s, m1, m2, q0); };
+                    const auto f_wave = [&](const double & q0) { return chew_mandelstam::f_wave(s, m1, m2, q0); };
+
+                    // poles coincide for q0^2 u = -m1^2 or -m2^2, at u = -1 for the P wave and u = u1 for the F wave
+                    check(p_wave, m1);
+                    check(p_wave, m2);
+                    check(f_wave, m1 / std::sqrt(-u1));
+                    check(f_wave, m2 / std::sqrt(-u1));
+                }
+
+                // equal masses, where the coincident poles sit at s = 0
+                const double m      = 1.86;
+                const auto   f_wave = [&](const double & q0) { return chew_mandelstam::f_wave(s, m, q0); };
+                check(f_wave, m / std::sqrt(-u1));
+            }
+        }
+} chew_mandelstam_coincident_poles_test;
+
 class ChewMandelstamDiscontinuityTest : public TestCase
 {
     public:
