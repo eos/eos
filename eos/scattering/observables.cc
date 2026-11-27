@@ -107,25 +107,25 @@ namespace eos
 
                     // Phase space factor
                     make_cacheable_observable("e^+e^-::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{e^+e^-}(E)))",
+                                              R"(\mathrm{Re}\rho_{e^+e^-}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_ee)),
 
                     make_cacheable_observable("eff::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{e^+e^-}(E)))",
+                                              R"(\mathrm{Re}\rho_{\textrm{eff}}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_eff)),
 
                     make_cacheable_observable("D^0Dbar^0::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D^0 \bar{D}^0}(E)))",
+                                              R"(\mathrm{Re}\rho_{D^0 \bar{D}^0}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_D0Dbar0)),
 
                     make_cacheable_observable("D^+D^-::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D^+D^-}(E)))",
+                                              R"(\mathrm{Re}\rho_{D^+D^-}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DpDm)),
@@ -204,7 +204,7 @@ namespace eos
                                               evaluate(&EEToCCBar::sigma_eetoDst0D0bar)),
 
                     make_cacheable_observable("D^*0Dbar^0::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^0 + \mathrm{h.c.}}(E)))",
+                                              R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^0 + \mathrm{h.c.}}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_Dst0D0bar)),
@@ -234,7 +234,7 @@ namespace eos
                                               evaluate(&EEToCCBar::sigma_eetoDstpDm)),
 
                     make_cacheable_observable("D^*+D^-::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D^{*+} D^- + \mathrm{h.c.}}(E)))",
+                                              R"(\mathrm{Re}\rho_{D^{*+} D^- + \mathrm{h.c.}}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DstpDm)),
@@ -264,7 +264,7 @@ namespace eos
                                               evaluate(&EEToCCBar::sigma_eetoDsDs)),
 
                     make_cacheable_observable("D_s^+D_s^-::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D_s^+ D_s^-}(E)))",
+                                              R"(\mathrm{Re}\rho_{D_s^+ D_s^-}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DsDs)),
@@ -312,7 +312,7 @@ namespace eos
                                               evaluate(&EEToCCBar::sigma_eetoDst0Dst0bar_LL)),
 
                     make_cacheable_observable("D^*0Dbar^*0::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^{*0}}(E)))",
+                                              R"(\mathrm{Re}\rho_{D^{*0} \bar{D}^{*0}}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_Dst0Dst0bar)),
@@ -402,7 +402,7 @@ namespace eos
                                               evaluate(&EEToCCBar::sigma_eetoDstpDstm_LL)),
 
                     make_cacheable_observable("D^*+D^*-::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D^{*+} D^{*-}}(E)))",
+                                              R"(\mathrm{Re}\rho_{D^{*+} D^{*-}}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DstpDstm)),
@@ -474,7 +474,7 @@ namespace eos
                                               evaluate(&EEToCCBar::sigma_eetoDstsDs)),
 
                     make_cacheable_observable("D_s^*+D_s^-::Re{rho}(Re{E},Im{E})",
-                                              R"(\mathrm{Re}\rho_{D_s^{*+} D_s^- + \mathrm{h.c.}}(E)))",
+                                              R"(\mathrm{Re}\rho_{D_s^{*+} D_s^- + \mathrm{h.c.}}(E))",
                                               Unit::None(),
                                               cache(&EEToCCBar::prepare_complex, "Re{E}", "Im{E}"),
                                               evaluate(&EEToCCBar::rho_DstsDs)),
